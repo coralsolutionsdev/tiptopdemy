@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="{{ URL::asset('/css/styles.css') }}">
+ @Include('partials._messages')
+
+ <li><a href="/posts">Posts</a></li>
+ <li><a href="{{ route('categories.index') }}">Categories</a></li>
+
+
+ <div class="navbar-default pull-left">
+    						<button type="button" class="navbar-toggle collapsed" data-toggle="offcanvas" data-target="#side-menu" aria-expanded="false">
+					        <span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					    	</button>
+    					</div>

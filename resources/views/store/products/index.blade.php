@@ -1,0 +1,79 @@
+@extends('themes.'.getAdminThemeName().'.layout')
+@section('title',$page_title)
+@section('page-header-button')
+    <a href="{{Route('store.products.create')}}" class="btn btn-primary btn-lg w-75"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span>{{trans('main._add')}}</span></a>
+@endsection
+@section('content')
+
+    <section>
+        {{--Page header--}}
+        @include('manage.partials._page-header')
+
+        {{--List of items--}}
+        <div>
+            <div class="card border-light table-card">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col" width="30">{{__('Image')}}</th>
+                            <th scope="col">{{__('Product')}}</th>
+                            <th scope="col" class="text-center">{{__('Type')}}</th>
+                            <th scope="col" class="text-center">{{__('Quantity')}}</th>
+                            <th scope="col" class="text-center">{{__('Price')}}</th>
+                            <th scope="col" class="text-center">{{__('SKU')}}</th>
+                            <th scope="col" class="text-center">{{__('Status')}}</th>
+                            <th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($products as $product)
+                            <tr>
+                                <td style="width: 120px">
+                                    <img src="{{$product->getProductPrimaryImage()}}" style="width: 100%">
+                                </td>
+                                <td>
+
+                                    <p><a target="_blank" href="{{route('store.products.show', $product->slug)}}">{{ucfirst($product->name)}}</a></p>
+                                    <p class="text-muted"><small>{{ucfirst($product->user->name)}} | {{$product->created_at->toFormattedDateString()}}</small></p>
+                                    <p>{{substr(strip_tags($product->description),0,50)}} {{strlen($product->description) > 50 ? "...": "" }}</p>
+                                </td>
+                                <td class="text-center align-middle">{{ucfirst($product->type->name)}}</td>
+                                <td class="text-center align-middle">{{ucfirst($product->quantity)}}</td>
+                                <td class="text-center align-middle">{{ucfirst($product->price)}}</td>
+                                <td class="text-center align-middle">{{ucfirst($product->sku)}}</td>
+                                <td class="text-center align-middle">{!! $product->getStatus() !!}</td>
+                                <td class="d-flex align-items-center">
+                                    <div class="action_btn text-right" style="padding-top: 10px">
+                                        <ul>
+                                            <li class="">
+                                                <a target="_blank" href="{{route('store.products.show', $product->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
+                                            </li>
+                                            <li class="">
+                                                <a href="{{route('store.products.edit', $product->id)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                            </li>
+                                            <li class="">
+                                                <span id="{{$product->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                <form id="delete-form" method="post" action="{{route('store.products.destroy', $product->id)}}">
+                                                    {{csrf_field()}}
+                                                    {{method_field('DELETE')}}
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+            {{$products->links()}}
+        </div>
+    </section>
+
+@endsection
+@section('script')
+@endsection

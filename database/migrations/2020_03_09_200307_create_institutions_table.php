@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIconColomnToBannerTable extends Migration
+class CreateInstitutionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddIconColomnToBannerTable extends Migration
      */
     public function up()
     {
-        Schema::table('banners', function (Blueprint $table) {
-            $table->string('icon')->after('image')->nullable();
+        Schema::create('institutions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +26,6 @@ class AddIconColomnToBannerTable extends Migration
      */
     public function down()
     {
-        Schema::table('banners', function (Blueprint $table) {
-            $table->dropColumn('icon');
-        });
+        Schema::dropIfExists('institutions');
     }
 }

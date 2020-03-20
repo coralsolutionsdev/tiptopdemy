@@ -16,6 +16,7 @@ class CreateBannersTable extends Migration
         Schema::create('banners', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
+            $table->string('slug');
             $table->string('image')->nullable();
             $table->integer('image_ratio')->default(100);
             $table->text('content')->nullable();

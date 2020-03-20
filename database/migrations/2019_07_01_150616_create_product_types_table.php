@@ -16,6 +16,7 @@ class CreateProductTypesTable extends Migration
         Schema::create('product_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->string('description')->nullable();
             $table->unsignedInteger('product_attribute_set_id')->index()->nullable();
             $table->foreign('product_attribute_set_id')->references('id')->on('product_attribute_sets')->onDelete('set null');

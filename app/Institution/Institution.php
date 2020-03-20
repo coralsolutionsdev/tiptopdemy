@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Institution;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Template extends Model
+class Institution extends Model
 {
     //
 }

@@ -9,10 +9,12 @@ use App\ProductImage;
 use App\ProductType;
 use App\Services\FileAssetManagerService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Spatie\Tags\Tag;
 
 //use Spatie\Tags\Tag;
@@ -118,10 +120,11 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      * @param Product $product
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function edit(Product $product)
     {
+
         $page_title = $this->page_title;
         $breadcrumb = $this->breadcrumb;
         $types = ProductType::pluck('name', 'id')->toArray();
@@ -253,7 +256,7 @@ class ProductController extends Controller
         return redirect()->route('store.products.index');
     }
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function indexTags()
     {

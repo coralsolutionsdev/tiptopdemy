@@ -9,8 +9,12 @@
         @endforeach
     @else
         <section>
-            <div>
-                Welcome to {{getSite()->name}}
+            <div class="">
+                <div class="uk-flex uk-flex-center ">
+                    <h1>
+                        Welcome to <span class="uk-text-primary">{{getSite()->name}}</span>
+                    </h1>
+                </div>
             </div>
         </section>
     @endif

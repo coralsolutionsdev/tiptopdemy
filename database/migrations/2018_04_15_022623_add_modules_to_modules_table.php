@@ -17,30 +17,52 @@ class AddModulesToModulesTable extends Migration
         //
         Module::create([
             'name' => 'banners',
-            'display_name' => 'banners'
+            'display_name' => 'Banners'
         ]);
         Module::create([
             'name' => 'blog_posts',
-            'display_name' => 'blog'
+            'display_name' => 'Blog'
         ]);
         Module::create([
             'name' => 'gallery_images',
-            'display_name' => 'gallery'
+            'display_name' => 'Gallery'
         ]);
         Module::create([
             'name' => 'messages',
-            'display_name' => 'messages'
+            'display_name' => 'Messages'
         ]);
         Module::create([
             'name' => 'pages',
-            'display_name' => 'pages'
+            'display_name' => 'Pages'
         ]);
         Module::create([
-            'name' => 'store',
-            'display_name' => 'store'
+            'name' => 'layouts',
+            'display_name' => 'Layouts'
         ]);
-
-
+        Module::create([
+            'name' => 'products',
+            'display_name' => 'Store'
+        ]);
+        Module::create([
+            'name' => 'appointments',
+            'display_name' => 'Appointments'
+        ]);
+        Module::create([
+            'name' => 'companies',
+            'display_name' => 'Companies'
+        ]);
+        Module::create([
+            'name' => 'contacts',
+            'display_name' => 'Contacts'
+        ]);
+        Module::create([
+            'name' => 'institutions',
+            'display_name' => 'Institutions'
+        ]);
+        Module::create([
+            'name' => 'directorates',
+            'display_name' => 'Directorates'
+        ]);
 
     }
 

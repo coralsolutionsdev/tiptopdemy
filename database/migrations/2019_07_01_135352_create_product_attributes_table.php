@@ -16,6 +16,7 @@ class CreateProductAttributesTable extends Migration
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->index();
+            $table->string('slug');
             $table->text('description')->nullable();
             $table->unsignedInteger('product_attribute_set_id')->index()->nullable();
             $table->foreign('product_attribute_set_id')->references('id')->on('product_attribute_sets')->onDelete('set null');

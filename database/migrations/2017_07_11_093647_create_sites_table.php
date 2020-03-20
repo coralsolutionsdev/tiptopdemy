@@ -20,7 +20,10 @@ class CreateSitesTable extends Migration
             $table->integer('logo_show')->default(0);
             $table->string('description')->nullable();
             $table->string('lang');
+            $table->unsignedInteger('layout_id')->nullable();
+            $table->foreign('layout_id')->references('id')->on('layouts')->onDelete('set null');
             $table->string('theme');
+            $table->string('admin_theme');
             $table->boolean('active');
             $table->boolean('registration');
             $table->boolean('installed');

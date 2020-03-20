@@ -283,4 +283,25 @@ function storeLastUrl()
 //    session(['lastUrl' => url()->current()]);
 }
 
+function generateUniqueId($moduleName = null)
+{
+    $module = null;
+    $moduleId = null;
+    if (!empty($moduleName)){
+        $module = Module::where('name', $moduleName)->first();
+        if (!empty($module)){
+            $moduleId = $module->id;
+        }
+    }
+    $uniqueId = \App\UniqueId::firstOrCreate([
+        'module_id' => $moduleId,
+    ], [
+        'unique_id' => 0
+    ]);
+    $uniqueId->unique_id =  $uniqueId->unique_id + 1;
+    $uniqueId->save();
+    return $uniqueId->unique_id;
+
+}
+
 

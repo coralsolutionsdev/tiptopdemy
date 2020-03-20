@@ -18,7 +18,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'gender', 'avatar', 'lang', 'verify_token', 'status'
+        'name', 'email', 'password', 'gender', 'avatar', 'lang', 'verify_token', 'status','user_info'
+    ];
+
+    protected $casts = [
+        'user_info' => 'array'
     ];
 
     /**

@@ -1,11 +1,13 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', 'register')
+@section('head')
+@endsection
 @section('content')
     <section>
         <div class="pt-25" style="background-color: #F3F5F9" uk-height-viewport="expand: true">
             <div class="uk-container">
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
-                    <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m">
+                    <div class="uk-card uk-card-default uk-card-body uk-width-3-5@m">
                         @if(getSite()->registration == 0)
                             <div class="uk-text-center">
                                 <h1 class=" mytext-light"><span class="uk-text-danger" uk-icon="icon: ban; ratio: 3.5"></span></i>
@@ -15,21 +17,152 @@
                             </div>
                         @else
                         <h3 class="uk-card-title">{{__('Register')}}</h3>
+                            <form class="uk-form-stacked" role="form" method="POST" action="{{ route('register') }}">
+                                {{ csrf_field() }}
+                                <div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Name')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-width-1-4@s">
+                                                <input class="uk-input" type="text" placeholder="{{__('First name')}}">
+                                            </div>
+                                            <div class="uk-width-1-4@s">
+                                                <input class="uk-input" type="text" placeholder="{{__('Father\'s name')}}">
+                                            </div>
+                                            <div class="uk-width-1-4@s">
+                                                <input class="uk-input" type="text" placeholder="{{__('Grandpa name')}}">
+                                            </div>
+                                            <div class="uk-width-1-4@s">
+                                                <input class="uk-input" type="text" placeholder="{{__('Surname')}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Mother\'s name:')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-width-1-1@s">
+                                                <input class="uk-input" type="text" placeholder="{{__('Full name')}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Email:')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-width-1-1@s">
+                                                <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email" value="{{!empty($email) ? $email : ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Password:')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-inline uk-width-1-1@s">
+                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                                                <input class="uk-input" id="form-stacked-text" type="password" name="password" placeholder="Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Confirm pass.:')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-inline uk-width-1-1@s">
+                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                                                <input class="uk-input" id="form-stacked-text" type="password" name="password_confirmation" placeholder="Confirm Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Birth date:')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-width-1-1@s">
+                                                <input id="timeDatePicker" class="uk-input" type="text" placeholder="{{__('Tap to select')}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Gender')}}</label></div>
+                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
+                                            <div class="uk-width-1-1@s" style="padding-top: 10px">
+                                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                                    <label><input class="uk-radio" type="radio" name="gender" value="1" checked> Male</label>
+                                                    <label><input class="uk-radio" type="radio" name="gender" value="0"> Female</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--Item--}}
+                                    <div class="uk-grid-small">
+                                        <button class="uk-button uk-button-primary uk-width-1-1">Register</button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+
+                        @if(false)
+                            <form class="uk-grid-small" role="form" method="POST" action="{{ route('register') }}" uk-grid>
+                                {{ csrf_field() }}
+                                <div class="uk-width-1-4@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('First name')}}">
+                                </div>
+                                <div class="uk-width-1-4@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('Father\'s name')}}">
+                                </div>
+                                <div class="uk-width-1-4@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('Grandpa name')}}">
+                                </div>
+                                <div class="uk-width-1-4@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('Surname')}}">
+                                </div>
+                                <div class="uk-width-1-1@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('Mather\'s name:')}}">
+                                </div>
+                                <div class="uk-width-1-1@s">
+                                    <div class="uk-margin">
+                                        <select class="uk-select">
+                                            <option value="">Your nationality...</option>
+                                            <option>Iraqi</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-1@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('Mather\'s name:')}}">
+                                </div>
+
+                                <div class="uk-width-1-1@s">
+                                    <div class="uk-margin">
+                                        <div class="uk-inline uk-width-1-1">
+                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: user"></span>
+                                            <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email" value="{{!empty($email) ? $email : ''}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-1@s">
+                                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                        <label><input class="uk-radio" type="radio" name="gender" value="1" checked> Male</label>
+                                        <label><input class="uk-radio" type="radio" name="gender" value="0"> Female</label>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-1@s">
+                                    <input class="uk-input" type="text" placeholder="{{__('Mather\'s name:')}}">
+                                </div>
+                            </form>
                         <form class="uk-form-stacked" role="form" method="POST" action="{{ route('register') }}">
                             {{ csrf_field() }}
 
-                                <div class="uk-margin">
-                                <div class="uk-inline uk-width-1-1">
-                                    <input class="uk-input" id="form-stacked-text" name="name" type="text" placeholder="Name" value="{{!empty($name) ? $name : ''}}">
-{{--                                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="{{trans('main._name')}}" required autofocus>--}}
 
-                                </div>
-                            </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: user"></span>
                                     <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email" value="{{!empty($email) ? $email : ''}}">
-
                                 </div>
                             </div>
                             <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
@@ -54,6 +187,7 @@
                                 </div>
                             </div>
                         </form>
+                            @endif
                         @endif
                     </div>
                 </div>

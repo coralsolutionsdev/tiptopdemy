@@ -16,6 +16,7 @@ class CreateProductAttributeSetsTable extends Migration
         Schema::create('product_attribute_sets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('slug');
             $table->string('description')->nullable();
             $table->tinyInteger('position')->default(0);
             $table->timestamps();

@@ -38,24 +38,38 @@
         </a>
     </li>
     <li>
-        <div class="menu-title">Companies</div>
+        <div class="menu-title">{{__('institutions')}}</div>
     </li>
 {{--List item--}}
     <li class="nav-group">
-        <a class="nav-link" href="{{route('companies.index')}}">
-            <i class="far fa-building"></i>
-            <span class="">{{__('Companies')}}</span>
+        <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-1" aria-expanded="false" aria-controls="nav-group-1">
+            <i class="fas fa-book"></i>
+            <span class="">{{__('Institutions')}}</span>
         </a>
+        <div class="collapse {{ (Request::is('manage/institution*') ? 'show' :'')}}" id="nav-group-1">
+            <ul style="">
+                <li class="">
+                    <a class="nav-link" href="{{Route('institution.index')}}">{{__('All institutions')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('institution.scopes.index')}}">{{__('Institution Scopes')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{route('institution.directorates.index')}}">{{__('Directorates')}}</a>
+                </li>
+            </ul>
+        </div>
     </li>
     <li class="nav-group">
-        <a class="nav-link" href="{{route('contacts.index')}}">
-            <i class="fas fa-calendar-check"></i>
-            <span class="">{{__('Appointments')}}</span>
+        <a class="nav-link" href="{{route('companies.index')}}">
+            <i class="far fa-building"></i>
+            <span class="">{{__('Academies')}}</span>
         </a>
     </li>
     <li>
         <div class="menu-title">Modules</div>
     </li>
+    @if(false)
 {{--List item--}}
     <li class="nav-group">
         <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-1" aria-expanded="false" aria-controls="nav-group-1">
@@ -97,6 +111,7 @@
             <span class="">{{__('Banners')}}</span>
         </a>
     </li>
+    @endif
 {{--List item--}}
     <li class="nav-group">
         <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-store" aria-expanded="false" aria-controls="nav-group-store">

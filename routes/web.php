@@ -107,9 +107,19 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::delete('tags/{tag}', 'ProductController@destroyTag')->name('tags.destroy');
             });
 
-            /*store*/
+            /*companies*/
             Route::group(['prefix' => 'companies', 'namespace' => 'company', 'as' => 'companies.'], function (){
                 Route::resource('/','CompanyController');
+            });
+
+            /*institutions*/
+            Route::group(['prefix' => 'institution', 'namespace' => 'institution', 'as' => 'institution.'], function (){
+                Route::resource('/','InstitutionController');
+                Route::resource('/scopes','InstitutionScopeController');
+                Route::resource('/scope/{scope}/fields','InstitutionScopeFieldController');
+                Route::resource('/directorates','DirectorateController');
+
+
             });
         });
 	/* Admin Routes end */

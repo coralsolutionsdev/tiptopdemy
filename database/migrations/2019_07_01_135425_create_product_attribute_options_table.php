@@ -18,6 +18,7 @@ class CreateProductAttributeOptionsTable extends Migration
             $table->unsignedInteger('product_attribute_id')->index()->nullable();
             $table->foreign('product_attribute_id')->references('id')->on('product_attributes')->onDelete('set null');
             $table->string('name')->index();
+            $table->string('slug')->nullable();
             $table->string('value')->nullable();
             $table->unsignedInteger('position')->default(0);
             $table->boolean('is_default')->default(false);

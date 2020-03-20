@@ -19,11 +19,11 @@
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit-icons.min.js"></script>
-    <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.tiny.cloud/1/0disoxw0ri417kacpbbaufwzt6temhwubr87eejae2tyvpjy/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="{{ asset('js/lightbox.js') }}"></script>
     <script src="{{ asset('js/parallax.js') }}"></script>
+    <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
     <title>{{getSite()->name}} | @yield('title')</title>
 
 @yield('head')

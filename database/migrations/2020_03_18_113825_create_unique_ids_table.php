@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersTable extends Migration
+class CreateUniqueIdsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('unique_ids', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('module_id')->index()->nullable();
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('set null');
+            $table->integer('unique_id');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('unique_ids');
     }
 }

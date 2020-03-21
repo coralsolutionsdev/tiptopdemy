@@ -54,13 +54,13 @@ class InstitutionScopeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param InstitutionScope $institutionScope
+     * @param Request $request
+     * @param InstitutionScope $scope
      * @return Response
      */
-    public function store(Request $request, InstitutionScope $institutionScope)
+    public function store(Request $request, InstitutionScope $scope)
     {
-        $input = $request->only($institutionScope->getFillable());
+        $input = $request->only($scope->getFillable());
         //Default values
         if (empty($input['position'])) {
             $input['position'] = 1;
@@ -75,9 +75,9 @@ class InstitutionScopeController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
-        $institutionScope = InstitutionScope::create($input);
+        $scope = InstitutionScope::create($input);
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('institution.scopes.edit', $institutionScope->slug);
+        return redirect()->route('institution.scopes.edit', $scope->slug);
     }
 
     /**
@@ -111,13 +111,30 @@ class InstitutionScopeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param InstitutionScope $institutionScope
+     * @param Request $request
+     * @param InstitutionScope $scope
      * @return Response
      */
-    public function update(Request $request, InstitutionScope $institutionScope)
+    public function update(Request $request, InstitutionScope $scope)
     {
-        //
+        $input = $request->only($scope->getFillable());
+        //Default values
+        if (empty($input['position'])) {
+            $input['position'] = 1;
+        }
+        if (empty($input['status'])) {
+            $input['status'] = 1;
+        }
+        $input['user_id'] = Auth::user()->id;
+        if(!empty($input['status'])){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $input['status'] = $status;
+        $scope->update($input);
+        session()->flash('success', trans('Updated successfully'));
+        return redirect()->route('institution.scopes.edit', $scope->slug);
     }
 
     /**

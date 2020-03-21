@@ -97,7 +97,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::get('/layouts/get/banners/{group}','Admin\LayoutController@getGroupBanners')->name('get.group.banners');
 
         /*store*/
-            Route::group(['prefix' => 'store', 'namespace' => 'store', 'as' => 'store.'], function (){
+            Route::group(['prefix' => 'store', 'namespace' => 'Store', 'as' => 'store.'], function (){
                 Route::resource('/categories','ProductCategoryController');
                 Route::resource('/products','ProductController');
                 Route::resource('/types','ProductTypeController');
@@ -113,7 +113,7 @@ Route::group(['middleware'=>'installed'], function(){
             });
 
             /*institutions*/
-            Route::group(['prefix' => 'institution', 'namespace' => 'institution', 'as' => 'institution.'], function (){
+            Route::group(['prefix' => 'institution', 'namespace' => 'Institution', 'as' => 'institution.'], function (){
                 Route::resource('/','InstitutionController');
                 Route::resource('/scopes','InstitutionScopeController');
                 Route::resource('/scope/{scope}/fields','InstitutionScopeFieldController');

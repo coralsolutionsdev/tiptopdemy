@@ -57,7 +57,7 @@ class DirectorateController extends Controller
     public function store(Request $request)
     {
         $input = $request->only(['title', 'description', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position']);
-        $itemIds = $input['item_id'];
+        $itemIds = isset($input['item_id']) ? $input['item_id'] :  array();
         $itemsArray = array();
         if (!empty($itemIds)){
             foreach ($itemIds as $key => $id){
@@ -123,7 +123,7 @@ class DirectorateController extends Controller
     public function update(Request $request, Directorate $directorate)
     {
         $input = $request->only(['title', 'description', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position', 'removed_items']);
-        $itemIds = $input['item_id'];
+        $itemIds = isset($input['item_id']) ? $input['item_id'] :  array();
         $itemsArray = array();
         if (!empty($itemIds)){
             foreach ($itemIds as $key => $id){

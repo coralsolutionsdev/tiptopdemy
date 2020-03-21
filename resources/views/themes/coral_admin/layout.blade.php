@@ -66,7 +66,7 @@
                             <div class="dropdown-menu dropdown-menu-right user-dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="#"><i class="far fa-user-circle"></i> My Profile</a>
                                 <a class="dropdown-item" href="#"><i class="far fa-envelope"></i> Messages</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                <a class="dropdown-item" href="{{route('logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </div>
                         </li>
                     </ul>

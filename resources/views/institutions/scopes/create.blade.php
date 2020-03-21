@@ -6,7 +6,7 @@
 @section('content')
     <section>
         @if(!empty($scope))
-            {!! Form::open(['url' => route('institution.scopes.update', $scope->id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+            {!! Form::open(['url' => route('institution.scopes.update', $scope->slug),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @else
             {!! Form::open(['url' => route('institution.scopes.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif

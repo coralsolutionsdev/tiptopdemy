@@ -1,5 +1,6 @@
+@if(true)
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="{{getSite()->lang == 'ar'? 'rtl': ''}}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -11,9 +12,18 @@
         }
     </style>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=DM+Sans|Lobster|Rubik|Squada+One&display=swap" rel="stylesheet"><!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/css/uikit.min.css" />
-{{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">--}}
+    <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Cairo:400,600,700|Tajawal:400,500,700&display=swap&subset=arabic" rel="stylesheet">
+    <!--UiKit UI-->
+    @if(getSite()->lang == 'ar')
+        <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>
+    @else
+        <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
+    @endif
+    <!--Semantic UI-->
+    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">
+    <!--site Css-->
     <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css')}}">
 
     <!-- scripts -->
@@ -21,9 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit-icons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.tiny.cloud/1/0disoxw0ri417kacpbbaufwzt6temhwubr87eejae2tyvpjy/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="{{ asset('js/lightbox.js') }}"></script>
-    <script src="{{ asset('js/parallax.js') }}"></script>
-    <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
+
     <title>{{getSite()->name}} | @yield('title')</title>
 
 @yield('head')
@@ -94,6 +102,12 @@
         </div>
     </div>
 </section>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 <script>
     $('.pagination').addClass('uk-pagination').addClass('uk-flex-center');
 
@@ -104,3 +118,35 @@
 
 </body>
 </html>
+@endif
+@if(false)
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--Semantic UI-->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css')}}">
+    <title>Hello, world!</title>
+</head>
+<body>
+<section>
+    <div class="light-mode">
+        {{--Navbar--}}
+        @widget('home.navbar_top_menu')
+    </div>
+</section>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
+@endif

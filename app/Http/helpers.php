@@ -53,6 +53,7 @@ function getSite(){
     return $site;
 }
 
+
 /**
  * return current lang
  * TODO: improve the code
@@ -302,6 +303,22 @@ function generateUniqueId($moduleName = null)
     $uniqueId->save();
     return $uniqueId->unique_id;
 
+}
+function getFloatKey($position)
+{
+    if (getSite()->lang == 'ar'){
+        if ($position == 'start'){
+            return 'right';
+        }else{
+            return 'left';
+        }
+    }else{
+        if ($position == 'start'){
+            return 'left';
+        }else{
+            return 'right';
+        }
+    }
 }
 
 

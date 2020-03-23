@@ -3,21 +3,23 @@ html, body{
     margin: 0px;
 }
 body{
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Cairo','Rubik', sans-serif !important;
     margin: auto;
     /*background-color: #F6F6F6;*/
     background-color: #F3F5F9;
     font-size: 13px;
 }
-
-nav.navbar{
+.site-name{
+    font-family: 'Tajawal', sans-serif;
+    font-weight: bold;
+}
+nav.nav{
+    font-family: 'Cairo','Rubik', sans-serif;
+    font-weight: 600;
     background-color: white !important;
-    min-height: 50px;
-    /*box-shadow: 0 0 11px rgba(0,0,0,0.13);*/
     padding-right: 5em;
     padding-left: 5em;
     opacity: 0.9;
-
     /*background-color: white;*/
 }
 nav .navbar-brand{
@@ -34,7 +36,6 @@ nav .navbar-brand{
     background-color: transparent;
     border: none;
     outline: none;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     text-decoration: none;
     cursor: pointer;
 }
@@ -52,6 +53,12 @@ nav .navbar-brand{
 }
 .uk-text-primary{
    color: var(--theme-primary-color) !important;
+}
+.uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle{
+    font-family: 'Cairo','Rubik', sans-serif;
+}
+p, h1, h2, h3, h4, h5{
+    font-family: 'Cairo','Rubik', sans-serif !important;
 }
 p{
     font-size: 14px;
@@ -72,7 +79,6 @@ p{
     margin: 0px;
 }
 .navbar-logo{
-    font-family: 'Lobster', cursive;
     font-size: 26px;
 }
 /*breadcrumb*/

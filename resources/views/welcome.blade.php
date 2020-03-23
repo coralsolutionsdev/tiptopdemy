@@ -16,6 +16,15 @@
                     </h1>
                 </div>
             </div>
+            <div class="ui grid">
+                <div class="four wide column">1</div>
+                <div class="four wide column">2</div>
+                <div class="four wide column">3</div>
+                <div class="four wide column">4</div>
+                <div class="two wide column">5</div>
+                <div class="eight wide column">6</div>
+                <div class="six wide column">7</div>
+            </div>
         </section>
     @endif
 @endsection

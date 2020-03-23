@@ -1,6 +1,11 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', 'register')
 @section('head')
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
+    <script src="{{asset('/plugins/date_picker/js/bootstrap-datetimepicker.min.js')}}"></script>
+    <link rel="stylesheet" href="{{url('/plugins/date_picker/css/bootstrap-datetimepicker.min.css')}}">
+
 @endsection
 @section('content')
     <section>
@@ -85,6 +90,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <script>
+                                        $(function () {
+                                            $('#timeDatePicker').datetimepicker({
+                                                format: 'DD/MM/YYYY'
+                                            });
+                                        });
+                                    </script>
                                     {{--Item--}}
                                     <div class="uk-grid-small" uk-grid>
                                         <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Gender')}}</label></div>

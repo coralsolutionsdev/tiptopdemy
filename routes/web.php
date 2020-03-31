@@ -29,6 +29,8 @@ Route::group(['middleware'=>'installed'], function(){
 		Route::get('/offline','PagesController@Offline')->name('offline');
 	/* Auth Routes */
 		Auth::routes();
+		Route::get('/get/institution/scope/{scopeId}/fields', 'Auth\RegisterController@getInstitutionScopeFields');
+		Route::get('/get/institution/scope/field/{fieldId}/options', 'Auth\RegisterController@getInstitutionScopeFieldOptions');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
         Route::post('/login/page', 'Admin\LoginController@login')->name('login.custom');
 		Route::get('/verification','HomeController@verification')->name('verification');
@@ -82,11 +84,13 @@ Route::group(['middleware'=>'installed'], function(){
 
 
         /*Roles*/
-//            Route::group(['prefix'=>'roles'],function (){
                 Route::resource('/roles','Site\RoleController');
                 Route::get('/roles/edit/permissions/{id}','Site\RoleController@editRolePermissions')->name('assign.permissions');
                 Route::put('/roles/update/permissions/{id}','Site\RoleController@updateRolePermissions')->name('assign.permissions.update');
-//            });
+
+        /*Languages*/
+            Route::resource('/languages','Site\LanguageController');
+
         /*Modules*/
             Route::get('/setting/modules','Admin\SettingController@getModules')->name('module.setting')->middleware('role:superadministrator');
             Route::put('/setting/modules/update','Admin\SettingController@updateModules')->name('module.setting.update')->middleware('role:superadministrator');

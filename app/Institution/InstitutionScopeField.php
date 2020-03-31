@@ -4,6 +4,7 @@ namespace App\Institution;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InstitutionScopeField extends Model
@@ -52,7 +53,7 @@ class InstitutionScopeField extends Model
     /**
      * One-To-Many Relationship Method for accessing the options
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function options()
     {

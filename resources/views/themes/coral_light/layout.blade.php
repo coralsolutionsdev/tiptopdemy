@@ -11,18 +11,19 @@
             --theme-primary-color: {{getFrontEndColor()}};
         }
     </style>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
     <link href="https://fonts.googleapis.com/css?family=Cairo:400,600,700|Tajawal:400,500,700&display=swap&subset=arabic" rel="stylesheet">
+    <!--Semantic UI-->
+    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">
     <!--UiKit UI-->
     @if(getSite()->lang == 'ar')
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>
     @else
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
-    <!--Semantic UI-->
-    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">
     <!--site Css-->
     <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css')}}">
 
@@ -48,6 +49,9 @@
     </div>
     {{--Navbar--}}
     @widget('home.navbar_top_menu')
+    <div class="uk-container uk-padding-small">
+        @include('layouts.partials._messages')
+    </div>
     @yield('content')
 </section>
 <section>

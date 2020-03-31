@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Institution\InstitutionScope;
+use App\Institution\InstitutionScopeField;
+use App\Institution\InstitutionScopeFieldOption;
+use App\Jobs\SendValidationMail;
 use App\Role;
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\mail\NewUser;
@@ -52,7 +58,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'gender' => 'required|bool',
             'password' => 'required|string|min:6|confirmed',
@@ -67,33 +74,73 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if($data['gender'])
-            { $avatar = 'male.png';}
-        else
-            { $avatar = 'female.png'; }
         $user = User::create([
-            'name' => $data['name'],
+            'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'].' '.$data['surname'],
+            'first_name' => $data['first_name'],
+            'middle_name' => $data['middle_name'],
+            'last_name' => $data['last_name'],
+            'surname' => $data['surname'],
+            'mother_name' => $data['mother_name'],
             'email' => $data['email'],
             'gender' => $data['gender'],
+            'phone_number' => $data['phone_number'],
+            'birth_date' => $data['birth_date'],
             'lang' => getSite()->lang,
-//            'avatar' => $avatar,
             'password' => bcrypt($data['password']),
             'verify_token' => str_random(60),
+            // TipTop fields
+            'directorate_id' => $data['directorate_id'],
+            'scope_id' => $data['scope_id'],
+            'field_id' => $data['field_id'],
+            'field_option_id' => $data['field_option_id'],
+            'level' => $data['level'],
         ]);
-
         $thisuser = User::findOrFail($user->id);
-        $this->sendVerifyEmail($thisuser);
+
+        // add user role to the registered user
         $updated_role = Role::where('name', 'user')->first();
         if (!empty($updated_role)){
             $user->attachRole($updated_role);
         }
 
+        // send validation email
+        $email = $user->email;
+        $validationCode =  !empty($email) ? generateValidationCode($email) : null;
+        $data['receiver_name'] = $user->first_name;
+        $data['receiver_email'] = $email;
+        $data['validation_code'] = $validationCode;
+        SendValidationMail::dispatch($data);
+
         return $user;
     }
 
-    public function sendVerifyEmail($thisuser)
+    /**
+     * @param $scopeId
+     * @return ResponseFactory|Response
+     */
+    public function getInstitutionScopeFields($scopeId)
     {
-        Mail::to($thisuser['email'])->send(new NewUser($thisuser));
+        if (!empty($scopeId)){
+            $scope = InstitutionScope::find($scopeId);
+            if (!empty($scope)){
+                $items =  $scope->fields->pluck('title','id')->toArray();
+                return response(['items' => $items], 200);
+            }
+        }
     }
 
+    /**
+     * @param $fieldId
+     * @return ResponseFactory|Response
+     */
+    public function getInstitutionScopeFieldOptions($fieldId)
+    {
+        if (!empty($fieldId)){
+            $field = InstitutionScopeField::find($fieldId);
+            if (!empty($field)){
+                $items =  $field->options->pluck('title','id')->toArray();
+                return response(['items' => $items], 200);
+            }
+        }
+    }
 }

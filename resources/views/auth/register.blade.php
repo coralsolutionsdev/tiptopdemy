@@ -1,295 +1,215 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', 'register')
 @section('head')
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
-    <script src="{{asset('/plugins/date_picker/js/bootstrap-datetimepicker.min.js')}}"></script>
-    <link rel="stylesheet" href="{{url('/plugins/date_picker/css/bootstrap-datetimepicker.min.css')}}">
+{{--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>--}}
+{{--    <script src="{{asset('/plugins/date_picker/js/bootstrap-datetimepicker.min.js')}}"></script>--}}
+{{--    <link rel="stylesheet" href="{{url('/plugins/date_picker/css/bootstrap-datetimepicker.min.css')}}">--}}
 
 @endsection
 @section('content')
     <section>
-        <div class="pt-25" style="background-color: #F3F5F9" uk-height-viewport="expand: true">
+        <div class="pt-25" style="background-color: #F3F5F9">
             <div class="uk-container">
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
-                    <div class="uk-card uk-card-default uk-card-body uk-width-3-5@m">
-                        @if(getSite()->registration == 0)
-                            <div class="uk-text-center">
-                                <h1 class=" mytext-light"><span class="uk-text-danger" uk-icon="icon: ban; ratio: 3.5"></span></i>
-                                </h1>
-                                <h3>{{trans('main._reg_not_allowed')}}</h3>
-                                <p>{{trans('main._for_more_info')}} <a href="{{route('contact')}}">{{trans('main._here')}}</a></p>
-                            </div>
-                        @else
+                    <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m register-card">
                         <h3 class="uk-card-title">{{__('Register')}}</h3>
-                            <form class="uk-form-stacked" role="form" method="POST" action="{{ route('register') }}">
-                                {{ csrf_field() }}
-                                <div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Name')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-width-1-4@s">
-                                                <input class="uk-input" type="text" placeholder="{{__('First name')}}">
-                                            </div>
-                                            <div class="uk-width-1-4@s">
-                                                <input class="uk-input" type="text" placeholder="{{__('Father\'s name')}}">
-                                            </div>
-                                            <div class="uk-width-1-4@s">
-                                                <input class="uk-input" type="text" placeholder="{{__('Grandpa name')}}">
-                                            </div>
-                                            <div class="uk-width-1-4@s">
-                                                <input class="uk-input" type="text" placeholder="{{__('Surname')}}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Mother\'s name:')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-width-1-1@s">
-                                                <input class="uk-input" type="text" placeholder="{{__('Full name')}}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Email:')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-width-1-1@s">
-                                                <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email" value="{{!empty($email) ? $email : ''}}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Password:')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-inline uk-width-1-1@s">
-                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                                <input class="uk-input" id="form-stacked-text" type="password" name="password" placeholder="Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Confirm pass.:')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-inline uk-width-1-1@s">
-                                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                                <input class="uk-input" id="form-stacked-text" type="password" name="password_confirmation" placeholder="Confirm Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Birth date:')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-width-1-1@s">
-                                                <input id="timeDatePicker" class="uk-input" type="text" placeholder="{{__('Tap to select')}}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $(function () {
-                                            $('#timeDatePicker').datetimepicker({
-                                                format: 'DD/MM/YYYY'
-                                            });
-                                        });
-                                    </script>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small" uk-grid>
-                                        <div class="uk-width-1-5@m"> <label class="uk-form-label">{{__('Gender')}}</label></div>
-                                        <div class="uk-width-4-5@m uk-grid-small" uk-grid>
-                                            <div class="uk-width-1-1@s" style="padding-top: 10px">
-                                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                                    <label><input class="uk-radio" type="radio" name="gender" value="1" checked> Male</label>
-                                                    <label><input class="uk-radio" type="radio" name="gender" value="0"> Female</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{--Item--}}
-                                    <div class="uk-grid-small">
-                                        <button class="uk-button uk-button-primary uk-width-1-1">Register</button>
-                                    </div>
 
-                                </div>
-                            </form>
-
-
-                        @if(false)
-                            <form class="uk-grid-small" role="form" method="POST" action="{{ route('register') }}" uk-grid>
-                                {{ csrf_field() }}
-                                <div class="uk-width-1-4@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('First name')}}">
-                                </div>
-                                <div class="uk-width-1-4@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('Father\'s name')}}">
-                                </div>
-                                <div class="uk-width-1-4@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('Grandpa name')}}">
-                                </div>
-                                <div class="uk-width-1-4@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('Surname')}}">
-                                </div>
-                                <div class="uk-width-1-1@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('Mather\'s name:')}}">
-                                </div>
-                                <div class="uk-width-1-1@s">
-                                    <div class="uk-margin">
-                                        <select class="uk-select">
-                                            <option value="">Your nationality...</option>
-                                            <option>Iraqi</option>
-                                            <option>Other</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="uk-width-1-1@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('Mather\'s name:')}}">
-                                </div>
-
-                                <div class="uk-width-1-1@s">
-                                    <div class="uk-margin">
-                                        <div class="uk-inline uk-width-1-1">
-                                            <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: user"></span>
-                                            <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email" value="{{!empty($email) ? $email : ''}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="uk-width-1-1@s">
-                                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                        <label><input class="uk-radio" type="radio" name="gender" value="1" checked> Male</label>
-                                        <label><input class="uk-radio" type="radio" name="gender" value="0"> Female</label>
-                                    </div>
-                                </div>
-                                <div class="uk-width-1-1@s">
-                                    <input class="uk-input" type="text" placeholder="{{__('Mather\'s name:')}}">
-                                </div>
-                            </form>
-                        <form class="uk-form-stacked" role="form" method="POST" action="{{ route('register') }}">
+                        <form class="uk-form-stacked " role="form" method="POST" action="{{ route('register') }}" autocomplete="on">
                             {{ csrf_field() }}
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Full name')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-4@s">
+                                            <input class="uk-input {{ $errors->has('first_name') ? ' uk-form-danger' : '' }}" name="first_name" type="text" placeholder="{{__('First name')}}" value="{{ old('first_name') }}" required>
+                                        </div>
+                                        <div class="uk-width-1-4@s">
+                                            <input class="uk-input {{ $errors->has('middle_name') ? ' uk-form-danger' : '' }}" name="middle_name" type="text" placeholder="{{__('Father\'s name')}}" value="{{ old('middle_name') }}">
+                                        </div>
+                                        <div class="uk-width-1-4@s">
+                                            <input class="uk-input {{ $errors->has('last_name') ? ' uk-form-danger' : '' }}" name="last_name" type="text" placeholder="{{__('Grandpa\'s name')}}" value="{{ old('last_name') }}">
+                                        </div>
+                                        <div class="uk-width-1-4@s">
+                                            <input class="uk-input {{ $errors->has('surname') ? ' uk-form-danger' : '' }}" name="surname" type="text" placeholder="{{__('Surname')}}" value="{{ old('surname') }}" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Mother name')}}:</label>
+                                <div class="uk-form-controls">
+                                    <input class="uk-input {{ $errors->has('mother_name') ? ' uk-form-danger' : '' }}" name="mother_name" type="text" value="{{ old('mother_name') }}">
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Email')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: mail"></span>
+                                        <input class="uk-input {{ $errors->has('email') ? ' uk-form-danger' : '' }}" name="email" type="text" placeholder="email@example.com" value="{{ old('email') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Password')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                                        <input class="uk-input {{ $errors->has('password') ? ' uk-form-danger' : '' }}" type="password" name="password" placeholder="{{__('Password')}}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <div class="uk-form-controls">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                                        <input class="uk-input {{ $errors->has('password_confirmation') ? ' uk-form-danger' : '' }}" type="password" name="password_confirmation" placeholder="{{__('Password confirm')}}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Birthday')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: calendar"></span>
+                                        <input class="uk-input {{ $errors->has('birth_date') ? ' uk-form-danger' : '' }} birthday" type="text" name="birth_date" placeholder="{{__('Tap to select')}}" value="{{ old('birth_date') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Phone number')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-inline uk-width-1-1 disable-number-row">
+                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: phone"></span>
+                                        <input class="uk-input {{ $errors->has('phone_number') ? ' uk-form-danger' : '' }}" name="phone_number" type="number" value="{{ old('phone_number') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Directorates')}}:</label>
+                                <div class="uk-form-controls">
+                                    <select class="uk-select" name="directorate_id" required>
+                                        <option selected="true" disabled="disabled">Please select</option>
+                                        @foreach(getCountryDirectorates() as $directorate)
+                                        <option value="{{$directorate->id}}">{{$directorate->title}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('School kind')}}:</label>
+                                <div class="uk-form-controls">
+                                    <select class="uk-select scope-items" name="scope_id" required>
+                                        <option selected="true" disabled="disabled">Please select</option>
+                                        @foreach(getCountryScopes() as $scope)
+                                            <option value="{{$scope->id}}">{{$scope->title}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small fields-section" style="display: none">
+                                <label class="uk-form-label" for="">{{__('Study type')}}:</label>
+                                <div class="uk-form-controls">
+                                    <select class="uk-select fields-items" name="field_id">
 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small fields-items-section" style="display: none">
+                                <div class="uk-form-controls">
+                                    <select class="uk-select field-item-options" name="field_option_id">
 
-                            <div class="uk-margin">
-                                <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: user"></span>
-                                    <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email" value="{{!empty($email) ? $email : ''}}">
+                                    </select>
                                 </div>
                             </div>
-                            <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                <label><input class="uk-radio" type="radio" name="gender" value="1" checked> Male</label>
-                                <label><input class="uk-radio" type="radio" name="gender" value="0"> Female</label>
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('School level')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: move"></span>
+                                        <input class="uk-input {{ $errors->has('level') ? ' uk-form-danger' : '' }}" name="level" type="number" max="6" min="1" value="{{ old('level') }}" required>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="uk-margin">
-                                <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                    <input class="uk-input" id="form-stacked-text" type="password" name="password" placeholder="Password">
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Gender')}}:</label>
+                                <div class="uk-form-controls">
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-1-6@s">
+                                            <label><input class="uk-radio" type="radio" name="gender" value="1" checked> {{__('Male')}}</label>
+                                        </div>
+                                        <div class="uk-width-1-6@s">
+                                            <label><input class="uk-radio" type="radio" name="gender" value="0"> {{__('Female')}}</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                    <input class="uk-input" id="form-stacked-text" type="password" name="password_confirmation" placeholder="Confirm Password">
-                                </div>
-                            </div>
-                            <div class="uk-margin">
-                                <div class="uk-inline uk-width-1-1">
-                                    <button class="uk-button uk-button-primary uk-width-1-1">Register</button>
+                                    <button class="uk-button uk-button-primary uk-width-1-1">{{__('Register')}}</button>
                                 </div>
                             </div>
                         </form>
-                            @endif
-                        @endif
+                        <div class="uk-text-center">
+                            Or, Login with..
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-inline uk-width-1-1">
+                                <button class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</button>
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-inline uk-width-1-1">
+                                <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-@if(false)
-<section id="login" class="section">
-    <div class="container d-flex justify-content-center">
-        <div class="col-md-6 col-sm-12 card border-light">
-            @if(getSite()->registration == 0)
-            <div class="login-form section-md text-center">
-                <h1 class=" mytext-light"><i class="fa fa-ban" aria-hidden="true"></i>
-                </h1>
-                <h3>{{trans('main._reg_not_allowed')}}</h3>
-                <p>{{trans('main._for_more_info')}} <a href="{{route('contact')}}">{{trans('main._here')}}</a></p>
-            </div>
-            @else
-            <div class="login-form section-md">
-                <div class="title d-flex justify-content-center">
-                <h3>{{trans('main._register')}}</h3>
-                </div>
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
-                    {{ csrf_field() }}
-                    
-                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                    
-                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="{{trans('main._name')}}" required autofocus>
-
-                        @if ($errors->has('name'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('name') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                
-
-                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                    
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="{{trans('main._email')}}" required>
-
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-
-                    <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
-                       <select name="gender" id="gender" class="custom-select col-12 form-control-dropdown">
-                        <option selected class="">-- {{trans('main._gender')}} --</option>
-                        <option value="1">{{trans('main._male')}}</option>
-                        <option value="0">{{trans('main._female')}}</option>
-                        </select>
-
-                        @if ($errors->has('gender'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('gender') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                
-                    
-                
-                    <div class="form-row">
-                        <div class="form-group col-6{{ $errors->has('password') ? ' has-error' : '' }}">
-                          <input id="password" type="password" class="form-control" name="password" placeholder="{{trans('main._password')}}"  required>
-
-                            @if ($errors->has('password'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-
-                        <div class="form-group col-6">
-                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="{{trans('main._confirm')}} {{trans('main._password')}}" required>
-                        </div>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="btn btn-dark btn-lg col-lg ">
-                            {{trans('main._submit')}}
-                        </button>
-                    </div>
-                </form>  
-            </div>
-            @endif
-        </div>
-    </div>
-</section>
-@endif
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        $(".birthday").flatpickr();
+        $('.scope-items').change(function () {
+            var id = $(this).val();
+            $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
+                var fields = response.items;
+                $('.fields-items').html('');
+                $('.fields-items').append('<option selected="true" disabled="disabled">Please select</option>');
+                if(fields.length !== 0){
+                    $.each(fields,  function (id, name) {
+                        $('.fields-items').append('<option value="'+id+'">'+name+'</option>');
+                    });
+                    $('.fields-section').slideDown();
+                } else {
+                    $('.fields-section').slideUp();
+                    $('.fields-items-section').slideUp();
+                }
+            });
+        });
+        $('.fields-items').change(function () {
+            var id = $(this).val();
+            $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
+                var fields = response.items;
+                $('.field-item-options').html('');
+                $('.field-item-options').append('<option selected="true" disabled="disabled">Please select</option>');
+                if(fields.length !== 0){
+                    $.each(fields,  function (id, name) {
+                        $('.field-item-options').append('<option value="'+id+'">'+name+'</option>');
+                    });
+                    $('.fields-items-section').slideDown();
+                } else {
+                    $('.fields-items-section').slideUp();
+                }
+            });
+        });
+        // function updateFieldOptionsMenu() {
+        //     var id = $(this).val();
+        //     // alert(id);
+        // }
+    </script>
 @endsection

@@ -155,6 +155,9 @@
                 <li class="">
                     <a class="nav-link" href="{{Route('roles.index')}}">{{__('Roles')}}</a>
                 </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('languages.index')}}">{{__('Languages')}}</a>
+                </li>
                 @if(Auth::user()->isSuperAdmin())
                     <li class="">
                         <a class="nav-link" href="{{Route('module.setting')}}">{{__('Modules')}}</a>

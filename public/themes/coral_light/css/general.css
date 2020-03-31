@@ -5,9 +5,8 @@ html, body{
 body{
     font-family: 'Cairo','Rubik', sans-serif !important;
     margin: auto;
-    /*background-color: #F6F6F6;*/
-    background-color: #F3F5F9;
     font-size: 13px;
+    background-color: #F3F5F9;
 }
 .site-name{
     font-family: 'Tajawal', sans-serif;
@@ -20,6 +19,7 @@ nav.nav{
     padding-right: 5em;
     padding-left: 5em;
     opacity: 0.9;
+    max-height: 70px;
     /*background-color: white;*/
 }
 nav .navbar-brand{
@@ -39,6 +39,47 @@ nav .navbar-brand{
     text-decoration: none;
     cursor: pointer;
 }
+.register-card{
+    overflow: hidden;
+}
+/*.register-card:before {*/
+/*    position:absolute;*/
+/*    font-family: "Font Awesome 5 Free";*/
+/*    font-weight: 400;*/
+/*    content: "\f2b9";*/
+/*    font-size: 250px;*/
+/*    top:0;*/
+/*    opacity: 0.08;*/
+/*    right:0;*/
+/*    top: -60px;*/
+/*    content: "\f2b9";*/
+/*    transform: rotate(-30deg);*/
+/*    z-index: 1;*/
+
+/*}*/
+.register-form{
+    z-index: 10;
+}
+
+/*
+Form
+ */
+.uk-input{
+    background-color: white;
+}
+/* Chrome, Safari, Edge, Opera */
+.disable-number-row input::-webkit-outer-spin-button,
+.disable-number-row input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.disable-number-row input[type=number] {
+    -moz-appearance: textfield !important;
+}
+/**
+ end
+ */
+
 .top-navbar-search input{
     background-color: #F6F6F6;
 }

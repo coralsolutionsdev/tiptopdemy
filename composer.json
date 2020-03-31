@@ -17,7 +17,8 @@
         "laravelcollective/html": "^5.4.0",
         "monolog/monolog": "^1.24",
         "santigarcor/laratrust": "5.0.*",
-        "spatie/laravel-tags": "^2.2"
+        "spatie/laravel-tags": "^2.2",
+        "ext-json": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

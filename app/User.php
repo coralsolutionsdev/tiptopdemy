@@ -18,11 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'gender', 'avatar', 'lang', 'verify_token', 'status','user_info'
-    ];
-
-    protected $casts = [
-        'user_info' => 'array'
+        'name', 'first_name', 'middle_name', 'last_name', 'surname', 'mother_name', 'email', 'gender','phone_number', 'birth_date', 'avatar', 'cover', 'lang', 'verify_token', 'status', 'password', 'country_id',
+        'directorate_id', 'scope_id', 'field_id', 'field_option_id', 'level'
     ];
 
     /**

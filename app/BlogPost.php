@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Tags\HasTags;
 
 class BlogPost extends Model
 {
+    use HasTags;
+
     protected $fillable = [
         'title',
         'user_id',
@@ -25,7 +29,25 @@ class BlogPost extends Model
         }
         return $count;
     }
-    // Relationships
+    /**
+     * Get the array list of this product tags
+     * @return array
+     */
+    public function getTags()
+    {
+        $spatie_tags = $this->tagsWithType('post');
+        $tags = array();
+        foreach($spatie_tags as $tag) {
+            $tags[$tag->name] = $tag->name;
+        }
+        return $tags;
+    }
+
+    /*
+     |--------------------------------------------------------------------------
+     | Relationship Methods
+     |--------------------------------------------------------------------------
+     */
     public function category()
     {
     	return $this->belongsTo('App\BlogCategory','category_id');
@@ -37,5 +59,14 @@ class BlogPost extends Model
     public function comments()
     {
         return $this->hasMany('App\BlogComment','post_id');
+    }
+    /**
+     * Many-To-Many Relationship Method for accessing the categories
+     *
+     * @return BelongsToMany
+     */
+    public function categories()
+    {
+        return $this->belongsToMany('App\Category','category_blog_post');
     }
 }

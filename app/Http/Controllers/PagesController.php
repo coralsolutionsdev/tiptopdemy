@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendValidationMail;
 use App\Layout;
 use Illuminate\Http\Request;
 use DB;
@@ -20,6 +21,23 @@ class PagesController extends Controller
 
     public function GetIndex(){
 
+        // Read File
+//        $file=fopen(base_path('resources/lang/') .'ar.json','w');
+
+//        $jsonString = file_get_contents(base_path('resources/lang/ar.json'));
+//        $data = json_decode($jsonString, true);
+//
+//
+//        // Update Key
+//        $data['login'] = "login";
+//        $data['get started'] = "Register";
+//        $data['register'] = "Register";
+//        // Write File
+//        $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
+//        file_put_contents(base_path('resources/lang/ar.json'), stripslashes($newJsonString));
+//
+
+//        dd('here',$data);
         $layout = Layout::find(getSite()->layout_id);
         return view('welcome', compact('layout'));
         

@@ -6,7 +6,7 @@
 	<div class="uk-background-default pt-25">
 		<div class="uk-container">
 			<div class="" uk-grid>
-				<div class="uk-width-2-3@m ">
+				<div class="uk-width-3-4@m ">
 					{{-- Posts cards --}}
 					@forelse($posts as $post)
 					<div class="uk-child-width-1-1@m" uk-grid>
@@ -20,7 +20,13 @@
 									<ul class="uk-iconnav uk-text-muted">
 										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: user; ratio: 0.8"></span><span><a href="#"> {{ucfirst($post->user->name)}}</a> </span></li>
 										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: calendar; ratio: 0.8"></span><span><a href="#"> {{$post->created_at->toFormattedDateString()}}</a></span></li>
-										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: folder; ratio: 0.8"></span><span><a href="{{route('blog.category.show',$post->category->id)}}"> {{ucfirst($post->category->title)}}</a></span></li>
+										@if(!empty($post->categories()))
+										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: folder; ratio: 0.8"></span>
+											@foreach($post->categories as $category)
+											<span><a href=""> {{ucfirst($category->name)}}</a></span>@if($post->categories->count() > 1) <span> | </span> @endif
+											@endforeach
+										</li>
+										@endif
 									</ul>
 									<p>
 										{!! $post->content !!}
@@ -48,7 +54,7 @@
                         </div>
 					@endforelse
 				</div>
-				<div class="uk-width-1-3@m blog-sidebar">
+				<div class="uk-width-1-4@m blog-sidebar">
 					@widget('home.blog.side_bar_menu')
 				</div>
 			</div>

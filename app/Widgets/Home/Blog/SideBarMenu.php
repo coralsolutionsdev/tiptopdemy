@@ -4,6 +4,7 @@ namespace App\Widgets\Home\Blog;
 
 use App\BlogCategory;
 use App\BlogPost;
+use App\Category;
 use Arrilot\Widgets\AbstractWidget;
 
 class SideBarMenu extends AbstractWidget
@@ -21,7 +22,7 @@ class SideBarMenu extends AbstractWidget
      */
     public function run()
     {
-        $categories = BlogCategory::all();
+        $categories = Category::getRootCategories(Category::TYPE_POST);
         $posts = BlogPost::latest()->where('status',BlogPost::STATUS_ENABLED)->paginate(5);
 
         return view('widgets.home.blog.side_bar_menu', [

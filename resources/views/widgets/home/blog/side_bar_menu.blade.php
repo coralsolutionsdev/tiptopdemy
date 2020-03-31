@@ -12,9 +12,9 @@
     </fieldset>
     <hr>
     {{-- Recent posts --}}
-    <div>
-        <div class="uk-background-secondary uk-light uk-text-center">
-            <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Resent posts</p>
+    <div class="" style="padding-bottom: 10px">
+        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
+            <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Latest posts</p>
         </div>
     </div>
     @foreach($posts as $post)
@@ -37,22 +37,22 @@
     @endforeach
     <hr>
     {{-- Categories --}}
-    <div>
-        <div class="uk-background-secondary uk-light uk-text-center">
+    <div class="" style="padding-bottom: 10px">
+        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
             <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Categories</p>
         </div>
     </div>
     <div>
         <ul class="uk-list uk-list-divider">
             @foreach($categories as $category)
-            <li><a href="{{route('blog.category.show',$category->slug)}}">{{$category->title}}</a> <span class="uk-align-right@m">{{ !empty($category->posts) ? $category->posts->count() : 0}}</span></li>
+            <li><a href="{{route('blog.category.show',$category->slug)}}">{{$category->name}}</a> <span class="uk-align-right@m">{{ !empty($category->posts) ? $category->posts->count() : 0}}</span></li>
             @endforeach
         </ul>
     </div>
     <hr>
-    {{-- Categories --}}
-    <div>
-        <div class="uk-background-secondary uk-light uk-text-center">
+    {{-- Tags --}}
+    <div class="" style="padding-bottom: 10px">
+        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
             <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Tags</p>
         </div>
     </div>

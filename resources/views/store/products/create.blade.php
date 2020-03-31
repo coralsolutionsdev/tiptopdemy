@@ -73,7 +73,8 @@
                                     <div id="demo" class="collapse">
                                         {{drawInputTreeListItems($tree_categories, 'categories[]',!empty($selectedCategories) ? $selectedCategories : array(), 'checktree')}}
                                     </div>
-                                </div>                            </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Product Type')}}</div>

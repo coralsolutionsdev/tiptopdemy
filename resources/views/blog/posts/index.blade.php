@@ -8,7 +8,6 @@
 <section>
 	{{--Page header--}}
 	@include('manage.partials._page-header')
-
 	{{--List of items--}}
 	<div>
 		<div class="card border-light table-card">
@@ -18,7 +17,7 @@
 					<tr>
 						<th scope="col" width="30">{{__('Image')}}</th>
 						<th scope="col">{{__('Post')}}</th>
-						<th scope="col" class="text-center" width="50">{{__('Category')}}</th>
+{{--						<th scope="col" class="text-center" width="50">{{__('Category')}}</th>--}}
 						<th scope="col" class="text-center" width="50">{{__('Status')}}</th>
 						<th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
 					</tr>
@@ -34,7 +33,7 @@
 								<p class="text-muted"><small>{{ucfirst($post->user->name)}} | {{$post->created_at->toFormattedDateString()}}</small></p>
 								<p>{{substr(strip_tags($post->content),0,50)}} {{strlen($post->content) > 50 ? "...": "" }}</p>
 							</td>
-							<td class="text-center align-middle">{{ucfirst($post->category->title)}}</td>
+{{--							<td class="text-center align-middle">{{ucfirst($post->category->title)}}</td>--}}
 							<td class="text-center align-middle">{!! getStatusIcon($post->status) !!}</td>
 							<td>
 								<div class="action_btn text-right" style="padding-top: 10px">

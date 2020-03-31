@@ -19,6 +19,9 @@
         }
     </style>
 @endsection
+@section('page-header-button')
+    <button class="btn btn-primary btn-lg w-75"><span>{{__('Submit')}}</span></button>
+@endsection
 @section('content')
 <section>
 @if(!empty($post))
@@ -79,7 +82,13 @@
                     <div class="form-group row col-lg-12">
                         <div class="col-lg-2 d-flex align-items-center">{{__('Category')}}</div>
                         <div class="col-lg-10" style="padding: 10px 0 10px 10px; margin: 0px">
-                            {!! Form::select('category_id',[null=>'-- Please Select Category --'] + $categories,!empty($post) ? $post->category_id : null,['class' => 'form-control']) !!}
+                            {!! Form::select('categories',[null=>'-- Please Select Category --'] + $categories,!empty($selectedCategories) ? $selectedCategories : null,['class' => 'form-control']) !!}
+{{--                            <div>--}}
+{{--                                <span class="btn btn-primary" data-toggle="collapse" data-target="#demo">Show list of categories</span>--}}
+{{--                                <div id="demo" class="collapse">--}}
+{{--                                    {{drawInputTreeListItems($tree_categories, 'categories[]',!empty($selectedCategories) ? $selectedCategories : array(), 'checktree')}}--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>

@@ -62,6 +62,35 @@ class Category extends Model
 
         return $categories;
     }
+
+    /**
+     * Get all categories of type product, this usually is use for backend purpose including multiple roots
+     * @param null $type
+     * @param null $rootId
+     * @return mixed
+     */
+    public static function getRootCategories($type =  null, $rootId = null)
+    {
+        $categories =  null;
+        if (is_null($type)){
+            $type = self::TYPE_POST;
+        }
+        if (!is_null($rootId)){
+            $categories = self::where('type', $type)
+                ->orderBy('position', 'ASC')
+                ->orderBy('name', 'ASC')->get()->filter(function ($category) use($rootId){
+                    if ($category->isCategoryBelongsToRoot($rootId)){
+                        return true;
+                    }
+                });
+        } else {
+            $categories = self::where('type', $type)
+                ->orderBy('position', 'ASC')
+                ->orderBy('name', 'ASC')->get();
+        }
+
+        return $categories;
+    }
     /**
      * check if the category belongs to the root id
      * @param $rootId

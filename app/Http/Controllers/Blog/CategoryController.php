@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog;
 
+use App\Category;
 use App\GalleryAlbum;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
@@ -32,10 +33,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $page_title =  $this->page_title;
-        $breadcrumb =  $this->breadcrumb;
-        $categories = BlogCategory::latest()->paginate(5);
-        return view('blog.categories.index', compact('page_title','breadcrumb','categories'));
+        $page_title = $this->page_title;
+        $breadcrumb = $this->breadcrumb;
+        $categoriesCollection =  $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id',0)->get()->pluck('name','id')->toArray();
+        return view('blog.categories.index', compact('page_title','breadcrumb','categoriesCollection'));
     }
 
     /**
@@ -45,8 +46,13 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
-        return view('blog.categories.create'); 
+        $page_title =  $this->page_title . ' - ' .__('Create');
+        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+                'Create' => ''
+            ];
+        $categories = ['0' => 'No parent'] + Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
+        return view('blog.categories.create', compact('page_title', 'breadcrumb', 'categories'));
     }
 
     /**
@@ -57,20 +63,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        if ($request->isMethod('POST')){
-        $this->validate($request, [
-                 'title' => 'required|unique:blog_categories,title',
-
-                 
-             ]);
-                $category = new BlogCategory();
-                $category->title = $request->input('title');
-                $category->description = $request->input('description');
-                $category->save();
-                session()->flash('success',trans('main._success_msg'));
-                return redirect()->route('blog.categories.index');
+        $input = $request->only([ 'name', 'slug', 'description', 'parent_id',
+            'position', 'meta_title', 'meta_keywords', 'meta_description',
+            'type', 'status', 'images']);
+        $input['type'] = Category::TYPE_POST;
+        if (empty($input['position'])){
+            $input['position'] = 0;
         }
+        if (empty($input['status'])){
+            $input['status'] = 0;
+        }
+        Category::create($input);
+        session()->flash('success',trans('main._success_msg'));
+        return redirect()->route('blog.categories.index');
     }
 
     /**

@@ -42,11 +42,11 @@
     </li>
 {{--List item--}}
     <li class="nav-group">
-        <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-1" aria-expanded="false" aria-controls="nav-group-1">
+        <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-institution" aria-expanded="false" aria-controls="nav-group-institution">
             <i class="fas fa-book"></i>
             <span class="">{{__('Institutions')}}</span>
         </a>
-        <div class="collapse {{ (Request::is('manage/institution*') ? 'show' :'')}}" id="nav-group-1">
+        <div class="collapse {{ (Request::is('manage/institution*') ? 'show' :'')}}" id="nav-group-institution">
             <ul style="">
                 <li class="">
                     <a class="nav-link" href="{{Route('institution.index')}}">{{__('All institutions')}}</a>
@@ -69,7 +69,6 @@
     <li>
         <div class="menu-title">Modules</div>
     </li>
-    @if(false)
 {{--List item--}}
     <li class="nav-group">
         <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-1" aria-expanded="false" aria-controls="nav-group-1">
@@ -111,7 +110,6 @@
             <span class="">{{__('Banners')}}</span>
         </a>
     </li>
-    @endif
 {{--List item--}}
     <li class="nav-group">
         <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-store" aria-expanded="false" aria-controls="nav-group-store">

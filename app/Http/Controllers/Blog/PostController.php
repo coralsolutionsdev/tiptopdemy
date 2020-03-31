@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog;
 
+use App\Category;
 use App\Services\FileAssetManagerService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -36,10 +37,10 @@ class PostController extends Controller
         $breadcrumb =  $this->breadcrumb;
         $count = BlogPost::where('id','>','1')->count();
         $posts = BlogPost::latest()->paginate(15);
-        $categories =  BlogCategory::all();
-        if ($categories->count() < 1){
-            session()->flash('warning', 'You haven\'t created any blog categories. Please create new one before proceed. ');
-        }
+//        $categories =  BlogCategory::all();
+//        if ($categories->count() < 1){
+//            session()->flash('warning', 'You haven\'t created any blog categories. Please create new one before proceed. ');
+//        }
         return view('blog.posts.index', compact('page_title', 'breadcrumb','posts','count'));
     }
      public function GetIndex(Request $request)
@@ -55,7 +56,7 @@ class PostController extends Controller
         }
         $postscount = BlogPost::latest()->where('status','1')->count();
         $count = BlogPost::where('id','>','1')->count();
-        $categories = BlogCategory::all();
+        $categories = Category::getRootCategories(Category::TYPE_POST);
         $all_posts = BlogPost::latest()->where('status','1')->paginate(5);
         return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search'));
     }
@@ -72,8 +73,9 @@ class PostController extends Controller
         $breadcrumb = $breadcrumb + [
             'Create' => ''
         ];
-        $categories = BlogCategory::all()->pluck('title','id')->toArray();
-        return view('blog.posts.create', compact('page_title','breadcrumb','categories'));
+        $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id', 0)->get();
+        $categories = Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
+        return view('blog.posts.create', compact('page_title','breadcrumb','categories', 'tree_categories'));
     }
 
     /**
@@ -84,47 +86,66 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        if ($request->isMethod('post')){
-             if ($request->input('slug') != ''){
-                 $this->validate($request, [
-                 'slug'         => 'alpha_dash|min:0|max:255|unique:blog_posts,slug',
-                ]);
-            }
-                $this->validate($request, [
-                 'title'        => 'required',
-                 'category_id'  => 'required|integer',
-                 'content'      => 'required',
-                 'image'        => 'sometimes|image',
-                ]);
-                $input =  $request->only(
-                    'title',
-                    'category_id',
-                    'slug',
-                    'image',
-                    'content',
-                    'status'
-                );
+        $input = $request->all();
+        $input['user_id'] = Auth()->user()->id;
+        if(!empty($input['status'])){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $input['status'] = $status;
+        $input['status'] = $status;
+        // upload save image
+        if ($request->hasFile('image')) {
+            // upload and save image
+            $image = $request->file('image');
+            $location =  config('baseapp.post_image_storage_path');
+            $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
+            $input['image'] = $uploaded_image;
+        }
+        $post = BlogPost::create($input);
+        // update Category
+        $categories = $request->input('categories', array());
+        $post->categories()->sync($categories);
 
-                $input['user_id'] = Auth()->user()->id;
-                if(!empty($input['status'])){
-                    $status = 1;
-                }else{
-                    $status = 0;
-                }
-                $input['status'] = $status;
-                // upload save image
-                if ($request->hasFile('image')) {
-                    // upload and save image
-                    $image = $request->file('image');
-                    $location =  config('baseapp.post_image_storage_path');
-                    $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-                    $input['image'] = $uploaded_image;
-                }
-                BlogPost::create($input);
-                session()->flash('success', trans('main._success_msg'));
-                return redirect()->route('posts.index');
-            }
+        // update tags
+        $tags = $request->input('tags', array());
+        $post->syncTagsWithType($tags, 'post');
+
+
+        session()->flash('success', trans('main._success_msg'));
+        return redirect()->route('posts.index');
+
+
+//        if ($request->isMethod('post')){
+//             if ($request->input('slug') != ''){
+//                 $this->validate($request, [
+//                 'slug'         => 'alpha_dash|min:0|max:255|unique:blog_posts,slug',
+//                ]);
+//            }
+//                $this->validate($request, [
+//                 'title'        => 'required',
+//                 'category_id'  => 'required|integer',
+//                 'content'      => 'required',
+//                 'image'        => 'sometimes|image',
+//                ]);
+//                $input =  $request->only(
+//                    'title',
+//                    'category_id',
+//                    'slug',
+//                    'image',
+//                    'content',
+//                    'status'
+//                );
+//
+//                $input['user_id'] = Auth()->user()->id;
+//                if(!empty($input['status'])){
+//                    $status = 1;
+//                }else{
+//                    $status = 0;
+//                }
+//
+//            }
     }
 
     /**
@@ -138,7 +159,7 @@ class PostController extends Controller
         //
         $post = BlogPost::find($id);
         $posts = BlogPost::latest()->paginate(5);
-        $categories = BlogCategory::all();
+        $categories = Category::getRootCategories(Category::TYPE_POST);
         return view('blog.frontend.show', compact('post' , 'categories', 'posts'));
     }
 
@@ -156,8 +177,10 @@ class PostController extends Controller
                 'Edit' => ''
             ];
         $post = BlogPost::find($id);
-        $categories = BlogCategory::all()->pluck('title','id')->toArray();
-        return view('blog.posts.create', compact('page_title','breadcrumb','post','categories'));
+        $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id', 0)->get();
+        $categories = Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
+        $selectedCategories = $post->categories()->pluck('id')->toArray();
+        return view('blog.posts.create', compact('page_title','breadcrumb','post','categories', 'tree_categories','selectedCategories'));
 
     }
 
@@ -170,53 +193,81 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
         $post = BlogPost::find($id);
+        if(!empty($input['status'])){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $input['status'] = $status;
+        $input['status'] = $status;
+        if ($request->hasFile('image')) {
+            // upload and save image
+            $image = $request->file('image');
+            $location =  config('baseapp.post_image_storage_path');
+            $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
+            $input['image'] = $uploaded_image;
+            // Delete old image
+            FileAssetManagerService::ImageDestroy($post->image);
+        }
+        $post->update($input);
 
-        if ($request->isMethod('PUT')){
+        // update Category
+        $categories = $request->input('categories', array());
+        $post->categories()->sync($categories);
 
-            if ($request->input('slug') != $post->slug){
-                $this->validate($request, [
-                    'slug'         => 'alpha_dash|min:0|max:255|unique:blog_posts,slug',
-                ]);
+        // update tags
+        $tags = $request->input('tags', array());
+        $post->syncTagsWithType($tags, 'post');
 
-            }
-            $this->validate($request, [
-                'title'        => 'required',
-                'category_id'  => 'required|integer',
-                'content'         => 'required',
-                'image'        => 'sometimes|image',
-            ]);
-            $input =  $request->only(
-                'title',
-                'category_id',
-                'slug',
-                'image',
-                'content',
-                'status'
-            );
-            $input['user_id'] = Auth()->user()->id;
-            if(!empty($input['status'])){
-                $status = 1;
-            }else{
-                $status = 0;
-            }
-            $input['status'] = $status;
+        session()->flash('success', trans('main._success_msg'));
+        return redirect()->route('posts.index');
 
-            if ($request->hasFile('image')) {
-                // upload and save image
-                $image = $request->file('image');
-                $location =  config('baseapp.post_image_storage_path');
-                $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-                $input['image'] = $uploaded_image;
-                // Delete old image
-                FileAssetManagerService::ImageDestroy($post->image);
-            }
-
-            $post->update($input);
-            session()->flash('success', trans('main._success_msg'));
-            return redirect()->route('posts.index');
-            }
+//        if ($request->isMethod('PUT')){
+//
+//            if ($request->input('slug') != $post->slug){
+//                $this->validate($request, [
+//                    'slug'         => 'alpha_dash|min:0|max:255|unique:blog_posts,slug',
+//                ]);
+//
+//            }
+//            $this->validate($request, [
+//                'title'        => 'required',
+//                'category_id'  => 'required|integer',
+//                'content'         => 'required',
+//                'image'        => 'sometimes|image',
+//            ]);
+//            $input =  $request->only(
+//                'title',
+//                'category_id',
+//                'slug',
+//                'image',
+//                'content',
+//                'status'
+//            );
+//            $input['user_id'] = Auth()->user()->id;
+//            if(!empty($input['status'])){
+//                $status = 1;
+//            }else{
+//                $status = 0;
+//            }
+//            $input['status'] = $status;
+//
+//            if ($request->hasFile('image')) {
+//                // upload and save image
+//                $image = $request->file('image');
+//                $location =  config('baseapp.post_image_storage_path');
+//                $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
+//                $input['image'] = $uploaded_image;
+//                // Delete old image
+//                FileAssetManagerService::ImageDestroy($post->image);
+//            }
+//
+//            $post->update($input);
+//            session()->flash('success', trans('main._success_msg'));
+//            return redirect()->route('posts.index');
+//            }
     }
 
     /**

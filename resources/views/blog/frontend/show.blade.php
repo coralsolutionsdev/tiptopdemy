@@ -15,7 +15,7 @@
                                         <img class="uk-transition-scale-up uk-transition-opaque" src="{{asset_image($post->image)}}" alt="" style="width: 100%">
                                     </div>
                                     <div class="uk-card-body" style="padding-left: 0px; padding-right: 0px">
-                                        <h3><a href="{{route('blog.post.show',$post->slug)}}">{{$post->title}}</a></h3>
+                                        <h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
                                         <ul class="uk-iconnav uk-text-muted">
                                             <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: user; ratio: 0.8"></span><span><a href="#"> {{ucfirst($post->user->name)}}</a> </span></li>
                                             <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: calendar; ratio: 0.8"></span><span><a href="#"> {{$post->created_at->toFormattedDateString()}}</a></span></li>

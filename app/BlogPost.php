@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Tags\HasTags;
@@ -9,6 +10,8 @@ use Spatie\Tags\HasTags;
 class BlogPost extends Model
 {
     use HasTags;
+    use Sluggable;
+
 
     protected $fillable = [
         'title',
@@ -28,6 +31,28 @@ class BlogPost extends Model
             $count = $this->comments->count();
         }
         return $count;
+    }
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => ['title', '']
+            ]
+        ];
+    }
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
     /**
      * Get the array list of this product tags

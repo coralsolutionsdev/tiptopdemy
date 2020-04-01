@@ -24,9 +24,9 @@
                 <canvas width="75" height="20"></canvas>
             </div>
             <div class="uk-width-2-3@s">
-                <div class="uk-card-body">
+                <div class="uk-card-body" style="font-size: 10px">
                     <p>
-                        <a href="{{route('blog.post.show',$post->slug)}}">
+                        <a href="{{route('blog.posts.show',$post->slug)}}">
                            {{$post->title}}
                         </a>
                     </p>

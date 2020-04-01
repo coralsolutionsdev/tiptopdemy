@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Institution;
 
-use App\Institution\Institution;
 use App\Institution\InstitutionScope;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -132,6 +132,11 @@ class InstitutionScopeController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
+        // update slug
+        if ($scope->title != $request->input('title')){
+            $slug = SlugService::createSlug(InstitutionScope::class, 'slug', $request->input('title'), ['unique' => true]);
+            $scope->slug = $slug;
+        }
         $scope->update($input);
         session()->flash('success', trans('Updated successfully'));
         return redirect()->route('institution.scopes.edit', $scope->slug);

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Category;
+use App\Institution\InstitutionScope;
 use App\Services\FileAssetManagerService;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\BlogPost;
@@ -151,16 +153,19 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param BlogPost $post
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BlogPost $post)
     {
-        //
-        $post = BlogPost::find($id);
-        $posts = BlogPost::latest()->paginate(5);
         $categories = Category::getRootCategories(Category::TYPE_POST);
-        return view('blog.frontend.show', compact('post' , 'categories', 'posts'));
+        $posts = BlogPost::latest()->paginate(5);
+        $page_title =  $post->title;
+        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+                $post->title => ''
+            ];
+        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts'));
     }
 
     /**
@@ -210,6 +215,11 @@ class PostController extends Controller
             $input['image'] = $uploaded_image;
             // Delete old image
             FileAssetManagerService::ImageDestroy($post->image);
+        }
+        // update slug
+        if ($post->title != $request->input('title')){
+            $slug = SlugService::createSlug(BlogPost::class, 'slug', $request->input('title'), ['unique' => true]);
+            $post->slug = $slug;
         }
         $post->update($input);
 
@@ -285,19 +295,6 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function GetSlug($slug){
-
-        $post = BlogPost::where('slug','=',$slug)->first();
-        $posts = BlogPost::latest()->paginate(5);
-        $categories = BlogCategory::all();
-        $page_title =  $post->title;
-        $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                $post->title => ''
-            ];
-        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts'));
-
-    }
 
     
 }

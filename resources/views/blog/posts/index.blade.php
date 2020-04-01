@@ -29,7 +29,7 @@
 								<img src="{{getImageURL($post->image)}}" style="width: 100%">
 							</td>
 							<td>
-								<p><a target="_blank" href="{{route('blog.post.show', $post->slug)}}">{{ucfirst($post->title)}}</a></p>
+								<p><a target="_blank" href="{{route('blog.posts.show', $post->slug)}}">{{ucfirst($post->title)}}</a></p>
 								<p class="text-muted"><small>{{ucfirst($post->user->name)}} | {{$post->created_at->toFormattedDateString()}}</small></p>
 								<p>{{substr(strip_tags($post->content),0,50)}} {{strlen($post->content) > 50 ? "...": "" }}</p>
 							</td>
@@ -39,7 +39,7 @@
 								<div class="action_btn text-right" style="padding-top: 10px">
 										<ul>
 											<li class="">
-												<a target="_blank" href="{{route('blog.post.show', $post->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
+												<a target="_blank" href="{{route('blog.posts.show', $post->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
 											</li>
 											<li class="">
 												<a href="{{route('posts.edit', $post->id)}}" class="btn btn-light"><i class="far fa-edit"></i></a>

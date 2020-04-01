@@ -43,12 +43,6 @@
                         </div>
                     </div>
                     <div class="form-group row col-lg-12">
-                        <div class="col-lg-2 d-flex align-items-center">{{__('Slug title')}}</div>
-                        <div class="col-lg-10 padding-0 margin-0">
-                            {!! Form::text('slug',!empty($post) ? $post->slug : null,['class' => 'form-control slug','required' => true,'placeholder' => 'slug-title']) !!}
-                        </div>
-                    </div>
-                    <div class="form-group row col-lg-12">
                         <div class="col-lg-2 d-flex align-items-center">{{__('Content')}}</div>
                         <div class="col-lg-10 padding-0 margin-0">
                             {!! Form::textarea('content',!empty($post->content) ? $post->content : null,['class' => 'form-control content-editor', 'rows' => '15']) !!}

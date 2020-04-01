@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Institution;
 use App\Institution\InstitutionScope;
 use App\Institution\InstitutionScopeField;
 use App\Institution\InstitutionScopeFieldOption;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -138,6 +139,11 @@ class InstitutionScopeFieldController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
+        // update slug
+        if ($field->title != $request->input('title')){
+            $slug = SlugService::createSlug(InstitutionScopeField::class, 'slug', $request->input('title'), ['unique' => true]);
+            $field->slug = $slug;
+        }
         $field->update($input);
         // update field options
         foreach ($itemIds as $key => $id){

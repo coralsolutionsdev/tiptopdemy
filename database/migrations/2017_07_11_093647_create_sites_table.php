@@ -18,7 +18,7 @@ class CreateSitesTable extends Migration
             $table->string('name');
             $table->string('logo')->nullable();
             $table->integer('logo_show')->default(0);
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('lang');
             $table->unsignedInteger('layout_id')->nullable();
             $table->foreign('layout_id')->references('id')->on('layouts')->onDelete('set null');

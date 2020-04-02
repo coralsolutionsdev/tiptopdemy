@@ -31,11 +31,12 @@ class ValidationMail extends Mailable
     public function build()
     {
         $domain = ucfirst(getApplicationDomain());
-        $domainLogoPath = '';
+        $domainLogoPath = asset_image(getSite()->logo);
+        $headerImage = asset_image('/assets/true_friends.png');
         $receiverData = $this->receiverData;
         $validationCode = $receiverData['validation_code'];
         $senderEmail = 'support@example.com';
         $validationLink = url('/account/activate?verify_email='.$validationCode);
-        return $this->from($senderEmail)->subject($domain.': Account activation')->markdown('emails.registration.validation_mail', compact('domain', 'domainLogoPath', 'receiverData','emailContactList', 'validationLink'));
+        return $this->from($senderEmail)->subject($domain.': Account activation')->markdown('emails.registration.validation_mail', compact('domain', 'domainLogoPath', 'receiverData','emailContactList', 'validationLink', 'headerImage'));
     }
 }

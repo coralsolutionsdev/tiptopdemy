@@ -35,11 +35,12 @@ class HomeController extends Controller
         return view('template');
     }
 
-    public function verification(){
-        if(Auth::user()->status == 0){
-            return view('profile.verification');
+    public function suspended(){
+        $status = Auth::user()->status;
+        if($status == User::STATUS_PENDING || $status == User::STATUS_DISABLED){
+            return view('profile.verification', compact('status'));
         }
-        return redirect()->route('home');
+        return redirect()->route('main');
         
 
         

@@ -36,13 +36,14 @@
                                 @if(Auth::user()->hasRole('superadministrator') OR Auth::user()->hasRole('administrator'))
                                     <li><a href="{{route('admin.dashboard')}}"><span class="uk-margin-small-right" uk-icon="tv"></span> Manage</a></li>
                                 @endif
-                                <li><a href=""><span class="uk-margin-small-right" uk-icon="user"></span> Profile</a></li>
-                                <li><a href="{{route('logout')}}"><span class="uk-margin-small-right" uk-icon="sign-out"></span> Log out</a></li>
+                                <li><a href="{{route('profile.index')}}"><span class="uk-margin-small-right" uk-icon="user"></span> {{__('Profile')}}</a></li>
+                                <li><a href="{{route('logout')}}"><span class="uk-margin-small-right" uk-icon="sign-out"></span>{{__('Log out')}}</a></li>
                             </ul>
                         </div>
                     </li>
                 @else
-                    <li><a class="top-menu-login">{{__('login')}}</a></li>
+                    <li><a href="{{route('login')}}">{{__('login')}}</a></li>
+{{--                    class="top-menu-login"--}}
                 @if(getSite()->active == 1)
                         <li><a href="{{route('register')}}">{{__('get started')}}</a></li>
                     @endif

@@ -9,21 +9,28 @@
         @endforeach
     @else
         <section>
-            <div class="">
-                <div class="uk-flex uk-flex-center ">
-                    <h1>
-                        Welcome to <span class="uk-text-primary">{{getSite()->name}}</span>
-                    </h1>
+            <div class="uk-container">
+                <div class="uk-flex uk-flex-center uk-padding" uk-grid>
+                    <div class="uk-card uk-card-default uk-card-body uk-width-2-3@m uk-padding">
+                        <div class="uk-child-width-expand@s" uk-grid>
+                            <div>
+                                <div class="uk-text-center">
+                                    <img src="{{asset_image('/assets/true_friends.png')}}" width="300">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex-center uk-text-center" style="padding-top: 20px">
+                                    <div>
+                                        <h3 class="uk-card-title uk-text-primary">Welcome to {{getApplicationDomain()}}</h3>
+                                        <p>
+                                            {{getSite()->description}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="ui grid">
-                <div class="four wide column">1</div>
-                <div class="four wide column">2</div>
-                <div class="four wide column">3</div>
-                <div class="four wide column">4</div>
-                <div class="two wide column">5</div>
-                <div class="eight wide column">6</div>
-                <div class="six wide column">7</div>
             </div>
         </section>
     @endif

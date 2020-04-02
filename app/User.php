@@ -38,6 +38,15 @@ class User extends Authenticatable
         self::GENDER_FEMALE => 'Female',
     ];
 
+    const STATUS_PENDING = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_DISABLED = 2;
+    const STATUS_TYPE_ARRAY = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_ACTIVE => 'Active',
+        self::STATUS_DISABLED => 'Disabled'
+    ];
+
     /**
      * Gets the first role title
      *

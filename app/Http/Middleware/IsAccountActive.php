@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 use Auth;
-use App\User;
-use App\site;
 
-class IsActive
+class IsAccountActive
 {
     /**
      * Handle an incoming request.
@@ -18,17 +17,15 @@ class IsActive
      */
     public function handle($request, Closure $next)
     {
-        $site = Site::all()->last();
-        
-        if($site->active == 0)
-        {
-            if (Auth::check() and Auth::user()->role == 'admin') {
+
+        if(Auth::check()){
+            if (Auth::user()->getRole()->name == 'superadministrator' || Auth::user()->getRole()->name == 'administrator' || Auth::user()->status == User::STATUS_ACTIVE){
                 return $next($request);
             }
-            return redirect()->route('offline');
-        }   
+            return redirect()->route('suspended');
+        }else{
+            return redirect()->route('main');
+        }
         return $next($request);
-        
-
     }
 }

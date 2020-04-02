@@ -33,12 +33,55 @@ Route::group(['middleware'=>'installed'], function(){
 		Route::get('/get/institution/scope/field/{fieldId}/options', 'Auth\RegisterController@getInstitutionScopeFieldOptions');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
         Route::post('/login/page', 'Admin\LoginController@login')->name('login.custom');
-		Route::get('/verification','HomeController@verification')->name('verification');
+		Route::get('/suspended','HomeController@suspended')->name('suspended');
+        Route::get('account/activate', ['as' => 'account.activate', 'uses' => 'Site\ProfileController@verifyEmail']);
         Route::get('/verify/{email}/{verify_token}', 'HomeController@sendVerifyEmailDone')->name('sendverifyemail');
     /* Socialite login*/
         Route::get('/login/{driver}', 'Auth\LoginController@redirectToProvider')->name('login.socialite');
         Route::get('/login/{driver}/callback', 'Auth\LoginController@handleProviderCallback');
-	/* Admin Routes */
+
+
+    /* User Routes */
+        Route::group(['middleware'=>'active'], function(){
+
+            if (isModuleEnabled('blog_posts')){
+                /* Blog  */
+                Route::group(['prefix' => 'blog', 'as' => 'blog.'], function () {
+                    Route::get('/' , 'Blog\PostController@GetIndex')->name('blog.main');
+//                Route::resource('/post','Blog\PostController', ['only' => ['show']]);
+                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
+//                Route::get('post/{slug}','Blog\PostController@show')->name('post.show');
+                    Route::resource('/posts','Blog\PostController', ['only' => ['show']]);
+
+                });
+            }
+            /* Gallery */
+            Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
+            Route::get('/gallery','Gallery\AlbumController@GetIndex')->name('gallery.main');
+            /* Profile */
+            Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'show' ,'edit']])->middleware('active.account');;
+            /* pages Routes */
+            Route::get('/','PagesController@GetIndex')->name('main');
+            Route::get('/about','PagesController@GetAbout');
+            Route::get('/contact','Site\ContactController@GetContact')->name('contact');
+            Route::post('/contact','Site\ContactController@PostContact')->name('post.contact');
+            if (isModuleEnabled('products')){
+                /* Store  */
+                Route::group(['prefix' => 'store', 'as' => 'store.'], function () {
+                    Route::get('/' , 'Store\ProductController@GetIndex')->name('store.main');
+                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
+                    Route::get('product/{slug}','Store\ProductController@show')->name('product.show');
+                });
+            }
+            /*pages*/
+            Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
+        });
+    });
+    /* End of User Routes */
+
+
+
+    /* Admin Routes */
 		Route::group(['prefix' => 'manage', 'middleware' => 'role:superadministrator|administrator'], function () {
 			
 			Route::get('/','Admin\AdminController@GetDashboard')->name('admin.dashboard');
@@ -128,49 +171,6 @@ Route::group(['middleware'=>'installed'], function(){
         });
 	/* Admin Routes end */
 
-	/* User Routes */
-	Route::group(['middleware'=>'active'], function(){
 
-	    if (isModuleEnabled('blog_posts')){
-            /* Blog  */
-            Route::group(['prefix' => 'blog', 'as' => 'blog.'], function () {
-                Route::get('/' , 'Blog\PostController@GetIndex')->name('blog.main');
-//                Route::resource('/post','Blog\PostController', ['only' => ['show']]);
-                Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
-//                Route::get('post/{slug}','Blog\PostController@show')->name('post.show');
-                Route::resource('/posts','Blog\PostController', ['only' => ['show']]);
-
-            });
-        }
-
-		/* Gallery */
-		Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
-		Route::get('/gallery','Gallery\AlbumController@GetIndex')->name('gallery.main');
-		
-		Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'show' ,'edit']]);
-		Route::get('/profile/{id}/dashboard', 'Site\ProfileController@edit');
-		Route::get('/profile', 'HomeController@index')->name('profile')->middleware('auth');
-
-		/* pages Routes */
-		Route::get('/','PagesController@GetIndex')->name('main');
-		Route::get('/about','PagesController@GetAbout');
-		Route::get('/contact','Site\ContactController@GetContact')->name('contact');
-		Route::post('/contact','Site\ContactController@PostContact')->name('post.contact');
-
-		});
-        if (isModuleEnabled('blog_posts')){
-            /* Blog  */
-            Route::group(['prefix' => 'store', 'as' => 'store.'], function () {
-                Route::get('/' , 'Store\ProductController@GetIndex')->name('store.main');
-                Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
-                Route::get('product/{slug}','Store\ProductController@show')->name('product.show');
-            });
-        }
-        /*pages*/
-        Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
-		//Route::resource('/user','Site\UserController');
-
-
-	});
 
 });

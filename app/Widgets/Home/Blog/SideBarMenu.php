@@ -22,7 +22,7 @@ class SideBarMenu extends AbstractWidget
      */
     public function run()
     {
-        $categories = Category::getRootCategories(Category::TYPE_POST);
+        $categories = Category::where('type', Category::TYPE_POST, 3)->where('parent_id', 0)->get();
         $posts = BlogPost::latest()->where('status',BlogPost::STATUS_ENABLED)->paginate(5);
 
         return view('widgets.home.blog.side_bar_menu', [

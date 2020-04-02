@@ -1,3 +1,5 @@
+@import url("fonts.css");
+
 html, body{
     padding: 0px;
     margin: 0px;
@@ -19,7 +21,7 @@ nav.nav{
     padding-right: 5em;
     padding-left: 5em;
     opacity: 0.9;
-    max-height: 70px;
+    max-height: 75px;
     /*background-color: white;*/
 }
 nav .navbar-brand{
@@ -38,6 +40,9 @@ nav .navbar-brand{
     outline: none;
     text-decoration: none;
     cursor: pointer;
+}
+[class*=uk-dropdown-bottom]{
+    margin-top: 0px;
 }
 .register-card{
     overflow: hidden;

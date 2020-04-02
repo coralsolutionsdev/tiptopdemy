@@ -230,15 +230,15 @@ function getImageURL($path)
 
 }
 
-function drawCategoryTreeList($items, $class = '')
+function drawCategoryTreeList($items, $type, $class = '')
 {
     echo '<ul class="'.$class.'">';
         foreach ($items as $id => $item){
             echo '<li>';
             echo '<a href="#" class="cat-item">'.$item.' (0)</a> <a href="'.route('store.categories.edit',$id).'" class="icon" title="Edit Category"><i class="far fa-edit"></i></a> - <a href="" class="icon"  title="View Category"><i class="far fa-eye"></i></a>';
-            $sub_menu =  Category::where('type', Category::TYPE_PRODUCT)->where('parent_id',$id)->get()->pluck('name','id')->toArray();
+            $sub_menu =  Category::where('type', $type)->where('parent_id',$id)->get()->pluck('name','id')->toArray();
             if (!empty($sub_menu)){
-                drawCategoryTreeList($sub_menu);
+                drawCategoryTreeList($sub_menu, $type);
             }
             echo '</li>';
         }

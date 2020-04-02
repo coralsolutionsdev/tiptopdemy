@@ -58,7 +58,6 @@ class PostController extends Controller
         }
         $postscount = BlogPost::latest()->where('status','1')->count();
         $count = BlogPost::where('id','>','1')->count();
-        $categories = Category::getRootCategories(Category::TYPE_POST);
         $all_posts = BlogPost::latest()->where('status','1')->paginate(5);
         return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search'));
     }

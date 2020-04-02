@@ -6,6 +6,9 @@
 	<div class="uk-background-default pt-25">
 		<div class="uk-container">
 			<div class="" uk-grid>
+				<div class="uk-width-1-4@m blog-sidebar">
+					@widget('home.blog.side_bar_menu')
+				</div>
 				<div class="uk-width-3-4@m ">
 					{{-- Posts cards --}}
 					@forelse($posts as $post)
@@ -16,7 +19,7 @@
 									<img class="uk-transition-scale-up uk-transition-opaque" src="{{asset_image($post->image)}}" alt="" style="width: 100%">
 								</div>
 								<div class="uk-card-body" style="padding-left: 0px; padding-right: 0px">
-									<h3><a href="{{route('blog.post.show',$post->slug)}}">{{$post->title}}</a></h3>
+									<h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
 									<ul class="uk-iconnav uk-text-muted">
 										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: user; ratio: 0.8"></span><span><a href="#"> {{ucfirst($post->user->name)}}</a> </span></li>
 										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: calendar; ratio: 0.8"></span><span><a href="#"> {{$post->created_at->toFormattedDateString()}}</a></span></li>
@@ -32,7 +35,7 @@
 										{!! $post->content !!}
 									</p>
 									<div>
-										<a href="{{route('blog.post.show',$post->slug)}}">
+										<a href="{{route('blog.posts.show',$post->slug)}}">
 											<span class="uk-button uk-button-primary">{{__('Read more')}}</span>
 										</a>
 									</div>
@@ -53,9 +56,6 @@
                             </div>
                         </div>
 					@endforelse
-				</div>
-				<div class="uk-width-1-4@m blog-sidebar">
-					@widget('home.blog.side_bar_menu')
 				</div>
 			</div>
 		</div>

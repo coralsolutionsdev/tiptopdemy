@@ -35,7 +35,7 @@
         <div>
             <div class="card border-light table-card">
                 <div class="card-body">
-                    {{drawCategoryTreeList($categoriesCollection, 'file-tree')}}
+                    {{drawCategoryTreeList($categoriesCollection, \App\Category::TYPE_POST, 'file-tree')}}
                 </div>
             </div>
         </div>

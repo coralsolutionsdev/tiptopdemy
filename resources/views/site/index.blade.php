@@ -31,7 +31,7 @@
                             <div class="form-group row col-lg-12 padding-0 margin-0">
                                 <div class="col-lg-3 d-flex align-items-center padding-0">{{__('Description')}}</div>
                                 <div class="col-lg-9" style="padding: 10px 0 10px 10px; margin: 0px">
-                                    {!! Form::textarea('description',getSite()->desicription,['class' => 'form-control','rows' => '5']) !!}
+                                    {!! Form::textarea('description',getSite()->description,['class' => 'form-control','rows' => '5']) !!}
 
                                 </div>
                             </div>

@@ -151,16 +151,14 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="uk-text-center">
-                            Or, Login with..
+                        <div class="uk-text-center" style="padding-bottom: 15px">
+                            Or, register with..
                         </div>
-                        <div class="uk-margin">
-                            <div class="uk-inline uk-width-1-1">
+                        <div class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
+                            <div>
                                 <button class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</button>
                             </div>
-                        </div>
-                        <div class="uk-margin">
-                            <div class="uk-inline uk-width-1-1">
+                            <div>
                                 <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
                             </div>
                         </div>

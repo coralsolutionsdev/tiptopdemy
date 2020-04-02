@@ -53,8 +53,8 @@
                                 <div class="uk-flex-center uk-text-center" style="padding-top: 20px">
                                     <div>
                                         <img src="{{asset_image('/assets/tutorial.png')}}" width="150">
-                                        <p style="font-size: 18px">{{getSite()->name}}</p>
-                                        <p style="margin: 0px; padding: 0px">
+                                        <p class="uk-text-bold" style="font-size: 18px">{{getSite()->name}}</p>
+                                        <p style="margin: 0px; padding: 0px; text-align: justify; text-justify: inter-word">
                                             {{getSite()->description}}
                                         </p>
                                     </div>

@@ -52,9 +52,9 @@
                             <div>
                                 <div class="uk-flex-center uk-text-center" style="padding-top: 20px">
                                     <div>
-                                        <img src="{{asset_image('/assets/tutorial.png')}}" width="200">
-                                        <h4>{{getSite()->name}}</h4>
-                                        <p>
+                                        <img src="{{asset_image('/assets/tutorial.png')}}" width="150">
+                                        <p style="font-size: 18px">{{getSite()->name}}</p>
+                                        <p style="margin: 0px; padding: 0px">
                                             {{getSite()->description}}
                                         </p>
                                     </div>

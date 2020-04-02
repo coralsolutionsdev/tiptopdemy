@@ -23,7 +23,8 @@
                     </thead>
                     <tbody>
                     @foreach ($roles as $role)
-                        <tr>
+                        @if($role->name != 'superadministrator' || Auth::user()->isSuperAdmin())
+                            <tr>
                             <td class="align-middle">{{$role->display_name}}</td>
                             <td class="align-middle">{{$role->description}}</td>
                             <td>
@@ -49,6 +50,7 @@
                                 </div>
                             </td>
                         </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>

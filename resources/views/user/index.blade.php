@@ -26,7 +26,7 @@
 					</thead>
 					<tbody>
 					@foreach ($users as $user)
-						@if($user->getRole()->name != 'superadministrator' OR $current_user->isSuperAdmin())
+						@if($user->getRole()->name != 'superadministrator' || $current_user->isSuperAdmin())
 							<tr>
 								<td class="align-middle"><img src="{{$user->getProfilePicURL()}}" class="profile-picture-w-50"></td>
 								<td class="align-middle"><a href="{{route('profile.show', $user->id)}}" target="_balnk">{{ucfirst($user->name)}}</a></td>

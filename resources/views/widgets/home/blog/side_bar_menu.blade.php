@@ -48,25 +48,23 @@
         </ul>
         <ul class="uk-list uk-list-divider">
             @foreach($categories as $category)
-                <li style="padding: 5px 5px 0px 5px"><span><a href="">{{$category->name}}</a></span><span class="uk-align-left"><span class="uk-badge">0</span></span></li>
+                <li style="padding: 5px 5px 0px 5px"><span><a href="{{route('blog.category.show', $category->slug)}}">{{$category->name}}</a></span><span class="uk-align-left"><span class="uk-badge">{{$category->items()->count()}}</span></span></li>
 {{--                <li><a href="{{route('blog.category.show',$category->slug)}}"></a> <span class="uk-align-right@m">{{ !empty($category->posts) ? $category->posts->count() : 0}}</span></li>--}}
             @endforeach
         </ul>
     </div>
     <hr>
     {{-- Tags --}}
-    <div class="" style="padding-bottom: 10px">
-        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
-            <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Tags</p>
+    @if(!empty($tags) && $tags->count() > 0)
+        <div class="" style="padding-bottom: 10px">
+            <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
+                <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Tags</p>
+            </div>
         </div>
-    </div>
-    <div class="blog-tags">
-        <a class="uk-button uk-button-default" href="#">Tag</a>
-        <a class="uk-button uk-button-default" href="#">Clearance</a>
-        <a class="uk-button uk-button-default" href="#">Tag NAme</a>
-        <a class="uk-button uk-button-default" href="#">Anonymous</a>
-        <a class="uk-button uk-button-default" href="#">blog</a>
-
-    </div>
-
+        <div class="blog-tags">
+            @foreach($tags as $tag)
+            <a class="uk-button uk-button-default" href="#">{{$tag->name}}</a>
+            @endforeach
+        </div>
+    @endif
 </div>

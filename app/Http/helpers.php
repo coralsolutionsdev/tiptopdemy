@@ -233,10 +233,16 @@ function getImageURL($path)
 function drawCategoryTreeList($items, $type, $class = '')
 {
     echo '<ul class="'.$class.'">';
-        foreach ($items as $id => $item){
+        // Temporary solution
+        if ($type == Category::TYPE_POST){
+            $folder = 'blog';
+        }else{
+            $folder = 'store';
+        }
+        foreach ($items as $item){
             echo '<li>';
-            echo '<a href="#" class="cat-item">'.$item.' (0)</a> <a href="'.route('store.categories.edit',$id).'" class="icon" title="Edit Category"><i class="far fa-edit"></i></a> - <a href="" class="icon"  title="View Category"><i class="far fa-eye"></i></a>';
-            $sub_menu =  Category::where('type', $type)->where('parent_id',$id)->get()->pluck('name','id')->toArray();
+            echo '<a href="#" class="cat-item">'.$item->name.' ('.$item->items->count().')</a> <a href="'.route($folder.'.categories.edit',$item->slug).'" class="icon" title="Edit Category"><i class="far fa-edit"></i></a> - <a href="'.route($folder.'.category.show',$item->slug).'" class="icon"  title="View Category"><i class="far fa-eye"></i></a>';
+            $sub_menu =  Category::where('type', $type)->where('parent_id',$item->id)->get();
             if (!empty($sub_menu)){
                 drawCategoryTreeList($sub_menu, $type);
             }

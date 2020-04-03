@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Blog;
 use App\Category;
 use App\GalleryAlbum;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\BlogPost;
 use App\BlogCategory;
 use Auth;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 use Image;
 use Storage;
 
@@ -29,20 +32,20 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
         $page_title = $this->page_title;
         $breadcrumb = $this->breadcrumb;
-        $categoriesCollection =  $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id',0)->get()->pluck('name','id')->toArray();
+        $categoriesCollection =  $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id',0)->get();
         return view('blog.categories.index', compact('page_title','breadcrumb','categoriesCollection'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -58,14 +61,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
-        $input = $request->only([ 'name', 'slug', 'description', 'parent_id',
+        $input = $request->only([ 'name', 'description', 'parent_id',
             'position', 'meta_title', 'meta_keywords', 'meta_description',
-            'type', 'status', 'images']);
+            'type', 'status', 'images', 'show_on_menu']);
         $input['type'] = Category::TYPE_POST;
         if (empty($input['position'])){
             $input['position'] = 0;
@@ -80,23 +83,22 @@ class CategoryController extends Controller
 
     /**
      * Display the specified resource.
-     * @param BlogCategory $slug
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Category $category
+     * @return Factory|View
      */
-    public function show($slug)
+    public function show(Category $category)
     {
-        $category = BlogCategory::where('slug',$slug)->first();
-        if (empty($category)){
-            abort('404');
-        }
-        $posts = BlogPost::latest()->where('category_id', $category->id)->where('status','1')->paginate(15);
-        $categories = BlogCategory::all();
-        $page_title =  $category->title;
+        $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                $category->title => ''
-            ];
-        return view('blog.frontend.index', compact('page_title', 'breadcrumb', 'posts','categories'));
+        $blog_search =  null;
+//        if(!empty($request->blog_search)){
+//            $blog_search =  $request->blog_search;
+//            $posts = BlogPost::latest()->where('status','1')->whereRaw("(title like '%$blog_search%' or content like '%$blog_search%')")->paginate(10);
+//        }else{
+//            $posts = BlogPost::latest()->where('status','1')->paginate(10);
+//        }
+        $posts = $category->items()->paginate(5);
+        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search'));
     }
 
     public function filter(){
@@ -106,61 +108,76 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
-
-        $category = BlogCategory::find($id);
-        return view('blog.categories.edit')->withCategory($category);
+        $page_title =  $this->page_title . ' - ' .__('Create');
+        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+                'Create' => ''
+            ];
+        $categories = ['0' => 'No parent'] + Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
+        return view('blog.categories.create', compact('page_title', 'breadcrumb', 'categories', 'category'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Category $category
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
-         if ($request->isMethod('PUT')){
+        $input = $request->only([ 'name', 'description', 'parent_id',
+            'position', 'meta_title', 'meta_keywords', 'meta_description',
+            'type', 'status', 'images', 'show_on_menu']);
+        $input['type'] = Category::TYPE_POST;
+        if (empty($input['position'])){
+            $input['position'] = 0;
+        }
+        if (empty($input['status'])){
+            $input['status'] = 0;
+        }
+        $category->update($input);
+        session()->flash('success',trans('main._success_msg'));
+        return redirect()->route('blog.categories.index');
 
-            $category = BlogCategory::find($id);
-            
-            if ($request->input('title') != $category->title)
-            {
-                $this->validate($request, [
-                 'title' => 'required|unique:blog_categories,title',
-                ]);
-
-            }   else{ 
-                $this->validate($request, [
-                 'title' => 'required',
-                ]);
-                     }
-
-                $category = BlogCategory::find($id);
-                 if ($category->title != $request->input('title')){
-                     $slug = SlugService::createSlug(BlogCategory::class, 'slug', $request->input('title'), ['unique' => true]);
-                     $category->slug = $slug;
-                 }
-                $category->title = $request->input('title');
-                $category->description = $request->input('description');
-                $category->save();
-                session()->flash('success',trans('main._update_msg'));
-                return redirect()->route('blog.categories.index');
-            }
+//         if ($request->isMethod('PUT')){
+//
+//            $category = BlogCategory::find($id);
+//
+//            if ($request->input('title') != $category->title)
+//            {
+//                $this->validate($request, [
+//                 'title' => 'required|unique:blog_categories,title',
+//                ]);
+//
+//            }   else{
+//                $this->validate($request, [
+//                 'title' => 'required',
+//                ]);
+//                     }
+//
+//                $category = BlogCategory::find($id);
+//                 if ($category->title != $request->input('title')){
+//                     $slug = SlugService::createSlug(BlogCategory::class, 'slug', $request->input('title'), ['unique' => true]);
+//                     $category->slug = $slug;
+//                 }
+//                $category->title = $request->input('title');
+//                $category->description = $request->input('description');
+//                $category->save();
+//                session()->flash('success',trans('main._update_msg'));
+//                return redirect()->route('blog.categories.index');
+//            }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

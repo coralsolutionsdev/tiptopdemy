@@ -32,7 +32,7 @@
 										@endif
 									</ul>
 									<p>
-										{!! $post->content !!}
+										{!! subContent($post->content, 500) !!}
 									</p>
 									<div>
 										<a href="{{route('blog.posts.show',$post->slug)}}">

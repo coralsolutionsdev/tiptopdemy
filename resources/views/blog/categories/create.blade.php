@@ -6,7 +6,7 @@
 @section('content')
     <section>
         @if(!empty($category))
-            {!! Form::open(['url' => route('blog.categories.update', $category->id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+            {!! Form::open(['url' => route('blog.categories.update', $category->slug),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @else
             {!! Form::open(['url' => route('blog.categories.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif

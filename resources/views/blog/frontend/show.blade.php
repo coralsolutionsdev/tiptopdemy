@@ -6,6 +6,9 @@
         <div class="uk-background-default pt-25">
             <div class="uk-container">
                 <div class="" uk-grid>
+                    <div class="uk-width-1-4@m blog-sidebar">
+                        @widget('home.blog.side_bar_menu')
+                    </div>
                     <div class="uk-width-3-4@m ">
                         {{-- Posts cards --}}
                         <div class="uk-child-width-1-1@m" uk-grid>
@@ -34,9 +37,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="uk-width-1-4@m blog-sidebar">
-                        @widget('home.blog.side_bar_menu')
                     </div>
                 </div>
             </div>

@@ -128,17 +128,16 @@ Route::group(['middleware'=>'installed'], function(){
 
         });
     });
-    /* Admin Routes end */
-    /* User Routes */
+/* Admin Routes end */
+/* User Routes */
         Route::group(['middleware'=>'active'], function(){
 
             if (isModuleEnabled('blog_posts')){
                 /* Blog  */
                 Route::group(['prefix' => 'blog', 'as' => 'blog.'], function () {
                     Route::get('/' , 'Blog\PostController@GetIndex')->name('blog.main');
-//                Route::resource('/post','Blog\PostController', ['only' => ['show']]);
-                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
-//                Route::get('post/{slug}','Blog\PostController@show')->name('post.show');
+                    Route::resource('/category','Blog\CategoryController', ['only' => ['show']]);
+//                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
                     Route::resource('/posts','Blog\PostController', ['only' => ['show']]);
 
                 });

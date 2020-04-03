@@ -4,6 +4,8 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class Category extends Model
 {
@@ -13,7 +15,7 @@ class Category extends Model
     protected $fillable = [
         'name', 'slug', 'description', 'parent_id',
         'position', 'meta_title', 'meta_keywords', 'meta_description',
-        'type', 'status', 'images'
+        'type', 'status', 'images','show_on_menu'
     ];
     protected $casts = [
         'images' => 'array'
@@ -37,6 +39,15 @@ class Category extends Model
                 'source' => 'name'
             ]
         ];
+    }
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
     /**
      * Get all categories of type product, this usually is use for backend purpose including multiple roots
@@ -132,6 +143,25 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany('App\Category', 'parent_id', 'id')->orderBy('name', 'asc');
+    }
+
+    /**
+     * @return BelongsToMany|Collection
+     */
+    public function items()
+    {
+        switch($this->type) {
+            case self::TYPE_POST:
+                return $this->belongsToMany('App\BlogPost', 'category_blog_post');
+                break;
+            case self::TYPE_PAGE:
+//              return $this->belongsToMany('App\Page');
+                return collect();
+                break;
+            case self::TYPE_PRODUCT:
+                return $this->belongsToMany('App\Product');
+                break;
+        }
     }
 
 }

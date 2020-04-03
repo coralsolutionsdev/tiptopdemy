@@ -42,7 +42,7 @@
 												<a target="_blank" href="{{route('blog.posts.show', $post->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
 											</li>
 											<li class="">
-												<a href="{{route('posts.edit', $post->id)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+												<a href="{{route('posts.edit', $post->slug)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
 											</li>
 											<li class="">
 												<span id="{{$post->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>

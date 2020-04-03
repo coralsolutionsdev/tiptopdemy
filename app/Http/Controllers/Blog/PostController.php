@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\BlogPost;
 use App\BlogCategory;
 use auth;
+use Illuminate\Http\Response;
 use Image;
 use Storage;
 
@@ -31,7 +32,7 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -65,7 +66,7 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -83,7 +84,7 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -153,7 +154,7 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param BlogPost $post
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(BlogPost $post)
     {
@@ -170,17 +171,16 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param BlogPost $post
+     * @return Response
      */
-    public function edit($id)
+    public function edit(BlogPost $post)
     {
         $page_title =  $this->page_title . ' - ' .__('Create');
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
                 'Edit' => ''
             ];
-        $post = BlogPost::find($id);
         $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id', 0)->get();
         $categories = Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
         $selectedCategories = $post->categories()->pluck('id')->toArray();
@@ -193,7 +193,7 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -283,7 +283,7 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

@@ -93,7 +93,7 @@
                 <input type="text" name="item-title[]" class="form-control item-title" placeholder="Menu title">
             </div>
             <div class="col-lg-5 d-flex align-items-center">
-                <input type="text" name="item-link[]" class="form-control item-link" placeholder="Link url">
+                <input type="text" name="item-link[]" class="form-control item-link" placeholder="example: page-name">
             </div>
             <div class="col-lg-2 text-right">
                 <span class="btn btn-light"><i class="far fa-plus-square"></i></span>

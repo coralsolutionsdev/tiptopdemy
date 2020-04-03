@@ -112,13 +112,14 @@
                                 {!! Form::text('position', (!empty($product)) ? $product->position : 0, ['class' => 'form-control']) !!}
                             </div>
                         </div>
+                        @if(false)
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Tags')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::select('tags[]', $tags, $selectedTags, ['class' => 'form-control select2', 'multiple' => 'multiple', 'id' => 'product-tags', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
                             </div>
                         </div>
-
+                        @endif
                     </div>
                 </div>
                 <div class="card border-light">

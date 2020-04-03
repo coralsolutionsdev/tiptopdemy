@@ -48,6 +48,7 @@
                             {!! Form::textarea('content',!empty($post->content) ? $post->content : null,['class' => 'form-control content-editor', 'rows' => '15']) !!}
                         </div>
                     </div>
+                    @if(false)
                     <div class="form-group row col-lg-12">
                         <div class="col-lg-2 d-flex align-items-center">{{__('Tags')}}</div>
                         <div class="col-lg-10 padding-0 margin-0">
@@ -58,6 +59,7 @@
                             {!! Form::select('tags[]', $tags, null, ['class' => 'form-control select2', 'multiple' => 'multiple', 'id' => 'posts-tags', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

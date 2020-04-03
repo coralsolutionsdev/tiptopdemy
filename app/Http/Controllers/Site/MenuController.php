@@ -71,7 +71,7 @@ class MenuController extends Controller
                 $items[$key]['title'] = $value;
             }
             foreach ($input['item-link'] as $key => $value){
-                $items[$key]['link'] = $value;
+                $items[$key]['link'] = !empty($value) ? $value : '/';
             }
 
             $this->validate($request, [
@@ -143,7 +143,7 @@ class MenuController extends Controller
                 $items[$key]['title'] = $value;
             }
             foreach ($input['item-link'] as $key => $value){
-                $items[$key]['link'] = $value;
+                $items[$key]['link'] = !empty($value) ? $value : '/';
             }
 
             $this->validate($request, [

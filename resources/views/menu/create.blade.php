@@ -31,7 +31,7 @@
 @endsection
 <section>
     @if(!empty($menu))
-        {!! Form::open(['url' => route('menus.update', $menu->id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+        {!! Form::open(['url' => route('menus.update', $menu->slug),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
     @else
         {!! Form::open(['url' => route('menus.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
     @endif

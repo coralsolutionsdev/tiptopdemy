@@ -16,9 +16,9 @@
 				<table class="table table-striped">
 					<thead>
 					<tr>
-						<th scope="col" width="50">{{__('Title')}}</th>
+						<th scope="col">{{__('Title')}}</th>
 						<th scope="col" class="text-center">{{__('position')}}</th>
-						<th scope="col" class="text-center" width="100">{{__('items count')}}</th>
+						<th scope="col" class="text-center" width="150">{{__('items count')}}</th>
 						<th scope="col" class="text-center" width="50">{{__('status')}}</th>
 						<th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
 					</tr>
@@ -37,10 +37,10 @@
 											<a target="_blank" href="" class="btn btn-light disabled"><i class="fas fa-link" aria-hidden="true"></i></a>
 										</li>
 										<li class="">
-											<a href="{{route('menus.edit', $menu->id)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+											<a href="{{route('menus.edit', $menu->slug)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
 										</li>
 										<li class="">
-											<span id="{{$menu->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+											<span id="{{$menu->slug}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
 											<form id="delete-form" method="post" action="{{route('menus.destroy', $menu->id)}}">
 												{{csrf_field()}}
 												{{method_field('DELETE')}}

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Menu;
 use Auth;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 
 class MenuController extends Controller
@@ -26,7 +28,7 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -39,7 +41,7 @@ class MenuController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -55,8 +57,8 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -99,7 +101,7 @@ class MenuController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -109,10 +111,10 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Menu $menu
+     * @return Response
      */
-    public function edit($id)
+    public function edit(Menu $menu)
     {
         $page_title =  $this->page_title . ' - ' .__('Edit');
         $breadcrumb =  $this->breadcrumb;
@@ -120,23 +122,21 @@ class MenuController extends Controller
                 'Edit' => ''
             ];
         $positions = Menu::POSITIONS_ARRAY;
-        $menu = Menu::find($id);
         return view('menu.create', compact('page_title','breadcrumb','menu','positions'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Menu $menu
+     * @return Response
+     * @throws ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Menu $menu)
     {
 
         $input =  $request->all();
         if ($request->isMethod('PUT')){
-            $menu = Menu::find($id);
             $items =  array();
 //            $input = $request->only('layout_title','layout_description','title','description','background','group','structure','container_type');
             foreach ($input['item-title'] as $key => $value){
@@ -162,30 +162,25 @@ class MenuController extends Controller
 
             $menu->update($input);
             session()->flash('success',__('Updated successfully'));
-
             return redirect()->route('menus.index');
-
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Menu $menu
+     * @return Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Menu $menu)
     {
-        //
-        $menu = Menu::find($id);
         $menu->delete();
-
         session()->flash('success',trans('main._delete_msg'));
         return redirect()->route('menus.index');
     }
 
     /**
-     * @param $layout_id
+     * @param $menu_id
      * @return array
      */
     public function getMenuItemsStructure($menu_id)

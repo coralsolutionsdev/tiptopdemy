@@ -2,6 +2,7 @@
 
 namespace Spatie\Tags;
 
+use Illuminate\Support\Facades\DB;
 use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;

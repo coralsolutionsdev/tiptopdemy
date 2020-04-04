@@ -78,7 +78,9 @@ class PostController extends Controller
         ];
         $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id', 0)->get();
         $categories = Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
-        return view('blog.posts.create', compact('page_title','breadcrumb','categories', 'tree_categories'));
+        $tags = Tag::getWithType('post')->pluck('name', 'name');
+        $selectedTags =array();
+        return view('blog.posts.create', compact('page_title','breadcrumb','categories', 'tree_categories', 'tags', 'selectedTags'));
     }
 
     /**

@@ -171,19 +171,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        function enableLoadingSpinner($status = true) {
-            if($status === true){
-                console.log('loading started')
-                $('.loading-screen-spinner').fadeIn();
-            } else{
-                console.log('loading ended')
-                $('.loading-screen-spinner').fadeOut();
-            }
-        }
         $(".birthday").flatpickr();
         $('.scope-items').change(function () {
             var id = $(this).val();
-            enableLoadingSpinner(true);
+            $('.loading-screen-spinner').fadeIn();
             $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
                 var fields = response.items;
                 $('.fields-items').html('');
@@ -193,17 +184,17 @@
                         $('.fields-items').append('<option value="'+id+'">'+name+'</option>');
                     });
                     $('.fields-section').slideDown();
-                    enableLoadingSpinner(false);
+                $('.loading-screen-spinner').fadeOut();
                 } else {
                     $('.fields-section').slideUp();
                     $('.fields-items-section').slideUp();
-                    enableLoadingSpinner(false);
+                $('.loading-screen-spinner').fadeOut();
                 }
             });
         });
         $('.fields-items').change(function () {
             var id = $(this).val();
-            enableLoadingSpinner(true);
+            $('.loading-screen-spinner').fadeIn();
             $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
                 var fields = response.items;
                 $('.field-item-options').html('');
@@ -213,10 +204,10 @@
                         $('.field-item-options').append('<option value="'+id+'">'+name+'</option>');
                     });
                     $('.fields-items-section').slideDown();
-                    enableLoadingSpinner(false);
+                $('.loading-screen-spinner').fadeOut();
                 } else {
                     $('.fields-items-section').slideUp();
-                    enableLoadingSpinner(false);
+                $('.loading-screen-spinner').fadeOut();
                 }
             });
         });

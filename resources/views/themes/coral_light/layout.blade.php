@@ -79,14 +79,14 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: user"></span>
-                                    <input class="uk-input" id="form-stacked-text" name="email" type="text" placeholder="Email">
+                                    <input class="uk-input" name="email" type="text" placeholder="Email">
 
                                 </div>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                    <input class="uk-input" id="form-stacked-text" type="password" name="password" placeholder="Password">
+                                    <input class="uk-input" type="password" name="password" placeholder="Password">
                                 </div>
                             </div>
                             <div class="uk-margin">

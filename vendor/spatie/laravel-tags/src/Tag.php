@@ -2,7 +2,6 @@
 
 namespace Spatie\Tags;
 
-use Illuminate\Support\Facades\DB;
 use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
@@ -58,8 +57,8 @@ class Tag extends Model implements Sortable
 
     public static function getWithType(string $type): DbCollection
     {
-//        return static::withType($type)->orderBy('order_column')->get();
-        return static::withType($type)->orderBy('order_column')->where(\DB::raw( "json_extract(name, '$." . $locale . "')" ), '=', $name)->get();
+        return static::withType($type)->orderBy('order_column')->get();
+//        return static::withType($type)->orderBy('order_column')->where(\DB::raw( "json_extract(name, '$." . $locale . "')" ), '=', $name)->get();
     }
 
     public static function findFromString(string $name, string $type = null, string $locale = null)

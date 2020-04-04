@@ -34,9 +34,11 @@ class LanguageController extends Controller
             $keys =  array();
             $jsonString = file_get_contents(base_path('resources/lang/'.$language->code.'.json'));
             $data = json_decode($jsonString, true);
-            foreach ($data as $key => $trans){
-                $keys[$language->code] = $trans;
-                $LanguageKys[$key] = $keys;
+            if (!empty($data)){
+                foreach ($data as $key => $trans){
+                    $keys[$language->code] = $trans;
+                    $LanguageKys[$key] = $keys;
+                }
             }
         }
         return view('site.languages.index', compact('page_title','breadcrumb','languages', 'LanguageKys'));

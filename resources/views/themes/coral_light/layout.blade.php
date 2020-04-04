@@ -25,7 +25,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202004040830')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -43,8 +43,10 @@
 <script>
     function enableLoadingSpinner($status = true) {
         if($status === true){
+            console.log('loading started')
             $('.loading-screen-spinner').fadeIn();
         } else{
+            console.log('loading ended')
             $('.loading-screen-spinner').fadeOut();
         }
     }

@@ -41,15 +41,6 @@
 <body>
 {{storeLastUrl()}}
 <section>
-    <div class="loading-screen-spinner">
-        <div class="uk-text-center">
-            <div class="spinner-box">
-                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-            </div>
-        </div>
-    </div>
-</section>
-<section>
     <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
         <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
             <div class="double-bounce1"></div>
@@ -112,6 +103,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="loading-screen-spinner">
+        <div class="uk-text-center">
+            loading
         </div>
     </div>
 </section>

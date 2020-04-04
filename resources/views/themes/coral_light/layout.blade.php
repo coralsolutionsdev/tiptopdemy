@@ -40,6 +40,24 @@
 </head>
 <body>
 {{storeLastUrl()}}
+<script>
+    function enableLoadingSpinner($status = true) {
+        if($status === true){
+            $('.loading-screen-spinner').fadeIn();
+        } else{
+            $('.loading-screen-spinner').fadeOut();
+        }
+    }
+</script>
+<section>
+    <div class="loading-screen-spinner uk-flex uk-flex-center">
+        <div class="uk-flex uk-flex-center uk-text-center">
+            <div class="spinner-box">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+    </div>
+</section>
 <section>
     <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
         <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
@@ -118,6 +136,13 @@
     $('.top-menu-login').click(function () {
         UIkit.modal('#login-modal').show();
     });
+    function enableLoadingSpinner($status = true) {
+        if($status === true){
+            $('.loading-screen-spinner').fadeIn();
+        } else{
+            $('.loading-screen-spinner').fadeOut();
+        }
+    }
 </script>
 
 </body>

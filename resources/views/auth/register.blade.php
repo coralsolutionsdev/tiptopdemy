@@ -174,6 +174,7 @@
         $(".birthday").flatpickr();
         $('.scope-items').change(function () {
             var id = $(this).val();
+            enableLoadingSpinner(true);
             $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
                 var fields = response.items;
                 $('.fields-items').html('');
@@ -183,14 +184,17 @@
                         $('.fields-items').append('<option value="'+id+'">'+name+'</option>');
                     });
                     $('.fields-section').slideDown();
+                    enableLoadingSpinner(false);
                 } else {
                     $('.fields-section').slideUp();
                     $('.fields-items-section').slideUp();
+                    enableLoadingSpinner(false);
                 }
             });
         });
         $('.fields-items').change(function () {
             var id = $(this).val();
+            enableLoadingSpinner(true);
             $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
                 var fields = response.items;
                 $('.field-item-options').html('');
@@ -200,8 +204,10 @@
                         $('.field-item-options').append('<option value="'+id+'">'+name+'</option>');
                     });
                     $('.fields-items-section').slideDown();
+                    enableLoadingSpinner(false);
                 } else {
                     $('.fields-items-section').slideUp();
+                    enableLoadingSpinner(false);
                 }
             });
         });

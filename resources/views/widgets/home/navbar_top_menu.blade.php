@@ -13,7 +13,7 @@
             <ul class="uk-navbar-nav menu-items">
                 @if(!empty($items) && getSite()->active == 1)
                     @foreach($items as $item)
-                        <li class="{{(Request::is($item['link'].'*') ? 'uk-active' :'')}}"><a href="{{url($item['link'])}}">{{$item['title']}}</a></li>
+                        <li class="{{(Request::is($item['link'].'*') ? 'uk-active' :'')}}"><a href="{{url($item['link'])}}">{{__($item['title'])}}</a></li>
                     @endforeach
                 @endif
             </ul>

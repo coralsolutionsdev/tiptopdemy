@@ -13,6 +13,7 @@ use App\BlogCategory;
 use auth;
 use Illuminate\Http\Response;
 use Image;
+use Spatie\Tags\Tag;
 use Storage;
 
 class PostController extends Controller
@@ -184,7 +185,9 @@ class PostController extends Controller
         $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id', 0)->get();
         $categories = Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
         $selectedCategories = $post->categories()->pluck('id')->toArray();
-        return view('blog.posts.create', compact('page_title','breadcrumb','post','categories', 'tree_categories','selectedCategories'));
+        $tags = Tag::getWithType('post')->pluck('name', 'name');
+        $selectedTags = $post->getTags();
+        return view('blog.posts.create', compact('page_title','breadcrumb','post','categories', 'tree_categories','selectedCategories', 'tags', 'selectedTags'));
 
     }
 

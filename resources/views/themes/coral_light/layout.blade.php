@@ -40,17 +40,6 @@
 </head>
 <body>
 {{storeLastUrl()}}
-<script>
-    function enableLoadingSpinner($status = true) {
-        if($status === true){
-            console.log('loading started')
-            $('.loading-screen-spinner').fadeIn();
-        } else{
-            console.log('loading ended')
-            $('.loading-screen-spinner').fadeOut();
-        }
-    }
-</script>
 <section>
     <div class="loading-screen-spinner uk-flex uk-flex-center">
         <div class="uk-flex uk-flex-center uk-text-center">

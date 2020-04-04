@@ -171,6 +171,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        function enableLoadingSpinner($status = true) {
+            if($status === true){
+                console.log('loading started')
+                $('.loading-screen-spinner').fadeIn();
+            } else{
+                console.log('loading ended')
+                $('.loading-screen-spinner').fadeOut();
+            }
+        }
         $(".birthday").flatpickr();
         $('.scope-items').change(function () {
             var id = $(this).val();

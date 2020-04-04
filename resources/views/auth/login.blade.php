@@ -12,7 +12,7 @@
                                     @if(!empty(getSite()->logo))
                                         <img src="{{asset_image(getSite()->logo)}}" style="height: 60px" alt="">
                                     @endif
-                                    <p style="font-size: 24px">{{__('Sign in')}}</p>
+                                    <p class="uk-text-capitalize" style="font-size: 24px">{{__('sign in')}}</p>
                                 </div>
 
                                 <form class="uk-form-stacked" role="form" method="POST" action="{{ route('login.custom') }}">

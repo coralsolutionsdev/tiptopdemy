@@ -92,6 +92,7 @@ Route::group(['middleware'=>'installed'], function(){
 
         /*Languages*/
         Route::resource('/languages','Site\LanguageController');
+        Route::post('/languages/update/keys','Site\LanguageController@updateKeys')->name('update.language.keys');
 
         /*Modules*/
         Route::get('/setting/modules','Admin\SettingController@getModules')->name('module.setting')->middleware('role:superadministrator');

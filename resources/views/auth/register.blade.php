@@ -174,7 +174,7 @@
         $(".birthday").flatpickr();
         $('.scope-items').change(function () {
             var id = $(this).val();
-            $('.loading-screen-spinner').fadeIn();
+            $('.loading-screen-spinner').show();
             $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
                 var fields = response.items;
                 $('.fields-items').html('');
@@ -194,7 +194,7 @@
         });
         $('.fields-items').change(function () {
             var id = $(this).val();
-            $('.loading-screen-spinner').fadeIn();
+            $('.loading-screen-spinner').show();
             $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
                 var fields = response.items;
                 $('.field-item-options').html('');

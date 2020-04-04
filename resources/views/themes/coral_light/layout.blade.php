@@ -41,8 +41,8 @@
 <body>
 {{storeLastUrl()}}
 <section>
-    <div class="loading-screen-spinner uk-flex uk-flex-center">
-        <div class="uk-flex uk-flex-center uk-text-center">
+    <div class="loading-screen-spinner">
+        <div class="uk-text-center">
             <div class="spinner-box">
                 <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
             </div>

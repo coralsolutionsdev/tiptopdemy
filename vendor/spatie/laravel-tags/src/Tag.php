@@ -17,6 +17,17 @@ class Tag extends Model implements Sortable
 
     public $guarded = [];
 
+    /**
+     * The attributes that should be cast to native types.
+     * Added this to support text type instead of json for MySQL 5.6 and lower
+     *
+     * @var array
+     */
+    protected $casts = [
+        'name' => 'array',
+        'slug' => 'array'
+    ];
+
     public function scopeWithType(Builder $query, string $type = null): Builder
     {
         if (is_null($type)) {
@@ -65,7 +76,7 @@ class Tag extends Model implements Sortable
         $locale = $locale ?? app()->getLocale();
 
         return static::query()
-            ->where("name->{$locale}", $name)
+            ->where("name", json_encode(array($locale => $name)))
             ->where('type', $type)
             ->first();
     }
@@ -75,7 +86,7 @@ class Tag extends Model implements Sortable
         $locale = $locale ?? app()->getLocale();
 
         return static::query()
-            ->where("name->{$locale}", $name)
+            ->where("name", json_encode(array($locale => $name)))
             ->first();
     }
 

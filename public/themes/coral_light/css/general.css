@@ -81,8 +81,12 @@ Form
 .disable-number-row input[type=number] {
     -moz-appearance: textfield !important;
 }
-
-
+/*Spinner*/
+.loading-screen-spinner{
+    width: 100%;
+    position: fixed;
+    top: 25em;
+}
 
 /**
  end

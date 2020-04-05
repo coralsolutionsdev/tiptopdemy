@@ -109,7 +109,9 @@
 <section>
     <div class="loading-screen-spinner">
         <div class="uk-text-center">
-            loading
+            <div class="">
+                loding
+            </div>
         </div>
     </div>
 </section>

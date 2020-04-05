@@ -160,9 +160,11 @@
                 <li class="">
                     <a class="nav-link" href="{{Route('languages.index')}}">{{__('Languages')}}</a>
                 </li>
+                @if(false)
                 <li class="">
                     <a class="nav-link" href="{{Route('system.countries.index')}}">{{__('Countries')}}</a>
                 </li>
+                @endif
                 @if(Auth::user()->isSuperAdmin())
                     <li class="">
                         <a class="nav-link" href="{{Route('module.setting')}}">{{__('Modules')}}</a>

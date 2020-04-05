@@ -45,10 +45,10 @@
                     <li><a href="{{route('login')}}">{{__('login')}}</a></li>
 {{--                    class="top-menu-login"--}}
                 @if(getSite()->active == 1)
-                        <li><a href="{{route('register')}}">{{__('get started')}}</a></li>
+                        <li><a class="" href="{{route('register')}}"><span class="uk-button uk-button-primary">{{__('get started')}}</span></a></li>
                     @endif
                 @endif
-                <li><button class="navbar-search uk-text-primary"><span class="search-icon"  uk-icon="icon: search"></span></button></li>
+{{--                <li><button class="navbar-search uk-text-primary"><span class="search-icon"  uk-icon="icon: search"></span></button></li>--}}
             </ul>
 
         </div>

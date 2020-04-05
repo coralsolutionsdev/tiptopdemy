@@ -155,10 +155,10 @@
                             Or, register with..
                         </div>
                         <div class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
-                            <div>
+                            <div class="disabled-div">
                                 <button class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</button>
                             </div>
-                            <div>
+                            <div class="disabled-div">
                                 <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
                             </div>
                         </div>

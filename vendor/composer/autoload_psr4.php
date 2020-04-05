@@ -38,6 +38,7 @@ return array(
     'Spatie\\Translatable\\' => array($vendorDir . '/spatie/laravel-translatable/src'),
     'Spatie\\Tags\\' => array($vendorDir . '/spatie/laravel-tags/src'),
     'Spatie\\EloquentSortable\\' => array($vendorDir . '/spatie/eloquent-sortable/src'),
+    'Rinvex\\Country\\' => array($vendorDir . '/rinvex/countries/src'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
     'Psy\\' => array($vendorDir . '/psy/psysh/src'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),

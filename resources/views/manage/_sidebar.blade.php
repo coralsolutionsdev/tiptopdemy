@@ -145,7 +145,7 @@
             <i class="menu-icon fas fa-cog"></i>
             <span class="">{{__('Settings')}}</span>
         </a>
-        <div class="collapse {{ ((Request::is('manage/layouts*') || Request::is('manage/roles*') || Request::is('manage/setting*') || Request::is('manage/setting*')) ? 'show' :'')}}" id="nav-group-3">
+        <div class="collapse {{ ((Request::is('manage/layouts*') || Request::is('manage/roles*') || Request::is('manage/setting*') || Request::is('manage/languages*') || Request::is('manage/system*') || Request::is('manage/setting*')) ? 'show' :'')}}" id="nav-group-3">
             <ul style="">
                 <li class="">
                     <a class="nav-link" href="{{Route('layouts.index')}}">{{__('Layouts')}}</a>
@@ -155,6 +155,9 @@
                 </li>
                 <li class="">
                     <a class="nav-link" href="{{Route('languages.index')}}">{{__('Languages')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('system.countries.index')}}">{{__('Countries')}}</a>
                 </li>
                 @if(Auth::user()->isSuperAdmin())
                     <li class="">

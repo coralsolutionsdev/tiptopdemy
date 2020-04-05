@@ -125,9 +125,16 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/scopes','InstitutionScopeController');
             Route::resource('/scope/{scope}/fields','InstitutionScopeFieldController');
             Route::resource('/directorates','DirectorateController');
-
-
         });
+            /**
+             * System routes
+             */
+            Route::group(['namespace' => 'System', 'prefix' => 'system', 'as' => 'system.'], function() {
+                Route::resource('countries', 'CountriesController');
+//                Route::resource('errors', 'ErrorLogsController');
+//                Route::resource('server', 'ServerController');
+//                Route::get('cache/flush',['as' => 'cache.flush', 'uses' =>  'ServerController@flushCache']);
+            });
     });
 /* Admin Routes end */
 /* User Routes */

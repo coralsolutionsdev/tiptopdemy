@@ -1,6 +1,6 @@
 @if(true)
 <!doctype html>
-<html lang="en" dir="{{getSite()->lang == 'ar'? 'rtl': ''}}">
+<html lang="en" dir="{{getLanguage() == 'ar'? 'rtl': ''}}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -19,7 +19,7 @@
     <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">
     <!--UiKit UI-->
-    @if(getSite()->lang == 'ar')
+    @if(getLanguage() == 'ar')
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>
     @else
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>

@@ -2,7 +2,7 @@
 
     <nav class="nav uk-navbar-container" uk-navbar style="position: relative; z-index: 980;">
 
-        <div class="uk-navbar-{{getFloatKey('start')}}">
+        <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'start' : 'end')}}">
             <img src="{{asset_image(getSite()->logo)}}" style="height: 35px" alt="">
             <a class="uk-navbar-item uk-logo navbar-logo" href="{{route('main')}}">
                 <span class="site-name">{{getSite()->name}}</span><span style="color: var(--theme-primary-color);"> &#9679;</span>
@@ -22,13 +22,31 @@
             </div>
         </div>
 
-        <div class="uk-navbar-{{getFloatKey('end')}}">
+        <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
             <ul class="uk-navbar-nav">
+                <li><button class="navbar-search uk-text-primary"><span class="search-icon"  uk-icon="icon: search"></span></button></li>
+                <li>
+                        <a class="uk-float-right">
+                            <span uk-icon="world"></span>
+                        </a>
+                        <div class="uk-padding-small" uk-dropdown>
+                            <ul class="uk-list ">
+                                <li><a href="{{url('lang/ar')}}" class="uk-text-capitalize">
+                                        <span>{{__('العربية')}}</span>
+                                    </a>
+                                </li>
+                                <li><a href="{{url('lang/en')}}" class="uk-text-capitalize">
+                                        <span>{{__('english')}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+            </li>
                 @if(Auth::check())
                     <li><a href=""><span uk-icon="cart"></span></a></li>
                     <li><a href=""><span uk-icon="bell"></span></a></li>
                     <li>
-                        <button class="uk-button uk-button-default bottom-left" type="button">
+                        <button class="uk-button uk-button-default uk-float-left" type="button">
                             <img class="uk-border-circle" src="{{Auth::user()->getProfilePicURL()}}" style="width: 35px; height: 35px; object-fit: cover" >
                         </button>
                         <div class="uk-padding-small" uk-dropdown>
@@ -43,12 +61,11 @@
                     </li>
                 @else
                     <li><a href="{{route('login')}}">{{__('login')}}</a></li>
-{{--                    class="top-menu-login"--}}
-                @if(getSite()->active == 1)
-                        <li><a class="" href="{{route('register')}}"><span class="uk-button uk-button-primary">{{__('get started')}}</span></a></li>
+                    {{--                    class="top-menu-login"--}}
+                    @if(getSite()->active == 1)
+                        <li><a href="{{route('register')}}">{{__('get started')}}</a></li>
                     @endif
                 @endif
-{{--                <li><button class="navbar-search uk-text-primary"><span class="search-icon"  uk-icon="icon: search"></span></button></li>--}}
             </ul>
 
         </div>
@@ -61,13 +78,21 @@
             $('.search-icon').attr('uk-icon','icon: close');
             $('.menu-items').addClass('hidden');
             $('.menu-items').slideUp(function () {
-                $('.top-navbar-search').slideDown();
+                $('.top-navbar-search').slideDown({
+                    duration: 50,
+                },{
+                duration: 50,
+                });
             });
         }else {
             $('.search-icon').attr('uk-icon','icon: search');
             $('.menu-items').removeClass('hidden');
             $('.top-navbar-search').slideUp(function () {
-                $('.menu-items').slideDown();
+                $('.menu-items').slideDown({
+                    duration: 50,
+                },{
+                duration: 50,
+                });
             });
         }
 

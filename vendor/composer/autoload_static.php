@@ -491,6 +491,13 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
     );
 
     public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Webpatser\\Countries' => 
+            array (
+                0 => __DIR__ . '/..' . '/webpatser/laravel-countries/src',
+            ),
+        ),
         'U' => 
         array (
             'UpdateHelper\\' => 
@@ -581,7 +588,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\Store\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductController.php',
         'App\\Http\\Controllers\\Store\\ProductImageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductImageController.php',
         'App\\Http\\Controllers\\Store\\ProductTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductTypeController.php',
-        'App\\Http\\Controllers\\System\\CountriesController' => __DIR__ . '/../..' . '/app/Http/Controllers/System/CountriesController.php',
+        'App\\Http\\Controllers\\System\\CountryController' => __DIR__ . '/../..' . '/app/Http/Controllers/System/CountryController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AuthAdmin' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthAdmin.php',
         'App\\Http\\Middleware\\AuthUser' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthUser.php',
@@ -665,6 +672,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Carbon\\Laravel\\ServiceProvider' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php',
         'Carbon\\Translator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Translator.php',
         'Carbon\\Upgrade' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Upgrade.php',
+        'CharifyCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_05_224213_charify_countries_table.php',
         'Cocur\\Slugify\\Bridge\\Laravel\\SlugifyFacade' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Laravel/SlugifyFacade.php',
         'Cocur\\Slugify\\Bridge\\Laravel\\SlugifyServiceProvider' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Laravel/SlugifyServiceProvider.php',
         'Cocur\\Slugify\\Bridge\\Latte\\SlugifyHelper' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Latte/SlugifyHelper.php',
@@ -693,6 +701,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Collective\\Html\\HtmlBuilder' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlBuilder.php',
         'Collective\\Html\\HtmlFacade' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlFacade.php',
         'Collective\\Html\\HtmlServiceProvider' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlServiceProvider.php',
+        'CountriesSeeder' => __DIR__ . '/../..' . '/database/seeds/CountriesSeeder.php',
         'CreateAppointmentTimeSlotsTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_24_131417_create_appointment_time_slots_table.php',
         'CreateAppointmentsTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_22_145540_create_appointments_table.php',
         'CreateBannersTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_15_114223_create_banners_table.php',
@@ -3913,6 +3922,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
         'SebastianBergmann\\ResourceOperations\\ResourceOperations' => __DIR__ . '/..' . '/sebastian/resource-operations/src/ResourceOperations.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'SetupCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_05_224212_setup_countries_table.php',
         'SiteTableSeeder' => __DIR__ . '/../..' . '/database/seeds/SiteTableSeeder.php',
         'Spatie\\EloquentSortable\\Sortable' => __DIR__ . '/..' . '/spatie/eloquent-sortable/src/Sortable.php',
         'Spatie\\EloquentSortable\\SortableTrait' => __DIR__ . '/..' . '/spatie/eloquent-sortable/src/SortableTrait.php',
@@ -4675,6 +4685,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'UpdateHelper\\UpdateHelper' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelper.php',
         'UpdateHelper\\UpdateHelperInterface' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelperInterface.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
+        'Webpatser\\Countries\\Countries' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/Countries.php',
+        'Webpatser\\Countries\\CountriesFacade' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/CountriesFacade.php',
+        'Webpatser\\Countries\\CountriesServiceProvider' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/CountriesServiceProvider.php',
+        'Webpatser\\Countries\\MigrationCommand' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/commands/MigrationCommand.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',
         'Whoops\\Exception\\Frame' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Frame.php',

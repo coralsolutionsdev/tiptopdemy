@@ -43,6 +43,10 @@ body{
 .w-200{
     width: 200px;
 }
+.flag svg{
+   width: 20px;
+    height: 10px;
+}
 /*Navbar*/
 #admin_panel .sidebar nav{
     background-color: transparent !important;

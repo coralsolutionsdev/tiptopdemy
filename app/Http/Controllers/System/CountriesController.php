@@ -4,7 +4,9 @@ namespace App\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use PragmaRX\Countries\Package\Countries;
+use Rinvex\Country\Country;
+use Rinvex\Country\CountryLoader;
+
 class CountriesController extends Controller
 {
     protected $breadcrumb;
@@ -26,8 +28,8 @@ class CountriesController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $countries = new Countries();
-        $countries =  $countries->all()->sortBy('name.common');
+        $countries =  countries();
+//        dd($countries);
         return view('system.countries.index', compact('page_title','breadcrumb', 'countries'));
     }
 

@@ -188,6 +188,7 @@ return [
         Arrilot\Widgets\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
+        Webpatser\Countries\CountriesServiceProvider::class,
 
 
 
@@ -250,6 +251,7 @@ return [
         'AsyncWidget'  => Arrilot\Widgets\AsyncFacade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Countries' => Webpatser\Countries\CountriesFacade::class,
 
 
     ],

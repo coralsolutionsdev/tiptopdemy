@@ -4,10 +4,9 @@ namespace App\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Rinvex\Country\Country;
-use Rinvex\Country\CountryLoader;
+use Webpatser\Countries\Countries;
 
-class CountriesController extends Controller
+class CountryController extends Controller
 {
     protected $breadcrumb;
     protected $page_title;
@@ -28,8 +27,7 @@ class CountriesController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $countries =  countries();
-//        dd($countries);
+        $countries =  Countries::orderBy('name')->paginate(50);
         return view('system.countries.index', compact('page_title','breadcrumb', 'countries'));
     }
 
@@ -46,7 +44,7 @@ class CountriesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -79,13 +77,22 @@ class CountriesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Countries $country
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Countries $country)
     {
-        //
+        $input = $request->only(['status']);
+        if(!empty($input['status'])){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $country->status = $status;
+        $country->save();
+        session()->flash('success', trans('Updated successfully'));
+        return redirect()->back();
     }
 
     /**

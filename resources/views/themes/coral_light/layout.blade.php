@@ -107,7 +107,7 @@
     </div>
 </section>
 <section>
-    <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed; top: 0px; z-index: 1000; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);">
+    <div class="screen-spinner uk-flex uk-flex-center uk-flex-middle" style="position: fixed; top: 0px; z-index: 1000; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
         <div style="padding: 20px; background-color: rgba(255, 255, 255, 0.7); border-radius: 5px">
             <div class="uk-text-primary" uk-spinner="ratio: 2"></div>
         </div>
@@ -119,6 +119,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 <script>
+    function toggleScreenSpinner($status = true)
+    {
+        if($status === true){
+            $('.screen-spinner').fadeIn();
+        }else {
+            $('.screen-spinner').fadeOut();
+        }
+    }
     $('.pagination').addClass('uk-pagination').addClass('uk-flex-center');
 
     $('.top-menu-login').click(function () {

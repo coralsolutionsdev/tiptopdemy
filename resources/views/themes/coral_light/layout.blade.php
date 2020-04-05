@@ -107,8 +107,8 @@
     </div>
 </section>
 <section>
-    <div class="" style="position: fixed; z-index: 1000; top: 200px;width: 100%">
-        <div style="background-color: blue;">
+    <div class="loading-screen-spinner" style="">
+        <div style="">
             <div uk-spinner></div>
         </div>
     </div>

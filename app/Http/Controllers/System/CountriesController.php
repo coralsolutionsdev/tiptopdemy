@@ -14,9 +14,9 @@ class CountriesController extends Controller
 
     public function __construct()
     {
-        $this->page_title = 'Languages';
+        $this->page_title = 'Countries';
         $this->breadcrumb = [
-            'Languages' => '',
+            'Countries' => '',
         ];
     }
     /**

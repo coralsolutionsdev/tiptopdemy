@@ -1,7 +1,6 @@
 @extends('themes.'.getAdminThemeName().'.layout')
 @section('title',$page_title)
 @section('page-header-button')
-	<a href="{{Route('posts.create')}}" class="btn btn-primary btn-lg w-75"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span>{{trans('main._add')}}</span></a>
 @endsection
 @section('content')
 

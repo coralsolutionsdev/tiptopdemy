@@ -107,8 +107,8 @@
     </div>
 </section>
 <section>
-    <div class="loading-screen-spinner" style="">
-        <div style="">
+    <div class="loading-screen-spinner uk-flex uk-flex-center" style=" position: fixed; z-index: 1000; top: 25em; width: 100%">
+        <div class="spinner-box">
             <div uk-spinner></div>
         </div>
     </div>

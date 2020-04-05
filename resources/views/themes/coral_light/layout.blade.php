@@ -107,9 +107,9 @@
     </div>
 </section>
 <section>
-    <div class="loading-screen-spinner uk-flex uk-flex-center" style=" position: fixed; z-index: 1000; top: 25em; width: 100%">
-        <div class="spinner-box">
-            <div uk-spinner></div>
+    <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed; top: 0px; z-index: 1000; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);">
+        <div style="padding: 20px; background-color: rgba(255, 255, 255, 0.7); border-radius: 5px">
+            <div class="uk-text-primary" uk-spinner="ratio: 2"></div>
         </div>
     </div>
 </section>

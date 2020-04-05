@@ -30,6 +30,12 @@
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('position')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0">
+                                {!! Form::text('position',!empty($scope) || !empty($scope->position) ? $scope->position : 0, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Status')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 <input type="checkbox" name="status" class="toogle-switch" value="1" {{empty($scope) || !empty($scope->status) ? 'checked' : null}}>

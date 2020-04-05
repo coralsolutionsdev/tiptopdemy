@@ -48,9 +48,11 @@
         </a>
         <div class="collapse {{ (Request::is('manage/institution*') ? 'show' :'')}}" id="nav-group-institution">
             <ul style="">
+                @if(false)
                 <li class="">
                     <a class="nav-link" href="{{Route('institution.index')}}">{{__('All institutions')}}</a>
                 </li>
+                @endif
                 <li class="">
                     <a class="nav-link" href="{{Route('institution.scopes.index')}}">{{__('Institution Scopes')}}</a>
                 </li>
@@ -60,12 +62,14 @@
             </ul>
         </div>
     </li>
+    @if(false)
     <li class="nav-group">
         <a class="nav-link" href="{{route('companies.index')}}">
             <i class="far fa-building"></i>
             <span class="">{{__('Academies')}}</span>
         </a>
     </li>
+    @endif
     <li>
         <div class="menu-title">Modules</div>
     </li>

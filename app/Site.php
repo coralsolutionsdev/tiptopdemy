@@ -34,8 +34,8 @@ class Site extends Model
     const THEME_FRAMEWORK_BOOTSTRAP = 1;
     const THEME_FRAMEWORK_UIKIT = 2;
     const COUNTRIES_ARRAY = [
-        0 => 'iq',
-        1 => 'jo',
-        2 => 'ae'
+        'iq' => 'iq',
+        'jo' => 'jo',
+        'ae' => 'ae'
     ];
 }

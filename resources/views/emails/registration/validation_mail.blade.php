@@ -84,6 +84,7 @@
                                             <a href="{{$validationLink}}" class="btn btn-primary" >Verify my email</a>
                                         </div>
                                         <br>
+                                        <br>
                                         <p>
                                             Regards <br>
                                             {{$domain}} team

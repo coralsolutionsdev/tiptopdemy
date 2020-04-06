@@ -29,6 +29,7 @@ Route::group(['middleware'=>'installed'], function(){
 		Route::get('/offline','PagesController@Offline')->name('offline');
 	/* Auth Routes */
 		Auth::routes();
+		Route::get('/get/country/{countryId}/directorates', 'Auth\RegisterController@getCountryDirectorates');
 		Route::get('/get/institution/scope/{scopeId}/fields', 'Auth\RegisterController@getInstitutionScopeFields');
 		Route::get('/get/institution/scope/field/{fieldId}/options', 'Auth\RegisterController@getInstitutionScopeFieldOptions');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Institution\Directorate;
 use App\Institution\InstitutionScope;
 use App\Institution\InstitutionScopeField;
 use App\Institution\InstitutionScopeFieldOption;
@@ -142,5 +143,17 @@ class RegisterController extends Controller
                 return response(['items' => $items], 200);
             }
         }
+    }
+
+    /**
+     * @param $countryId
+     * @return ResponseFactory|Response
+     */
+    public function getCountryDirectorates($countryId)
+    {
+        if (!empty($countryId)){
+                $items =  Directorate::where('status', 1)->where('country_id', $countryId)->orderBy('position')->pluck('title','id')->toArray();
+                return response(['items' => $items], 200);
+            }
     }
 }

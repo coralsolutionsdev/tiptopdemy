@@ -89,22 +89,18 @@
                             <div class="uk-margin-small">
                                 <label class="uk-form-label" for="">{{__('Country')}}:</label>
                                 <div class="uk-form-controls">
-                                    <select class="uk-select" name="country_id" required>
-                                        <option selected="true" disabled="disabled">Please select</option>
+                                    <select class="uk-select countries-items" name="country_id" required>
+                                        <option selected="true" disabled="disabled">Please select an option</option>
                                         @foreach(getCountries() as $country)
                                             <option value="{{$country->id}}">{{$country->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="uk-margin-small">
+                            <div class="uk-margin-small directorates-section" style="display: none">
                                 <label class="uk-form-label" for="">{{__('Directorates')}}:</label>
                                 <div class="uk-form-controls">
-                                    <select class="uk-select" name="directorate_id" required>
-                                        <option selected="true" disabled="disabled">Please select</option>
-                                        @foreach(getCountryDirectorates() as $directorate)
-                                        <option value="{{$directorate->id}}">{{$directorate->title}}</option>
-                                        @endforeach
+                                    <select class="uk-select directorates-items" name="directorate_id" required>
                                     </select>
                                 </div>
                             </div>
@@ -112,7 +108,7 @@
                                 <label class="uk-form-label" for="">{{__('School kind')}}:</label>
                                 <div class="uk-form-controls">
                                     <select class="uk-select scope-items" name="scope_id" required>
-                                        <option selected="true" disabled="disabled">Please select</option>
+                                        <option selected="true" disabled="disabled">Please select an option</option>
                                         @foreach(getCountryScopes() as $scope)
                                             <option value="{{$scope->id}}">{{$scope->title}}</option>
                                         @endforeach
@@ -183,13 +179,41 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         $(".birthday").flatpickr();
+        /**
+         * methods
+         */
+        /*
+        get directorates
+         */
+        $('.countries-items').change(function () {
+            var id = $(this).val();
+            toggleScreenSpinner(true);
+            $.get('/get/country/'+id+'/directorates').done(function (response) {
+                var directorates = response.items;
+                $('.directorates-items').html('');
+                $('.directorates-items').append('<option selected="true" disabled="disabled">Please select an option</option>');
+                if(directorates.length !== 0){
+                    $.each(directorates,  function (id, name) {
+                        $('.directorates-items').append('<option value="'+id+'">'+name+'</option>');
+                    });
+                    $('.directorates-section').slideDown();
+                    toggleScreenSpinner(false);
+                } else {
+                    $('.directorates-section').slideUp();
+                    toggleScreenSpinner(false);
+                }
+            });
+        });
+        /*
+        get fields items
+         */
         $('.scope-items').change(function () {
             var id = $(this).val();
             toggleScreenSpinner(true);
             $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
                 var fields = response.items;
                 $('.fields-items').html('');
-                $('.fields-items').append('<option selected="true" disabled="disabled">Please select</option>');
+                $('.fields-items').append('<option selected="true" disabled="disabled">Please select an option</option>');
                 if(fields.length !== 0){
                     $.each(fields,  function (id, name) {
                         $('.fields-items').append('<option value="'+id+'">'+name+'</option>');
@@ -203,13 +227,16 @@
                 }
             });
         });
+        /*
+        get field options
+         */
         $('.fields-items').change(function () {
             var id = $(this).val();
             toggleScreenSpinner(true);
             $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
                 var fields = response.items;
                 $('.field-item-options').html('');
-                $('.field-item-options').append('<option selected="true" disabled="disabled">Please select</option>');
+                $('.field-item-options').append('<option selected="true" disabled="disabled">Please select an option</option>');
                 if(fields.length !== 0){
                     $.each(fields,  function (id, name) {
                         $('.field-item-options').append('<option value="'+id+'">'+name+'</option>');
@@ -222,9 +249,6 @@
                 }
             });
         });
-        // function updateFieldOptionsMenu() {
-        //     var id = $(this).val();
-        //     // alert(id);
-        // }
+
     </script>
 @endsection

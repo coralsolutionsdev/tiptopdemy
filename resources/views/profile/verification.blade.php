@@ -13,7 +13,7 @@
                         An email has been sent to your email "<strong class="color-primary">{{Auth::user()->email}}</strong>" with the activation instruction.
                     </p>
                     <p>If you haven't received your activation mail! please click on the link below.</p>
-                    <a class="uk-button uk-button-primary" href="">Resend verification email</a>
+                    <a class="uk-button uk-button-primary" href="{{route('account.resend.activation')}}">Resend verification email</a>
                 @else
                     <img src="{{asset_image('/assets/reading_01.png')}}" width="200">
                     <h4 class="uk-card-title uk-text-danger uk-text-normal">{{__('Oops, something wrong!')}}</h4>

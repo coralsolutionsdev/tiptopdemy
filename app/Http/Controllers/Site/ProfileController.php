@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Site;
 
+use App\Jobs\SendValidationMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -114,20 +115,47 @@ class ProfileController extends Controller
     {
         if (Auth::check() ){
             $user = Auth::user();
-            $validationCode = generateValidationCode($user->email);
-            $verifyEmail =  $request->verify_email;
-            if (!empty($validationCode) && !empty($validationCode)){
-                if ($verifyEmail == $validationCode){
-                    $user->status = User::STATUS_ACTIVE;
-                    $user->save();
-                    session()->flash('success', trans('Your account has been activated successfully.'));
-                    return view('profile.index');
+            if ($user->status == User::STATUS_PENDING){
+                $validationCode = generateValidationCode($user->email);
+                $verifyEmail =  $request->verify_email;
+                if (!empty($validationCode) && !empty($verifyEmail)){
+                    if ($verifyEmail == $validationCode){
+                        $user->status = User::STATUS_ACTIVE;
+                        $user->save();
+                        session()->flash('success', __('Your account has been activated successfully.'));
+                        return redirect()->route('profile.index');
+                    }
                 }
+                session()->flash('warning', __('Unable to activate the account please try again or contact our customer services.'));
+                return redirect()->route('profile.index');
+            } elseif ($user->status == User::STATUS_ACTIVE){
+                session()->flash('warning', __('Your account is already activated.'));
+                return redirect()->route('profile.index');
+            }else{
+                session()->flash('warning', __('Unable to activate the account please try again or contact our customer services.'));
+                return redirect()->route('main');
             }
-            session()->flash('warning', trans('Unable to activate the account please try again or contact our customer services.'));
-            return redirect('/');
         }else{
-            session()->flash('warning', trans('Activation failed, please login first then click on activation link.'));
+            session()->flash('warning', __('Activation failed, please login first then click on activation link.'));
+            return redirect()->route('main');
+        }
+    }
+
+
+    public function reSendActivationEmail()
+    {
+        $user = Auth::user();
+        if (!empty($user)){
+            // send validation email
+            $email = $user->email;
+            $validationCode =  !empty($email) ? generateValidationCode($email) : null;
+            $data['receiver_name'] = $user->first_name;
+            $data['receiver_email'] = $email;
+            $data['validation_code'] = $validationCode;
+            SendValidationMail::dispatch($data);
+            session()->flash('success', __('You will receive your activation mail soon, please check your email.'));
+            return redirect()->back();
+        }else{
             return redirect('/');
         }
     }

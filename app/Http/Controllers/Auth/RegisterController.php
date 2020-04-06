@@ -89,8 +89,8 @@ class RegisterController extends Controller
             'lang' => getSite()->lang,
             'password' => bcrypt($data['password']),
             // TipTop fields
-            'directorate_id' => $data['directorate_id'],
             'country_id' => $data['country_id'],
+            'directorate_id' => !empty($data['directorate_id']) ? $data['directorate_id'] : null,
             'scope_id' => !empty($data['scope_id']) ? $data['scope_id'] : null,
             'field_id' => !empty($data['field_id']) ? $data['field_id'] : null,
             'field_option_id' => !empty($data['field_option_id']) ? $data['field_option_id'] : null,

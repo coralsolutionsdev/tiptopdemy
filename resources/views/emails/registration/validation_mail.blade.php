@@ -68,8 +68,8 @@
                         <tbody>
                         <tr>
                             <td>
-                                <div style="padding: 0 2em">
-                                    <div style="background-color: white; padding: 2em 1em">
+                                <div style="padding: 0 1em">
+                                    <div style="background-color: white; padding: 2em">
                                         <div style="text-align: center">
                                             <img src="{{$headerImage}}" width="200">
                                         </div>

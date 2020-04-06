@@ -63,18 +63,19 @@
 
                 <div class="languages-keys" style="padding: 10px">
                     <div class="row" style="padding: 5px 0px; background-color: #F3F5F9">
-                        <div class="col-3">key</div>
+                        <div class="col-2">key</div>
                         @if (!empty($languages))
                             @foreach($languages as $language)
-                                <div class="col-3">{{$language->name}} ({{$language->code}})</div>
+                                <div class="col-2">{{$language->name}} ({{$language->code}})</div>
                             @endforeach
                         @endif
+                        <div class="col-1">Delete</div>
                     </div>
                     @foreach($LanguageKys as $key => $langKeys)
                         <div class="row" style="padding: 5px">
-                            <div class="col-3" style="padding:1px 5px"><input type="text" name="key[]" class="form-control" value="{{$key}}" required></div>
+                            <div class="col-2" style="padding:1px 5px"><input type="text" name="key[]" class="form-control" value="{{$key}}" required></div>
                                 @foreach($langKeys as $lang => $trans)
-                                <div class="col-3" style="padding:1px 5px"><input type="text" name="trans[][{{$language->code}}]" class="form-control" value="{{$trans}}" required></div>
+                                <div class="col-2" style="padding:1px 5px"><input type="text" name="trans[][{{$language->code}}]" class="form-control" value="{{$trans}}" required></div>
                                 @endforeach
                         </div>
                     @endforeach
@@ -90,39 +91,40 @@
     </div>
     <section>
         <div class="row key-row-template" style="padding: 5px; display: none">
-            <div class="col-3" style="padding:1px 5px"><input type="text" name="key[]" class="form-control" required></div>
+            <div class="col-2" style="padding:1px 5px"><input type="text" name="key[]" class="form-control" required></div>
             @if (!empty($languages))
                 @foreach($languages as $language)
-                    <div class="col-3" style="padding:1px 5px"><input type="text" name="trans[][{{$language->code}}]" class="form-control" required></div>
+                    <div class="col-2" style="padding:1px 5px"><input type="text" name="trans[][{{$language->code}}]" class="form-control" required></div>
                 @endforeach
             @endif
+            <div class="col-1"><span class="btn btn-outline-danger delete-lang-key"><i class="far fa-trash-alt"></i></span></div>
         </div>
     </section>
     </div>
 </section>
 
 <script>
-    function addLanguageKey() {
-        var newItem = $('.key-row-template').clone().removeClass('key-row-template').show();
-        $('.languages-keys').append(newItem);
-    }
+
     function removeItem(){
-        $('.remove-item').off('click');
-        $('.remove-item').click(function () {
+        $('.delete-lang-key').off('click');
+        $('.delete-lang-key').click(function () {
             if(!confirm('Are you sure that you want to remove this item')){
                 return false;
             }
-            var lang= $(this);
-            var lang_id = lang.attr('id');
-            if (lang_id > 0) {
-                $('.removed-items').append('' +
-                    '<input type="hidden" name="removed_options['+lang_id+']" value="'+lang_id+'">\n' +
-                    '');
-            }
-            option.parent().parent().remove();
+            var item = $(this);
+            $(this).parent().parent().remove();
         });
     }
     removeItem();
+
+    /**
+     * methods
+     */
+    function addLanguageKey() {
+        var newItem = $('.key-row-template').clone().removeClass('key-row-template').show();
+        $('.languages-keys').append(newItem);
+        removeItem();
+    }
     function addOptionRow() {
         // Find a <table> element with id="myTable":
         var table = document.getElementById("languages-table");

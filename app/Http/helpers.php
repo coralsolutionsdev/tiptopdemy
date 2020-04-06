@@ -13,7 +13,7 @@ use App\Layout;
 use App\Banner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use Webpatser\Countries\Countries;
 
 
 /**
@@ -369,6 +369,9 @@ function generateValidationCode($email)
 }
 function getCountryDirectorates(){
     return  Directorate::where('status', 1)->orderBy('position')->get();
+}
+function getCountries(){
+    return $countries = Countries::where('status',  1)->get();
 }
 
 function getCountryScopes(){

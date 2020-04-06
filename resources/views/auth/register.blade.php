@@ -87,6 +87,17 @@
                                 </div>
                             </div>
                             <div class="uk-margin-small">
+                                <label class="uk-form-label" for="">{{__('Country')}}:</label>
+                                <div class="uk-form-controls">
+                                    <select class="uk-select" name="country_id" required>
+                                        <option selected="true" disabled="disabled">Please select</option>
+                                        @foreach(getCountries() as $country)
+                                            <option value="{{$country->id}}">{{$country->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="uk-margin-small">
                                 <label class="uk-form-label" for="">{{__('Directorates')}}:</label>
                                 <div class="uk-form-controls">
                                     <select class="uk-select" name="directorate_id" required>

@@ -37,7 +37,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/verification';
+    protected $redirectTo = '/suspended';
 
     /**
      * Create a new controller instance.
@@ -87,12 +87,12 @@ class RegisterController extends Controller
             'birth_date' => $data['birth_date'],
             'lang' => getSite()->lang,
             'password' => bcrypt($data['password']),
-            'verify_token' => str_random(60),
             // TipTop fields
             'directorate_id' => $data['directorate_id'],
-            'scope_id' => $data['scope_id'],
-            'field_id' => $data['field_id'],
-            'field_option_id' => $data['field_option_id'],
+            'country_id' => $data['country_id'],
+            'scope_id' => !empty($data['scope_id']) ? $data['scope_id'] : null,
+            'field_id' => !empty($data['field_id']) ? $data['field_id'] : null,
+            'field_option_id' => !empty($data['field_option_id']) ? $data['field_option_id'] : null,
             'level' => $data['level'],
         ]);
         $thisuser = User::findOrFail($user->id);

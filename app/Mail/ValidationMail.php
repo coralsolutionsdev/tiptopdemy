@@ -32,7 +32,7 @@ class ValidationMail extends Mailable
     {
         $domain = ucfirst(getApplicationDomain());
         $domainLogoPath = asset_image(getSite()->logo);
-        $headerImage = asset_image('/assets/email_01.png');
+        $headerImage = asset_image('assets/email_01.png');
         $receiverData = $this->receiverData;
         $validationCode = $receiverData['validation_code'];
         $senderEmail = 'support@tiptopdemy.com';

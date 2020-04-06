@@ -219,9 +219,12 @@
                         $('.fields-items').append('<option value="'+id+'">'+name+'</option>');
                     });
                     $('.fields-section').slideDown();
+                    $('.field-item-options').html('');
+                    $('.fields-items-section').slideUp();
                     toggleScreenSpinner(false);
                 } else {
                     $('.fields-section').slideUp();
+                    $('.field-item-options').html('');
                     $('.fields-items-section').slideUp();
                     toggleScreenSpinner(false);
                 }

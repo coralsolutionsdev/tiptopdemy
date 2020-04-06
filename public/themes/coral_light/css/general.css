@@ -47,21 +47,6 @@ nav .navbar-brand{
 .register-card{
     overflow: hidden;
 }
-/*.register-card:before {*/
-/*    position:absolute;*/
-/*    font-family: "Font Awesome 5 Free";*/
-/*    font-weight: 400;*/
-/*    content: "\f2b9";*/
-/*    font-size: 250px;*/
-/*    top:0;*/
-/*    opacity: 0.08;*/
-/*    right:0;*/
-/*    top: -60px;*/
-/*    content: "\f2b9";*/
-/*    transform: rotate(-30deg);*/
-/*    z-index: 1;*/
-
-/*}*/
 .register-form{
     z-index: 10;
 }

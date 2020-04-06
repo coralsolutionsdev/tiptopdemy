@@ -25,7 +25,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="/themes/{{getFrontendThemeName()}}/css/general.css?version=10">
+    <link rel="stylesheet" href="{{url('/themes/'.getFrontendThemeName().'/css/general.css?version=202004050147')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>

@@ -132,16 +132,23 @@ class LanguageController extends Controller
         $trans = $input['trans'];
         $languages = Language::all();
         foreach ($languages as $language){
-        $lang = $language->code;
-        $jsonString = file_get_contents(base_path('resources/lang/'.$lang.'.json'));
-        $data = json_decode($jsonString, true);
-        // Update Key
+            $lang = $language->code;
+            $jsonString = file_get_contents(base_path('resources/lang/'.$lang.'.json'));
+            $data = json_decode($jsonString, true);
+
+            // Update Key
             foreach ($keys as $id => $key){
-                $data[$key] = $trans[$id][$lang];
+                    $data[$key] = $trans[$id][$lang];
             }
-        // Write File JSON_UNESCAPED_UNICODE JSON_PRETTY_PRINT
-        $newJsonString = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        file_put_contents(base_path('resources/lang/'.$lang.'.json'), stripslashes($newJsonString));
+            // Update Key
+            foreach ($data as $id => $item){
+                if (!in_array($id, $keys)){
+                    unset($data[$id]);
+                }
+            }
+            // Write File JSON_UNESCAPED_UNICODE JSON_PRETTY_PRINT
+            $newJsonString = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            file_put_contents(base_path('resources/lang/'.$lang.'.json'), stripslashes($newJsonString));
         }
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('languages.index');

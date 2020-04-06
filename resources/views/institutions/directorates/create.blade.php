@@ -42,7 +42,13 @@
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Status')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('position')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0">
+                                {!! Form::select('country_id',[null=>'-- Please Select country --'] + $countries, !empty($directorate) ? $directorate->country_id : null,['class' => 'form-control', 'required' => true]) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('Status')}}</div>  
                             <div class="col-lg-10 padding-0 margin-0">
                                 <input type="checkbox" name="status" class="toogle-switch" value="1" {{empty($directorate) || !empty($directorate->status) ? 'checked' : null}}>
                             </div>

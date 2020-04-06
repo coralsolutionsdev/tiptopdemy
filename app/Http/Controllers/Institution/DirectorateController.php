@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Webpatser\Countries\Countries;
 
 class DirectorateController extends Controller
 {
@@ -45,7 +46,8 @@ class DirectorateController extends Controller
         $breadcrumb = $breadcrumb + [
                 'Create' => ''
             ];
-        return view('institutions.directorates.create', compact('page_title','breadcrumb'));
+        $countries = Countries::where('status',  1)->pluck('name','id')->toArray();
+        return view('institutions.directorates.create', compact('page_title','breadcrumb', 'countries'));
     }
 
     /**
@@ -56,7 +58,7 @@ class DirectorateController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->only(['title', 'description', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position']);
+        $input = $request->only(['title', 'description', 'country_id', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position']);
         $itemIds = isset($input['item_id']) ? $input['item_id'] :  array();
         $itemsArray = array();
         if (!empty($itemIds)){
@@ -109,7 +111,8 @@ class DirectorateController extends Controller
                 $directorate->title => '',
                 'Edit' => ''
             ];
-        return view('institutions.directorates.create', compact('page_title','breadcrumb', 'directorate'));
+        $countries = Countries::where('status',  1)->pluck('name','id')->toArray();
+        return view('institutions.directorates.create', compact('page_title','breadcrumb', 'directorate','countries'));
 
     }
 
@@ -122,7 +125,7 @@ class DirectorateController extends Controller
      */
     public function update(Request $request, Directorate $directorate)
     {
-        $input = $request->only(['title', 'description', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position', 'removed_items']);
+        $input = $request->only(['title', 'description', 'country_id', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position', 'removed_items']);
         $itemIds = isset($input['item_id']) ? $input['item_id'] :  array();
         $itemsArray = array();
         if (!empty($itemIds)){

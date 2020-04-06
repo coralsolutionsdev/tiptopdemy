@@ -32,6 +32,8 @@ class CreateUsersTable extends Migration
             $table->boolean('status')->default(0);
             $table->string('password');
             $table->integer('country_id')->nullable();
+//            $table->unsignedInteger('country_id')->index()->nullable();
+//            $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null');
             // TipTop fields
             $table->unsignedInteger('directorate_id')->index()->nullable();
             $table->foreign('directorate_id')->references('id')->on('directorates')->onDelete('set null');

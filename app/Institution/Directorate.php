@@ -10,7 +10,7 @@ class Directorate extends Model
 {
     use Sluggable;
 
-    protected $fillable = ['title','slug' , 'description', 'items', 'user_id', 'position', 'status'];
+    protected $fillable = ['title','slug' , 'description', 'items', 'user_id', 'country_id', 'position', 'status'];
 
     protected $casts = [
         'items' => 'array'

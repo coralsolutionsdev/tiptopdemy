@@ -4168,6 +4168,7 @@ return array(
     'UpdateHelper\\NotUpdateInterfaceInstanceException' => $vendorDir . '/kylekatarnls/update-helper/src/UpdateHelper/NotUpdateInterfaceInstanceException.php',
     'UpdateHelper\\UpdateHelper' => $vendorDir . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelper.php',
     'UpdateHelper\\UpdateHelperInterface' => $vendorDir . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelperInterface.php',
+    'UpgradeDirectoratesTableAddCountryIdCoulumn' => $baseDir . '/database/migrations/2020_04_05_234820_upgrade_directorates_table_add_country_id_coulumn.php',
     'Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',
     'Webpatser\\Countries\\Countries' => $vendorDir . '/webpatser/laravel-countries/src/Webpatser/Countries/Countries.php',
     'Webpatser\\Countries\\CountriesFacade' => $vendorDir . '/webpatser/laravel-countries/src/Webpatser/Countries/CountriesFacade.php',

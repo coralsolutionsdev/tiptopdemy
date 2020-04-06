@@ -30,7 +30,7 @@ class DirectorateController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $directorates = Directorate::latest()->paginate(15);
+        $directorates = Directorate::orderBy('position')->paginate(15);
         return view('institutions.directorates.index', compact('page_title','breadcrumb','directorates'));
     }
 

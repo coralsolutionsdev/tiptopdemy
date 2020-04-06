@@ -18,6 +18,7 @@
 					<tr>
 						<th scope="col">{{__('name')}}</th>
 						<th scope="col">{{__('Description')}}</th>
+						<th scope="col" class="text-center">{{__('Position')}}</th>
 						<th scope="col" class="text-center">{{__('Status')}}</th>
 						<th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
 					</tr>
@@ -33,7 +34,7 @@
 								<p class="text-muted"><small>{{ucfirst($item->user->name)}} | {{$item->created_at->toFormattedDateString()}}</small></p>
 {{--								<p>{{substr(strip_tags($item->body),0,50)}} {{strlen($item->body) > 50 ? "...": "" }}</p>--}}
 							</td>
-{{--							<td class="text-center align-middle">{{ucfirst($item->slug)}}</td>--}}
+							<td class="text-center align-middle">{{$item->position}}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($item->status) !!}</td>
 							<td>
 								<div class="action_btn text-right" style="padding-top: 10px">

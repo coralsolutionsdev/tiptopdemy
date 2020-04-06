@@ -193,8 +193,8 @@
                 $('.directorates-items').html('');
                 $('.directorates-items').append('<option selected="true" disabled="disabled">Please select an option</option>');
                 if(directorates.length !== 0){
-                    $.each(directorates,  function (id, name) {
-                        $('.directorates-items').append('<option value="'+id+'">'+name+'</option>');
+                    $.each(directorates,  function (id, directorate) {
+                        $('.directorates-items').append('<option value="'+directorate.id+'">'+directorate.title+'</option>');
                     });
                     $('.directorates-section').slideDown();
                     toggleScreenSpinner(false);

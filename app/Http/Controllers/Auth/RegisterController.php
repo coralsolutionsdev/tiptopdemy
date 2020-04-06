@@ -152,7 +152,7 @@ class RegisterController extends Controller
     public function getCountryDirectorates($countryId)
     {
         if (!empty($countryId)){
-                $items =  Directorate::where('status', 1)->where('country_id', $countryId)->orderBy('position')->pluck('title','id')->toArray();
+                $items =  Directorate::orderBy('position')->where('country_id', $countryId)->where('status', 1)->get();
                 return response(['items' => $items], 200);
             }
     }

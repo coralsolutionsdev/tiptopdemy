@@ -73,7 +73,7 @@
                                         <div style="text-align: center">
                                             <img src="{{$headerImage}}" width="200">
                                         </div>
-                                        <p style="text-align: center; font-size: 32px; font-family: 'Tajawal Extra-bold', sans-serif;">Account Activation</p>
+                                        <p style="text-align: center; font-size: 32px; font-family: 'Tajawal Extra-bold', sans-serif;">Welcome aboard!</p>
                                         <p>Dear <strong>{{$receiverData['receiver_name']}},</strong></p>
                                         <p>
                                             Thank you for joining {{$domain}}. <br>

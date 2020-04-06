@@ -37,6 +37,6 @@ class ValidationMail extends Mailable
         $validationCode = $receiverData['validation_code'];
         $senderEmail = 'support@tiptopdemy.com';
         $validationLink = url('/account/activate?verify_email='.$validationCode);
-        return $this->from($senderEmail, $domain)->subject($domain.': Account activation')->markdown('emails.registration.validation_mail', compact('domain', 'domainLogoPath', 'receiverData','emailContactList', 'validationLink', 'headerImage'));
+        return $this->from($senderEmail, $domain)->subject('Account Activation')->markdown('emails.registration.validation_mail', compact('domain', 'domainLogoPath', 'receiverData','emailContactList', 'validationLink', 'headerImage'));
     }
 }

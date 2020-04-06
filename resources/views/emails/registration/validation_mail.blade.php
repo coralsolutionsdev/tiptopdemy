@@ -74,7 +74,7 @@
                                             <img src="{{$headerImage}}" width="200">
                                         </div>
                                         <p style="text-align: center; font-size: 32px; font-family: 'Tajawal Extra-bold', sans-serif;">Account Activation</p>
-                                        <p>Dear <strong>{{$receiverData['receiver_name']}}</strong></p>
+                                        <p>Dear <strong>{{$receiverData['receiver_name']}},</strong></p>
                                         <p>
                                             Thank you for joining {{$domain}}. <br>
                                             Only one more step to complete your registration, please click on the link below to complete your registration.
@@ -87,7 +87,7 @@
                                         <br>
                                         <p>
                                             Regards <br>
-                                            {{$domain}} team
+                                            {{$domain}} team.
                                         </p>
                                     </div>
                                 </div>

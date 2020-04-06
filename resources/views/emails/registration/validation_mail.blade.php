@@ -69,7 +69,7 @@
                         <tr>
                             <td>
                                 <div style="padding: 0 2em">
-                                    <div style="background-color: white; padding: 2em">
+                                    <div style="background-color: white; padding: 2em 1em">
                                         <div style="text-align: center">
                                             <img src="{{$headerImage}}" width="200">
                                         </div>
@@ -81,7 +81,7 @@
                                         </p>
                                         <br>
                                         <div style="text-align: center">
-                                            <a href="{{$validationLink}}" class="btn btn-primary" >Verify my email</a>
+                                            <a href="{{$validationLink}}" class="btn btn-primary" >Verify Your email</a>
                                         </div>
                                         <br>
                                         <br>

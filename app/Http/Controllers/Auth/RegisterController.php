@@ -124,7 +124,7 @@ class RegisterController extends Controller
         if (!empty($scopeId)){
             $scope = InstitutionScope::find($scopeId);
             if (!empty($scope)){
-                $items =  $scope->fields->pluck('title','id')->toArray();
+                $items =  $scope->fields()->orderBy('position')->where('status', 1)->get();
                 return response(['items' => $items], 200);
             }
         }
@@ -139,7 +139,7 @@ class RegisterController extends Controller
         if (!empty($fieldId)){
             $field = InstitutionScopeField::find($fieldId);
             if (!empty($field)){
-                $items =  $field->options->pluck('title','id')->toArray();
+                $items =  $field->options()->orderBy('position')->where('status', 1)->get();
                 return response(['items' => $items], 200);
             }
         }
@@ -152,7 +152,7 @@ class RegisterController extends Controller
     public function getCountryDirectorates($countryId)
     {
         if (!empty($countryId)){
-                $items =  Directorate::where('status', 1)->where('country_id', $countryId)->orderBy('position')->pluck('title','id')->toArray();
+                $items =  Directorate::orderBy('position')->where('country_id', $countryId)->where('status', 1)->get();
                 return response(['items' => $items], 200);
             }
     }

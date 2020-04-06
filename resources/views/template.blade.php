@@ -1,73 +1,126 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Hello, world!</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <style type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;700;800&display=swap" rel="stylesheet">
+    <style>
       body{
-
+        padding: 0px;
+        margin: auto;
+        font-family: 'Tajawal Medium', sans-serif;
+        color: #74787E;
       }
-      a{
-        color: #FFF;
-        background-color: #3399FF;
-        padding: 15px 25px;
-        margin-top: 10px;
-        border-radius: 5px;
+      table{
+        width: 100%;
       }
-      a:hover{
+      .text-center{
+        text-align: center;
+      }
+      .heading-1{
+        font-size: 32px;
+      }
+      .btn{
+        padding:15px 25px;
+        margin: 10px 0;
         text-decoration: none;
-                color: #FFF;
-        background-color: #428BCA;
-
-      }
-      header{
-        padding: 30px;
+        color: white;
+        text-transform: uppercase;
         font-weight: bold;
       }
-      footer{
-        padding: 30px;
-      }
-      .card{
-        padding: 25px;
+      .btn-primary{
+        background-color: #0099FF;
       }
     </style>
   </head>
-  <body class="bg-light ">
-    <header>
-      <div class="d-flex justify-content-center text-muted">
-        <h1>Site name</h1>
+  <body>
+  <!-- body -->
+      <div style="background-color: #F3F5F9">
+        <table>
+          <tbody>
+          <!-- /// -->
+          <tr>
+            <td>
+              <div>
+                <!-- header -->
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class=" text-center" style="padding: 2em 0 1em 0">
+                          <img src="{{asset_image(getSite()->logo)}}" style="height: 60px" alt="">
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- header end-->
+              </div>
+            </td>
+          </tr>
+          <!-- /// -->
+          <tr>
+            <td>
+              <div>
+                <!-- content -->
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div style="padding: 0 2em">
+                            <div style="background-color: white; padding: 2em">
+                              <div style="text-align: center">
+                                <img src="{{asset_image('/assets/email_01.png')}}" width="200">
+                              </div>
+                              <p style="text-align: center; font-size: 32px; font-family: 'Tajawal Extra-bold', sans-serif;">Account Activation</p>
+                              <p>Dear <strong>Mehmet</strong></p>
+                              <p>
+                                Thank you for joining Laravel. <br>
+                                Only one more step to complete your registration, please click on the link below to complete your registration.
+                              </p>
+                              <br>
+                              <div style="text-align: center">
+                                <a href="" class="btn btn-primary" >Verify my email</a>
+                              </div>
+                              <br>
+                              <p>
+                                Regards <br>
+                                Laravel team
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                <!-- content end-->
+              </div>
+            </td>
+          </tr>
+          <!-- /// -->
+          <tr>
+            <td>
+              <div>
+                <!-- footer -->
+                <table>
+                  <tbody>
+                  <tr>
+                    <td>
+                      <div class=" text-center" style="padding: 2em 0">
+                        all copy rights reserved to Laravel
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <!-- footer end-->
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-    </header>
-
-    <section>
-      <div class="container">
-          <div class="card border-light">
-            <div class="card-body text-center">
-              <h4>  
-                  <strong>We're glad you're here, MehmetMunaf.</strong>
-              </h4>
-              <p class="text-center text-muted">One step more! to activate your account click the button below:</p>
-              <br>
-              <a href="#" class="">Activate Now!</a>
-            </div>
-          </div>
-      </div>
-    </section>
-    <footer>
-      <div class="d-flex justify-content-center text-muted">
-        <p>Copyright © *|CURRENT_YEAR|* *|LIST:COMPANY|*, All rights reserved.</p>
-      </div>
-    </footer>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <!--end body -->
   </body>
 </html>

@@ -193,8 +193,8 @@
                 $('.directorates-items').html('');
                 $('.directorates-items').append('<option selected="true" disabled="disabled">Please select an option</option>');
                 if(directorates.length !== 0){
-                    $.each(directorates,  function (id, name) {
-                        $('.directorates-items').append('<option value="'+id+'">'+name+'</option>');
+                    $.each(directorates,  function (id, directorate) {
+                        $('.directorates-items').append('<option value="'+directorate.id+'">'+directorate.title+'</option>');
                     });
                     $('.directorates-section').slideDown();
                     toggleScreenSpinner(false);
@@ -215,8 +215,8 @@
                 $('.fields-items').html('');
                 $('.fields-items').append('<option selected="true" disabled="disabled">Please select an option</option>');
                 if(fields.length !== 0){
-                    $.each(fields,  function (id, name) {
-                        $('.fields-items').append('<option value="'+id+'">'+name+'</option>');
+                    $.each(fields,  function (id, field) {
+                        $('.fields-items').append('<option value="'+field.id+'">'+field.title+'</option>');
                     });
                     $('.fields-section').slideDown();
                     $('.field-item-options').html('');
@@ -237,12 +237,12 @@
             var id = $(this).val();
             toggleScreenSpinner(true);
             $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
-                var fields = response.items;
+                var items = response.items;
                 $('.field-item-options').html('');
                 $('.field-item-options').append('<option selected="true" disabled="disabled">Please select an option</option>');
-                if(fields.length !== 0){
-                    $.each(fields,  function (id, name) {
-                        $('.field-item-options').append('<option value="'+id+'">'+name+'</option>');
+                if(items.length !== 0){
+                    $.each(items,  function (id, option) {
+                        $('.field-item-options').append('<option value="'+option.id+'">'+option.title+'</option>');
                     });
                     $('.fields-items-section').slideDown();
                     toggleScreenSpinner(false);

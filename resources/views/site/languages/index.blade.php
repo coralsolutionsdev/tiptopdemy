@@ -77,7 +77,7 @@
                                 @foreach($langKeys as $lang => $trans)
                                 <div class="col-2" style="padding:1px 5px"><input type="text" name="trans[][{{$language->code}}]" class="form-control" value="{{$trans}}" required></div>
                                 @endforeach
-                            <div class="col-1"><span class="btn btn-outline-danger delete-lang-key"><i class="far fa-trash-alt"></i></span></div>
+                            <div class="col-1" style="padding:1px 5px"><span class="btn btn-outline-danger delete-lang-key"><i class="far fa-trash-alt"></i></span></div>
                         </div>
                     @endforeach
                 </div>
@@ -98,7 +98,7 @@
                     <div class="col-2" style="padding:1px 5px"><input type="text" name="trans[][{{$language->code}}]" class="form-control" required></div>
                 @endforeach
             @endif
-            <div class="col-1"><span class="btn btn-outline-danger delete-lang-key"><i class="far fa-trash-alt"></i></span></div>
+            <div class="col-1" style="padding:1px 5px"><span class="btn btn-outline-danger delete-lang-key"><i class="far fa-trash-alt"></i></span></div>
         </div>
     </section>
     </div>

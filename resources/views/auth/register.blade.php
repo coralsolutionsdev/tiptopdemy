@@ -255,7 +255,6 @@
                     }
                 }
                 updateFieldOptionsMenu(id);
-
             });
         }
         function updateFieldOptionsMenu(id) {
@@ -271,10 +270,10 @@
                         $('.field-item-options').append('<option value="'+option.id+'" '+selected+'>'+option.title+'</option>');
                     });
                     // done
-                } else {
+                    toggleScreenSpinner(false);
+                    } else {
                     // field
                 }
-                toggleScreenSpinner(false);
 
             });
         }

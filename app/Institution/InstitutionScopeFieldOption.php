@@ -10,7 +10,7 @@ class InstitutionScopeFieldOption extends Model
     use Sluggable;
 
     protected $fillable = [
-        'title', 'slug', 'description', 'field_id', 'user_id', 'position', 'status',
+        'title', 'slug', 'description', 'field_id', 'user_id', 'position', 'default', 'status',
     ];
 
     const TYPE_GENERAL = 0;

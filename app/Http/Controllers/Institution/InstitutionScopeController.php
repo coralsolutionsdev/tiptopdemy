@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Institution;
 
 use App\Institution\InstitutionScope;
+use App\Page;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -75,9 +76,22 @@ class InstitutionScopeController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
-        $scope = InstitutionScope::create($input);
+        if(!empty($input['default'])){
+            $default = 1;
+            $scopes = InstitutionScope::all();
+            if (!empty($scopes)){
+                foreach ($scopes as $scopeItem){
+                    $scopeItem->default =  0;
+                    $scopeItem->save();
+                }
+            }
+        }else{
+            $default = 0;
+        }
+        $input['default'] = $default;
+        InstitutionScope::create($input);
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('institution.scopes.edit', $scope->slug);
+        return redirect()->route('institution.scopes.index');
     }
 
     /**
@@ -131,7 +145,21 @@ class InstitutionScopeController extends Controller
         }else{
             $status = 0;
         }
-        $input['status'] = $status;
+        if(isset($input['default'])){
+            $scopes = InstitutionScope::all();
+            if (!empty($scopes)){
+                foreach ($scopes as $scopeItem){
+                    if ($scopeItem->id != $scope->id){
+                        $scopeItem->default =  0;
+                        $scopeItem->save();
+                    }
+                }
+            }
+            $default = 1;
+        }else{
+            $default = 0;
+        }
+        $input['default'] = $default;
         // update slug
         if ($scope->title != $request->input('title')){
             $slug = SlugService::createSlug(InstitutionScope::class, 'slug', $request->input('title'), ['unique' => true]);
@@ -139,17 +167,36 @@ class InstitutionScopeController extends Controller
         }
         $scope->update($input);
         session()->flash('success', trans('Updated successfully'));
-        return redirect()->route('institution.scopes.edit', $scope->slug);
+        return redirect()->route('institution.scopes.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param InstitutionScope $institutionScope
+     * @param InstitutionScope $scope
      * @return Response
      */
-    public function destroy(InstitutionScope $institutionScope)
+    public function destroy(InstitutionScope $scope)
     {
-        //
+        $fields =  $scope->fields;
+        $totalOptionsCount = 0;
+        $fieldsCount = $fields->count();
+        if ($fieldsCount > 0){
+            foreach ($fields as $field){
+                $options =  $field->options;
+                $optionsCount = $options->count();
+                if ($optionsCount > 0 ){
+                    $totalOptionsCount = $totalOptionsCount + $optionsCount;
+                    foreach($options as $option){
+                        $option->delete();
+                    }
+                }
+                $field->delete();
+            }
+        }
+        $scope->delete();
+        session()->flash('success', 'Scope has been deleted successfully, with the dependencies: '.$fieldsCount .' fields and '.$totalOptionsCount. ' options');
+        return redirect()->route('institution.scopes.index');
+
     }
 }

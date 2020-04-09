@@ -64,13 +64,37 @@ class InstitutionScopeFieldController extends Controller
      */
     public function store(Request $request, InstitutionScope $scope)
     {
-        $input = $request->only(['title', 'slug', 'description','type', 'scope_id', 'user_id', 'scope_slug', 'position', 'status','option_id', 'option_title', 'option_desc', 'option_type', 'option_position']);
+        $input = $request->only(['title', 'slug', 'description', 'default', 'type', 'level_id', 'level_title', 'level_status', 'level_default', 'scope_id', 'user_id', 'scope_slug', 'position', 'status','option_id', 'option_title', 'option_desc', 'option_type', 'option_position', 'removed_options']);
         if(!empty($input['status'])){
             $status = 1;
         }else{
             $status = 0;
         }
         $input['status'] = $status;
+        if(isset($input['default'])){
+            $items = InstitutionScopeField::where('scope_id', $scope->id)->get();
+            if (!empty($items)){
+                foreach ($items as $item){
+                    $item->default =  0;
+                    $item->save();
+                }
+            }
+            $default = 1;
+        }else{
+            $default = 0;
+        }
+        $input['default'] = $default;
+        // update levels
+        $levels =  $input['level_id'];
+        $levelsArray =  array();
+        foreach ($levels as $key => $id){
+            $levelsArray[$id] = [
+                'title' => isset($input['level_title'][$id]) ? $input['level_title'][$id] : 'level '.$id,
+                'status' => isset($input['level_status'][$id]) ? 1 : 0,
+                'default' => isset($input['level_default'][$id]) ? 1 : 0
+            ];
+        }
+        $input['levels'] = $levelsArray;
         $field = InstitutionScopeField::create($input);
         $itemIds = isset($input['option_id']) ? $input['option_id'] :  array();
         foreach ($itemIds as $key => $id){
@@ -130,7 +154,7 @@ class InstitutionScopeFieldController extends Controller
      */
     public function update(Request $request, InstitutionScope $scope, InstitutionScopeField $field)
     {
-        $input = $request->only(['title', 'slug', 'description','type', 'scope_id', 'user_id', 'scope_slug', 'position', 'status','option_id', 'option_title', 'option_desc', 'option_type', 'option_position', 'removed_options']);
+        $input = $request->only(['title', 'slug', 'description', 'default','type', 'level_id', 'level_title', 'level_status', 'level_default', 'scope_id', 'user_id', 'scope_slug', 'position', 'status','option_id', 'option_title', 'option_desc', 'option_type', 'option_position', 'option_default', 'removed_options']);
         $itemIds = isset($input['option_id']) ? $input['option_id'] :  array();
         $removedOptions = isset($input['removed_options']) ? $input['removed_options'] :  array();
         if(!empty($input['status'])){
@@ -139,11 +163,39 @@ class InstitutionScopeFieldController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
+        if(isset($input['default'])){
+            $items = InstitutionScopeField::where('scope_id', $scope->id)->get();
+            if (!empty($items)){
+                foreach ($items as $item){
+                    if ($item->id != $field->id){
+                        $item->default =  0;
+                        $item->save();
+                    }
+                }
+            }
+            $default = 1;
+        }else{
+            $default = 0;
+        }
+        $input['default'] = $default;
+
         // update slug
         if ($field->title != $request->input('title')){
             $slug = SlugService::createSlug(InstitutionScopeField::class, 'slug', $request->input('title'), ['unique' => true]);
             $field->slug = $slug;
         }
+        // update levels
+        $levels =  $input['level_id'];
+        $levelsArray =  array();
+        foreach ($levels as $key => $id){
+            $levelsArray[$id] = [
+                'title' => isset($input['level_title'][$id]) ? $input['level_title'][$id] : 'level '.$id,
+                'status' => isset($input['level_status'][$id]) ? 1 : 0,
+                'default' => isset($input['level_default'][$id]) ? 1 : 0
+            ];
+        }
+        $input['levels'] = $levelsArray;
+
         $field->update($input);
         // update field options
         foreach ($itemIds as $key => $id){
@@ -152,6 +204,7 @@ class InstitutionScopeFieldController extends Controller
             $optionInput['description'] = $input['option_desc'][$key];
             $optionInput['field_id'] = $field->id;
             $optionInput['position'] = $input['option_position'][$key];
+            $optionInput['default'] = $input['option_default'][$key];
             $optionInput['status'] = 1;
             if (!empty($id)){
                 // update
@@ -177,12 +230,24 @@ class InstitutionScopeFieldController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\InstitutionScopeField  $institutionScopeField
-     * @return Response
+     * @param InstitutionScope $scope
+     * @param InstitutionScopeField $field
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function destroy(InstitutionScopeField $institutionScopeField)
+    public function destroy(InstitutionScope $scope, InstitutionScopeField $field)
     {
-        //
+        $totalOptionsCount = 0;
+            $options =  $field->options;
+            $optionsCount = $options->count();
+            if ($optionsCount > 0 ){
+                $totalOptionsCount = $totalOptionsCount + $optionsCount;
+                foreach($options as $option){
+                    $option->delete();
+                }
+            }
+            $field->delete();
+        session()->flash('success', 'Field has been deleted successfully, with the dependencies: '.$totalOptionsCount. ' options');
+        return redirect()->route('institution.scopes.edit', $scope->slug);
     }
 }

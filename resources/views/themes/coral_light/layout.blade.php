@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
     <link href="https://fonts.googleapis.com/css?family=Cairo:400,600,700|Tajawal:400,500,700&display=swap&subset=arabic" rel="stylesheet">
-    <!--Semantic UI-->
-    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">
+{{--    <!--Semantic UI-->--}}
+{{--    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>--}}
+{{--    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">--}}
     <!--UiKit UI-->
     @if(getLanguage() == 'ar')
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>
@@ -25,7 +25,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('/themes/'.getFrontendThemeName().'/css/general.css?version=202004050147')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202004101230')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>

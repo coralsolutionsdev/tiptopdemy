@@ -12,11 +12,12 @@
     </fieldset>
     <hr>
     {{-- Recent posts --}}
-    <div class="" style="padding-bottom: 10px">
-        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
-            <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Latest posts</p>
+    <div class="">
+        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color); padding: 5px 10px">
+            <span class="uk-h4 uk-text-capitalize">{{__('latest posts')}}</span>
         </div>
     </div>
+
     @foreach($posts as $post)
         <div class="recent-posts uk-card uk-card-default uk-grid-collapse" uk-grid>
             <div class="uk-card-media-left uk-cover-container uk-width-1-3@s">
@@ -37,9 +38,9 @@
     @endforeach
     <hr>
     {{-- Categories --}}
-    <div class="" style="padding-bottom: 10px">
-        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
-            <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Categories</p>
+    <div class="">
+        <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color); padding: 5px 10px">
+            <span class="uk-h4 uk-text-capitalize">{{__('categories')}}</span>
         </div>
     </div>
     <div>
@@ -56,9 +57,9 @@
     <hr>
     {{-- Tags --}}
     @if(!empty($tags) && $tags->count() > 0)
-        <div class="" style="padding-bottom: 10px">
-            <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color)">
-                <p class="uk-h4 uk-text-capitalize" style="padding: 8px">Tags</p>
+        <div class="">
+            <div class="uk-background-muted uk-text-center" style="border:1px solid var(--theme-primary-color); padding: 5px 10px">
+                <span class="uk-h4 uk-text-capitalize">Tags</>
             </div>
         </div>
         <div class="blog-tags">

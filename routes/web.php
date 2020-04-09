@@ -32,6 +32,7 @@ Route::group(['middleware'=>'installed'], function(){
 		Route::get('/get/country/{countryId}/directorates', 'Auth\RegisterController@getCountryDirectorates');
 		Route::get('/get/institution/scope/{scopeId}/fields', 'Auth\RegisterController@getInstitutionScopeFields');
 		Route::get('/get/institution/scope/field/{fieldId}/options', 'Auth\RegisterController@getInstitutionScopeFieldOptions');
+		Route::get('/get/institution/scope/field/{fieldId}/levels', 'Auth\RegisterController@getInstitutionScopeFieldLevels');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
         Route::post('/login/page', 'Admin\LoginController@login')->name('login.custom');
 		Route::get('/suspended','HomeController@suspended')->name('suspended');

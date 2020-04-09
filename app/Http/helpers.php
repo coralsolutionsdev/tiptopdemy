@@ -367,15 +367,19 @@ function generateValidationCode($email)
     $validationCode = md5($validationCombination);
     return $validationCode;
 }
-function getCountryDirectorates(){
-    return  Directorate::where('status', 1)->orderBy('position')->get();
+function getCountryDirectorates($countryId){
+    if (is_null($countryId)){
+        $countryId = 368;
+    }
+    return  Directorate::where('status', 1)->where('country_id', $countryId)->orderBy('position')->get();
 }
 function getCountries(){
     return $countries = Countries::where('status',  1)->get();
 }
 
-function getCountryScopes(){
+function getInstitutionScopes(){
     return InstitutionScope::where('status', 1)->orderBy('position')->get();
 }
+
 
 

@@ -41,6 +41,12 @@
                                 <input type="checkbox" name="status" class="toogle-switch" value="1" {{empty($scope) || !empty($scope->status) ? 'checked' : null}}>
                             </div>
                         </div>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('Default')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0">
+                                <input type="checkbox" name="default" class="toogle-switch" value="1" {{!empty($scope->default) ? 'checked' : null}}>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,7 +62,7 @@
                                 <p>{{__('Scope Fields')}}</p>
                                 <hr>
                                 <div class="text-right" style="padding-bottom: 10px">
-                                    <a href="{{Route('institution.fields.create', $scope->slug)}}" class="btn btn-primary"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span> Add Attribute</span></a>
+                                    <a href="{{Route('institution.fields.create', $scope->slug)}}" class="btn btn-primary"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span> Add Field</span></a>
                                 </div>
                                 <div class="form-group row col-lg-12 padding-0 margin-0">
                                     <table class="table table-striped">
@@ -65,6 +71,7 @@
                                             <th scope="col">{{__('Title')}}</th>
                                             <th scope="col">{{__('Description')}}</th>
                                             <th scope="col" class="text-center">{{__('Options No.')}}</th>
+                                            <th scope="col" class="text-center">{{__('Default')}}</th>
                                             <th scope="col" class="text-center">{{__('Status')}}</th>
                                             <th scope="col" class="text-center" width="50">{{__('Position')}}</th>
                                             <th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
@@ -76,6 +83,7 @@
                                                 <td>{{$field->title}}</td>
                                                 <td>{{$field->description}}</td>
                                                 <td class="text-center">{{$field->options->count()}}</td>
+                                                <td class="text-center">{!! getStatusIcon($field->default) !!}</td>
                                                 <td class="text-center">{!! getStatusIcon($field->status) !!}</td>
                                                 <td class="text-center">{{ $field->position }}</td>
                                                 <td>

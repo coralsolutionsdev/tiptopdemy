@@ -19,6 +19,7 @@
 							<th scope="col">{{__('name')}}</th>
 							<th scope="col">{{__('Description')}}</th>
 							<th scope="col">{{__('position')}}</th>
+							<th scope="col">{{__('default')}}</th>
 							<th scope="col" class="text-center">{{__('Status')}}</th>
 							<th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
 						</tr>
@@ -34,6 +35,7 @@
 									<p class="text-muted"><small>{{ucfirst($item->user->name)}} | {{$item->created_at->toFormattedDateString()}}</small></p>
 								</td>
 								<td class="text-center align-middle">{{$item->position}}</td>
+								<td class="text-center align-middle">{!! getStatusIcon($item->default) !!}</td>
 								<td class="text-center align-middle">{!! getStatusIcon($item->status) !!}</td>
 								<td>
 									<div class="action_btn text-right" style="padding-top: 10px">

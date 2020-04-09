@@ -58,7 +58,7 @@ class DirectorateController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->only(['title', 'description', 'country_id', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position']);
+        $input = $request->only(['title', 'description', 'country_id', 'sub_items', 'position','status', 'default','item_id', 'item_title', 'item_desc', 'item_position', 'removed_items']);
         $itemIds = isset($input['item_id']) ? $input['item_id'] :  array();
         $itemsArray = array();
         if (!empty($itemIds)){
@@ -81,6 +81,20 @@ class DirectorateController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
+        //
+        if(isset($input['default'])){
+            $scopes = Directorate::all();
+            if (!empty($scopes)){
+                foreach ($scopes as $scopeItem){
+                    $scopeItem->default =  0;
+                    $scopeItem->save();
+                }
+            }
+            $default = 1;
+        }else{
+            $default = 0;
+        }
+        $input['default'] = $default;
         Directorate::create($input);
         session()->flash('success', __('Added successfully'));
         return redirect()->route('institution.directorates.index');
@@ -125,7 +139,7 @@ class DirectorateController extends Controller
      */
     public function update(Request $request, Directorate $directorate)
     {
-        $input = $request->only(['title', 'description', 'country_id', 'sub_items', 'position','status', 'item_id', 'item_title', 'item_desc', 'item_position', 'removed_items']);
+        $input = $request->only(['title', 'description', 'country_id', 'sub_items', 'position','status', 'default','item_id', 'item_title', 'item_desc', 'item_position', 'removed_items']);
         $itemIds = isset($input['item_id']) ? $input['item_id'] :  array();
         $itemsArray = array();
         if (!empty($itemIds)){
@@ -148,6 +162,22 @@ class DirectorateController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
+        //
+        if(isset($input['default'])){
+            $scopes = Directorate::all();
+            if (!empty($scopes)){
+                foreach ($scopes as $scopeItem){
+                    if ($scopeItem->id != $directorate->id){
+                        $scopeItem->default =  0;
+                        $scopeItem->save();
+                    }
+                }
+            }
+            $default = 1;
+        }else{
+            $default = 0;
+        }
+        $input['default'] = $default;
         $directorate->update($input);
         session()->flash('success', __('Updated successfully'));
         return redirect()->route('institution.directorates.index');

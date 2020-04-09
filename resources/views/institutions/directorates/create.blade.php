@@ -53,6 +53,12 @@
                                 <input type="checkbox" name="status" class="toogle-switch" value="1" {{empty($directorate) || !empty($directorate->status) ? 'checked' : null}}>
                             </div>
                         </div>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('Default')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0">
+                                <input type="checkbox" name="default" class="toogle-switch" value="1" {{!empty($directorate->default) ? 'checked' : null}}>
+                            </div>
+                        </div>
                         <div id="type-radio" class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex">{{__('Directorate Items')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">

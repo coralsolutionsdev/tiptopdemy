@@ -14,7 +14,10 @@ class InstitutionScopeField extends Model
     protected $fillable = [
         'title', 'slug', 'description', 'scope_id',
         'user_id', 'images', 'position', 'status',
-        'type'
+        'type', 'default', 'levels'
+    ];
+    protected $casts = [
+        'levels' => 'array'
     ];
 
     const TYPE_GENERAL = 0;

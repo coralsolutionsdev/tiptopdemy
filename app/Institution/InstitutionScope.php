@@ -16,7 +16,7 @@ class InstitutionScope extends Model
      */
     protected $fillable = [
         'title','slug', 'description', 'user_id',
-        'images','position', 'status'
+        'images','position', 'default' , 'status'
     ];
     protected $casts = [
         'images' => 'array'

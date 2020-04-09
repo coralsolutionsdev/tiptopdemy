@@ -63,6 +63,7 @@ class RegisterController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'gender' => 'required|bool',
+            'phone_number' => 'integer',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -84,8 +85,8 @@ class RegisterController extends Controller
             'mother_name' => $data['mother_name'],
             'email' => $data['email'],
             'gender' => $data['gender'],
-            'phone_number' => $data['phone_number'],
-            'birth_date' => $data['birth_date'],
+            'phone_number' => !empty($data['phone_number']) ? $data['phone_number'] : null,
+            'birth_date' => !empty($data['birth_date']) ? $data['birth_date'] : null,
             'lang' => getSite()->lang,
             'password' => bcrypt($data['password']),
             // TipTop fields
@@ -94,9 +95,9 @@ class RegisterController extends Controller
             'scope_id' => !empty($data['scope_id']) ? $data['scope_id'] : null,
             'field_id' => !empty($data['field_id']) ? $data['field_id'] : null,
             'field_option_id' => !empty($data['field_option_id']) ? $data['field_option_id'] : null,
-            'level' => $data['level'],
+            'level' => !empty($data['level']) ? $data['level'] : null,
         ]);
-        $thisuser = User::findOrFail($user->id);
+        User::findOrFail($user->id);
 
         // add user role to the registered user
         $updated_role = Role::where('name', 'user')->first();
@@ -140,6 +141,20 @@ class RegisterController extends Controller
             $field = InstitutionScopeField::find($fieldId);
             if (!empty($field)){
                 $items =  $field->options()->orderBy('position')->where('status', 1)->get();
+                return response(['items' => $items], 200);
+            }
+        }
+    }
+    /**
+     * @param $fieldId
+     * @return ResponseFactory|Response
+     */
+    public function getInstitutionScopeFieldLevels($fieldId)
+    {
+        if (!empty($fieldId)){
+            $field = InstitutionScopeField::find($fieldId);
+            if (!empty($field)){
+                $items =  $field->levels;
                 return response(['items' => $items], 200);
             }
         }

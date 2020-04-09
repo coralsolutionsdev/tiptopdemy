@@ -4685,6 +4685,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'UpdateHelper\\UpdateHelper' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelper.php',
         'UpdateHelper\\UpdateHelperInterface' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelperInterface.php',
         'UpgradeDirectoratesTableAddCountryIdCoulumn' => __DIR__ . '/../..' . '/database/migrations/2020_04_05_234820_upgrade_directorates_table_add_country_id_coulumn.php',
+        'UpgradeTablesAddDefaultColumnsToMultipleTables' => __DIR__ . '/../..' . '/database/migrations/2020_04_08_202008_upgrade_tables_add_default_columns_to_multiple_tables.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Webpatser\\Countries\\Countries' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/Countries.php',
         'Webpatser\\Countries\\CountriesFacade' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/CountriesFacade.php',

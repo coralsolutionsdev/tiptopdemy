@@ -241,7 +241,7 @@
                 console.log(levels);
                 resetFieldLevels();
                 if (levels !== undefined){
-                    if(levels.length !== 0){
+                    if(levels.length != 0){
                         $.each(levels, function (id, level) {
                             var selected = '';
                             if (level.status === 1){
@@ -254,6 +254,7 @@
                         // done
                     }
                 }
+                updateFieldOptionsMenu(id);
 
             });
         }
@@ -273,12 +274,12 @@
                 } else {
                     // field
                 }
+                toggleScreenSpinner(false);
+
             });
-            return 1;
         }
 
         function updateFieldsMenu(id){
-            var status = 0;
             $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
                 var fields = response.items;
                 $('.fields-items').html('');
@@ -288,7 +289,7 @@
                     var levels = null;
                     $.each(fields,  function (id, field) {
                         var selected = '';
-                        if (field.default === 1){
+                        if (field.default == 1){
                             selected = 'selected';
                             defaultFieldId = field.id;
                             levels = field.levels;
@@ -299,8 +300,7 @@
                     if (defaultFieldId !== null){
                         // update levels
                         updateFieldLevelsMenu(defaultFieldId);
-                        // update options
-                        updateFieldOptionsMenu(defaultFieldId);
+
                     }else{
                         // reset levels
                         resetFieldLevels();
@@ -332,7 +332,6 @@
             updateFieldLevelsMenu(id);
             // update options
             updateFieldOptionsMenu(id);
-            toggleScreenSpinner(false);
         });
         $( document ).ready(function() {
             var id = $('.scope').val();

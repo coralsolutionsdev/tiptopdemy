@@ -185,12 +185,12 @@ class DirectorateController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Directorate $directorate
      */
-    public function destroy($id)
+    public function destroy(Directorate $directorate)
     {
-        //
+        $directorate->delete();
+        session()->flash('success', __('Deleted successfully'));
+        return redirect()->route('institution.directorates.index');
     }
 }

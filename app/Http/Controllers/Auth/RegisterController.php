@@ -63,7 +63,7 @@ class RegisterController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'gender' => 'required|bool',
-            'phone_number' => 'integer',
+            'phone_number' => 'string',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -82,7 +82,7 @@ class RegisterController extends Controller
             'middle_name' => $data['middle_name'],
             'last_name' => $data['last_name'],
             'surname' => $data['surname'],
-            'mother_name' => $data['mother_name'],
+            'mother_name' => !empty($data['mother_name']) ? $data['mother_name'] : null,
             'email' => $data['email'],
             'gender' => $data['gender'],
             'phone_number' => !empty($data['phone_number']) ? $data['phone_number'] : null,

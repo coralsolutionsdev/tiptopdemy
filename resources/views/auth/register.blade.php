@@ -268,9 +268,10 @@
                             selected = 'selected';
                         }
                         $('.field-item-options').append('<option value="'+option.id+'" '+selected+'>'+option.title+'</option>');
+                    }).done(function () {
+                        toggleScreenSpinner(false);
                     });
                     // done
-                    toggleScreenSpinner(false);
                     } else {
                     // field
                 }

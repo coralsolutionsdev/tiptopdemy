@@ -265,7 +265,7 @@
                     if(items.length !== 0){
                     $.each(items,  function (id, option) {
                         var selected = '';
-                        if (option.default === 1){
+                        if (option.default == 1){
                             selected = 'selected';
                         }
                         $('.field-item-options').append('<option value="'+option.id+'" '+selected+'>'+option.title+'</option>');

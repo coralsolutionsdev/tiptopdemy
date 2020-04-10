@@ -235,6 +235,10 @@
             $('.field-level-options').html('');
             $('.field-level-options').append('<option selected="true" disabled="disabled">{{__('Study Level')}}</option>');
         }
+        function resetFields() {
+            $('.fields').html('');
+            $('.fields').append('<option selected="true" disabled="disabled">{{__('Study field')}}</option>');
+        }
         function updateFieldLevelsMenu(id) {
             $.get('/get/institution/scope/field/'+id+'/levels').done(function (response) {
                 var levels = response.items;
@@ -254,8 +258,8 @@
                         // done
                     }
                 }
-                updateFieldOptionsMenu(id);
             });
+
         }
         function updateFieldOptionsMenu(id) {
             $.get('/get/institution/scope/field/'+id+'/options').done(function (response) {
@@ -268,23 +272,20 @@
                             selected = 'selected';
                         }
                         $('.field-item-options').append('<option value="'+option.id+'" '+selected+'>'+option.title+'</option>');
-                    }).done(function () {
-                        toggleScreenSpinner(false);
-                    });
+                    })
                     // done
                     } else {
                     // field
                     }
             });
-            toggleScreenSpinner(false);
 
         }
-
         function updateFieldsMenu(id){
             $.get('/get/institution/scope/'+id+'/fields').done(function (response) {
                 var fields = response.items;
-                $('.fields-items').html('');
-                $('.fields-items').append('<option selected="true" disabled="disabled">{{__('Study field')}}</option>');
+                resetFields();
+                resetFieldLevels();
+                resetFieldOptions();
                 if(fields.length !== 0){
                     var defaultFieldId = null;
                     var levels = null;
@@ -297,23 +298,25 @@
                         }
                         $('.fields-items').append('<option value="'+field.id+'" '+selected+'>'+field.title+'</option>');
                     });
-
-                    if (defaultFieldId !== null){
+                    if (defaultFieldId != null){
                         // update levels
                         updateFieldLevelsMenu(defaultFieldId);
-
-                    }else{
-                        // reset levels
-                        resetFieldLevels();
-                        // reset options
-                        resetFieldOptions();
+                        // update options
+                        updateFieldOptionsMenu(defaultFieldId);
                     }
+
 
                 }
                 // done
-                toggleScreenSpinner(false);
             });
 
+        }
+
+        function initiateDefaults()
+        {
+            var id = $('.scope').val();
+            toggleScreenSpinner(true);
+            updateFieldsMenu(id);
         }
         /**
          * methods
@@ -331,14 +334,18 @@
             toggleScreenSpinner(true);
             // update levels
             updateFieldLevelsMenu(id);
+            // update options
+            updateFieldOptionsMenu(id);
+
         });
 
         $( document ).ready(function() {
-            var id = $('.scope').val();
-            toggleScreenSpinner(true);
-            updateFieldsMenu(id);
+            initiateDefaults();
         });
 
+        $( document ).ajaxComplete(function() {
+            toggleScreenSpinner(false);
+        });
 
     </script>
 @endsection

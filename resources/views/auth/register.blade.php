@@ -274,9 +274,10 @@
                     // done
                     } else {
                     // field
-                }
-
+                    }
             });
+            toggleScreenSpinner(false);
+
         }
 
         function updateFieldsMenu(id){
@@ -309,9 +310,10 @@
                     }
 
                 }
+                // done
+                toggleScreenSpinner(false);
             });
-            // done
-            toggleScreenSpinner(false);
+
         }
         /**
          * methods
@@ -327,12 +329,10 @@
         $('.fields').change(function () {
             var id = $(this).val();
             toggleScreenSpinner(true);
-            var status = 0;
             // update levels
             updateFieldLevelsMenu(id);
-            // update options
-            updateFieldOptionsMenu(id);
         });
+
         $( document ).ready(function() {
             var id = $('.scope').val();
             toggleScreenSpinner(true);

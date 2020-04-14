@@ -50,7 +50,12 @@ nav .navbar-brand{
 .register-form{
     z-index: 10;
 }
-
+.bg-white{
+    background-color: white !important;
+}
+.bg-secondary{
+    background-color: var(--theme-secondary-bg-color);
+}
 /*
 Form
  */
@@ -135,6 +140,11 @@ p{
     padding:0px 10px;
 }
 /*Blog*/
+.uk-secondary-bg{
+    background-color: var(--theme-secondary-bg-color);
+    border: none !important;
+    box-shadow: none;
+}
 .blog-sidebar .uk-card{
     box-shadow: none;
     /*background-color: #FAFAFF;*/
@@ -174,6 +184,17 @@ a:hover{
     color: #9B9AAC;
     padding-right: 10px;
     padding-left: 10px;
+}
+.uk-comment-list ul li,.uk-comment-list li , .uk-comment-list .uk-comment~ul>:nth-child(n+2){
+    /*margin: 25px 0 0 0;*/
+    margin: 15px 0px !important;
+    /*padding: 0px !important;*/
+}
+.uk-comment-list .uk-comment~ul{
+    margin-top: 0px !important;
+}
+.blog-post-actions a{
+    padding: 0px 10px;
 }
 
 /*product-card*/

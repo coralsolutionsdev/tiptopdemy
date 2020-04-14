@@ -70,6 +70,19 @@
                         </div>
                     </div>
                     <div class="form-group row col-lg-12">
+                        <div class="col-lg-2 d-flex align-items-center">{{__('Allow Comments')}}</div>
+                        <div class="col-lg-10" style="padding: 10px 0 10px 10px; margin: 0px">
+                            <input type="checkbox" name="allow_comments_status" class="toogle-switch" value="1" {{empty($post) || !empty($post->allow_comments_status) ? 'checked' : null}}>
+                        </div>
+                    </div>
+                    <div class="form-group row col-lg-12">
+                        <div class="col-lg-2 d-flex align-items-center">{{__('Default Comment Status')}}</div>
+                        <div class="col-lg-10" style="padding: 10px 0 10px 10px; margin: 0px">
+                            <input type="checkbox" name="default_comment_status" class="toogle-switch" value="1" {{empty($post) || !empty($post->default_comment_status) ? 'checked' : null}}>
+                        </div>
+                    </div>
+
+                    <div class="form-group row col-lg-12">
                         <div class="col-lg-2 d-flex align-items-center">{{__('Category')}}</div>
                         <div class="col-lg-10" style="padding: 10px 0 10px 10px; margin: 0px">
                             {!! Form::select('categories',[null=>'-- Please Select Category --'] + $categories,!empty($selectedCategories) ? $selectedCategories : null,['class' => 'form-control']) !!}

@@ -21,6 +21,8 @@ class BlogPost extends Model
         'image',
         'content',
         'status',
+        'allow_comments_status',
+        'default_comment_status',
     ];
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;

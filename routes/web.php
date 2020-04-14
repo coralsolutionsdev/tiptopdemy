@@ -60,6 +60,7 @@ Route::group(['middleware'=>'installed'], function(){
         /*Blog */
         Route::group(['prefix' => 'blog'], function () {
             Route::resource('/posts','Blog\PostController', ['except' => ['show']]);
+            // movie this
             Route::resource('/comments','Blog\CommentController', ['except' => ['show']]);
             Route::resource('/categories','Blog\CategoryController', ['except' => ['show']])->names([
                 'index' => 'blog.categories.index',
@@ -68,6 +69,8 @@ Route::group(['middleware'=>'installed'], function(){
                 'edit' => 'blog.categories.edit',
                 'update' => 'blog.categories.update'
             ]);
+            Route::get('/post/{post}/comments','Blog\PostController@viewComments')->name('blog.post.comments.show');
+
         });
 
         /*Gallery*/
@@ -146,11 +149,13 @@ Route::group(['middleware'=>'installed'], function(){
 
             if (isModuleEnabled('blog_posts')){
                 /* Blog  */
-                Route::group(['prefix' => 'blog', 'as' => 'blog.'], function () {
-                    Route::get('/' , 'Blog\PostController@GetIndex')->name('blog.main');
-                    Route::resource('/category','Blog\CategoryController', ['only' => ['show']]);
+                Route::group(['prefix' => 'blog','namespace' => 'Blog', 'as' => 'blog.'], function () {
+                    Route::get('/' , 'PostController@GetIndex')->name('blog.main');
+                    Route::resource('/category','CategoryController', ['only' => ['show']]);
 //                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
-                    Route::resource('/posts','Blog\PostController', ['only' => ['show']]);
+                    Route::resource('/posts','PostController', ['only' => ['show']]);
+                    Route::get('/post/{id}/get/comments', 'PostController@getComments');
+                    Route::post('/post/comment/{id}/delete', 'PostController@deleteComments');
 
                 });
             }

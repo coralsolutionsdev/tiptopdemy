@@ -522,6 +522,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
     );
 
     public static $classMap = array (
+        'AddBlogPostAndBlogCommentRactionsTables' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_163001_add_blog_post_and_blog_comment_ractions_tables.php',
         'AddCategoryPostTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_31_211430_add_category_post_table.php',
         'AddModulesToModulesTable' => __DIR__ . '/../..' . '/database/migrations/2018_04_15_022623_add_modules_to_modules_table.php',
         'AlbertCht\\InvisibleReCaptcha\\Facades\\InvisibleReCaptcha' => __DIR__ . '/..' . '/albertcht/invisible-recaptcha/src/Facades/InvisibleReCaptcha.php',
@@ -589,6 +590,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\Store\\ProductImageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductImageController.php',
         'App\\Http\\Controllers\\Store\\ProductTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductTypeController.php',
         'App\\Http\\Controllers\\System\\CountryController' => __DIR__ . '/../..' . '/app/Http/Controllers/System/CountryController.php',
+        'App\\Http\\Controllers\\System\\ReactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/System/ReactionController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AuthAdmin' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthAdmin.php',
         'App\\Http\\Middleware\\AuthUser' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthUser.php',
@@ -628,6 +630,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Reaction' => __DIR__ . '/../..' . '/app/Reaction.php',
         'App\\Role' => __DIR__ . '/../..' . '/app/Role.php',
         'App\\Services\\FileAssetManagerService' => __DIR__ . '/../..' . '/app/Services/FileAssetManagerService.php',
         'App\\Site' => __DIR__ . '/../..' . '/app/Site.php',
@@ -734,6 +737,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'CreateProductProductAttributePivotTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_02_094141_create_product_product_attribute_pivot_table.php',
         'CreateProductTypesTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_01_150616_create_product_types_table.php',
         'CreateProductsTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_01_102812_create_products_table.php',
+        'CreateReactionsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_160547_create_reactions_table.php',
         'CreateSitesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_11_093647_create_sites_table.php',
         'CreateTagTables' => __DIR__ . '/../..' . '/database/migrations/2019_07_27_131726_create_tag_tables.php',
         'CreateUniqueIdsTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_18_113825_create_unique_ids_table.php',
@@ -3830,6 +3834,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Ramsey\\Uuid\\UuidFactory' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactory.php',
         'Ramsey\\Uuid\\UuidFactoryInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactoryInterface.php',
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
+        'ReactionSeeder' => __DIR__ . '/../..' . '/database/seeds/ReactionSeeder.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
         'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
         'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Driver.php',
@@ -4680,6 +4685,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Traitor\\Handlers\\Handler' => __DIR__ . '/..' . '/kkszymanowski/traitor/src/Handlers/Handler.php',
         'Traitor\\TraitUseAdder' => __DIR__ . '/..' . '/kkszymanowski/traitor/src/TraitUseAdder.php',
         'Traitor\\Traitor' => __DIR__ . '/..' . '/kkszymanowski/traitor/src/Traitor.php',
+        'UpdateCommentTableAddParentIdColumn' => __DIR__ . '/../..' . '/database/migrations/2020_04_12_125341_update_comment_table_add_parent_id_column.php',
         'UpdateHelper\\ComposerPlugin' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/ComposerPlugin.php',
         'UpdateHelper\\NotUpdateInterfaceInstanceException' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/NotUpdateInterfaceInstanceException.php',
         'UpdateHelper\\UpdateHelper' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelper.php',

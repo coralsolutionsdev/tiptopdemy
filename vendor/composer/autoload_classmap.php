@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddBlogPostAndBlogCommentRactionsTables' => $baseDir . '/database/migrations/2020_04_14_163001_add_blog_post_and_blog_comment_ractions_tables.php',
     'AddCategoryPostTable' => $baseDir . '/database/migrations/2020_03_31_211430_add_category_post_table.php',
     'AddModulesToModulesTable' => $baseDir . '/database/migrations/2018_04_15_022623_add_modules_to_modules_table.php',
     'AlbertCht\\InvisibleReCaptcha\\Facades\\InvisibleReCaptcha' => $vendorDir . '/albertcht/invisible-recaptcha/src/Facades/InvisibleReCaptcha.php',
@@ -73,6 +74,7 @@ return array(
     'App\\Http\\Controllers\\Store\\ProductImageController' => $baseDir . '/app/Http/Controllers/Store/ProductImageController.php',
     'App\\Http\\Controllers\\Store\\ProductTypeController' => $baseDir . '/app/Http/Controllers/Store/ProductTypeController.php',
     'App\\Http\\Controllers\\System\\CountryController' => $baseDir . '/app/Http/Controllers/System/CountryController.php',
+    'App\\Http\\Controllers\\System\\ReactionController' => $baseDir . '/app/Http/Controllers/System/ReactionController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\AuthAdmin' => $baseDir . '/app/Http/Middleware/AuthAdmin.php',
     'App\\Http\\Middleware\\AuthUser' => $baseDir . '/app/Http/Middleware/AuthUser.php',
@@ -112,6 +114,7 @@ return array(
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
+    'App\\Reaction' => $baseDir . '/app/Reaction.php',
     'App\\Role' => $baseDir . '/app/Role.php',
     'App\\Services\\FileAssetManagerService' => $baseDir . '/app/Services/FileAssetManagerService.php',
     'App\\Site' => $baseDir . '/app/Site.php',
@@ -218,6 +221,7 @@ return array(
     'CreateProductProductAttributePivotTable' => $baseDir . '/database/migrations/2019_07_02_094141_create_product_product_attribute_pivot_table.php',
     'CreateProductTypesTable' => $baseDir . '/database/migrations/2019_07_01_150616_create_product_types_table.php',
     'CreateProductsTable' => $baseDir . '/database/migrations/2019_07_01_102812_create_products_table.php',
+    'CreateReactionsTable' => $baseDir . '/database/migrations/2020_04_14_160547_create_reactions_table.php',
     'CreateSitesTable' => $baseDir . '/database/migrations/2017_07_11_093647_create_sites_table.php',
     'CreateTagTables' => $baseDir . '/database/migrations/2019_07_27_131726_create_tag_tables.php',
     'CreateUniqueIdsTable' => $baseDir . '/database/migrations/2020_03_18_113825_create_unique_ids_table.php',
@@ -3314,6 +3318,7 @@ return array(
     'Ramsey\\Uuid\\UuidFactory' => $vendorDir . '/ramsey/uuid/src/UuidFactory.php',
     'Ramsey\\Uuid\\UuidFactoryInterface' => $vendorDir . '/ramsey/uuid/src/UuidFactoryInterface.php',
     'Ramsey\\Uuid\\UuidInterface' => $vendorDir . '/ramsey/uuid/src/UuidInterface.php',
+    'ReactionSeeder' => $baseDir . '/database/seeds/ReactionSeeder.php',
     'SebastianBergmann\\CodeCoverage\\CodeCoverage' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage.php',
     'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => $vendorDir . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
     'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => $vendorDir . '/phpunit/php-code-coverage/src/Driver/Driver.php',
@@ -4164,6 +4169,7 @@ return array(
     'Traitor\\Handlers\\Handler' => $vendorDir . '/kkszymanowski/traitor/src/Handlers/Handler.php',
     'Traitor\\TraitUseAdder' => $vendorDir . '/kkszymanowski/traitor/src/TraitUseAdder.php',
     'Traitor\\Traitor' => $vendorDir . '/kkszymanowski/traitor/src/Traitor.php',
+    'UpdateCommentTableAddParentIdColumn' => $baseDir . '/database/migrations/2020_04_12_125341_update_comment_table_add_parent_id_column.php',
     'UpdateHelper\\ComposerPlugin' => $vendorDir . '/kylekatarnls/update-helper/src/UpdateHelper/ComposerPlugin.php',
     'UpdateHelper\\NotUpdateInterfaceInstanceException' => $vendorDir . '/kylekatarnls/update-helper/src/UpdateHelper/NotUpdateInterfaceInstanceException.php',
     'UpdateHelper\\UpdateHelper' => $vendorDir . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelper.php',

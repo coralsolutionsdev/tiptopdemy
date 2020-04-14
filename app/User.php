@@ -109,5 +109,10 @@ class User extends Authenticatable
         }
         return $url;
     }
+    public function getUserName($fullName = false)
+    {
+        $name = $this->name;
+        return $name;
+    }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Blog;
 
 use App\BlogComment;
+use App\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -37,13 +38,21 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $input = $request->input();
-//        $input['comment'] = 'aa';
+        $input['parent_id'] = isset($input['parent_id']) ? $input['parent_id'] : 0;
         $comment = BlogComment::create($input);
-        $response = collect();
-        $response->name = 'mehmet';
-        return response($comment,200);
+        $item = [
+            'id' => $comment->id,
+            'parent_id' => !is_null($comment->parent_id) ? $comment->parent_id : 0,
+            'user_profile_pic' => $comment->user->getProfilePicURL(),
+            'user_name' => $comment->user->getUserName(),
+            'create_date' => $comment->created_at->diffForHumans(),
+            'content' => $comment->content,
+            'likes' => 0,
+            'user_id' => $comment->user_id,
+            'sub_items' => null,
+        ];
+        return response($item,200);
     }
 
     /**

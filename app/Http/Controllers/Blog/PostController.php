@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Blog;
 
+use App\BlogComment;
 use App\Category;
 use App\Institution\InstitutionScope;
+use App\Page;
 use App\Services\FileAssetManagerService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
@@ -23,7 +25,7 @@ class PostController extends Controller
     
     public function __construct()
     {
-    $this->middleware('auth', ['except' => ['GetIndex','show']]);
+    $this->middleware('auth', ['except' => ['GetIndex','show', 'getComments']]);
     $this->page_title = 'Blog Posts';
     $this->breadcrumb = [
         'blog' => '',
@@ -99,7 +101,20 @@ class PostController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
-        $input['status'] = $status;
+        //
+        if(!empty($input['allow_comments_status'])){
+            $allow_comments_status = 1;
+        }else{
+            $allow_comments_status = 0;
+        }
+        $input['allow_comments_status'] = $allow_comments_status;
+        //
+        if(!empty($input['default_comment_status'])){
+            $default_comment_status = 1;
+        }else{
+            $default_comment_status = 0;
+        }
+        $input['default_comment_status'] = $default_comment_status;
         // upload save image
         if ($request->hasFile('image')) {
             // upload and save image
@@ -210,7 +225,20 @@ class PostController extends Controller
             $status = 0;
         }
         $input['status'] = $status;
-        $input['status'] = $status;
+        //
+        if(!empty($input['allow_comments_status'])){
+            $allow_comments_status = 1;
+        }else{
+            $allow_comments_status = 0;
+        }
+        $input['allow_comments_status'] = $allow_comments_status;
+        //
+        if(!empty($input['default_comment_status'])){
+            $default_comment_status = 1;
+        }else{
+            $default_comment_status = 0;
+        }
+        $input['default_comment_status'] = $default_comment_status;
         if ($request->hasFile('image')) {
             // upload and save image
             $image = $request->file('image');
@@ -290,15 +318,72 @@ class PostController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(BlogPost $post)
     {
-        $post = BlogPost::find($id);
         FileAssetManagerService::ImageDestroy($post->image);
         $post->delete();
         session()->flash('success',__('Successfully deleted'));
         return redirect()->route('posts.index');
     }
 
+    public function viewComments(BlogPost $post)
+    {
+        $page_title =  $this->page_title . ' - ' .__('Comments');
+        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+                $post->title => '',
+                'Comments' => ''
+            ];
+        $comments =  $post->comments;
+        return view('blog.comments.index', compact('page_title', 'breadcrumb', 'comments'));
+    }
 
+    function getComments($id){
+        $items =  array();
+        $post = BlogPost::find($id);
+        if (!empty($post)){
+            $comments =  $post->comments->where('parent_id', 0);
+            foreach ($comments as $comment){
+                $subItems =  array();
+                $subComments =  $comment->comments;
+                if (!empty($subComments)){
+                    foreach ($subComments as $subComment){
+                        $subItems[] = [
+                            'id' => $subComment->id,
+                            'parent_id' => !is_null($subComment->parent_id) ? $subComment->parent_id : 0,
+                            'user_profile_pic' => $subComment->user->getProfilePicURL(),
+                            'user_name' => $subComment->user->getUserName(),
+                            'create_date' => $subComment->created_at->diffForHumans(),
+                            'content' => $subComment->content,
+                            'likes' => 0,
+                            'user_id' => $subComment->user_id,
+                        ];
+                    }
+                }
+                $items[] = [
+                    'id' => $comment->id,
+                    'parent_id' => !is_null($comment->parent_id) ? $comment->parent_id : 0,
+                    'user_profile_pic' => $comment->user->getProfilePicURL(),
+                    'user_name' => $comment->user->getUserName(),
+                    'create_date' => $comment->created_at->diffForHumans(),
+                    'content' => $comment->content,
+                    'likes' => 0,
+                    'user_id' => $comment->user_id,
+                    'sub_items' => $subItems,
+                ];
+            }
+        }
+        return response($items,200);
+    }
+
+    function deleteComments($id)
+    {
+        $status = 0;
+        $comment = BlogComment::find($id);
+        if (!empty($comment)){
+            $comment->delete();
+        }
+        return response($status,  200);
+    }
     
 }

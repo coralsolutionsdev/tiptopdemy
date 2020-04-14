@@ -19,7 +19,7 @@
 						<th scope="col">{{__('Post')}}</th>
 {{--						<th scope="col" class="text-center" width="50">{{__('Category')}}</th>--}}
 						<th scope="col" class="text-center" width="50">{{__('Status')}}</th>
-						<th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
+						<th scope="col" class="text-center" width="350">{{__('Actions')}}</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -38,6 +38,9 @@
 							<td>
 								<div class="action_btn text-right" style="padding-top: 10px">
 										<ul>
+											<li class="">
+												<a href="{{route('blog.post.comments.show', $post->slug)}}" class="btn btn-light">View Comments</a>
+											</li>
 											<li class="">
 												<a target="_blank" href="{{route('blog.posts.show', $post->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
 											</li>

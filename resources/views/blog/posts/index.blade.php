@@ -18,7 +18,10 @@
 						<th scope="col" width="30">{{__('Image')}}</th>
 						<th scope="col">{{__('Post')}}</th>
 {{--						<th scope="col" class="text-center" width="50">{{__('Category')}}</th>--}}
+						<th scope="col" class="text-center" width="50">{{__('Likes')}}</th>
+						<th scope="col" class="text-center" width="50">{{__('Comments')}}</th>
 						<th scope="col" class="text-center" width="50">{{__('Status')}}</th>
+						<th scope="col" class="text-center" width="100">{{__('Allow Com.')}}</th>
 						<th scope="col" class="text-center" width="350">{{__('Actions')}}</th>
 					</tr>
 					</thead>
@@ -34,7 +37,10 @@
 								<p>{{substr(strip_tags($post->content),0,50)}} {{strlen($post->content) > 50 ? "...": "" }}</p>
 							</td>
 {{--							<td class="text-center align-middle">{{ucfirst($post->category->title)}}</td>--}}
+							<td class="text-center align-middle">{{$post->getReactCount('like')}}</td>
+							<td class="text-center align-middle">{{$post->comments->count()}}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->status) !!}</td>
+							<td class="text-center align-middle">{!! getStatusIcon($post->allow_comments_status) !!}</td>
 							<td>
 								<div class="action_btn text-right" style="padding-top: 10px">
 										<ul>

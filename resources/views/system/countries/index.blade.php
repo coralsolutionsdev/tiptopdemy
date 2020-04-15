@@ -31,9 +31,7 @@
 								<td>{{$country->currency_code}}</td>
 								<td>{{$country->full_name}}</td>
 								<td>
-									{!! Form::open(['url' => route('system.countries.update', $country->id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
-									<input type="checkbox" name="status" onchange="this.form.submit()" class="toogle-switch"  value="1"  {{empty($country) || !empty($country->status) ? 'checked' : null}}>
-									{!! Form::close() !!}
+
 								</td>
 							</tr>
 						@endforeach

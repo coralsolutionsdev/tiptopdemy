@@ -7,13 +7,18 @@ use App\Category;
 use App\Institution\InstitutionScope;
 use App\Page;
 use App\Services\FileAssetManagerService;
+use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\BlogPost;
 use App\BlogCategory;
 use auth;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 use Image;
 use Spatie\Tags\Tag;
 use Storage;
@@ -28,8 +33,8 @@ class PostController extends Controller
     $this->middleware('auth', ['except' => ['GetIndex','show', 'getComments']]);
     $this->page_title = 'Blog Posts';
     $this->breadcrumb = [
-        'blog' => '',
-        'posts' => '',
+        'Blog' => '',
+        'Posts' => '',
     ];
     }
     /**
@@ -53,17 +58,14 @@ class PostController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $blog_search =  null;
-        if(!empty($request->blog_search)){
-            $blog_search =  $request->blog_search;
-            $posts = BlogPost::latest()->where('status','1')->whereRaw("(title like '%$blog_search%' or content like '%$blog_search%')")->paginate(10);
+        $search_key =  null;
+        if(!empty($request->search_key)){
+            $search_key =  $request->search_key;
+            $posts = BlogPost::latest()->where('status','1')->whereRaw("(title like '%$search_key%' or content like '%$search_key%')")->paginate(10);
         }else{
             $posts = BlogPost::latest()->where('status','1')->paginate(10);
         }
-        $postscount = BlogPost::latest()->where('status','1')->count();
-        $count = BlogPost::where('id','>','1')->count();
-        $all_posts = BlogPost::latest()->where('status','1')->paginate(5);
-        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search'));
+        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','search_key'));
     }
 
     /**
@@ -178,12 +180,13 @@ class PostController extends Controller
     {
         $categories = Category::getRootCategories(Category::TYPE_POST);
         $posts = BlogPost::latest()->paginate(5);
+        $search_key =  null;
         $page_title =  $post->title;
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
                 $post->title => ''
             ];
-        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts'));
+        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key'));
     }
 
     /**
@@ -267,56 +270,15 @@ class PostController extends Controller
         return redirect()->route('posts.index');
 
 //        if ($request->isMethod('PUT')){
-//
-//            if ($request->input('slug') != $post->slug){
-//                $this->validate($request, [
-//                    'slug'         => 'alpha_dash|min:0|max:255|unique:blog_posts,slug',
-//                ]);
-//
-//            }
-//            $this->validate($request, [
-//                'title'        => 'required',
-//                'category_id'  => 'required|integer',
-//                'content'         => 'required',
-//                'image'        => 'sometimes|image',
-//            ]);
-//            $input =  $request->only(
-//                'title',
-//                'category_id',
-//                'slug',
-//                'image',
-//                'content',
-//                'status'
-//            );
-//            $input['user_id'] = Auth()->user()->id;
-//            if(!empty($input['status'])){
-//                $status = 1;
-//            }else{
-//                $status = 0;
-//            }
-//            $input['status'] = $status;
-//
-//            if ($request->hasFile('image')) {
-//                // upload and save image
-//                $image = $request->file('image');
-//                $location =  config('baseapp.post_image_storage_path');
-//                $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-//                $input['image'] = $uploaded_image;
-//                // Delete old image
-//                FileAssetManagerService::ImageDestroy($post->image);
-//            }
-//
-//            $post->update($input);
-//            session()->flash('success', trans('main._success_msg'));
-//            return redirect()->route('posts.index');
-//            }
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param BlogPost $post
      * @return Response
+     * @throws \Exception
      */
     public function destroy(BlogPost $post)
     {
@@ -326,6 +288,11 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
+    /**
+     * view post comments
+     * @param BlogPost $post
+     * @return Factory|Application|View
+     */
     public function viewComments(BlogPost $post)
     {
         $page_title =  $this->page_title . ' - ' .__('Comments');
@@ -338,9 +305,12 @@ class PostController extends Controller
         return view('blog.comments.index', compact('page_title', 'breadcrumb', 'comments'));
     }
 
-    function getComments($id){
+    /**
+     * @param BlogPost $post
+     * @return ResponseFactory|Application|Response
+     */
+    function getComments(BlogPost $post){
         $items =  array();
-        $post = BlogPost::find($id);
         if (!empty($post)){
             $comments =  $post->comments->where('parent_id', 0);
             foreach ($comments as $comment){
@@ -355,8 +325,10 @@ class PostController extends Controller
                             'user_name' => $subComment->user->getUserName(),
                             'create_date' => $subComment->created_at->diffForHumans(),
                             'content' => $subComment->content,
-                            'likes' => 0,
+                            'likes' =>  $count = $subComment->getReactCount('like'),
                             'user_id' => $subComment->user_id,
+                            'status' => $subComment->status,
+                            'is_liked' => ($subComment->isReacted('like') == true) ? 1 : 0,
                         ];
                     }
                 }
@@ -367,23 +339,34 @@ class PostController extends Controller
                     'user_name' => $comment->user->getUserName(),
                     'create_date' => $comment->created_at->diffForHumans(),
                     'content' => $comment->content,
-                    'likes' => 0,
+                    'likes' =>  $count = $comment->getReactCount('like'),
                     'user_id' => $comment->user_id,
                     'sub_items' => $subItems,
+                    'status' => $comment->status,
+                    'is_liked' => ($comment->isReacted('like') == true) ? 1 : 0,
                 ];
             }
         }
         return response($items,200);
     }
 
-    function deleteComments($id)
+    /**
+     * react to post
+     * @param BlogPost $post
+     * @param $type
+     * @return ResponseFactory|Application|Response
+     */
+    function updateReact(BlogPost $post, $type)
     {
-        $status = 0;
-        $comment = BlogComment::find($id);
-        if (!empty($comment)){
-            $comment->delete();
+        $count = 0;
+        if ($post->isReacted($type)){ // true
+            $post->unReactTo($type);
+        }else{
+            $post->reactTo($type);
         }
-        return response($status,  200);
+        $count = $post->getReactCount($type);
+        return response($count,  200);
     }
-    
+
+
 }

@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Blog;
 
 use App\BlogComment;
 use App\BlogPost;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -22,7 +25,7 @@ class CommentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -34,7 +37,7 @@ class CommentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -51,6 +54,8 @@ class CommentController extends Controller
             'likes' => 0,
             'user_id' => $comment->user_id,
             'sub_items' => null,
+            'status' => $comment->status,
+            'is_liked' => ($comment->isReacted('like') == true) ? 1 : 0,
         ];
         return response($item,200);
     }
@@ -59,7 +64,7 @@ class CommentController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -70,7 +75,7 @@ class CommentController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -80,20 +85,29 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param BlogComment $comment
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, BlogComment $comment)
     {
-        //
+        $input = $request->only(['status']);
+        if(!empty($input['status'])){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $comment->status = $status;
+        $comment->save();
+        session()->flash('success', trans('Updated successfully'));
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  BlogComment  $comment
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(BlogComment $comment)
     {
@@ -101,5 +115,43 @@ class CommentController extends Controller
         $comment->delete();
         return response('success',200);
 
+    }
+
+    /**
+     * ajax method to remove comments
+     * @param BlogComment $comment
+     * @return ResponseFactory|Application|Response
+     * @throws \Exception
+     */
+    function deleteComments(BlogComment $comment)
+    {
+        $status = 0;
+        if (!empty($comment)){
+            if (!empty($comment->comments)){
+                foreach ($comment->comments as $item){
+                    $item->delete();
+                }
+            }
+            $comment->delete();
+        }
+        return response($status,  200);
+    }
+
+    /**
+     * react to comment
+     * @param BlogComment $comment
+     * @param $type
+     * @return ResponseFactory|Application|Response
+     */
+    function updateReact(BlogComment $comment, $type)
+    {
+        $count = 0;
+        if ($comment->isReacted($type)){ // true
+            $comment->unReactTo($type);
+        }else{
+            $comment->reactTo($type);
+        }
+        $count = $comment->getReactCount($type);
+        return response($count,  200);
     }
 }

@@ -381,5 +381,18 @@ function getInstitutionScopes(){
     return InstitutionScope::where('status', 1)->orderBy('position')->get();
 }
 
+function getAuthUser()
+{
+    $user = null;
+    if (Auth::check()){
+        $user = Auth::user();
+    }
+    return $user;
+}
+function isLoginIn()
+{
+    return Auth::user();
+}
+
 
 

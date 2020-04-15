@@ -16,8 +16,7 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
-    <link href="https://fonts.googleapis.com/css?family=Cairo:400,600,700|Tajawal:400,500,700&display=swap&subset=arabic" rel="stylesheet">
-{{--    <!--Semantic UI-->--}}
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">{{--    <!--Semantic UI-->--}}
 {{--    <script src="{{asset('libraries/semantic/semantic.min.js')}}"></script>--}}
 {{--    <link rel="stylesheet" type="text/css" href="{{asset('libraries/semantic/semantic.min.css')}}">--}}
     <!--UiKit UI-->

@@ -6,9 +6,7 @@
 		'_main' => 'Overview',
 		'_dashboard' => 'Dashboard',
 		'_users' => 'Users',
-		'_posts' => 'Posts',
 		'_new_posts' => 'New posts',
-		'_categories' => 'Categories',
 		'_setting' => 'Setting',
 		'_admin_dashboard' => 'Admin Dashboard',
 		'_avatar' => 'Avatar',
@@ -42,7 +40,6 @@
 
 
 	// blog 
-		'_blog' => 'Blog',
 		'_posts' => 'Posts',
 		'_post_title' => 'Post title',
 		'_new_post' => 'New Post',
@@ -63,8 +60,24 @@
 		'_last_posts' => 'Last Posts',
 		'_cat_delete_confirm' => 'Are you sure that you want to delete this category?',
 		'_cat_delete_confirm_details' => 'Deleting this, will delete all posts in this category',
+        '_latest_posts' => 'Latest Posts',
+        '_tags' => 'Tags',
+        'Search in Blog' => 'Search in Blog',
+        'search' => 'Search',
+        'Read more' => 'Read more',
+        'Blog Posts' => 'Blog Posts',
+        'Blog' => 'Blog',
+        'Posts' => 'Posts',
+        'Replay' => 'Replay',
+        'Comments' => 'Comments',
+        'Comment' => 'Comment',
+        'Comment removed successfully' => 'Comment removed successfully',
+        'Comment added successfully' => 'Comment added successfully',
+        'Type your comment here ..' => 'Type your comment here ..',
+        'To add comments you are required to login with your account.' => 'To add comments you are required to login with your account.',
 
-	// Gallery
+
+        // Gallery
 		'_gallery' => 'Gallery',
 		'_albums' => 'Albums',
 		'_album' => 'Album',
@@ -80,7 +93,6 @@
 		'_models' => 'Models',
 		'_banners' => 'Banners',
 		'_banner' => 'Banner',
-		'_new_model' => 'Banners',
 		'_new_model' => 'New model',
 		'_edit_model' => 'Model edit',
 		'_model_size' => 'Model size',
@@ -111,7 +123,6 @@
 		'_remember_me' => 'Remember Me',
 		'_forgot_pass' => 'Forgot password ?',
 		'_register' => 'Register',
-		'_read_more' => 'Read more',
 
 	//pages
 		'_contact_us' => 'Contact us',

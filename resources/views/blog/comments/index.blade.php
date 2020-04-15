@@ -23,9 +23,11 @@
 					<tbody>
 					@foreach ($comments as $item)
 						<tr>
-							<td>{{$item->content}}</td>
+							<td>{!! nl2br($item->content) !!}</td>
 							<td class="" style="padding-top: 20px">
-								<input type="checkbox" name="status" class="toogle-switch" value="1" >
+								{!! Form::open(['url' => route('comments.update', $item->id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+								<input type="checkbox" name="status" onchange="this.form.submit()" class="toogle-switch"  value="1"  {{empty($item) || !empty($item->status) ? 'checked' : null}}>
+								{!! Form::close() !!}
 							</td>
 							<td>
 								<div class="action_btn text-right" >
@@ -46,14 +48,17 @@
 								<tr>
 									<td style="padding-left: 50px"><i class="fas fa-angle-right"></i> {{$item->content}}</td>
 									<td class="" style="padding-top: 20px">
-										<input type="checkbox" name="status" class="toogle-switch" value="1" >
+										{!! Form::open(['url' => route('comments.update', $item->id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+										<input type="checkbox" name="status" onchange="this.form.submit()" class="toogle-switch"  value="1"  {{empty($item) || !empty($item->status) ? 'checked' : null}}>
+										{!! Form::close() !!}
 									</td>
+
 									<td>
 										<div class="action_btn text-right" >
 											<ul>
 												<li class="">
 													<span id="{{$item->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-													<form id="delete-form" method="post" action="{{route('posts.destroy', $item->id)}}">
+													<form id="delete-form" method="post" action="{{route('comments.destroy', $item->id)}}">
 														{{csrf_field()}}
 														{{method_field('DELETE')}}
 													</form>

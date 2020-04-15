@@ -6,11 +6,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Auth;
 use Laratrust\Traits\LaratrustUserTrait;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements ReacterableContract
 {
     use Notifiable;
     use LaratrustUserTrait;
+    use Reacterable;
 
     /**
      * The attributes that are mass assignable.

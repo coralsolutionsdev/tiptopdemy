@@ -150,12 +150,14 @@ Route::group(['middleware'=>'installed'], function(){
             if (isModuleEnabled('blog_posts')){
                 /* Blog  */
                 Route::group(['prefix' => 'blog','namespace' => 'Blog', 'as' => 'blog.'], function () {
-                    Route::get('/' , 'PostController@GetIndex')->name('blog.main');
+                    Route::get('/' , 'PostController@GetIndex')->name('posts.main');
                     Route::resource('/category','CategoryController', ['only' => ['show']]);
 //                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
                     Route::resource('/posts','PostController', ['only' => ['show']]);
-                    Route::get('/post/{id}/get/comments', 'PostController@getComments');
-                    Route::post('/post/comment/{id}/delete', 'PostController@deleteComments');
+                    Route::get('/post/{post}/get/comments', 'PostController@getComments');
+                    Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
+                    Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
+                    Route::post('/post/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact'); // move to comment controller
 
                 });
             }

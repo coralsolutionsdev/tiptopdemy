@@ -2,15 +2,21 @@
 
 namespace App;
 
+use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Tags\HasTags;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 
-class BlogPost extends Model
+class BlogPost extends Model implements ReactableContract
+
 {
     use HasTags;
     use Sluggable;
+        use Reactable;
 
 
     protected $fillable = [
@@ -68,6 +74,112 @@ class BlogPost extends Model
             $tags[$tag->name] = $tag->name;
         }
         return $tags;
+    }
+
+    /**
+     * check if user has reacted to item
+     * @param $type
+     * @return bool
+     */
+    function isReacted($type)
+    {
+        $user = getAuthUser();
+        if ($user){
+            if ($this->isNotRegisteredAsLoveReactant()){
+                $this->registerAsLoveReactant();
+            }
+            if (is_null($type)){
+                $type = 'like';
+            }
+            if ($user->isNotRegisteredAsLoveReacter()){ // register the user as love reacter
+                $user->registerAsLoveReacter();
+            }
+            $reacter = $user->viaLoveReacter();
+            if ($reacter->hasReactedTo($this, 'Like')){
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * assign reaction to item
+     * @param $type
+     * @param int $weight
+     * @return bool
+     */
+    function reactTo($type,  $weight = 1)
+    {
+        $user = getAuthUser();
+        if ($user){
+            if ($this->isNotRegisteredAsLoveReactant()){
+                $this->registerAsLoveReactant();
+            }
+            if (is_null($type)){
+                $type = 'like';
+            }
+            if ($user->isNotRegisteredAsLoveReacter()){ // register the user as love reacter
+                $user->registerAsLoveReacter();
+            }
+            $reacter = $user->viaLoveReacter();
+            if ($reacter->hasNotReactedTo($this, $type)){
+                $reacter->reactTo($this, $type, $weight);
+                return true;
+                }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * remove reaction from item
+     * @param $type
+     * @param int $weight
+     * @return bool
+     */
+    function unReactTo($type,  $weight = 1)
+    {
+        $user = getAuthUser();
+        if ($user){
+            if ($this->isNotRegisteredAsLoveReactant()){
+                $this->registerAsLoveReactant();
+            }
+            if (is_null($type)){
+                $type = 'like';
+            }
+            if ($user->isNotRegisteredAsLoveReacter()){ // register the user as love reacter
+                $user->registerAsLoveReacter();
+            }
+            $reacter = $user->viaLoveReacter();
+            if ($reacter->hasReactedTo($this, $type)){
+                $reacter->unreactTo($this, $type, $weight);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * return reaction count
+     * @param null $type
+     * @return int
+     */
+    public function getReactCount($type =  null)
+    {
+        if ($this->isNotRegisteredAsLoveReactant()){
+            $this->registerAsLoveReactant();
+        }
+        if (is_null($type)){
+            $type = 'like';
+        }
+        $reactantFacade = $this->viaLoveReactant();
+        $reactionCounter = $reactantFacade->getReactionCounterOfType($type);
+        if ($reactantFacade->getReactionCounters()->count() > 0){
+            return $reactionCounter->count;
+        }
+        return 0;
     }
 
     /*

@@ -7,11 +7,9 @@
 		'_users' => 'المستخدمين',
 		'_dashboard' => 'لوحة التحكم',
 		'_admin_dashboard' => 'لوحة تحكم الإدارة',
-		'_posts' => 'المنشورات',
 		'_avatar' => 'الصورة',
 		'_name' => 'الأسم',
 		'_email' => 'البريد الإلكتروني',
-		'_categories' => 'الأقسام',
 		'_setting' => 'الاعدادات',
 		'_gender' => 'الجنس',
 		'_role' => 'المستوى',
@@ -70,8 +68,32 @@
 		'_last_posts' => 'آخر المقالات',
 		'_cat_delete_confirm' => 'هل انت متأكد انك تريد حذف هذا التصنيف ؟',
 		'_cat_delete_confirm_details' => 'حذف هذا التصنيف سوف يحذف جميع المقلات المدرجة ضمنه!',
+        '_latest_posts' => 'آخر المقالات',
+        '_tags' => 'الأوسمة',
+        'Search in Blog' => 'إبحث في المدونة',
+        'search' => 'إبحث',
+        'Read more' => 'إقرأ المزيد',
+        'Blog Posts' => 'مقالات المدونة',
+        'Blog' => 'المدونة',
+        'Posts' => 'المقالات',
+        'Comments' => 'التعليقات',
+        'Replay' => 'إضافة رد',
+        'Comment' => 'تعليق',
+        'Comment removed successfully' => 'تم حذف التعليق بنجاح',
+        'Comment added successfully' => 'تمت إضافة التعليق بنجاح',
+        'Type your comment here ..' => 'أضف تعليقك في هذه الخانة ..',
+        'Login now' => 'قم بتسجيل الدخول الآن',
+        'To add comments you are required to login with your account.' => 'لإضافة التعليقات يجب عليك تسجيل الدخول الى حسابك.',
 
-	// Gallery
+
+
+
+
+
+
+
+
+        // Gallery
 		'_gallery' => 'المعرض',
 		'_albums' => 'الألبومات',
 		'_album' => 'الألبوم',
@@ -117,15 +139,13 @@
 		// Site
 		'_home' => 'الرئيسية',	
 		'_about_us' => 'من نحن',	
-		'_blog' => 'المدونة',		
 		'_login' => 'دخول',
 		'_password' => 'كلمة المرور',
 		'_confirm' => 'تأكيد',
 		'_remember_me' => 'تذكرني',
 		'_forgot_pass' => 'هل نسيت كلمة المرور ؟',	
 		'_register' => 'تسجيل',
-		'_read_more' => 'إقرأ المزيد',	
-	
+
 	//pages
 		'_contact_us' => 'إتصل بنا',
 		'_contact_info' => 'معلومات الإتصال',

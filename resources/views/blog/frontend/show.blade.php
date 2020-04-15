@@ -86,33 +86,6 @@
                                                 </div>
                                             @endif
                                         @endif
-                                        @if(false)
-                                        <li id="comment-1" class="comment">
-                                            <article class="uk-comment uk-comment-primary bg-secondary uk-visible-toggle" tabindex="-1">
-                                                <header class="uk-comment-header uk-flex-middle" uk-grid>
-                                                    <div class="uk-width-auto">
-                                                        <div class="uk-width-auto">
-                                                            <img class="uk-comment-avatar uk-border-circle" src="" width="60" height="60" alt="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="uk-width-expand">
-                                                        <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"></a></h4>
-                                                        <p class="uk-comment-meta uk-margin-remove-top"><a class="uk-link-reset" href="#"></a></p>
-                                                    </div>
-                                                    <div class="uk-width-auto">
-                                                        <a uk-icon="icon: heart"> <span class="uk-badge">0</span> </a>
-                                                        <a class="uk-link-muted uk-button uk-button-default open-comment-form" style="margin: 0px 5px">Reply</a>
-                                                    </div>
-                                                </header>
-                                                <div class="uk-comment-body">
-                                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-                                                </div>
-                                            </article>
-                                            <ul id="list-1" class="uk-comment-list comments-list-1">
-
-                                            </ul>
-                                        </li>
-                                        @endif
                                     </ul>
                                 </div>
                             </div>

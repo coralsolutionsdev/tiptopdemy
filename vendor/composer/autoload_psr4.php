@@ -77,8 +77,6 @@ return array(
     'Cviebrock\\EloquentSluggable\\' => array($vendorDir . '/cviebrock/eloquent-sluggable/src'),
     'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),
     'Collective\\Html\\' => array($vendorDir . '/laravelcollective/html/src'),
-    'Cog\\Laravel\\Love\\' => array($vendorDir . '/cybercog/laravel-love/src'),
-    'Cog\\Contracts\\Love\\' => array($vendorDir . '/cybercog/laravel-love/contracts'),
     'Cocur\\Slugify\\' => array($vendorDir . '/cocur/slugify/src'),
     'Arrilot\\Widgets\\' => array($vendorDir . '/arrilot/laravel-widgets/src'),
     'App\\' => array($baseDir . '/app'),

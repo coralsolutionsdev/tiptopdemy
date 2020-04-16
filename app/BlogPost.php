@@ -16,7 +16,7 @@ class BlogPost extends Model implements ReactableContract
 {
     use HasTags;
     use Sluggable;
-        use Reactable;
+    use Reactable;
 
 
     protected $fillable = [
@@ -85,20 +85,19 @@ class BlogPost extends Model implements ReactableContract
     {
         $user = getAuthUser();
         if ($user){
-            if ($this->isNotRegisteredAsLoveReactant()){
-                $this->registerAsLoveReactant();
-            }
+            // get reaction type
             if (is_null($type)){
                 $type = 'like';
             }
-            if ($user->isNotRegisteredAsLoveReacter()){ // register the user as love reacter
+            $reactionType = ReactionType::fromName($type);
+            $typeName = $reactionType->getName(); // 'Like'
+            if ($user->isNotRegisteredAsLoveReacter()){ // false
                 $user->registerAsLoveReacter();
             }
-            $reacter = $user->viaLoveReacter();
-            if ($reacter->hasReactedTo($this, 'Like')){
-                return true;
-            }
+            $reacterFacade = $user->viaLoveReacter();
 
+            $isReacted = $reacterFacade->hasReactedTo($this);
+            return $isReacted;
         }
         return false;
     }
@@ -113,21 +112,27 @@ class BlogPost extends Model implements ReactableContract
     {
         $user = getAuthUser();
         if ($user){
-            if ($this->isNotRegisteredAsLoveReactant()){
-                $this->registerAsLoveReactant();
-            }
+            // get reaction type
             if (is_null($type)){
                 $type = 'like';
             }
-            if ($user->isNotRegisteredAsLoveReacter()){ // register the user as love reacter
+            $reactionType = ReactionType::fromName($type);
+            $typeName = $reactionType->getName(); // 'Like'
+
+            //model should ne registered ad love reactant
+            if ($this->isNotRegisteredAsLoveReactant()){
+                $this->registerAsLoveReactant();
+            }
+
+            if ($user->isNotRegisteredAsLoveReacter()){ // false
                 $user->registerAsLoveReacter();
             }
-            $reacter = $user->viaLoveReacter();
-            if ($reacter->hasNotReactedTo($this, $type)){
-                $reacter->reactTo($this, $type, $weight);
-                return true;
-                }
-            return false;
+            $reacterFacade = $user->viaLoveReacter();
+
+            $isNotReacted = $reacterFacade->hasNotReactedTo($this);
+            if ($isNotReacted){
+                $reacterFacade->reactTo($this, $typeName, $weight);
+            }
         }
         return false;
     }
@@ -142,21 +147,30 @@ class BlogPost extends Model implements ReactableContract
     {
         $user = getAuthUser();
         if ($user){
-            if ($this->isNotRegisteredAsLoveReactant()){
-                $this->registerAsLoveReactant();
+            if ($user){
+                // get reaction type
+                if (is_null($type)){
+                    $type = 'like';
+                }
+                $reactionType = ReactionType::fromName($type);
+                $typeName = $reactionType->getName(); // 'Like'
+
+                //model should ne registered ad love reactant
+                if ($this->isNotRegisteredAsLoveReactant()){
+                    $this->registerAsLoveReactant();
+                }
+
+                if ($user->isNotRegisteredAsLoveReacter()){ // false
+                    $user->registerAsLoveReacter();
+                }
+                $reacterFacade = $user->viaLoveReacter();
+
+                $isReacted = $reacterFacade->hasReactedTo($this);
+                if ($isReacted){
+                    $reacterFacade->unreactTo($this, $typeName);
+                }
+
             }
-            if (is_null($type)){
-                $type = 'like';
-            }
-            if ($user->isNotRegisteredAsLoveReacter()){ // register the user as love reacter
-                $user->registerAsLoveReacter();
-            }
-            $reacter = $user->viaLoveReacter();
-            if ($reacter->hasReactedTo($this, $type)){
-                $reacter->unreactTo($this, $type, $weight);
-                return true;
-            }
-            return false;
         }
         return false;
     }
@@ -171,13 +185,17 @@ class BlogPost extends Model implements ReactableContract
         if ($this->isNotRegisteredAsLoveReactant()){
             $this->registerAsLoveReactant();
         }
+        // get reaction type
         if (is_null($type)){
             $type = 'like';
         }
+        $reactionType = ReactionType::fromName($type);
+        $typeName = $reactionType->getName(); // 'Like'
         $reactantFacade = $this->viaLoveReactant();
-        $reactionCounter = $reactantFacade->getReactionCounterOfType($type);
-        if ($reactantFacade->getReactionCounters()->count() > 0){
+        $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
+        if ($reactionCounter->count() > 0){
             return $reactionCounter->count;
+
         }
         return 0;
     }

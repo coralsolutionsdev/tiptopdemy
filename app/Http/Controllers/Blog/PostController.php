@@ -140,34 +140,7 @@ class PostController extends Controller
 
 
 //        if ($request->isMethod('post')){
-//             if ($request->input('slug') != ''){
-//                 $this->validate($request, [
-//                 'slug'         => 'alpha_dash|min:0|max:255|unique:blog_posts,slug',
-//                ]);
-//            }
-//                $this->validate($request, [
-//                 'title'        => 'required',
-//                 'category_id'  => 'required|integer',
-//                 'content'      => 'required',
-//                 'image'        => 'sometimes|image',
-//                ]);
-//                $input =  $request->only(
-//                    'title',
-//                    'category_id',
-//                    'slug',
-//                    'image',
-//                    'content',
-//                    'status'
-//                );
-//
-//                $input['user_id'] = Auth()->user()->id;
-//                if(!empty($input['status'])){
-//                    $status = 1;
-//                }else{
-//                    $status = 0;
-//                }
-//
-//            }
+
     }
 
     /**
@@ -178,6 +151,7 @@ class PostController extends Controller
      */
     public function show(BlogPost $post)
     {
+
         $categories = Category::getRootCategories(Category::TYPE_POST);
         $posts = BlogPost::latest()->paginate(5);
         $search_key =  null;

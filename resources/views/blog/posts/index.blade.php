@@ -40,7 +40,7 @@
 							<td class="text-center align-middle">{{$post->getReactCount('like')}}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->status) !!}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->allow_comments_status) !!}</td>
-							<td class="text-center align-middle"><a href="{{route('blog.post.comments.show', $post->slug)}}" class="btn btn-light">View Comments</a>({{$post->comments->count()}})</td>
+							<td class="text-center align-middle"><a href="{{route('blog.post.comments.show', $post->slug)}}" class="btn btn-light">View</a>({{$post->comments->count()}})</td>
 							<td>
 								<div class="action_btn text-right" style="padding-top: 10px">
 										<ul>

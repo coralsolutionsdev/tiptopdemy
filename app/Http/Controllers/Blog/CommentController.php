@@ -112,9 +112,16 @@ class CommentController extends Controller
     public function destroy(BlogComment $comment)
     {
         //
-        $comment->delete();
-        return response('success',200);
-
+        if (!empty($comment)){
+            if (!empty($comment->comments)){
+                foreach ($comment->comments as $item){
+                    $item->delete();
+                }
+            }
+            $comment->delete();
+        }
+        session()->flash('success', trans('deleted successfully'));
+        return redirect()->back();
     }
 
     /**

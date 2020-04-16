@@ -34,7 +34,7 @@
 										<ul>
 											<li class="">
 												<span id="{{$item->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-												<form id="delete-form" method="post" action="{{route('posts.destroy', $item->id)}}">
+												<form id="delete-form" method="post" action="{{route('comments.destroy', $item->id)}}">
 													{{csrf_field()}}
 													{{method_field('DELETE')}}
 												</form>

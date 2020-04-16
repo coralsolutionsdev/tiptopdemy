@@ -193,7 +193,7 @@ class BlogPost extends Model implements ReactableContract
         $typeName = $reactionType->getName(); // 'Like'
         $reactantFacade = $this->viaLoveReactant();
         $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
-        if ($reactionCounter->count() > 0){
+        if (!empty($reactionCounter)){
             return $reactionCounter->count;
 
         }

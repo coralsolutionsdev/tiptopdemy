@@ -16,7 +16,7 @@
 					<thead>
 					<tr>
 						<th scope="col" width="30">{{__('Image')}}</th>
-						<th scope="col" width="150">{{__('Post')}}</th>
+						<th scope="col" width="300">{{__('Post')}}</th>
 {{--						<th scope="col" class="text-center" width="50">{{__('Category')}}</th>--}}
 						<th scope="col" class="text-center" width="50">{{__('Likes')}}</th>
 						<th scope="col" class="text-center" width="50">{{__('Comments')}}</th>

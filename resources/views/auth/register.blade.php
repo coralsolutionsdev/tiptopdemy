@@ -114,7 +114,7 @@
                                                 <select class="uk-select scope" name="scope_id" required>
                                                     <option selected="true" disabled="disabled">Study kind</option>
                                                     @foreach(getInstitutionScopes() as $scope)
-                                                        <option value="{{$scope->id}}" {{$scope->default == 1 ? 'selected' : ''}}>{{$scope->title}}</option>
+                                                        <option value="{{$scope->id}}" {{$scope->default == 1 ? 'selected' : ''}} title="{{$scope->description}}">{{$scope->title}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -271,7 +271,12 @@
                         if (option.default == 1){
                             selected = 'selected';
                         }
-                        $('.field-item-options').append('<option value="'+option.id+'" '+selected+'>'+option.title+'</option>');
+                        var description = ''
+                        if(option.description != null)
+                        {
+                            description = option.description;
+                        }
+                        $('.field-item-options').append('<option value="'+option.id+'" '+selected+' title="'+description+'">'+option.title+'</option>');
                     })
                     // done
                     } else {
@@ -296,7 +301,12 @@
                             defaultFieldId = field.id;
                             levels = field.levels;
                         }
-                        $('.fields-items').append('<option value="'+field.id+'" '+selected+'>'+field.title+'</option>');
+                        var description = ''
+                        if(field.description != null)
+                        {
+                            description = field.description;
+                        }
+                        $('.fields-items').append('<option value="'+field.id+'" '+selected+' title="'+description+'">'+field.title+'</option>');
                     });
                     if (defaultFieldId != null){
                         // update levels

@@ -316,7 +316,7 @@
         function addComment(){
             $('.add-comment').off('click');
             $('.add-comment').click(function () {
-                // toggleScreenSpinner(true);
+                toggleScreenSpinner(true);
                 var item = $(this);
                 var itemList = item.parent().parent();
                 var listId = itemList.attr('id').split('-')[1];

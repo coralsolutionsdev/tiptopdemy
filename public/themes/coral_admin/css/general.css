@@ -3,6 +3,7 @@ html, body{
     padding: 0px;
     margin: 0px;
     height: 100%;
+    font-family: 'Cairo','Rubik', sans-serif;
 }
 body{
     margin: auto;
@@ -73,7 +74,7 @@ body{
 }
 .page-header .page-title{
     font-size: 20px;
-    font-family: "Open Sans", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
+    font-family: 'Cairo','Rubik', sans-serif;
 }
 .text-muted{
     opacity: 0.5;
@@ -206,7 +207,7 @@ ul.admin-sidebar ul li a:before{
     color: white;
     font-size: 18px;
     border-left: 4px solid var(--theme-primary-color);
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Cairo','Rubik', sans-serif;
     /*background-color: blue;*/
     margin-left: 8px;
     padding-left: 3px;

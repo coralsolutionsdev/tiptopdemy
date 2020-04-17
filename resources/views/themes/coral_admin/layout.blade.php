@@ -11,9 +11,9 @@
         }
     </style>
     <!-- THEME CSS -->
-    <link rel="stylesheet" href="{{url('themes/coral_admin/css/general.css')}}">
+    <link rel="stylesheet" href="{{url('themes/coral_admin/css/general.css?v=202004180130')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">{{--    <!--Semantic UI-->--}}
     <!-- scripts -->
     <script src="https://kit.fontawesome.com/2f85794b10.js" crossorigin="anonymous"></script>
     <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>

@@ -91,14 +91,9 @@ class CategoryController extends Controller
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
         $blog_search =  null;
-//        if(!empty($request->blog_search)){
-//            $blog_search =  $request->blog_search;
-//            $posts = BlogPost::latest()->where('status','1')->whereRaw("(title like '%$blog_search%' or content like '%$blog_search%')")->paginate(10);
-//        }else{
-//            $posts = BlogPost::latest()->where('status','1')->paginate(10);
-//        }
+        $search_key =  null;
         $posts = $category->items()->paginate(5);
-        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search'));
+        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search', 'search_key'));
     }
 
     public function filter(){

@@ -31,7 +31,7 @@
     <div class="display-table-row">
         <div class="display-table-cell sidebar">
             <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{{url()}}">
                     <span class="logo uk-text-primary">
                         <span class="uk-margin-small-right" uk-icon="uikit"></span>
                         </span><span class="title"> {{getSite()->name}}</span>

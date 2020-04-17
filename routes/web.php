@@ -61,7 +61,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::group(['prefix' => 'blog'], function () {
             Route::resource('/posts','Blog\PostController', ['except' => ['show']]);
             // movie this
-            Route::resource('/comments','Blog\CommentController', ['except' => ['show']]);
+            Route::resource('/comments','Blog\CommentController', ['except' => ['show', 'store']]);
             Route::resource('/categories','Blog\CategoryController', ['except' => ['show']])->names([
                 'index' => 'blog.categories.index',
                 'create' => 'blog.categories.create',
@@ -159,6 +159,8 @@ Route::group(['middleware'=>'installed'], function(){
                     Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
                     Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
                     Route::post('/post/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact'); // move to comment controller
+                    Route::post('/post/comment/store', 'CommentController@store');
+
 
                 });
             }

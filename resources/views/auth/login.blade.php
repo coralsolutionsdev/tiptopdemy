@@ -32,6 +32,11 @@
                                     </div>
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
+                                            <a href="{{ url('/password/reset') }}" class="font-family-Roboto" style="font-size: 14px;">{{trans('auth.Forgot Password?')}}</a>
+                                        </div>
+                                    </div>
+                                    <div class="uk-margin">
+                                        <div class="uk-inline uk-width-1-1">
                                             <button class="uk-button uk-button-primary uk-width-1-1">log in</button>
                                         </div>
                                     </div>

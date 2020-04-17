@@ -316,7 +316,7 @@
         function addComment(){
             $('.add-comment').off('click');
             $('.add-comment').click(function () {
-                toggleScreenSpinner(true);
+                // toggleScreenSpinner(true);
                 var item = $(this);
                 var itemList = item.parent().parent();
                 var listId = itemList.attr('id').split('-')[1];
@@ -335,7 +335,7 @@
                     'parent_id': listId,
                     'status': '{{$post->default_comment_status == 1 ? 1 : 0}}',
                 };
-                $.post('/manage/blog/comments',data).done(function (item) {
+                $.post('/blog/post/comment/store',data).done(function (item) {
                     drawCommentItem(item.id, listId, item.user_profile_pic, item.user_name, item.create_date, item.content, item.likes, item.parent_id, item.user_id, item.is_liked, item.status);
                     $('body, html').animate({ scrollTop: $("#comment-"+item.id).offset().top - 200 }, 1000);
                     updateCommentCount(true);

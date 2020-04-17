@@ -19,12 +19,10 @@ class LoginController extends Controller
     		if($user->hasRole('superadministrator') OR $user->hasRole('administrator')){
                 return redirect()->route('admin.dashboard');
             }
-//            return redirect()->route('home');
             return redirect()->back();
 
-
         }
-    	return redirect()->back();
+    	return redirect()->back()->withErrors(['email' => trans('auth.failed')]);
 
 
     }

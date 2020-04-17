@@ -7,6 +7,7 @@
             ifr.attr("scrolling", "no");
             ifr.attr("src", ifr.attr("src"));
             var newItemWidth = parseInt($('.post-content').width());
+            console.log(newItemWidth);
             var itemHeight = ifr.attr("height");
             var itemWidth = ifr.attr("width");
             var r = (itemWidth / newItemWidth) * 100;
@@ -32,9 +33,11 @@
                         <div class="uk-child-width-1-1@m" uk-grid>
                             <div>
                                 <div class="uk-card uk-card-clear">
+                                    @if(!empty($post->cover_image))
                                     <div class="uk-inline-clip uk-transition-toggle" tabindex="0" style="width: 100%;max-height: 400px; overflow: hidden; object-fit: contain; margin-bottom: 10px">
-                                        <img class="uk-transition-scale-up uk-transition-opaque" src="{{asset_image($post->image)}}" alt="" style="width: 100%">
+                                        <img class="uk-transition-scale-up uk-transition-opaque" src="{{$post->getMainImage()}}" alt="" style="width: 100%">
                                     </div>
+                                    @endif
                                     <div class="uk-card-body post-content" style="padding-left: 0px; padding-right: 0px; padding-top: 0px">
                                         <h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
                                         <div class="uk-grid-column-small uk-grid-row-large uk-child-width-1-2@s" uk-grid>

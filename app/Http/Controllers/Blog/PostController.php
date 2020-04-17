@@ -97,6 +97,7 @@ class PostController extends Controller
     {
         $input = $request->all();
         $input['user_id'] = Auth()->user()->id;
+
         if(!empty($input['status'])){
             $status = 1;
         }else{
@@ -123,7 +124,7 @@ class PostController extends Controller
             $image = $request->file('image');
             $location =  config('baseapp.post_image_storage_path');
             $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-            $input['image'] = $uploaded_image;
+            $input['cover_image'] = $uploaded_image;
         }
         $post = BlogPost::create($input);
         // update Category
@@ -137,7 +138,6 @@ class PostController extends Controller
 
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('posts.index');
-
 
 //        if ($request->isMethod('post')){
 
@@ -221,9 +221,16 @@ class PostController extends Controller
             $image = $request->file('image');
             $location =  config('baseapp.post_image_storage_path');
             $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-            $input['image'] = $uploaded_image;
+            $input['cover_image'] = $uploaded_image;
             // Delete old image
             FileAssetManagerService::ImageDestroy($post->image);
+        }
+        if (!empty($post->images)){
+            foreach ($post->images as $key => $image){
+                if (!array_key_exists($key,$input['images'])){
+                    FileAssetManagerService::ImageDestroy($image);
+                }
+            }
         }
         // update slug
         if ($post->title != $request->input('title')){
@@ -340,6 +347,62 @@ class PostController extends Controller
         }
         $count = $post->getReactCount($type);
         return response($count,  200);
+    }
+
+    /**
+     * store image
+     * @param Request $request
+     */
+
+    function imageUpload(Request $request)
+    {
+
+        if ($request->hasFile('file')) {
+            $file = $request->file;
+            $fileName = $file->getClientOriginalName();
+
+            if (isset($_SERVER['HTTP_ORIGIN'])) {
+                // same-origin requests won't set an origin. If the origin is set, it must be valid.
+                if ($_SERVER['HTTP_ORIGIN'] == url('/')) {
+                    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                } else {
+                    header("HTTP/1.0 403 Origin Denied");
+                    return;
+                }
+            }
+
+            /*
+              If your script needs to receive cookies, set images_upload_credentials : true in
+              the configuration and enable the following two headers.
+            */
+            // header('Access-Control-Allow-Credentials: true');
+            // header('P3P: CP="There is no P3P policy."');
+
+            // Sanitize input
+            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $fileName)) {
+                header("HTTP/1.0 500 Invalid file name.");
+                return;
+            }
+
+            // Accept upload if there was no origin, or if it is an accepted origin
+            $image = $file;
+            $location =  config('baseapp.post_image_storage_path');
+            $path = FileAssetManagerService::ImageStore($image,$location);
+
+            // Respond to the successful upload with JSON.
+            // Use a location key to specify the path to the saved image resource.
+            // { location : '/your/uploaded/image/file'}
+            $attachmentUrl = url('/storage/'.$path);
+            $item = [
+                'path' =>  $path,
+                'url' =>  $attachmentUrl,
+            ];
+            echo json_encode(array('item' => $item));
+        } else {
+            // Notify editor that the upload failed
+            header("HTTP/1.0 500 Server Error");
+        }
+
     }
 
 

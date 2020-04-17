@@ -22,7 +22,7 @@
             <a style="padding: 0px; margin: 0px" href="{{route('blog.posts.show',$post->slug)}}">
             <div class="uk-child-width-1-2@s uk-margin" uk-grid>
                 <div class="uk-card-media-right uk-cover-container">
-                    <img src="{{getImageURL($post->image)}}">
+                    <img src="{{$post->getMainImage()}}">
                 </div>
                 <div style="padding: 0px 6px">
                     {{$post->title}}

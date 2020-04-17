@@ -70,6 +70,7 @@ Route::group(['middleware'=>'installed'], function(){
                 'update' => 'blog.categories.update'
             ]);
             Route::get('/post/{post}/comments','Blog\PostController@viewComments')->name('blog.post.comments.show');
+            Route::post('/post/image/upload','Blog\PostController@imageUpload')->name('blog.post.image.upload');
 
         });
 

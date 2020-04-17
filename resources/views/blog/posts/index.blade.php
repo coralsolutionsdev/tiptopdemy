@@ -29,7 +29,7 @@
 					@foreach ($posts as $post)
 						<tr>
 							<td style="width: 120px">
-								<img src="{{getImageURL($post->image)}}" style="width: 100%">
+								<img src="{{$post->getMainImage()}}" style="width: 100%">
 							</td>
 							<td>
 								<p><a target="_blank" href="{{route('blog.posts.show', $post->slug)}}">{{ucfirst($post->title)}}</a></p>

@@ -81,22 +81,7 @@
     </div>
 </div>
 <script>
-    tinymce.init({
-        selector: '.content-editor',
-        branding: false,
-        menubar: true,
-        statusbar: false,
-        toolbar_drawer: 'sliding',
-        // theme: "modern",
-        fontsize_formats: "8pt 9pt 10pt 11pt 12pt 26pt 36pt 48pt 72pt",
-        plugins: [
-            "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-            "table contextmenu directionality emoticons paste textcolor code fullscreen",
-        ],
-        toolbar1: "undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect link| image media | forecolor backcolor | link unlink anchor | fontsizeselect forecolor backcolor  | print preview code fullscreen",
-        // image_advtab: true ,
-    });
+
     // List item delete
     $('.btn-delete').click(function () {
         var item = $(this);

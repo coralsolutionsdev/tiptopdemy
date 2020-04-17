@@ -14,10 +14,10 @@ return [
     | Storage path locations
     |--------------------------------------------------------------------------
     */
-    'banner_image_storage_path'   =>  'images' . DIRECTORY_SEPARATOR . 'banners',
-    'post_image_storage_path'   =>  'images' . DIRECTORY_SEPARATOR . 'posts',
-    'page_image_storage_path'   =>  'images' . DIRECTORY_SEPARATOR . 'pages',
-    'user_image_storage_path'   =>  'images' . DIRECTORY_SEPARATOR . 'avatars',
-    'product_image_storage_path'   =>  'images' . DIRECTORY_SEPARATOR . 'products',
+    'banner_image_storage_path'   =>  'images' . '/' . 'banners',
+    'post_image_storage_path'   =>  'images' . '/' . 'posts',
+    'page_image_storage_path'   =>  'images' . '/' . 'pages',
+    'user_image_storage_path'   =>  'images' . '/' . 'avatars',
+    'product_image_storage_path'   =>  'images' . '/' . 'products',
 
 ];

@@ -18,9 +18,11 @@
 					<div class="uk-child-width-1-1@m uk-margin-small" uk-grid>
 						@if(!empty($search_key))
 							<div class="" uk-grid>
+								<a href="{{route('blog.posts.show',$post->slug)}}">
 								<div class="uk-width-2-5@m uk-flex uk-flex-middle">
-									<img src="{{getImageURL($post->image)}}">
+									<img src="{{$post->getMainImage()}}">
 								</div>
+								</a>
 								<div class="uk-width-expand@m">
 									<h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
 									<ul class="uk-iconnav uk-text-muted">
@@ -45,11 +47,11 @@
 						@else
 						<div>
 							<div class="uk-card uk-card-clear">
-								@if(!empty($post->image))
+								<a href="{{route('blog.posts.show',$post->slug)}}">
 								<div class="uk-inline-clip uk-transition-toggle" tabindex="0" style="width: 100%;max-height: 400px; overflow: hidden; object-fit: contain;">
-									<img class="uk-transition-scale-up uk-transition-opaque" src="{{asset_image($post->image)}}" alt="" style="width: 100%">
+									<img class="uk-transition-scale-up uk-transition-opaque" src="{{$post->getMainImage()}}" alt="" style="width: 100%">
 								</div>
-								@endif
+								</a>
 								<div class="uk-card-body uk-padding-small" style="padding-left: 0px; padding-right: 0px">
 									<h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
 									<ul class="uk-iconnav uk-text-muted">

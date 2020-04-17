@@ -6,7 +6,7 @@
                     <span uk-icon="home"></span>
                 </li>
             @foreach($breadcrumb as $page => $link)
-                    <li><a href="">{{__('main.'.$page)}}</a></li>
+                    <li><a href="">{{__($page)}}</a></li>
                 @endforeach
             </ul>
     </div>

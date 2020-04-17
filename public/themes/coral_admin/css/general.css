@@ -322,6 +322,10 @@ input[type=checkbox].toogle-switch:checked::after{
     margin-left: 0px;
 }
 
+.post-images-item{
+    border-bottom: 1px solid #CCCCCC;
+    padding: 10px 0px;
+}
 /*File upload*/
 .files-uploader{
     color: #97A1A8;

@@ -24,11 +24,15 @@ class BlogPost extends Model implements ReactableContract
         'user_id',
         'category_id',
         'slug',
-        'image',
+        'images',
+        'cover_image',
         'content',
         'status',
         'allow_comments_status',
         'default_comment_status',
+    ];
+    protected $casts = [
+        'images' => 'array'
     ];
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;
@@ -61,6 +65,24 @@ class BlogPost extends Model implements ReactableContract
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * get post cover image
+     * @return string
+     */
+    function getMainImage()
+    {
+        if (!empty($this->cover_image)){
+            return asset_image($this->cover_image);
+
+        }elseif (!empty($this->images)){
+            foreach ($this->images as $key => $value) {
+                return asset_image($value);
+                break;
+            }
+        }
+        return asset_image('temp/no-image.png');
     }
     /**
      * Get the array list of this product tags

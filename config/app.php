@@ -190,6 +190,7 @@ return [
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Webpatser\Countries\CountriesServiceProvider::class,
         Bnb\Laravel\Attachments\AttachmentsServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
     ],
 

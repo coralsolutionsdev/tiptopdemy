@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                                 {{--attachments--}}
-                                @if(!empty($attachments))
+                                @if(!empty($attachments) && $attachments->count() > 0)
 
                                 <div>
                                     <h4>{{__('main.Attachments')}} (<span class="comment-count">{{$attachments->count()}}</span>)</h4>

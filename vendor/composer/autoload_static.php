@@ -544,6 +544,13 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
                 0 => __DIR__ . '/..' . '/kylekatarnls/update-helper/src',
             ),
         ),
+        'R' => 
+        array (
+            'Rap2hpoutre\\LaravelLogViewer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src',
+            ),
+        ),
         'P' => 
         array (
             'Parsedown' => 
@@ -571,7 +578,6 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'AlbertCht\\InvisibleReCaptcha\\InvisibleReCaptchaServiceProvider' => __DIR__ . '/..' . '/albertcht/invisible-recaptcha/src/InvisibleReCaptchaServiceProvider.php',
         'App\\Appointment' => __DIR__ . '/../..' . '/app/Appointment.php',
         'App\\AppointmentTimeSlot' => __DIR__ . '/../..' . '/app/AppointmentTimeSlot.php',
-        'App\\Attachments' => __DIR__ . '/../..' . '/app/Attachments.php',
         'App\\Banner' => __DIR__ . '/../..' . '/app/Banner.php',
         'App\\BlogCategory' => __DIR__ . '/../..' . '/app/BlogCategory.php',
         'App\\BlogComment' => __DIR__ . '/../..' . '/app/BlogComment.php',
@@ -589,7 +595,6 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\Admin\\LayoutController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/LayoutController.php',
         'App\\Http\\Controllers\\Admin\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/LoginController.php',
         'App\\Http\\Controllers\\Admin\\SettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/SettingController.php',
-        'App\\Http\\Controllers\\AttachmentsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AttachmentsController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
@@ -827,7 +832,6 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'CountriesSeeder' => __DIR__ . '/../..' . '/database/seeds/CountriesSeeder.php',
         'CreateAppointmentTimeSlotsTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_24_131417_create_appointment_time_slots_table.php',
         'CreateAppointmentsTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_22_145540_create_appointments_table.php',
-        'CreateAttachmentsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_18_124158_create_attachments_table.php',
         'CreateBannersTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_15_114223_create_banners_table.php',
         'CreateBlogCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_10_070039_create_blog_categories_table.php',
         'CreateBlogCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2018_08_25_142513_create_blog_comments_table.php',
@@ -4239,6 +4243,12 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Ramsey\\Uuid\\UuidFactory' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactory.php',
         'Ramsey\\Uuid\\UuidFactoryInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactoryInterface.php',
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
+        'Rap2hpoutre\\LaravelLogViewer\\BaseController' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/controllers/LogViewerController.php',
+        'Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewer' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/LaravelLogViewer.php',
+        'Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewerServiceProvider' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/LaravelLogViewerServiceProvider.php',
+        'Rap2hpoutre\\LaravelLogViewer\\Level' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/Level.php',
+        'Rap2hpoutre\\LaravelLogViewer\\LogViewerController' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/controllers/LogViewerController.php',
+        'Rap2hpoutre\\LaravelLogViewer\\Pattern' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/Pattern.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
         'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
         'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Driver.php',

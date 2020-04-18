@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ class User extends Authenticatable implements ReacterableContract
     use Notifiable;
     use LaratrustUserTrait;
     use Reacterable;
+    use HasAttachment;
 
     /**
      * The attributes that are mass assignable.

@@ -181,7 +181,8 @@ class PostController extends Controller
         $selectedCategories = $post->categories()->pluck('id')->toArray();
         $tags = Tag::getWithType('post')->pluck('name', 'name');
         $selectedTags = $post->getTags();
-        return view('blog.posts.create', compact('page_title','breadcrumb','post','categories', 'tree_categories','selectedCategories', 'tags', 'selectedTags'));
+        $attachments = $post->attachments()->get();
+        return view('blog.posts.create', compact('page_title','breadcrumb','post','categories', 'tree_categories','selectedCategories', 'tags', 'selectedTags', 'attachments'));
 
     }
 
@@ -237,6 +238,16 @@ class PostController extends Controller
             $slug = SlugService::createSlug(BlogPost::class, 'slug', $request->input('title'), ['unique' => true]);
             $post->slug = $slug;
         }
+        // attachments
+        if (isset($input['attachment'])){
+            $attachment = $post->attach(\Request::file('attachment'), [
+                'disk' => 'local',
+                'title' => 'name',
+                'description' => 'desc',
+                'key' => \Request::input('attachment_key'),
+            ]);
+        }
+
         $post->update($input);
 
         // update Category

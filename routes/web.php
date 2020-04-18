@@ -183,7 +183,7 @@ Route::group(['middleware'=>'installed'], function(){
                 });
             }
             /*pages*/
-            Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
+//            Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
         });
     });
     /* End of User Routes */

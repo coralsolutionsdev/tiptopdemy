@@ -145,6 +145,10 @@ function asset_image($image)
 {
     return asset('/storage/'.$image);
 }
+function asset_attachment($path)
+{
+    return asset('/storage/'.ltrim($path,"public/"));
+}
 function date_html($datetime)
 {
     if (is_string($datetime)) {

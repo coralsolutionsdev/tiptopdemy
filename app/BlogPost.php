@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Bnb\Laravel\Attachments\HasAttachment;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,7 @@ class BlogPost extends Model implements ReactableContract
     use HasTags;
     use Sluggable;
     use Reactable;
+    use HasAttachment;
 
 
     protected $fillable = [

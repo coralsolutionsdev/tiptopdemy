@@ -96,6 +96,41 @@
                     </div>
                 </div>
             </div>
+        </div> <div class="col-lg-12">
+            <div class="card border-light">
+                <div class="card-body">
+                    <p>{{__('Attachments')}}</p>
+                    <hr>
+                    <input type="file" name="attachment">
+
+                    @if(!empty($attachments))
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">filename</th>
+                                <th scope="col">filetype</th>
+                                <th scope="col">filepath</th>
+                                <th scope="col">action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($attachments as $attachment)
+{{--                                {{dd($attachment)}}--}}
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>{{$attachment->filename}}</td>
+                                    <td>{{$attachment->filetype}}</td>
+                                    <td><a target="_blank" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse('2020-04-20'))}}">Download</a></td>
+                                    <td>delete</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+
+                </div>
+            </div>
         </div>
         <div class="col-lg-12">
             <div class="card border-light">

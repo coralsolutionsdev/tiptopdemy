@@ -19,6 +19,7 @@
         "santigarcor/laratrust": "5.0.*",
         "spatie/laravel-tags": "^2.2",
         "webpatser/laravel-countries": "1.5.*",
+        "bnbwebexpertise/laravel-attachments": "1.0.*",
         "ext-json": "*"
     },
     "require-dev": {

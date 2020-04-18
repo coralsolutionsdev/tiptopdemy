@@ -189,14 +189,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Webpatser\Countries\CountriesServiceProvider::class,
-
-
-
-
-
-
-
-
+        Bnb\Laravel\Attachments\AttachmentsServiceProvider::class,
+        
     ],
 
     /*

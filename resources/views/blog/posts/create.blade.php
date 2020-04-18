@@ -2,8 +2,6 @@
 @section('title', $page_title)
 @section('head')
     <!-- MiniColors -->
-    <script src="{{asset('themes/plugins/dropzone/dropzone.js')}}"></script>
-    <script src="{{asset('plugins/color_picker/jquery.minicolors.js')}}"></script>
     <link rel="stylesheet" href="{{asset('plugins/color_picker/jquery.minicolors.css')}}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
@@ -203,6 +201,7 @@
         function deleteAttachment()
         {
             $('.delete-attachment').click(function () {
+                $('.attachment-message').html('<span class="text-warning"><i class="far fa-clock"></i> Deleting attachment .., Please wait</span>\n');
                 var postId = '{{!empty($post->slug) ?  $post->slug : ''}}';
                 var item = $(this);
                 var key = item.attr('id');

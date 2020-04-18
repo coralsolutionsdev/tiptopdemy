@@ -20,7 +20,7 @@
         "spatie/laravel-tags": "^2.2",
         "webpatser/laravel-countries": "1.5.*",
         "bnbwebexpertise/laravel-attachments": "1.0.*",
-        "rap2hpoutre/laravel-log-viewer ": "1.4.*",
+        "rap2hpoutre/laravel-log-viewer": "1.4.*",
         "ext-json": "*"
     },
     "require-dev": {

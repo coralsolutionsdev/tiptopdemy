@@ -191,6 +191,8 @@ return [
         Webpatser\Countries\CountriesServiceProvider::class,
         Bnb\Laravel\Attachments\AttachmentsServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        Cog\Laravel\Love\LoveServiceProvider::class,
+        Cog\Laravel\Love\LoveEventServiceProvider::class,
 
     ],
 

@@ -75,6 +75,11 @@
         'Comment added successfully' => 'Comment added successfully',
         'Type your comment here ..' => 'Type your comment here ..',
         'To add comments you are required to login with your account.' => 'To add comments you are required to login with your account.',
+        'Attachments' => 'Attachments',
+        'File name' => 'File name',
+        'File Type' => 'File Type',
+        'Download link' => 'Download link',
+        'Download' => 'Download',
 
 
         // Gallery

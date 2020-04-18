@@ -44,7 +44,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::get('/login/{driver}', 'Auth\LoginController@redirectToProvider')->name('login.socialite');
         Route::get('/login/{driver}/callback', 'Auth\LoginController@handleProviderCallback');
 
-    /* Admin Routes */
+/* Admin Routes */
         Route::group(['prefix' => 'manage', 'middleware' => 'role:superadministrator|administrator'], function () {
 
         Route::get('/','Admin\AdminController@GetDashboard')->name('admin.dashboard');
@@ -71,6 +71,7 @@ Route::group(['middleware'=>'installed'], function(){
             ]);
             Route::get('/post/{post}/comments','Blog\PostController@viewComments')->name('blog.post.comments.show');
             Route::post('/post/image/upload','Blog\PostController@imageUpload')->name('blog.post.image.upload');
+            Route::post('/post/{post}/attachment/{key}/delete','Blog\PostController@attachmentDelete')->name('blog.post.attachment.delete');
 
         });
 
@@ -183,7 +184,7 @@ Route::group(['middleware'=>'installed'], function(){
                 });
             }
             /*pages*/
-//            Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
+            Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
         });
     });
     /* End of User Routes */

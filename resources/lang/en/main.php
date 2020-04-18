@@ -36,6 +36,9 @@
 		'_reg_not_allowed' => 'Registration is not available right now.',
 		'_site_is_offline' => 'The site is under maintenance',
 		'_copy_right' => 'All Rights Reserved to',
+		'manage' => 'manage',
+		'profile' => 'profile',
+		'log out' => 'log out',
 
 
 

@@ -21,6 +21,7 @@
         "webpatser/laravel-countries": "1.5.*",
         "bnbwebexpertise/laravel-attachments": "1.0.*",
         "rap2hpoutre/laravel-log-viewer": "1.4.*",
+        "cybercog/laravel-love": "8.3.*",
         "ext-json": "*"
     },
     "require-dev": {

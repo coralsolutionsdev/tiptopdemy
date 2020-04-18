@@ -46,13 +46,12 @@ class PostController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $count = BlogPost::where('id','>','1')->count();
         $posts = BlogPost::latest()->paginate(15);
 //        $categories =  BlogCategory::all();
 //        if ($categories->count() < 1){
 //            session()->flash('warning', 'You haven\'t created any blog categories. Please create new one before proceed. ');
 //        }
-        return view('blog.posts.index', compact('page_title', 'breadcrumb','posts','count'));
+        return view('blog.posts.index', compact('page_title', 'breadcrumb','posts'));
     }
      public function GetIndex(Request $request)
     {
@@ -134,7 +133,14 @@ class PostController extends Controller
         // update tags
         $tags = $request->input('tags', array());
         $post->syncTagsWithType($tags, 'post');
-
+        
+        // attachments
+        if (isset($input['attachments'])){
+            $comments = $input['attachments'];
+            foreach ($comments as $comment){
+                $post->attach($comment);
+            }
+        }
 
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('posts.index');
@@ -160,7 +166,8 @@ class PostController extends Controller
         $breadcrumb = $breadcrumb + [
                 $post->title => ''
             ];
-        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key'));
+        $attachments = $post->attachments()->get();
+        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key', 'attachments'));
     }
 
     /**
@@ -239,13 +246,11 @@ class PostController extends Controller
             $post->slug = $slug;
         }
         // attachments
-        if (isset($input['attachment'])){
-            $attachment = $post->attach(\Request::file('attachment'), [
-                'disk' => 'local',
-                'title' => 'name',
-                'description' => 'desc',
-                'key' => \Request::input('attachment_key'),
-            ]);
+        if (isset($input['attachments'])){
+            $comments = $input['attachments'];
+            foreach ($comments as $comment){
+                $post->attach($comment);
+            }
         }
 
         $post->update($input);
@@ -403,7 +408,7 @@ class PostController extends Controller
             // Respond to the successful upload with JSON.
             // Use a location key to specify the path to the saved image resource.
             // { location : '/your/uploaded/image/file'}
-            $attachmentUrl = url('/storage/'.$path);
+            $attachmentUrl = url('storage/'.$path);
             $item = [
                 'path' =>  $path,
                 'url' =>  $attachmentUrl,
@@ -415,6 +420,13 @@ class PostController extends Controller
         }
 
     }
-
+    function attachmentDelete(BlogPost $post, $key)
+    {
+        $attachment = $post->attachment($key);
+        if ($attachment){
+            $attachment->delete();
+        }
+        return response($key, 200);
+    }
 
 }

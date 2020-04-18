@@ -84,7 +84,11 @@
         'Type your comment here ..' => 'أضف تعليقك في هذه الخانة ..',
         'Login now' => 'قم بتسجيل الدخول الآن',
         'To add comments you are required to login with your account.' => 'لإضافة التعليقات يجب عليك تسجيل الدخول الى حسابك.',
-
+        'Attachments' => 'المرفقات',
+        'File name' => 'أسم الملف',
+        'File Type' => 'نوع الملف',
+        'Download link' => 'رابط التحميل',
+        'Download' => 'تحميل',
 
 
 

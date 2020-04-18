@@ -68,6 +68,32 @@
                                         </p>
                                     </div>
                                 </div>
+                                {{--attachments--}}
+                                @if(!empty($attachments))
+
+                                <div>
+                                    <h4>{{__('main.Attachments')}} (<span class="comment-count">{{$attachments->count()}}</span>)</h4>
+                                    <table class="uk-table uk-table-divider">
+                                        <thead>
+                                        <tr>
+                                            <th class="uk-table-shrink">{{__('main.File name')}}</th>
+                                            <th class="uk-table-expand">{{__('main.File Type')}}</th>
+                                            <th class="uk-width-small"> {{__('main.Download link')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($attachments as $attachment)
+                                        <tr>
+                                            <td>{{$attachment->filename}}</td>
+                                            <td>{{$attachment->filetype}}</td>
+                                            <td><a target="_blank" class="uk-button uk-button-default uk-text-primary" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse(date('y-m-d'))->addDay())}}"><span uk-icon="icon: cloud-download"></span> <span>{{__('main.Download')}} </span></a></td>
+                                        </tr>
+                                        @endforeach
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @endif
                                 {{--comments--}}
                                 <div>
                                     <h4>{{__('main.Comments')}} (<span class="comment-count">{{$post->comments->where('status', 1)->count()}}</span>)</h4>

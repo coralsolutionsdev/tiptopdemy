@@ -2,6 +2,7 @@
 @section('title', $page_title)
 @section('head')
     <!-- MiniColors -->
+    <script src="{{asset('themes/plugins/dropzone/dropzone.js')}}"></script>
     <script src="{{asset('plugins/color_picker/jquery.minicolors.js')}}"></script>
     <link rel="stylesheet" href="{{asset('plugins/color_picker/jquery.minicolors.css')}}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
@@ -18,6 +19,7 @@
             border: 1px solid #566573;
         }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('page-header-button')
     <button class="btn btn-primary btn-lg w-75"><span>{{__('Submit')}}</span></button>
@@ -101,30 +103,39 @@
                 <div class="card-body">
                     <p>{{__('Attachments')}}</p>
                     <hr>
-                    <input type="file" name="attachment">
+                    <div class="form-group row col-lg-12">
+                        <div class="col-lg-2 d-flex align-items-center">{{__('Add attachment')}}</div>
+                        <div class="col-lg-5" style="padding: 10px 0 10px 10px; margin: 0px">
+                            <div class="custom-file">
+                                <input type="file" name="attachments[]" multiple >
+                            </div>
+                        </div>
+                    </div>
 
                     @if(!empty($attachments))
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">filename</th>
-                                <th scope="col">filetype</th>
-                                <th scope="col">filepath</th>
-                                <th scope="col">action</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">File type</th>
+                                <th scope="col">Download link</th>
+                                <th scope="col" width="30">action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($attachments as $attachment)
 {{--                                {{dd($attachment)}}--}}
                                 <tr>
-                                    <th scope="row">1</th>
                                     <td>{{$attachment->filename}}</td>
                                     <td>{{$attachment->filetype}}</td>
-                                    <td><a target="_blank" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse('2020-04-20'))}}">Download</a></td>
-                                    <td>delete</td>
+                                    <td><a target="_blank" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse(date('y-m-d'))->addDay())}}">Download</a></td>
+                                    <td><span id="{{$attachment->key}}" class="btn btn-light btn-delete delete-attachment"><i class="far fa-trash-alt"></i></span></td>
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td colspan="4" class="attachment-message">
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     @endif
@@ -183,6 +194,26 @@
         });
     </script>
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        function deleteAttachment()
+        {
+            $('.delete-attachment').click(function () {
+                var postId = '{{!empty($post->slug) ?  $post->slug : ''}}';
+                var item = $(this);
+                var key = item.attr('id');
+                $.post('/manage/blog/post/'+postId+'/attachment/'+key+'/delete').done(function (response) {
+                    item.parent().parent().remove();
+                    $('.attachment-message').html('<span class="text-success"><i class="far fa-check-circle"></i> attachment deleted</span>\n');
+                });
+            });
+
+        }
+        deleteAttachment();
         function deleteImage()
         {
             $('.btn-post-delete').off('click');
@@ -218,7 +249,9 @@
                 "table contextmenu directionality emoticons paste textcolor code fullscreen",
             ],
             toolbar1: "undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect link| image media | forecolor backcolor | link unlink anchor | fontsizeselect forecolor backcolor  | print preview code fullscreen",
-            // image_advtab: true ,
+            relative_urls : false,
+            remove_script_host : false,
+            convert_urls : true,
             // content-editor
             images_upload_handler: function (blobInfo, success, failure) {
                 var xhr, formData;

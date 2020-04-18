@@ -35,6 +35,7 @@
 												@endforeach
 											</li>
 										@endif
+										<li><span uk-icon="icon: heart; ratio: 0.8"></span>  <span class="reaction-count">{{$post->getReactCount('like')}}</span>  </li>
 									</ul>
 									<p>
 										{!! subContent($post->content, 500) !!}
@@ -64,6 +65,7 @@
 											@endforeach
 										</li>
 										@endif
+										<li><span uk-icon="icon: heart; ratio: 0.8"></span>  <span class="reaction-count">{{$post->getReactCount('like')}}</span>  </li>
 									</ul>
 									<p>
 										{!! subContent($post->content, 500) !!}

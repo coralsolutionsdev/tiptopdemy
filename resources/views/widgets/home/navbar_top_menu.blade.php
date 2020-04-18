@@ -52,10 +52,10 @@
                         <div class="uk-padding-small" uk-dropdown>
                             <ul class="uk-list">
                                 @if(Auth::user()->hasRole('superadministrator') OR Auth::user()->hasRole('administrator'))
-                                    <li><a href="{{route('admin.dashboard')}}" class="uk-text-capitalize"><span class="uk-margin-small-right uk-margin-small-left" uk-icon="tv"></span>{{__('manage')}}</a></li>
+                                    <li><a href="{{route('admin.dashboard')}}" class="uk-text-capitalize"><span class="uk-margin-small-right uk-margin-small-left" uk-icon="tv"></span>{{__('main.manage')}}</a></li>
                                 @endif
-                                <li><a href="{{route('profile.index')}}" class="uk-text-capitalize"><span class="uk-margin-small-right uk-margin-small-left" uk-icon="user"></span> {{__('profile')}}</a></li>
-                                <li><a href="{{route('logout')}}" class="uk-text-capitalize"><span class="uk-margin-small-right uk-margin-small-left" uk-icon="sign-out"></span>{{__('log out')}}</a></li>
+                                <li><a href="{{route('profile.index')}}" class="uk-text-capitalize"><span class="uk-margin-small-right uk-margin-small-left" uk-icon="user"></span> {{__('main.profile')}}</a></li>
+                                <li><a href="{{route('logout')}}" class="uk-text-capitalize"><span class="uk-margin-small-right uk-margin-small-left" uk-icon="sign-out"></span>{{__('main.log out')}}</a></li>
                             </ul>
                         </div>
                     </li>

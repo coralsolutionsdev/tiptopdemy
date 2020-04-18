@@ -279,7 +279,12 @@ class PostController extends Controller
      */
     public function destroy(BlogPost $post)
     {
-        FileAssetManagerService::ImageDestroy($post->image);
+        FileAssetManagerService::ImageDestroy($post->cover_image);
+        if (!empty($post->images)){
+            foreach ($post->images as $key => $image){
+                    FileAssetManagerService::ImageDestroy($image);
+            }
+        }
         $post->delete();
         session()->flash('success',__('Successfully deleted'));
         return redirect()->route('posts.index');

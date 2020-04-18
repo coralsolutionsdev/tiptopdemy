@@ -52,7 +52,7 @@
 											</li>
 											<li class="">
 												<span id="{{$post->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-												<form id="delete-form" method="post" action="{{route('posts.destroy', $post->id)}}">
+												<form id="delete-form" method="post" action="{{route('posts.destroy', $post->slug)}}">
 													{{csrf_field()}}
 													{{method_field('DELETE')}}
 												</form>

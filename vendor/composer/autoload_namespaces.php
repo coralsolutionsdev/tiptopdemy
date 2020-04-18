@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Webpatser\\Countries' => array($vendorDir . '/webpatser/laravel-countries/src'),
     'UpdateHelper\\' => array($vendorDir . '/kylekatarnls/update-helper/src'),
+    'Rap2hpoutre\\LaravelLogViewer\\' => array($vendorDir . '/rap2hpoutre/laravel-log-viewer/src'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
 );

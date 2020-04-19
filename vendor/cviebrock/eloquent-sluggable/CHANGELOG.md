@@ -1,5 +1,15 @@
 # Change Log
 
+## 4.8.1 - 09-Feb-2020
+
+- PHP 7.4 compatibility fix
+
+
+## 4.8.0 - 28-Feb-2019
+
+- Laravel 5.8 support (#460, big thanks @tabuna)
+
+
 ## 4.7.0 - 24-Feb-2019
 
 - Fix slug getting set to `null` if model is updated with no source column loaded (#450, thanks @mylgeorge)

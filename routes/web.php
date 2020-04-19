@@ -47,7 +47,7 @@ Route::group(['middleware'=>'installed'], function(){
 /* Admin Routes */
         Route::group(['prefix' => 'manage', 'middleware' => 'role:superadministrator|administrator'], function () {
 
-        Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+        Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('error.log');
 
         Route::get('/','Admin\AdminController@GetDashboard')->name('admin.dashboard');
         Route::resource('/users','Site\UserController');

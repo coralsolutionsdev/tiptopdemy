@@ -39,6 +39,7 @@
 		'manage' => 'manage',
 		'profile' => 'profile',
 		'log out' => 'log out',
+		'Error log' => 'Error log',
 
 
 

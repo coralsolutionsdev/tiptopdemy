@@ -169,6 +169,9 @@
                     <li class="">
                         <a class="nav-link" href="{{Route('module.setting')}}">{{__('admin.Modules')}}</a>
                     </li>
+                    <li class="">
+                        <a class="nav-link" target="_blank" href="{{Route('error.log')}}">{{__('main.Error log')}}</a>
+                    </li>
                 @endif
                 <li class="">
                     <a class="nav-link" href="{{Route('setting.index')}}">{{__('admin.Settings')}}</a>

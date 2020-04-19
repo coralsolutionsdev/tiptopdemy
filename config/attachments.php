@@ -81,7 +81,7 @@ return [
     |
     */
     'storage_directory' => [
-        'prefix' =>  rtrim(env('ATTACHMENTS_STORAGE_DIRECTORY_PREFIX', 'public/attachments'), '/'),
+        'prefix' =>  rtrim(env('ATTACHMENTS_STORAGE_DIRECTORY_PREFIX', 'attachments'), '/'),
     ],
 
     /*

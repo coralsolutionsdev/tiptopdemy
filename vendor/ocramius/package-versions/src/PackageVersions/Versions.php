@@ -40,6 +40,7 @@ final class Versions
   'kkszymanowski/traitor' => '0.2.5@9770fc7de72ff585601dc9c42b31715d9fc40a24',
   'laravel/framework' => 'v5.8.38@78eb4dabcc03e189620c16f436358d41d31ae11f',
   'laravel/nexmo-notification-channel' => 'v2.3.0@da1ba24ecd9877e461fc3fdd68761328eaf035e3',
+  'laravel/slack-notification-channel' => 'v2.0.2@ecc90a70791195d6f5e20b2732a5eb1eb9619d10',
   'laravel/socialite' => 'v4.3.2@4bd66ee416fea04398dee5b8c32d65719a075db4',
   'laravel/tinker' => 'v1.0.10@ad571aacbac1539c30d480908f9d0c9614eaf1a7',
   'laravelcollective/html' => 'v5.8.1@3a1c9974ea629eed96e101a24e3852ced382eb29',
@@ -131,7 +132,7 @@ final class Versions
   'sebastian/version' => '2.0.1@99732be0ddb3361e16ad77b68ba41efc8e979019',
   'theseer/tokenizer' => '1.1.3@11336f6f84e16a720dae9d8e6ed5019efa85a0f9',
   'webmozart/assert' => '1.8.0@ab2cb0b3b559010b75981b1bdce728da3ee90ad6',
-  'laravel/laravel' => 'dev-development@60c256023cceeef2a944860c1149b6c03074c7f4',
+  'laravel/laravel' => 'dev-master@fd99cb8ef37d8d3f52fb13b78fbf2272e9758cb9',
 );
 
     private function __construct()

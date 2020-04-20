@@ -112,7 +112,7 @@
                                         <div class="uk-grid-small" uk-grid>
                                             <div class="uk-width-1-4@m">
                                                 <select class="uk-select scope" name="scope_id" required>
-                                                    <option selected="true" disabled="disabled">Study kind</option>
+{{--                                                    <option selected="true" disabled="disabled">Study kind</option>--}}
                                                     @foreach(getInstitutionScopes() as $scope)
                                                         <option value="{{$scope->id}}" {{$scope->default == 1 ? 'selected' : ''}} title="{{$scope->description}}">{{$scope->title}}</option>
                                                     @endforeach
@@ -229,15 +229,15 @@
          */
         function resetFieldOptions() {
             $('.field-item-options').html('');
-            $('.field-item-options').append('<option selected="true" disabled="disabled">{{__('Study type')}}</option>');
+            {{--$('.field-item-options').append('<option selected="true" disabled="disabled">{{__('Study type')}}</option>');--}}
         }
         function resetFieldLevels() {
             $('.field-level-options').html('');
-            $('.field-level-options').append('<option selected="true" disabled="disabled">{{__('Study Level')}}</option>');
+            {{--$('.field-level-options').append('<option selected="true" disabled="disabled">{{__('Study Level')}}</option>');--}}
         }
         function resetFields() {
             $('.fields').html('');
-            $('.fields').append('<option selected="true" disabled="disabled">{{__('Study field')}}</option>');
+            {{--$('.fields').append('<option selected="true" disabled="disabled">{{__('Study field')}}</option>');--}}
         }
         function updateFieldLevelsMenu(id) {
             $.get('/get/institution/scope/field/'+id+'/levels').done(function (response) {

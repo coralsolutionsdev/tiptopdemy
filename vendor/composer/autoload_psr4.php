@@ -40,6 +40,7 @@ return array(
     'Spatie\\Tags\\' => array($vendorDir . '/spatie/laravel-tags/src'),
     'Spatie\\EloquentSortable\\' => array($vendorDir . '/spatie/eloquent-sortable/src'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
+    'Raju\\Streamer\\' => array($vendorDir . '/rajurayhan/larastreamer/src'),
     'Psy\\' => array($vendorDir . '/psy/psysh/src'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),

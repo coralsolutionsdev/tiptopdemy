@@ -4346,6 +4346,48 @@
         ]
     },
     {
+        "name": "rajurayhan/larastreamer",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/rajurayhan/larastreamer.git",
+            "reference": "2ce1da37754d6c638a6bc21fb812278995bb7ca7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/rajurayhan/larastreamer/zipball/2ce1da37754d6c638a6bc21fb812278995bb7ca7",
+            "reference": "2ce1da37754d6c638a6bc21fb812278995bb7ca7",
+            "shasum": ""
+        },
+        "time": "2019-07-09T04:41:15+00:00",
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Raju\\Streamer\\StreamServiceProvider"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Raju\\Streamer\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Raju Rayhan",
+                "email": "raju.rayhan@yandex.com"
+            }
+        ],
+        "description": "A laravel package to stream video content."
+    },
+    {
         "name": "ralouphie/getallheaders",
         "version": "3.0.3",
         "version_normalized": "3.0.3.0",

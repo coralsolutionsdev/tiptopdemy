@@ -94,6 +94,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'R' => 
         array (
             'Ramsey\\Uuid\\' => 12,
+            'Raju\\Streamer\\' => 14,
         ),
         'P' => 
         array (
@@ -333,6 +334,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'Raju\\Streamer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rajurayhan/larastreamer/src',
         ),
         'Psy\\' => 
         array (
@@ -4304,6 +4309,9 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Psy\\VersionUpdater\\GitHubChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/GitHubChecker.php',
         'Psy\\VersionUpdater\\IntervalChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/IntervalChecker.php',
         'Psy\\VersionUpdater\\NoopChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/NoopChecker.php',
+        'Raju\\Streamer\\Controllers\\StreamController' => __DIR__ . '/..' . '/rajurayhan/larastreamer/src/Controllers/StreamController.php',
+        'Raju\\Streamer\\Helpers\\VideoStream' => __DIR__ . '/..' . '/rajurayhan/larastreamer/src/Helpers/VideoStream.php',
+        'Raju\\Streamer\\StreamServiceProvider' => __DIR__ . '/..' . '/rajurayhan/larastreamer/src/StreamServiceProvider.php',
         'Ramsey\\Uuid\\BinaryUtils' => __DIR__ . '/..' . '/ramsey/uuid/src/BinaryUtils.php',
         'Ramsey\\Uuid\\Builder\\DefaultUuidBuilder' => __DIR__ . '/..' . '/ramsey/uuid/src/Builder/DefaultUuidBuilder.php',
         'Ramsey\\Uuid\\Builder\\DegradedUuidBuilder' => __DIR__ . '/..' . '/ramsey/uuid/src/Builder/DegradedUuidBuilder.php',

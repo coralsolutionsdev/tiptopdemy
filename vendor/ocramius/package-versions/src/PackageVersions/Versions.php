@@ -67,6 +67,7 @@ final class Versions
   'psr/log' => '1.1.3@0f73288fd15629204f9d42b7055f72dacbe811fc',
   'psr/simple-cache' => '1.0.1@408d5eafb83c57f6365a3ca330ff23aa4a5fa39b',
   'psy/psysh' => 'v0.9.12@90da7f37568aee36b116a030c5f99c915267edd4',
+  'rajurayhan/larastreamer' => 'v1.0.0@2ce1da37754d6c638a6bc21fb812278995bb7ca7',
   'ralouphie/getallheaders' => '3.0.3@120b605dfeb996808c31b6477290a714d356e822',
   'ramsey/uuid' => '3.9.3@7e1633a6964b48589b142d60542f9ed31bd37a92',
   'rap2hpoutre/laravel-log-viewer' => 'v1.4.0@3506baaddbe5661fc4482b048db2ec5cfc5f9025',
@@ -132,7 +133,7 @@ final class Versions
   'sebastian/version' => '2.0.1@99732be0ddb3361e16ad77b68ba41efc8e979019',
   'theseer/tokenizer' => '1.1.3@11336f6f84e16a720dae9d8e6ed5019efa85a0f9',
   'webmozart/assert' => '1.8.0@ab2cb0b3b559010b75981b1bdce728da3ee90ad6',
-  'laravel/laravel' => 'dev-master@fd99cb8ef37d8d3f52fb13b78fbf2272e9758cb9',
+  'laravel/laravel' => 'dev-220420-dev-stream@7500e1f48e8f5e6bd50fc7d89472ecba81c5e63b',
 );
 
     private function __construct()

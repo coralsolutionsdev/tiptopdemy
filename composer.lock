@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2aaada4de66f49bdb359a1004b48eb98",
+    "content-hash": "8bb3e5d90f7fe2b46fa176fd0c010c77",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -3236,6 +3236,46 @@
                 "shell"
             ],
             "time": "2019-12-06T14:19:43+00:00"
+        },
+        {
+            "name": "rajurayhan/larastreamer",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rajurayhan/larastreamer.git",
+                "reference": "2ce1da37754d6c638a6bc21fb812278995bb7ca7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rajurayhan/larastreamer/zipball/2ce1da37754d6c638a6bc21fb812278995bb7ca7",
+                "reference": "2ce1da37754d6c638a6bc21fb812278995bb7ca7",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Raju\\Streamer\\StreamServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Raju\\Streamer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raju Rayhan",
+                    "email": "raju.rayhan@yandex.com"
+                }
+            ],
+            "description": "A laravel package to stream video content.",
+            "time": "2019-07-09T04:41:15+00:00"
         },
         {
             "name": "ralouphie/getallheaders",

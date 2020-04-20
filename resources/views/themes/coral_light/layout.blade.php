@@ -10,6 +10,7 @@
         :root{
             --theme-secondary-bg-color: #F3F5F9;
             --theme-primary-color: {{getFrontEndColor()}};
+            --theme-primary-font-color: #333e48;
         }
 
     </style>

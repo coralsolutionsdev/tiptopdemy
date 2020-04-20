@@ -95,13 +95,18 @@ Form
 }
 .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle{
     font-family: 'Cairo','Rubik', sans-serif;
+    color: var(--theme-primary-font-color);
 }
+.uk-navbar-nav>li>a:hover{
+    color: var(--theme-primary-color);
+}
+
 p, h1, h2, h3, h4, h5{
     font-family: 'Cairo','Rubik', sans-serif !important;
 }
 p{
     font-size: 14px;
-    color: #9B9AAC;
+    color: var(--theme-primary-font-color);
 }
 .pt-25{
     padding-top: 25px;
@@ -181,7 +186,7 @@ a:hover{
 }
 
 .uk-iconnav a{
-    color: #9B9AAC;
+    color: var(--theme-primary-font-color);
     padding-right: 10px;
     padding-left: 10px;
 }

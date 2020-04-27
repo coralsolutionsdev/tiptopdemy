@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Modules\Comment\Commenter;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,6 +17,7 @@ class User extends Authenticatable implements ReacterableContract
     use LaratrustUserTrait;
     use Reacterable;
     use HasAttachment;
+    use Commenter;
 
     /**
      * The attributes that are mass assignable.

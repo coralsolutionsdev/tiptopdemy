@@ -139,4 +139,130 @@ trait Reactable
             ->leftJoin((new ReactionTotal())->getTable() . ' as ' . $alias, "{$alias}.reactant_id", '=', "{$this->getTable()}.love_reactant_id")
             ->select($select);
     }
+    /*
+     |--------------------------------------------------------------------------
+     | App eaction Methods
+     |--------------------------------------------------------------------------
+     */
+    /**
+     * check if user has reacted to item
+     * @param $type
+     * @return bool
+     */
+    function hasReaction($type)
+    {
+        $user = getAuthUser();
+        if ($user){
+            // get reaction type
+            if (is_null($type)){
+                $type = 'like';
+            }
+            $reactionType = ReactionType::fromName($type);
+            $typeName = $reactionType->getName(); // 'Like'
+            if ($user->isNotRegisteredAsLoveReacter()){ // false
+                $user->registerAsLoveReacter();
+            }
+            $reacterFacade = $user->viaLoveReacter();
+
+            $isReacted = $reacterFacade->hasReactedTo($this);
+            return $isReacted;
+        }
+        return false;
+    }
+
+    /**
+     * assign reaction to item
+     * @param $type
+     * @param int $weight
+     * @return bool
+     */
+    function addReaction($type,  $weight = 1)
+    {
+        $user = getAuthUser();
+        if ($user){
+            // get reaction type
+            if (is_null($type)){
+                $type = 'like';
+            }
+            $reactionType = ReactionType::fromName($type);
+            $typeName = $reactionType->getName(); // 'Like'
+
+            //model should ne registered ad love reactant
+            if ($this->isNotRegisteredAsLoveReactant()){
+                $this->registerAsLoveReactant();
+            }
+
+            if ($user->isNotRegisteredAsLoveReacter()){ // false
+                $user->registerAsLoveReacter();
+            }
+            try {
+                $user->viaLoveReacter()->reactTo($this, $typeName, $weight);
+            } catch (\Cog\Contracts\Love\Reaction\Exceptions\ReactionAlreadyExists $exception) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * remove reaction from item
+     * @param $type
+     * @param int $weight
+     * @return bool
+     */
+    function removeReaction($type,  $weight = 1)
+    {
+        $user = getAuthUser();
+        if ($user){
+            if ($user){
+                // get reaction type
+                if (is_null($type)){
+                    $type = 'like';
+                }
+                $reactionType = ReactionType::fromName($type);
+                $typeName = $reactionType->getName(); // 'Like'
+
+                //model should ne registered ad love reactant
+                if ($this->isNotRegisteredAsLoveReactant()){
+                    $this->registerAsLoveReactant();
+                }
+
+                if ($user->isNotRegisteredAsLoveReacter()){ // false
+                    $user->registerAsLoveReacter();
+                }
+                try {
+                    $user->viaLoveReacter()->unreactTo($this, $typeName, $weight);
+                } catch (\Cog\Contracts\Love\Reaction\Exceptions\ReactionAlreadyExists $exception) {
+                    return false;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    /**
+     * return reaction count
+     * @param null $type
+     * @return int
+     */
+    public function getReactionCount($type =  null)
+    {
+        if ($this->isNotRegisteredAsLoveReactant()){
+            $this->registerAsLoveReactant();
+        }
+        // get reaction type
+        if (is_null($type)){
+            $type = 'like';
+        }
+        $reactionType = ReactionType::fromName($type);
+        $typeName = $reactionType->getName(); // 'Like'
+        $reactantFacade = $this->viaLoveReactant();
+        $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
+        if (!empty($reactionCounter) && !empty($reactionCounter->count)){
+            return $reactionCounter->count;
+
+        }
+        return 0;
+    }
 }

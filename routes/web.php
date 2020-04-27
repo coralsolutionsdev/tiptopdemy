@@ -57,13 +57,10 @@ Route::group(['middleware'=>'installed'], function(){
         Route::put('/user/role/{id}','Site\UserController@RoleUpdate')->name('role.update');
         Route::resource('/setting','Admin\SettingController', ['only' => ['index' , 'update']]);
 
-
-
         /*Blog */
         Route::group(['prefix' => 'blog'], function () {
             Route::resource('/posts','Blog\PostController', ['except' => ['show']]);
             // movie this
-            Route::resource('/comments','Blog\CommentController', ['except' => ['show', 'store']]);
             Route::resource('/categories','Blog\CategoryController', ['except' => ['show']])->names([
                 'index' => 'blog.categories.index',
                 'create' => 'blog.categories.create',
@@ -76,6 +73,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::post('/post/{post}/attachment/{key}/delete','Blog\PostController@attachmentDelete')->name('blog.post.attachment.delete');
 
         });
+
 
         /*Gallery*/
         Route::group(['prefix' => 'gallery'], function () {
@@ -161,12 +159,20 @@ Route::group(['middleware'=>'installed'], function(){
                     Route::get('/post/{post}/get/comments', 'PostController@getComments');
                     Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
                     Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
-                    Route::post('/post/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact'); // move to comment controller
                     Route::post('/post/comment/store', 'CommentController@store');
-
-
                 });
             }
+            /* Comment */
+//            Route::group(['prefix' => 'comment', 'namespace' => 'Comment', 'as' => 'comment.'], function (){
+//            });
+            Route::group(['namespace' => 'Comment'], function (){
+                Route::resource('/comment','CommentController');
+                Route::post('/comment/{comment}/ajax/delete','CommentController@ajaxDestroy');
+                Route::post('/comment/{comment}/ajax/update','CommentController@ajaxUpdate');
+                Route::post('/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact');
+            });
+
+
             /* Gallery */
             Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
             Route::get('/gallery','Gallery\AlbumController@GetIndex')->name('gallery.main');

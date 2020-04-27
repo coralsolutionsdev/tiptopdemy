@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Modules\Comment\Commentable;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -17,8 +18,9 @@ class BlogPost extends Model implements ReactableContract
 {
     use HasTags;
     use Sluggable;
-    use Reactable;
     use HasAttachment;
+    use Reactable;
+    use Commentable;
 
 
     protected $fillable = [
@@ -100,130 +102,6 @@ class BlogPost extends Model implements ReactableContract
         return $tags;
     }
 
-    /**
-     * check if user has reacted to item
-     * @param $type
-     * @return bool
-     */
-    function isReacted($type)
-    {
-        $user = getAuthUser();
-        if ($user){
-            // get reaction type
-            if (is_null($type)){
-                $type = 'like';
-            }
-            $reactionType = ReactionType::fromName($type);
-            $typeName = $reactionType->getName(); // 'Like'
-            if ($user->isNotRegisteredAsLoveReacter()){ // false
-                $user->registerAsLoveReacter();
-            }
-            $reacterFacade = $user->viaLoveReacter();
-
-            $isReacted = $reacterFacade->hasReactedTo($this);
-            return $isReacted;
-        }
-        return false;
-    }
-
-    /**
-     * assign reaction to item
-     * @param $type
-     * @param int $weight
-     * @return bool
-     */
-    function reactTo($type,  $weight = 1)
-    {
-        $user = getAuthUser();
-        if ($user){
-            // get reaction type
-            if (is_null($type)){
-                $type = 'like';
-            }
-            $reactionType = ReactionType::fromName($type);
-            $typeName = $reactionType->getName(); // 'Like'
-
-            //model should ne registered ad love reactant
-            if ($this->isNotRegisteredAsLoveReactant()){
-                $this->registerAsLoveReactant();
-            }
-
-            if ($user->isNotRegisteredAsLoveReacter()){ // false
-                $user->registerAsLoveReacter();
-            }
-            $reacterFacade = $user->viaLoveReacter();
-
-            $isNotReacted = $reacterFacade->hasNotReactedTo($this);
-            if ($isNotReacted){
-                $reacterFacade->reactTo($this, $typeName, $weight);
-            }
-        }
-        return false;
-    }
-
-    /**
-     * remove reaction from item
-     * @param $type
-     * @param int $weight
-     * @return bool
-     */
-    function unReactTo($type,  $weight = 1)
-    {
-        $user = getAuthUser();
-        if ($user){
-            if ($user){
-                // get reaction type
-                if (is_null($type)){
-                    $type = 'like';
-                }
-                $reactionType = ReactionType::fromName($type);
-                $typeName = $reactionType->getName(); // 'Like'
-
-                //model should ne registered ad love reactant
-                if ($this->isNotRegisteredAsLoveReactant()){
-                    $this->registerAsLoveReactant();
-                }
-
-                if ($user->isNotRegisteredAsLoveReacter()){ // false
-                    $user->registerAsLoveReacter();
-                }
-                $reacterFacade = $user->viaLoveReacter();
-
-                $isReacted = $reacterFacade->hasReactedTo($this);
-                if ($isReacted){
-                    $reacterFacade->unreactTo($this, $typeName);
-                }
-
-            }
-        }
-        return false;
-    }
-
-    /**
-     * return reaction count
-     * @param null $type
-     * @return int
-     */
-    public function getReactCount($type =  null)
-    {
-        if ($this->isNotRegisteredAsLoveReactant()){
-            $this->registerAsLoveReactant();
-        }
-        // get reaction type
-        if (is_null($type)){
-            $type = 'like';
-        }
-        $reactionType = ReactionType::fromName($type);
-        $typeName = $reactionType->getName(); // 'Like'
-        $reactantFacade = $this->viaLoveReactant();
-        $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
-        if (!empty($reactionCounter) && !empty($reactionCounter->count)){
-            return $reactionCounter->count;
-
-        }
-        return 0;
-    }
-
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods
@@ -239,7 +117,7 @@ class BlogPost extends Model implements ReactableContract
     }
     public function comments()
     {
-        return $this->hasMany('App\BlogComment','post_id');
+        return $this->hasMany('App\Modules\Comment\Comment','commentable_id')->where('commentable_type', $this->getClassName());
     }
     /**
      * Many-To-Many Relationship Method for accessing the categories

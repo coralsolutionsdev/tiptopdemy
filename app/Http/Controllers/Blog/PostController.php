@@ -44,13 +44,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $page_title =  $this->page_title;
+        $page_title =  trans('main.Blog Posts');
         $breadcrumb =  $this->breadcrumb;
         $posts = BlogPost::latest()->paginate(15);
-//        $categories =  BlogCategory::all();
-//        if ($categories->count() < 1){
-//            session()->flash('warning', 'You haven\'t created any blog categories. Please create new one before proceed. ');
-//        }
         return view('blog.posts.index', compact('page_title', 'breadcrumb','posts'));
     }
      public function GetIndex(Request $request)
@@ -74,10 +70,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        $page_title =  $this->page_title . ' - ' .__('Create');
+        $page_title =  trans('main.Blog Posts') . ' - ' .__('main.Create');
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
-            'Create' => ''
+            __('main.Create') => ''
         ];
         $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id', 0)->get();
         $categories = Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
@@ -178,7 +174,7 @@ class PostController extends Controller
      */
     public function edit(BlogPost $post)
     {
-        $page_title =  $this->page_title . ' - ' .__('Create');
+        $page_title =  trans('main.Blog Posts') . ' - ' .__('main.Edit');
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
                 'Edit' => ''
@@ -297,11 +293,11 @@ class PostController extends Controller
      */
     public function viewComments(BlogPost $post)
     {
-        $page_title =  $this->page_title . ' - ' .__('Comments');
+        $page_title =  $post->title . ' - ' .__('main.Comments');
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
                 $post->title => '',
-                'Comments' => ''
+                __('main.Comments') => ''
             ];
         $comments =  $post->comments;
         return view('blog.comments.index', compact('page_title', 'breadcrumb', 'comments'));
@@ -312,44 +308,8 @@ class PostController extends Controller
      * @return ResponseFactory|Application|Response
      */
     function getComments(BlogPost $post){
-        $items =  array();
-        if (!empty($post)){
-            $comments =  $post->comments->where('parent_id', 0);
-            foreach ($comments as $comment){
-                $subItems =  array();
-                $subComments =  $comment->comments;
-                if (!empty($subComments)){
-                    foreach ($subComments as $subComment){
-                        $subItems[] = [
-                            'id' => $subComment->id,
-                            'parent_id' => !is_null($subComment->parent_id) ? $subComment->parent_id : 0,
-                            'user_profile_pic' => $subComment->user->getProfilePicURL(),
-                            'user_name' => $subComment->user->getUserName(),
-                            'create_date' => $subComment->created_at->diffForHumans(),
-                            'content' => $subComment->content,
-                            'likes' =>  $count = $subComment->getReactCount('like'),
-                            'user_id' => $subComment->user_id,
-                            'status' => $subComment->status,
-                            'is_liked' => ($subComment->isReacted('like') == true) ? 1 : 0,
-                        ];
-                    }
-                }
-                $items[] = [
-                    'id' => $comment->id,
-                    'parent_id' => !is_null($comment->parent_id) ? $comment->parent_id : 0,
-                    'user_profile_pic' => $comment->user->getProfilePicURL(),
-                    'user_name' => $comment->user->getUserName(),
-                    'create_date' => $comment->created_at->diffForHumans(),
-                    'content' => $comment->content,
-                    'likes' =>  $count = $comment->getReactCount('like'),
-                    'user_id' => $comment->user_id,
-                    'sub_items' => $subItems,
-                    'status' => $comment->status,
-                    'is_liked' => ($comment->isReacted('like') == true) ? 1 : 0,
-                ];
-            }
-        }
-        return response($items,200);
+        $comments = $post->getCommentsWithDetails();
+        return response($comments,200);
     }
 
     /**
@@ -360,14 +320,12 @@ class PostController extends Controller
      */
     function updateReact(BlogPost $post, $type)
     {
-        $count = 0;
-        if ($post->isReacted($type)){ // true
-            $post->unReactTo($type);
+        if ($post->hasReaction($type)){ // true
+            $post->removeReaction($type);
         }else{
-            $post->reactTo($type);
+            $post->addReaction($type);
         }
-        $count = $post->getReactCount($type);
-        return response($count,  200);
+        return response('success',  200);
     }
 
     /**

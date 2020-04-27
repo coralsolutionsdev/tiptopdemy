@@ -52,12 +52,13 @@
                                                             @endforeach
                                                         </li>
                                                     @endif
-                                                    <li><span uk-icon="icon: heart; ratio: 0.8"></span>  <span class="reaction-count">{{$post->getReactCount('like')}}</span>  </li>
                                                 </ul>
                                             </div>
                                             <div class="uk-text-{{getFloatKey('end')}} blog-post-actions">
-                                                @if(getAuthUser())
-                                                <a class="uk-button uk-button-default post-reaction reaction-off"><span class=" reaction-icon {{$post->isReacted('like')? 'uk-text-danger' : ''}}" uk-icon="icon: heart"></span></a>
+                                                @if(isLoginIn())
+                                                    <a class="uk-button uk-button-default post-reaction uk-text-danger {{$post->hasReaction('like')? 'reacted' : ''}}"><span class="post-reaction-count">{{$post->getReactionCount('like')}}</span> <span class="{{$post->hasReaction('like')? 'fas' : 'far'}} fa-heart post-reaction-icon"></span></a>
+                                                @else
+                                                    <span class="uk-button uk-text-danger {{$post->hasReaction('like')? 'reacted' : ''}}" style="padding: 0 10px" uk-tooltip="title: {{__('main.Please login to react with this post.')}}; pos: top"><span class="post-reaction-count">{{$post->getReactionCount('like')}}</span> <span class="{{$post->hasReaction('like')? 'fas' : 'far'}} fa-heart post-reaction-icon"></span></span>
                                                 @endif
                                                 <a href="" class="uk-button uk-button-default"><span uk-icon="icon: twitter" style="color: #29A4DA"></span></a>
                                                 <a href="" class="uk-button uk-button-default"><span uk-icon="icon: facebook" style="color: #0074EF"></span></a>
@@ -115,6 +116,61 @@
                                                 </div>
                                             @endif
                                         @endif
+                                            <li class="comment-loading-spinner">
+                                                <div class="uk-margin">
+                                                    <div class="uk-text-center uk-text-primary">
+                                                        <div>
+                                                            <span uk-spinner="ratio: 2"></span>
+                                                        </div>
+                                                        <div class="uk-padding-small">
+                                                            {{__('main.Loading')}} ...
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+@if(false)
+<li>
+    <article class="uk-comment bg-secondary uk-padding-small uk-visible-toggle" tabindex="-1">
+        <header class="uk-comment-header uk-position-relative">
+            <div class="uk-grid-medium" uk-grid>
+                <div class="uk-width-auto">
+                    <img class="uk-comment-avatar uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="80" height="80" alt="">
+                </div>
+                <div class="uk-width-expand">
+                    <div class="uk-grid-medium" uk-grid>
+                        <div class="uk-width-expand">
+                            <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#">Author</a></h4>
+                            <p class="uk-comment-meta uk-margin-remove-top"><a class="uk-link-reset" href="#">12 days ago</a></p>
+                        </div>
+                        <div class="uk-width-auto">
+                            <ul class="uk-list comment-actions">
+                                <li><button class="uk-button uk-button-default uk-text-danger" style="padding: 0 10px"><span>1</span> <span class="fas fa-heart"></span></button></li>
+                                <li><button class="uk-button uk-button-default uk-text-primary">Replay</button></li>
+                                <li>
+                                    <button class="uk-button uk-button-text" type="button" style="padding: 0 10px"><span uk-icon="icon:  more-vertical; ratio: 0.8"></span></button>
+                                    <div uk-dropdown="pos: bottom-right">
+                                        <ul class="uk-list" style="padding: 0px; margin: 0px">
+                                            <li><a href="#">Report</a></li>
+                                            <li><a href="#">Edit</a></li>
+                                            <li><a href="#">Reply</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="uk-comment-body">
+                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+    <ul>
+    </ul>
+</li>
+@endif
+
                                     </ul>
                                 </div>
                             </div>
@@ -142,6 +198,21 @@
                 </div>
             </div>
         </div>
+
+    </section>
+    <section>
+        <!-- This is the modal -->
+        <div id="comment-editor" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <h2 class="uk-modal-title">{{__('main.Edit Comment')}}</h2>
+                <textarea class="uk-textarea comment-editor-input" rows="5"></textarea>
+                <input type="hidden" class="comment-editor-id" value="">
+                <p class="uk-text-right">
+                    <button class="uk-button uk-button-primary uk-width-1-1 update-comment" type="button">{{__('main.Save changes')}}</button>
+                </p>
+            </div>
+        </div>
     </section>
     <script>
         $.ajaxSetup({
@@ -154,18 +225,67 @@
         var count = 0;
         var bgClass = '';
 
+        function openCommentEditorForm() {
+            $('.edit-comment-item').off('click');
+            $('.edit-comment-item').click(function () {
+                var item = $(this);
+                var itemId = item.attr('id').split('-')[1];
+                var itemContent = $('.comment-'+itemId+'-content').html();
+                $('.comment-editor-input').html(itemContent);
+                $('.comment-editor-id').val(itemId);
+                UIkit.modal('#comment-editor').show();
+            });
+        }
+        function getEditedComment() {
+            return $('.comment-editor-input').val();
+        }
+        function updateComment() {
+            $('.update-comment').off('click');
+            $('.update-comment').click(function () {
+                var commentId = $('.comment-editor-id').val();
+                var comment = getEditedComment();
+                var data = {
+                    'comment':comment,
+                };
+                $('.update-comment').html('<span uk-spinner="ratio: 0.5"></span>'+'{{__('main.Updating')}}')
+                $.post('/comment/'+commentId+'/ajax/update',data).done(function (comment) {
+                    $('.comment-editor-input').html('');
+                    $('.comment-editor-id').val('');
+                    $('.comment-'+commentId+'-content').html(comment)
+                    UIkit.modal('#comment-editor').hide();
+                    $('.update-comment').html('{{__('main.Save changes')}}');
+
+                });
+            });
+        }
+
         function toggleCommentReaction(){
             $('.comment-reaction').off('click');
             $('.comment-reaction').click(function () {
-                console.log('liked');
                 var item = $(this);
-                var icon =  item.find('.reaction-icon');
-                var listIem = $(this).parent().parent().parent().parent();
-                var itemId = listIem.attr('id').split('-')[1];
-                $.post('/blog/post/comment/'+itemId+'/react/like/toggle').done(function (count) {
-                    listIem.find('.comment-reaction-count').html(count);
+                var itemId = $(this).attr('id').split('-')[1];
+                var itemIcon = item.find('.reaction-icon');
+                var itemReactionCount = item.find('.comment-reaction-count').html();
+                var newCount = 0;
+                if(item.hasClass('reacted')){ // remove
+                    item.removeClass('reacted');
+                    item.addClass('not-reacted');
+                    itemIcon.removeClass('fas');
+                    itemIcon.addClass('far');
+                    newCount = parseInt(itemReactionCount) - 1;
+                    item.find('.comment-reaction-count').html(newCount)
+                }else{ // add
+                    item.removeClass('not-reacted');
+                    item.addClass('reacted');
+                    item.find('.reaction-icon');
+                    itemIcon.removeClass('far');
+                    itemIcon.addClass('fas');
+                    newCount = parseInt(itemReactionCount) + 1;
+                    item.find('.comment-reaction-count').html(newCount)
+                }
+                $.post('/comment/'+itemId+'/react/like/toggle').done(function (count) {
                 });
-                icon.toggleClass('uk-text-danger');
+                // TODO: add field notification
             });
         }
 
@@ -173,10 +293,26 @@
             var item = $(this);
             var icon =  item.find('.reaction-icon');
             var postId = '{{$post->slug}}';
+            var itemIcon = item.find('.post-reaction-icon');
+            var itemReactionCount = item.find('.post-reaction-count').html();
+            var newCount = 0;
+            if(item.hasClass('reacted')){ // remove
+                item.removeClass('reacted');
+                itemIcon.removeClass('fas');
+                itemIcon.addClass('far');
+                newCount = parseInt(itemReactionCount) - 1;
+                item.find('.post-reaction-count').html(newCount)
+            }else{ // add
+                item.addClass('reacted');
+                item.find('.reaction-icon');
+                itemIcon.removeClass('far');
+                itemIcon.addClass('fas');
+                newCount = parseInt(itemReactionCount) + 1;
+                item.find('.post-reaction-count').html(newCount)
+            }
             $.post('/blog/post/'+postId+'/react/like/toggle').done(function (count) {
-                $('.reaction-count').html(count);
             });
-            icon.toggleClass('uk-text-danger');
+            // TODO: notification if failed
         });
 
         function updateCommentCount($status = true) {
@@ -192,16 +328,16 @@
         function deleteComment() {
             $('.delete-comment-item').off('click');
             $('.delete-comment-item').click(function () {
-                var listIem = $(this).parent().parent().parent().parent();
-                var itemId = listIem.attr('id').split('-')[1];
+                var item = $(this);
+                var itemId = item.attr('id').split('-')[1];
                 if (!confirm('Are you sure you want to remove your comment?')){
                     return false;
                 }
-                $.post('/blog/post/comment/'+itemId+'/delete').done(function (response) {
-                    listIem.remove();
+                $.post('/comment/'+itemId+'/ajax/delete').done(function (response) {
+                    $('#comment-'+itemId).remove();
                     updateCommentCount(false);
                     var deleteMsg = '<span class="uk-text-success"><span uk-icon=\'icon: trash\'></span> '+'{{__('main.Comment removed successfully')}}'+'</span>';
-                    UIkit.notification({message: deleteMsg, pos: 'top-right'})
+                    UIkit.notification({message: deleteMsg, pos: 'bottom-right'})
                 });
             });
         }
@@ -210,11 +346,10 @@
             $('.open-comment-form').off('click');
             $('.open-comment-form').click(function () {
                 var item = $(this);
-                var listitem = item.parent().parent().parent().parent();
-                var listId = item.parent().parent().parent().parent().attr('id').split('-')[1];
-                var listItem = item.parent().parent().parent().parent();
+                var listId = item.attr('id').split('-')[1];
+                var listItem = $('#comment-'+listId);
                 var form = $('.main-comments-list').find('.sub-comment-form');
-                var replyedTo =listItem.find('.user-name').html();
+                var replyedTo = listItem.find('.user-name').html();
                 form.remove();
                 if(listItem.hasClass('comment-parent-0')){
                     $('.comments-list-'+listId).append(
@@ -241,108 +376,118 @@
             });
         }
 
-        function drawCommentItem(commentId, listId, profilePic, userName, date, comment, likes , commentParentId, userId , isLiked, status) {
+        function drawCommentItem(item) {
             var bgClass = 'bg-secondary';
+            var replayBtn = '';
+            var actionsBtn = '';
+            var reactionBtn = '';
+            var editBtn = '';
             var deleteBtn = '';
-            var replyBtn = '';
-            var likeBtn = '';
-            var likedClass = '';
-            var currentUserId = '{{\Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : 0}}';
-            if(isLiked == 1){
-                likedClass = 'uk-text-danger';
+            var reportBtn = '';
+            var reactionStatus = 'not-reacted';
+            if(item.is_liked == true){
+                reactionStatus = 'reacted';
             }
-            if (userId == currentUserId){
-                deleteBtn = '<a class="uk-link-muted uk-button uk-button-default delete-comment-item" style="padding: 0px 10px"><span uk-icon="icon: trash"></span></a>\n';
+            var comment = item.comment.replace(/\n/g,"<br>");
+            var likeClass = 'far';
+            if(item.is_liked == true){
+                likeClass = 'fas'
             }
             @if(isLoginIn())
-                if(postAllowedToComment == 1){
-                    replyBtn = '<a class="uk-link-muted uk-button uk-button-default open-comment-form" style="margin: 0px 5px">{{__('main.Replay')}}</a>\n';
+                var currentUserId = parseInt('{{getAuthUser()->id}}');
+                if(currentUserId == item.commenter_id){
+                    editBtn = '<li><a id="edit_comment-'+item.id+'" class="edit-comment-item" style="display: block"><span uk-icon="icon: file-edit"></span> Edit</a></a></li>\n';
+                    deleteBtn = '<li><a id="delete_comment-'+item.id+'" class="delete-comment-item" style="display: block"><span uk-icon="icon: trash"></span> Remove</a></a></li>\n';
+                }else{
+                    reportBtn ='<li><a href="#"><span uk-icon="icon: warning"></span> Report</a></a></li>\n';
                 }
-                likeBtn = '<a class="uk-button uk-button-default comment-reaction" style="padding: 0px 10px"><span class=" reaction-icon '+likedClass+'" uk-icon="icon: heart"></span></a>\n';
+                replayBtn = '<li><button id="reply_to-'+item.id+'" class="uk-button uk-button-default open-comment-form uk-text-primary">Replay</button></li>';
+                actionsBtn = '<li>\n' +
+                '<button class="uk-button uk-button-text" type="button" style="padding: 0 10px"><span uk-icon="icon:  more-vertical; ratio: 0.8"></span></button>\n' +
+                '<div uk-dropdown="pos: bottom-right">\n' +
+                '<ul class="uk-list" style="padding: 0px; margin: 0px">\n' +
+                reportBtn+
+                editBtn+
+                deleteBtn+
+                '</ul>\n' +
+                '</div>\n' +
+                '</li>';
+                reactionBtn = '<li><button id="react_to_comment-'+item.id+'" class="uk-button uk-button-default uk-text-danger comment-reaction '+reactionStatus+'" style="padding: 0 10px"><span class="comment-reaction-count">'+item.likes+'</span> <span class="'+likeClass+' fa-heart reaction-icon"></span></button></li>';
+            @else
+                reactionBtn = '<li><span id="react_to_comment-'+item.id+'" class="uk-text-danger '+reactionStatus+'" style="padding: 0 10px"><span class="comment-reaction-count">'+item.likes+'</span> <span class="'+likeClass+' fa-heart reaction-icon"></span></span></li>';
             @endif
 
 
-            comment = comment.replace(/\n/g,"<br>");
-
-            $('.comments-list-'+listId).append(
-                '<li id="comment-'+commentId+'" class="comment comment-parent-'+commentParentId+'">\n' +
-                '<article class="uk-comment uk-comment-primary '+bgClass+' uk-visible-toggle" tabindex="-1">\n' +
-                '<header class="uk-comment-header uk-flex-middle" uk-grid>\n' +
-                '<div class="uk-width-auto">\n' +
-                '<img class="uk-comment-avatar uk-border-circle" src="'+profilePic+'" width="60" height="60" alt="">\n' +
-                '</div>\n' +
-                '<div class="uk-width-expand">\n' +
-                '<h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset user-name" href="#">'+userName+'</a></h4>\n' +
-                '<p class="uk-comment-meta uk-margin-remove-top"><a class="uk-link-reset" href="#">'+date+'</a>  <span style="padding: 0px 5px">|</span>  <span uk-icon="icon: heart; ratio: 0.8"></span>  <span class="comment-reaction-count">'+likes+'</span>  </p>\n' +
-                '</div>\n' +
-                '<div class="uk-width-auto">\n' +
-                likeBtn +
-                replyBtn +
-                deleteBtn+
-                '</div>\n' +
-                '</header>\n' +
-                '<div class="uk-comment-body">\n' +
-                '<p>'+comment+'</p>\n' +
-                '</div>\n' +
-                '</article>\n' +
-                '<ul id="list-'+commentId+'" class="uk-comment-list comments-list-'+commentId+'">\n' +
-                '</ul>\n' +
+            $('.comments-list-'+item.parent_id).append(
+                '<li id="comment-'+item.id+'" class="comment comment-parent-'+item.parent_id+'">\n' +
+                '    <article class="uk-comment bg-secondary uk-padding-small uk-visible-toggle" tabindex="-1">\n' +
+                '        <header class="uk-comment-header uk-position-relative">\n' +
+                '            <div class="uk-grid-medium" uk-grid>\n' +
+                '                <div class="uk-width-auto">\n' +
+                '                    <img class="uk-comment-avatar uk-border-circle" src="'+item.commenter_profile_pic+'" width="60" height="60" alt="">\n' +
+                '                </div>\n' +
+                '                <div class="uk-width-expand">\n' +
+                '                    <div class="uk-grid-medium" uk-grid>\n' +
+                '                        <div class="uk-width-expand">\n' +
+                '                            <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset">'+item.commenter_name+'</a></h4>\n' +
+                '                            <p class="uk-comment-meta uk-margin-remove-top"><a class="uk-link-reset">'+item.creation_date+'</a></p>\n' +
+                '                        </div>\n' +
+                '                        <div class="uk-width-auto">\n' +
+                '                            <ul class="uk-list comment-actions">\n' +
+                '                                '+reactionBtn+'\n' +
+                '                                '+replayBtn+'\n' +
+                '                                '+actionsBtn+'\n' +
+                '                            </ul>\n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                    <div class="uk-comment-body">\n' +
+                '                        <p class="comment-'+item.id+'-content">'+comment+'</p>\n' +
+                '                    </div>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '        </header>\n' +
+                '    </article>\n' +
+                '    <ul id="list-'+item.id+'" class="uk-comment-list comments-list-'+item.id+'">\n' +
+                '    </ul>\n' +
                 '</li>'
             );
             opedSubCommentForm();
             deleteComment();
             toggleCommentReaction();
+            openCommentEditorForm();
+            updateComment();
         }
-
         function reDrawComments() {
             var id = '{{$post->slug}}';
-            $.get('/blog/post/'+id+'/get/comments').done(function (items) {
-                $.each(items, function (id, item) {
-                    var commentId = item.id;
-                    var commentParentId = item.parent_id;
-                    var listId = 0;
-                    var profilePic = item.user_profile_pic;
-                    var userName = item.user_name;
-                    var date = item.create_date;
-                    var comment = item.content;
-                    var likes = item.likes;
-                    var userId = item.user_id;
-                    var status = item.status;
-                    var subItems = item.sub_items;
-                    var isLiked = item.is_liked;
-                    if(status == 1){
-                        drawCommentItem(commentId, listId, profilePic, userName, date, comment, likes , commentParentId, userId,  isLiked, status);
-                        if (subItems != null && subItems != undefined){
-                            $.each(subItems, function (id, item) {
-                                var subCommentId = item.id;
-                                var commentParentId = item.parent_id;
-                                var listId = commentId;
-                                var profilePic = item.user_profile_pic;
-                                var userName = item.user_name;
-                                var date = item.create_date;
-                                var comment = item.content;
-                                var likes = item.likes;
-                                var userId = item.user_id;
-                                var subStatus = item.status;
-                                var isLiked = item.is_liked;
-                                if(subStatus == 1){
-                                    drawCommentItem(subCommentId, listId, profilePic, userName, date, comment, likes , commentParentId, userId,  isLiked, subStatus);
-                                    count++;
-                                    opedSubCommentForm();
-                                }
-                            })
-                        }
+            $.get('/blog/post/'+id+'/get/comments').done(function (comments) {
+                $('.comment-loading-spinner').remove();
+                $.each(comments, function (id, comment) {
+                    if(comment.status == 1){
+                        drawCommentItem(comment);
                         count++;
                         opedSubCommentForm();
                     }
                 })
+            }).fail(function () {
+                $('.comment-loading-spinner').html(
+                    '<div class="uk-margin">\n' +
+                    '<div class="uk-text-center uk-text-warning">\n' +
+                    '<div>\n' +
+                    '<span uk-icon="icon: warning; ratio: 2"></span>\n' +
+                    '</div>\n' +
+                    '<div class="uk-padding-small">\n' +
+                    '{{__('main.An error appended during loading, please refresh the page.')}} ...\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '</div>'
+                );
             });
         }
+
 
         function addComment(){
             $('.add-comment').off('click');
             $('.add-comment').click(function () {
-                toggleScreenSpinner(true);
                 var item = $(this);
                 var itemList = item.parent().parent();
                 var listId = itemList.attr('id').split('-')[1];
@@ -352,25 +497,25 @@
                     alert('Comment is empty!');
                     return false;
                 }
-                var userId = '{{\Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : 0}}';
+                toggleScreenSpinner(true);
                 var postId = '{{$post->id}}';
                 var data = {
-                    'user_id':userId,
-                    'post_id':postId,
-                    'content':comment,
+                    'commentable_id':postId,
+                    'commentable_type': '{!! addslashes($post->getClassName()) !!}',
+                    'comment':comment,
                     'parent_id': listId,
                     'status': '{{$post->default_comment_status == 1 ? 1 : 0}}',
                 };
-                $.post('/blog/post/comment/store',data).done(function (item) {
-                    drawCommentItem(item.id, listId, item.user_profile_pic, item.user_name, item.create_date, item.content, item.likes, item.parent_id, item.user_id, item.is_liked, item.status);
+                $.post('/comment',data).done(function (item) {
+                    drawCommentItem(item);
                     $('body, html').animate({ scrollTop: $("#comment-"+item.id).offset().top - 200 }, 1000);
                     updateCommentCount(true);
-                    if(item.status == 0){
-                        UIkit.modal($('#comment-submitted')).show();
-                    }else{
-                        var deleteMsg = '<span class="uk-text-success"><span uk-icon=\'icon: check\'></span> '+'{{__('main.Comment added successfully')}}'+'</span>';
-                        UIkit.notification({message: deleteMsg, pos: 'top-right'})
-                    }
+                    {{--if(item.status == 0){--}}
+                    {{--    UIkit.modal($('#comment-submitted')).show();--}}
+                    {{--}else{--}}
+                    {{--    var deleteMsg = '<span class="uk-text-success"><span uk-icon=\'icon: check\'></span> '+'{{__('main.Comment added successfully')}}'+'</span>';--}}
+                    {{--    UIkit.notification({message: deleteMsg, pos: 'bottom-right'})--}}
+                    {{--}--}}
                 });
 
                 count++;

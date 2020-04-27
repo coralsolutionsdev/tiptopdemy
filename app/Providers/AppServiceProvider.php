@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Site;
-use DB;
-use Schema;
-use View;
 
 class AppServiceProvider extends ServiceProvider
 {

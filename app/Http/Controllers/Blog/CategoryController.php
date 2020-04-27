@@ -36,7 +36,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $page_title = $this->page_title;
+        $page_title = __('main.Blog Categories');
         $breadcrumb = $this->breadcrumb;
         $categoriesCollection =  $tree_categories = Category::where('type', Category::TYPE_POST)->where('parent_id',0)->get();
         return view('blog.categories.index', compact('page_title','breadcrumb','categoriesCollection'));
@@ -49,12 +49,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $page_title =  $this->page_title . ' - ' .__('Create');
+        $page_title =  __('main.Blog Categories') . ' - ' .__('main.Create');
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
                 'Create' => ''
             ];
-        $categories = ['0' => 'No parent'] + Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
+        $categories = ['0' => __('main.Please Select Category')] + Category::getRootCategories(Category::TYPE_POST)->pluck('name', 'id')->toArray();
         return view('blog.categories.create', compact('page_title', 'breadcrumb', 'categories'));
     }
 
@@ -108,7 +108,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $page_title =  $this->page_title . ' - ' .__('Create');
+        $page_title =  __('main.Blog Categories') . ' - ' .__('main.Edit');
         $breadcrumb =  $this->breadcrumb;
         $breadcrumb = $breadcrumb + [
                 'Create' => ''

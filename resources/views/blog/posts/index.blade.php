@@ -15,14 +15,13 @@
 				<table class="table table-striped">
 					<thead>
 					<tr>
-						<th scope="col" width="30">{{__('Image')}}</th>
-						<th scope="col" width="300">{{__('Post')}}</th>
-{{--						<th scope="col" class="text-center" width="50">{{__('Category')}}</th>--}}
-						<th scope="col" class="text-center">{{__('Likes')}}</th>
-						<th scope="col" class="text-center">{{__('Status')}}</th>
-						<th scope="col" class="text-center">{{__('Allow Com.')}}</th>
-						<th scope="col" class="text-center" width="100">{{__('Comments')}}</th>
-						<th scope="col" class="text-center" width="350">{{__('Actions')}}</th>
+						<th scope="col">{{__('main.Cover Image')}}</th>
+						<th scope="col" widtd="300">{{__('main.Details')}}</th>
+						<th scope="col" class="text-center">{{__('main.Reactions')}}</th>
+						<th scope="col" class="text-center">{{__('main.Status')}}</th>
+						<th scope="col" class="text-center">{{__('main.Allow Com.')}}</th>
+						<th scope="col" class="text-center">{{__('main.Comments')}}</th>
+						<th scope="col" class="text-center"></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -37,15 +36,15 @@
 								<p>{{substr(strip_tags($post->content),0,50)}} {{strlen($post->content) > 50 ? "...": "" }}</p>
 							</td>
 {{--							<td class="text-center align-middle">{{ucfirst($post->category->title)}}</td>--}}
-							<td class="text-center align-middle">{{$post->getReactCount('like')}}</td>
+							<td class="text-center align-middle">{{$post->getReactionCount('like')}}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->status) !!}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->allow_comments_status) !!}</td>
-							<td class="text-center align-middle"><a href="{{route('blog.post.comments.show', $post->slug)}}" class="btn btn-light">View</a>({{$post->comments->count()}})</td>
+							<td class="text-center align-middle"><a href="{{route('blog.post.comments.show', $post->slug)}}" class="btn btn-light">{{__('main.View')}} ({{$post->comments->count()}})</a></td>
 							<td>
 								<div class="action_btn text-right" style="padding-top: 10px">
 										<ul>
 											<li class="">
-												<a target="_blank" href="{{route('blog.posts.show', $post->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
+												<a target="_blank" href="{{route('blog.posts.show', $post->slug)}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>
 											</li>
 											<li class="">
 												<a href="{{route('posts.edit', $post->slug)}}" class="btn btn-light"><i class="far fa-edit"></i></a>

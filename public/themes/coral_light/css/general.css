@@ -201,6 +201,15 @@ a:hover{
 .blog-post-actions a{
     padding: 0px 10px;
 }
+.comment-actions li{
+    display: inline-block;
+}
+.comment-actions .uk-dropdown{
+    padding: 0 20px;
+}
+.comment-actions li ul li{
+    display: block;
+}
 
 /*product-card*/
 .product-card{

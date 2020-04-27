@@ -113,7 +113,7 @@ class ProductController extends Controller
         $product->syncTagsWithType($tags, 'product');
 
         session()->flash('success',trans('main._success_msg'));
-        return redirect()->route('store.products.edit', $product->id);
+        return redirect()->route('store.products.edit', $product->slug);
     }
 
 

@@ -396,12 +396,12 @@
             @if(isLoginIn())
                 var currentUserId = parseInt('{{getAuthUser()->id}}');
                 if(currentUserId == item.commenter_id){
-                    editBtn = '<li><a id="edit_comment-'+item.id+'" class="edit-comment-item" style="display: block"><span uk-icon="icon: file-edit"></span> Edit</a></a></li>\n';
-                    deleteBtn = '<li><a id="delete_comment-'+item.id+'" class="delete-comment-item" style="display: block"><span uk-icon="icon: trash"></span> Remove</a></a></li>\n';
+                    editBtn = '<li><a id="edit_comment-'+item.id+'" class="edit-comment-item" style="display: block"><span uk-icon="icon: file-edit"></span> {{__('main.Edit')}}</a></a></li>\n';
+                    deleteBtn = '<li><a id="delete_comment-'+item.id+'" class="delete-comment-item" style="display: block"><span uk-icon="icon: trash"></span> {{__('main.Remove')}}</a></a></li>\n';
                 }else{
-                    reportBtn ='<li><a href="#"><span uk-icon="icon: warning"></span> Report</a></a></li>\n';
+                    reportBtn ='<li><a href="#"><span uk-icon="icon: warning"></span> {{__('main.Report')}}</a></a></li>\n';
                 }
-                replayBtn = '<li><button id="reply_to-'+item.id+'" class="uk-button uk-button-default open-comment-form uk-text-primary">Replay</button></li>';
+                replayBtn = '<li><button id="reply_to-'+item.id+'" class="uk-button uk-button-default open-comment-form uk-text-primary">{{__('main.Replay')}}</button></li>';
                 actionsBtn = '<li>\n' +
                 '<button class="uk-button uk-button-text" type="button" style="padding: 0 10px"><span uk-icon="icon:  more-vertical; ratio: 0.8"></span></button>\n' +
                 '<div uk-dropdown="pos: bottom-right">\n' +

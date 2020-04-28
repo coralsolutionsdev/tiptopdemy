@@ -72,6 +72,8 @@
         'Loading' => 'جارِ التحميل',
         'Please login to react with this post.' => 'يرجى تسجيل الدخول لاضافة التفاعل.',
         'An error appended during loading, please refresh the page.' => 'حدث خطأ اثناء التحميل, يرجى اعادة تحميل الصفحة.',
+        'Report' => 'الإبلاغ عن المحتوى',
+        'Remove' => 'حذف',
 
 
 

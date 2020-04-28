@@ -275,6 +275,39 @@ class PostController extends Controller
      */
     public function destroy(BlogPost $post)
     {
+        // remove reactions
+        $reactantFacade = $post->viaLoveReactant();
+        $reactions = $reactantFacade->getReactions();
+        if (!empty($reactions)){
+            foreach ($reactions as $reaction){
+                $reaction->delete();
+            }
+        }
+        // remove Comments
+        if ($comments = $post->comments){
+            foreach ($comments as $comment){
+                if ($subComments = $comment->children){
+                    foreach ($subComments as $subComment){
+                        $subComReactantFacade = $subComment->viaLoveReactant();
+                        $reactions = $subComReactantFacade->getReactions();
+                        if (!empty($reactions)){
+                            foreach ($reactions as $reaction){
+                                $reaction->delete();
+                            }
+                        }
+                        $subComment->delete();
+                    }
+                }
+                $comReactantFacade = $comment->viaLoveReactant();
+                $reactions = $comReactantFacade->getReactions();
+                if (!empty($reactions)){
+                    foreach ($reactions as $reaction){
+                        $reaction->delete();
+                    }
+                }
+                $comment->delete();
+            }
+        }
         FileAssetManagerService::ImageDestroy($post->cover_image);
         if (!empty($post->images)){
             foreach ($post->images as $key => $image){
@@ -383,6 +416,14 @@ class PostController extends Controller
         }
 
     }
+
+    /**
+     * delete attachment
+     * @param BlogPost $post
+     * @param $key
+     * @return \Illuminate\Contracts\Foundation\Application|ResponseFactory|Response
+     * @throws \Exception
+     */
     function attachmentDelete(BlogPost $post, $key)
     {
         $attachment = $post->attachment($key);

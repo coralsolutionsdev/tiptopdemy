@@ -65,6 +65,9 @@
         'Position' => 'Position',
         'Show on menu' => 'Show on menu',
         'Please Select Category' => 'Please Select Category',
+        'Report' => 'Report',
+        'Remove' => 'Remove',
+
 
 
         // Meta

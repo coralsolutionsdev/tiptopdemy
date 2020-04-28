@@ -116,18 +116,47 @@ class CommentController extends Controller
         session()->flash('success', trans('deleted successfully'));
         return redirect()->back();
     }
+
+    /**
+     * remove comment by ajax request
+     * @param Comment $comment
+     * @return Application|ResponseFactory|Response
+     * @throws \Exception
+     */
     public function ajaxDestroy(Comment $comment)
     {
+        // remove Comments
         if (!empty($comment)){
             if (!empty($comment->children)){
                 foreach ($comment->children as $item){
+                    $comReactantFacade = $item->viaLoveReactant();
+                    $reactions = $comReactantFacade->getReactions();
+                    if (!empty($reactions)){
+                        foreach ($reactions as $reaction){
+                            $reaction->delete();
+                        }
+                    }
                     $item->delete();
+                }
+            }
+            $comReactantFacade = $comment->viaLoveReactant();
+            $reactions = $comReactantFacade->getReactions();
+            if (!empty($reactions)){
+                foreach ($reactions as $reaction){
+                    $reaction->delete();
                 }
             }
             $comment->delete();
         }
         return response('success', 200);
     }
+
+    /**
+     * update comment by ajax request
+     * @param Request $request
+     * @param Comment $comment
+     * @return Application|ResponseFactory|Response
+     */
     public function ajaxUpdate(Request $request, Comment $comment)
     {
         $input = $request->only(['comment']);

@@ -1,24 +1,5 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', $page_title)
-@section('head')
-	<script>
-		$(function() {
-			var ifr = $("iframe");
-			ifr.attr("scrolling", "no");
-			ifr.attr("src", ifr.attr("src"));
-			var newItemWidth = parseInt($('.post-content').width());
-			console.log(newItemWidth);
-			var itemHeight = ifr.attr("height");
-			var itemWidth = ifr.attr("width");
-			var r = (itemWidth / newItemWidth) * 100;
-			var newItemHeight = (itemHeight * 100) / r;
-			ifr.attr("width",newItemWidth);
-			ifr.attr("height",newItemHeight);
-		});
-	</script>
-	<meta name="csrf-token" content="{{ csrf_token() }}">
-
-@endsection
 @section('content')
 <section>
 	@include('partial.frontend._page-header')
@@ -72,8 +53,7 @@
 									<img class="uk-transition-scale-up uk-transition-opaque" src="{{$post->getMainImage()}}" alt="" style="width: 100%">
 								</div>
 								</a>
-{{--								<div class="uk-card-body uk-padding-small" style="padding-left: 0px; padding-right: 0px">--}}
-								<div class="uk-card-body uk-padding-small post-content" style="padding-left: 0px; padding-right: 0px; padding-top: 0px">
+								<div class="uk-card-body uk-padding-small" style="padding-left: 0px; padding-right: 0px">
 									<h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
 									<ul class="uk-iconnav uk-text-muted">
 										<li class="uk-flex uk-flex-middle"><span  uk-icon="icon: user; ratio: 0.8"></span><span><a href="#"> {{ucfirst($post->user->name)}}</a> </span></li>
@@ -87,10 +67,9 @@
 										@endif
 										<li><span class="{{$post->getReactionCount('like') > 0 ? 'uk-text-danger fas' : 'far' }} fa-heart reaction-icon"></span>  <span class="reaction-count">{{$post->getReactionCount('like')}}</span></li>
 									</ul>
-										<p>
-											{!! $post->content !!}
-										</p>
-
+									<p>
+										{!! subContent($post->content, 500) !!}
+									</p>
 									<div>
 										<a href="{{route('blog.posts.show',$post->slug)}}">
 											<span class="uk-button uk-button-primary">{{__('main.Read more')}}</span>

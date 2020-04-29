@@ -161,6 +161,11 @@ function subContent($content,$length)
         $dot = strlen($content) > $length ? "...": "";
     $sub_content =  substr(strip_tags($content),0,$length) .$dot;
     return $sub_content;
+    dd('here');
+}
+function readMore($content)
+{
+    return substr($content, 0, strpos($content, '<p><!-- pagebreak --></p>'));
 }
 function getStatusIcon($status)
 {

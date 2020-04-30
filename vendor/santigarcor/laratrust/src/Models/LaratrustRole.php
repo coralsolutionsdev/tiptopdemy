@@ -9,10 +9,11 @@ namespace Laratrust\Models;
  * @license MIT
  * @package Laratrust
  */
-use Illuminate\Support\Facades\Config;
-use Illuminate\Database\Eloquent\Model;
-use Laratrust\Traits\LaratrustRoleTrait;
+
 use Laratrust\Contracts\LaratrustRoleInterface;
+use Laratrust\Traits\LaratrustRoleTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class LaratrustRole extends Model implements LaratrustRoleInterface
 {

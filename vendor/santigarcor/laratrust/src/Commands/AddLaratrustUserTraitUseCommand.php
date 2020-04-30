@@ -9,11 +9,13 @@ namespace Laratrust\Commands;
  * @license MIT
  * @package Laratrust
  */
-use Traitor\Traitor;
+
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Laratrust\Traits\LaratrustUserTrait;
+use Traitor\Traitor;
 
 class AddLaratrustUserTraitUseCommand extends Command
 {

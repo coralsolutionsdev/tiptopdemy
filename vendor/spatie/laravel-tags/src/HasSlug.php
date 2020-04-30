@@ -20,7 +20,7 @@ trait HasSlug
     {
         $slugger = config('tags.slugger');
 
-        $slugger = $slugger ?: '\Illuminate\Support\Str::slug';
+        $slugger = $slugger ?: 'str_slug';
 
         return call_user_func($slugger, $this->getTranslation('name', $locale));
     }

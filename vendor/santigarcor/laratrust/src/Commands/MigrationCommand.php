@@ -9,6 +9,7 @@ namespace Laratrust\Commands;
  * @license MIT
  * @package Laratrust
  */
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -43,7 +44,7 @@ class MigrationCommand extends Command
      */
     public function handle()
     {
-        $this->laravel->view->addNamespace('laratrust', __DIR__.'/../../views');
+        $this->laravel->view->addNamespace('laratrust', substr(__DIR__, 0, -8).'views');
         $this->line('');
         $this->info("Laratrust Migration Creation.");
         if (Config::get('laratrust.use_teams')) {

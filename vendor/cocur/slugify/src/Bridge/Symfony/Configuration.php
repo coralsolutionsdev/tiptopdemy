@@ -28,6 +28,7 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->getRootNode();
         } else {
             $rootNode = $treeBuilder->root('cocur_slugify');
+
         }
 
         $rootNode

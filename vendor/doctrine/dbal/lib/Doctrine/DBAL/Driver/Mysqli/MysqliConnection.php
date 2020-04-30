@@ -222,7 +222,7 @@ class MysqliConnection implements Connection, PingableConnection, ServerInfoAwar
      * @throws MysqliException When one of of the options is not supported.
      * @throws MysqliException When applying doesn't work - e.g. due to incorrect value.
      */
-    private function setDriverOptions(array $driverOptions = []) : void
+    private function setDriverOptions(array $driverOptions = [])
     {
         $supportedDriverOptions = [
             MYSQLI_OPT_CONNECT_TIMEOUT,
@@ -281,7 +281,7 @@ class MysqliConnection implements Connection, PingableConnection, ServerInfoAwar
      *
      * @throws MysqliException
      */
-    private function setSecureConnection(array $params) : void
+    private function setSecureConnection(array $params)
     {
         if (! isset($params['ssl_key']) &&
             ! isset($params['ssl_cert']) &&

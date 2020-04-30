@@ -11,7 +11,6 @@ use Doctrine\DBAL\Event\ConnectionEventArgs;
 use Doctrine\DBAL\Events;
 use InvalidArgumentException;
 use function array_rand;
-use function assert;
 use function count;
 use function func_get_args;
 
@@ -120,9 +119,7 @@ class MasterSlaveConnection extends Connection
     }
 
     /**
-     * @param string|null $connectionName
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function connect($connectionName = null)
     {
@@ -136,7 +133,7 @@ class MasterSlaveConnection extends Connection
         // If we have a connection open, and this is not an explicit connection
         // change request, then abort right here, because we are already done.
         // This prevents writes to the slave in case of "keepSlave" option enabled.
-        if ($this->_conn !== null && ! $requestedConnectionChange) {
+        if (isset($this->_conn) && $this->_conn && ! $requestedConnectionChange) {
             return false;
         }
 
@@ -147,7 +144,7 @@ class MasterSlaveConnection extends Connection
             $forceMasterAsSlave = true;
         }
 
-        if (isset($this->connections[$connectionName])) {
+        if (isset($this->connections[$connectionName]) && $this->connections[$connectionName]) {
             $this->_conn = $this->connections[$connectionName];
 
             if ($forceMasterAsSlave && ! $this->keepSlave) {
@@ -235,7 +232,7 @@ class MasterSlaveConnection extends Connection
     {
         $this->connect('master');
 
-        return parent::beginTransaction();
+        parent::beginTransaction();
     }
 
     /**
@@ -245,7 +242,7 @@ class MasterSlaveConnection extends Connection
     {
         $this->connect('master');
 
-        return parent::commit();
+        parent::commit();
     }
 
     /**
@@ -347,7 +344,6 @@ class MasterSlaveConnection extends Connection
     public function query()
     {
         $this->connect('master');
-        assert($this->_conn instanceof DriverConnection);
 
         $args = func_get_args();
 

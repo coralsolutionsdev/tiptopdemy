@@ -1,7 +1,8 @@
 # Sortable behaviour for Eloquent models
 
+
 [![Latest Version](https://img.shields.io/github/release/spatie/eloquent-sortable.svg?style=flat-square)](https://github.com/spatie/eloquent-sortable/releases)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/eloquent-sortable/run-tests?label=tests)
+[![Build Status](https://img.shields.io/travis/spatie/eloquent-sortable.svg?style=flat-square)](https://travis-ci.org/spatie/eloquent-sortable)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/eloquent-sortable.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/eloquent-sortable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![StyleCI](https://styleci.io/repos/21866232/shield?branch=master)](https://styleci.io/repos/21866232)
@@ -22,12 +23,6 @@ This package can be installed through Composer.
 ```
 composer require spatie/eloquent-sortable
 ```
-
-## Support us
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Usage
 
@@ -81,9 +76,9 @@ You can set a new order for all the records using the `setNewOrder`-method
 
 ```php
 /**
- * the record for model id 3 will have order_column value 1
- * the record for model id 1 will have order_column value 2
- * the record for model id 2 will have order_column value 3
+ * the record for model id 3 will have record_column value 1
+ * the record for model id 1 will have record_column value 2
+ * the record for model id 2 will have record_column value 3
  */
 MyModel::setNewOrder([3,1,2]);
 ```
@@ -92,41 +87,11 @@ Optionally you can pass the starting order number as the second argument.
 
 ```php
 /**
- * the record for model id 3 will have order_column value 11
- * the record for model id 1 will have order_column value 12
- * the record for model id 2 will have order_column value 13
+ * the record for model id 3 will have record_column value 11
+ * the record for model id 1 will have record_column value 12
+ * the record for model id 2 will have record_column value 13
  */
 MyModel::setNewOrder([3,1,2], 10);
-```
-
-To sort using a column other than the primary key, use the `setNewOrderByCustomColumn`-method.
-
-```php
-/**
- * the record for model uuid '7a051131-d387-4276-bfda-e7c376099715' will have order_column value 1
- * the record for model uuid '40324562-c7ca-4c69-8018-aff81bff8c95' will have order_column value 2
- * the record for model uuid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have order_column value 3
- */
-MyModel::setNewOrderByCustomColumn('uuid', [
-   '7a051131-d387-4276-bfda-e7c376099715',
-   '40324562-c7ca-4c69-8018-aff81bff8c95',
-   '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1'
-]);
-```
-
-As with `setNewOrder`, `setNewOrderByCustomColumn` will also accept an optional starting order argument.
-
-```php
-/**
- * the record for model uuid '7a051131-d387-4276-bfda-e7c376099715' will have order_column value 10
- * the record for model uuid '40324562-c7ca-4c69-8018-aff81bff8c95' will have order_column value 11
- * the record for model uuid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have order_column value 12
- */
-MyModel::setNewOrderByCustomColumn('uuid', [
-   '7a051131-d387-4276-bfda-e7c376099715',
-   '40324562-c7ca-4c69-8018-aff81bff8c95',
-   '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1'
-], 10);
 ```
 
 You can also move a model up or down with these methods:
@@ -166,8 +131,8 @@ This will restrict the calculations to fields value of the model instance.
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
 
-```bash
-vendor/bin/phpunit
+```
+$ vendor/bin/phpunit
 ```
 
 ## Changelog
@@ -181,6 +146,14 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Security
 
 If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+
+## Postcardware
+
+You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
+
+Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
+
+We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
 
 ## Credits
 

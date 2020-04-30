@@ -9,6 +9,7 @@ namespace Laratrust;
  * @license MIT
  * @package Laratrust
  */
+
 use Illuminate\Support\Facades\Facade;
 
 class LaratrustFacade extends Facade

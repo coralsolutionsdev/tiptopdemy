@@ -2,11 +2,11 @@
 
 namespace Spatie\Tags;
 
+use InvalidArgumentException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use InvalidArgumentException;
 
 trait HasTags
 {
@@ -20,11 +20,9 @@ trait HasTags
     public static function bootHasTags()
     {
         static::created(function (Model $taggableModel) {
-            if (count($taggableModel->queuedTags) > 0) {
-                $taggableModel->attachTags($taggableModel->queuedTags);
+            $taggableModel->attachTags($taggableModel->queuedTags);
 
-                $taggableModel->queuedTags = [];
-            }
+            $taggableModel->queuedTags = [];
         });
 
         static::deleted(function (Model $deletedModel) {
@@ -38,22 +36,7 @@ trait HasTags
     {
         return $this
             ->morphToMany(self::getTagClassName(), 'taggable')
-            ->ordered();
-    }
-
-    /**
-     * @param string $locale
-     */
-    public function tagsTranslated($locale = null): MorphToMany
-    {
-        $locale = ! is_null($locale) ? $locale : app()->getLocale();
-
-        return $this
-            ->morphToMany(self::getTagClassName(), 'taggable')
-            ->select('*')
-            ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.\"{$locale}\"')) as name_translated")
-            ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(slug, '$.\"{$locale}\"')) as slug_translated")
-            ->ordered();
+            ->orderBy('order_column');
     }
 
     /**
@@ -81,8 +64,10 @@ trait HasTags
         $tags = static::convertToTags($tags, $type);
 
         collect($tags)->each(function ($tag) use ($query) {
-            $query->whereHas('tags', function (Builder $query) use ($tag) {
-                $query->where('tags.id', $tag ? $tag->id : 0);
+            $query->whereIn("{$this->getTable()}.{$this->getKeyName()}", function ($query) use ($tag) {
+                $query->from('taggables')
+                    ->select('taggables.taggable_id')
+                    ->where('taggables.tag_id', $tag ? $tag->id : 0);
             });
         });
 
@@ -111,8 +96,10 @@ trait HasTags
         $tags = static::convertToTagsOfAnyType($tags);
 
         collect($tags)->each(function ($tag) use ($query) {
-            $query->whereHas('tags', function (Builder $query) use ($tag) {
-                $query->where('tags.id', $tag ? $tag->id : 0);
+            $query->whereIn("{$this->getTable()}.{$this->getKeyName()}", function ($query) use ($tag) {
+                $query->from('taggables')
+                    ->select('taggables.taggable_id')
+                    ->where('taggables.tag_id', $tag ? $tag->id : 0);
             });
         });
 

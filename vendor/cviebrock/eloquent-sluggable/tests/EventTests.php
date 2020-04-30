@@ -1,7 +1,6 @@
 <?php namespace Cviebrock\EloquentSluggable\Tests;
 
 use Cviebrock\EloquentSluggable\Tests\Listeners\AbortSlugging;
-use Cviebrock\EloquentSluggable\Tests\Listeners\DoNotAbortSlugging;
 use Cviebrock\EloquentSluggable\Tests\Models\Post;
 
 /**
@@ -36,27 +35,6 @@ class EventTests extends TestCase
      *
      * @todo Figure out how to accurately test Eloquent model events
      */
-    public function testDoNotCancelSluggingEventWhenItReturnsAnythingOtherThanFalse()
-    {
-        $this->markTestIncomplete('Event tests are not yet reliable.');
-
-        $this->app['events']->listen('eloquent.slugging: ' . Post::class, DoNotAbortSlugging::class);
-
-        $post = Post::create([
-            'title' => 'My Test Post'
-        ]);
-
-        $this->expectsEvents([
-            'eloquent.slugging: ' . Post::class,
-        ]);
-
-        $this->doesntExpectEvents([
-            'eloquent.slugged: ' . Post::class,
-        ]);
-
-        $this->assertEquals('my-test-post', $post->slug);
-    }
-
     public function testCancelSluggingEvent()
     {
         $this->markTestIncomplete('Event tests are not yet reliable.');

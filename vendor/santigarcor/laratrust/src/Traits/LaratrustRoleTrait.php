@@ -9,10 +9,10 @@ namespace Laratrust\Traits;
  * @license MIT
  * @package Laratrust
  */
+
 use Laratrust\Helper;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Laratrust\Checkers\LaratrustCheckerManager;
 
 trait LaratrustRoleTrait
 {
@@ -54,13 +54,23 @@ trait LaratrustRoleTrait
     }
 
     /**
-     * Return the right checker for the role model.
+     * Tries to return all the cached permissions of the role.
+     * If it can't bring the permissions from the cache,
+     * it brings them back from the DB.
      *
-     * @return \Laratrust\Checkers\Role\LaratrustRoleChecker
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function laratrustRoleChecker()
+    public function cachedPermissions()
     {
-        return (new LaratrustCheckerManager($this))->getRoleChecker();
+        $cacheKey = 'laratrust_permissions_for_role_' . $this->getKey();
+
+        if (! Config::get('laratrust.use_cache')) {
+            return $this->permissions()->get();
+        }
+
+        return Cache::remember($cacheKey, Config::get('cache.ttl', 60), function () {
+            return $this->permissions()->get()->toArray();
+        });
     }
 
     /**
@@ -104,8 +114,34 @@ trait LaratrustRoleTrait
      */
     public function hasPermission($permission, $requireAll = false)
     {
-        return $this->laratrustRoleChecker($this)
-            ->currentRoleHasPermission($permission, $requireAll);
+        if (is_array($permission)) {
+            if (empty($permission)) {
+                return true;
+            }
+
+            foreach ($permission as $permissionName) {
+                $hasPermission = $this->hasPermission($permissionName);
+
+                if ($hasPermission && !$requireAll) {
+                    return true;
+                } elseif (!$hasPermission && $requireAll) {
+                    return false;
+                }
+            }
+
+            // If we've made it this far and $requireAll is FALSE, then NONE of the permissions were found.
+            // If we've made it this far and $requireAll is TRUE, then ALL of the permissions were found.
+            // Return the value of $requireAll.
+            return $requireAll;
+        }
+
+        foreach ($this->cachedPermissions() as $perm) {
+            if (str_is($permission, $perm['name'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -204,6 +240,6 @@ trait LaratrustRoleTrait
      */
     public function flushCache()
     {
-        return $this->laratrustRoleChecker()->currentRoleFlushCache();
+        Cache::forget('laratrust_permissions_for_role_' . $this->getKey());
     }
 }

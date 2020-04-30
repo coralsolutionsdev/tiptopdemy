@@ -9,8 +9,9 @@ namespace Laratrust\Commands;
  * @license MIT
  * @package Laratrust
  */
-use Illuminate\Support\Facades\Config;
+
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Facades\Config;
 
 class MakePermissionCommand extends GeneratorCommand
 {
@@ -42,7 +43,7 @@ class MakePermissionCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/../../stubs/permission.stub';
+        return __DIR__.'/stubs/permission.stub';
     }
 
     /**

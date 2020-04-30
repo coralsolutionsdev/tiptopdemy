@@ -9,8 +9,9 @@ namespace Laratrust;
  * @license MIT
  * @package Laratrust
  */
-use Illuminate\Support\ServiceProvider;
+
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\ServiceProvider;
 
 class LaratrustServiceProvider extends ServiceProvider
 {
@@ -56,11 +57,10 @@ class LaratrustServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/laratrust.php', 'laratrust');
-
+        // Register published configuration.
         $this->publishes([
-            __DIR__.'/../config/laratrust.php' => config_path('laratrust.php'),
-            __DIR__. '/../config/laratrust_seeder.php' => config_path('laratrust_seeder.php'),
+            __DIR__.'/config/laratrust.php' => config_path('laratrust.php'),
+            __DIR__.'/config/laratrust_seeder.php' => config_path('laratrust_seeder.php'),
         ], 'laratrust');
 
         $this->useMorphMapForRelationships();
@@ -120,6 +120,8 @@ class LaratrustServiceProvider extends ServiceProvider
         $this->registerLaratrust();
 
         $this->registerCommands();
+
+        $this->mergeConfig();
     }
 
     /**
@@ -223,6 +225,19 @@ class LaratrustServiceProvider extends ServiceProvider
         $this->app->singleton('command.laratrust.upgrade', function () {
             return new \Laratrust\Commands\UpgradeCommand();
         });
+    }
+
+    /**
+     * Merges user's and laratrust's configs.
+     *
+     * @return void
+     */
+    private function mergeConfig()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/config/laratrust.php',
+            'laratrust'
+        );
     }
 
     /**

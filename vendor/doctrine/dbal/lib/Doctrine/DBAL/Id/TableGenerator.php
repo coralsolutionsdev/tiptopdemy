@@ -10,8 +10,6 @@ use Doctrine\DBAL\LockMode;
 use Throwable;
 use const CASE_LOWER;
 use function array_change_key_case;
-use function assert;
-use function is_int;
 
 /**
  * Table ID Generator for those poor languages that are missing sequences.
@@ -112,8 +110,6 @@ class TableGenerator
 
                 $value = $row['sequence_value'];
                 $value++;
-
-                assert(is_int($value));
 
                 if ($row['sequence_increment_by'] > 1) {
                     $this->sequences[$sequenceName] = [

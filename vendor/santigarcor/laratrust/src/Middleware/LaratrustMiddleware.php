@@ -42,20 +42,13 @@ class LaratrustMiddleware
      */
     protected function unauthorized()
     {
-        $handling = Config::get('laratrust.middleware.handling');
-        $handler = Config::get("laratrust.middleware.handlers.{$handling}");
+        $parameter = Config::get('laratrust.middleware.params');
 
-        if ($handling == 'abort') {
-            $defaultMessage = 'User does not have any of the necessary access rights.';
-            return App::abort($handler['code'], $handler['message'] ?? $defaultMessage);
+        if (Config::get('laratrust.middleware.handling') == 'abort') {
+            return App::abort($parameter);
         }
 
-        $redirect = Redirect::to($handler['url']);
-        if (!empty($handler['message']['content'])) {
-            $redirect->with($handler['message']['key'], $handler['message']['content']);
-        }
-
-        return $redirect;
+        return Redirect::to($parameter);
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Laratrust\Contracts;
  * @license MIT
  * @package Laratrust
  */
+
 interface Ownable
 {
     /**

@@ -9,6 +9,7 @@ namespace Laratrust\Middleware;
  * @license MIT
  * @package Laratrust
  */
+
 use Closure;
 use Illuminate\Support\Facades\Auth;
 

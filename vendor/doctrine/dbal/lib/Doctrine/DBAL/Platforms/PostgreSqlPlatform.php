@@ -69,8 +69,6 @@ class PostgreSqlPlatform extends AbstractPlatform
      * Enables use of 'true'/'false' or otherwise 1 and 0 instead.
      *
      * @param bool $flag
-     *
-     * @return void
      */
     public function setUseBooleanTrueFalseStrings($flag)
     {
@@ -279,10 +277,7 @@ class PostgreSqlPlatform extends AbstractPlatform
     }
 
     /**
-     * @param string      $table
-     * @param string|null $database
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getListTableForeignKeysSQL($table, $database = null)
     {
@@ -372,7 +367,7 @@ SQL
             [$schema, $table] = explode('.', $table);
             $schema           = $this->quoteStringLiteral($schema);
         } else {
-            $schema = 'ANY(current_schemas(false))';
+            $schema = "ANY(string_to_array((select replace(replace(setting,'\"\$user\"',user),' ','') from pg_catalog.pg_settings where name = 'search_path'),','))";
         }
 
         $table = new Identifier($table);
@@ -619,14 +614,8 @@ SQL
         if (! $this->onSchemaAlterTable($diff, $tableSql)) {
             $sql = array_merge($sql, $commentsSQL);
 
-            $newName = $diff->getNewName();
-
-            if ($newName !== false) {
-                $sql[] = sprintf(
-                    'ALTER TABLE %s RENAME TO %s',
-                    $diff->getName($this)->getQuotedName($this),
-                    $newName->getQuotedName($this)
-                );
+            if ($diff->newName !== false) {
+                $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this) . ' RENAME TO ' . $diff->getNewName()->getQuotedName($this);
             }
 
             $sql = array_merge(
@@ -826,7 +815,7 @@ SQL
         }
 
         if (is_bool($value) || is_numeric($value)) {
-            return $callback((bool) $value);
+            return $callback($value ? true : false);
         }
 
         if (! is_string($value)) {
@@ -1226,8 +1215,7 @@ SQL
      */
     private function isSerialField(array $field) : bool
     {
-        return isset($field['type'], $field['autoincrement'])
-            && $field['autoincrement'] === true
+        return $field['autoincrement'] ?? false === true && isset($field['type'])
             && $this->isNumericType($field['type']);
     }
 
@@ -1256,20 +1244,5 @@ SQL
     private function getOldColumnComment(ColumnDiff $columnDiff) : ?string
     {
         return $columnDiff->fromColumn ? $this->getColumnComment($columnDiff->fromColumn) : null;
-    }
-
-    public function getListTableMetadataSQL(string $table, ?string $schema = null) : string
-    {
-        if ($schema !== null) {
-            $table = $schema . '.' . $table;
-        }
-
-        return sprintf(
-            <<<'SQL'
-SELECT obj_description(%s::regclass) AS table_comment;
-SQL
-            ,
-            $this->quoteStringLiteral($table)
-        );
     }
 }

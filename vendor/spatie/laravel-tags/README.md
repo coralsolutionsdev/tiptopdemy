@@ -1,8 +1,8 @@
 # Add tags and taggable behaviour to a Laravel app
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-tags.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-tags)
-[![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-tags/run-tests?label=tests)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/spatie/laravel-tags/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-tags)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-tags.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-tags)
 [![StyleCI](https://styleci.io/repos/71335427/shield?branch=master)](https://styleci.io/repos/71335427)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-tags.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-tags)
@@ -11,55 +11,47 @@ This package offers taggable behaviour for your models. After the package is ins
 
 But we didn't stop with the regular tagging capabilities you find in every package. Laravel Tags comes with batteries included. Out of the box it has support for [translating tags](https://docs.spatie.be/laravel-tags/v2/advanced-usage/adding-translations), [multiple tag types](https://docs.spatie.be/laravel-tags/v2/advanced-usage/using-types) and [sorting capabilities](https://docs.spatie.be/laravel-tags/v2/advanced-usage/sorting-tags).
 
-You'll find the documentation on https://docs.spatie.be/laravel-tags/v2/introduction/.
+You'll find the documentation on https://docs.spatie.be/laravel-tags/v2.
 
 Here are some code examples:
 
 ```php
-//create a model with some tags, don't forget to put "tags" on $fillable array on referred model
+//create a model with some tags
 $newsItem = NewsItem::create([
-   'name' => 'The Article Title',
-   'tags' => ['first tag', 'second tag'], //tags will be created if they don't exist
+   'name' => 'testModel',
+   'tags' => ['tag', 'tag2'], //tags will be created if they don't exist
 ]);
 
 //attaching tags
-$newsItem->attachTag('third tag');
-$newsItem->attachTags(['fourth tag', 'fifth tag']);
+$newsItem->attachTag('tag3');
+$newsItem->attachTags(['tag4', 'tag5']);
 
 //detaching tags
-$newsItem->detachTags('third tag');
-$newsItem->detachTags(['fourth tag', 'fifth tag']);
+$newsItem->detachTags('tag3');
+$newsItem->detachTags(['tag4', 'tag5']);
 
 //syncing tags
-$newsItem->syncTags(['first tag', 'second tag']); // all other tags on this model will be detached
+$newsItem->syncTags(['tag1', 'tag2']); // all other tags on this model will be detached
 
 //syncing tags with a type
-$newsItem->syncTagsWithType(['category 1', 'category 2'], 'categories'); 
-$newsItem->syncTagsWithType(['topic 1', 'topic 2'], 'topics'); 
+$newsItem->syncTagsWithType(['tag1', 'tag2'], 'typeA'); 
+$newsItem->syncTagsWithType(['tag1', 'tag2'], 'typeB'); 
 
 //retrieving tags with a type
-$newsItem->tagsWithType('categories'); 
-$newsItem->tagsWithType('topics'); 
+$newsItem->tagsWithType('typeA'); 
+$newsItem->tagsWithType('typeB'); 
 
 //retrieving models that have any of the given tags
-NewsItem::withAnyTags(['first tag', 'second tag'])->get();
+NewsItem::withAnyTags(['tag1', 'tag2'])->get();
 
 //retrieve models that have all of the given tags
-NewsItem::withAllTags(['first tag', 'second tag'])->get();
+NewsItem::withAllTags(['tag1', 'tag2'])->get();
 
 //translating a tag
 $tag = Tag::findOrCreate('my tag');
-$tag->setTranslation('name', 'fr', 'mon tag');
-$tag->setTranslation('name', 'nl', 'mijn tag');
+$tag->setTranslation('fr', 'mon tag');
+$tag->setTranslation('nl', 'mijn tag');
 $tag->save();
-
-//getting translations
-$tag->translate('name'); //returns my name
-$tag->translate('name', 'fr'); //returns mon tag (optional locale param)
-
-//convenient translations through taggable models
-$newsItem->tagsTranslated();// returns tags with slug_translated and name_translated properties
-$newsItem->tagsTranslated('fr');// returns tags with slug_translated and name_translated properties set for specified locale
 
 //using tag types
 $tag = Tag::findOrCreate('tag 1', 'my type');
@@ -82,7 +74,7 @@ Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview 
 
 ## Requirements
 
-This package requires Laravel 5.8 or higher, PHP 7.2 or higher and a database that supports `json` fields and MySQL compatible functions.
+This package requires Laravel 5.7 or higher, PHP 7.0 or higher and a database that supports `json` fields and functions such as MySQL 5.7 or higher. 
 
 ## Installation
 
@@ -117,17 +109,11 @@ return [
 
     /*
      * The given function generates a URL friendly "slug" from the tag name property before saving it.
-     * Defaults to Str::slug (https://laravel.com/docs/5.8/helpers#method-str-slug)
      */
-    'slugger' => null, 
+    'slugger' => 'str_slug',
 ];
 ```
 
-## Support us
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Documentation
 You'll find the documentation on [https://docs.spatie.be/laravel-tags/v2](https://docs.spatie.be/laravel-tags/v2).
@@ -165,6 +151,13 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
+
+## Support us
+
+Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/open-source).
+
+Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
+All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
 
 ## License
 

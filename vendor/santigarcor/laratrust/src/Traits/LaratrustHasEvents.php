@@ -2,19 +2,8 @@
 
 namespace Laratrust\Traits;
 
-use Illuminate\Support\Str;
-
 trait LaratrustHasEvents
 {
-    protected static $laratrustObservables = [
-        'roleAttached',
-        'roleDetached',
-        'permissionAttached',
-        'permissionDetached',
-        'roleSynced',
-        'permissionSynced',
-    ];
-
     /**
      * Register an observer to the Laratrust events.
      *
@@ -23,20 +12,21 @@ trait LaratrustHasEvents
      */
     public static function laratrustObserve($class)
     {
+        $observables = [
+            'roleAttached',
+            'roleDetached',
+            'permissionAttached',
+            'permissionDetached',
+            'roleSynced',
+            'permissionSynced',
+        ];
+
         $className = is_string($class) ? $class : get_class($class);
 
-        foreach (self::$laratrustObservables as $event) {
+        foreach ($observables as $event) {
             if (method_exists($class, $event)) {
-                static::registerLaratrustEvent(Str::snake($event, '.'), $className.'@'.$event);
+                static::registerLaratrustEvent(\Illuminate\Support\Str::snake($event, '.'), $className.'@'.$event);
             }
-        }
-    }
-
-    public static function laratrustFlushObservables()
-    {
-        foreach (self::$laratrustObservables as $event) {
-            $event = Str::snake($event, '.');
-            static::$dispatcher->forget("laratrust.{$event}: " . static::class);
         }
     }
 
@@ -53,7 +43,7 @@ trait LaratrustHasEvents
             return true;
         }
 
-        return static::$dispatcher->dispatch(
+        return static::$dispatcher->fire(
             "laratrust.{$event}: ".static::class,
             $payload
         );

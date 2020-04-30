@@ -20,7 +20,6 @@
  * - JD Isaacks
  * - Sebastian Thierer
  * - Fastfuel
- * - Pete Scopes (pdscopes)
  */
 return [
     'year' => ':count an|:count ans',
@@ -44,9 +43,6 @@ return [
     'second' => ':count seconde|:count secondes',
     'a_second' => 'quelques secondes|:count secondes',
     's' => ':count s',
-    'millisecond' => ':count milliseconde:count millisecondes',
-    'a_millisecond' => 'une milliseconde|:count millisecondes',
-    'ms' => ':countms',
     'ago' => 'il y a :time',
     'from_now' => 'dans :time',
     'after' => ':time après',

@@ -7,7 +7,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
@@ -44,15 +44,11 @@ abstract class TestCase extends Orchestra
         $this->app['db']->connection()->getSchemaBuilder()->create('dummies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('custom_column_sort');
             $table->integer('order_column');
         });
 
         collect(range(1, 20))->each(function (int $i) {
-            Dummy::create([
-                'name' => $i,
-                'custom_column_sort' => rand(),
-            ]);
+            Dummy::create(['name' => $i]);
         });
     }
 

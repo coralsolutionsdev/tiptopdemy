@@ -17,7 +17,7 @@ use function func_get_args;
 use function func_num_args;
 use function gettype;
 use function is_array;
-use function is_int;
+use function is_numeric;
 use function is_object;
 use function is_resource;
 use function is_string;
@@ -177,11 +177,9 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
             $hasZeroIndex = array_key_exists(0, $params);
 
             foreach ($params as $key => $val) {
-                if ($hasZeroIndex && is_int($key)) {
-                    $this->bindValue($key + 1, $val);
-                } else {
-                    $this->bindValue($key, $val);
-                }
+                $key = $hasZeroIndex && is_numeric($key) ? $key + 1 : $key;
+
+                $this->bindValue($key, $val);
             }
         }
 
@@ -313,8 +311,6 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
         $this->defaultFetchMode          = $fetchMode;
         $this->defaultFetchClass         = $arg2 ?: $this->defaultFetchClass;
         $this->defaultFetchClassCtorArgs = $arg3 ? (array) $arg3 : $this->defaultFetchClassCtorArgs;
-
-        return true;
     }
 
     /**

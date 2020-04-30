@@ -6,8 +6,6 @@ use Doctrine\DBAL\DBALException;
 
 /**
  * Sharding related Exceptions
- *
- * @psalm-immutable
  */
 class ShardingException extends DBALException
 {

@@ -1,8 +1,23 @@
 # Change Log
 
-## 4.8.1 - 09-Feb-2020
+## 6.0.3 - 09-Feb-2020
 
-- PHP 7.4 compatibility fix
+- bump [cocur/slugify](https://github.com/cocur/slugify) to `^4.0`
+
+
+## 6.0.2 - 09-Oct-2019
+
+- fix for PHP 7.4 beta (#486, thanks @KamaZzw)
+
+
+## 6.0.1 - 13-Sep-2019
+
+- fix for semantic versioning
+
+
+## 6.0.0 - 03-Sep-2019
+
+- Laravel 6.0 support (note the package version will now follow the Laravel version)
 
 
 ## 4.8.0 - 28-Feb-2019

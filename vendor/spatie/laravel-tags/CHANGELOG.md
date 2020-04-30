@@ -2,6 +2,59 @@
 
 All notable changes to `laravel-tags` will be documented in this file
 
+## 2.6.0 - 2020-03-03
+
+- add support for Laravel 7
+
+## 2.5.4 - 2020-02-12
+
+- make sure each tag is unique on the database level (#251)
+
+## 2.5.3 - 2019-11-07
+
+- use `morphs` in migration
+
+## 2.5.2 - 2019-09-29
+
+- `findOrCreateFromString` can now be overloaded (#231)
+
+## 2.5.1 - 2019-09-08
+
+- make `scopeContaining` compatible with Postgresql
+
+## 2.5.0 - 2019-09-04
+
+- add support for Laravel 6
+
+## 2.4.5 - 2019-07-18
+
+- fix `scopeWithAllTags`* scopes
+
+## 2.4.4 - 2019-04-17
+
+- use `ordered()` scope to determine order column name (#193)
+
+## 2.4.3 - 2019-04-10
+
+- fix `str_slug` being deprecated
+
+## 2.4.2 - 2019-04-10
+
+- added ability to work with multibyte charset
+
+## 2.4.1 - 2019-03-06
+
+- performance enhanchements
+
+## 2.4.0 - 2019-03-01
+
+- add `tagsTranslated`
+
+## 2.3.0 - 2019-02-27
+
+- drop support for Laravel 5.7 and below
+- drop support for PHP 7.1 and below
+
 ## 2.2.2 - 2019-02-27
 
 - add support for Laravel 5.8

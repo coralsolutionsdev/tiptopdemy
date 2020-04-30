@@ -1,8 +1,8 @@
 # A trait to make Eloquent models translatable
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-translatable.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-translatable)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/spatie/laravel-translatable/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-translatable)
+[![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-translatable/run-tests?label=tests)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-translatable.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-translatable)
 [![StyleCI](https://styleci.io/repos/55690447/shield?branch=master)](https://styleci.io/repos/55690447)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-translatable.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-translatable)
@@ -26,6 +26,12 @@ app()->setLocale('nl');
 $newsItem->name; // Returns 'Naam in het Nederlands'
 ```
 
+## Support us
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
 ## Installation
 
 You can install the package via composer:
@@ -34,9 +40,7 @@ You can install the package via composer:
 composer require spatie/laravel-translatable
 ```
 
-The package will automatically register itself.
-
-If you want to change add fallback_locale, you must publish the config file:
+If you want to have another fallback_locale then the app fallback locale (see `config/app.php`), you could publish the config file:
 ```
 php artisan vendor:publish --provider="Spatie\Translatable\TranslatableServiceProvider"
 ```
@@ -47,7 +51,6 @@ return [
   'fallback_locale' => 'en',
 ];
 ```
-
 
 ## Making a model translatable
 
@@ -85,7 +88,7 @@ $newsItem->name;
 You can also use this method:
 
 ```php
-public function getTranslation(string $attributeName, string $locale) : string
+public function getTranslation(string $attributeName, string $locale, bool $useFallbackLocale = true) : string
 ```
 
 This function has an alias named `translate`.
@@ -191,7 +194,7 @@ You can immediately set translations when creating a model. Here's an example:
 ```php
 NewsItem::create([
    'name' => [
-      'en' => 'Name in English'
+      'en' => 'Name in English',
       'nl' => 'Naam in het Nederlands'
    ],
 ]);
@@ -245,13 +248,6 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 - [All Contributors](../../contributors)
 
 We got the idea to store translations as json in a column from [Mohamed Said](https://github.com/themsaid). Parts of the readme of [his multilingual package](https://github.com/themsaid/laravel-multilingual) were used in this readme.
-
-## Support us
-
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
-All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
 
 ## License
 

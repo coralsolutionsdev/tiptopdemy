@@ -2,6 +2,55 @@
 
 All notable changes to `laravel-translatable` will be documented in this file
 
+## 4.3.2 - 2020-04-30
+
+- fix `forgetTranslation` & `forgetAllTranslations` on fields with mutator (#205)
+
+## 4.3.1 - 2020-03-07
+
+- Lumen fix (#201)
+
+## 4.3.0 - 2020-03-02
+
+- add support for Laravel 7
+
+## 4.2.2 - 2020-01-20
+
+- open up for non-model objects (#186)
+
+## 4.2.1 - 2019-10-03
+
+- add third param to translate method (#177)
+
+## 4.2.0 - 2019-09-04
+
+- make compatible with Laravel 6
+
+## 4.1.4 - 2019-08-28
+
+- re-added the `translatable.fallback_local` config which overrule `app.fallback_local` (see https://github.com/spatie/laravel-translatable/issues/170)
+
+## 4.1.3 - 2019-06-16
+
+- improve dependencies
+
+## 4.1.2 - 2019-06-06
+
+- allow false and true values in translations
+
+## 4.1.1 - 2019-02-27
+
+- fix service provider error
+
+## 4.1.0 - 2019-02-27
+
+- drop support for Laravel 5.7 and below
+- drop support for PHP 7.1 and below
+
+## 4.0.0 - 2019-02-27
+
+- `app.fallback_local` will now be used (see #148)
+
 ## 3.1.3 - 2019-02-27
 
 - add support for Laravel 5.8

@@ -9,6 +9,7 @@ body{
     margin: auto;
     background-color: #F3F5F9;
     font-size: 14px;
+    height: 100%;
 }
 .inactive-div {
     pointer-events: none;

@@ -193,6 +193,7 @@ return [
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Cog\Laravel\Love\LoveServiceProvider::class,
         Cog\Laravel\Love\LoveEventServiceProvider::class,
+        Vinkla\Hashids\Facades\Hashids::class,
 
     ],
 

@@ -280,7 +280,7 @@ class ProductController extends Controller
 
     public function getIndex()
     {
-        $page_title =  $this->page_title;
+        $page_title =  __('main.Store');
         $breadcrumb =  $this->breadcrumb;
         $products =  Product::where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->get();
         return view('store.products.frontend.index', compact('products','page_title','breadcrumb'));

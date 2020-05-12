@@ -64,7 +64,7 @@
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.video link')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::text('video', !empty($lesson->getLessonFirstMedia()) ? $lesson->media->first()->source : null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'https://youtu.be/example']) !!}
+                                {!! Form::text('video', !empty($lesson) && !empty($lesson->getLessonFirstMedia()) ? $lesson->media->first()->source : null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'https://youtu.be/example']) !!}
                             </div>
                         </div>
                     </div>

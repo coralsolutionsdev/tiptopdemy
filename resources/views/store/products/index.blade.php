@@ -23,7 +23,7 @@
                             <th scope="col" class="text-center">{{__('main.Price')}}</th>
                             <th scope="col" class="text-center">{{__('main.SKU')}}</th>
                             <th scope="col" class="text-center">{{__('main.Status')}}</th>
-                            <th scope="col" class="text-center" width="200">{{__('main.Actions')}}</th>
+                            <th scope="col" class="text-center" width="240">{{__('main.Actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -42,8 +42,8 @@
                                 <td class="text-center align-middle">{{ucfirst($product->price)}}</td>
                                 <td class="text-center align-middle">{{ucfirst($product->sku)}}</td>
                                 <td class="text-center align-middle">{!! $product->getStatus() !!}</td>
-                                <td class="text-center align-middle">
-                                    <div class="action_btn text-right d-flex align-items-center" style="padding-top: 25px">
+                                <td class="text-right align-middle">
+                                    <div class="action_btn" style="padding-top: 25px">
                                         <ul>
                                             <li class="">
                                                 <a target="_blank" href="{{route('store.product.show', $product->slug)}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>

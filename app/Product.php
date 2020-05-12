@@ -287,11 +287,11 @@ class Product extends Model implements ReactableContract
      */
     public function groups()
     {
-        return $this->hasMany('App\Modules\Group\Group', 'owner_id')->where('owner_type', $this->getClassName());
+        return $this->hasMany('App\Modules\Group\Group', 'owner_id')->where('owner_type', $this->getClassName())->orderBy('position');
     }
     public function lessons()
     {
-        return $this->hasMany(Lesson::class, 'product_id');
+        return $this->hasMany(Lesson::class, 'product_id')->orderBy('position');
     }
 
     /**

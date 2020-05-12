@@ -111,16 +111,19 @@ class LessonController extends Controller
             }
         }
         // media
-        $mediaInput['title'] = '';
-        $mediaInput['type'] = Media::TYPE_VIDEO;
-        $mediaInput['storage_type'] = Media::STORAGE_TYPE_YOUTUBE;
-        $mediaInput['source'] = $input['video'];
-        $mediaInput['status'] = 1;
-        $mediaInput['position'] = 0;
-        $media = Media::create($mediaInput);
+        if (isset($input['video'])){
+            $mediaInput['title'] = '';
+            $mediaInput['type'] = Media::TYPE_VIDEO;
+            $mediaInput['storage_type'] = Media::STORAGE_TYPE_YOUTUBE;
+            $mediaInput['source'] = $input['video'];
+            $mediaInput['status'] = 1;
+            $mediaInput['position'] = 0;
+            $media = Media::create($mediaInput);
 
-        // update media
-        $lesson->media()->sync($media->id);
+            // update media
+            $lesson->media()->sync($media->id);
+        }
+
 
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('store.products.edit', $product->slug);

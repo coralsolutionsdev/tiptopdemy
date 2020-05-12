@@ -62,11 +62,11 @@ class Group extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Lesson::class)->orderBy('position');
     }
     public function items()
     {
-        return $this->belongsToMany(Lesson::class);
+        return $this->belongsToMany(Lesson::class)->orderBy('position');
     }
 
     public function products()

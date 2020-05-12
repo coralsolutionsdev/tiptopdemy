@@ -59,7 +59,7 @@
                                         <tbody>
                                         @foreach ($set->attributes as $attribute)
                                             <tr class="row-click">
-                                                <td>{{$attribute->name}}</td>
+                                                <td class="align-middle">{{$attribute->name}}</td>
                                                 <td class="align-middle">{{ $attribute->default }}</td>
                                                 <td class="align-middle">{{ $attribute->position }}</td>
                                                 <td>

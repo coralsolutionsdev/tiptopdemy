@@ -73,7 +73,7 @@ class CategoryController extends Controller
         }
         Category::create($input);
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('categories.index');
+        return redirect()->route('store.categories.index');
     }
 
     /**
@@ -117,7 +117,7 @@ class CategoryController extends Controller
         $input = $request->only([ 'name', 'description', 'parent_id',
             'position', 'meta_title', 'meta_keywords', 'meta_description',
             'type', 'status', 'images', 'show_on_menu']);
-        $input['type'] = Category::TYPE_POST;
+        $input['type'] = Category::TYPE_PRODUCT;
         if (empty($input['position'])){
             $input['position'] = 0;
         }

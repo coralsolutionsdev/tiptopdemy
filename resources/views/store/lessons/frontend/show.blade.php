@@ -148,7 +148,7 @@
                             {{--here--}}
                             @if($media = $lesson->media)
                                 @foreach($media as $mediaItem)
-                                    <iframe width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/dxuKN6SNXyk'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                                    <iframe width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
                                 @endforeach
                             {{--here--}}
                             @endif

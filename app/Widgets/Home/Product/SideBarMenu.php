@@ -3,7 +3,9 @@
 namespace App\Widgets\Home\Product;
 
 use App\Category;
+use App\Product;
 use Arrilot\Widgets\AbstractWidget;
+use Spatie\Tags\Tag;
 
 class SideBarMenu extends AbstractWidget
 {
@@ -20,11 +22,18 @@ class SideBarMenu extends AbstractWidget
      */
     public function run()
     {
-        $tree_categories = Category::where('type', Category::TYPE_PRODUCT)->where('parent_id', 0)->get();
+        $config =  $this->config;
+//        $search_key = $config['search_key'];
+        $search_key = '';
+
+        $categories = Category::where('type', Category::TYPE_PRODUCT, 3)->where('parent_id', 0)->get();
+        $tags = Tag::where('type', 'product')->get();
 
         return view('widgets.home.product.side_bar_menu', [
             'config' => $this->config,
-            'tree_categories' => $tree_categories,
+            'categories' => $categories,
+            'tags' => $tags,
+            'search_key' => $search_key,
         ]);
     }
 }

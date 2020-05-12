@@ -2,22 +2,39 @@
 
 namespace App\Http\Controllers\Store;
 
-use App\StoreCategory;
+use App\Category;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
+    protected $breadcrumb;
+    protected $page_title;
+
+    public function __construct()
+    {
+        $this->page_title = 'Store Categories';
+        $this->breadcrumb = [
+            'Store' => '',
+            'categories' => '',
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        //
-        $categories = StoreCategory::latest()->get();
-        return view('store.categories.index', compact('categories'));
+        $page_title = __('main.Store Categories');
+        $breadcrumb = $this->breadcrumb;
+        $categoriesCollection =  $tree_categories = Category::where('type', Category::TYPE_PRODUCT)->where('parent_id',0)->get();
+        return view('store.categories.index', compact('categoriesCollection', 'page_title', 'breadcrumb'));
     }
 
     /**
@@ -27,9 +44,13 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
-        $pageTitle = 'Category Create';
-        return view('store.categories.create',compact('pageTitle'));
+        $page_title =  __('main.Store Categories') . ' - ' .__('main.Create');
+        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+                'Create' => ''
+            ];
+        $categories = ['0' => __('main.Please Select Category')] + Category::getRootCategories(Category::TYPE_PRODUCT)->pluck('name', 'id')->toArray();
+        return view('store.categories.create', compact('page_title', 'breadcrumb', 'categories'));
     }
 
     /**
@@ -40,9 +61,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $input = $request->input();
-        StoreCategory::create($input);
+        $input = $request->only([ 'name', 'description', 'parent_id',
+            'position', 'meta_title', 'meta_keywords', 'meta_description',
+            'type', 'status', 'images', 'show_on_menu']);
+        $input['type'] = Category::TYPE_PRODUCT;
+        if (empty($input['position'])){
+            $input['position'] = 0;
+        }
+        if (empty($input['status'])){
+            $input['status'] = 0;
+        }
+        Category::create($input);
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('categories.index');
     }
@@ -61,38 +90,43 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
-        $pageTitle = 'Category Create';
-        $category = StoreCategory::find($id);
-        return view('store.categories.create',compact('category','pageTitle'));
+        $page_title =  __('main.Store Categories') . ' - ' .__('main.Edit');
+        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+                'Create' => ''
+            ];
+        $categories = ['0' => 'No parent'] + Category::getRootCategories(Category::TYPE_PRODUCT)->pluck('name', 'id')->toArray();
+        return view('store.categories.create', compact('page_title', 'breadcrumb', 'categories', 'category'));
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param Category $category
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
-        $input = $request->input();
-        $category = StoreCategory::find($id);
-        if(!empty($input['status'])){
-            $status = 1;
-        }else{
-            $status = 0;
+        $input = $request->only([ 'name', 'description', 'parent_id',
+            'position', 'meta_title', 'meta_keywords', 'meta_description',
+            'type', 'status', 'images', 'show_on_menu']);
+        $input['type'] = Category::TYPE_POST;
+        if (empty($input['position'])){
+            $input['position'] = 0;
         }
-        $input['status'] = $status;
+        if (empty($input['status'])){
+            $input['status'] = 0;
+        }
         $category->update($input);
         session()->flash('success',trans('main._update_msg'));
-        return redirect()->route('categories.index');
+        return redirect()->route('store.categories.index');
     }
 
     /**

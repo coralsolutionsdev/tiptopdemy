@@ -68,7 +68,7 @@ return [
     | `dropzone_attributes` holds the public fields returned after a successful upload via DropzoneController
     |
     */
-    'attributes' => ['title', 'description', 'key', 'disk', 'filepath', 'group'],
+    'attributes' => ['title', 'description', 'key', 'disk', 'filepath', 'group', 'position'],
 
     'dropzone_attributes' => ['uuid', 'url', 'url_inline', 'filename', 'filetype', 'filesize', 'title', 'description', 'key', 'group'],
 

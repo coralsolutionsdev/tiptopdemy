@@ -21,6 +21,8 @@ return [
     'Institution Scopes' => 'Institution Scopes',
     'Directorates' => 'Directorates',
     'Academies' => 'Academies',
+    'Acceptable scopes' => 'Acceptable scopes',
+    'Scope options' => 'Scope options',
     // Modules
     'Modules' => 'Modules',
     'Blog' => 'Blog',

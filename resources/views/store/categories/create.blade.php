@@ -15,48 +15,42 @@
             <div class="col-lg-12">
                 <div class="card border-light">
                     <div class="card-body">
-                        <p>{{__('Basic input')}}</p>
+                        <p>{{__('main.Basic input')}}</p>
                         <hr>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Name')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Title')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::text('name', !empty($category) ? $category->name : null, ['class' => 'form-control', 'id' => 'name']) !!}
+                                {!! Form::text('name', !empty($category) ? $category->name : null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => __('main.Title')]) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Slug')}}</div>
-                            <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::text('slug', !empty($category) ? $category->slug : null, ['class' => 'form-control', 'id' => 'slug', 'readonly' => true]) !!}
-                            </div>
-                        </div>
-                        <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Description')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Description')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::textarea('description',  !empty($category) ? $category->description : null, ['class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Parent Category')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Parent Category')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::select('parent_id', $categories,  !empty($category) ? $category->parent_id : null, ['class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Position')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Position')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::text('position', (!empty($category)) ? $category->position : 0, ['class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Status')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Status')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 <input type="checkbox" name="status" class="toogle-switch" value="1" {{empty($category) || !empty($category->status) ? 'checked' : null}}>
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Show on menu')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Show on menu')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                <input type="checkbox" name="show_on_frontend" class="toogle-switch" value="1" {{empty($category) || !empty($category->show_on_frontend) ? 'checked' : null}}>
+                                <input type="checkbox" name="show_on_menu" class="toogle-switch" value="1" {{empty($category) || !empty($category->show_on_frontend) ? 'checked' : null}}>
                             </div>
                         </div>
 
@@ -64,22 +58,22 @@
                 </div>
                 <div class="card border-light">
                     <div class="card-body">
-                        <p>{{__('Meta input')}}</p>
+                        <p>{{__('main.Meta input')}}</p>
                         <hr>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Meta Title')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Meta Title')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::text('meta_title', !empty($category) ? $category->meta_title : null, ['class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Meta Keywords')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Meta Keywords')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::text('meta_keywords', !empty($category) ? $category->meta_keywords : null, ['class' => 'form-control']) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Meta Description')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Meta Description')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::textarea('meta_description', !empty($category) ? $category->meta_description : null, ['class' => 'form-control', 'rows' => '4']) !!}
                             </div>
@@ -89,7 +83,7 @@
             </div>
             {!! Form::close() !!}
         </div>
-            @if(!empty($category))
+        @if(!empty($category))
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-end">
@@ -101,8 +95,7 @@
                     </div>
                 </div>
             </div>
-            @endif
-
+        @endif
 
     </section>
 

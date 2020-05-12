@@ -74,6 +74,12 @@
         'An error appended during loading, please refresh the page.' => 'حدث خطأ اثناء التحميل, يرجى اعادة تحميل الصفحة.',
         'Report' => 'الإبلاغ عن المحتوى',
         'Remove' => 'حذف',
+        'Appearance' => 'المضهر',
+        'Color pattern' => 'نمط اللون',
+        'By' => 'بواسطة',
+
+
+
 
 
 
@@ -205,10 +211,70 @@
 		'_contact' => 'جهة إتصال',
 		'_subject' => 'الموضوع',
 
-	
+    // Store
+        'Store' => 'المتجر',
+        'Store Categories' => 'تصنيفات المتجر',
+        'Product' => 'المنتج',
+        'Products' => 'المنتجات',
+        'Product info' => 'بيانات المنتج',
+        'Product images' => 'صور المنتج',
+        'Type' => 'النوع',
+        'Quantity' => 'الكمية',
+        'Price' => 'السعر',
+        'SKU' => 'SKU كود',
+        'Attributes' => 'السمات',
+        'Product attributes' => 'سمات المنتج',
+        'Lessons' => 'الدروس',
+        'lessons' => 'دروس',
+        'Show list of categories' => 'أضهر قائمة الأقسام',
+        'Manage Stock' => 'إدارة الكمية المتوفرة',
+        'Units' => 'الوحدات',
+        'units' => 'وحدات',
+        'Add to cart' => 'أضف الى سلة المشتريات',
+        'Buy now' => 'إشتري الآن',
+        'This course includes' => 'هذه الدورة تحتويى على:',
+        'downloadable resources' => 'مصادر قابلة للتحميل',
+        'Full lifetime access' => 'امكانية الوصول مدى الحياة',
+        'Certificate of Completion' => 'شهادة اكمال الدورة',
+        'Showing products' => 'عرض المنتجات',
+        'Default Sort' => 'ترتيب افتراضي',
+        'Sort by name' => 'ترتيب حسب الإسم',
+        'Sort by position' => 'ترتيب حسب الموقع',
+        'Price low to high' => 'السعر من الأرخص الى الأغلى',
+        'Price high to low' => 'السعر من الأغلى الى الارخص',
+        'of' => 'من',
+
+
+        // lessons
+        'Add new Lesson' => 'أضف درس جديد',
+        'Add new Unit' => 'أضف وحدة جديدة',
+        'Store Lessons' => 'دروس المتجر',
+        'Presentations and Multimedia' => 'العروض التقديمية و الوسائط',
+        'video link' => 'رابط الفيديو',
+        'Lesson description' => 'وصف الدرس',
+        'There is no available lessons in this unit' => 'لا يوجد دروس متوفرة في هذه الوحدة',
+
+        // Form
+        'Quizzes' => 'الإختبارات',
+        'quizzes' => 'إختبارات',
+        'Add Quiz' => 'أضف إختبار',
+        'Quiz name' => 'إسم الإختبار',
+        'Quiz Type' => 'نوع الإختبار',
 
 
 
-		
-	];	
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ];
 ?>

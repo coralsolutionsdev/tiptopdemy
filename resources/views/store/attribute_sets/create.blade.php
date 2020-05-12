@@ -44,7 +44,7 @@
                                 <p>{{__('Attributes')}}</p>
                                 <hr>
                                 <div class="text-right" style="padding-bottom: 10px">
-                                    <a href="{{Route('store.attributes.create', $set->id)}}" class="btn btn-primary"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span> Add Attribute</span></a>
+                                    <a href="{{Route('store.attributes.create', $set->slug)}}" class="btn btn-primary"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span> Add Attribute</span></a>
                                 </div>
                                 <div class="form-group row col-lg-12 padding-0 margin-0">
                                     <table class="table table-striped">
@@ -69,11 +69,11 @@
                                                                 <a target="_blank" href="" class="btn btn-light disabled"><i class="fas fa-link" aria-hidden="true"></i></a>
                                                             </li>
                                                             <li class="">
-                                                                <a href="{{route('store.attributes.edit', [$set->id, $attribute->id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                                <a href="{{route('store.attributes.edit', [$set->slug, $attribute->slug])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
                                                             </li>
                                                             <li>
                                                                 <span id="{{$attribute->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-                                                                <form id="delete-form" method="post" action="{{route('store.attributes.destroy',[$set->id, $attribute->id])}}">
+                                                                <form id="delete-form" method="post" action="{{route('store.attributes.destroy',[$set->slug, $attribute->slug])}}">
                                                                     {{csrf_field()}}
                                                                     {{method_field('DELETE')}}
                                                                 </form>

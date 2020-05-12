@@ -30,12 +30,12 @@
     <section>
         {{--Page header--}}
         @include('manage.partials._page-header')
-{{--        style="background-color: var(--main-theme-color)"--}}
+        {{--        style="background-color: var(--main-theme-color)"--}}
         {{--List of items--}}
         <div>
             <div class="card border-light table-card">
                 <div class="card-body">
-                    {{drawCategoryTreeList($categoriesCollection, 'file-tree')}}
+                    {{drawCategoryTreeList($categoriesCollection, \App\Category::TYPE_PRODUCT, 'file-tree')}}
                 </div>
             </div>
         </div>

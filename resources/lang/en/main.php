@@ -67,6 +67,10 @@
         'Please Select Category' => 'Please Select Category',
         'Report' => 'Report',
         'Remove' => 'Remove',
+        'Appearance' => 'Appearance',
+        'Color pattern' => 'Color pattern',
+        'By' => 'By',
+
 
 
 
@@ -75,11 +79,6 @@
         'Meta Title' => 'Meta Title',
         'Meta Keywords' => 'Meta Keywords',
         'Meta Description' => 'Meta Description',
-
-
-
-
-
 
 
         // blog
@@ -167,8 +166,7 @@
 		'_home' => 'Home',	
 		'_about_us' => 'About Us',	
 		'_blog' => 'Blog',	
-		'_contact_us' => 'Contact US',	
-		'_login' => 'Login',	
+		'_login' => 'Login',
 		'_password' => 'Password',
 		'_confirm' => 'Confirm',
 		'_remember_me' => 'Remember Me',
@@ -186,7 +184,56 @@
 		'_contact' => 'contact',
 		'_subject' => 'Subject',
 
-		
+    // Store
+        'Store' => 'Store',
+        'Store Categories' => 'Store Categories',
+        'Product' => 'Product',
+        'Products' => 'Products',
+        'Product info' => 'Product info',
+        'Product images' => 'Product images',
+        'Type' => 'Type',
+        'Quantity' => 'Quantity',
+        'Price' => 'Price',
+        'SKU' => 'SKU',
+        'Attributes' => 'Attributes',
+        'Product attributes' => 'Product attributes',
+        'Lessons' => 'Lessons',
+        'lessons' => 'Lessons',
+        'Show list of categories' => 'Show list of categories',
+        'Manage Stock' => 'Manage Stock',
+        'units' => 'Units',
+        'Add to cart' => 'Add to cart',
+        'Buy now' => 'Buy now',
+        'This course includes' => 'This course includes',
+        'downloadable resources' => 'downloadable resources',
+        'Full lifetime access' => 'Full lifetime access',
+        'Certificate of Completion' => 'Certificate of Completion',
+        'Showing products' => 'Showing result',
+        'Default Sort' => 'Default Sort',
+        'Sort by name' => 'Sort by name',
+        'Sort by position' => 'Sort by position',
+        'Price low to high' => 'Price low to high',
+        'Price high to low' => 'Price high to low',
+        'of' => 'of',
 
-	];
+
+
+        // lessons
+        'Add new Lesson' => 'Add new Lesson',
+        'Add new Unit' => 'Add new Unit',
+        'Store Lessons' => 'Store Lessons',
+        'Presentations and Multimedia' => 'Presentations and Multimedia',
+        'video link' => 'video link',
+        'Lesson description' => 'Lesson description',
+        'Quizzes' => 'Quizzes',
+        'quizzes' => 'Quizzes',
+        'There is no available lessons in this unit' => 'There is no available lessons in this unit',
+
+    // Form
+        'Add Quiz' => 'Add Quiz',
+        'Quiz name' => 'Quiz name',
+        'Quiz Type' => 'Quiz Type',
+
+
+    ];
 ?>

@@ -23,18 +23,18 @@
 				<div class="uk-width-expand@m">
 					<div class="uk-grid-small uk-child-width-1-1@s uk-child-width-1-3@m" uk-grid style="margin-bottom: 10px">
 						<div class="uk-flex uk-flex-middle">
-							<p>Showing result 20 of 53</p>
+							<p>{{__('main.Showing products')}} {{$products->count()}} {{__('main.of')}} {{$products->count()}}</p>
 						</div>
 						<div></div>
 						<div class="" >
 							<form>
 									<div class="">
 										<select class="uk-select">
-											<option>Default Sort</option>
-											<option>Sort by name</option>
-											<option>Sort by position</option>
-											<option>Price low to high</option>
-											<option>Price high to low</option>
+											<option>{{__('main.Default Sort')}}</option>
+											<option>{{__('main.Sort by name')}}</option>
+											<option>{{__('main.Sort by position')}}</option>
+											<option>{{__('main.Price low to high')}}</option>
+											<option>{{__('main.Price high to low')}}</option>
 										</select>
 									</div>
 							</form>
@@ -45,17 +45,42 @@
 					<div>
 						<hr class="">
 					</div>
-					<div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid uk-height-match="target: > div > .uk-card">
+					<div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid uk-height-match="target: > div > .uk-card">
 						@foreach($products as $product)
 								<div>
 									<div class="uk-card uk-card-default uk-card-body uk-padding-small product-card">
+										<div class="uk-grid-small uk-child-width-1-1@s uk-text-center" uk-grid>
+											<a href="{{route('store.product.show', $product->slug)}}">
+											<div style="max-height: 250px; overflow: hidden">
+												<div class="uk-text-center">
+													<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
+														<img src="{{$product->getProductPrimaryImage()}}" alt="">
+														<img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="">
+													</div>
+												</div>
+											</div>
+											</a>
+											<div>
+												<a href="{{route('store.product.show', $product->slug)}}">
+												<div>
+													<div style="font-size: 22px">{{$product->name}}</div>
+													<div style="font-size: 18px" class="uk-text-primary">$ {{$product->price}}</div>
+													<br>
+												</div>
+												</a>
+												<div>
+													<button class="uk-button uk-button-primary"><span uk-icon="icon: cart"></span> {{__('main.Add to cart')}}</button>
+												</div>
+											</div>
+										</div>
+										@if(false)
 										<div class="uk-text-center">
 											<a href="{{route('store.product.show', $product->slug)}}">
 												<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
-													<img class="product-image" src="{{$product->getProductPrimaryImage()}}" alt="" style="width: 100%; background-color: green; object-fit: cover;">
-													@if(!empty($product->getProductAlternativeImage()))
-														<img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="" style="width: 100%; background-color: green; object-fit: cover;">
-													@endif
+													<img class="product-image" src="{{$product->getProductPrimaryImage()}}" alt="">
+{{--													@if(!empty($product->getProductAlternativeImage()))--}}
+{{--														<img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="" style="width: 100%; background-color: green; object-fit: cover;">--}}
+{{--													@endif--}}
 												</div>
 											</a>
 										</div>
@@ -78,33 +103,14 @@
 												<span class="uk-icon-button uk-margin-small-right" uk-icon="plus"></span>
 											</div>
 										</div>
+										@endif
+
 									</div>
 								</div>
 						@endforeach
 					</div>
 
 					{{-- product cards --}}
-{{--					@forelse($products as $product)--}}
-{{--					<div class="uk-child-width-1-2@m" uk-grid>--}}
-{{--						<div>--}}
-{{--							<div class="uk-card uk-card-clear">--}}
-{{--								product--}}
-
-{{--							</div>--}}
-{{--						</div>--}}
-{{--					</div>--}}
-{{--                    @empty--}}
-{{--                        <div class="uk-child-width-1-1@m" uk-grid>--}}
-{{--                            <div>--}}
-{{--                                <div class="uk-card uk-card-clear">--}}
-{{--                                    <div class="uk-card-body uk-padding uk-text-center uk-placeholder">--}}
-{{--										<span class="uk-text-muted" uk-icon="icon: ban; ratio: 3"></span>--}}
-{{--										<h5 class="uk-margin-small">No records found</h5>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--					@endforelse--}}
 				</div>
 			</div>
 		</div>

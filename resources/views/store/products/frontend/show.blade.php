@@ -15,7 +15,7 @@
                                 <ul class="uk-slideshow-items" style="height: 500px">
                                     @foreach($product->getImages() as $image)
                                     <li>
-                                        <img class="product-image" src="{{asset_image($image->path)}}" alt="" uk-cover>
+                                        <img class="product-image" src="{{asset($image->url)}}" alt="" uk-cover>
                                     </li>
                                     @endforeach
                                 </ul>
@@ -23,7 +23,7 @@
                                 <div class="uk-position-small uk-flex uk-flex-center">
                                     <ul class="uk-thumbnav">
                                         @foreach($product->getImages() as $key => $image)
-                                            <li uk-slideshow-item="{{$key}}"><a href="#" class="product-image-thumb"><img src="{{asset_image($image->path)}}" width="100" alt=""></a></li>
+                                            <li uk-slideshow-item="{{$key}}"><a href="#" class="product-image-thumb"><img src="{{asset($image->url)}}" width="100" alt=""></a></li>
                                         @endforeach
                                     </ul>
                                 </div>

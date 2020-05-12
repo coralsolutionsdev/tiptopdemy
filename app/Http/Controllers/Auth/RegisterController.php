@@ -47,7 +47,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['guest','active']);
+        $this->middleware(['guest','active'], ['except' => ['getInstitutionScopeFields','getInstitutionScopeFieldOptions', 'getInstitutionScopeFieldLevels', 'getCountryDirectorates']]);
     }
 
     /**

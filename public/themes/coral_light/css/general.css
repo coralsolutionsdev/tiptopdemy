@@ -11,6 +11,9 @@ body{
     font-size: 13px;
     background-color: #F3F5F9;
 }
+.color-white{
+    color: #FFFFFF !important;
+}
 .site-name{
     font-family: 'Tajawal', sans-serif;
     font-weight: bold;
@@ -72,8 +75,25 @@ Form
 .disable-number-row input[type=number] {
     -moz-appearance: textfield !important;
 }
-/*Spinner*/
-
+/*images*/
+.thumbnail {
+    position: relative;
+    overflow: hidden;
+}
+.thumbnail img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    width: auto;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+.thumbnail img.portrait {
+    width: 100%;
+    height: auto;
+}
 
 /**
  end
@@ -147,6 +167,11 @@ p{
 }
 /*Blog*/
 .uk-secondary-bg{
+    background-color: var(--theme-secondary-bg-color);
+    border: none !important;
+    box-shadow: none;
+}
+.uk-secondary-bg-hover:hover{
     background-color: var(--theme-secondary-bg-color);
     border: none !important;
     box-shadow: none;
@@ -290,6 +315,26 @@ a:hover{
     pointer-events: none;
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/*
+Lessons
+ */
+.product-header-body p, .product-header-body h3,  .product-header-body h4{
+    color: white !important;
+}
+.product-header-body .product-tags a{
+    background-color: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid white;
+}
+.product-header-body .product-tags a:hover{
+    background-color: rgba(255,255,255,1);
+    color: var(--theme-primary-color);
+    border: 1px solid white;
+}
+.nav-col:hover{
+    cursor: pointer;
 }
 
 /*

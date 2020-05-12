@@ -96,7 +96,8 @@
                     </div>
                 </div>
             </div>
-        </div> <div class="col-lg-12">
+        </div>
+        <div class="col-lg-12">
             <div class="card border-light">
                 <div class="card-body">
                     <p>{{__('main.Attachments')}}</p>

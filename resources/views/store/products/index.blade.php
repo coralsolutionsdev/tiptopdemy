@@ -16,25 +16,24 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col" width="30">{{__('Image')}}</th>
-                            <th scope="col">{{__('Product')}}</th>
-                            <th scope="col" class="text-center">{{__('Type')}}</th>
-                            <th scope="col" class="text-center">{{__('Quantity')}}</th>
-                            <th scope="col" class="text-center">{{__('Price')}}</th>
-                            <th scope="col" class="text-center">{{__('SKU')}}</th>
-                            <th scope="col" class="text-center">{{__('Status')}}</th>
-                            <th scope="col" class="text-center" width="200">{{__('Actions')}}</th>
+                            <th scope="col" width="30">{{__('main.Cover image')}}</th>
+                            <th scope="col">{{__('main.Product')}}</th>
+                            <th scope="col" class="text-center">{{__('main.Type')}}</th>
+                            <th scope="col" class="text-center">{{__('main.Quantity')}}</th>
+                            <th scope="col" class="text-center">{{__('main.Price')}}</th>
+                            <th scope="col" class="text-center">{{__('main.SKU')}}</th>
+                            <th scope="col" class="text-center">{{__('main.Status')}}</th>
+                            <th scope="col" class="text-center" width="200">{{__('main.Actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($products as $product)
                             <tr>
-                                <td style="width: 120px">
+                                <td  class="text-center align-middle" style="width: 120px">
                                     <img src="{{$product->getProductPrimaryImage()}}" style="width: 100%">
                                 </td>
-                                <td>
-
-                                    <p><a target="_blank" href="{{route('store.products.show', $product->slug)}}">{{ucfirst($product->name)}}</a></p>
+                                <td  class="align-middle">
+                                    <p><a target="_blank" href="{{route('store.product.show', $product->slug)}}">{{ucfirst($product->name)}}</a></p>
                                     <p class="text-muted"><small>{{ucfirst($product->user->name)}} | {{$product->created_at->toFormattedDateString()}}</small></p>
                                     <p>{{substr(strip_tags($product->description),0,50)}} {{strlen($product->description) > 50 ? "...": "" }}</p>
                                 </td>
@@ -43,14 +42,14 @@
                                 <td class="text-center align-middle">{{ucfirst($product->price)}}</td>
                                 <td class="text-center align-middle">{{ucfirst($product->sku)}}</td>
                                 <td class="text-center align-middle">{!! $product->getStatus() !!}</td>
-                                <td class="d-flex align-items-center">
-                                    <div class="action_btn text-right" style="padding-top: 10px">
+                                <td class="text-center align-middle">
+                                    <div class="action_btn text-right d-flex align-items-center" style="padding-top: 25px">
                                         <ul>
                                             <li class="">
-                                                <a target="_blank" href="{{route('store.products.show', $product->slug)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
+                                                <a target="_blank" href="{{route('store.product.show', $product->slug)}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>
                                             </li>
                                             <li class="">
-                                                <a href="{{route('store.products.edit', $product->id)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                <a href="{{route('store.products.edit', $product->slug)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
                                             </li>
                                             <li class="">
                                                 <span id="{{$product->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>

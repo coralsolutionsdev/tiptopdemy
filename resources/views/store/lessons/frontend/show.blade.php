@@ -107,13 +107,16 @@
                             <div class="uk-margin-small">
                                 <ul uk-accordion="multiple: true">
                                     @php
-                                    $lessonCount = 1;
+                                    $lessonCount = 0;
                                     @endphp
                                     @foreach($product->groups as $id => $group)
                                     <li class="{{$id == 0 ? 'uk-open' : ''}}" style="margin:0px 0px 10px 0px">
                                         <a class="uk-accordion-title uk-secondary-bg" style="padding: 10px 20px" href="#">{{sprintf('%02d', $id+1)}} | {{$group->title}}</a>
                                         <div class="uk-accordion-content">
                                             @forelse($group->items as $itemId => $item)
+                                                @php
+                                                    $lessonCount++;
+                                                @endphp
                                                 <a href="{{route('store.lesson.show', [$product->slug, $item->slug])}}">
                                                 <div class="uk-secondary-bg-hover">
                                                     <div class="uk-grid-small uk-padding-small" uk-grid>
@@ -121,7 +124,7 @@
                                                             @if($item->id == $lesson->id)
                                                                 <span class="uk-border-circle uk-secondary-bg" style=" padding: 0px; color: {{$product->getMainColorPattern()}}"><span uk-icon="icon:  play-circle; ratio: 2"></span></span>
                                                             @else
-                                                                <span class="uk-border-circle uk-secondary-bg" style=" padding: 10px 12px">{{sprintf('%02d', $lessonCount++)}}</span>
+                                                                <span class="uk-border-circle uk-secondary-bg" style=" padding: 10px 12px">{{sprintf('%02d', $lessonCount)}}</span>
                                                             @endif
                                                         </div>
                                                         <div class="uk-width-4-5@s">

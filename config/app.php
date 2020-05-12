@@ -193,7 +193,7 @@ return [
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Cog\Laravel\Love\LoveServiceProvider::class,
         Cog\Laravel\Love\LoveEventServiceProvider::class,
-        Vinkla\Hashids\Facades\Hashids::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
 
     ],
 
@@ -250,7 +250,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Countries' => Webpatser\Countries\CountriesFacade::class,
-
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
     ],
 

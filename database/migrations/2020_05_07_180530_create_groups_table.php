@@ -23,6 +23,7 @@ class CreateGroupsTable extends Migration
             $table->integer('position')->nullable();
             $table->integer('type')->nullable();
             $table->string('owner_type');
+            $table->integer('rate')->nullable();
             $table->unsignedBigInteger('owner_id')->index();
             $table->unsignedBigInteger('color_pattern_id')->nullable();
             $table->foreign('color_pattern_id')->references('id')->on('color_patterns')->onDelete('cascade');

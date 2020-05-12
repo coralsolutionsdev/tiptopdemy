@@ -236,6 +236,14 @@
         'downloadable resources' => 'مصادر قابلة للتحميل',
         'Full lifetime access' => 'امكانية الوصول مدى الحياة',
         'Certificate of Completion' => 'شهادة اكمال الدورة',
+        'Showing products' => 'عرض المنتجات',
+        'Default Sort' => 'ترتيب افتراضي',
+        'Sort by name' => 'ترتيب حسب الإسم',
+        'Sort by position' => 'ترتيب حسب الموقع',
+        'Price low to high' => 'السعر من الأرخص الى الأغلى',
+        'Price high to low' => 'السعر من الأغلى الى الارخص',
+        'of' => 'من',
+
 
         // lessons
         'Add new Lesson' => 'أضف درس جديد',

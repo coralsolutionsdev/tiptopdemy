@@ -208,6 +208,13 @@
         'downloadable resources' => 'downloadable resources',
         'Full lifetime access' => 'Full lifetime access',
         'Certificate of Completion' => 'Certificate of Completion',
+        'Showing products' => 'Showing result',
+        'Default Sort' => 'Default Sort',
+        'Sort by name' => 'Sort by name',
+        'Sort by position' => 'Sort by position',
+        'Price low to high' => 'Price low to high',
+        'Price high to low' => 'Price high to low',
+        'of' => 'of',
 
 
 

@@ -23,18 +23,18 @@
 				<div class="uk-width-expand@m">
 					<div class="uk-grid-small uk-child-width-1-1@s uk-child-width-1-3@m" uk-grid style="margin-bottom: 10px">
 						<div class="uk-flex uk-flex-middle">
-							<p>Showing result 20 of 53</p>
+							<p>{{__('main.Showing products')}} {{$products->count()}} {{__('main.of')}} {{$products->count()}}</p>
 						</div>
 						<div></div>
 						<div class="" >
 							<form>
 									<div class="">
 										<select class="uk-select">
-											<option>Default Sort</option>
-											<option>Sort by name</option>
-											<option>Sort by position</option>
-											<option>Price low to high</option>
-											<option>Price high to low</option>
+											<option>{{__('main.Default Sort')}}</option>
+											<option>{{__('main.Sort by name')}}</option>
+											<option>{{__('main.Sort by position')}}</option>
+											<option>{{__('main.Price low to high')}}</option>
+											<option>{{__('main.Price high to low')}}</option>
 										</select>
 									</div>
 							</form>

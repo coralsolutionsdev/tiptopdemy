@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\ProductAttributeSet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class ProductAttributeSetController extends Controller
 {
@@ -22,7 +23,7 @@ class ProductAttributeSetController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -35,7 +36,7 @@ class ProductAttributeSetController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -60,15 +61,15 @@ class ProductAttributeSetController extends Controller
             $input['position'] = 0;
         }
         $set = ProductAttributeSet::create($input);
-        return redirect()->route('store.sets.edit', $set->id);
-
+        session()->flash('success',trans('main._success_msg'));
+        return redirect()->route('store.sets.edit', $set->slug);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -92,20 +93,27 @@ class ProductAttributeSetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param ProductAttributeSet $set
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ProductAttributeSet $set)
     {
-        //
+        $input = $request->only($set->getFillable());
+        //Default values
+        if (empty($input['position'])) {
+            $input['position'] = 0;
+        }
+        $set->update($input);
+        session()->flash('success',__('Updated Successfully'));
+        return redirect()->route('store.sets.edit', $set->slug);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

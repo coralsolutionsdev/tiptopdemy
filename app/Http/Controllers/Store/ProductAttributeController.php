@@ -90,7 +90,7 @@ class ProductAttributeController extends Controller
         }
 
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('store.sets.edit', $set->id);
+        return redirect()->route('store.sets.edit', $set->slug);
     }
 
     /**
@@ -185,7 +185,7 @@ class ProductAttributeController extends Controller
         }
         $attribute->fill($input)->save();
         session()->flash('success', __('updated successfully'));
-        return redirect()->route('store.sets.edit', $set->id);
+        return redirect()->route('store.sets.edit', $set->slug);
     }
 
     /**

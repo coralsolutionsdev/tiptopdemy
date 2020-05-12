@@ -96,7 +96,6 @@
             return false;
         }
         var delete_form = item.parent().find('#delete-form');
-        console.log(delete_form.attr('id'));
         delete_form.submit();
     });
 </script>

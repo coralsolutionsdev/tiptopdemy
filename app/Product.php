@@ -2,15 +2,26 @@
 
 namespace App;
 
+use App\Modules\ColorPattern\ColorPattern;
+use App\Modules\ColorPattern\HasColorPattern;
+use App\Modules\Course\Lesson;
+use App\Modules\Group\HasGroup;
+use Bnb\Laravel\Attachments\HasAttachment;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Tags\HasTags;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 
-class Product extends Model
+class Product extends Model implements ReactableContract
 {
 
     use Sluggable;
     use HasTags;
+    use HasAttachment;
+    use HasGroup;
+    use HasColorPattern;
+    use Reactable;
 
 
     protected $fillable = [
@@ -19,16 +30,27 @@ class Product extends Model
         'special_price', 'special_price_from', 'special_price_to', 'status',
         'qr_path', 'position', 'meta_title', 'meta_keywords',
         'meta_description', 'images', 'product_type_id', 'sku',
-        'user_id'
+        'user_id',
+        'country_id',
+        'directorate_id',
+        'scope_id',
+        'field_id',
+        'field_option_id',
+        'level',
+        'color_pattern_id',
+        'creator_id',
+        'editor_id',
     ];
 
     const STATUS_AVAILABLE = 1;
     const STATUS_OUT_OF_STOCK = 2;
     const STATUS_DISABLED = 3;
+    const STATUS_AVAILABLE_FOR_INSTITUTIONS = 4;
     const STATUS_ARRAY = [
-        self::STATUS_AVAILABLE    => 'In Stock',
+        self::STATUS_AVAILABLE_FOR_INSTITUTIONS     => 'Available for Institutions',
+        self::STATUS_AVAILABLE    => 'Available for All',
         self::STATUS_OUT_OF_STOCK => 'Out of Stock',
-        self::STATUS_DISABLED     => 'Hidden'
+        self::STATUS_DISABLED     => 'Hidden',
     ];
 
     /**
@@ -165,7 +187,8 @@ class Product extends Model
      */
     public function getImages()
     {
-        return ProductImage::where('product_id', $this->id)->orderBy('position', 'asc')->get();
+        return $this->attachments()->where('group', 'product_image')->orderBy('position')->get();
+
     }
 
     /**
@@ -179,10 +202,10 @@ class Product extends Model
         if (!empty($images)){
             $image = $images->first();
             if (!empty($image)){
-                $path = $image->path;
+                $path = $image->url;
             }
         }
-        return getImageURL($path);
+        return $path;
     }
     /**
      * @return string
@@ -192,10 +215,12 @@ class Product extends Model
         $path =  null;
         $images = $this->getImages();
         if (!empty($images)){
-            $image = $images->get(1); // get second image
-            $path = $image->path;
+            $image = $images->get(1);
+            if (!empty($image)){
+                $path = $image->url;
+            }
         }
-        return getImageURL($path);
+        return $path;
     }
     /**
      * Get the array list of this product tags
@@ -216,6 +241,10 @@ class Product extends Model
             return $this->attributes()->where('type',$type)->get();
         }
         return $this->attributes();
+    }
+    public function getColorPattern()
+    {
+        return ColorPattern::find($this->color_pattern_id);
     }
 
     /*
@@ -251,6 +280,18 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany('App\Category');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function groups()
+    {
+        return $this->hasMany('App\Modules\Group\Group', 'owner_id')->where('owner_type', $this->getClassName());
+    }
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'product_id');
     }
 
     /**
@@ -299,6 +340,6 @@ class Product extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User','user_id');
+        return $this->belongsTo('App\User','creator_id');
     }
 }

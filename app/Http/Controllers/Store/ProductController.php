@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\Category;
 use App\GalleryImage;
+use App\Modules\ColorPattern\ColorPattern;
 use App\Product;
 use App\ProductImage;
 use App\ProductType;
@@ -39,7 +40,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $page_title = $this->page_title;
+        $page_title = __('main.Products');
         $breadcrumb = $this->breadcrumb;
         $products = Product::latest()->paginate(15);
         return view('store.products.index', compact('page_title', 'breadcrumb', 'products'));
@@ -52,8 +53,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $page_title = $this->page_title;
+        $page_title =  trans('main.Products') . ' - ' .__('main.Create');
         $breadcrumb = $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+            __('main.create') => ''
+        ];
         $types = ProductType::pluck('name', 'id')->toArray();
         $visibility = Product::STATUS_ARRAY;
 //        $categories = Category::getRootProductCategories()->pluck('name', 'id');
@@ -61,8 +65,9 @@ class ProductController extends Controller
         $selectedCategories = array();
         $tags = Tag::getWithType('product')->pluck('name', 'name');
         $selectedTags = array();
+        $colorPatterns = ColorPattern::where('status', 1)->get();
 //        $categories = ['0' => 'No parent'] + Category::getRootProductCategories()->pluck('name', 'id')->toArray();
-        return view('store.products.create', compact('page_title', 'breadcrumb', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags'));
+        return view('store.products.create', compact('page_title', 'breadcrumb', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns'));
     }
 
     /**
@@ -72,10 +77,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-
         if (!empty($input['sku'])) {
             if (Product::where('sku', $input['sku'])->count()) {
-//                flash()->error('This SKU is already in use! Please use another SKU instead.');
                 return back()->withInput();
             }
         }
@@ -84,7 +87,8 @@ class ProductController extends Controller
         if (empty($input['manage_stock'])) {
             $input['manage_stock'] = 0;
         }
-        $input['user_id'] = Auth::user()->id;
+        $input['creator_id'] = getAuthUser()->id;
+        $input['editor_id']  = getAuthUser()->id;
         $product =  Product::create($input);
 
         // update Category
@@ -96,16 +100,24 @@ class ProductController extends Controller
             $images = $request->file('new_image');
             foreach ($images as $key => $image) {
                 # code...
-                $new_product_image =  null;
-                $location =  config('baseapp.product_image_storage_path');
-                $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-                $new_product_image['path'] = $uploaded_image;
-                $new_product_image['product_id'] = $product->id;
-                $new_product_image['code'] = $input['new_image_code'][$key];
-                $new_product_image['description'] = $input['new_image_description'][$key];
-                $new_product_image['position'] = $input['new_image_position'][$key];
-                ProductImage::create($new_product_image);
-
+                if (false){
+                    $new_product_image =  null;
+                    $location =  config('baseapp.product_image_storage_path');
+                    $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
+                    $new_product_image['path'] = $uploaded_image;
+                    $new_product_image['product_id'] = $product->id;
+                    $new_product_image['code'] = $input['new_image_code'][$key];
+                    $new_product_image['description'] = $input['new_image_description'][$key];
+                    $new_product_image['position'] = $input['new_image_position'][$key];
+                    ProductImage::create($new_product_image);
+                } // to be removed later
+                $product->attach($image, [
+                    'disk' => 'local',
+                    'title' => $input['new_image_description'][$key],
+                    'description' => $input['new_image_description'][$key],
+                    'position' => $input['new_image_position'][$key],
+                    'group' => 'product_image',
+                ]);
             }
         }
         // update tags
@@ -124,18 +136,19 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-
-        $page_title = $this->page_title;
+        $page_title =  trans('main.Products') . ' - ' .__('main.Edit');
         $breadcrumb = $this->breadcrumb;
+        $breadcrumb = $breadcrumb + [
+            __('main.Edit') => ''
+        ];
         $types = ProductType::pluck('name', 'id')->toArray();
         $visibility = Product::STATUS_ARRAY;
-//        $categories = Category::getRootProductCategories()->pluck('name', 'id');
         $tree_categories = Category::where('type', Category::TYPE_PRODUCT)->where('parent_id', 0)->get();
         $selectedCategories = $product->categories()->pluck('id')->toArray();
         $tags = Tag::getWithType('product')->pluck('name', 'name');
         $selectedTags = $product->getTags();
-//        $categories = ['0' => 'No parent'] + Category::getRootProductCategories()->pluck('name', 'id')->toArray();
-        return view('store.products.create', compact('page_title', 'breadcrumb', 'product', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags'));
+        $colorPatterns = ColorPattern::where('status', 1)->get();
+        return view('store.products.create', compact('page_title', 'breadcrumb', 'product', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns'));
     }
 
     /**
@@ -148,7 +161,6 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $input = $request->all();
-
         if (!empty($input['sku'])) {
             if (Product::where('sku', $input['sku'])->where('id', '<>', $product->id)->count()) {
 //                flash()->error('This SKU is already in use! Please use another SKU instead.');
@@ -156,11 +168,10 @@ class ProductController extends Controller
             }
         }
         // TODO: created by
-
         if (empty($input['manage_stock'])) {
             $input['manage_stock'] = 0;
         }
-
+        $input['editor_id']  = getAuthUser()->id;
         // update slug
         if ($product->name != $request->input('name')){
             $slug = SlugService::createSlug(Product::class, 'slug', $request->input('name'), ['unique' => true]);
@@ -184,44 +195,34 @@ class ProductController extends Controller
 
         // images update
         if (!empty($input['image_code'] )){
-            foreach ($input['image_code'] as $key => $image){
-                $productImage =  null;
-                $productImage = ProductImage::find($key);
-                if (!empty($productImage)){
-                    $productImage->description = $input['image_description'][$key];
-                    $productImage->position = $input['image_position'][$key] ? : 0;
-                    $productImage->save();
-                }
+            foreach ($input['image_code'] as $id => $key){
+                $item = $product->attachments()->where('key', $key)->first();
+                $item->title = $input['image_description'][$id];
+                $item->description = $input['image_description'][$id];
+                $item->position = $input['image_position'][$id];
+                $item->save();
             }
         }
-
 
         // upload new images
         if ($request->hasFile('new_image')) {
             $images = $request->file('new_image');
             foreach ($images as $key => $image) {
                 # code...
-                $new_product_image =  null;
-                $location =  config('baseapp.product_image_storage_path');
-                $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-                $new_product_image['path'] = $uploaded_image;
-                $new_product_image['product_id'] = $product->id;
-                $new_product_image['code'] = $input['new_image_code'][$key];
-                $new_product_image['description'] = $input['new_image_description'][$key];
-                $new_product_image['position'] = $input['new_image_position'][$key];
-                ProductImage::create($new_product_image);
-
+                $product->attach($image, [
+                    'disk' => 'local',
+                    'title' => $input['new_image_description'][$key],
+                    'description' => $input['new_image_description'][$key],
+                    'position' => $input['new_image_position'][$key],
+                    'group' => 'product_image',
+                ]);
             }
         }
         // remove images
         if (!empty($input['image_deleted'])){
-            foreach ($input['image_deleted'] as $key => $deletedImage){
-                $productImage =  null;
-                $productImage = ProductImage::find($deletedImage);
-                if (!empty($productImage)){
-                    FileAssetManagerService::ImageDestroy($productImage->path);
-                    $productImage->delete();
-                }
+            foreach ($input['image_deleted'] as $id => $key){
+                $item = $product->attachments()->where('key', $key)->first();
+                $item->delete();
             }
         }
         // update tags
@@ -281,24 +282,24 @@ class ProductController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $products =  Product::where('status', Product::STATUS_AVAILABLE)->get();
+        $products =  Product::where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->get();
         return view('store.products.frontend.index', compact('products','page_title','breadcrumb'));
     }
 
     /**
      * Display the specified resource.
-     * @param $slug
+     * @param Product $product
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|View
      */
-    public function show($slug)
+    public function show(Product $product)
     {
-        $product = Product::where('slug', $slug)->first();
-
         $page_title =  $product->name;
         $breadcrumb =  $this->breadcrumb;
-
-        $products =  Product::where('status', Product::STATUS_AVAILABLE)->get();
-        return view('store.products.frontend.show', compact('product','page_title','breadcrumb'));
-
-
+        $firstLesson =  $product->lessons->first();
+        if (!empty($firstLesson)){
+            return redirect()->route('store.lesson.show', [$product->slug, $firstLesson->slug]);
+        }else{
+            return view('store.products.frontend.show', compact('product','page_title','breadcrumb'));
+        }
     }
 }

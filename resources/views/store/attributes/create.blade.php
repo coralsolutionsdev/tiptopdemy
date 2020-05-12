@@ -6,9 +6,9 @@
 @section('content')
     <section>
         @if(!empty($attribute))
-            {!! Form::open(['url' => route('store.attributes.update', [$set->id, $attribute->id]),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+            {!! Form::open(['url' => route('store.attributes.update', [$set->slug, $attribute->id]),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @else
-            {!! Form::open(['url' => route('store.attributes.store', $set->id),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+            {!! Form::open(['url' => route('store.attributes.store', $set->slug),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
         @include('manage.partials._page-header')
         <div class="form-panel row">

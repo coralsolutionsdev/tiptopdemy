@@ -1,0 +1,20 @@
+models:
+  Modules\Group\Group:
+    hash_id: string
+    title: string:400
+    slug: slug:400
+    description: nullable text
+    ancestor_id: id foreign:lists.id
+    position: nullable integer
+    type: nullable integer
+    owner_type: string
+    owner_id: id index
+    color_id: id foreign:color_patterns.id
+    status: tinyInteger
+    creator_id: id foreign:users.id
+    editor_id: id foreign:users.id
+    relationships:
+      hasMany: Lesson
+      belongsToMany: Product, User
+
+

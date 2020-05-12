@@ -1,0 +1,20 @@
+created:
+    - database/migrations/2020_05_07_180530_create_groups_table.php
+    - database/migrations/2020_05_07_180530_create_group_product_table.php
+    - database/migrations/2020_05_07_180530_create_group_user_table.php
+    - app/Modules/Group/Group.php
+    - database/factories/Modules/Group/GroupFactory.php
+models:
+    Modules.ColorOption: { title: 'string:400', content: longtext, published_at: 'nullable timestamp' }
+    Modules/ColorOption: { title: 'string:400', content: longtext, published_at: 'nullable timestamp' }
+    Modules/ColorOption/ColorOption: { title: 'string:400', colors: text, angle: 'nullable integer', content: longtext, user_id: 'id:user', status: tinyInteger }
+    Modules/ColorPattern/ColorPattern: { title: 'string:400', description: 'nullable text', colors: 'nullable text', angle: 'nullable integer', status: tinyInteger, position: 'nullable integer', creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id' }
+    Modules/Media/Media: { title: 'string:400', type: integer, storage_type: integer, source: 'string:400', status: tinyInteger, position: 'nullable integer', creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id' }
+    Modules/Course/Unit: { title: 'string:400', description: 'nullable text', ancestor_id: 'id:unit', product_id: 'id foreign:products.id', status: tinyInteger, position: 'nullable integer', creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id' }
+    Modules/Course/Lesson: { title: 'string:400', description: 'nullable text', type: integer, unit_id: 'id foreign:units.id', status: tinyInteger, position: 'nullable integer', creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id' }
+    Modules/Form/Form: { title: 'string:400', description: 'nullable text', version: integer, master_id: 'id:form', ancestor_id: 'id:form', submit_route: 'nullable text', type: 'nullable integer', status: tinyInteger, position: 'nullable integer', structure: longtext, creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id', start_at: 'nullable timestamp', expire_at: 'nullable timestamp' }
+    Modules/Form/Respone: { title: 'string:400', description: 'nullable text', colors: text, angle: 'nullable integer', structure: longtext, status: tinyInteger, position: 'nullable integer', creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id', softdeletes: softDeletes }
+    List: { hash_id: string, title: 'string:400', slug: 'slug:400', description: 'nullable text', ancestor_id: 'id foreign:lists.id', position: 'nullable integer', type: 'nullable integer', owner_type: string, owner_id: 'id index', color_id: 'id foreign:color_patterns.id', status: tinyInteger, creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id', relationships: { hasMany: Lesson, belongsToMany: 'Product, User' } }
+    Modules\List\List: { hash_id: string, title: 'string:400', slug: 'slug:400', description: 'nullable text', ancestor_id: 'id foreign:lists.id', position: 'nullable integer', type: 'nullable integer', owner_type: string, owner_id: 'id index', color_id: 'id foreign:color_patterns.id', status: tinyInteger, creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id', relationships: { hasMany: Lesson, belongsToMany: 'Product, User' } }
+    Modules\para\para: { hash_id: string, title: 'string:400', slug: 'slug:400', description: 'nullable text', ancestor_id: 'id foreign:lists.id', position: 'nullable integer', type: 'nullable integer', owner_type: string, owner_id: 'id index', color_id: 'id foreign:color_patterns.id', status: tinyInteger, creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id', relationships: { hasMany: Lesson, belongsToMany: 'Product, User' } }
+    Modules\Group\Group: { hash_id: string, title: 'string:400', slug: 'slug:400', description: 'nullable text', ancestor_id: 'id foreign:lists.id', position: 'nullable integer', type: 'nullable integer', owner_type: string, owner_id: 'id index', color_id: 'id foreign:color_patterns.id', status: tinyInteger, creator_id: 'id foreign:users.id', editor_id: 'id foreign:users.id', relationships: { hasMany: Lesson, belongsToMany: 'Product, User' } }

@@ -57,6 +57,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
             'Whoops\\' => 7,
             'Webmozart\\Assert\\' => 17,
         ),
+        'V' => 
+        array (
+            'Vinkla\\Hashids\\' => 15,
+        ),
         'T' => 
         array (
             'Traitor\\' => 8,
@@ -149,12 +153,15 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
             'Http\\Promise\\' => 13,
             'Http\\Client\\' => 12,
             'Http\\Adapter\\Guzzle6\\' => 21,
+            'Hashids\\' => 8,
+            'Haruncpi\\LaravelIdGenerator\\' => 28,
         ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'GrahamCampbell\\Manager\\' => 23,
         ),
         'F' => 
         array (
@@ -221,6 +228,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Vinkla\\Hashids\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vinkla/hashids/src',
         ),
         'Traitor\\' => 
         array (
@@ -464,6 +475,14 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         array (
             0 => __DIR__ . '/..' . '/php-http/guzzle6-adapter/src',
         ),
+        'Hashids\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/hashids/hashids/src',
+        ),
+        'Haruncpi\\LaravelIdGenerator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/haruncpi/laravel-id-generator/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -475,6 +494,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'GrahamCampbell\\Manager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/graham-campbell/manager/src',
         ),
         'Faker\\' => 
         array (
@@ -599,6 +622,8 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'AddLoveReactantIdToBlogCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_180557_add_love_reactant_id_to_blog_comments_table.php',
         'AddLoveReactantIdToBlogPostsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_180945_add_love_reactant_id_to_blog_posts_table.php',
         'AddLoveReactantIdToCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_26_203420_add_love_reactant_id_to_comments_table.php',
+        'AddLoveReactantIdToLessonsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_12_033637_add_love_reactant_id_to_lessons_table.php',
+        'AddLoveReactantIdToProductsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_12_033508_add_love_reactant_id_to_products_table.php',
         'AddLoveReacterIdToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_180127_add_love_reacter_id_to_users_table.php',
         'AddModulesToModulesTable' => __DIR__ . '/../..' . '/database/migrations/2018_04_15_022623_add_modules_to_modules_table.php',
         'AlbertCht\\InvisibleReCaptcha\\Facades\\InvisibleReCaptcha' => __DIR__ . '/..' . '/albertcht/invisible-recaptcha/src/Facades/InvisibleReCaptcha.php',
@@ -628,10 +653,13 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\BlogCommentController' => __DIR__ . '/../..' . '/app/Http/Controllers/BlogCommentController.php',
         'App\\Http\\Controllers\\Blog\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Blog/CategoryController.php',
         'App\\Http\\Controllers\\Blog\\PostController' => __DIR__ . '/../..' . '/app/Http/Controllers/Blog/PostController.php',
+        'App\\Http\\Controllers\\ColorPattern\\ColorPatternController' => __DIR__ . '/../..' . '/app/Http/Controllers/ColorPattern/ColorPatternController.php',
         'App\\Http\\Controllers\\Comment\\CommentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Comment/CommentController.php',
         'App\\Http\\Controllers\\Company\\AppointmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Company/AppointmentController.php',
         'App\\Http\\Controllers\\Company\\CompanyController' => __DIR__ . '/../..' . '/app/Http/Controllers/Company/CompanyController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\Course\\LessonController' => __DIR__ . '/../..' . '/app/Http/Controllers/Course/LessonController.php',
+        'App\\Http\\Controllers\\Course\\UnitController' => __DIR__ . '/../..' . '/app/Http/Controllers/Course/UnitController.php',
         'App\\Http\\Controllers\\Gallery\\AlbumController' => __DIR__ . '/../..' . '/app/Http/Controllers/Gallery/AlbumController.php',
         'App\\Http\\Controllers\\Gallery\\ImageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Gallery/ImageController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
@@ -640,6 +668,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\Institution\\InstitutionScopeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Institution/InstitutionScopeController.php',
         'App\\Http\\Controllers\\Institution\\InstitutionScopeFieldController' => __DIR__ . '/../..' . '/app/Http/Controllers/Institution/InstitutionScopeFieldController.php',
         'App\\Http\\Controllers\\Institution\\InstitutionScopeFieldOptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Institution/InstitutionScopeFieldOptionController.php',
+        'App\\Http\\Controllers\\Media\\MediaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Media/MediaController.php',
         'App\\Http\\Controllers\\Model\\BannerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Model/BannerController.php',
         'App\\Http\\Controllers\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrderController.php',
         'App\\Http\\Controllers\\PagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/PagesController.php',
@@ -652,8 +681,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\Site\\SiteController' => __DIR__ . '/../..' . '/app/Http/Controllers/Site/SiteController.php',
         'App\\Http\\Controllers\\Site\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Site/UserController.php',
         'App\\Http\\Controllers\\Store\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/CategoryController.php',
+        'App\\Http\\Controllers\\Store\\GroupController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/GroupController.php',
         'App\\Http\\Controllers\\Store\\HostController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/HostController.php',
         'App\\Http\\Controllers\\Store\\ItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ItemController.php',
+        'App\\Http\\Controllers\\Store\\LessonController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/LessonController.php',
         'App\\Http\\Controllers\\Store\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/OrderController.php',
         'App\\Http\\Controllers\\Store\\ProductAttributeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductAttributeController.php',
         'App\\Http\\Controllers\\Store\\ProductAttributeOptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductAttributeOptionController.php',
@@ -688,9 +719,18 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Mail\\ValidationMail' => __DIR__ . '/../..' . '/app/Mail/ValidationMail.php',
         'App\\Menu' => __DIR__ . '/../..' . '/app/Menu.php',
         'App\\Module' => __DIR__ . '/../..' . '/app/Module.php',
+        'App\\Modules\\ColorPattern\\ColorPattern' => __DIR__ . '/../..' . '/app/Modules/ColorPattern/ColorPattern.php',
+        'App\\Modules\\ColorPattern\\HasColorPattern' => __DIR__ . '/../..' . '/app/Modules/ColorPattern/HasColorPattern.php',
         'App\\Modules\\Comment\\Comment' => __DIR__ . '/../..' . '/app/Modules/Comment/Comment.php',
         'App\\Modules\\Comment\\Commentable' => __DIR__ . '/../..' . '/app/Modules/Comment/Commentable.php',
         'App\\Modules\\Comment\\Commenter' => __DIR__ . '/../..' . '/app/Modules/Comment/Commenter.php',
+        'App\\Modules\\Course\\Lesson' => __DIR__ . '/../..' . '/app/Modules/Course/Lesson.php',
+        'App\\Modules\\Course\\Unit' => __DIR__ . '/../..' . '/app/Modules/Course/Unit.php',
+        'App\\Modules\\Form\\Form' => __DIR__ . '/../..' . '/app/Modules/Form/Form.php',
+        'App\\Modules\\Form\\Response' => __DIR__ . '/../..' . '/app/Modules/Form/Response.php',
+        'App\\Modules\\Group\\Group' => __DIR__ . '/../..' . '/app/Modules/Group/Group.php',
+        'App\\Modules\\Group\\HasGroup' => __DIR__ . '/../..' . '/app/Modules/Group/HasGroup.php',
+        'App\\Modules\\Media\\Media' => __DIR__ . '/../..' . '/app/Modules/Media/Media.php',
         'App\\Page' => __DIR__ . '/../..' . '/app/Page.php',
         'App\\Permission' => __DIR__ . '/../..' . '/app/Permission.php',
         'App\\Product' => __DIR__ . '/../..' . '/app/Product.php',
@@ -927,6 +967,8 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Collective\\Html\\HtmlBuilder' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlBuilder.php',
         'Collective\\Html\\HtmlFacade' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlFacade.php',
         'Collective\\Html\\HtmlServiceProvider' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlServiceProvider.php',
+        'ColorPatternSeeder' => __DIR__ . '/../..' . '/database/seeds/ColorPatternSeeder.php',
+        'CompanySeeder' => __DIR__ . '/../..' . '/database/seeds/CompanySeeder.php',
         'CountriesSeeder' => __DIR__ . '/../..' . '/database/seeds/CountriesSeeder.php',
         'CreateAppointmentTimeSlotsTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_24_131417_create_appointment_time_slots_table.php',
         'CreateAppointmentsTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_22_145540_create_appointments_table.php',
@@ -935,20 +977,31 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'CreateBlogPostsTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_10_110250_create_blog_posts_table.php',
         'CreateCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_01_092043_create_categories_table.php',
         'CreateCategoryProductPivotTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_02_092210_create_category_product_pivot_table.php',
+        'CreateColorPatternsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_05_203703_create_color_patterns_table.php',
         'CreateCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_23_131047_create_comments_table.php',
         'CreateCompaniesTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_22_144540_create_companies_table.php',
         'CreateCompanyUserTable' => __DIR__ . '/../..' . '/database/migrations/2019_11_28_092914_create_company_user_table.php',
         'CreateContactsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_22_135341_create_contacts_table.php',
         'CreateDirectoratesTable' => __DIR__ . '/../..' . '/database/migrations/2020_02_23_181008_create_directorates_table.php',
         'CreateFailedJobsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_18_123018_create_failed_jobs_table.php',
+        'CreateFormsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_05_203707_create_forms_table.php',
         'CreateGalleryAlbumsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_02_083122_create_gallery_albums_table.php',
         'CreateGalleryImagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_02_083140_create_gallery_images_table.php',
+        'CreateGroupLessonPivotTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_08_145343_create_group_lesson_pivot_table.php',
+        'CreateGroupProductTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_07_180530_create_group_product_table.php',
+        'CreateGroupUserTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_07_180530_create_group_user_table.php',
+        'CreateGroupsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_07_180530_create_groups_table.php',
         'CreateInstitutionScopeFieldOptionsTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_16_153745_create_institution_scope_field_options_table.php',
         'CreateInstitutionScopeFieldsTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_15_155606_create_institution_scope_fields_table.php',
         'CreateInstitutionScopesTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_09_200744_create_institution_scopes_table.php',
         'CreateInstitutionsTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_09_200307_create_institutions_table.php',
         'CreateLanguagesTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_23_204334_create_languages_table.php',
         'CreateLayoutsTable' => __DIR__ . '/../..' . '/database/migrations/2019_01_22_101838_create_layouts_table.php',
+        'CreateLessonGroupPivotTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_08_143155_create_lesson_group_pivot_table.php',
+        'CreateLessonMediaPivotTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_08_144118_create_lesson_media_pivot_table.php',
+        'CreateLessonsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_05_203706_create_lessons_table.php',
+        'CreateMediaLessonPivotTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_08_145450_create_media_lesson_pivot_table.php',
+        'CreateMediaTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_05_203704_create_media_table.php',
         'CreateMenusTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_11_075932_create_menus_table.php',
         'CreateModulesTable' => __DIR__ . '/../..' . '/database/migrations/2018_04_15_021448_create_modules_table.php',
         'CreatePagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_27_055526_create_pages_table.php',
@@ -960,6 +1013,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'CreateProductProductAttributePivotTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_02_094141_create_product_product_attribute_pivot_table.php',
         'CreateProductTypesTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_01_150616_create_product_types_table.php',
         'CreateProductsTable' => __DIR__ . '/../..' . '/database/migrations/2019_07_01_102812_create_products_table.php',
+        'CreateResponesTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_05_203708_create_respones_table.php',
         'CreateSitesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_11_093647_create_sites_table.php',
         'CreateTagTables' => __DIR__ . '/../..' . '/database/migrations/2019_07_27_131726_create_tag_tables.php',
         'CreateUniqueIdsTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_18_113825_create_unique_ids_table.php',
@@ -1838,6 +1892,9 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'GrahamCampbell\\Manager\\AbstractManager' => __DIR__ . '/..' . '/graham-campbell/manager/src/AbstractManager.php',
+        'GrahamCampbell\\Manager\\ConnectorInterface' => __DIR__ . '/..' . '/graham-campbell/manager/src/ConnectorInterface.php',
+        'GrahamCampbell\\Manager\\ManagerInterface' => __DIR__ . '/..' . '/graham-campbell/manager/src/ManagerInterface.php',
         'GuzzleHttp\\Client' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Client.php',
         'GuzzleHttp\\ClientInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/ClientInterface.php',
         'GuzzleHttp\\Cookie\\CookieJar' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Cookie/CookieJar.php',
@@ -1977,6 +2034,14 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Hamcrest\\Type\\IsString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsString.php',
         'Hamcrest\\Util' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
         'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
+        'Haruncpi\\LaravelIdGenerator\\IdGenerator' => __DIR__ . '/..' . '/haruncpi/laravel-id-generator/src/IdGenerator.php',
+        'Haruncpi\\LaravelIdGenerator\\IdGeneratorServiceProvider' => __DIR__ . '/..' . '/haruncpi/laravel-id-generator/src/IdGeneratorServiceProvider.php',
+        'Hashids\\Hashids' => __DIR__ . '/..' . '/hashids/hashids/src/Hashids.php',
+        'Hashids\\HashidsException' => __DIR__ . '/..' . '/hashids/hashids/src/HashidsException.php',
+        'Hashids\\HashidsInterface' => __DIR__ . '/..' . '/hashids/hashids/src/HashidsInterface.php',
+        'Hashids\\Math\\Bc' => __DIR__ . '/..' . '/hashids/hashids/src/Math/Bc.php',
+        'Hashids\\Math\\Gmp' => __DIR__ . '/..' . '/hashids/hashids/src/Math/Gmp.php',
+        'Hashids\\Math\\MathInterface' => __DIR__ . '/..' . '/hashids/hashids/src/Math/MathInterface.php',
         'Http\\Adapter\\Guzzle6\\Client' => __DIR__ . '/..' . '/php-http/guzzle6-adapter/src/Client.php',
         'Http\\Adapter\\Guzzle6\\Exception\\UnexpectedValueException' => __DIR__ . '/..' . '/php-http/guzzle6-adapter/src/Exception/UnexpectedValueException.php',
         'Http\\Adapter\\Guzzle6\\Promise' => __DIR__ . '/..' . '/php-http/guzzle6-adapter/src/Promise.php',
@@ -5467,9 +5532,15 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Traitor\\TraitUseAdder' => __DIR__ . '/..' . '/kkszymanowski/traitor/src/TraitUseAdder.php',
         'Traitor\\Traitor' => __DIR__ . '/..' . '/kkszymanowski/traitor/src/Traitor.php',
         'UpdateCommentTableAddParentIdColumn' => __DIR__ . '/../..' . '/database/migrations/2020_04_12_125341_update_comment_table_add_parent_id_column.php',
+        'UpgradeAttachmentsTableToAddPositionColumn' => __DIR__ . '/../..' . '/database/migrations/2020_05_06_214442_upgrade_attachments_table_to_add_position_column.php',
         'UpgradeDirectoratesTableAddCountryIdCoulumn' => __DIR__ . '/../..' . '/database/migrations/2020_04_05_234820_upgrade_directorates_table_add_country_id_coulumn.php',
         'UpgradePostsTableAddImagesColumn' => __DIR__ . '/../..' . '/database/migrations/2020_04_17_151428_upgrade_posts_table_add_images_column.php',
+        'UpgradeProductColumnsAddScopeColumns' => __DIR__ . '/../..' . '/database/migrations/2020_05_06_152800_upgrade_product_columns_add_scope_columns.php',
         'UpgradeTablesAddDefaultColumnsToMultipleTables' => __DIR__ . '/../..' . '/database/migrations/2020_04_08_202008_upgrade_tables_add_default_columns_to_multiple_tables.php',
+        'Vinkla\\Hashids\\Facades\\Hashids' => __DIR__ . '/..' . '/vinkla/hashids/src/Facades/Hashids.php',
+        'Vinkla\\Hashids\\HashidsFactory' => __DIR__ . '/..' . '/vinkla/hashids/src/HashidsFactory.php',
+        'Vinkla\\Hashids\\HashidsManager' => __DIR__ . '/..' . '/vinkla/hashids/src/HashidsManager.php',
+        'Vinkla\\Hashids\\HashidsServiceProvider' => __DIR__ . '/..' . '/vinkla/hashids/src/HashidsServiceProvider.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Webpatser\\Countries\\Countries' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/Countries.php',
         'Webpatser\\Countries\\CountriesFacade' => __DIR__ . '/..' . '/webpatser/laravel-countries/src/Webpatser/Countries/CountriesFacade.php',

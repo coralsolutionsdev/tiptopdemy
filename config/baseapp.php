@@ -19,5 +19,5 @@ return [
     'page_image_storage_path'   =>  'images' . '/' . 'pages',
     'user_image_storage_path'   =>  'images' . '/' . 'avatars',
     'product_image_storage_path'   =>  'images' . '/' . 'products',
-
+    'attachments_storage_path'   =>  'images' . '/' . 'products',
 ];

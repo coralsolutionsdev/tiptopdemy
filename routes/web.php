@@ -73,6 +73,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::post('/post/{post}/attachment/{key}/delete','Blog\PostController@attachmentDelete')->name('blog.post.attachment.delete');
 
         });
+        /* Attachments */
+            Route::post('/attachments/image/upload','Admin\AttachmentController@imageUpload')->name('attachment.image.upload');
 
 
         /*Gallery*/
@@ -114,13 +116,16 @@ Route::group(['middleware'=>'installed'], function(){
 
         /*store*/
         Route::group(['prefix' => 'store', 'namespace' => 'Store', 'as' => 'store.'], function (){
-            Route::resource('/categories','ProductCategoryController');
-            Route::resource('/products','ProductController');
+            Route::resource('/categories','CategoryController',  ['except' => ['show']]);
+            Route::resource('/products','ProductController',  ['except' => ['show']]);
             Route::resource('/types','ProductTypeController');
             Route::resource('/attribute/sets','ProductAttributeSetController');
             Route::resource('/attribute/sets/{set}/attributes','ProductAttributeController');
             Route::get('tags', 'ProductController@indexTags')->name('tags.index');
             Route::delete('tags/{tag}', 'ProductController@destroyTag')->name('tags.destroy');
+            Route::resource('/product/{product}/groups','GroupController');
+            Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
+
         });
 
         /*companies*/
@@ -163,15 +168,12 @@ Route::group(['middleware'=>'installed'], function(){
                 });
             }
             /* Comment */
-//            Route::group(['prefix' => 'comment', 'namespace' => 'Comment', 'as' => 'comment.'], function (){
-//            });
             Route::group(['namespace' => 'Comment'], function (){
                 Route::resource('/comment','CommentController');
                 Route::post('/comment/{comment}/ajax/delete','CommentController@ajaxDestroy');
                 Route::post('/comment/{comment}/ajax/update','CommentController@ajaxUpdate');
                 Route::post('/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact');
             });
-
 
             /* Gallery */
             Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
@@ -184,12 +186,14 @@ Route::group(['middleware'=>'installed'], function(){
             Route::get('/contact','Site\ContactController@GetContact')->name('contact');
             Route::post('/contact','Site\ContactController@PostContact')->name('post.contact');
             if (isModuleEnabled('products')){
-                /* Store  */
-                Route::group(['prefix' => 'store', 'as' => 'store.'], function () {
-                    Route::get('/' , 'Store\ProductController@GetIndex')->name('store.main');
-                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
-                    Route::get('product/{slug}','Store\ProductController@show')->name('product.show');
-                });
+            /* Store  */
+            /*store*/
+            Route::group(['prefix' => 'store', 'namespace' => 'Store', 'as' => 'store.'], function (){
+                Route::get('/' , 'ProductController@GetIndex')->name('store.main');
+                Route::resource('/category','CategoryController',  ['only' => ['show']]);
+                Route::resource('/product','ProductController',  ['only' => ['show']]);
+                Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']]);
+            });
             }
             /*pages*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
@@ -204,3 +208,35 @@ Route::group(['middleware'=>'installed'], function(){
 
 
 });
+
+Route::resource('post', 'PostController')->only('index', 'create', 'store');
+
+
+Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
+
+
+Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create');
+
+
+Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
+
+
+Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
+
+
+Route::resource('course.-unit', 'Course.UnitController');
+
+
+Route::resource('post', 'Admin\PostController')->only('index', 'store');
+
+
+Route::resource('post', 'Course\PostController')->only('index', 'store');
+
+
+Route::resource('post', 'Course\PostController')->only('index', 'store');
+
+
+Route::resource('mma', 'Course\MmaController')->only('index', 'store');
+
+
+Route::resource('post', 'Course\PostController')->only('index');

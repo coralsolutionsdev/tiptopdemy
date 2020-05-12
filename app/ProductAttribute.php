@@ -2,10 +2,12 @@
 
 namespace App;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductAttribute extends Model
 {
+    use Sluggable;
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +29,19 @@ class ProductAttribute extends Model
         self::TYPE_TIMESTAMP => 'Date & Time',
         self::TYPE_COLOR => 'Color',
     ];
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
     /**
      * One-To-Many Relationship Method for accessing the options
      *

@@ -30,9 +30,12 @@ final class Versions
   'dragonmantank/cron-expression' => 'v2.3.0@72b6fbf76adb3cf5bc0db68559b33d41219aba27',
   'egulias/email-validator' => '2.1.17@ade6887fd9bd74177769645ab5c474824f8a418a',
   'filp/whoops' => '2.7.1@fff6f1e4f36be0e0d0b84d66b413d9dcb0c49130',
+  'graham-campbell/manager' => 'v4.5.3@9584dcca30aeaebd04bed7f1a59ee52fe5b24b49',
   'guzzlehttp/guzzle' => '6.5.3@aab4ebd862aa7d04f01a4b51849d657db56d882e',
   'guzzlehttp/promises' => 'v1.3.1@a59da6cf61d80060647ff4d3eb2c03a2bc694646',
   'guzzlehttp/psr7' => '1.6.1@239400de7a173fe9901b9ac7c06497751f00727a',
+  'haruncpi/laravel-id-generator' => 'v1.0.5@5d81b7a8232b434e07a84376ec6c63f43bc055cf',
+  'hashids/hashids' => '4.0.0@43bb2407f16a631f0128f47bcb67ff986c63dde2',
   'intervention/image' => '2.5.1@abbf18d5ab8367f96b3205ca3c89fb2fa598c69e',
   'jakub-onderka/php-console-color' => 'v0.2@d5deaecff52a0d61ccb613bb3804088da0307191',
   'jakub-onderka/php-console-highlighter' => 'v0.4@9f7a229a69d52506914b4bc61bfdb199d90c5547',
@@ -99,6 +102,7 @@ final class Versions
   'symfony/translation-contracts' => 'v2.0.1@8cc682ac458d75557203b2f2f14b0b92e1c744ed',
   'symfony/var-dumper' => 'v4.4.8@c587e04ce5d1aa62d534a038f574d9a709e814cf',
   'tijsverkoyen/css-to-inline-styles' => '2.2.2@dda2ee426acd6d801d5b7fd1001cde9b5f790e15',
+  'vinkla/hashids' => '7.0.0@97ddf2d3b9f68c6fb438d378113cb96396b544ef',
   'vlucas/phpdotenv' => 'v3.6.3@1b3103013797f04521c6cae5560f604649484066',
   'webpatser/laravel-countries' => '1.5.4@000d7aaa67a1eb488275feafe6ab74a6b7544e84',
   'zendframework/zend-diactoros' => '2.2.1@de5847b068362a88684a55b0dbb40d85986cfa52',
@@ -135,7 +139,7 @@ final class Versions
   'symfony/yaml' => 'v5.0.8@482fb4e710e5af3e0e78015f19aa716ad953392f',
   'theseer/tokenizer' => '1.1.3@11336f6f84e16a720dae9d8e6ed5019efa85a0f9',
   'webmozart/assert' => '1.8.0@ab2cb0b3b559010b75981b1bdce728da3ee90ad6',
-  'laravel/laravel' => 'dev-220501-dev-laravel-blueprint@319a5c2545fe74bdc0b2e020454f99a5e36f9449',
+  'laravel/laravel' => 'dev-220430-dev-courses@235cd40f6ce135dfda487ef59eba97eb0764dee8',
 );
 
     private function __construct()

@@ -23,18 +23,15 @@
                     <tbody>
                     @foreach ($types as $item)
                         <tr>
-                            <td>
+                            <td class="align-middle">
                                 <p>{{ucfirst($item->name)}}</p>
                                 <p class="text-muted"><small> {{$item->created_at->toFormattedDateString()}}</small></p>
                                 <p>{{substr(strip_tags($item->description),0,50)}} {{strlen($item->description) > 50 ? "...": "" }}</p>
                             </td>
-                            <td>{{$item->attributeSet->name}}</td>
+                            <td class="align-middle">{{$item->attributeSet->name}}</td>
                             <td>
                                 <div class="action_btn text-right" style="padding-top: 10px">
                                     <ul>
-                                        <li class="">
-                                            <a target="_blank" href="" class="btn btn-light disabled"><i class="fas fa-link" aria-hidden="true"></i></a>
-                                        </li>
                                         <li class="">
                                             <span id="{{$item->id}}" class="btn btn-light edit-product-type" data-toggle="modal" data-target="#productTypeModal"><i class="far fa-edit"></i></span>
                                         </li>

@@ -60,14 +60,11 @@
                                         @foreach ($set->attributes as $attribute)
                                             <tr class="row-click">
                                                 <td>{{$attribute->name}}</td>
-                                                <td>{{ $attribute->default }}</td>
-                                                <td>{{ $attribute->position }}</td>
+                                                <td class="align-middle">{{ $attribute->default }}</td>
+                                                <td class="align-middle">{{ $attribute->position }}</td>
                                                 <td>
                                                     <div class="action_btn text-right" style="padding-top: 10px">
                                                         <ul>
-                                                            <li class="">
-                                                                <a target="_blank" href="" class="btn btn-light disabled"><i class="fas fa-link" aria-hidden="true"></i></a>
-                                                            </li>
                                                             <li class="">
                                                                 <a href="{{route('store.attributes.edit', [$set->slug, $attribute->slug])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
                                                             </li>

@@ -1,11 +1,11 @@
 {{-- Search --}}
 <div class="uk-card uk-margin-small uk-card-body uk-secondary-bg" style="padding: 40px 20px">
-    <form action="{{ route('blog.posts.main') }}" method="GET" class="home-search">
+    <form action="{{ route('store.products.main') }}" method="GET" class="home-search">
         <fieldset class="uk-fieldset">
             <div class="uk-margin-small">
                 <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon uk-form-icon-flip uk-text-primary" uk-icon="icon: search"></span>
-                    <input class="uk-input" name="search_key" type="text" placeholder="{{__('main.Search in Blog')}} .." value="{{!empty($search_key) ? $search_key : ''}}" required>
+                    <input class="uk-input" name="search_key" type="text" placeholder="{{__('main.Search in Store')}} .." value="{{!empty($search_key) ? $search_key : ''}}" required>
                 </div>
             </div>
         </fieldset>

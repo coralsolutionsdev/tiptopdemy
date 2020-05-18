@@ -215,6 +215,8 @@
         'Price low to high' => 'Price low to high',
         'Price high to low' => 'Price high to low',
         'of' => 'of',
+        'Search in Store' => 'Search in Store',
+
 
 
 

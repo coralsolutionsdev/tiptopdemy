@@ -243,6 +243,8 @@
         'Price low to high' => 'السعر من الأرخص الى الأغلى',
         'Price high to low' => 'السعر من الأغلى الى الارخص',
         'of' => 'من',
+        'Search in Store' => 'إبحث في المتجر',
+
 
 
         // lessons

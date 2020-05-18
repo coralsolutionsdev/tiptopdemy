@@ -204,7 +204,6 @@
             ifr.attr("scrolling", "no");
             ifr.attr("src", ifr.attr("src"));
             var newItemWidth = parseInt($('.post-content').width());
-            console.log(newItemWidth);
             var itemHeight = ifr.attr("height");
             var itemWidth = ifr.attr("width");
             var r = (itemWidth / newItemWidth) * 100;

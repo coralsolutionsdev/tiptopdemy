@@ -189,7 +189,7 @@ Route::group(['middleware'=>'installed'], function(){
             /* Store  */
             /*store*/
             Route::group(['prefix' => 'store', 'namespace' => 'Store', 'as' => 'store.'], function (){
-                Route::get('/' , 'ProductController@GetIndex')->name('store.main');
+                Route::get('/' , 'ProductController@GetIndex')->name('products.main');
                 Route::resource('/category','CategoryController',  ['only' => ['show']]);
                 Route::resource('/product','ProductController',  ['only' => ['show']]);
                 Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']]);

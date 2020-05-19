@@ -36,6 +36,7 @@ class ControllerLexer implements Lexer
                 unset($original['resource']);
                 // this gives the ability to both use a shorthand and override some methods
                 $definition = array_merge($definition, $original);
+                $controller->setApiResource(true);
             }
 
             foreach ($definition as $method => $body) {
@@ -66,7 +67,7 @@ class ControllerLexer implements Lexer
 
                         return str_replace(
                             ['[singular]', '[plural]'],
-                            [Str::lower($model), Str::lower(Str::plural($model))],
+                            [Str::camel($model), Str::camel(Str::plural($model))],
                             $statement
                         );
                     }),
@@ -107,7 +108,6 @@ class ControllerLexer implements Lexer
                 'delete' => '[singular]',
                 'redirect' => '[singular].index',
             ],
-
             'api.index' => [
                 'query' => 'all:[plural]',
                 'resource' => 'collection:[plural]',
@@ -138,7 +138,7 @@ class ControllerLexer implements Lexer
             return ['api.index', 'api.store', 'api.show', 'api.update', 'api.destroy'];
         }
 
-        if ($type === 'all') {
+        if ($type === 'web') {
             return ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'];
         }
 

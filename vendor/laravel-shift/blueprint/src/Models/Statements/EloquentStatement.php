@@ -17,10 +17,16 @@ class EloquentStatement
      */
     private $reference;
 
-    public function __construct(string $operation, string $reference)
+    /**
+     * @var array
+     */
+    private $columns;
+
+    public function __construct(string $operation, ?string $reference, array $columns = [])
     {
         $this->operation = $operation;
         $this->reference = $reference;
+        $this->columns = $columns;
     }
 
     public function operation(): string
@@ -28,9 +34,14 @@ class EloquentStatement
         return $this->operation;
     }
 
-    public function reference(): string
+    public function reference(): ?string
     {
         return $this->reference;
+    }
+
+    public function columns(): array
+    {
+        return $this->columns;
     }
 
     public function output(string $controller_prefix, string $context): string
@@ -40,13 +51,24 @@ class EloquentStatement
 
         if ($this->operation() == 'save') {
             if ($context === 'store') {
-                $code = "$" . Str::lower($model);
+                $code = "$" . Str::camel($model);
                 $code .= ' = ';
                 $code .= $model;
                 $code .= '::create($request->all());';
             } else {
-                $code = "$" . Str::lower($model) . '->save();';
+                $code = "$" . Str::camel($model) . '->save();';
             }
+        }
+
+        if ($this->operation() == 'update') {
+            $columns = '';
+            if (!empty($this->columns())) {
+                $columns = implode(', ', array_map(function ($column) {
+                    return sprintf("'%s' => \$%s", $column, $column);
+                }, $this->columns()));
+            }
+
+            $code = "$" . Str::camel($model) . '->update([' . $columns . ']);';
         }
 
         if ($this->operation() == 'find') {
@@ -54,7 +76,7 @@ class EloquentStatement
                 $model = $this->extractModel();
             }
 
-            $code = "$" . Str::lower($model);
+            $code = "$" . Str::camel($model);
             $code .= ' = ';
             $code .= $model;
             $code .= '::find($' . $this->columnName($this->reference()) . ');';
@@ -66,7 +88,7 @@ class EloquentStatement
                 $code .= '::destroy($' . str_replace('.', '->', $this->reference()) . ');';
             } else {
                 // TODO: only for certain contexts or no matter what given simple reference?
-                $code = "$" . Str::lower($model) . '->delete();';
+                $code = "$" . Str::camel($model) . '->delete();';
             }
         }
 

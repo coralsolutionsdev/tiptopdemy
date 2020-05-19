@@ -2,8 +2,9 @@
 
 namespace Blueprint;
 
-use Blueprint\Commands\BlueprintCommand;
+use Blueprint\Commands\BuildCommand;
 use Blueprint\Commands\EraseCommand;
+use Blueprint\Commands\NewCommand;
 use Blueprint\Commands\TraceCommand;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\File;
@@ -24,7 +25,7 @@ class BlueprintServiceProvider extends ServiceProvider implements DeferrableProv
 
         $this->publishes([
             __DIR__ . '/../config/blueprint.php' => config_path('blueprint.php'),
-        ]);
+        ], 'blueprint-config');
     }
 
     /**
@@ -42,7 +43,7 @@ class BlueprintServiceProvider extends ServiceProvider implements DeferrableProv
 
         $this->app->bind('command.blueprint.build',
             function ($app) {
-                return new BlueprintCommand($app['files']);
+                return new BuildCommand($app['files']);
             }
         );
         $this->app->bind('command.blueprint.erase',
@@ -55,15 +56,22 @@ class BlueprintServiceProvider extends ServiceProvider implements DeferrableProv
                 return new TraceCommand($app['files']);
             }
         );
+        $this->app->bind('command.blueprint.new',
+            function ($app) {
+                return new NewCommand($app['files']);
+            }
+        );
 
         $this->app->singleton(Blueprint::class, function ($app) {
             $blueprint = new Blueprint();
             $blueprint->registerLexer(new \Blueprint\Lexers\ModelLexer());
+            $blueprint->registerLexer(new \Blueprint\Lexers\SeederLexer());
             $blueprint->registerLexer(new \Blueprint\Lexers\ControllerLexer(new \Blueprint\Lexers\StatementLexer()));
 
             $blueprint->registerGenerator(new \Blueprint\Generators\MigrationGenerator($app['files']));
             $blueprint->registerGenerator(new \Blueprint\Generators\ModelGenerator($app['files']));
             $blueprint->registerGenerator(new \Blueprint\Generators\FactoryGenerator($app['files']));
+            $blueprint->registerGenerator(new \Blueprint\Generators\SeederGenerator($app['files']));
 
             $blueprint->registerGenerator(new \Blueprint\Generators\ControllerGenerator($app['files']));
             $blueprint->registerGenerator(new \Blueprint\Generators\Statements\EventGenerator($app['files']));
@@ -83,6 +91,7 @@ class BlueprintServiceProvider extends ServiceProvider implements DeferrableProv
             'command.blueprint.build',
             'command.blueprint.erase',
             'command.blueprint.trace',
+            'command.blueprint.new',
         ]);
     }
 
@@ -97,6 +106,7 @@ class BlueprintServiceProvider extends ServiceProvider implements DeferrableProv
             'command.blueprint.build',
             'command.blueprint.erase',
             'command.blueprint.trace',
+            'command.blueprint.new',
             Blueprint::class,
         ];
     }

@@ -53,16 +53,16 @@ class MigrationGenerator implements Generator
             if (!empty($model->pivotTables())) {
                 foreach ($model->pivotTables() as $pivotSegments) {
                     $pivotTable = $this->getPivotTableName($pivotSegments);
-                    if (isset($created_pivot_tables[$pivotTable])) {
-                        continue;
-                    }
-
-                    $path = $this->getPivotTablePath($pivotTable, $sequential_timestamp);
-                    $this->files->put($path, $this->populatePivotStub($stub, $pivotSegments));
-                    $created_pivot_tables[] = $pivotTable;
-                    $output['created'][] = $path;
+                    $created_pivot_tables[$pivotTable] = $pivotSegments;
                 }
             }
+        }
+
+        foreach ($created_pivot_tables as $pivotTable => $pivotSegments) {
+            $path = $this->getPivotTablePath($pivotTable, $sequential_timestamp);
+            $this->files->put($path, $this->populatePivotStub($stub, $pivotSegments));
+            $created_pivot_tables[] = $pivotTable;
+            $output['created'][] = $path;
         }
 
         return $output;
@@ -131,7 +131,7 @@ class MigrationGenerator implements Generator
             $foreign_modifier = $column->isForeignKey();
 
             if ($this->shouldAddForeignKeyConstraint($column)) {
-                $foreign = $this->buildForeignKey($column->name(), $foreign_modifier === 'foreign' ? null : $foreign_modifier, $column->dataType());
+                $foreign = $this->buildForeignKey($column->name(), $foreign_modifier === 'foreign' ? null : $foreign_modifier, $column->dataType(), $column->attributes());
                 if ($column->dataType() === 'id' && $this->isLaravel7orNewer()) {
                     $column_definition = $foreign;
                     $foreign = '';
@@ -198,7 +198,7 @@ class MigrationGenerator implements Generator
         return trim($definition);
     }
 
-    protected function buildForeignKey(string $column_name, ?string $on, string $type)
+    protected function buildForeignKey(string $column_name, ?string $on, string $type, array $attributes = [])
     {
         if (is_null($on)) {
             $table = Str::plural(Str::beforeLast($column_name, '_'));
@@ -211,6 +211,10 @@ class MigrationGenerator implements Generator
             $column = Str::afterLast($column_name, '_');
         }
 
+        if ($type === 'id' && !empty($attributes)) {
+            $table = Str::lower(Str::plural($attributes[0]));
+        }
+
         if ($this->isLaravel7orNewer() && $type === 'id') {
             if ($column_name === Str::singular($table) . '_' . $column) {
                 return self::INDENT . '$table->foreignId' . "('{$column_name}')->constrained()->cascadeOnDelete()";
@@ -219,7 +223,7 @@ class MigrationGenerator implements Generator
                 return self::INDENT . '$table->foreignId' . "('{$column_name}')->constrained('{$table}')->cascadeOnDelete()";
             }
 
-            return self::INDENT . '$table->foreignId' . "('{$column_name}')->constrained('{$table}', '{$column}')->cascadeOnDelete())";
+            return self::INDENT . '$table->foreignId' . "('{$column_name}')->constrained('{$table}', '{$column}')->cascadeOnDelete()";
         }
 
         return self::INDENT . '$table->foreign' . "('{$column_name}')->references('{$column}')->on('{$table}')->onDelete('cascade')";

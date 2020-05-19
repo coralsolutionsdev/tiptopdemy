@@ -49,16 +49,15 @@ class Rules
             array_push($rules, 'json');
         }
 
-        if (in_array($column->dataType(), [
-            'decimal',
-            'double',
-            'float',
-            'unsignedDecimal',
-        ])) {
+        if (in_array($column->dataType(), ['decimal', 'double', 'float', 'unsignedDecimal'])) {
             array_push($rules, 'numeric');
 
-            if (Str::startsWith($column->dataType(), 'unsigned')) {
+            if (Str::startsWith($column->dataType(), 'unsigned') || in_array('unsigned', $column->modifiers())) {
                 array_push($rules, 'gt:0');
+            }
+
+            if (!empty($column->attributes())) {
+                array_push($rules, self::betweenRuleForColumn($column));
             }
         }
 
@@ -93,5 +92,26 @@ class Rules
         }
 
         return 'string';
+    }
+
+
+    private static function betweenRuleForColumn(Column $column)
+    {
+        $precision = $column->attributes()[0];
+        $scale = $column->attributes()[1] ?? 0;
+
+        $value = substr_replace(str_pad("", $precision, '9'), ".", $precision - $scale, 0);
+
+        if (intval($scale) === 0) {
+            $value = trim($value, ".");
+        }
+
+        if ($precision == $scale) {
+            $value = '0' . $value;
+        }
+
+        $min = $column->dataType() === 'unsignedDecimal' || in_array('unsigned', $column->modifiers()) ? '0' : '-' . $value;
+
+        return 'between:' . $min . ',' . $value;
     }
 }

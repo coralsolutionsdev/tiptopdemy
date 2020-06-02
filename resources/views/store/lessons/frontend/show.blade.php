@@ -157,7 +157,7 @@
                                         @if($mediaItem->type == \App\Modules\Media\Media::TYPE_VIDEO)
                                             <iframe class="frame" width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
                                         @else
-                                            <iframe class="frame-w" allowfullscreen width="889" height="450" src="http://kb.tiptopdemy.com/lessons/u1-l1/" frameborder="0"></iframe>
+                                            <iframe class="frame-w" allowfullscreen width="889" height="450" src="{{$mediaItem->source}}" frameborder="0"></iframe>
                                         @endif
 
                                     </div>

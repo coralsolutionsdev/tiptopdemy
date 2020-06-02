@@ -125,6 +125,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::delete('tags/{tag}', 'ProductController@destroyTag')->name('tags.destroy');
             Route::resource('/product/{product}/groups','GroupController');
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
+            Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
 
         });
 

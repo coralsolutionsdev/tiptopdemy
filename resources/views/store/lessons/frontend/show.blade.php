@@ -1,6 +1,8 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', $page_title)
 @section('head')
+    <style>
+    </style>
 @endsection
 @section('content')
     <section>
@@ -151,17 +153,26 @@
                             {{--here--}}
                             @if($media = $lesson->media)
                                 @foreach($media as $mediaItem)
-                                    <iframe width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                                    <div class="" style="margin-bottom: 5px">
+                                        @if($mediaItem->type == \App\Modules\Media\Media::TYPE_VIDEO)
+                                            <iframe class="frame" width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                                        @else
+                                            <iframe class="frame-w" allowfullscreen width="889" height="450" src="http://kb.tiptopdemy.com/lessons/u1-l1/" frameborder="0"></iframe>
+                                        @endif
+
+                                    </div>
                                 @endforeach
                             {{--here--}}
                             @endif
+                            <br>
+
                             <script>
                                 $(function() {
-                                    var ifr = $("iframe");
+                                    var ifr = $(".frame");
                                     ifr.attr("scrolling", "no");
                                     ifr.attr("src", ifr.attr("src"));
                                     var newItemWidth = parseInt($('.iframe-container').width());
-                                    console.log(newItemWidth);
+                                    console.log(newItemWidth, newItemHeight);
                                     var itemHeight = ifr.attr("height");
                                     var itemWidth = ifr.attr("width");
                                     var r = (itemWidth / newItemWidth) * 100;

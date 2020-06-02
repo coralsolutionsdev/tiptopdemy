@@ -110,18 +110,18 @@ class LessonController extends Controller
                 $lesson->attach($attachment);
             }
         }
-        // media
-        if (isset($input['video'])){
-            $mediaInput['title'] = '';
-            $mediaInput['type'] = Media::TYPE_VIDEO;
-            $mediaInput['storage_type'] = Media::STORAGE_TYPE_YOUTUBE;
-            $mediaInput['source'] = $input['video'];
-            $mediaInput['status'] = 1;
-            $mediaInput['position'] = 0;
-            $media = Media::create($mediaInput);
-
-            // update media
-            $lesson->media()->sync($media->id);
+        // add new media items
+        if (isset($input['new_media_url'])){
+            foreach ($input['new_media_url'] as $key => $newMedia){
+                $mediaInput['title'] = '';
+                $mediaInput['type'] = $input['new_media_type'][$key];
+                $mediaInput['storage_type'] = $input['new_media_type'][$key];
+                $mediaInput['source'] = $newMedia;
+                $mediaInput['status'] = 1;
+                $mediaInput['position'] = 0;
+                $media = Media::create($mediaInput);
+                $lesson->media()->attach($media->id);
+            }
         }
 
 
@@ -237,26 +237,35 @@ class LessonController extends Controller
                 $lesson->attach($attachment);
             }
         }
-        // media
-        if (isset($input['video'])){
-            $mediaInput['source'] = $input['video'];
-            $media = $lesson->media->first();
-            if (!empty($media)){
-                $media->update($mediaInput);
-            }else{
+
+        // update existing media
+        if (!empty($lesson->media) && $lesson->media->count() > 0){
+            foreach ($lesson->media as $existingMedia){
+                if (array_key_exists (  $existingMedia->id ,$input['media_url'])){ // if key exist update the item
+                    $existingMedia->source = $input['media_url'][$existingMedia->id];
+                    $existingMedia->type = $input['media_type'][$existingMedia->id];
+                    $existingMedia->storage_type = $input['media_type'][$existingMedia->id];
+                    $existingMedia->save();
+                }else{ // if key exist remove the item
+                    $existingMedia->delete();
+                }
+            }
+        }
+        // add new media items
+        if (isset($input['new_media_url'])){
+            foreach ($input['new_media_url'] as $key => $newMedia){
                 $mediaInput['title'] = '';
-                $mediaInput['type'] = Media::TYPE_VIDEO;
-                $mediaInput['storage_type'] = Media::STORAGE_TYPE_YOUTUBE;
-                $mediaInput['source'] = $input['video'];
+                $mediaInput['type'] = $input['new_media_type'][$key];
+                $mediaInput['storage_type'] = $input['new_media_type'][$key];
+                $mediaInput['source'] = $newMedia;
                 $mediaInput['status'] = 1;
                 $mediaInput['position'] = 0;
                 $media = Media::create($mediaInput);
-                $lesson->media()->sync($media->id);
+                $lesson->media()->attach($media->id);
             }
         }
-
         session()->flash('success',__('Updated Successfully'));
-        return redirect()->route('store.products.edit', $product->slug);
+        return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
     }
 
     /**

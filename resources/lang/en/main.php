@@ -230,6 +230,8 @@
         'Quizzes' => 'Quizzes',
         'quizzes' => 'Quizzes',
         'There is no available lessons in this unit' => 'There is no available lessons in this unit',
+        'Add Media Item' => 'Add Media Item',
+        'Media items' => 'Media items',
 
     // Form
         'Add Quiz' => 'Add Quiz',

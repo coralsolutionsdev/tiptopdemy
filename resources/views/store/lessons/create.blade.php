@@ -62,9 +62,29 @@
                         <p>{{__('main.Presentations and Multimedia')}}</p>
                         <hr>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('main.video link')}}</div>
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Media items')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::text('video', !empty($lesson) && !empty($lesson->getLessonFirstMedia()) ? $lesson->media->first()->source : null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'https://youtu.be/example']) !!}
+                                <div class="text-right"><span class="btn btn-primary add-media-item">{{__('main.Add Media Item')}}</span></div>
+                                <div class="media-items pt-2">
+                                    @if(!empty($lesson) && !empty($lesson->media))
+                                    @foreach($lesson->media as $media)
+                                        <div class="row form-group media-item">
+                                            <div class="col-7">
+                                                <input type="text" name="media_url[{{$media->id}}]" value="{{$media->source}}" class="form-control">
+                                            </div>
+                                            <div class="col-4">
+                                                <select class="form-control" name="media_type[{{$media->id}}]">
+                                                    <option value="1" {{$media->type == 1 ? 'selected' : ''}}>Youtube</option>
+                                                    <option value="2" {{$media->type == 2 ? 'selected' : ''}}>Html page</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-1">
+                                                <span id="{{$media->id}}" class="btn btn-light btn-media-item-delete"><i class="far fa-trash-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -77,7 +97,9 @@
                         <hr>
                         <div class="row">
                             <div class="col-lg-12 text-right" style="padding: 10px">
-                                <a href="" class="btn btn-primary">{{__('main.Add Quiz')}}</a>
+                                @if(!empty($lesson))
+                                <a href="{{route('store.form.create', $lesson->slug)}}" class="btn btn-primary">{{__('main.Add Quiz')}}</a>
+                                @endif
                             </div>
                         </div>
 
@@ -104,17 +126,17 @@
         {!! Form::close() !!}
 
         @if(!empty($lesson))
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="d-flex justify-content-end">
-                        <form id="delete-form" method="post" action="{{route('store.categories.destroy', $lesson->id)}}">
-                            {{csrf_field()}}
-                            {{method_field('DELETE')}}
-                            <button class="btn btn-danger btn-cat-delete"><i class="far fa-trash-alt"></i> {{__('Delete')}}</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="row">--}}
+{{--                <div class="col-lg-12">--}}
+{{--                    <div class="d-flex justify-content-end">--}}
+{{--                        <form id="delete-form" method="post" action="{{route('store.categories.destroy', $lesson->id)}}">--}}
+{{--                            {{csrf_field()}}--}}
+{{--                            {{method_field('DELETE')}}--}}
+{{--                            <button class="btn btn-danger btn-cat-delete"><i class="far fa-trash-alt"></i> {{__('Delete')}}</button>--}}
+{{--                        </form>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         @endif
 
     </section>
@@ -134,6 +156,37 @@
                 $('#presentations').slideUp();
                 $('#quizzes').slideDown();
             }
+        });
+        function deleteMediaItem(){
+            $('.btn-media-item-delete').off('click');
+            $('.btn-media-item-delete').click(function () {
+                var item = $(this);
+                if(!confirm('Are syou sure that you want to remove this item?')){
+                    return false;
+                }
+                item.closest('.media-item').remove();
+            });
+        }
+        deleteMediaItem();
+        //
+        $('.add-media-item').click(function () {
+            $('.media-items').append(
+                '<div class="row form-group media-item">\n' +
+                '<div class="col-7">\n' +
+                '    <input type="text" name="new_media_url[]" class="form-control" placeholder="https://example.com/example_path">\n' +
+                '</div>\n' +
+                '<div class="col-4">\n' +
+                '    <select class="form-control" name="new_media_type[]">\n' +
+                '        <option value="1">Youtube</option>\n' +
+                '        <option value="2">Html page</option>\n' +
+                '    </select>\n' +
+                '</div>\n' +
+                '<div class="col-1">\n' +
+                '    <span id="" class="btn btn-light btn-media-item-delete"><i class="far fa-trash-alt"></i></span>\n' +
+                '</div>\n' +
+                '</div>'
+            );
+            deleteMediaItem();
         });
     </script>
     @if(!empty($lesson))

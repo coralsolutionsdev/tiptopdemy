@@ -2,6 +2,7 @@
 
 namespace App\Modules\Media;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
@@ -35,17 +36,19 @@ class Media extends Model
     ];
 
     const TYPE_VIDEO = 1;
+    const TYPE_HTML_PAGE = 2;
 
     const STORAGE_TYPE_YOUTUBE = 1;
+    const STORAGE_TYPE_LOCAL = 2;
 
 
     public function creator()
     {
-        return $this->belongsTo(\App\Modules\Media\Creator::class);
+        return $this->belongsTo(User::class);
     }
 
     public function editor()
     {
-        return $this->belongsTo(\App\Modules\Media\Editor::class);
+        return $this->belongsTo(User::class);
     }
 }

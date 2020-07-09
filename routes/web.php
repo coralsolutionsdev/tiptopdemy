@@ -245,3 +245,5 @@ Route::group(['middleware'=>'installed'], function(){
 //
 //
 //Route::resource('post', 'Course\PostController')->only('index');
+
+// update

@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202005120900')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202007090800')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -55,6 +55,15 @@
         @include('partial.frontend._message')
     </div>
     @yield('content')
+
+        <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
+            <div class="">
+                <div class="uk-background-secondary uk-light uk-padding uk-panel">
+                    <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy</p>
+                </div>
+            </div>
+        </div>
+
 </section>
 <section>
     <div id="login-modal" uk-modal>

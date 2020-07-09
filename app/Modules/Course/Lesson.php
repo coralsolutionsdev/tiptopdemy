@@ -2,8 +2,10 @@
 
 namespace App\Modules\Course;
 
+use App\Modules\Form\Form;
 use App\Modules\Group\Group;
 use App\Modules\Media\Media;
+use App\Product;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
@@ -61,11 +63,18 @@ class Lesson extends Model implements ReactableContract
         return 'slug';
     }
 
+    /**
+     * return type
+     * @return string
+     */
     public function getType()
     {
         return self::TYPES_ARRAY[$this->type];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function deleteWithDependencies()
     {
         $this->media->each(function ($item) {
@@ -73,6 +82,11 @@ class Lesson extends Model implements ReactableContract
         });
         $this->delete();
     }
+
+    /**
+     * return lesson first media
+     * @return mixed
+     */
     public function getLessonFirstMedia()
     {
         if ($media = $this->media){
@@ -80,9 +94,32 @@ class Lesson extends Model implements ReactableContract
         }
     }
 
+    /**
+     * return latest version of each form item
+     * @return mixed
+     */
+    public function getAvailableForms()
+    {
+        $forms = $this->forms->filter(function ($form) {
+            if ($form->children->count() == 0){
+                return true;
+            }
+            return false;
+        });
+        return $forms;
+    }
+    /*
+     |--------------------------------------------------------------------------
+     | Relationship Methods
+     |--------------------------------------------------------------------------
+     */
     public function groups()
     {
         return $this->belongsToMany(Group::class);
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function creator()
@@ -97,5 +134,9 @@ class Lesson extends Model implements ReactableContract
     public function media()
     {
         return $this->belongsToMany(Media::class,'media_lesson', 'media_id', 'lesson_id');
+    }
+    public function forms()
+    {
+        return $this->belongsToMany(Form::class,'lesson_form', 'form_id', 'lesson_id');
     }
 }

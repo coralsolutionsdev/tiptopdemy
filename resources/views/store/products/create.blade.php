@@ -384,38 +384,36 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12" style="padding: 0 15px">
-                                                    <table class="table">
+                                                    <table class="uk-table uk-table-justify uk-table-divider">
                                                         <tbody>
                                                         @forelse($group->items as $itemId => $item)
-                                                        <tr>
-                                                            <td class="align-middle" width="20"><span>{{sprintf('%02d', $itemId+1)}}</span></td>
-                                                            <td class="align-middle">{{$item->title}}</td>
-                                                            <td class="align-middle">{{$item->getType()}}</td>
-                                                            <td>
-                                                                <div class="action_btn text-right">
-                                                                    <ul>
-                                                                        <li class="">
-                                                                            <a target="_blank" href="{{route('store.lesson.show', [$product->slug, $item->slug])}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>
-                                                                        </li>
-                                                                        <li class="">
-                                                                            <a href="{{route('store.lessons.edit', [$product->slug, $item->slug])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
-                                                                        </li>
-                                                                        <li class="">
-                                                                            <span id="{{$item->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-                                                                            <form id="delete-form" method="post" action="{{route('store.lessons.destroy', [$product->slug, $item->slug])}}">
-                                                                                {{csrf_field()}}
-                                                                                {{method_field('DELETE')}}
-                                                                            </form>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                            <tr>
+                                                                <td class="uk-table-shrink align-middle"><span>{{sprintf('%02d', $itemId+1)}}</span></td>
+                                                                <td class="uk-table-expand align-middle">{{$item->title}}</td>
+                                                                <td class="uk-width-small align-middle">{{$item->getType()}}</td>
+                                                                <td class="uk-width-small">
+                                                                    <div class="action_btn text-right" style="width: 200px">
+                                                                        <ul>
+                                                                            <li class="">
+                                                                                <a target="_blank" href="{{route('store.lesson.show', [$product->slug, $item->slug])}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>
+                                                                            </li>
+                                                                            <li class="">
+                                                                                <a href="{{route('store.lessons.edit', [$product->slug, $item->slug])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                                            </li>
+                                                                            <li class="">
+                                                                                <span id="{{$item->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                                                <form id="delete-form" method="post" action="{{route('store.lessons.destroy', [$product->slug, $item->slug])}}">
+                                                                                    {{csrf_field()}}
+                                                                                    {{method_field('DELETE')}}
+                                                                                </form>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
                                                         @empty
                                                             <tr>
-                                                                <td colspan="3" class="text-center">
-                                                                   {{__('main.There is no available lessons in this unit')}}
-                                                                </td>
+                                                                <td colspan="4" class="uk-text-center">{{__('main.There is no form items yet.')}}</td>
                                                             </tr>
                                                         @endforelse
                                                         </tbody>

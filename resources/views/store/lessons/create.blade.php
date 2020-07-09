@@ -50,13 +50,13 @@
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.Type')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::select('type', \App\Modules\Course\Lesson::TYPES_ARRAY,  !empty($lesson) ? $lesson->parent_id : null, ['class' => 'form-control lesson-type']) !!}
+                                {!! Form::select('type', \App\Modules\Course\Lesson::TYPES_ARRAY,  !empty($lesson) ? $lesson->type : null, ['class' => 'form-control lesson-type']) !!}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="presentations" class="col-lg-12">
+            <div id="presentations" class="col-lg-12 {{empty($lesson) || (!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_PRESENTATION) ? 'hidden-div' : ''}}">
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Presentations and Multimedia')}}</p>
@@ -90,7 +90,9 @@
                     </div>
                 </div>
             </div>
-            <div id="quizzes" class="col-lg-12" style="display: none">
+            {!! Form::close() !!}
+
+            <div id="quizzes" class="col-lg-12 {{!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_QUIZ ? 'hidden-div' : ''}}">
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Quizzes')}}</p>
@@ -102,28 +104,64 @@
                                 @endif
                             </div>
                         </div>
-
+                        @if(!empty($lesson))
                         <table class="table table-striped">
                             <thead>
                             <tr>
                                 <th scope="col">{{__('main.Quiz name')}}</th>
-                                <th scope="col">{{__('main.Quiz Type')}}</th>
-                                <th scope="col" width="30">{{__('main.Actions')}}</th>
+                                <th scope="col">{{__('main.version')}}</th>
+                                <th scope="col">{{__('main.Items num.')}}</th>
+                                <th scope="col" width="150">{{__('main.Actions')}}</th>
                             </tr>
                             </thead>
                             <tbody>
+                            @if(!empty($lesson))
+                            @forelse($lesson->forms as $form)
+                                <tr>
+                                    <td>{{$form->title}}</td>
+                                    <td class="uk-text-success">{{$form->version}}.0</td>
+                                    <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                    <td>
+                                        <div class="action_btn">
+                                            <ul>
+                                                <li class="">
+                                                    <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                </li>
+                                                <li class="">
+                                                    <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                    <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
+                                                        {{csrf_field()}}
+                                                        {{method_field('DELETE')}}
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
                             <tr>
-                                <td colspan="4" class="attachment-message">
+                                <td colspan="4" class="uk-text-center">
+                                    {{__('main.There is no form items yet.')}}
                                 </td>
                             </tr>
+                            @endforelse
+                            @endif
                             </tbody>
                         </table>
+                        @else
+                            <div class="uk-placeholder uk-text-center">
+                                <div class="uk-alert-warning" uk-alert>
+                                    <p>
+                                        {{__('main.Please create a lesson first.')}}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
 
                     </div>
                 </div>
             </div>
         </div>
-        {!! Form::close() !!}
 
         @if(!empty($lesson))
 {{--            <div class="row">--}}

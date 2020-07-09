@@ -194,7 +194,11 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::resource('/category','CategoryController',  ['only' => ['show']]);
                 Route::resource('/product','ProductController',  ['only' => ['show']]);
                 Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']]);
+                Route::get('/lesson/{lesson}/form/{form}/get/items/','FormController@getItems')->name('form.get.items');
+                Route::resource('/lesson/{lesson}/form','FormController', ['only' => ['show']]);
+
             });
+
             }
             /*pages*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
@@ -209,35 +213,37 @@ Route::group(['middleware'=>'installed'], function(){
 
 
 });
+//
+//Route::resource('post', 'PostController')->only('index', 'create', 'store');
+//
+//
+//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
+//
+//
+//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create');
+//
+//
+//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
+//
+//
+//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
+//
+//
+//Route::resource('course.-unit', 'Course.UnitController');
+//
+//
+//Route::resource('post', 'Admin\PostController')->only('index', 'store');
+//
+//
+//Route::resource('post', 'Course\PostController')->only('index', 'store');
+//
+//
+//Route::resource('post', 'Course\PostController')->only('index', 'store');
+//
+//
+//Route::resource('mma', 'Course\MmaController')->only('index', 'store');
+//
+//
+//Route::resource('post', 'Course\PostController')->only('index');
 
-Route::resource('post', 'PostController')->only('index', 'create', 'store');
-
-
-Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
-
-
-Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create');
-
-
-Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
-
-
-Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
-
-
-Route::resource('course.-unit', 'Course.UnitController');
-
-
-Route::resource('post', 'Admin\PostController')->only('index', 'store');
-
-
-Route::resource('post', 'Course\PostController')->only('index', 'store');
-
-
-Route::resource('post', 'Course\PostController')->only('index', 'store');
-
-
-Route::resource('mma', 'Course\MmaController')->only('index', 'store');
-
-
-Route::resource('post', 'Course\PostController')->only('index');
+// update

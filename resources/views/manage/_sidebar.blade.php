@@ -73,6 +73,32 @@
     <li>
         <div class="menu-title">{{__('admin.Modules')}}</div>
     </li>
+    {{--List item--}}
+    <li class="nav-group">
+        <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-store" aria-expanded="false" aria-controls="nav-group-store">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="">{{__('admin.Store')}}</span>
+        </a>
+        <div class="collapse {{ (Request::is('manage/store*') ? 'show' :'')}}" id="nav-group-store">
+            <ul style="">
+                <li class="">
+                    <a class="nav-link" href="{{Route('store.products.index')}}">{{__('admin.Products')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('store.categories.index')}}">{{__('admin.Categories')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('store.types.index')}}">{{__('admin.Product Types')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('store.sets.index')}}">{{__('admin.Attribute sets')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('store.tags.index')}}">{{__('admin.Tags')}}</a>
+                </li>
+            </ul>
+        </div>
+    </li>
 {{--List item--}}
     <li class="nav-group">
         <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-1" aria-expanded="false" aria-controls="nav-group-1">
@@ -115,32 +141,6 @@
             <i class="fas fa-expand"></i>
             <span class="">{{__('admin.Banners')}}</span>
         </a>
-    </li>
-{{--List item--}}
-    <li class="nav-group">
-        <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-store" aria-expanded="false" aria-controls="nav-group-store">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="">{{__('admin.Store')}}</span>
-        </a>
-        <div class="collapse {{ (Request::is('manage/store*') ? 'show' :'')}}" id="nav-group-store">
-            <ul style="">
-                <li class="">
-                    <a class="nav-link" href="{{Route('store.products.index')}}">{{__('admin.Products')}}</a>
-                </li>
-                <li class="">
-                    <a class="nav-link" href="{{Route('store.categories.index')}}">{{__('admin.Categories')}}</a>
-                </li>
-                <li class="">
-                    <a class="nav-link" href="{{Route('store.types.index')}}">{{__('admin.Product Types')}}</a>
-                </li>
-                <li class="">
-                    <a class="nav-link" href="{{Route('store.sets.index')}}">{{__('admin.Attribute sets')}}</a>
-                </li>
-                <li class="">
-                    <a class="nav-link" href="{{Route('store.tags.index')}}">{{__('admin.Tags')}}</a>
-                </li>
-            </ul>
-        </div>
     </li>
     <li>
         <div class="menu-title">{{__('admin.Settings')}}</div>

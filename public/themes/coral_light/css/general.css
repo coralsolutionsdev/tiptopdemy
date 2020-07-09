@@ -60,12 +60,6 @@ nav .navbar-brand{
 .bg-secondary{
     background-color: var(--theme-secondary-bg-color);
 }
-.border-primary{
-    border: 1px solid var(--theme-primary-color);
-}
-.pb-1{
-    padding-bottom: 1em !important;
-}
 /*
 Form
  */
@@ -352,21 +346,6 @@ banners
 }
 .banner-item a, .banner-item a:hover{
     color: white !important;
-}
-/**
-Form
- */
-.input-blank{
-    border: none;
-    border-bottom: 1px solid #CCCCCC;
-    max-width: 75px;
-    margin: 0 5px;
-}
-.input-blank:focus, .input-blank:active{
-    outline: none;
-    border: none;
-    border-bottom: 1px solid var(--theme-primary-color);
-    max-width: 75px;
 }
 /**
 Loading spinner

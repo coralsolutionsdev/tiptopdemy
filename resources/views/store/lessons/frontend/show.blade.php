@@ -124,7 +124,7 @@
                                                     <div class="uk-grid-small uk-padding-small" uk-grid>
                                                         <div class="uk-width-1-5@s uk-text-center uk-flex uk-flex-middle">
                                                             @if($item->id == $lesson->id)
-                                                                <span class="uk-border-circle uk-secondary-bg" style=" padding: 0px; color: {{$product->getMainColorPattern()}}"><span uk-icon="icon:   {{$lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION ? 'play-circle; ratio: 2' : 'pencil; ratio: 2'}}"></span></span>
+                                                                <span class="uk-border-circle uk-secondary-bg" style=" padding: 0px; color: {{$product->getMainColorPattern()}}"><span uk-icon="icon:  play-circle; ratio: 2"></span></span>
                                                             @else
                                                                 <span class="uk-border-circle uk-secondary-bg" style=" padding: 10px 12px">{{sprintf('%02d', $lessonCount)}}</span>
                                                             @endif
@@ -147,19 +147,15 @@
                         </div>
                         {{--Groups end--}}
                     </div>
-                    <div class="uk-width-expand@m">
-                        @if($lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION)
-                        <div class="iframe-container" style="padding-bottom: 15px">
+                    <div class="uk-width-expand@m iframe-container">
+
+                        <div style="padding-bottom: 15px">
                             {{--here--}}
                             @if($media = $lesson->media)
                                 @foreach($media as $mediaItem)
                                     <div class="" style="margin-bottom: 5px">
                                         @if($mediaItem->type == \App\Modules\Media\Media::TYPE_VIDEO)
-                                            <div class="uk-cover-container" style="height: 300px">
-                                                <iframe class="frame" src="https://www.youtube.com/embed/_cAJ9VE2Mg8?autoplay=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;loop=1&amp;modestbranding=1&amp;wmode=transparent" width="560" height="315" frameborder="0" allowfullscreen uk-cover></iframe>
-                                            </div>
-{{--                                            <iframe width="560" height="315" src="https://www.youtube.com/embed/_cAJ9VE2Mg8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>--}}
-{{--                                            <iframe class="frame" width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>--}}
+                                            <iframe class="frame" width="560" height="315" src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" frameborder="0" allow="autoplay" allowfullscreen></iframe>
                                         @else
                                             <iframe class="frame-w" allowfullscreen width="889" height="450" src="{{$mediaItem->source}}" frameborder="0"></iframe>
                                         @endif
@@ -187,24 +183,6 @@
                             </script>
 
                        </div>
-                        @elseif($lesson->type == \App\Modules\Course\Lesson::TYPE_QUIZ)
-                            <div>
-                                @forelse($lesson->getAvailableForms() as $form)
-                                    <div class="uk-placeholder uk-text-center">
-                                        <img src="{{asset_image('/assets/book_lover.png')}}" width="300">
-                                        <br>
-                                        <p style="font-size: 22px">{{$form->title}}</p>
-                                        <p>{!! $form->description !!}</p>
-                                        <a class="uk-button uk-button-primary" href="{{route('store.form.show',[$lesson->slug, $form->hash_id])}}">{{__('main.Take the exam')}}</a>
-
-                                    </div>
-                                @empty
-                                    <div class="uk-placeholder uk-text-center bg-white uk-text-meta items-message">
-                                        {{__('main.There is no form items yet.')}}.
-                                    </div>
-                                @endforelse
-                            </div>
-                        @endif
                         <div class="uk-grid-small uk-child-width-1-1@s" uk-grid>
                             <div>
                                 <div class="uk-card uk-body uk-secondary-bg uk-padding-small">
@@ -238,7 +216,7 @@
                     <div uk-grid>
                         <div class="uk-width-1-3@m">
                             <div style="height: 120px; overflow: hidden">
-{{--                                <img src="http://baseapp.local/storage/images/products/2GGwRUoKZ2266GPtSCRIvR2xkJENMA1oBjSBNJmB.jpeg" alt="" >--}}
+                                <img src="http://baseapp.local/storage/images/products/2GGwRUoKZ2266GPtSCRIvR2xkJENMA1oBjSBNJmB.jpeg" alt="" >
                             </div>
 
                         </div>

@@ -126,7 +126,7 @@ class LessonController extends Controller
 
 
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
+        return redirect()->route('store.products.edit', $product->slug);
 
     }
 
@@ -221,6 +221,7 @@ class LessonController extends Controller
         }
 
         $lesson->update($input);
+        $lesson->save();
         // update Category
         $groups = $request->input('groups', array());
         $lesson->groups()->sync($groups);

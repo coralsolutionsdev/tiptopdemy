@@ -64,8 +64,6 @@
         'Actions' => 'العمليات',
         'submit' => 'إرسال',
         'Save changes' => 'حفظ التغيرات',
-        'Save' => 'حفظ',
-        'Save as new ver.' => 'حفظ كإصدار جديد',
         'Position' => 'الترتيب',
         'Show on menu' => 'العرض في القائمة الرئيسية',
         'Please Select Category' => 'قم بإختيار التصنيف',
@@ -79,18 +77,10 @@
         'Appearance' => 'المضهر',
         'Color pattern' => 'نمط اللون',
         'By' => 'بواسطة',
-        'Cancel' => 'إلغاء',
-        'Reset' => 'إعادة تعيين',
-        'Placeholder' => 'النص التوضيحي',
-        'Fill the blank' => 'إملأ الفراغاات',
-        'Fill the blank question' => 'إملاء الفراغات في النص',
-        'Close' => 'إغلاق',
-        'Difficulty' => 'الصعوبة',
-        'Items num.' => 'عدد العناصر',
-        'Back' => 'عودة',
-        'version' => 'الإصدار',
-        'Oops' => 'عُذراً',
-        'Ok' => 'حسناً',
+
+
+
+
 
 
 
@@ -254,7 +244,6 @@
         'Price high to low' => 'السعر من الأغلى الى الارخص',
         'of' => 'من',
         'Search in Store' => 'إبحث في المتجر',
-        'To complete this step, please purchase the item first' => 'لإكمال هذه الخطوة, يرجى شراء المنتج اولاً',
 
 
 
@@ -270,57 +259,20 @@
         'Media items' => 'عناصر الميديا',
 
 
+
         // Form
         'Quizzes' => 'الإختبارات',
         'quizzes' => 'إختبارات',
         'Add Quiz' => 'أضف إختبار',
         'Quiz name' => 'إسم الإختبار',
         'Quiz Type' => 'نوع الإختبار',
-        'Short text' => 'إجابة قصيرة',
-        'Long text' => 'إجابة طويلة',
-        'For single line text fields' => 'لإجابات السطر الواحد',
-        'For paragraph text fields' => 'لإجابات النصوص الطويلة',
-        'Drop menu' => 'قائمة منسدلة',
-        'To select from menu' => 'للإختيار من القائمة المنسدلة',
-        'Single choice' => 'خيار واحد',
-        'Ratio allowing one choice' => 'يسمح بإجابة واحدة',
-        'Multiple choice' => 'إجابات متددة',
-        'Allowing multi choice' => 'يسمح بأختيار اجابات متعددة',
-        'Section' => 'قسم',
-        'The section' => 'القسم',
-        'Section Title' => 'عنوان القسم',
-        'Create new section' => 'إنشاء قسم جديد',
-        'There is no form items yet, please select new item from the items list' => 'لا يوجد عناصر متاحة, يرجى الأختيار من قائمة العناصر للإضافة ',
-        'There is no form items yet.' => 'لا يوجد عناصر متاحة.',
-        'Press here to edit the default question.' => 'إضغط هنا لتعديل السؤال الإفتراضي',
-        'You can add description and instructions, or remove it from the question settings' => 'تستطيع إضافة بعض الوصف و التعليمات, او يمكنك حذفها من إعدادات السؤال',
-        'First option' => 'الخيار الأول',
-        'Option title' => 'عنوان الخيار',
-        'Option' => 'الخيار',
-        'Default' => 'إفتراضي',
-        'Delete' => 'حذف',
-        'Add Option' => 'أضف خيار',
-        'Question Options' => 'خيارات العنصر',
-        'Question Width' => 'عرض العنصر',
-        'General settings' => 'خيارات عامة',
-        'Score' => 'التقييم',
-        'Remark' => 'الدرجة',
-        'Add blank' => 'أضف فراغ',
-        'Delete blank' => 'حذف الفراغ',
-        'Quiz settings' => 'إعدادات الإمتحان',
-        'Quiz title' => 'عنوان الإمتحان',
-        'Quiz description' => 'وصف الإمتحان',
-        'Take the exam' => 'إبدأ الأمتحان',
-        'Your answer' => 'ضع إجابتك هنا',
-        'Source' => 'المصدر',
-        'Internal' => 'من المنهج',
-        'External' => 'خارجي',
-        'Recommending' => 'الترشيحات',
-        'Recommended' => 'وزاري',
-        'Not recommended' => 'غير مرشح',
-        'Please wait, items are loading.' => 'يرجى الإنتظار يتم تحميل العناصر.',
-        'Please create a lesson first.' => 'يرجى إنشاء درس أولاً.',
-        'Marks' => '[1] درجة|[2,*] درجات',
+
+
+
+
+
+
+
 
 
 

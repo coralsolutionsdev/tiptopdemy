@@ -49,9 +49,6 @@ body{
    width: 20px;
     height: 10px;
 }
-.uk-secondary-bg{
-    background-color: #F3F5F9;
-}
 /*Navbar*/
 #admin_panel .sidebar nav{
     background-color: transparent !important;
@@ -105,13 +102,6 @@ body{
 .bg-primary{
     background-color: var(--theme-primary-color) !important;
 }
-.border-hover-primary:hover{
-    border: 1px solid var(--theme-primary-color);
-}
-.border-secondary{
-    border: 1px solid var(--theme-primary-color);
-
-}
 .btn{
     font-size: 14px;
     border-radius: 0px;
@@ -148,9 +138,6 @@ body{
 .table-card p{
     padding: 0px;
     margin: 0px;
-}
-.hidden-div{
-    display: none;
 }
 /*admin-sidebar*/
 ul.admin-sidebar{
@@ -281,100 +268,6 @@ input.form-control:focus, textarea.form-control:focus, select.form-control:focus
 ::-ms-input-placeholder { /* Microsoft Edge */
     font-size: 14px !important;
 }
-
-/*Form builder*/
-.question-type{
-    color: #666666;
-    transition: all 0.2s ease;
-
-}
-.question-type:hover{
-    color: var(--theme-primary-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-input[type=text].invisible-input{
-    padding: 0px;
-    border: none;
-    background-color: transparent;
-}
-input[type=text]:focus.invisible-input{
-    border-bottom: 1px solid var(--theme-primary-color);
-    background-color: transparent;
-
-}
-input[type=text].blank-dropdown{
-    padding: 0px;
-    border: none;
-}
-input[type=text]:focus.blank-dropdown{
-    padding: 0px;
-    border: none;
-    outline: none!important;
-    border-bottom: 1px solid var(--theme-primary-color) !important;
-}
-.btn-blank-dropdown{
-    padding: 5px 10px;
-    border: none;
-}
-.btn-blank-dropdown:focus{
-    outline: none !important;
-    border: none !important;
-}
-.input-large-text{
-    font-size: 24px;
-}
-.uk-input:disabled, .uk-select:disabled, .uk-textarea:disabled{
-    /*background-color: var(--theme-secondary-bg-color);*/
-    background-color: #F3F5F9;
-}
-.hover-danger:hover{
-    color: #f0506e;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.hover-primary:hover{
-    color: var(--theme-primary-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-}
-.uk-card{
-    border: 1px solid white;
-
-}
-.form-item .uk-card:hover{
-    border: 1px solid var(--theme-primary-color) !important;
-    transition: all 0.7s ease;
-
-}
-.form-item input[type=text].input-description{
-   padding-right: 25px;
-}
-.form-item a.uk-accordion-title{
-    font-size: 16px;
-    background-color: #F3F5F9;
-    padding: 10px;
-
-}
-.active-card{
-    border: 1px solid var(--theme-primary-color);
-}
-
-
-.item-options-table td{
-    padding: 5px;
-}
-.clickable{
-    cursor: pointer;
-}
-.editable-div{
-    min-height: 75px;
-}
-.editable-div:focus{
-    outline: -webkit-focus-ring-color auto 0px ;
-}
-
 /*toogle*/
 
 input[type=checkbox].toogle-switch{

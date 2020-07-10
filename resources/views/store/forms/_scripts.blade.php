@@ -22,6 +22,7 @@
     }
     function resetCount() {
         count = 0;
+        currentlyActiveId = 0;
     }
     function closeCurrentlyOpenedConfig() {
         // close currently opened settings.
@@ -225,9 +226,9 @@
                 sel = window.getSelection();
                 var itemBaseNode = $(window.getSelection().baseNode);
                 var itemBaseNodeID = itemBaseNode.closest('.form-item').attr('id');
-                if(itemBaseNodeID == formItem.attr('id') && itemBaseNode.parent().hasClass('editable-div')){
-                    if (sel.getRangeAt && sel.rangeCount && sel) {
 
+                if(itemBaseNodeID == formItem.attr('id') && itemBaseNode.closest('.fill-the-blank-div').hasClass('editable-div')){
+                    if (sel.getRangeAt && sel.rangeCount && sel) {
                         range = window.getSelection().getRangeAt(0); // get selected text
                         var html = '<tag><div contenteditable="false" id="item_blank-'+blankId+'" class="uk-inline blank-menu">\n' +
                             '    <button class="bg-white btn-blank-dropdown uk-text-primary" type="button">'+range+' <span uk-icon="icon: triangle-down"></span></button>\n' +

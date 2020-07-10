@@ -53,7 +53,7 @@
                                             </li>
                                             <li class="">
                                                 <span id="{{$product->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-                                                <form id="delete-form" method="post" action="{{route('store.products.destroy', $product->id)}}">
+                                                <form id="delete-form" method="post" action="{{route('store.products.destroy', $product->slug)}}">
                                                     {{csrf_field()}}
                                                     {{method_field('DELETE')}}
                                                 </form>

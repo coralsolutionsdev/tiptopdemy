@@ -22,8 +22,8 @@
         }
     </style>
     <!-- THEME CSS -->
-    <link rel="stylesheet" href="{{url('themes/coral_admin/css/dashboard.css?v=202005100430')}}">
-    <link rel="stylesheet" href="{{url('themes/coral_admin/css/general.css?v=202005100430')}}">
+    <link rel="stylesheet" href="{{url('themes/coral_admin/css/dashboard.css?v=202005101530')}}">
+    <link rel="stylesheet" href="{{url('themes/coral_admin/css/general.css?v=202005101530')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <!-- scripts -->
     <script src="https://kit.fontawesome.com/2f85794b10.js" crossorigin="anonymous"></script>

@@ -8,6 +8,7 @@
     margin: auto auto 0.5em auto;
     width: 4.5em;
     padding: 1em 0 1em;
+    border-radius: 10px;
 }
 .widget .count-status{
     font-size: 18px;
@@ -16,7 +17,7 @@
 widget primary
  */
 .widget.widget-primary .icon-body{
-    background-color: rgba(30,135,240,0.15)
+    background-color: rgba(30,135,240,0.15);
 }
 
 .widget .uk-widget-button{

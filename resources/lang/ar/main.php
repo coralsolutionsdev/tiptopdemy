@@ -12,6 +12,8 @@
         'view the recently added products' => 'عرض آخر المنتجات التي تم اضافتها',
         'latest users' => 'أخر المستخدمين',
         'view the recently registered products' => 'عرض آخر المستخدمين المسجلين',
+        'welcome back' => 'اهلا وسهلاً بعودتك',
+        'site settings' => 'إعداادات الموقع',
 
 
 

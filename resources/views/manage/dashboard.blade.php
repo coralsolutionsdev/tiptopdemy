@@ -27,11 +27,11 @@
 				<div class="widget uk-box-shadow-hover-small" style="border-radius: 15px; background-color: #FFF4DE; border-color: #FFF4DE; min-height: 14em">
 					<div class="" uk-grid>
 						<div class="uk-width-3-4" style="padding:2em 5em">
-							<h4 style="color: #FFA800">Welcome back !!</h4>
-							<p>Administratior</p>
+							<h4 style="color: #FFA800">{{__('main.welcome back')}} !!</h4>
+							<p>{{getAuthUser()->name}}</p>
 							<br>
-							<a class="" href="" style="color: #FFA800">
-								View reports <span uk-icon="icon:  chevron-double-right"></span>
+							<a class="" href="{{Route('setting.index')}}" style="color: #FFA800">
+								{{__('main.site settings')}} <span uk-icon="icon:  chevron-double-right"></span>
 							</a>
 						</div>
 						<div class="uk-width-1-4">

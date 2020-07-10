@@ -16,7 +16,7 @@
             @foreach($items as $product)
             <tr>
                 <td>
-                    <div class="uk-inline-clip uk-transition-toggle" tabindex="0">
+                    <div class="uk-inline-clip uk-transition-toggle" tabindex="0" style="max-height: 75px; overflow: hidden">
                         <img class="uk-transition-scale-up uk-transition-opaque" src="{{$product->getProductPrimaryImage()}}" alt="">
                     </div>
                 </td>

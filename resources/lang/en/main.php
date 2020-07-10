@@ -12,6 +12,8 @@
         'view the recently added products' => 'View the recently added products',
         'latest users' => 'Latest users',
         'view the recently registered products' => 'View the recently registered products',
+        'welcome back' => 'Welcome back',
+        'site settings' => 'Site settings',
 
 
         '_main' => 'Overview',

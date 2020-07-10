@@ -6,44 +6,46 @@
 @endsection
 @section('content')
 <section>
-	<div class="row">
-		<div class="col-lg-3">
-			<div class="statistic-widget card border-light">
-				<div class="card-body">
-					<div><i class="far fa-user fa-2x text-primary"></i></div>
-					<div class="text-secondary">Tickets Answered</div>
-					<div class="h2">201</div>
+		<div class="uk-grid-small uk-width-1-1" uk-grid style="padding-top: 1em">
+			<div class="uk-width-2-3@m">
+				<div class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
+					<div>
+						@widget('admin.dashboard.users')
+					</div>
+					<div>
+						@widget('admin.dashboard.products')
+					</div>
+					<div>
+						@widget('admin.dashboard.posts')
+					</div>
+					<div>
+						@widget('admin.dashboard.orders')
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-3">
-			<div class="statistic-widget card border-light">
-				<div class="card-body">
-					<div><i class="far fa-user fa-2x text-success"></i></div>
-					<div class="text-secondary">Tickets Answered</div>
-					<div class="h2">201</div>
+			<div class="uk-width-1-3@m">
+				<div class="widget uk-box-shadow-hover-small" style="border-radius: 15px; background-color: #FFF4DE; border-color: #FFF4DE; min-height: 14em">
+					<div class="" uk-grid>
+						<div class="uk-width-3-4" style="padding:2em 5em">
+							<h4 style="color: #FFA800">Welcome back !!</h4>
+							<p>Administratior</p>
+							<br>
+							<a class="" href="" style="color: #FFA800">
+								View reports <span uk-icon="icon:  chevron-double-right"></span>
+							</a>
+						</div>
+						<div class="uk-width-1-4">
+							<img src="{{asset_image('/assets/welcome-boss.svg')}}" style="width: 170px; position: absolute; top: 4.5em; right: 5em">
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-3">
-			<div class="statistic-widget card border-light">
-				<div class="card-body">
-					<div><i class="far fa-user fa-2x text-warning"></i></div>
-					<div class="text-secondary">Tickets Answered</div>
-					<div class="h2">201</div>
-				</div>
+			<div class="uk-width-2-3@m">
+				@widget('admin.dashboard.recent_products')
+			</div>
+			<div class="uk-width-1-3@m">
+				@widget('admin.dashboard.recent_users')
 			</div>
 		</div>
-		<div class="col-lg-3">
-			<div class="statistic-widget card border-light">
-				<div class="card-body">
-					<div><i class="far fa-user fa-2x text-danger"></i></div>
-					<div class="text-secondary">Tickets Answered</div>
-					<div class="h2">201</div>
-				</div>
-			</div>
-		</div>
-
-	</div>
 </section>
 @endsection

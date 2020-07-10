@@ -1,7 +1,7 @@
 @extends('themes.'.getAdminThemeName().'.layout')
 @section('title', $page_title)
 @section('page-header-button')
-    <button class="btn btn-primary btn-lg w-75"><span>{{__('Submit')}}</span></button>
+    <button class="btn btn-primary btn-lg w-75"><span>{{!empty($lesson)? __('main.Save changes') : __('main.submit')}}</span></button>
 @endsection
 @section('content')
     <section>
@@ -20,7 +20,7 @@
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.Title')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::text('title', !empty($lesson) ? $lesson->title : null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => __('main.Title')]) !!}
+                                {!! Form::text('title', !empty($lesson) ? $lesson->title : null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => __('main.Title'), 'required' => true]) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div id="presentations" class="col-lg-12 {{empty($lesson) || (!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_PRESENTATION) ? 'hidden-div' : ''}}">
+            <div id="presentations" class="col-lg-12 {{(!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_PRESENTATION) ? 'hidden-div' : ''}}">
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Presentations and Multimedia')}}</p>
@@ -92,7 +92,7 @@
             </div>
             {!! Form::close() !!}
 
-            <div id="quizzes" class="col-lg-12 {{!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_QUIZ ? 'hidden-div' : ''}}">
+            <div id="quizzes" class="col-lg-12 {{empty($lesson) || (!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_QUIZ) ? 'hidden-div' : ''}}">
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Quizzes')}}</p>

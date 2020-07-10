@@ -2,7 +2,20 @@
 	return [
 		'welcome' => 'مرحبا',
 
-	// Control panel lang
+    //dashboard
+        'users' => 'مستخدمين',
+        'new user today' => '[1] مستخدم جديد اليوم|[2,*] مستخدمين جدد اليوم',
+        'new product today' => '[1] منتج جديد اليوم|[2,*] منتجات جديدة اليوم',
+        'new post today' => '[1] مقال جديد اليوم|[2,*] مقالات جديدة اليوم',
+        'new order today' => '[1] طلب جديد اليوم|[2,*] طلبات جديدة اليوم',
+        'latest products' => 'آخر المنتجات',
+        'view the recently added products' => 'عرض آخر المنتجات التي تم اضافتها',
+        'latest users' => 'أخر المستخدمين',
+        'view the recently registered products' => 'عرض آخر المستخدمين المسجلين',
+
+
+
+        // Control panel lang
 		'_main' => 'الرئيسية',
 		'_users' => 'المستخدمين',
 		'_dashboard' => 'لوحة التحكم',
@@ -91,6 +104,12 @@
         'version' => 'الإصدار',
         'Oops' => 'عُذراً',
         'Ok' => 'حسناً',
+        'view' => 'عرض',
+        'view all' => 'عرض الكُل',
+        'edit' => 'تعديل',
+        'delete' => 'حذف',
+        'add' => 'أضِف',
+
 
 
 
@@ -140,6 +159,7 @@
         'Blog Posts' => 'مقالات المدونة',
         'Blog' => 'المدونة',
         'Posts' => 'المقالات',
+        'posts' => 'المقالات',
         'Comments' => 'التعليقات',
         'Replay' => 'إضافة رد',
         'Comment' => 'تعليق',
@@ -322,7 +342,8 @@
         'Please create a lesson first.' => 'يرجى إنشاء درس أولاً.',
         'Marks' => '[1] درجة|[2,*] درجات',
 
-
+        //orders
+        'orders' => 'طلبات'
 
 
 

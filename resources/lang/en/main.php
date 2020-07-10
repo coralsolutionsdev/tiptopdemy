@@ -1,8 +1,20 @@
 <?php
 	return [
 		'welcome' => 'Welcome',
-		
-		'_main' => 'Overview',
+
+        //dashboard
+		'users' => 'Users',
+        'new user today' => '[1] New user today|[2,*] New users today',
+        'new product today' => '[1] New product today|[2,*] New products today',
+        'new post today' => '[1] New post today|[2,*] New posts today',
+        'new order today' => '[1] New order today|[2,*] New orders today',
+        'latest products' => 'Latest products',
+        'view the recently added products' => 'View the recently added products',
+        'latest users' => 'Latest users',
+        'view the recently registered products' => 'View the recently registered products',
+
+
+        '_main' => 'Overview',
 		'_dashboard' => 'Dashboard',
 		'_users' => 'Users',
 		'_new_posts' => 'New posts',
@@ -82,6 +94,11 @@
         'version' => 'Version',
         'Oops' => 'Oops',
         'Ok' => 'Ok',
+        'view' => 'View',
+        'view all' => 'View all',
+        'edit' => 'Edit',
+        'delete' => 'Delete',
+        'add' => 'Add',
 
 
 
@@ -122,6 +139,7 @@
         'Blog Posts' => 'Blog Posts',
         'Blog' => 'Blog',
         'Posts' => 'Posts',
+        'posts' => 'Posts',
         'Replay' => 'Replay',
         'Comments' => 'Comments',
         'Comment' => 'Comment',
@@ -297,6 +315,9 @@
         'Please create a lesson first.' => 'Please create a lesson first.',
 //        'Marks' => '{0} There are none|[1,19] There are some|[20,*] There are many',
         'Marks' => '[1] Mark|[2,*] Marks',
+
+        //orders
+        'orders' => 'Orders'
 
 
 

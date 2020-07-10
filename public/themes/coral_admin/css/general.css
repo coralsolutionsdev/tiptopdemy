@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway|Source+Sans+Pro&display=swap');
+@import url("fonts.css");
+
 html, body{
     padding: 0px;
     margin: 0px;
@@ -32,7 +33,8 @@ body{
     height: 100%;
 }
 #admin_panel .sidebar{
-    background-color: #3F4D66;
+    /*background-color: #3F4D66;*/
+    background-color: #1E1E2D;
     width: 240px;
 }
 .padding-0{
@@ -40,6 +42,16 @@ body{
 }
 .margin-0{
     margin: 0px;
+}
+.p-tag-m-0 p{
+    margin: 0px !important;
+}
+.uk-action-btn{
+    padding: 5px 10px;
+    border-radius: 0px !important;
+}
+h1, h2, h3, h4, h5{
+    font-family: 'Cairo','Rubik', sans-serif;
 }
 /*widths*/
 .w-200{
@@ -202,7 +214,8 @@ ul.admin-sidebar ul{
 ul.admin-sidebar ul li{
     padding: 0px;
     margin: 0px;
-    background-color: #354156;
+    /*background-color: #354156;*/
+    background-color: #1a1a27;
     border-left: 3px solid var(--theme-primary-color); /* blue color #2196F3*/
 }
 ul.admin-sidebar ul li a:before{
@@ -220,7 +233,6 @@ ul.admin-sidebar ul li a:before{
     opacity: 0.8;
     color: white;
     font-size: 18px;
-    border-left: 4px solid var(--theme-primary-color);
     font-family: 'Cairo','Rubik', sans-serif;
     /*background-color: blue;*/
     margin-left: 8px;
@@ -313,6 +325,38 @@ input[type=text]:focus.blank-dropdown{
     outline: none!important;
     border-bottom: 1px solid var(--theme-primary-color) !important;
 }
+/**
+button
+ */
+.ck-button-danger{
+    color: #F0506E;
+    background-color: #F3F6F9;
+}
+.ck-button-danger:hover{
+    color: #F3F6F9;
+    background-color: #F0506E;
+    border-color: #F3F6F9;
+}
+.ck-button-success{
+    color: #32D3B3;
+    background-color: #F3F6F9;
+}
+.ck-button-success:hover{
+    color: #F3F5F9;
+    background-color: #32D3B3;
+    border-color: #F3F5F9;
+}
+.ck-button-primary{
+    color: #1E87F0;
+    background-color: #F3F5F9;
+}
+.ck-button-primary:hover{
+    color: #F3F5F9;
+    background-color: #1E87F0;
+    border-color: #F3F5F9;
+}
+
+
 .btn-blank-dropdown{
     padding: 5px 10px;
     border: none;

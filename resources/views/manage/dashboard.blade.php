@@ -41,7 +41,7 @@
 				</div>
 			</div>
 			<div class="uk-width-2-3@m">
-				@widget('admin.dashboard.recent_products')
+				@widget('admin.dashboard.changes_log')
 			</div>
 			<div class="uk-width-1-3@m">
 				@widget('admin.dashboard.recent_users')

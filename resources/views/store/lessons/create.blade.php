@@ -3,6 +3,9 @@
 @section('page-header-button')
     <button class="btn btn-primary btn-lg w-75"><span>{{!empty($lesson)? __('main.Save changes') : __('main.submit')}}</span></button>
 @endsection
+@section('head')
+    <link rel="stylesheet" href="{{asset('/plugins/input_tree/css/styles.css')}}">
+@endsection
 @section('content')
     <section>
         @if(!empty($lesson))
@@ -100,7 +103,71 @@
                         <div class="row">
                             <div class="col-lg-12 text-right" style="padding: 10px">
                                 @if(!empty($lesson))
-                                <a href="{{route('store.form.create', $lesson->slug)}}" class="btn btn-primary">{{__('main.Add Quiz')}}</a>
+                                    <!-- Button trigger modal -->
+                                    <a href="{{route('store.get.form.templates', $lesson->slug)}}" class="uk-button uk-button-primary">
+                                        {{__('main.Add Quiz')}}
+                                    </a>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Add new Quiz</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="uk-flex uk-flex-center actions-section">
+                                                        <div class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid style="padding:10px 20px; width: 60%">
+                                                            <div>
+                                                                <a href="{{route('store.form.create', $lesson->slug)}}">
+                                                                    <div class="uk-card uk-card-default uk-card-body uk-text-primary border-primary uk-box-shadow-hover-large">
+                                                                        <div class="uk-padding-small"><span uk-icon="icon: plus-circle; ratio: 3"></span></div>
+                                                                        <label>Create new</label>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div>
+                                                                <div class="uk-card uk-card-default uk-card-body uk-text-primary border-primary uk-box-shadow-hover-large show-template-section">
+                                                                    <div class="uk-padding-small"><span uk-icon="icon: copy; ratio: 3"></span></div>
+                                                                    <label>Clone Template</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="templates-section hidden-div">
+                                                        <div class="uk-grid-small uk-child-width-expand@s uk-text-left" uk-grid style="padding:0px 20px;">
+                                                            <div class="uk-width-1-3">
+                                                                {{drawInputTreeListItems($categories, 'categories[]',!empty($selectedCategories) ? $selectedCategories : array(), 'checktree')}}
+                                                            </div>
+                                                            <div class="uk-width-2-3">
+                                                                <div class="uk-text-center">{{__('main.There is no form items yet.')}}</div>
+                                                                <div class="uk-grid-collapse" uk-grid>
+                                                                    <div>
+                                                                        text
+                                                                    </div>
+                                                                    <div>
+                                                                        <a class="uk-button uk-button-default" href="">Apply</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <script>
+                                                        $('.show-template-section').click(function () {
+                                                            $('.actions-section').slideUp(function () {
+                                                                $('.templates-section').fadeIn();
+                                                            });
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 @endif
                             </div>
                         </div>

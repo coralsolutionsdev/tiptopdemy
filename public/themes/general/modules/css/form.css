@@ -1,0 +1,31 @@
+.form-item .uk-subnav {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px 0px -1px 0px !important;
+    padding: 0;
+    list-style: none;
+}
+.form-item .uk-switcher .uk-placeholder {
+    margin-top: 0px ;
+}
+.form-item .uk-subnav>* {
+    flex: none;
+    padding-left: 0px;
+    position: relative;
+}
+.form-item .uk-subnav-pill>.uk-active>a {
+    background-color: #1E1E2D;
+    border-radius: 5px 5px 0 0;
+}
+.form-item .uk-subnav-pill>*>:first-child {
+    border-color: #1E1E2D;
+    border-radius: 5px 5px 0 0;
+    background-color: #F3F5F9;
+    margin-right: 1px;
+    margin-left: 1px;
+}
+.form-item .item-config-section{
+    padding: 1.5em 1em;
+}.form-item .item-config{
+    padding: 1em 0em;
+}

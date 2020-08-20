@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Store;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Modules\Course\Lesson;
 use App\Modules\Media\Media;
@@ -180,7 +181,9 @@ class LessonController extends Controller
         $selectedGroups = $lesson->groups->pluck('id')->toArray();
 //        $tags = Tag::getWithType('lesson')->pluck('name', 'name');
 //        $selectedTags = $lesson->getTags();
-        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags'));
+        $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
+
+        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags', 'categories'));
 
     }
 

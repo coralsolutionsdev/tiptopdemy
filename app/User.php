@@ -122,4 +122,9 @@ class User extends Authenticatable implements ReacterableContract
         return $name;
     }
 
+    public function getCompanyId()
+    {
+        return 1;
+    }
+
 }

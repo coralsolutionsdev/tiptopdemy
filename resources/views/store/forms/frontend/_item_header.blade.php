@@ -1,6 +1,6 @@
 <div class="uk-grid-collapse" uk-grid>
     <div class="uk-width-3-4@m">
-        <h5 class="uk-card-title">{{$item->title}}</h5>
+        <h5 class="uk-card-title">{!! $item->title !!}</h5>
         <p class="uk-text-meta">
             {!! $item->description !!}
         </p>

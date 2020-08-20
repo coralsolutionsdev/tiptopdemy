@@ -79,28 +79,30 @@
         <div class="bg-secondary pt-25">
             <div class="uk-container">
                 <div class="uk-margin uk-flex uk-flex-center" uk-grid>
-                    <div class="uk-width-5-6">
+                    <div class="uk-width-5-6" style="direction: {{$form->getDirection()}}">
                         <ul id="form-items" class="uk-grid-small" uk-grid>
                             @if($items = $form->getGroupedItems())
                                 @forelse($items as $section => $items)
+                                    @if(!is_null($displayType) && $displayType == 1)
+                                        {{--Todo: --}}
                                     @foreach($items as $item)
                                         @if($item->type == \App\Modules\Form\FormItem::TYPE_SECTION)
                                             <li class="form-item uk-width-1-1 uk-margin-remove pb-1">
-                                                <div class="uk-child-width-1-5@s uk-grid-small uk-text-center" uk-grid>
-                                                    <div>
-                                                        <div class="uk-tile uk-tile-secondary uk-padding-small uk-box-shadow-small" style="border-radius: 15px 15px 0 0 ">
-                                                            <p class="uk-h4">{{__('main.The section')}} {{$section}}</p>
+                                                <div class="uk-grid-small uk-text-center" uk-grid>
+                                                    <div class="uk-width-auto@m">
+                                                        <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 10px">
+                                                            <p class="uk-h4">{{$item->title}} ssssssssssssssss</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-padding">
-                                                        <div>
-                                                            <h5 class="uk-card-title uk-text-primary">{{$item->title}}</h5>
-                                                            <p>
-                                                                {!! $item->description !!}
-                                                            </p>
-                                                        </div>
+                                                <div class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-padding-small">
+                                                    <div>
+                                                        <h5 class="uk-card-title uk-text-primary"></h5>
+                                                        <p>
+                                                            {!! $item->description !!}
+                                                        </p>
                                                     </div>
+                                                </div>
                                             </li>
                                         @elseif($item->type == \App\Modules\Form\FormItem::TYPE_SHORT_ANSWER)
                                             <li class="form-item uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove pb-1">
@@ -133,7 +135,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_MULTI_CHOICE)
+                                        @elseif($item->type == \App\Modules\Form\FormItem::TYPE_MULTI_CHOICE)
                                             <li class="form-item uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove pb-1">
                                                 <div class="uk-card uk-card-default uk-card-body">
                                                    @include('store.forms.frontend._item_header')
@@ -146,7 +148,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_DROP_DOWN)
+                                        @elseif($item->type == \App\Modules\Form\FormItem::TYPE_DROP_DOWN)
                                             <li class="form-item uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove pb-1">
                                                 <div class="uk-card uk-card-default uk-card-body">
                                                    @include('store.forms.frontend._item_header')
@@ -161,7 +163,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK)
+                                        @elseif($item->type == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK)
                                             <li class="form-item uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove pb-1">
                                                 <div class="uk-card uk-card-default uk-card-body">
                                                    @include('store.forms.frontend._item_header')
@@ -170,14 +172,71 @@
                                                     </div>
                                                 </div>
                                             </li>
-
                                         @else
-                                            <li class="form-item uk-width-1-1 uk-margin-remove pb-1">
-                                                <div>
-                                                </div>
-                                            </li>
                                         @endif
                                     @endforeach
+                                    @else
+                                        <li class="form form-group uk-width-1-1@s bg-white uk-padding-small uk-grid-small" uk-grid style="margin: 3em 0px 0px 0px">
+                                            @foreach($items as $key => $item)
+                                            <div class="uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove" style="padding: 2px 0px">
+                                                @if($item->type == \App\Modules\Form\FormItem::TYPE_SECTION)
+                                                    <div class="uk-grid-small uk-text-center" uk-grid style="position: absolute; margin-top: -48px;">
+                                                        <div class="uk-width-auto@m">
+                                                            <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 20px">
+                                                                <p class="uk-h5">{{$item->title}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-grid-collapse" uk-grid>
+                                                        <div class="uk-width-expand@m" style="padding: 0 5px">
+                                                            {!! $item->description !!}
+                                                        </div>
+                                                        <div class="uk-width-auto@m uk-text-success">
+                                                            {{$item->score}} Marks
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="uk-grid-collapse" uk-grid>
+                                                        <div class="uk-width-auto@m">
+                                                            {{$key}}:
+                                                        </div>
+                                                        <div class="uk-width-expand@m question" style="padding: 0 5px">
+                                                            {!! $item->title !!}
+                                                            @if($item->type == \App\Modules\Form\FormItem::TYPE_SHORT_ANSWER)
+                                                                @if($item->properties['display'] == 1)<br>@endif
+                                                                <input class="input-classic" type="text" placeholder="{{__('main.Your answer')}}">
+                                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_SINGLE_CHOICE)
+                                                                @if($item->properties['display'] == 1)<br>@endif
+                                                                @foreach($item['options'] as $option)
+                                                                    <label><input class="uk-radio" type="radio"> {{$option['title']}}</label>@if($item->properties['display'] == 1)<br>@endif
+                                                                @endforeach
+                                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_MULTI_CHOICE)
+                                                                @if($item->properties['display'] == 1)<br>@endif
+                                                                @foreach($item['options'] as $option)
+                                                                    <label><input class="uk-checkbox" type="checkbox"> {{$option['title']}}</label>@if($item->properties['display'] == 1)<br>@endif
+                                                                @endforeach
+                                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_DROP_DOWN)
+                                                                @if($item->properties['display'] == 1)<br>@endif
+                                                                    <select class="uk-select uk-form-small uk-form-width-small">
+                                                                        @foreach($item['options'] as $option)
+                                                                            <option>{{$option['title']}}</option>
+                                                                        @endforeach
+                                                                    </select>
+
+
+                                                            @elseif($item->type == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK)
+                                                                {!! $item->getFillableBlank() !!}
+                                                            @endif
+                                                        </div>
+                                                        <div class="uk-width-auto@m uk-text-lighter">
+                                                            {{$item->score}} Marks
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            @endforeach
+                                        </li>
+                                    @endif
                                 @empty
                                     <div class="uk-placeholder uk-text-center bg-white uk-text-meta items-message">
                                         {{__('main.There is no form items yet.')}}.
@@ -185,11 +244,11 @@
                                 @endforelse
                             @endif
                         </ul>
-                        <div style="padding-bottom: 15px">
-                            <span class="uk-button uk-button-primary uk-margin-small-right submit-form" >{{__('main.submit')}}</span>
-                        </div>
 
                     </div>
+                </div>
+                <div class="uk-text-center" style="padding-bottom: 10px">
+                    <span class="uk-button uk-button-primary uk-margin-small-right submit-form uk-width-1-3@l" >{{ucfirst($form->properties['submission_title'])}}</span>
                 </div>
             </div>
         </div>

@@ -9,6 +9,8 @@
 .file-list li{
     position: relative;
     padding-left:25px;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
 }
 .file-list li a{
     text-decoration: none;

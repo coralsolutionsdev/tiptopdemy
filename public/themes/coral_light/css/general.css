@@ -356,17 +356,27 @@ banners
 /**
 Form
  */
-.input-blank{
+.input-blank, .input-classic, .input-blank:focus, .input-classic:focus{
     border: none;
     border-bottom: 1px solid #CCCCCC;
-    max-width: 75px;
     margin: 0 5px;
+    outline: none;
+    box-shadow: none;
+}
+.input-blank:focus, .input-classic:focus{
+    border-bottom: 1px solid var(--theme-primary-color);
+}
+.input-blank{
+    max-width: 75px;
 }
 .input-blank:focus, .input-blank:active{
     outline: none;
     border: none;
     border-bottom: 1px solid var(--theme-primary-color);
     max-width: 75px;
+}
+.form-group .question p{
+    display: inline;
 }
 /**
 Loading spinner

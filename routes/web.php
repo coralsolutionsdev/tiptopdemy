@@ -126,8 +126,26 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/product/{product}/groups','GroupController');
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
             Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
+            Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
 
         });
+        /*form*/
+            Route::group(['prefix' => 'form', 'namespace' => 'Form', 'as' => 'form.'], function (){
+                Route::resource('/','FormController',  ['except' => ['show']]);
+
+                Route::resource('/templates','TemplateController',  ['except' => ['show']]);
+                Route::post('/template/clone','TemplateController@clone')->name('template.clone');
+                Route::get('/{form}/get/items/','FormController@getItems')->name('get.items');
+
+                Route::resource('/categories','CategoryController',  ['except' => ['show']]);
+                Route::get('/categories/type/{type}','CategoryController@create')->name('create.withType');
+            });
+        /*category*/
+            Route::resource('/category','Category\CategoryController',  ['except' => ['show']]);
+            Route::group(['prefix' => 'category', 'namespace' => 'Category', 'as' => 'category.'], function (){
+                Route::get('/type/{type}/create','CategoryController@createType')->name('create.type');
+                Route::get('/type/{type}/','CategoryController@indexType')->name('index.type');
+            });
 
         /*companies*/
         Route::group(['prefix' => 'companies', 'namespace' => 'company', 'as' => 'companies.'], function (){
@@ -141,15 +159,15 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/scope/{scope}/fields','InstitutionScopeFieldController');
             Route::resource('/directorates','DirectorateController');
         });
-            /**
-             * System routes
-             */
-            Route::group(['namespace' => 'System', 'prefix' => 'system', 'as' => 'system.'], function() {
-                Route::resource('countries', 'CountryController');
+        /*
+         * System routes
+         */
+        Route::group(['namespace' => 'System', 'prefix' => 'system', 'as' => 'system.'], function() {
+            Route::resource('countries', 'CountryController');
 //                Route::resource('errors', 'ErrorLogsController');
 //                Route::resource('server', 'ServerController');
 //                Route::get('cache/flush',['as' => 'cache.flush', 'uses' =>  'ServerController@flushCache']);
-            });
+        });
     });
 /* Admin Routes end */
 /* User Routes */
@@ -163,9 +181,9 @@ Route::group(['middleware'=>'installed'], function(){
 //                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
                     Route::resource('/posts','PostController', ['only' => ['show']]);
                     Route::get('/post/{post}/get/comments', 'PostController@getComments');
-                    Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
+//                    Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
                     Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
-                    Route::post('/post/comment/store', 'CommentController@store');
+//                    Route::post('/post/comment/store', 'CommentController@store');
                 });
             }
             /* Comment */

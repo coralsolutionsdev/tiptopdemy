@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Form;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Course\Lesson;
+use App\Modules\Form\Form;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FormController extends Controller
 {
@@ -35,7 +40,12 @@ class FormController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input =  $request->all();
+        $input['type'] = Form::TYPE_FORM;
+        $owner = Form::getOwner($input['owner_id'], $input['owner_type']);
+        $form = Form::createOrUpdate($input, $owner);
+        session()->flash('success', trans('main._success_msg'));
+        return redirect()->route('store.form.edit', [$owner->slug, $form->slug]);
     }
 
     /**
@@ -81,5 +91,13 @@ class FormController extends Controller
     public function destroy($id)
     {
         //
+    }
+    /**
+     * @param Form $form
+     * @return Application|ResponseFactory|Response
+     */
+    function getItems(Form $form){
+        $items = $form->items;
+        return response($items, 200);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Modules\Category;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -13,10 +13,23 @@ class Category extends Model
     use Sluggable;
 
     protected $fillable = [
-        'name', 'slug', 'description', 'parent_id',
-        'position', 'meta_title', 'meta_keywords', 'meta_description',
-        'type', 'status', 'images','show_on_menu'
-    ];
+        'name',
+        'slug',
+        'description',
+        'company_id',
+        'parent_id',
+        'position',
+        'meta_title',
+        'meta_keywords',
+        'meta_description',
+        'type',
+        'status',
+        'images',
+        'show_on_menu',
+        'creator_id',
+        'editor_id'
+
+   ];
     protected $casts = [
         'images' => 'array'
     ];
@@ -30,6 +43,27 @@ class Category extends Model
         self::TYPE_PAGE => 'Page',
         self::TYPE_PRODUCT => 'Product',
     ];
+
+    const ROUTE_POST = 'post';
+    const ROUTE_PAGE = 'page';
+    const ROUTE_PRODUCT = 'product';
+    const ROUTE_FORM = 'form';
+    const ROUTE_FORM_TEMPLATE = 'form-template';
+    const ROUTES_ARRAY = [
+        self::ROUTE_POST => self::TYPE_POST,
+        self::ROUTE_PAGE => self::TYPE_PAGE,
+        self::ROUTE_PRODUCT => self::TYPE_PRODUCT,
+        self::ROUTE_FORM => self::TYPE_FORM,
+        self::ROUTE_FORM_TEMPLATE => self::TYPE_FORM_TEMPLATE,
+    ];
+
+    function getRout(){
+        foreach (self::ROUTES_ARRAY as $key => $rout){
+            if ($rout == $this->type){
+                return $key;
+            }
+        }
+    }
 
     const STATUS_DISABLED = 0;
     const STATUS_ENABLED = 1;
@@ -50,6 +84,30 @@ class Category extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public static function createOrUpdate($input, $category =  null)
+    {
+        if (empty($input['position'])){
+            $input['position'] = 0;
+        }
+        if (empty($input['status'])){
+            $input['status'] = 0;
+        }
+        $user = getAuthUser();
+        $input['editor_id'] = $user->id;
+        if (!empty($category)){
+            $input['type'] = $category->type;
+        }
+        if (!empty($category)){
+            $category->update($input);
+            return  $category;
+        }else{
+            $input['company_id'] = $user->getCompanyId();
+            $input['creator_id'] = $user->id;
+            return self::create($input);
+        }
+
     }
     /**
      * Get all categories of type product, this usually is use for backend purpose including multiple roots
@@ -163,6 +221,7 @@ class Category extends Model
             case self::TYPE_PRODUCT:
                 return $this->belongsToMany('App\Product');
                 break;
+
         }
     }
 

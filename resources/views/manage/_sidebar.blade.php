@@ -101,6 +101,23 @@
     </li>
 {{--List item--}}
     <li class="nav-group">
+        <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-form" aria-expanded="false" aria-controls="nav-group-form">
+            <i class="far fa-file-alt"></i>
+            <span class="">{{__('main.Quizzes')}}</span>
+        </a>
+        <div class="collapse {{ ((Request::is('manage/form*') || Request::is('manage/category/form-template*')) ? 'show' :'')}}" id="nav-group-form">
+            <ul style="">
+                <li class="">
+                    <a class="nav-link" href="{{Route('form.templates.index')}}">{{__('main.templates')}}</a>
+                </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('category.index.type', \App\Modules\Category\Category::ROUTE_FORM_TEMPLATE)}}">{{__('main.template categories')}}</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+{{--List item--}}
+    <li class="nav-group">
         <a class="nav-group-header collapsed" data-toggle="collapse" data-target="#nav-group-1" aria-expanded="false" aria-controls="nav-group-1">
             <i class="fas fa-book"></i>
             <span class="">{{__('admin.Blog')}}</span>

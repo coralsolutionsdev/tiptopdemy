@@ -284,8 +284,11 @@ class Form extends Model
                 $lastSectionItem = $newFormItem;
                 $currentSectionScore = 0;
             }
-            $currentSectionScore = $currentSectionScore  + $newFormItem->score;
-            $lastSectionItem->save();
+            if (!is_null($lastSectionItem)){
+                $currentSectionScore = $currentSectionScore  + $newFormItem->score;
+                $lastSectionItem->save();
+            }
+
 
         }
         return $form;

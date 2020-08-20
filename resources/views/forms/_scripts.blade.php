@@ -683,9 +683,10 @@
             item.find('#itemOptionList-'+itemId).html('');
             item.find('.item-review-options').html('');
             // add options
-            if(multiOptionsArray.includes(type)){
+            if(multiOptionsArray.includes(parseInt(type))){
                 var options = formItem.options;
                 if(options != null){
+                    console.log('passed');
                     options.map(function (option) {
                         drawOptionItem(itemId, type, item, option)
                     });

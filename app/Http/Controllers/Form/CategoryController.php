@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Form;
 
-use App\ProductAttribute;
-use Illuminate\Http\Request;
+use App\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
@@ -13,26 +14,33 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->page_title = 'Attributes';
+        $this->page_title = 'Form Categories';
         $this->breadcrumb = [
-            'Store' => '',
-            'Attributes Sets' => '',
+            'Form' => '',
+            'Categories' => '',
         ];
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param null $type
+     * @return Response
      */
-    public function index()
+    public function index($type = null)
     {
+        $page_title = "Form categories";
+        $breadcrumb = $this->breadcrumb;
+        $categoryType = !empty($type) ? $type : Category::TYPE_FORM;
+        $categoriesCollection =  $tree_categories = Category::where('type', $categoryType)->where('parent_id',0)->get();
+        return view('categories.index', compact('page_title','breadcrumb','categoriesCollection', 'categoryType'));
 
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -43,7 +51,7 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -54,7 +62,7 @@ class CategoryController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -65,7 +73,7 @@ class CategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -77,7 +85,7 @@ class CategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -88,7 +96,7 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

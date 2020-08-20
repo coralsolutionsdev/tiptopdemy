@@ -16,6 +16,11 @@ body{
     pointer-events: none;
     opacity: 0.4;
 }
+.disabled-div{
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 /* main page */
 .display-table{
     display: table;
@@ -52,6 +57,12 @@ body{
 }
 h1, h2, h3, h4, h5{
     font-family: 'Cairo','Rubik', sans-serif;
+}
+.h-header{
+    background-color: #F3F5F9;
+    display: block;
+    padding: 0.5em;
+    margin-bottom: 1em;
 }
 /*widths*/
 .w-200{
@@ -122,7 +133,12 @@ h1, h2, h3, h4, h5{
 }
 .border-secondary{
     border: 1px solid var(--theme-primary-color);
-
+}
+.cu-border-light{
+    border: 1px solid #e2e2e2;
+}
+.red{
+    color: red;
 }
 .btn{
     font-size: 14px;
@@ -325,6 +341,18 @@ input[type=text]:focus.blank-dropdown{
     outline: none!important;
     border-bottom: 1px solid var(--theme-primary-color) !important;
 }
+.blank-item-value{
+    width: 100px;
+}
+.blank-item-mark{
+    width: 40px;
+}
+.input-blank{
+    border: none;
+    border-bottom: 1px solid #CCCCCC;
+    max-width: 75px;
+    margin: 0 5px;
+}
 /**
 button
  */
@@ -356,7 +384,12 @@ button
     border-color: #F3F5F9;
 }
 
-
+.insert-blank{
+    border: 1px solid #e2e2e2;
+}
+.insert-blank:hover{
+    cursor: pointer;
+}
 .btn-blank-dropdown{
     padding: 5px 10px;
     border: none;
@@ -412,8 +445,18 @@ button
 .clickable{
     cursor: pointer;
 }
+.blank_item{
+    border: 1px solid #e2e2e2 !important;
+    padding: 3px !important;
+}
+.blank-item-mark{
+    text-align: center;
+}
+.blank_item:focus{
+   outline: none;
+}
 .editable-div{
-    min-height: 75px;
+    min-height: 160px;
 }
 .editable-div:focus{
     outline: -webkit-focus-ring-color auto 0px ;

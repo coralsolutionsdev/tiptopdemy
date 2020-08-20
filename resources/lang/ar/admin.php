@@ -40,5 +40,9 @@ return [
     'Roles'=>'الأدوار',
     'Languages'=>'اللغات',
     'Countries'=>'البلدان',
+    // forms
+    'forms' => 'Forms',
+    'all forms' => 'All forms',
+    'templates' => 'Templates',
 
 ];

@@ -312,6 +312,7 @@
         'External' => 'External',
         'Recommending' => 'Recommending',
         'Recommended' => 'Recommended',
+        'Display settings' => 'Display settings',
         'Not recommended' => 'Not recommended',
         'Please wait, items are loading.' => 'Please wait, items are loading.',
         'Please create a lesson first.' => 'Please create a lesson first.',
@@ -319,7 +320,16 @@
         'Marks' => '[1] Mark|[2,*] Marks',
 
         //orders
-        'orders' => 'Orders'
+        'orders' => 'Orders',
+        // forms
+        'forms' => 'Forms',
+        'all forms' => 'All forms',
+        'templates' => 'Templates',
+        'categories' => 'Categories',
+        'template categories' => 'Template categories',
+        '_fill blank default paragraph' => 'Add your paragraph here, the select the word that you want to convert to blank and click on insert blank.',
+
+
 
 
 

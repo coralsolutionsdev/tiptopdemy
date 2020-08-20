@@ -17,13 +17,13 @@ class CreateCommentsTable extends Migration
             $table->bigIncrements('id');
             // auth commenter
             $table->string('commenter_type')->nullable()->index();
-            $table->string('commenter_id')->nullable()->index();
+            $table->unsignedBigInteger('commenter_id')->nullable()->index();
             // guest commenter
             $table->string('guest_name')->nullable();
             $table->string('guest_email')->nullable();
             // commentable model
             $table->string("commentable_type")->index();
-            $table->string("commentable_id")->index();
+            $table->unsignedBigInteger("commentable_id")->index();
 //            $table->index(["commentable_type", "commentable_id"]);
             // comment
             $table->text('comment');

@@ -242,16 +242,43 @@ function getImageURL($path)
 function drawCategoryTreeList($items, $type, $class = '')
 {
     echo '<ul class="'.$class.'">';
-        // Temporary solution
+
+
         if ($type == Category::TYPE_POST){
-            $folder = 'blog';
+            $routePath = 'blog';
         }else{
-            $folder = 'store';
+            $routePath = 'store';
         }
         foreach ($items as $item){
-            echo '<li>';
-            echo '<a href="#" class="cat-item">'.$item->name.' ('.$item->items->count().')</a> <a href="'.route($folder.'.categories.edit',$item->slug).'" class="icon" title="Edit Category"><i class="far fa-edit"></i></a> - <a href="'.route($folder.'.category.show',$item->slug).'" class="icon"  title="View Category"><i class="far fa-eye"></i></a>';
+            // Temporary solution for routing paths
+            $showRoute = '';
+            $editRoute = '';
+            switch ($type) {
+                case \App\Modules\Category\Category::TYPE_POST:
+                    $showRoute = route('blog.category.show',$item->slug);
+                    $editRoute = route('blog.categories.edit',$item->slug);
+                    break;
+                case \App\Modules\Category\Category::TYPE_PRODUCT:
+                    $showRoute = route('store.category.show',$item->slug);
+                    $editRoute = route('store.categories.edit',$item->slug);
+                    break;
+                case \App\Modules\Category\Category::TYPE_FORM:
+                    $showRoute = route('category.show',$item->slug);
+                    $editRoute = route('category.edit',$item->slug);
+                    break;
+                case \App\Modules\Category\Category::TYPE_FORM_TEMPLATE:
+//                    $showRoute = route('category.show',$item->slug);
+                    $editRoute = route('category.edit',$item->slug);
+                    break;
+                default:
+                    $showRoute = route('category.show',$item->slug);
+                    $editRoute = route('category.edit',$item->slug);
+            }
+            echo '<li class="cat-li uk-clearfix">';
+//            .$item->items->count().
+            echo '<a href="#" class="uk-button uk-button-default uk-button-small uk-text-capitalize uk-float-left">'.$item->name.' (0)</a>  <a href="'.$showRoute.'" class="uk-button uk-button-default uk-button-small ck-button-success" uk-tooltip="'.__('main.view').'" style="margin: 0px 3px 0px 6px !important;"><i class="far fa-eye"></i></a> <a href="'.$editRoute.'" class="uk-button uk-button-default uk-button-small ck-button-primary" uk-tooltip="'.__('main.edit').'"><i class="far fa-edit"></i></a>';
             $sub_menu =  Category::where('type', $type)->where('parent_id',$item->id)->get();
+            $sub_menu =  $item->children;
             if (!empty($sub_menu)){
                 drawCategoryTreeList($sub_menu, $type);
             }
@@ -270,8 +297,8 @@ function drawInputTreeListItems($items, $input_name, $selectedItems = array(), $
         }else{
             $checked = '';
         }
-        echo '<input name="'.$input_name.'"  id="tree_item-'.$item->id.'" class="tree_item-'.$item->id.'" value="'.$item->id.'" type="checkbox" '.$checked.' /><label for="tree_item-'.$item->id.'">'.$item->name.'</label>';
-        $sub_menu = \App\Category::where('type',\App\Category::TYPE_PRODUCT)->where('parent_id',$item->id)->orderBy('position')->get();
+        echo '<input name="'.$input_name.'"  id="tree_item-'.$item->id.'" class="tree-item tree_item-'.$item->id.'" value="'.$item->id.'" type="checkbox" '.$checked.' /> <label for="tree_item-'.$item->id.'">'.$item->name.'</label>';
+        $sub_menu = \App\Category::where('type',$item->type)->where('parent_id',$item->id)->orderBy('position')->get();
         if (!empty($sub_menu)){ // Draw inner list if available
             drawInputTreeListItems($sub_menu, $input_name, $selectedItems);
         }

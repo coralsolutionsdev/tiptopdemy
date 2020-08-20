@@ -39,5 +39,10 @@ return [
     'Roles'=>'Roles',
     'Languages'=>'Languages',
     'Countries'=>'Countries',
+    // forms
+    'forms' => 'Forms',
+    'all forms' => 'All forms',
+    'templates' => 'Templates',
+
 
 ];

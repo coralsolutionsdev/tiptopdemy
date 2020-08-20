@@ -293,7 +293,7 @@
 
 
         // Form
-        'Quizzes' => 'الإختبارات',
+        'Quizzes' => 'إختبارات',
         'quizzes' => 'إختبارات',
         'Add Quiz' => 'أضف إختبار',
         'Quiz name' => 'إسم الإختبار',
@@ -306,7 +306,7 @@
         'To select from menu' => 'للإختيار من القائمة المنسدلة',
         'Single choice' => 'خيار واحد',
         'Ratio allowing one choice' => 'يسمح بإجابة واحدة',
-        'Multiple choice' => 'إجابات متددة',
+        'Multiple choice' => 'إجابات متعددة',
         'Allowing multi choice' => 'يسمح بأختيار اجابات متعددة',
         'Section' => 'قسم',
         'The section' => 'القسم',
@@ -324,7 +324,7 @@
         'Add Option' => 'أضف خيار',
         'Question Options' => 'خيارات العنصر',
         'Question Width' => 'عرض العنصر',
-        'General settings' => 'خيارات عامة',
+        'General settings' => 'الإعدادات العامة',
         'Score' => 'التقييم',
         'Remark' => 'الدرجة',
         'Add blank' => 'أضف فراغ',
@@ -340,16 +340,21 @@
         'Recommending' => 'الترشيحات',
         'Recommended' => 'وزاري',
         'Not recommended' => 'غير مرشح',
+        'Display settings' => 'إعدادات العرض',
         'Please wait, items are loading.' => 'يرجى الإنتظار يتم تحميل العناصر.',
         'Please create a lesson first.' => 'يرجى إنشاء درس أولاً.',
         'Marks' => '[1] درجة|[2,*] درجات',
 
         //orders
-        'orders' => 'طلبات'
+        'orders' => 'طلبات',
 
-
-
-
+        // forms
+        'forms' => 'النماذج',
+        'all forms' => 'جميع النماذج',
+        'templates' => 'القوالب',
+        'categories' => 'المصنفات',
+        'template categories' => 'مصنفات القوالب',
+        '_fill blank default paragraph' => 'ضع النص هناو ثم قم باختيار الكلمة المراد تحويلها الى فراغ و اضغط أضف فراغ.',
 
 
 

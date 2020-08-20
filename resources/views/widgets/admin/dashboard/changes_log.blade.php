@@ -24,7 +24,7 @@
             </tbody>
         </table>
         <div class="text-right" style="padding: 10px">
-            <a href="{{Route('store.products.index')}}" class="uk-button uk-button-small uk-action-btn uk-button-default">{{__('main.view all')}}</a>
+{{--            <a href="{{Route('store.products.index')}}" class="uk-button uk-button-small uk-action-btn uk-button-default">{{__('main.view all')}}</a>--}}
         </div>
     </div>
 </div>

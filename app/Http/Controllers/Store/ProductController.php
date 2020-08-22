@@ -144,6 +144,7 @@ class ProductController extends Controller
         $types = ProductType::pluck('name', 'id')->toArray();
         $visibility = Product::STATUS_ARRAY;
         $tree_categories = Category::where('type', Category::TYPE_PRODUCT)->where('parent_id', 0)->get();
+        $categories = $tree_categories; //TODO: this is temp
         $selectedCategories = $product->categories()->pluck('id')->toArray();
         $tags = Tag::getWithType('product')->pluck('name', 'name');
         $selectedTags = $product->getTags();

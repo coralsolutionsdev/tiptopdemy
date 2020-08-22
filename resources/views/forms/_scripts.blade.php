@@ -157,7 +157,6 @@
             // var item = $(this).closest('.form-item');
             // var itemId = item.attr('id').split('-')[1];
             // addMinyTinyEditor('.item-content-editor-'+itemId);
-            // console.log('movied');
             closeCurrentlyOpenedConfig();
         });
     }
@@ -308,7 +307,6 @@
     function reArrangeItemOptions() {
         $('.item-options-list').off('moved');
         UIkit.util.on('.item-options-list', 'moved', function () {
-            //console.log();
             // UIkit.notification('Card has been moved.', 'success');
         });
     }
@@ -606,6 +604,7 @@
         }
 
         if(formItem != null) {
+            console.log(formItem);
             // update values
             item.find('.input-title').val(formItem.title);
             if(type == typeSection){
@@ -615,6 +614,7 @@
             }
             item.find('.input-description').val(formItem.description);
             item.find('.item-score-widget').html(formItem.score);
+            item.find('.input-score').val(formItem.score);
             // update properties
             var properties = formItem.properties;
             if(properties != null){
@@ -679,14 +679,12 @@
 
             }
 
-
             item.find('#itemOptionList-'+itemId).html('');
             item.find('.item-review-options').html('');
             // add options
             if(multiOptionsArray.includes(parseInt(type))){
                 var options = formItem.options;
                 if(options != null){
-                    console.log('passed');
                     options.map(function (option) {
                         drawOptionItem(itemId, type, item, option)
                     });
@@ -732,6 +730,63 @@
         removeEditorOnResorting();
         closeCurrentlyOpenedConfigOnSorting();
         updateQuestionTotalScore();
+        replicateFormItem();
+
+    }
+    function replicateFormItem() {
+        $('.replicate-form-item').off('click');
+        $('.replicate-form-item').click(function () {
+            closeCurrentlyOpenedConfig();
+            var item = $(this).closest('.form-item');
+            var itemId = item.attr('id').split('-')[1];
+            var itemType = item.find('.input-type').val();
+            var formItem = [];
+            var properties = [];
+            var options = [];
+            // build item properties
+            if(item.find('.input-shuffle-questions').is(":checked")){
+                properties.shuffle_questions = 1;
+            }
+            if(item.find('.input-shuffle-options').is(":checked")){
+                properties.shuffle_options = 1;
+            }
+            if(item.find('.input-answer-time').is(":checked")){
+                properties.answer_time = 1;
+            }
+            properties.answer_time_within = item.find('.input-answer-time-within').val();
+
+            if(item.find('.input-source-internal').is(":checked")){
+                properties.source = 0;
+            }else if(item.find('.input-source-internal-modified').is(":checked")){
+                properties.source = 1;
+            }else if(item.find('.input-source-external').is(":checked")){
+                properties.source = 2;
+            }
+            if(item.find('.input-display-inline').is(":checked")){
+                properties.display = 0;
+            }else if(item.find('.input-display-block').is(":checked")){
+                properties.display = 1;
+            }
+            properties.width = item.find('.input-width').val();
+
+            // update options
+            if(itemType == typeFillTheBlank){
+                options.paragraph = item.find('.fill-the-blank-div').html();
+                options.align = item.find('.input-blanks-alignment').val();
+            }
+
+            // build item values
+            formItem.id = generateRandomString(6);
+            formItem.title = item.find('.input-title').val();
+            formItem.description = item.find('.input-description').val();
+            formItem.score = item.find('.input-score').val();
+            formItem.properties = properties;
+            formItem.options = options;
+
+            currentlyActiveId = itemId;
+            // drawFormItem(type, formItem = null)
+            drawFormItem(itemType, formItem)
+        });
 
     }
     function scrollToEndOfPage(item){
@@ -795,7 +850,9 @@
             });
         });
         @else
-        $('#formSettingModal').modal('show');
+        /*Add section by default*/
+        drawFormItem(typeSection);
+        // $('#formSettingModal').modal('show');
     @endif
 
 

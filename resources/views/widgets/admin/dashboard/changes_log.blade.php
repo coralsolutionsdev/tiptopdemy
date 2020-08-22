@@ -11,16 +11,33 @@
             </tr>
             </thead>
             <tbody>
-            <td>August 20, 2020 3:47:02 PM</td>
-            <td class="uk-text-center align-middle">
-                <div class="uk-alert-success" uk-alert>
-                    Deployed
-                </div>
-            </td>
-            <td>
-                [Form] create form model / form template and all realetd pages.
-            </td>
+            <tr>
+                <td class="align-middle">August 22, 2020 6:55:24 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Product]: bugfix, error occurs in case empty categories. <br>
+                    [FormItem]: view the question description in tooltip (when mouse pass over the question).
+                    [FormItem]: fix drop down padding (move mouse over text). <br>
+                    [FormItem]: add default select option in drop down menu (Do not select the first option by default)
+                    <br>
 
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">August 20, 2020 3:47:02 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Form] create form model / form template and all realetd pages.
+                </td>
+            </tr>
             </tbody>
         </table>
         <div class="text-right" style="padding: 10px">

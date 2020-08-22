@@ -323,6 +323,7 @@
         'orders' => 'Orders',
         // forms
         'forms' => 'Forms',
+        'choose answer' => 'choose answer',
         'all forms' => 'All forms',
         'templates' => 'Templates',
         'categories' => 'Categories',

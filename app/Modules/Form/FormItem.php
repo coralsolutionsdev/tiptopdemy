@@ -79,6 +79,21 @@ class FormItem extends Model
         return $value;
     }
 
+    /**
+     * return tooltip string to view the question description
+     * @return string
+     */
+    function getToolTip()
+    {
+        $tooltip = '';
+        if ($this->type != self::TYPE_SECTION && !empty($this->description)){
+            $direction = $this->form->getDirection() == 'ltr' ? 'left' : 'right';
+            $tooltip = 'uk-tooltip="title: '.$this->description.'; pos: '.$direction.'"';
+
+        }
+        return $tooltip;
+    }
+
 
     public function users()
     {

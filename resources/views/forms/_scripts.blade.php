@@ -225,12 +225,16 @@
         });
     }
     updateOptionItem();
-    function drawOptionItem(itemId, type, item = null, option = null) {
+    function drawOptionItem(itemId, type, item = null, option = null, defaultTitle =  null) {
         if(item == null){
             item = $('#form_item-'+itemId);
         }
         var optionID = generateRandomString(6);
+
         var optionTitle = '{{__('main.Option title')}}';
+        if(defaultTitle != null){
+            optionTitle = defaultTitle;
+        }
         var optionSelected = '';
         var optionScore = 0;
         if(option != null){
@@ -715,7 +719,13 @@
                 deleteItemBlank();
             }
         }else{
-            drawOptionItem(itemId, type)
+            if(type == typeSingleChoice){
+                drawOptionItem(itemId, type, null, null, 'True');
+                drawOptionItem(itemId, type, null, null, 'False');
+
+            }else{
+                drawOptionItem(itemId, type)
+            }
         }
         closeCurrentlyOpenedConfig();
         // activateItem(itemId);

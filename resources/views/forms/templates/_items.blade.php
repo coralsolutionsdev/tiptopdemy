@@ -17,7 +17,7 @@
                         <li><a href="#">{{__('main.General settings')}}</a></li>
                     </ul>
                     <ul class="uk-switcher">
-                        <li class="uk-placeholder item-config-section">
+                        <li class="uk-placeholder item-config-section bg-white">
                             <div>
                                 <div>
                                     {{--hidden data--}}

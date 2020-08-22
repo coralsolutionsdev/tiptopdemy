@@ -795,6 +795,8 @@
             });
         });
         @else
+        /*Add section by default*/
+        drawFormItem(typeSection);
         $('#formSettingModal').modal('show');
     @endif
 

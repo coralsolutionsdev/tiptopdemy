@@ -181,7 +181,7 @@
                                         <li class="form form-group uk-width-1-1@s bg-white uk-padding-small uk-grid-small" uk-grid style="margin: 3em 0px 0px 0px">
                                             @if(!empty($items))
                                                 @foreach($items as $key => $item)
-                                                <div class="uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove" style="padding: 2px 0px">
+                                                <div class="uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove" {!! $item->getToolTip() !!} style="padding: 2px 0px">
                                                     @if($item->type == \App\Modules\Form\FormItem::TYPE_SECTION)
                                                         <div class="uk-grid-small uk-text-center" uk-grid style="position: absolute; margin-top: -48px;">
                                                             <div class="uk-width-auto@m">
@@ -220,8 +220,9 @@
                                                                     @endforeach
                                                                 @elseif($item->type == \App\Modules\Form\FormItem::TYPE_DROP_DOWN)
                                                                     @if($item->properties['display'] == 1)<br>@endif
-                                                                        <select class="uk-select uk-form-small uk-form-width-small">
-                                                                            @foreach($item['options'] as $option)
+                                                                        <select class="uk-select uk-form-small uk-form-width-small" style="padding-left: 20px">
+                                                                        <option>{{$form->getDirection() == 'ltr' ? 'Choose answer' : __('main.choose answer')}}</option>
+                                                                        @foreach($item['options'] as $option)
                                                                                 <option>{{$option['title']}}</option>
                                                                             @endforeach
                                                                         </select>

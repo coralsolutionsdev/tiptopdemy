@@ -350,6 +350,7 @@
 
         // forms
         'forms' => 'النماذج',
+        'choose answer' => 'إختر الإجابة',
         'all forms' => 'جميع النماذج',
         'templates' => 'القوالب',
         'categories' => 'المصنفات',

@@ -111,7 +111,8 @@ class FormController extends Controller
     public function edit(Lesson $lesson, Form $form)
     {
         $page_title = $form->title;
-        return view('store.forms.create', compact('page_title', 'lesson', 'form'));
+        $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
+        return view('store.forms.create', compact('page_title', 'lesson', 'form', 'categories'));
     }
 
     /**

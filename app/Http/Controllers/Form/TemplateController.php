@@ -126,21 +126,29 @@ class TemplateController extends Controller
         session()->flash('success',__('main._delete_msg'));
         return redirect()->back();
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function clone(Request $request){
+
         $input = $request->all();
-        $input =  $request->all();
-        $input['type'] = Form::TYPE_FORM;
-        $owner = Form::getOwner($input['owner_id'], $input['owner_type']);
+        $input['type'] = isset($input['type']) ? $input['type'] : Form::TYPE_FORM;
+        $owner =  null;
+        if (isset($input['owner_id']) && isset($input['owner_type'])){
+            $owner = Form::getOwner($input['owner_id'], $input['owner_type']);
+        }
         $form = Form::find($input['form_template_id']);
         if(empty($form)){
             abort(404);
         }
         $newForm = $form->clone($input);
-        session()->flash('success', trans('main._success_msg'));
-        if ($input['owner_type'] == Form::OWNER_TYPE_LESSON){
+        session()->flash('success', trans('main._save_msg'));
+        if (isset($input['owner_type']) && $input['owner_type'] == Form::OWNER_TYPE_LESSON){
             return redirect()->route('store.form.edit', [$owner->slug, $newForm->hash_id]);
-        }else{
-            abort(404);
+        }elseif($input['type'] == Form::TYPE_FORM_TEMPLATE){
+            return redirect()->back();
         }
 
     }

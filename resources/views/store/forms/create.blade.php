@@ -4,6 +4,7 @@
     <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
+    <link rel="stylesheet" href="{{asset('/plugins/input_tree/css/styles.css')}}">
 @endsection
 @section('content')
     @if(!empty($form))
@@ -23,6 +24,7 @@
                         @endif
                         <span class="uk-button uk-button-default" style="padding: 0 20px" data-toggle="modal" data-target="#formSettingModal" uk-tooltip="{{__('main.General settings')}}"><span uk-icon="icon: settings"></span></span>
                         <span class="uk-button uk-button-default reset-form">{{__('main.Reset')}}</span>
+                        <span class="uk-button uk-button-default save-as-template" data-toggle="modal" data-target="#saveAsTemplate">{{__('main.save as Template')}}</span>
                     </div>
                     <div class="uk-text-right">
                         @if(empty($form))
@@ -59,6 +61,7 @@
     </div>
     {!! Form::close() !!}
     @include('forms.templates._items')
+    @include('forms.templates._save_template')
 @endsection
 @section('script')
     @include('partial.scripts._tinyemc')

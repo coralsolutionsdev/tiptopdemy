@@ -297,7 +297,7 @@ function drawInputTreeListItems($items, $input_name, $selectedItems = array(), $
         }else{
             $checked = '';
         }
-        echo '<input name="'.$input_name.'"  id="tree_item-'.$item->id.'" class="tree-item tree_item-'.$item->id.'" value="'.$item->id.'" type="checkbox" '.$checked.' /> <label for="tree_item-'.$item->id.'">'.$item->name.'</label>';
+        echo '<label><input name="'.$input_name.'"  id="tree_item-'.$item->id.'" class="tree-item tree_item-'.$item->id.'" value="'.$item->id.'" type="checkbox" '.$checked.' /> '.$item->name.'</label>';
         $sub_menu = \App\Category::where('type',$item->type)->where('parent_id',$item->id)->orderBy('position')->get();
         if (!empty($sub_menu)){ // Draw inner list if available
             drawInputTreeListItems($sub_menu, $input_name, $selectedItems);

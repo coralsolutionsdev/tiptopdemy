@@ -295,13 +295,17 @@ class Form extends Model
     }
     function clone($input)
     {
-        $owner = self::getOwner($input['owner_id'], $input['owner_type']);
+        $owner = null;
+        if (isset($input['owner_id']) && isset($input['owner_type'])){
+            $owner = self::getOwner($input['owner_id'], $input['owner_type']);
+        }
         $ownerId = !empty($owner)? $owner->id : 0;
         $newForm = $this->replicate();
         $newForm->push();
         $newForm->slug = Hashids::encode(1,$ownerId,$newForm->id); // change this
         $newForm->hash_id = Hashids::encode(1,$ownerId,$newForm->id);
-        $newForm->type = self::TYPE_FORM;
+        $newForm->type = $input['type'];
+        $newForm->title = isset($input['title']) ? $input['title'] : $newForm->title;
         $newForm->save();
         if(!empty($owner)){
             $owner->forms()->attach($newForm->id);
@@ -328,6 +332,9 @@ class Form extends Model
                 $newFormItem->save();
             }
         }
+        // update Category
+        $categories = isset($input['categories']) ? $input['categories'] : array();
+        $newForm->categories()->sync($categories);
 
         return $newForm;
     }

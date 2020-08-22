@@ -12,6 +12,18 @@
             </thead>
             <tbody>
             <tr>
+                <td class="align-middle">August 21, 2020 0:19:55 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Checkbox Tree]: improve the performance by allowing to select when clicking on the category name.
+                    [Form] Create a function to save the quiz form as a template (Click on save as template) in the edit form quiz.
+                </td>
+            </tr>
+            <tr>
                 <td class="align-middle">August 22, 2020 9:28:14 PM</td>
                 <td class="uk-text-center align-middle">
                     <div class="uk-alert-success" uk-alert>

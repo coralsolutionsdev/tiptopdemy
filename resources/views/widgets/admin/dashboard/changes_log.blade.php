@@ -21,7 +21,7 @@
                 <td class="align-middle">
                     [Product]: bugfix, error occurs in case empty categories. <br>
                     [FormItem]: view the question description in tooltip (when mouse pass over the question).
-                    [FormItem]: fix drop down padding (Arrows over text. <br>
+                    [FormItem]: fix drop down padding (Arrows over text). <br>
                     [FormItem]: add default select option in drop down menu (Do not select the first option by default)
                     <br>
 

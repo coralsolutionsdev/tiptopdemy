@@ -20,6 +20,7 @@
                 </td>
                 <td class="align-middle">
                     [Checkbox Tree]: improve the performance by allowing to select when clicking on the category name.
+                    <br>
                     [Form] Create a function to save the quiz form as a template (Click on save as template) in the edit form quiz.
                 </td>
             </tr>

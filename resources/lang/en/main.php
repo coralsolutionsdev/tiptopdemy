@@ -41,6 +41,7 @@
 		'_success_msg' => 'Added successfully',
 		'_update_msg' => 'Updated successfully',
 		'_delete_msg' => 'Deleted successfully',
+		'_save_msg' => 'Saved successfully',
 		'_quick_links' => 'Quick Links',
 		'_profile' => 'Profile',
 		'_logout' => 'Logout',
@@ -321,11 +322,13 @@
 
         //orders
         'orders' => 'Orders',
+
         // forms
         'forms' => 'Forms',
         'choose answer' => 'choose answer',
         'all forms' => 'All forms',
         'templates' => 'Templates',
+        'save as Template' => 'Save as Template',
         'categories' => 'Categories',
         'template categories' => 'Template categories',
         '_fill blank default paragraph' => 'Add your paragraph here, the select the word that you want to convert to blank and click on insert blank.',

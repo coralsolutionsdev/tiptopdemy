@@ -4,6 +4,7 @@
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 <span class="uk-align-right">
+                    <span class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Replicate"></span>
                     <span class="open-config hover-primary" uk-icon="icon: cog" href=""></span>
                     <span class="hover-danger remove-form-item" uk-icon="icon: trash"></span>
                 </span>
@@ -160,8 +161,9 @@
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 <span class="uk-align-right">
                     <span class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
-                    <span class="open-config hover-primary" uk-icon="icon: cog" href=""></span>
-                    <span class="hover-danger remove-form-item" uk-icon="icon: trash"></span>
+                    <span class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Replicate"></span>
+                    <span class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+                    <span class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                 </span>
             </div>
             <div class="uk-margin-remove">

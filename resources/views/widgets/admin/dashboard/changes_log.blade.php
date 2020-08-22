@@ -12,6 +12,17 @@
             </thead>
             <tbody>
             <tr>
+                <td class="align-middle">August 22, 2020 9:28:14 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Form] add form items count to show the number of the added items.
+                </td>
+            </tr>
+            <tr>
                 <td class="align-middle">August 22, 2020 6:55:24 PM</td>
                 <td class="uk-text-center align-middle">
                     <div class="uk-alert-success" uk-alert>

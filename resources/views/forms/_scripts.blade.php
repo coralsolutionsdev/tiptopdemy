@@ -65,6 +65,9 @@
     function resetCount() {
         count = 0;
         currentlyActiveId = 0;
+        $('.question-type').each(function () {
+            $(this).find('.count').html(0);
+        });
     }
     function reBuildItemReview(itemId){
         var item = $('#form_item-'+itemId);
@@ -314,12 +317,19 @@
         $('.remove-form-item').off('click');
         $('.remove-form-item').click(function () {
             var item = $(this).closest('.form-item');
+            var type = item.find('.input-type').val();
+
             if(!confirm('Are you sure that you want to remove this item?')){
                 return false;
             }
             item.remove();
             if(count >= 1) {
                 count--;
+            }
+            var formListItem = $('#questionType-'+type);
+            var formListItemCurrentCount = formListItem.find('.count');
+            if(parseInt(formListItemCurrentCount.html()) > 0){
+                formListItemCurrentCount.html(parseInt(formListItemCurrentCount.html()) - 1);
             }
         });
     }
@@ -716,6 +726,9 @@
             }
 
         }
+        var formListItem = $('#questionType-'+type);
+        var formListItemCurrentCount = formListItem.find('.count');
+        formListItemCurrentCount.html(parseInt(formListItemCurrentCount.html()) + 1);
         /*Load default actions*/
         resetDescription();
         activeClickedItem();

@@ -12,6 +12,19 @@
             </thead>
             <tbody>
             <tr>
+                <td class="align-middle">August 21, 2020 0:37:30 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [FormItem]: in single choice form item set true and false as the default initial question options.
+                    <br>
+                    [SidebarMenu] rearrange the forms menu to be placed before the store menu.
+                </td>
+            </tr>
+            <tr>
                 <td class="align-middle">August 21, 2020 0:19:55 PM</td>
                 <td class="uk-text-center align-middle">
                     <div class="uk-alert-success" uk-alert>

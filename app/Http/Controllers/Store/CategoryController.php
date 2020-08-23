@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Store;
 
 use App\Category;
+use App\Product;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -79,12 +80,16 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        $page_title =  $category->name;
+        $breadcrumb =  $this->breadcrumb;
+        $products = $category->items;
+
+        return view('store.products.frontend.index', compact('products','page_title','breadcrumb', 'category'));
     }
 
     /**

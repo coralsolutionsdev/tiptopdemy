@@ -12,6 +12,91 @@
 	</style>
 @endsection
 @section('content')
+	<div class="store uk-container uk-padding-remove" style="background-color: transparent">
+	{{--header--}}
+	<div class="header uk-grid-collapse uk-padding-small uk-padding-remove-left uk-padding-remove-right" uk-grid>
+		<div class="uk-width-expand">
+			<p style="margin-bottom: -5px">{{__('main.Products browser')}}</p>
+			<p style="font-size: 26px; color: black; font-weight:700">{{__($page_title)}}</p>
+		</div>
+		<div class="uk-width-auto uk-flex uk-flex-bottom">
+			<ul class="uk-breadcrumb">
+				<li><span uk-icon="home"></span></li>
+				@foreach($breadcrumb as $page => $link)
+					<li><a href="">{{__($page)}}</a></li>
+				@endforeach
+			</ul>
+		</div>
+	</div>
+	{{--body--}}
+		<div class="uk-grid-small uk-child-width-1-1" uk-grid>
+			<div>
+				@widget('home.product.top_bar_menu')
+			</div>
+			<div>
+				<div class="uk-grid-small" uk-grid>
+					<div class="uk-width-1-4">
+						<div class="uk-card uk-card-default uk-card-body" style="padding: 10px">
+							@widget('home.product.side_bar_menu')
+						</div>
+					</div>
+					<div class="uk-width-expand">
+						@if(!empty($products) && $products->count() > 0)
+						<div class="uk-grid-small uk-child-width-1-3@m" uk-grid>
+							@foreach($products as $product)
+							<div>
+								<div class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
+									<a href="{{route('store.product.show', $product->slug)}}">
+										<div style="height: 200px;">
+											<div class="uk-text-center">
+												<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
+													<img src="{{$product->getProductPrimaryImage()}}" alt="">
+													<img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="">
+												</div>
+											</div>
+										</div>
+									</a>
+									<div class="" style="padding:20px 15px">
+										<a href="{{route('store.product.show', $product->slug)}}">
+											<div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -45px;" uk-grid>
+												<div class="uk-width-expand"></div>
+												<div class="uk-width-auto">
+													<div class="uk-card uk-card-default uk-card-body" style="padding:3px 10px; color: black; font-weight: 700; font-size: 18px">
+														<span class="uk-text-primary">$</span> {{$product->price}}
+													</div>
+												</div>
+											</div>
+											<div style="font-weight: 700; color: black">{{$product->name}}</div>
+											<div style="height: 50px">
+												{!! subContent($product->description, 100) !!}
+											</div>
+											<div style="margin-bottom: 10px">
+												<span><img class="uk-border-circle" src="{{$product->user->getProfilePicURL()}}" style="width: 20px; height: 20px; object-fit: cover"></span> <span>{{__('main.By')}}: </span> <span> {{$product->user->name}}</span>
+											</div>
+										</a>
+										<div style="">
+											<button class="uk-button uk-button-primary uk-width-1-1"><span uk-icon="icon: cart"></span> {{__('main.Add to cart')}}</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							@endforeach
+						</div>
+						@else
+						<div class="uk-grid-small uk-child-width-1-1@m uk-text-center" uk-grid>
+							<div>
+								<div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large">
+									{{__('main.There is no form items yet.')}}
+								</div>
+							</div>
+						</div>
+						@endif
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+@if(false)
 <section>
 	@include('partial.frontend._page-header')
 	<div class="uk-background-default pt-25">
@@ -51,31 +136,23 @@
 									<div class="uk-card uk-card-default uk-card-body uk-padding-small product-card">
 										<div class="uk-grid-small uk-child-width-1-1@s uk-text-center" uk-grid>
 											<a href="{{route('store.product.show', $product->slug)}}">
-											<div style="max-height: 250px; overflow: hidden">
-												<div class="uk-text-center">
-													<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
-														<img src="{{$product->getProductPrimaryImage()}}" alt="">
-														<img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="">
-													</div>
-												</div>
-											</div>
+
 											</a>
 											<div>
 												<a href="{{route('store.product.show', $product->slug)}}">
 												<div>
-													<div style="font-size: 22px">{{$product->name}}</div>
+													<div style="font-size: 22px"></div>
 													<div style="font-size: 18px" class="uk-text-primary">$ {{$product->price}}</div>
 													<br>
 												</div>
 												</a>
 												<div>
-													<button class="uk-button uk-button-primary"><span uk-icon="icon: cart"></span> {{__('main.Add to cart')}}</button>
 												</div>
 											</div>
 										</div>
 										@if(false)
 										<div class="uk-text-center">
-											<a href="{{route('store.product.show', $product->slug)}}">
+
 												<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
 													<img class="product-image" src="{{$product->getProductPrimaryImage()}}" alt="">
 {{--													@if(!empty($product->getProductAlternativeImage()))--}}
@@ -120,4 +197,5 @@
 	var cw = $('.product-image').width();
 	$('.product-image').css({'height':cw+'px'});
 </script>
+@endif
 @endsection

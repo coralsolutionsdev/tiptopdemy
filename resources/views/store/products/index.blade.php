@@ -4,7 +4,6 @@
     <a href="{{Route('store.products.create')}}" class="btn btn-primary btn-lg w-75"><span class="fa fa-plus-circle" aria-hidden="true"></span> <span>{{trans('main._add')}}</span></a>
 @endsection
 @section('content')
-
     <section>
         {{--Page header--}}
         @include('manage.partials._page-header')
@@ -72,7 +71,6 @@
             {{$products->links()}}
         </div>
     </section>
-
 @endsection
 @section('script')
 @endsection

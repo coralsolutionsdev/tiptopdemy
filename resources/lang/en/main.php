@@ -14,6 +14,8 @@
         'view the recently registered products' => 'View the recently registered products',
         'welcome back' => 'Welcome back',
         'site settings' => 'Site settings',
+        'From' => 'From',
+        'To' => 'To',
 
 
         '_main' => 'Overview',
@@ -250,7 +252,11 @@
         'of' => 'of',
         'Search in Store' => 'Search in Store',
         'To complete this step, please purchase the item first' => 'To complete this step, please purchase the item first',
-
+        'Search in store' => 'Search in store',
+        'Filter by Category' => 'Filter by Category',
+        'Sort by' => 'Sort by',
+        'Apply Filter' => 'Apply Filter',
+        'Filter prices' => 'Filter prices',
 
 
 
@@ -266,6 +272,9 @@
         'There is no available lessons in this unit' => 'There is no available lessons in this unit',
         'Add Media Item' => 'Add Media Item',
         'Media items' => 'Media items',
+        'Products browser' => 'Products browser',
+        'Store\'s products' => 'Store\'s products',
+        'Price range' => 'Price range',
 
     // Form
         'Add Quiz' => 'Add Quiz',

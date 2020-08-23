@@ -10,6 +10,7 @@ use App\ProductImage;
 use App\ProductType;
 use App\Services\FileAssetManagerService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -277,20 +278,70 @@ class ProductController extends Controller
 
     /****************************************
      * Front end functions
-     ***************************************/
+     **************************************
+     * @param Request $request
+     * @return Application|Factory|View
+     */
 
-    public function getIndex()
+    public function getIndex(Request $request)
     {
-        $page_title =  __('main.Store');
+        $page_title =  __('main.Store\'s products');
         $breadcrumb =  $this->breadcrumb;
-        $products =  Product::where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->get();
-        return view('store.products.frontend.index', compact('products','page_title','breadcrumb'));
+        $input = $request->input();
+        // get collection by search
+        $searchKey = ltrim(rtrim($request->input('search'), ' '), ' ');
+        $search_in_category = $request->input('category') ? : 0;
+        // get collection
+        if (!empty($searchKey)){
+            $products = Product::where('name', 'LIKE', '%' . $searchKey . '%')->orWhere('sku', 'LIKE', '%' . $searchKey . '%')->latest()->get();
+        }else{
+            $products = Product::where('name', 'LIKE', '%' . $searchKey . '%')->orWhere('sku', 'LIKE', '%' . $searchKey . '%')->latest()->get();
+        }
+        if (!empty($search_in_category != 0)){ // 0 is searching in all categories
+            $products = $products->filter(function ($product) use($search_in_category){
+                if ($product->status == Product::STATUS_AVAILABLE || $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
+                    $categories =  $product->categories->where('id',$search_in_category);
+                    if (!empty($categories) && $categories->count() > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                return false;
+            });
+        }
+        // is between prices filter
+        if (!empty($input['min']) || !empty($input['max'])) {
+            $minPrice =  $input['min'];
+            $maxPrice =  $input['max'];
+            $products = $products->filter(function ($product) use($minPrice, $maxPrice){
+                $isBetween = true;
+                if (!empty($minPrice)){
+//                  $product->getNumericPrice();
+                    if ($product->price >= $minPrice){
+                        $isBetween =  true;
+                    }else{
+                        $isBetween = false;
+                    }
+                }
+                if ($isBetween == true && !empty($maxPrice)){
+                    if ($product->price <= $maxPrice){
+                        $isBetween =  true;
+                    }else{
+                        $isBetween = false;
+                    }
+                }
+                return $isBetween;
+            });
+        }
+
+        return view('store.products.frontend.index', compact('products','page_title','breadcrumb', 'searchKey'));
     }
 
     /**
      * Display the specified resource.
      * @param Product $product
-     * @return \Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|View
+     * @return Application|Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|View
      */
     public function show(Product $product)
     {

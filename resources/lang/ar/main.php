@@ -272,12 +272,24 @@
         'Showing products' => 'عرض المنتجات',
         'Default Sort' => 'ترتيب افتراضي',
         'Sort by name' => 'ترتيب حسب الإسم',
-        'Sort by position' => 'ترتيب حسب الموقع',
+        'Sort by position' => 'ترتيب حسب الترتيب',
         'Price low to high' => 'السعر من الأرخص الى الأغلى',
         'Price high to low' => 'السعر من الأغلى الى الارخص',
         'of' => 'من',
         'Search in Store' => 'إبحث في المتجر',
         'To complete this step, please purchase the item first' => 'لإكمال هذه الخطوة, يرجى شراء المنتج اولاً',
+        'Search in store' => 'إبحث في المتجر',
+        'Filter by Category' => 'فلترة التصنيفات',
+        'Sort by' => 'عرض النتائج حسب',
+        'Apply Filter' => 'فلتر التصنيفات',
+        'Products browser' => 'تصفح المنتجات',
+        'Store\'s products' => ' منتجات المتجر',
+        'Price range' => 'نطاق السعر',
+        'From' => 'من',
+        'To' => 'إلى',
+        'Filter prices' => 'فلترة الأسعار',
+
+
 
 
 

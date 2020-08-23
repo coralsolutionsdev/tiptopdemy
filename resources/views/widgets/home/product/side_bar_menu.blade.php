@@ -1,33 +1,40 @@
-{{-- Search --}}
-<div class="uk-card uk-margin-small uk-card-body uk-secondary-bg" style="padding: 40px 20px">
-    <form action="{{ route('store.products.main') }}" method="GET" class="home-search">
-        <fieldset class="uk-fieldset">
-            <div class="uk-margin-small">
-                <div class="uk-inline uk-width-1-1">
-                    <span class="uk-form-icon uk-form-icon-flip uk-text-primary" uk-icon="icon: search"></span>
-                    <input class="uk-input" name="search_key" type="text" placeholder="{{__('main.Search in Store')}} .." value="{{!empty($search_key) ? $search_key : ''}}" required>
-                </div>
-            </div>
-        </fieldset>
-        <button class="uk-button uk-button-primary uk-width-1-1">{{__('main.search')}}</button>
-    </form>
-</div>
 {{-- Categories --}}
-<div class="uk-card uk-margin-small uk-card-body uk-secondary-bg" style="padding: 20px">
-    <h3 class="uk-card-title" style="padding: 0px">{{__('main._categories')}}</h3>
-    <hr>
+<div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
+    <h5 class="" style="padding: 0px; font-weight: 700">{{__('main._categories')}}</h5>
     <div class="uk-margin-small">
         <ul class="uk-list uk-list-divider">
             @foreach($categories as $category)
-                <li style="padding: 5px 5px 0px 5px"><span><a href="{{route('blog.category.show', $category->slug)}}">{{$category->name}}</a></span><span class="uk-align-left"><span class="uk-badge">{{$category->items()->count()}}</span></span></li>
+                <li style="padding: 5px 5px 0px 5px"><span><a href="{{route('store.category.show', $category->slug)}}">{{$category->name}}</a></span><span class="uk-align-left"><span class="uk-badge">{{$category->items()->count()}}</span></span></li>
             @endforeach
         </ul>
     </div>
 </div>
+<div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
+    <form action="{{ route('store.products.main') }}" method="GET" class="home-search">
+        <h5 class="" style="padding: 0px; font-weight: 700">{{__('main.Price range')}}</h5>
+        <div class="uk-margin-small uk-grid-small uk-child-width-1-2" uk-grid>
+            <div class="input-group">
+                <div class="item-title">
+                    <span class="title">{{__('main.From')}}</span>
+                </div>
+                <input class="uk-input" name="min" type="text" placeholder="$" value="{{ $_GET['min'] ?? '' }}">
+            </div>
+            <div class="input-group">
+                <div class="item-title">
+                    <span class="title">{{__('main.To')}}</span>
+                </div>
+                <input class="uk-input" name="max" type="text" placeholder="$" value="{{ $_GET['max'] ?? '' }}">
+            </div>
+        </div>
+        <div style="padding-top: 5px">
+            <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">{{__('main.Filter prices')}}</button>
+        </div>
+    </form>
+
+</div>
 {{-- Tags --}}
-<div class="uk-card uk-margin-small uk-card-body uk-secondary-bg" style="padding: 20px">
-    <h3 class="uk-card-title" style="padding: 0px">{{__('main._tags')}}</h3>
-    <hr>
+<div class="uuk-margin-small" style="padding: 20px">
+    <h5 class="" style="padding: 0px; font-weight: 700">{{__('main._tags')}}</h5>
     <div class="uk-margin-small">
         <div class="blog-tags">
             @foreach($tags as $tag)

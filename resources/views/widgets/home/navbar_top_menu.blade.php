@@ -47,7 +47,7 @@
                     <li><a href=""><span uk-icon="bell"></span></a></li>
                     <li>
                         <button class="uk-button uk-button-default uk-float-left" type="button">
-                            <img class="uk-border-circle" src="{{Auth::user()->getProfilePicURL()}}" style="width: 35px; height: 35px; object-fit: cover" >
+                            <img class="uk-border-circle" src="{{Auth::user()->getProfilePicURL()}}" style="width: 35px; height: 35px; object-fit: cover">
                         </button>
                         <div class="uk-padding-small" uk-dropdown>
                             <ul class="uk-list">

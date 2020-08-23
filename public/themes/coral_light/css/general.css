@@ -1,5 +1,6 @@
 /*@import url("fonts.css");*/
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400&display=swap');
+@import "store.css";
 html, body{
     padding: 0px;
     margin: 0px;
@@ -10,7 +11,24 @@ body{
     margin: auto;
     font-size: 13px;
     background-color: #F3F5F9;
+    /*color: #a7a7a9;*/
+    color: var(--theme-primary-font-color);
+
 }
+
+/**
+uk card
+ */
+.uk-card {
+    border-radius: 10px;
+}
+.uk-button, .uk-input, .uk-select{
+    border-radius: 5px;
+
+}
+/**
+
+ */
 .color-white{
     color: #FFFFFF !important;
 }
@@ -133,7 +151,6 @@ p, h1, h2, h3, h4, h5{
 }
 p{
     font-size: 14px;
-    color: var(--theme-primary-font-color);
 }
 .pt-25{
     padding-top: 25px;

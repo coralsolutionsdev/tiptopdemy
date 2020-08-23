@@ -12,6 +12,19 @@
             </thead>
             <tbody>
             <tr>
+                <td class="align-middle">August 23, 2020 9:16:23 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Product] upgrade product index page. <br>
+                    [Product] enable search by name, category and price in index page. <br>
+                    [Product] BugFix, unable to open show product's category page. <br>
+                </td>
+            </tr>
+            <tr>
                 <td class="align-middle">August 21, 2020 0:37:30 PM</td>
                 <td class="uk-text-center align-middle">
                     <div class="uk-alert-success" uk-alert>

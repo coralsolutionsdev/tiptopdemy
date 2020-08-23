@@ -1,0 +1,23 @@
+.store .header p{
+    margin: 0px;
+    padding: 0px;
+}
+.uk-breadcrumb>:nth-child(n+2):not(.uk-first-column)::before {
+    content: "/";
+    display: inline-block;
+    margin: 0 10px;
+    font-size: .875rem;
+    color: #999;
+    font-weight: 900;
+    color: var(--theme-primary-color);
+}
+.store .input-group .item-title{
+    padding: 0px 5px; position: absolute;
+    margin-top: -10px;
+}
+.store .input-group .item-title .title{
+    background-color: white; padding: 0px 5px; color: #d8d7dc; font-weight: 700
+}
+.store .product a:hover{
+    color: #494949;
+}

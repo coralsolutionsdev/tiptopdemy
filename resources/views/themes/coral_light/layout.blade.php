@@ -10,7 +10,7 @@
         :root{
             --theme-secondary-bg-color: #F3F5F9;
             --theme-primary-color: {{getFrontEndColor()}};
-            --theme-primary-font-color: #333e48;
+            --theme-primary-font-color: #949494;
         }
 
     </style>
@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008200430')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008221910')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -42,7 +42,7 @@
 </head>
 <body>
 {{storeLastUrl()}}
-<section>
+<section style="background-color: var(--theme-secondary-bg-color)">
     <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
         <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
             <div class="double-bounce1"></div>
@@ -56,13 +56,13 @@
     </div>
     @yield('content')
 
-        <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
-            <div class="">
-                <div class="uk-background-secondary uk-light uk-padding uk-panel">
-                    <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy</p>
-                </div>
+    <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
+        <div class="">
+            <div class="uk-background-secondary uk-light uk-padding uk-panel">
+                <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy</p>
             </div>
         </div>
+    </div>
 
 </section>
 <section>

@@ -47,7 +47,7 @@
 							<div>
 								<div class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
 									<a href="{{route('store.product.show', $product->slug)}}">
-										<div style="height: 200px;">
+										<div style="height: 200px; overflow: hidden">
 											<div class="uk-text-center">
 												<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
 													<img src="{{$product->getProductPrimaryImage()}}" alt="">
@@ -68,7 +68,7 @@
 											</div>
 											<div style="font-weight: 700; color: black">{{$product->name}}</div>
 											<div style="height: 50px">
-												{!! subContent($product->description, 100) !!}
+												{!! subContent($product->description, 150) !!}
 											</div>
 											<div style="margin-bottom: 10px">
 												<span><img class="uk-border-circle" src="{{$product->user->getProfilePicURL()}}" style="width: 20px; height: 20px; object-fit: cover"></span> <span>{{__('main.By')}}: </span> <span> {{$product->user->name}}</span>

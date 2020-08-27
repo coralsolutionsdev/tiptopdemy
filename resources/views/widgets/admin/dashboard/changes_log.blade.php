@@ -1,7 +1,7 @@
 <div class="widget uk-padding-small uk-box-shadow-hover-small p-tag-m-0">
     <div>
         <h4 class="">Changes Log</h4>
-        <span class="uk-text-meta">Last changes at 18 Aug 2020 </span>
+        <span class="uk-text-meta">Last changes at August 27, 2020 4:57:45 PM </span>
         <table class="uk-table uk-table-justify uk-table-divider">
             <thead>
             <tr>
@@ -11,6 +11,21 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td class="align-middle">August 27, 2020 4:57:45 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Form]: bugFix, an error occurred when trying to update quiz with empty blanks items. <br>
+                    [Form]: improve rich text editor in add new blank option to enable all the editor actions. <br>
+                    [Form]: enable the build preview for formItem with the type blank. <br>
+                    [Form] BugFix, unable to duplicate item options in duplicate function. <br>
+
+                </td>
+            </tr>
             <tr>
                 <td class="align-middle">August 23, 2020 9:16:23 PM</td>
                 <td class="uk-text-center align-middle">
@@ -24,6 +39,7 @@
                     [Product] BugFix, unable to open show product's category page. <br>
                 </td>
             </tr>
+
             <tr>
                 <td class="align-middle">August 21, 2020 0:37:30 PM</td>
                 <td class="uk-text-center align-middle">

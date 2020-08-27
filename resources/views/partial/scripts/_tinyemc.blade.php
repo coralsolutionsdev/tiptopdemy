@@ -1,6 +1,6 @@
 <script>
     var fullToolBar = "undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect link| image media | forecolor backcolor | link unlink anchor | fontsizeselect forecolor backcolor  | print preview code fullscreen | pagebreak";
-    var miniToolBar = "bold italic underline | alignleft aligncenter alignright alignjustify | image media | forecolor backcolor | forecolor backcolor";
+    var miniToolBar = "bold italic underline | alignleft aligncenter alignright alignjustify | image media | forecolor backcolor | fontsizeselect";
 
     function addTinyEditor(item, fullToolBar, menubar){
         var storeUrl =  '{{ route('attachment.image.upload', array(), false) . '?_token=' . csrf_token() }}';

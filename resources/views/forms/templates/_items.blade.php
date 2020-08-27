@@ -191,14 +191,45 @@
                                     <div class="uk-grid-collapse" uk-grid>
                                         <div class="uk-width-expand@m">
                                             <div class="fill-the-blank-section hidden-div">
-                                                <div class="uk-grid-collapse" uk-grid>
+                                                <div class="cu-editor uk-grid-collapse" uk-grid>
                                                     <div class="uk-width-expand@m">
-                                                        <span class="uk-button uk-button-default uk-button-small editor-align" data-value="left"><i class="fas fa-align-left"></i></span>
-                                                        <span class="uk-button uk-button-default uk-button-small editor-align" data-value="center"><i class="fas fa-align-center"></i></span>
-                                                        <span class="uk-button uk-button-default uk-button-small editor-align" data-value="right"><i class="fas fa-align-right"></i></span>
-                                                        <span class="uk-button uk-button-default uk-button-small editor-format"><i class="fas fa-italic"></i></span>
-                                                        <span class="uk-button uk-button-default uk-button-small editor-format"><i class="fas fa-underline"></i></span>
-                                                        <span class="uk-button uk-button-default uk-button-small editor-format"><i class="fas fa-bold"></i></span>
+                                                        <strong></strong>
+                                                        <span class="btn btn-default editor-item editor-align" data-value="left"><i class="fas fa-align-left"></i></span>
+                                                        <span class="btn btn-default editor-item editor-align" data-value="center"><i class="fas fa-align-center"></i></span>
+                                                        <span class="btn btn-default editor-item editor-align" data-value="right"><i class="fas fa-align-right"></i></span>
+                                                        <span class="btn btn-default editor-item editor-action editor-format" data-value="Italic"><i class="fas fa-italic"></i></span>
+                                                        <span class="btn btn-default editor-item editor-action editor-format" data-value="underline"><i class="fas fa-underline"></i></span>
+                                                        <span class="btn btn-default editor-item editor-action editor-format" data-value="Bold"><i class="fas fa-bold"></i></span>
+                                                        <div class="uk-inline">
+                                                            <span class="btn btn-default editor-item editor-font-color" style="padding:6px 10px"><i style="border-bottom: 2px solid #000000; padding: 1px 3px" class="fas fa-font"></i></span>
+                                                            <div uk-dropdown="mode: hover" class="uk-padding-remove font-color-pallet">
+                                                                <div class="uk-grid-collapse uk-child-width-1-5 uk-text-center" uk-grid>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #BFEDD2" data-value="#BFEDD2"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #FBEEB8" data-value="#FBEEB8"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #F8CAC6" data-value="#F8CAC6"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #ECCAFA" data-value="#ECCAFA"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #C2E0F4" data-value="#C2E0F4"></span>
+
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #2DC26B" data-value="#2DC26B"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #F1C40F" data-value="#F1C40F"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #E03E2D" data-value="#E03E2D"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #B96AD9" data-value="#B96AD9"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #3598DB" data-value="#3598DB"></span>
+
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #169179" data-value="#169179"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #E67E23" data-value="#E67E23"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #BA372A" data-value="#BA372A"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #843FA1" data-value="#843FA1"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #236FA1" data-value="#ECF0F1"></span>
+
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #ECF0F1" data-value="#ECF0F1"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #CED4D9" data-value="#CED4D9"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #7E8C8D" data-value="#7E8C8D"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #34495E" data-value="#34495E"></span>
+                                                                    <span class="btn btn-default editor-action color-item" style="background-color: #000000" data-value="#000000"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="uk-width-auto@m">
                                                         <span class="btn btn-default insert-blank"><span class="" uk-icon="icon: plus-circle"></span> {{__('main.Add blank')}}</span>

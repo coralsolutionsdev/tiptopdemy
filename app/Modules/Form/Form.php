@@ -255,9 +255,9 @@ class Form extends Model
                 $newFormItem->save();
             }elseif ($itemType == FormItem::TYPE_FILL_THE_BLANK){
                 $blank = isset($input['item_blanks']) ? $input['item_blanks'][$id] : null;
-                $blankOptions = isset($input['item_blank_option'])? $input['item_blank_option'][$id] : null;
-                $blankOptionsMarks = isset($input['item_blank_option_mark'])? $input['item_blank_option_mark'][$id] : null;
-                $blankAlignments = isset($input['item_blank_alignment'])? $input['item_blank_alignment'][$id] : 'auto';
+                $blankOptions = isset($input['item_blank_option']) && isset($input['item_blank_option'][$id]) ? $input['item_blank_option'][$id] : null;
+                $blankOptionsMarks = isset($input['item_blank_option_mark']) && isset($input['item_blank_option_mark'][$id]) ? $input['item_blank_option_mark'][$id] : null;
+                $blankAlignments = isset($input['item_blank_alignment']) && $input['item_blank_alignment'][$id] ? $input['item_blank_alignment'][$id] : 'auto';
                 $optionsArray = array();
                 if (!is_null($blankOptions)){
                     foreach ($blankOptions as $key => $optionItems){

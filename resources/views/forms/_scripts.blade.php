@@ -38,12 +38,35 @@
             fillableDiv.addClass('text-'+align);
         });
 
-        $('.editor-format').off('click');
-        $('.editor-format').click(function () {
-            var actionBtn = $(this);
-            var format = actionBtn.attr('data-value');
-            var fillableDiv = actionBtn.closest('.fill-the-blank-section').find('.editable-div');
-            alert('Action under development');
+        $('.editor-action').click(function () {
+            var item = $(this);
+            var dataValue = item.attr('data-value');
+            var formItem = item.closest('.form-item');
+            var editor = formItem.find('.fill-the-blank-div');
+            editor.designMode = 'on';
+            if (item.hasClass('color-item')){
+                var colorMenu =  formItem.find('.font-color-pallet');
+                document.execCommand('ForeColor', false, dataValue);
+                colorMenu.hide();
+
+            }else {
+                document.execCommand(dataValue);
+            }
+            document.getSelection().removeAllRanges();
+
+            // switch(actionType) {
+            //     case 'bold':
+            //         document.execCommand("Bold");
+            //         break;
+            //     case 'italic':
+            //         document.execCommand("Italic");
+            //         break;
+            //     case 'underline':
+            //         document.execCommand("underline");
+            //         break;
+            //     default:
+            //     // code block
+            // }
 
         });
 
@@ -123,12 +146,13 @@
             });
         }else if(itemType == typeFillTheBlank){
             var blankParagraph = item.find('.fill-the-blank-div').html();
-            // question = blankParagraph.replace(/<tag>[\s\S]*?<\/tag>/, ' <input class="input-blank" type="text" disabled>');
-            question = blankParagraph;
-            // review = '<div class="pt-2">\n' +
-            //     '<span class="question-text">'+question+'</span>\n' +
-            //     '</div>';
-            review = 'preview has been disabled for development porpuses';
+            question = blankParagraph.replace(/<tag>[\s\S]*?<\/tag>/g, ' <input class="input-blank" type="text" disabled>');
+            // question = blankParagraph.replace(new RegExp(/<tag>[\s\S]*?<\/tag>/, "g"), ' <input class="input-blank" type="text" disabled>');
+            // date.replace(new RegExp("/", "g"), '')
+            // date.replace(/\//g, '')
+            review = '<div class="pt-2">\n' +
+                '<span class="question-text">'+question+'</span>\n' +
+                '</div>';
             item.find('.item-review').html(review);
         }else if(itemType == typeSection){
             var sectionText = item.find('.input-title').val();
@@ -618,7 +642,6 @@
         }
 
         if(formItem != null) {
-            console.log(formItem);
             // update values
             item.find('.input-title').val(formItem.title);
             if(type == typeSection){

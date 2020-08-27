@@ -1,0 +1,13 @@
+.cu-editor .font-color-pallet .color-item{
+    height: 40px;
+}
+.cu-editor .font-color-pallet .color-item:hover{
+    cursor: pointer;
+    border: 3px solid white;
+}
+.cu-editor .editor-item{
+    border: 1px solid #e2e2e2;
+}
+.cu-editor .editor-item:hover{
+    cursor: pointer;
+}

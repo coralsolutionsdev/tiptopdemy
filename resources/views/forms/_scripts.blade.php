@@ -271,10 +271,10 @@
         }
         var itemsList = item.find('#itemOptionList-'+itemId);
         itemsList.append('<li class="pb-1">\n' +
-            '    <div class="uk-grid-column-small uk-flex uk-flex-middle uk-text-center" uk-grid>\n' +
+            '    <div id="option-'+optionID+'" class="uk-grid-column-small uk-flex uk-flex-middle uk-text-center" uk-grid>\n' +
             '        <div class="uk-width-auto@m"><span class="uk-sortable-handle" uk-icon="icon: table"></span></div>\n' +
             '        <div class="uk-width-expand@m"><input class="uk-input uk-form-small invisible-input item_option" type="text" name="item_option_title['+itemId+']['+optionID+']" id="itemOption_'+itemId+'-'+optionID+'"  value="'+optionTitle+'"><input type="hidden"  name="item_option_position['+itemId+'][]" value="'+optionID+'"></div>\n' +
-            '        <div class="uk-width-auto@m"><input class="uk-checkbox" name="item_option_default['+itemId+']['+optionID+']" type="checkbox" '+optionSelected+'></div>\n' +
+            '        <div class="uk-width-auto@m"><input class="uk-checkbox item-default" name="item_option_default['+itemId+']['+optionID+']" type="checkbox" '+optionSelected+'></div>\n' +
             '        <div class="uk-width-auto@m"><input class="uk-input uk-form-small uk-form-width-xsmall item-score" name="item_option_marks['+itemId+']['+optionID+']" type="text" placeholder="score" value="'+optionScore+'"></div>\n' +
             '        <div class="uk-width-auto@m"><div class="js-upload" uk-form-custom><input type="file" multiple><button class="uk-button uk-button-default uk-button-small" type="button" tabindex="-1"><span uk-icon="icon: image"></span></button></div></div>\n' +
             '        <div class="uk-width-auto@m"><span id="removeItemOption_'+itemId+'-'+optionID+'" class="hover-danger remove-item-option" uk-icon="icon: trash"></span></div>\n' +
@@ -819,13 +819,25 @@
             if(itemType == typeFillTheBlank){
                 options.paragraph = item.find('.fill-the-blank-div').html();
                 options.align = item.find('.input-blanks-alignment').val();
+            } else if (multiOptionsArray.includes(parseInt(itemType))){
+                var itemOptions = item.find('.item_option');
+                itemOptions.each(function (){
+                    var optionItem = $(this).parent();
+                    var optionId = generateRandomString(6);
+                    var option = [];
+                    option.id = optionId;
+                    option.title = optionItem.find('.item_option').val();
+                    option.mark = 0;
+                    option.default = 0;
+                    options.push(option);
+                });
             }
 
             // build item values
             formItem.id = generateRandomString(6);
             formItem.title = item.find('.input-title').val();
             formItem.description = item.find('.input-description').val();
-            formItem.score = item.find('.input-score').val();
+            formItem.score = 0;
             formItem.properties = properties;
             formItem.options = options;
 

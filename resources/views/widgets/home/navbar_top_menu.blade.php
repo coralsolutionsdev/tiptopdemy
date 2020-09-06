@@ -1,4 +1,4 @@
-<div class="bg-white uk-navbar-container">
+<div class="bg-white" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
     <nav class=" bg-white uk-container" uk-navbar>
         {{--Logo--}}
         <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'start' : 'end')}}">
@@ -39,12 +39,12 @@
                             <ul class="uk-list ">
                                 <li>
                                     <a href="{{url('lang/ar')}}" class="uk-text-capitalize">
-                                    <img class="" src="{{asset_image('/flags/lang-ar-iq.png')}}" style="width: 20px; height: 20px; object-fit: cover; border-radius: 3px; margin: 0px 5px">  <span>{{__('العربية')}}</span>
+                                        <img class="" src="{{asset_image('/flags/lang-ar-iq.png')}}" style="width: 20px; height: 20px; object-fit: cover; border-radius: 3px; margin: 0px 5px">  <span>{{__('العربية')}}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{url('lang/en')}}" class="uk-text-capitalize">
-                                    <img class="" src="{{asset_image('/flags/lang-en-uk.png')}}" style="width: 20px; height: 20px; object-fit: cover; border-radius: 3px; margin: 0px 5px">  <span>{{__('english')}}</span>
+                                        <img class="" src="{{asset_image('/flags/lang-en-uk.png')}}" style="width: 20px; height: 20px; object-fit: cover; border-radius: 3px; margin: 0px 5px">  <span>{{__('english')}}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -86,6 +86,9 @@
 
     </nav>
 </div>
+{{--<div class="bg-white uk-navbar-container" >--}}
+{{--    --}}
+{{--</div>--}}
 
 @if(false)
 <div class="uk-section-primary uk-preserve-color">

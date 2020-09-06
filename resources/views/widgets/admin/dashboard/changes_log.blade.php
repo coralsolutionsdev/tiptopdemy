@@ -1,7 +1,7 @@
 <div class="widget uk-padding-small uk-box-shadow-hover-small p-tag-m-0">
     <div>
         <h4 class="">Changes Log</h4>
-        <span class="uk-text-meta">Last changes at August 27, 2020 4:57:45 PM </span>
+        <span class="uk-text-meta">Last changes at September 6, 2020 4:33:27 AM </span>
         <table class="uk-table uk-table-justify uk-table-divider">
             <thead>
             <tr>
@@ -11,6 +11,17 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td class="align-middle">September 6, 2020 4:33:27 AM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Top navbar] improve navbar design and responsiveness.
+                </td>
+            </tr>
             <tr>
                 <td class="align-middle">August 27, 2020 4:57:45 PM</td>
                 <td class="uk-text-center align-middle">

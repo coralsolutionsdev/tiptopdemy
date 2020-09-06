@@ -1,5 +1,6 @@
 /*@import url("fonts.css");*/
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400&display=swap');
+@import "navbar.css";
 @import "store.css";
 html, body{
     padding: 0px;
@@ -123,12 +124,7 @@ Form
  end
  */
 
-.top-navbar-search input{
-    background-color: #F3F5F9;
-}
-.uk-active a{
-    color: var(--theme-primary-color) !important;
-}
+
 .uk-button-primary{
     background-color: var(--theme-primary-color);
 }
@@ -138,14 +134,10 @@ Form
 .uk-text-primary{
    color: var(--theme-primary-color) !important;
 }
-.uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle{
-    font-family: 'Cairo','Rubik', sans-serif;
-    color: var(--theme-primary-font-color);
-}
-.uk-navbar-nav>li>a:hover{
-    color: var(--theme-primary-color);
-}
 
+.text-highlighted{
+    color: var(--text-highlighted) !important;
+}
 p, h1, h2, h3, h4, h5{
     font-family: 'Cairo','Rubik', sans-serif !important;
 }

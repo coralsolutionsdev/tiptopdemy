@@ -1,6 +1,6 @@
 {{-- Categories --}}
 <div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
-    <h5 class="" style="padding: 0px; font-weight: 700">{{__('main._categories')}}</h5>
+    <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main._categories')}}</h5>
     <div class="uk-margin-small">
         <ul class="uk-list uk-list-divider">
             @foreach($categories as $category)
@@ -11,7 +11,7 @@
 </div>
 <div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
     <form action="{{ route('store.products.main') }}" method="GET" class="home-search">
-        <h5 class="" style="padding: 0px; font-weight: 700">{{__('main.Price range')}}</h5>
+        <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main.Price range')}}</h5>
         <div class="uk-margin-small uk-grid-small uk-child-width-1-2" uk-grid>
             <div class="input-group">
                 <div class="item-title">
@@ -34,7 +34,7 @@
 </div>
 {{-- Tags --}}
 <div class="uuk-margin-small" style="padding: 20px">
-    <h5 class="" style="padding: 0px; font-weight: 700">{{__('main._tags')}}</h5>
+    <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main._tags')}}</h5>
     <div class="uk-margin-small">
         <div class="blog-tags">
             @foreach($tags as $tag)

@@ -1,6 +1,7 @@
 /*@import url("fonts.css");*/
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400&display=swap');
 @import "editor.css";
+@import "navbar.css";
 html, body{
     padding: 0px;
     margin: 0px;

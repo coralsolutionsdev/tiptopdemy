@@ -1,0 +1,94 @@
+.navbar-icon-uk a, .uk-navbar-nav>li>a{
+    color: var(--text-highlighted) !important;
+    font-family: 'Cairo','Rubik', sans-serif;
+    transition: all 0.3s ease;
+}
+.navbar-icon-uk .site-name a{
+    font-size: 26px;
+    padding: 0px;
+    margin: 0px;
+}
+.uk-navbar-nav>li>a:hover, .uk-navbar-nav>li.uk-active>a{
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease;
+}
+.top-navbar-search input{
+    background-color: var(--bg-secondary);
+}
+.uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle{
+    font-family: 'Cairo','Rubik', sans-serif;
+    color: var(--theme-primary-font-color);
+    padding: 0 12px !important;
+}
+.uk-navbar-nav>li>a:hover{
+    color: var(--theme-primary-color);
+}
+.uk-active a{
+    color: var(--theme-primary-color) !important;
+}
+.uk-navbar-nav>li>a.uk-button{
+    min-height: auto;
+}
+.uk-navbar-nav>li>a.uk-button.uk-button-primary, .uk-navbar-nav>li>a.uk-button.uk-button-primary:hover{
+    color: white !important;
+    margin: 0 5px;
+}
+.uk-navbar-nav>li>a.uk-button.uk-button-default:hover{
+    border-color: var(--text-primary) !important;
+}
+/*Canvas*/
+.uk-offcanvas-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -270px;
+    box-sizing: border-box;
+    width: 270px;
+    padding: 20px 20px;
+    /*background: white;*/
+    /*color: var(--text-highlighted) !important;*/
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.uk-offcanvas-bar{
+    background-color: white;
+}
+.uk-offcanvas-bar .text-highlighted{
+     color: var(--text-highlighted) !important;
+ }
+.uk-offcanvas-bar p{
+    color: var(--text-regular) !important;
+    margin: 0px;
+    padding: 0px;
+}
+.uk-offcanvas-bar .online{
+    position: absolute !important;
+    border:  2px solid white;
+    border-radius: 50%;
+    margin: -5px -5px 0 0;
+}
+.uk-offcanvas-bar a{
+    color: var(--text-highlighted) !important;
+}
+.uk-offcanvas-bar .uk-text-primary{
+    color: var(--text-primary) !important;
+}
+.uk-offcanvas-bar .uk-text-small{
+   font-size: 12px;
+}
+.uk-offcanvas-bar .uk-button-primary{
+    background-color: var(--text-primary) !important;
+    color: white !important;
+}
+.uk-offcanvas-bar .uk-button-default{
+    background-color: #F8F8F8 !important;
+    color: #222222 !important;
+}
+.uk-offcanvas-bar .uk-button-primary:hover, .uk-offcanvas-bar .uk-button-default:hover, .uk-offcanvas-bar .uk-button-default:focus{
+    background-color: #222222 !important;
+    color: white;
+}
+.uk-offcanvas-bar .uk-active a, .uk-offcanvas-bar .uk-nav-header{
+    color: var(--text-primary) !important;
+}
+

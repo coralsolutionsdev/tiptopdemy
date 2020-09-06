@@ -11,6 +11,11 @@
             --theme-secondary-bg-color: #F3F5F9;
             --theme-primary-color: {{getFrontEndColor()}};
             --theme-primary-font-color: #949494;
+            --text-primary: {{getFrontEndColor()}};
+            --text-secondary: #263655;
+            --text-regular: #666666;
+            --text-highlighted: #263655;
+            --bg-secondary: #f5fafe;
         }
 
     </style>
@@ -27,7 +32,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008221910')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008060430')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -42,7 +47,7 @@
 </head>
 <body>
 {{storeLastUrl()}}
-<section style="background-color: var(--theme-secondary-bg-color)">
+<section style="background-color: var(--bg-secondary)">
     <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
         <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
             <div class="double-bounce1"></div>

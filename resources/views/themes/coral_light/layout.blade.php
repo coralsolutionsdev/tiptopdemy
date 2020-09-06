@@ -32,7 +32,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008060430')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008060444')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>

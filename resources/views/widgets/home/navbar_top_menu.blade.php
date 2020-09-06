@@ -2,7 +2,7 @@
     <nav class=" bg-white uk-container" uk-navbar>
         {{--Logo--}}
         <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'start' : 'end')}}">
-            <ul class="uk-navbar-nav navbar-icon-uk">
+            <ul class="uk-navbar-nav navbar-icon-uk" style="margin: 0px 5px">
                 <li><a href="#"><img src="{{asset_image(getSite()->logo)}}" style="height: 35px" alt=""></a></li>
                 <li class="uk-visible@m site-name" style="">
                     <a class="uk-navbar-item uk-logo navbar-logo" href="{{route('main')}}">

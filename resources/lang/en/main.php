@@ -16,6 +16,16 @@
         'site settings' => 'Site settings',
         'From' => 'From',
         'To' => 'To',
+        'Search here' => 'Search here ..',
+        'Main menu' => 'Main menu',
+        'hi' => 'Hi, :name',
+        'My Courses' => 'My Courses',
+        'Manage your website' => 'Manage your website',
+        'View and modify profile' => 'View and modify profile',
+        'view all of my courses' => 'view all of my courses',
+        'User Profile' => 'User Profile',
+
+
 
 
         '_main' => 'Overview',
@@ -104,6 +114,9 @@
         'edit' => 'Edit',
         'delete' => 'Delete',
         'add' => 'Add',
+        'login' => 'Login',
+        'register' => 'register',
+
 
 
 

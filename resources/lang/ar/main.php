@@ -112,6 +112,20 @@
         'edit' => 'تعديل',
         'delete' => 'حذف',
         'add' => 'أضِف',
+        'login' => 'الدخول',
+        'register' => 'سجِل الآن!',
+        'Search here' => 'إبحث هنا ..',
+        'Main menu' => 'القائمة الرئيسية',
+        'hi' => 'أهلاً, :name',
+        'My Courses' => 'كورساتي',
+        'Manage your website' => 'ادارة فعاليات الموقع',
+        'View and modify profile' => 'عرض و تعديل الملف الشخصي',
+        'view all of my courses' => 'عرض كل الدروس التي تم شرائها',
+        'User Profile' => 'أدارة المستخدم',
+
+
+
+
 
 
 

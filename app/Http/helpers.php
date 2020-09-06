@@ -91,6 +91,17 @@ function getLanguage()
     return $lang;
 }
 
+function getLanguageFlagIcon($lang = null){
+    $lang = getLanguage();
+//    switch ($lang) {
+//        case 0:
+//            break;
+//        case 1:
+//            break;
+//    }
+    return asset_image('/flags/lang-ar-iq.png');
+}
+
 function getAdminThemeName()
 {
     $theme_name = 'coral_admin';

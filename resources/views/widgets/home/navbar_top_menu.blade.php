@@ -35,7 +35,7 @@
                         <a class="uk-float-right">
                             <span uk-icon="world"></span>
                         </a>
-                        <div class="uk-padding-small" uk-dropdown>
+                        <div class="uk-padding-small" uk-dropdown="mode: click">
                             <ul class="uk-list ">
                                 <li>
                                     <a href="{{url('lang/ar')}}" class="uk-text-capitalize">
@@ -165,7 +165,7 @@
                 </div>
             </div>
             <div class="uk-width-2-3">
-                <p class="uk-text-bold">{{__('main.hi', ['name' => Auth::user()->getUserName()])}}</p>
+                <p class="uk-text-bold">{{__('main.hi', ['name' => Auth::user()->first_name])}}</p>
                 <p>{{Auth::user()->getRole()->display_name}}</p>
                 <p>{{Auth::user()->email}}</p>
             </div>

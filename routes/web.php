@@ -198,7 +198,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
             Route::get('/gallery','Gallery\AlbumController@GetIndex')->name('gallery.main');
             /* Profile */
-            Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'show' ,'edit']])->middleware('active.account');;
+            Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'show', 'update' ,'edit']])->middleware('active.account');
+            Route::put('/profile/update', 'Site\ProfileController@update')->name('profile.update')->middleware('active.account');
             /* pages Routes */
             Route::get('/','PagesController@GetIndex')->name('main');
             Route::get('/about','PagesController@GetAbout');

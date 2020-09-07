@@ -24,6 +24,7 @@
         'View and modify profile' => 'View and modify profile',
         'view all of my courses' => 'view all of my courses',
         'User Profile' => 'User Profile',
+        'Avatar groups' => 'Avatar groups',
 
 
 

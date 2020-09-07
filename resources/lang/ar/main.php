@@ -122,6 +122,8 @@
         'View and modify profile' => 'عرض و تعديل الملف الشخصي',
         'view all of my courses' => 'عرض كل الدروس التي تم شرائها',
         'User Profile' => 'أدارة المستخدم',
+        'Avatar groups' => 'مجموعات الصور الرمزية',
+
 
 
 

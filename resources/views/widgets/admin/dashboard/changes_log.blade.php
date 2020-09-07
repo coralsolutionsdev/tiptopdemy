@@ -1,7 +1,7 @@
 <div class="widget uk-padding-small uk-box-shadow-hover-small p-tag-m-0">
     <div>
         <h4 class="">Changes Log</h4>
-        <span class="uk-text-meta">Last changes at September 6, 2020 4:33:27 AM </span>
+        <span class="uk-text-meta">Last changes at September 7, 2020 8:39:47 PM </span>
         <table class="uk-table uk-table-justify uk-table-divider">
             <thead>
             <tr>
@@ -11,6 +11,17 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td class="align-middle">September 7, 2020 8:39:47 PM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Profile] Add update avatar function.
+                </td>
+            </tr>
             <tr>
                 <td class="align-middle">September 6, 2020 4:33:27 AM</td>
                 <td class="uk-text-center align-middle">

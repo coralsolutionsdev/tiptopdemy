@@ -56,7 +56,7 @@
     </div>
     {{--Navbar--}}
     @widget('home.navbar_top_menu')
-    <div class="uk-container uk-padding-small">
+    <div class="uk-container">
         @include('partial.frontend._message')
     </div>
     @yield('content')

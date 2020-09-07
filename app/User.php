@@ -55,6 +55,33 @@ class User extends Authenticatable implements ReacterableContract
     ];
 
     /**
+     * Avatars
+     */
+    const AVATARS_ARRAY = [
+        'avatar_group_0' => [
+           '/images/avatars/group_0/01.png',
+           '/images/avatars/group_0/02.png',
+           '/images/avatars/group_0/03.png',
+           '/images/avatars/group_0/04.png',
+        ],
+        'avatar_group_2' => [
+            '/images/avatars/group_2/01.png',
+            '/images/avatars/group_2/02.png',
+            '/images/avatars/group_2/03.png',
+            '/images/avatars/group_2/04.png',
+            '/images/avatars/group_2/05.png',
+            '/images/avatars/group_2/06.png',
+            '/images/avatars/group_2/07.png',
+//            '/images/avatars/group_2/08.png',
+            '/images/avatars/group_2/09.png',
+        ],
+    ];
+    public function getAvatarGroups(){
+        $groups = self::AVATARS_ARRAY;
+        return $groups;
+    }
+
+    /**
      * Gets the first role title
      *
      * @param $tenantId The associated company_id
@@ -109,9 +136,9 @@ class User extends Authenticatable implements ReacterableContract
             $url = asset_image($this->avatar);
         }else{
             if ($this->gender == 1){
-                $url = asset_image('temp/male.png');
+                $url = asset_image('images/avatars/group_2/01.png');
             }else{
-                $url = asset_image('temp/female.png');
+                $url = asset_image('images/avatars/group_2/02.png');
             }
         }
         return $url;

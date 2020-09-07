@@ -63,8 +63,6 @@ class ProfileController extends Controller
         $pictures_count = GalleryImage::all()->where('user_id', '=', $id)->count();
 
         //blog
-
-
         $user = User::find($id);
         return view('profile.show', compact('user', 'posts_count', 'pictures_count'));
     }
@@ -86,14 +84,17 @@ class ProfileController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+
+    public function update(Request $request)
     {
-        //
+        $input = $request->only(['avatar']); //TODO: update all all
+        $user = getAuthUser();
+        $user->update($input);
+        session()->flash('success', trans('main._update_msg'));
+        return redirect()->back();
     }
 
     /**
@@ -159,6 +160,7 @@ class ProfileController extends Controller
             return redirect('/');
         }
     }
+
 
 
 }

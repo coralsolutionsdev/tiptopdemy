@@ -33,7 +33,7 @@ class UserController extends Controller
     {
         $page_title =  $this->page_title;
         $breadcrumb =  $this->breadcrumb;
-        $users = User::latest()->paginate(5);
+        $users = User::latest()->paginate(15);
         $current_user = Auth::user();
         $roles = Role::all()->filter(function ($role) use ($current_user){
             if ($role->name == 'superadministrator'){

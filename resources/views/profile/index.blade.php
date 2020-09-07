@@ -48,7 +48,7 @@
                 {!! Form::open(['url' => route('profile.update'),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
                 <div>
                     @foreach($user->getAvatarGroups() as $groupName => $groupAvatars)
-                    <h5 class="text-highlighted">{{$groupName}}</h5>
+                    <h5 class="text-highlighted">{{__($groupName)}}</h5>
                         <div class="uk-grid-small uk-child-width-1-4@m uk-child-width-1-2@s " uk-grid>
                             @foreach($groupAvatars as $avatarUrl)
                             <label class=""><input type="radio" name="avatar" value="{{$avatarUrl}}" {{$user->avatar == $avatarUrl ? 'checked' : ''}}> <img src="{{asset_image($avatarUrl)}}" class="uk-box-shadow-hover-large" width="100" alt="" style="border-radius: 5px"></label>

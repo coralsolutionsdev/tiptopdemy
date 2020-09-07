@@ -3,7 +3,7 @@
         {{--Logo--}}
         <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'start' : 'end')}}">
             <ul class="uk-navbar-nav navbar-icon-uk" style="margin: 0px 5px">
-                <li><a href="#"><img src="{{asset_image(getSite()->logo)}}" style="height: 35px" alt=""></a></li>
+                <li><a href="{{url('/')}}"><img src="{{asset_image(getSite()->logo)}}" style="height: 35px" alt=""></a></li>
                 <li class="uk-visible@m site-name" style="">
                     <a class="uk-navbar-item uk-logo navbar-logo" href="{{route('main')}}">
                         <span class="site-name">{{getSite()->name}}</span><span style="color: var(--theme-primary-color);"> &#9679;</span>
@@ -86,53 +86,6 @@
 
     </nav>
 </div>
-{{--<div class="bg-white uk-navbar-container" >--}}
-{{--    --}}
-{{--</div>--}}
-
-@if(false)
-<div class="uk-section-primary uk-preserve-color">
-
-    <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent uk-light; top: 200">
-
-        <nav class="uk-navbar-container">
-            <div class="uk-container uk-container-expand">
-                <div uk-navbar>
-
-                    <ul class="uk-navbar-nav">
-                        <li class="uk-active"><a href="#">Active</a></li>
-                        <li>
-                            <a href="#">Parent</a>
-                            <div class="uk-navbar-dropdown">
-                                <ul class="uk-nav uk-navbar-dropdown-nav">
-                                    <li class="uk-active"><a href="#">Active</a></li>
-                                    <li><a href="#">Item</a></li>
-                                    <li><a href="#">Item</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li><a href="#">Item</a></li>
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
-    </div>
-
-    <div class="uk-section uk-light">
-        <div class="uk-container">
-
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
-
-            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
-
-        </div>
-    </div>
-
-</div>
-@endif
 
 <div id="top-menu-offcanvas-nav" class="uk-light" uk-offcanvas="mode: slide; overlay: true; flip:true">
     <div class="uk-offcanvas-bar">

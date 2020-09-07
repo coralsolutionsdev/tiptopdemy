@@ -60,14 +60,16 @@
         @include('partial.frontend._message')
     </div>
     @yield('content')
-
-    <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
-        <div class="">
-            <div class="uk-background-secondary uk-light uk-padding uk-panel">
-                <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy</p>
+    <div>
+        <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
+            <div class="">
+                <div class="uk-background-secondary uk-light uk-padding uk-panel">
+                    <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy</p>
+                </div>
             </div>
         </div>
     </div>
+
 
 </section>
 <section>

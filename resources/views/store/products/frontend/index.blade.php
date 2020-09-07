@@ -12,17 +12,17 @@
 	</style>
 @endsection
 @section('content')
-	<div class="store uk-container uk-padding-remove" style="background-color: transparent">
+	<div class="store uk-container" style="background-color: transparent">
 	{{--header--}}
 	@include('store.products.frontend._page_header')
 	{{--body--}}
 		<div class="uk-grid-small uk-child-width-1-1" uk-grid>
-			<div>
+			<div class="uk-visible@m">
 				@widget('home.product.top_bar_menu')
 			</div>
 			<div>
 				<div class="uk-grid-small" uk-grid>
-					<div class="uk-width-1-4">
+					<div class="uk-width-1-4 uk-visible@m">
 						<div class="uk-card uk-card-default uk-card-body" style="padding: 10px">
 							@widget('home.product.side_bar_menu')
 						</div>
@@ -31,6 +31,7 @@
 						@if(!empty($products) && $products->count() > 0)
 						<div class="uk-grid-small uk-child-width-1-3@m" uk-grid>
 							@foreach($products as $product)
+								@if(true)
 							<div>
 								<div class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
 									<a href="{{route('store.product.show', $product->slug)}}">
@@ -45,7 +46,7 @@
 									</a>
 									<div class="" style="padding:20px 15px">
 										<a href="{{route('store.product.show', $product->slug)}}">
-											<div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -45px;" uk-grid>
+											<div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -40px;" uk-grid>
 												<div class="uk-width-expand"></div>
 												<div class="uk-width-auto">
 													<div class="uk-card uk-card-default uk-card-body" style="padding:3px 10px; color: black; font-weight: 700; font-size: 18px">
@@ -55,7 +56,7 @@
 											</div>
 											<div style="font-weight: 700; color: black">{{$product->name}}</div>
 											<div style="height: 50px">
-												{!! subContent($product->description, 150) !!}
+												{!! subContent($product->description, 130) !!}
 											</div>
 											<div style="margin-bottom: 10px">
 												<span><img class="uk-border-circle" src="{{$product->user->getProfilePicURL()}}" style="width: 20px; height: 20px; object-fit: cover"></span> <span>{{__('main.By')}}: </span> <span> {{$product->user->name}}</span>
@@ -67,6 +68,8 @@
 									</div>
 								</div>
 							</div>
+								@endif
+
 							@endforeach
 						</div>
 						@else

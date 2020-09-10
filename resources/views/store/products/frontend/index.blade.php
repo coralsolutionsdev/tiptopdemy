@@ -31,7 +31,6 @@
 						@if(!empty($products) && $products->count() > 0)
 						<div class="uk-grid-small uk-child-width-1-3@m" uk-grid>
 							@foreach($products as $product)
-								@if(true)
 							<div>
 								<div class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
 									<a href="{{route('store.product.show', $product->slug)}}">
@@ -68,8 +67,6 @@
 									</div>
 								</div>
 							</div>
-								@endif
-
 							@endforeach
 						</div>
 						@else

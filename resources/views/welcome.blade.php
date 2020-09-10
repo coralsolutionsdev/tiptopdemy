@@ -10,13 +10,13 @@
     @else
         <section>
             <div class="uk-container">
-                <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slideshow="autoplay: true" style="max-height: 50em; overflow: hidden">
+                <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slideshow="autoplay: true" style="overflow: hidden">
 
                     <ul class="uk-slideshow-items">
                         <li>
-                            <img src="{{asset_image('/assets/slides/01.png')}}" alt="" uk-cover>
+                            <img class="uk-visible@m" src="{{asset_image('/assets/slides/01.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
-                                <div class="uk-width-1-2">
+                                <div class="uk-width-1-2@m uk-width-1-1@s">
                                     <h1 class="uk-text-bold text-highlighted" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
                                         إمكانية استخدام المنصة على مختلف أنواع <span style="color: #17e5b4">الأجهزة</span> الرقمية
 
@@ -28,7 +28,7 @@
                             </div>
                         </li>
                         <li>
-                            <img src="{{asset_image('/assets/slides/02.png')}}" alt="" uk-cover>
+                            <img class="uk-visible@m" src="{{asset_image('/assets/slides/02.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
                                 <div class="uk-width-1-2">
                                     <h1 class="uk-text-bold text-highlighted" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
@@ -106,13 +106,6 @@
                     </div>
                 </div>
             </div>
-            <div class="uk-card uk-card-primary uk-card-body uk-padding-remove">
-                <div class="uk-container uk-text-center">
-                    <img src="{{asset_image('/assets/slides/03.png')}}" alt="">
-                </div>
-            </div>
-
-
             <div class="uk-container uk-padding">
                 <div class="uk-text-center">
                     <h3 class="uk-text-primary uk-margin-remove uk-text-bold">آخر الدروس</h3>
@@ -166,6 +159,11 @@
                             @endforeach
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="uk-background-primary">
+                <div class="uk-container uk-text-center">
+                    <img src="{{asset_image('/assets/slides/03.png')}}" alt="">
                 </div>
             </div>
         </section>

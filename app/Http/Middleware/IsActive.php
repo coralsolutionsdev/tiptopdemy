@@ -18,11 +18,10 @@ class IsActive
      */
     public function handle($request, Closure $next)
     {
-        $site = Site::all()->last();
-        
-        if($site->active == 0)
+        if(getSite()->active == 0)
         {
-            if (Auth::check() and Auth::user()->role == 'admin') {
+            if (getAuthUser() && !empty(getAuthUser()->getRole()) && in_array(getAuthUser()->getRole()->id, [1, 2])){
+
                 return $next($request);
             }
             return redirect()->route('offline');

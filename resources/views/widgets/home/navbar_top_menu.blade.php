@@ -14,7 +14,7 @@
         {{--Top menu--}}
         <div class="uk-visible@m uk-navbar-center">
             <ul class="uk-navbar-nav menu-items">
-                @if(!empty($items) && getSite()->active == 1)
+                @if(!empty($items) && getSite()->active == 1 || getAuthUser() && !empty(getAuthUser()->getRole()) && in_array(getAuthUser()->getRole()->id, [1, 2]))
                     @foreach($items as $item)
                         <li class="{{(Request::is($item['link'].'*') ? 'uk-active' :'')}}"><a href="{{url($item['link'])}}">{{__($item['title'])}}</a></li>
                     @endforeach

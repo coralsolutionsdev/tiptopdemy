@@ -2,6 +2,7 @@
 <html lang="en" dir="">
 {{--{{getLanguage() == 'ar'? 'rtl': ''}}--}}
 <head>
+    <link rel="icon" href="{{asset_image('/assets/favicon/favicon.ico')}}" type="image/x-icon">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

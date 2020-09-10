@@ -27,10 +27,11 @@
                                 </div>
                             </div>
                         </li>
+                        {{--slide 2--}}
                         <li>
                             <img class="uk-visible@m" src="{{asset_image('/assets/slides/02.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
-                                <div class="uk-width-1-2">
+                                <div class="uk-width-1-2@m uk-width-1-1@s">
                                     <h1 class="uk-text-bold text-highlighted" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
                                         تهتم <span style="color: #17e5b4">بتفاعل</span>  أصحاب المصلحة
                                     </h1>

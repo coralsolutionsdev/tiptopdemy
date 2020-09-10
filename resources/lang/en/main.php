@@ -62,6 +62,7 @@
 		'_for_more_info' => 'For more information contact us',
 		'_reg_not_allowed' => 'Registration is not available right now.',
 		'_site_is_offline' => 'The site is under maintenance',
+		'Website is currently offline.' => 'The website is currently offline.',
 		'_copy_right' => 'All Rights Reserved to',
 		'manage' => 'manage',
 		'profile' => 'profile',

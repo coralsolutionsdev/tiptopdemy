@@ -1,7 +1,7 @@
 <div class="widget uk-padding-small uk-box-shadow-hover-small p-tag-m-0">
     <div>
         <h4 class="">Changes Log</h4>
-        <span class="uk-text-meta">Last changes at September 7, 2020 8:39:47 PM </span>
+        <span class="uk-text-meta">Last changes at September 11, 2020 12:05:59 AM </span>
         <table class="uk-table uk-table-justify uk-table-divider">
             <thead>
             <tr>
@@ -11,6 +11,16 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td class="align-middle">September 11, 2020 12:05:59 AM</td>
+                <td class="uk-text-center align-middle">
+                    <div class="uk-alert-success" uk-alert>
+                        Deployed
+                    </div>
+                </td>
+                <td class="align-middle">
+                    [Site settings] Allow administrator to view the website even while website is offline.                </td>
+            </tr>
             <tr>
                 <td class="align-middle">September 7, 2020 8:39:47 PM</td>
                 <td class="uk-text-center align-middle">

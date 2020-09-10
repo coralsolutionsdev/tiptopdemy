@@ -10,10 +10,10 @@
     @else
         <section>
             <div class="uk-container">
-                <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slideshow="autoplay: true" style="height: 500px; overflow: hidden">
+                <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slideshow="autoplay: true" style="max-height: 50em; overflow: hidden">
 
                     <ul class="uk-slideshow-items">
-                        <li style="height: 500px">
+                        <li>
                             <img src="{{asset_image('/assets/slides/01.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
                                 <div class="uk-width-1-2">
@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li style="height: 500px">
+                        <li>
                             <img src="{{asset_image('/assets/slides/02.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
                                 <div class="uk-width-1-2">

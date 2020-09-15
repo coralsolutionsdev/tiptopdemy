@@ -1,35 +1,37 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Call;
+namespace Vonage\Call;
 
-use Nexmo\Client\ClientAwareInterface;
-use Nexmo\Client\ClientAwareTrait;
-use Nexmo\Conversations\Conversation;
-use Nexmo\Entity\EntityInterface;
-use Nexmo\Entity\JsonResponseTrait;
-use Nexmo\Entity\JsonSerializableTrait;
-use Nexmo\Entity\JsonUnserializableInterface;
-use Nexmo\Entity\NoRequestResponseTrait;
+use Vonage\Client\ClientAwareInterface;
+use Vonage\Client\ClientAwareTrait;
+use Vonage\Conversations\Conversation;
+use Vonage\Entity\EntityInterface;
+use Vonage\Entity\JsonResponseTrait;
+use Vonage\Entity\JsonSerializableTrait;
+use Vonage\Entity\JsonUnserializableInterface;
+use Vonage\Entity\NoRequestResponseTrait;
 use Psr\Http\Message\ResponseInterface;
-use Nexmo\Client\Exception;
+use Vonage\Client\Exception;
 use Zend\Diactoros\Request;
 
 /**
  * Class Call
  *
- * @property \Nexmo\Call\Stream $stream
- * @property \Nexmo\Call\Talk   $talk
- * @property \Nexmo\Call\Dtmf   $dtmf
+ * @deprecated Please use Vonage\Voice\OutboundCall or Vonage\Voice\Call instead
  *
- * @method \Nexmo\Call\Stream stream()
- * @method \Nexmo\Call\Talk   talk()
- * @method \Nexmo\Call\Dtmf   dtmf()
+ * @property \Vonage\Call\Stream $stream
+ * @property \Vonage\Call\Talk   $talk
+ * @property \Vonage\Call\Dtmf   $dtmf
+ *
+ * @method \Vonage\Call\Stream stream()
+ * @method \Vonage\Call\Talk   talk()
+ * @method \Vonage\Call\Dtmf   dtmf()
  */
 class Call implements EntityInterface, \JsonSerializable, JsonUnserializableInterface, ClientAwareInterface
 {
@@ -63,6 +65,11 @@ class Call implements EntityInterface, \JsonSerializable, JsonUnserializableInte
 
     public function __construct($id = null)
     {
+        trigger_error(
+            'Vonage\Call\Call is deprecated, please use Vonage\Voice\Client for functionality instead',
+            E_USER_DEPRECATED
+        );
+
         $this->id = $id;
     }
 
@@ -178,7 +185,7 @@ class Call implements EntityInterface, \JsonSerializable, JsonUnserializableInte
         }
 
         if (is_null($url)) {
-            throw new \InvalidArgumentException('must provide `Nexmo\Call\Webhook` object, or a type and url: missing url');
+            throw new \InvalidArgumentException('must provide `Vonage\Call\Webhook` object, or a type and url: missing url');
         }
 
         $this->webhooks[$type] = new Webhook($type, $url, $method);
@@ -271,7 +278,7 @@ class Call implements EntityInterface, \JsonSerializable, JsonUnserializableInte
     protected function lazySubresource($type)
     {
         if (!isset($this->subresources[$type])) {
-            $class = 'Nexmo\Call\\' . $type;
+            $class = 'Vonage\Call\\' . $type;
             $instance = new $class($this->getId());
             $instance->setClient($this->getClient());
             $this->subresources[$type] = $instance;

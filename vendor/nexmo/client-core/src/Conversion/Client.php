@@ -1,14 +1,42 @@
 <?php
 
-namespace Nexmo\Conversion;
+namespace Vonage\Conversion;
 
-use Nexmo\Client\ClientAwareInterface;
-use Nexmo\Client\ClientAwareTrait;
-use Nexmo\Client\Exception;
+use Vonage\Client\APIClient;
+use Vonage\Client\Exception;
+use Vonage\Client\APIResource;
+use Vonage\Client\ClientAwareTrait;
+use Vonage\Client\ClientAwareInterface;
+use Psr\Http\Message\ResponseInterface;
 
-class Client implements ClientAwareInterface
+class Client implements ClientAwareInterface, APIClient
 {
     use ClientAwareTrait;
+
+    /**
+     * @var APIResource
+     */
+    protected $api;
+
+    public function __construct(APIResource $api = null)
+    {
+        $this->api = $api;
+    }
+
+    public function getAPIResource(): APIResource
+    {
+        if (is_null($this->api)) {
+            $api = new APIResource();
+            $api
+                ->setBaseUri('/conversions/')
+                ->setClient($this->getClient())
+            ;
+
+            $this->api = $api;
+        }
+
+        return $this->api;
+    }
 
     public function sms($message_id, $delivered, $timestamp = null)
     {
@@ -31,11 +59,10 @@ class Client implements ClientAwareInterface
             $params['timestamp'] = $timestamp;
         }
 
-        $response = $this->client->postUrlEncoded(
-            $this->getClient()->getApiUrl() . '/conversions/'.$type.'?'.http_build_query($params),
-            []
-        );
+        $uri = $type . '?' . http_build_query($params);
 
+        $this->getAPIResource()->create([], $uri);
+        $response = $this->getAPIResource()->getLastResponse();
         if ($response->getStatusCode() != '200') {
             throw $this->getException($response);
         }
@@ -47,7 +74,7 @@ class Client implements ClientAwareInterface
         $status = $response->getStatusCode();
 
         if ($status === 402) {
-            $e = new Exception\Request("This endpoint may need activating on your account. Please email support@nexmo.com for more information", $status);
+            $e = new Exception\Request("This endpoint may need activating on your account. Please email support@Vonage.com for more information", $status);
         } elseif ($status >= 400 and $status < 500) {
             $e = new Exception\Request($body['error_title'], $status);
         } elseif ($status >= 500 and $status < 600) {

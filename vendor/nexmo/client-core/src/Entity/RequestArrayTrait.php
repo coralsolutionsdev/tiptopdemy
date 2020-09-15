@@ -1,16 +1,18 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Entity;
+namespace Vonage\Entity;
 
 /**
  * Implements getRequestData from EntityInterface with a simple array. Request data stored in an array, and locked once
  * a request object has been set.
+ *
+ * @deprecated This information will be available at API client level as opposed to the model level
  *
  * @see EntityInterface::getRequestData()
  */
@@ -60,7 +62,7 @@ trait RequestArrayTrait
             ));
         }
 
-        if ($this->getResponse()) {
+        if (@$this->getResponse()) {
             throw new \RuntimeException(sprintf(
                 'can not set request parameter `%s` for `%s` after API request has be made',
                 $name,

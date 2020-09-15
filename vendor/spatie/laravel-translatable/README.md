@@ -28,7 +28,11 @@ $newsItem->name; // Returns 'Naam in het Nederlands'
 
 ## Support us
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
+Learn how to create a package like this one, by watching our premium video course:
+
+[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
 We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
@@ -40,7 +44,7 @@ You can install the package via composer:
 composer require spatie/laravel-translatable
 ```
 
-If you want to have another fallback_locale then the app fallback locale (see `config/app.php`), you could publish the config file:
+If you want to have another fallback_locale than the app fallback locale (see `config/app.php`), you could publish the config file:
 ```
 php artisan vendor:publish --provider="Spatie\Translatable\TranslatableServiceProvider"
 ```
@@ -113,6 +117,12 @@ For example (given that `name` is a translatable attribute):
 
 ```php
 $newsItem->name = 'New translation';
+```
+
+Also you can set translations with
+
+```php
+$newItem->name = ['en' => 'myName', 'nl' => 'Naam in het Nederlands'];
 ```
 
 To set a translation for a specific locale you can use this method:
@@ -209,6 +219,12 @@ This will allow you to query these columns like this:
 NewsItem::where('name->en', 'Name in English')->get();
 ```
 
+Or if you're using MariaDB 10.2.3 or above :
+```php
+NewsItem::whereRaw("JSON_EXTRACT(name, '$.en') = 'Name in English'")->get();
+```
+
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
@@ -237,7 +253,7 @@ If you discover any security related issues, please email freek@spatie.be instea
 
 You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
 
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
+Our address is: Spatie, Kruikstraat 22, 2018 Antwerp, Belgium.
 
 We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
 

@@ -1,22 +1,23 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Numbers;
+namespace Vonage\Numbers;
 
-use Nexmo\Application\Application;
-use Nexmo\Entity\EntityInterface;
-use Nexmo\Entity\JsonResponseTrait;
-use Nexmo\Entity\JsonSerializableInterface;
-use Nexmo\Entity\JsonSerializableTrait;
-use Nexmo\Entity\JsonUnserializableInterface;
-use Nexmo\Entity\NoRequestResponseTrait;
+use Vonage\Application\Application;
+use Vonage\Entity\EntityInterface;
+use Vonage\Entity\Hydrator\ArrayHydrateInterface;
+use Vonage\Entity\JsonResponseTrait;
+use Vonage\Entity\JsonSerializableInterface;
+use Vonage\Entity\JsonSerializableTrait;
+use Vonage\Entity\JsonUnserializableInterface;
+use Vonage\Entity\NoRequestResponseTrait;
 
-class Number implements EntityInterface, JsonSerializableInterface, JsonUnserializableInterface
+class Number implements EntityInterface, JsonSerializableInterface, JsonUnserializableInterface, ArrayHydrateInterface
 {
     use JsonSerializableTrait;
     use NoRequestResponseTrait;
@@ -27,6 +28,11 @@ class Number implements EntityInterface, JsonSerializableInterface, JsonUnserial
 
     const FEATURE_VOICE = 'VOICE';
     const FEATURE_SMS   = 'SMS';
+    const FEATURE_MMS   = 'MMS';
+    const FEATURE_SMS_VOICE   = 'SMS,VOICE';
+    const FEATURE_SMS_MMS   = 'SMS,MMS';
+    const FEATURE_VOICE_MMS   = 'VOICE,MMS';
+    const FEATURE_ALL   = 'SMS,MMS,VOICE';
 
     const WEBHOOK_MESSAGE      = 'moHttpUrl';
     const WEBHOOK_VOICE_STATUS = 'voiceStatusCallbackUrl';
@@ -173,14 +179,42 @@ class Number implements EntityInterface, JsonSerializableInterface, JsonUnserial
      */
     public function jsonUnserialize(array $json)
     {
-        $this->data = $json;
+        trigger_error(
+            get_class($this) . "::jsonUnserialize is deprecated, please fromArray() instead",
+            E_USER_DEPRECATED
+        );
+
+        $this->fromArray($json);
+    }
+
+    public function fromArray(array $data)
+    {
+        $this->data = $data;
     }
 
     public function jsonSerialize()
     {
+        return $this->toArray();
+    }
+
+    public function toArray() : array
+    {
         $json = $this->data;
+
+        // Swap to using app_id instead
+        if (isset($json['messagesCallbackType'])) {
+            $json['app_id'] = $json['messagesCallbackValue'];
+            unset($json['messagesCallbackValue'], $json['messagesCallbackType']);
+        }
+
         if (isset($json['voiceCallbackValue']) and ($json['voiceCallbackValue'] instanceof Application)) {
-            $json['voiceCallbackValue'] = $json['voiceCallbackValue']->getId();
+            $json['app_id'] = $json['voiceCallbackValue']->getId();
+            unset($json['voiceCallbackValue'], $json['voiceCallbackType']);
+        }
+
+        if (isset($json['voiceCallbackValue']) and $json['voiceCallbackType'] === 'app') {
+            $json['app_id'] = $json['voiceCallbackValue'];
+            unset($json['voiceCallbackValue'], $json['voiceCallbackType']);
         }
 
         return $json;
@@ -189,5 +223,22 @@ class Number implements EntityInterface, JsonSerializableInterface, JsonUnserial
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    public function setAppId(string $appId) : self
+    {
+        $this->data['messagesCallbackType'] = self::ENDPOINT_APP;
+        $this->data['messagesCallbackValue'] = $appId;
+
+        $this->data['voiceCallbackType'] = self::ENDPOINT_APP;
+        $this->data['voiceCallbackValue'] = $appId;
+
+        return $this;
+    }
+
+    public function getAppId() : ?string
+    {
+        // These should never be different, but might not both be set
+        return $this->data['voiceCallbackValue'] ?? $this->data['messagesCallbackValue'];
     }
 }

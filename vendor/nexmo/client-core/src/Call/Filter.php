@@ -1,19 +1,30 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Call;
+namespace Vonage\Call;
 
-use Nexmo\Conversations\Conversation;
-use Nexmo\Entity\FilterInterface;
+use Vonage\Conversations\Conversation;
+use Vonage\Entity\Filter\FilterInterface;
 
+/**
+ * @deprecated Use Vonage\Voice\Filter\VoiceFilter
+ */
 class Filter implements FilterInterface
 {
     protected $query = [];
+
+    public function __construct()
+    {
+        trigger_error(
+            'Vonage\Call\Filter is deprecated, please use Vonage\Voice\Filter\VoiceFilter instead',
+            E_USER_DEPRECATED
+        );
+    }
 
     public function getQuery()
     {

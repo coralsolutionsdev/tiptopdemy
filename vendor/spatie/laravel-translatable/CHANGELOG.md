@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-translatable` will be documented in this file
 
+## 4.4.1 - 2020-09-06
+
+- add support for Laravel 8 (#226)
+
+## 4.4.0 - 2020-07-09
+
+- make possible to set multiple translations on mutator model field with array (#216)
+
 ## 4.3.2 - 2020-04-30
 
 - fix `forgetTranslation` & `forgetAllTranslations` on fields with mutator (#205)

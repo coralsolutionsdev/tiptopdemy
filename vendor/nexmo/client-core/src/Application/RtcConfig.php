@@ -1,12 +1,12 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2019 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2019 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Application;
+namespace Vonage\Application;
 
 class RtcConfig
 {
@@ -17,6 +17,10 @@ class RtcConfig
     public function setWebhook($type, $url, $method = null)
     {
         if (!($url instanceof Webhook)) {
+            trigger_error(
+                'Passing a string URL and method are deprecated, please pass a Webhook object instead',
+                E_USER_DEPRECATED
+            );
             $url = new Webhook($url, $method);
         }
 

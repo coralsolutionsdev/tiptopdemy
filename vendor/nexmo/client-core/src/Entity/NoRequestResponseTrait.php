@@ -1,17 +1,19 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Entity;
+namespace Vonage\Entity;
 
 /**
  * Class Psr7Trait
  *
  * Allow an entity to contain last request / response objects.
+ * 
+ * @deprecated This information will no longer be available at the model level but the API client level
  */
 trait NoRequestResponseTrait
 {

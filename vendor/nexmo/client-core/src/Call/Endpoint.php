@@ -1,18 +1,20 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Call;
+namespace Vonage\Call;
 
 /**
  * Class Endpoint
  * Represents a call destination / origin.
  *
  * TODO: Try to unify this and other (message, etc) endpoint identifiers.
+ *
+ * @deprecated Please use Vonage\Voice\Endpoint\Phone instead
  */
 class Endpoint implements \JsonSerializable
 {
@@ -26,6 +28,11 @@ class Endpoint implements \JsonSerializable
 
     public function __construct($id, $type = self::PHONE, $additional = [])
     {
+        trigger_error(
+            'Vonage\Call\Endpoint is deprecated, please use Vonage\Voice\Endpoint\Phone instead',
+            E_USER_DEPRECATED
+        );
+
         $this->id = $id;
         $this->type = $type;
         $this->additional = $additional;

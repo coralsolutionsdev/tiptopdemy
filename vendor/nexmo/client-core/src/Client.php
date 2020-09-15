@@ -1,46 +1,50 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo;
+namespace Vonage;
 
-use Http\Client\HttpClient;
-use Nexmo\Client\Credentials\Basic;
-use Nexmo\Client\Credentials\Container;
-use Nexmo\Client\Credentials\CredentialsInterface;
-use Nexmo\Client\Credentials\Keypair;
-use Nexmo\Client\Credentials\OAuth;
-use Nexmo\Client\Credentials\SignatureSecret;
-use Nexmo\Client\Exception\Exception;
-use Nexmo\Client\Factory\FactoryInterface;
-use Nexmo\Client\Factory\MapFactory;
-use Nexmo\Client\Response\Response;
-use Nexmo\Client\Signature;
-use Nexmo\Entity\EntityInterface;
-use Nexmo\Verify\Verification;
-use Psr\Http\Message\RequestInterface;
 use Zend\Diactoros\Uri;
+use Http\Client\HttpClient;
+use Vonage\Client\Signature;
 use Zend\Diactoros\Request;
+use Vonage\Client\APIResource;
+use Vonage\Verify\Verification;
+use Vonage\Entity\EntityInterface;
+use Vonage\Client\Credentials\Basic;
+use Vonage\Client\Credentials\OAuth;
+use Vonage\Client\Factory\MapFactory;
+use Vonage\Client\Credentials\Keypair;
+use Vonage\Client\Exception\Exception;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface;
+use Vonage\Client\Credentials\Container;
+use Vonage\Client\Factory\FactoryInterface;
+use Vonage\Client\Credentials\SignatureSecret;
+use Vonage\Client\Credentials\CredentialsInterface;
+use Psr\Http\Client\ClientInterface;
 
 /**
- * Nexmo API Client, allows access to the API from PHP.
+ * Vonage API Client, allows access to the API from PHP.
  *
- * @property \Nexmo\Message\Client $message
- * @property \Nexmo\Call\Collection|\Nexmo\Call\Call[] $calls
- *
- * @method \Nexmo\Message\Client message()
- * @method \Nexmo\Verify\Client  verify()
- * @method \Nexmo\Application\Client applications()
- * @method \Nexmo\Call\Collection calls()
- * @method \Nexmo\Numbers\Client numbers()
+ * @method \Vonage\Account\Client account()
+ * @method \Vonage\Message\Client message()
+ * @method \Vonage\Application\Client applications()
+ * @method \Vonage\Conversion\Client conversion()
+ * @method \Vonage\Insights\Client insights()
+ * @method \Vonage\Numbers\Client numbers()
+ * @method \Vonage\Redact\Client redact()
+ * @method \Vonage\SMS\Client sms()
+ * @method \Vonage\Verify\Client  verify()
+ * @method \Vonage\Voice\Client voice()
  */
 class Client
 {
-    const VERSION = '1.2.0';
+    const VERSION = '2.2.0';
 
     const BASE_API  = 'https://api.nexmo.com';
     const BASE_REST = 'https://rest.nexmo.com';
@@ -58,22 +62,28 @@ class Client
     protected $client;
 
     /**
-     * @var FactoryInterface
+     * @var ContainerInterface
      */
     protected $factory;
 
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = ['show_deprecations' => false];
 
     /**
      * Create a new API client using the provided credentials.
      */
-    public function __construct(CredentialsInterface $credentials, $options = array(), HttpClient $client = null)
+    public function __construct(CredentialsInterface $credentials, $options = array(), ClientInterface $client = null)
     {
         if (is_null($client)) {
-            $client = new \Http\Adapter\Guzzle6\Client();
+            // Since the user did not pass a client, try and make a client
+            // using the Guzzle 6 adapter or Guzzle 7
+            if (class_exists(\Http\Adapter\Guzzle6\Client::class)) {
+                $client = new \Http\Adapter\Guzzle6\Client();
+            } elseif (class_exists(\GuzzleHttp\Client::class)) {
+                $client = new \GuzzleHttp\Client();
+            }
         }
 
         $this->setHttpClient($client);
@@ -85,7 +95,7 @@ class Client
 
         $this->credentials = $credentials;
 
-        $this->options = $options;
+        $this->options = array_merge($this->options, $options);
 
         // If they've provided an app name, validate it
         if (isset($options['app'])) {
@@ -108,18 +118,42 @@ class Client
         }
 
         $this->setFactory(new MapFactory([
-            'account' => 'Nexmo\Account\Client',
-            'insights' => 'Nexmo\Insights\Client',
-            'message' => 'Nexmo\Message\Client',
-            'verify'  => 'Nexmo\Verify\Client',
-            'applications' => 'Nexmo\Application\Client',
-            'numbers' => 'Nexmo\Numbers\Client',
-            'calls' => 'Nexmo\Call\Collection',
-            'conversion' => 'Nexmo\Conversion\Client',
-            'conversation' => 'Nexmo\Conversations\Collection',
-            'user' => 'Nexmo\User\Collection',
-            'redact' => 'Nexmo\Redact\Client',
+            // Legacy Namespaces
+            'message' => \Vonage\Message\Client::class,
+            'calls' => \Vonage\Call\Collection::class,
+            'conversation' => \Vonage\Conversations\Collection::class,
+            'user' => \Vonage\User\Collection::class,
+
+            // Registered Services by name
+            'account' => \Vonage\Account\ClientFactory::class,
+            'applications' => \Vonage\Application\ClientFactory::class,
+            'conversion' => \Vonage\Conversion\ClientFactory::class,
+            'insights' => \Vonage\Insights\ClientFactory::class,
+            'numbers' => \Vonage\Numbers\ClientFactory::class,
+            'redact' => \Vonage\Redact\ClientFactory::class,
+            'sms' => \Vonage\SMS\ClientFactory::class,
+            'verify' => \Vonage\Verify\ClientFactory::class,
+            'voice' => \Vonage\Voice\ClientFactory::class,
+
+            // Additional utility classes
+            APIResource::class => APIResource::class,
         ], $this));
+
+        // Disable throwing E_USER_DEPRECATED notices by default, the user can turn it on during development
+        if (array_key_exists('show_deprecations', $this->options) && !$this->options['show_deprecations']) {
+            set_error_handler(
+                function (
+                    int $errno,
+                    string $errstr,
+                    string $errfile,
+                    int $errline,
+                    array $errorcontext
+                ) {
+                    return true;
+                },
+                E_USER_DEPRECATED
+            );
+        }
     }
 
     public function getRestUrl()
@@ -141,7 +175,7 @@ class Client
      * @param HttpClient $client
      * @return $this
      */
-    public function setHttpClient(HttpClient $client)
+    public function setHttpClient(ClientInterface $client)
     {
         $this->client = $client;
         return $this;
@@ -167,6 +201,11 @@ class Client
     {
         $this->factory = $factory;
         return $this;
+    }
+
+    public function getFactory() : ContainerInterface
+    {
+        return $this->factory;
     }
 
     /**
@@ -404,11 +443,11 @@ class Client
 
         // The user agent must be in the following format:
         // LIBRARY-NAME/LIBRARY-VERSION LANGUAGE-NAME/LANGUAGE-VERSION [APP-NAME/APP-VERSION]
-        // See https://github.com/Nexmo/client-library-specification/blob/master/SPECIFICATION.md#reporting
+        // See https://github.com/Vonage/client-library-specification/blob/master/SPECIFICATION.md#reporting
         $userAgent = [];
 
         // Library name
-        $userAgent[] = 'nexmo-php/'.$this->getVersion();
+        $userAgent[] = 'vonage-php/'.$this->getVersion();
 
         // Language name
         $userAgent[] = 'php/'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
@@ -481,11 +520,11 @@ class Client
 
     public function __get($name)
     {
-        if (!$this->factory->hasApi($name)) {
+        if (!$this->factory->has($name)) {
             throw new \RuntimeException('no api namespace found: ' . $name);
         }
 
-        return $this->factory->getApi($name);
+        return $this->factory->get($name);
     }
 
     protected static function requiresBasicAuth(\Psr\Http\Message\RequestInterface $request)

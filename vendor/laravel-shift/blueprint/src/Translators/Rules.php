@@ -9,16 +9,20 @@ class Rules
 {
     public static function fromColumn(string $context, Column $column)
     {
-        $rules = ['required'];
+        $rules = [];
+
+        if (!in_array('nullable', $column->modifiers())) {
+            array_push($rules, 'required');
+        }
 
         // hack for tests...
         if (in_array($column->dataType(), ['string', 'char', 'text', 'longText'])) {
             array_push($rules, self::overrideStringRuleForSpecialNames($column->name()));
         }
 
-        if ($column->dataType() === 'id' && Str::endsWith($column->name(), '_id')) {
-            [$prefix, $field] = explode('_', $column->name());
-            $rules = array_merge($rules, ['integer', 'exists:' . Str::plural($prefix) . ',' . $field]);
+        if ($column->dataType() === 'id' && ($column->attributes() || Str::endsWith($column->name(), '_id'))) {
+            $reference = $column->attributes()[0] ?? Str::beforeLast($column->name(), '_id');
+            $rules = array_merge($rules, ['integer', 'exists:' . Str::plural($reference) . ',id']);
         }
 
         if (in_array($column->dataType(), [

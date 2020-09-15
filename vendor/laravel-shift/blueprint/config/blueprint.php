@@ -64,8 +64,15 @@ return [
     | within the generated migration. This will relate these records
     | together to add structure and integrity to your database.
     |
+    | In addition, you may specify the action to perform `ON DELETE`. By
+    | default Blueprint will use `cascade`. However, you may set this
+    | to 'restrict', 'no_action', or 'null' as well as inline
+    | by defining your `foreign` key column with an `onDelete`.
+    |
     */
     'use_constraints' => false,
+
+    'on_delete' => 'cascade',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,4 +101,48 @@ return [
     */
 
     'use_guarded' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generate FQCN Routes
+    |--------------------------------------------------------------------------
+    |
+    | By default, Blueprint follows the Laravel convention of the controller
+    | namespace matches the namespace set within the RouteServiceProvider.
+    | However, you may configure Blueprint to generate routes using a
+    | "tuple syntax" in cases where you may not use this property
+    | or wish to improve static analysis.
+    |
+    */
+    'generate_fqcn_route' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generators
+    |--------------------------------------------------------------------------
+    |
+    | Blueprint will automatically register this default array of Generator classes.
+    | However, you may configure Blueprint to use a custom Generator class to grant
+    | expanded functionality to Blueprint.
+    |
+    | Your custom Generator class MUST implement the 'Blueprint\Contracts\Generator' interface.
+    |
+    */
+    'generators' => [
+        'controller' => \Blueprint\Generators\ControllerGenerator::class,
+        'factory' => \Blueprint\Generators\FactoryGenerator::class,
+        'migration' => \Blueprint\Generators\MigrationGenerator::class,
+        'model' => \Blueprint\Generators\ModelGenerator::class,
+        'route' => \Blueprint\Generators\RouteGenerator::class,
+        'seeder' => \Blueprint\Generators\SeederGenerator::class,
+        'test' => \Blueprint\Generators\TestGenerator::class,
+        'event' => \Blueprint\Generators\Statements\EventGenerator::class,
+        'form_request' => \Blueprint\Generators\Statements\FormRequestGenerator::class,
+        'job' => \Blueprint\Generators\Statements\JobGenerator::class,
+        'mail' => \Blueprint\Generators\Statements\MailGenerator::class,
+        'notification' => \Blueprint\Generators\Statements\NotificationGenerator::class,
+        'resource' => \Blueprint\Generators\Statements\ResourceGenerator::class,
+        'view' => \Blueprint\Generators\Statements\ViewGenerator::class,
+    ],
+
 ];

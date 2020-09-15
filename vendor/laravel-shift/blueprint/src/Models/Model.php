@@ -11,9 +11,11 @@ class Model
     private $primaryKey = 'id';
     private $timestamps = 'timestamps';
     private $softDeletes = false;
+    private $morphTo;
     private $columns = [];
     private $relationships = [];
     private $pivotTables = [];
+    private $indexes = [];
 
     /**
      * @param $name
@@ -158,8 +160,28 @@ class Model
         $this->pivotTables[] = $segments;
     }
 
+    public function indexes(): array
+    {
+        return $this->indexes;
+    }
+    
+    public function addIndex(Index $index)
+    {
+        $this->indexes[] = $index;
+    }
+
     public function pivotTables(): array
     {
         return $this->pivotTables;
+    }
+
+    public function setMorphTo(string $reference)
+    {
+        $this->morphTo = $reference;
+    }
+
+    public function morphTo(): ?string
+    {
+        return $this->morphTo;
     }
 }

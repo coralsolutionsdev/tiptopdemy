@@ -1,26 +1,37 @@
 <?php
 /**
- * Nexmo Client Library for PHP
+ * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016 Nexmo, Inc. (http://nexmo.com)
- * @license   https://github.com/Nexmo/nexmo-php/blob/master/LICENSE.txt MIT License
+ * @copyright Copyright (c) 2016 Vonage, Inc. (http://vonage.com)
+ * @license   https://github.com/vonage/vonage-php/blob/master/LICENSE MIT License
  */
 
-namespace Nexmo\Call;
+namespace Vonage\Call;
 
-use Nexmo\Client\ClientAwareInterface;
-use Nexmo\Client\ClientAwareTrait;
-use Nexmo\Conversations\Conversation;
-use Nexmo\Entity\CollectionInterface;
-use Nexmo\Entity\CollectionTrait;
+use Vonage\Client\ClientAwareInterface;
+use Vonage\Client\ClientAwareTrait;
+use Vonage\Conversations\Conversation;
+use Vonage\Entity\CollectionInterface;
+use Vonage\Entity\CollectionTrait;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Request;
-use Nexmo\Client\Exception;
+use Vonage\Client\Exception;
 
+/**
+ * @deprecated Please use Vonage\Voice\Client for this functionality
+ */
 class Collection implements ClientAwareInterface, CollectionInterface, \ArrayAccess
 {
     use ClientAwareTrait;
     use CollectionTrait;
+
+    public function __construct()
+    {
+        trigger_error(
+            'Vonage\Call\Collection is deprecated, please use Vonage\Voice\Client instead',
+            E_USER_DEPRECATED
+        );
+    }
 
     public static function getCollectionName()
     {
@@ -48,9 +59,10 @@ class Collection implements ClientAwareInterface, CollectionInterface, \ArrayAcc
      * @param null $callOrFilter
      * @return $this|Call
      */
-    public function __invoke(Filter $filter = null)
+    public function __invoke($filter = null)
     {
-        if (!is_null($filter)) {
+        /** Fix for the smarter MapFactory in v2.2.0 and the uniqueness of this class interface */
+        if (!is_null($filter) && $filter instanceof Filter) {
             $this->setFilter($filter);
         }
 
@@ -116,7 +128,9 @@ class Collection implements ClientAwareInterface, CollectionInterface, \ArrayAcc
         $response = $this->client->send($request);
 
         if ($response->getStatusCode() != '201') {
-            throw $this->getException($response);
+            $e = $this->getException($response);
+            $e->setRequest($request);
+            throw $e;
         }
 
         $body = json_decode($response->getBody()->getContents(), true);
@@ -168,6 +182,7 @@ class Collection implements ClientAwareInterface, CollectionInterface, \ArrayAcc
             throw $e;
         }
 
+        $e->setResponse($response);
         return $e;
     }
 

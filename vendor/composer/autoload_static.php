@@ -180,6 +180,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'GrahamCampbell\\Manager\\' => 23,
+            'Gloudemans\\Shoppingcart\\' => 24,
         ),
         'F' => 
         array (
@@ -544,6 +545,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'GrahamCampbell\\Manager\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/manager/src',
+        ),
+        'Gloudemans\\Shoppingcart\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src',
         ),
         'Faker\\' => 
         array (
@@ -2047,6 +2052,21 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'Gloudemans\\Shoppingcart\\Calculation\\DefaultCalculator' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Calculation/DefaultCalculator.php',
+        'Gloudemans\\Shoppingcart\\Calculation\\GrossPrice' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Calculation/GrossPrice.php',
+        'Gloudemans\\Shoppingcart\\CanBeBought' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/CanBeBought.php',
+        'Gloudemans\\Shoppingcart\\Cart' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Cart.php',
+        'Gloudemans\\Shoppingcart\\CartItem' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/CartItem.php',
+        'Gloudemans\\Shoppingcart\\CartItemOptions' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/CartItemOptions.php',
+        'Gloudemans\\Shoppingcart\\Contracts\\Buyable' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Contracts/Buyable.php',
+        'Gloudemans\\Shoppingcart\\Contracts\\Calculator' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Contracts/Calculator.php',
+        'Gloudemans\\Shoppingcart\\Contracts\\InstanceIdentifier' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Contracts/InstanceIdentifier.php',
+        'Gloudemans\\Shoppingcart\\Exceptions\\CartAlreadyStoredException' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Exceptions/CartAlreadyStoredException.php',
+        'Gloudemans\\Shoppingcart\\Exceptions\\InvalidCalculatorException' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Exceptions/InvalidCalculatorException.php',
+        'Gloudemans\\Shoppingcart\\Exceptions\\InvalidRowIDException' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Exceptions/InvalidRowIDException.php',
+        'Gloudemans\\Shoppingcart\\Exceptions\\UnknownModelException' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Exceptions/UnknownModelException.php',
+        'Gloudemans\\Shoppingcart\\Facades\\Cart' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/Facades/Cart.php',
+        'Gloudemans\\Shoppingcart\\ShoppingcartServiceProvider' => __DIR__ . '/..' . '/bumbummen99/shoppingcart/src/ShoppingcartServiceProvider.php',
         'GrahamCampbell\\Manager\\AbstractManager' => __DIR__ . '/..' . '/graham-campbell/manager/src/AbstractManager.php',
         'GrahamCampbell\\Manager\\ConnectorInterface' => __DIR__ . '/..' . '/graham-campbell/manager/src/ConnectorInterface.php',
         'GrahamCampbell\\Manager\\ManagerInterface' => __DIR__ . '/..' . '/graham-campbell/manager/src/ManagerInterface.php',

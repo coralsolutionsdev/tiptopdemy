@@ -10,6 +10,7 @@
         "albertcht/invisible-recaptcha": "^1.8",
         "arrilot/laravel-widgets": "^3.12",
         "bnbwebexpertise/laravel-attachments": "1.0.*",
+        "bumbummen99/shoppingcart": "^2.10",
         "cviebrock/eloquent-sluggable": "^6.0",
         "cybercog/laravel-love": "8.3.*",
         "filp/whoops": "^2.7",

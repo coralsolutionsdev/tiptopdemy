@@ -194,6 +194,8 @@ return [
         Cog\Laravel\Love\LoveServiceProvider::class,
         Cog\Laravel\Love\LoveEventServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
+//        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+
 
     ],
 
@@ -251,6 +253,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Countries' => Webpatser\Countries\CountriesFacade::class,
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
+//        'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
 
     ],
 

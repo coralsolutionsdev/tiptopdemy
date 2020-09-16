@@ -37,6 +37,7 @@ final class Versions
   'arrilot/laravel-widgets' => '3.13.0@24297e9a7b1988808b782567892170cd421e6715',
   'bnbwebexpertise/laravel-attachments' => '1.0.22@d3f4aa024449ad938d564aede64d05e19bfc5ff5',
   'bnbwebexpertise/php-uuid' => '0.0.3@d60bf8054db1d062f2fc79c43af0ff499a49fbfa',
+  'bumbummen99/shoppingcart' => '2.10.0@2d11e6ad582bf99b7e4f02459d1339394b2b1fa7',
   'cocur/slugify' => 'v4.0.0@3f1ffc300f164f23abe8b64ffb3f92d35cec8307',
   'composer/package-versions-deprecated' => '1.11.99@c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855',
   'cviebrock/eloquent-sluggable' => '6.0.3@ebaefa01b810b93d0c33a0465eb6c53c38340388',
@@ -166,7 +167,7 @@ final class Versions
   'symfony/yaml' => 'v5.1.5@a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.9.1@bafc69caeb4d49c39fd0779086c03a3738cbb389',
-  'laravel/laravel' => 'dev-200915-dev-shopping-cart@1ec89fa1fdc70fe14081d23d2378e25451559722',
+  'laravel/laravel' => 'dev-200915-dev-shopping-cart@64ab8c2c63e8af4079b280fd242361b8c70f2436',
 );
 
     private function __construct()

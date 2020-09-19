@@ -255,8 +255,8 @@ class Product extends Model implements ReactableContract
 
     public function isInCart()
     {
+        $result = false;
         foreach (Cart::content() as $item){
-            $result = false;
             if ($item->id == $this->id){
                 $result = true;
                 break;

@@ -52,7 +52,7 @@
                 <div class="uk-container uk-padding">
                     <div class="uk-child-width-1-2@m" uk-grid>
                         <div class="uk-width-1-2@m uk-width-1-1@s">
-                            <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-2@s uk-text-center" uk-grid uk-height-match="target: > div > .uk-card">
+                            <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-2@s uk-text-center" uk-grid uk-height-match="target: > div > .uk-card" uk-grid uk-scrollspy="cls: uk-animation-slide-bottom; target: .uk-card; delay: 300; repeat: true">
                                 <div>
                                     <div class="uk-card uk-card-primary uk-card-body uk-box-shadow-hover-large">
                                         <i class="fas fa-diagnoses fa-4x uk-margin-small-bottom"></i>
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large">
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large"  uk-scrollspy-class="uk-animation-slide-top">
                                         <i class="fas fa-laptop-code fa-4x uk-margin-small-bottom" style="color: #17e5b4"></i>
                                         <p class="uk-margin-small uk-text-bold">أدوات التقييم</p>
                                         <p class="uk-margin-remove">
@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large">
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large"  uk-scrollspy-class="uk-animation-slide-top">
                                         <i class="fas fa-map-signs fa-4x uk-margin-small-bottom" style="color: #fc788f"></i>
                                         <p class="uk-margin-small uk-text-bold">نظام إرشادي</p>
                                         <p class="uk-margin-remove">
@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large">
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large" >
                                         <i class="fas fa-download fa-4x uk-margin-small-bottom" style="color: #ffb228"></i>
                                         <p class="uk-margin-small uk-text-bold">محتوى قابل للتنزيل</p>
                                         <p class="uk-margin-remove">

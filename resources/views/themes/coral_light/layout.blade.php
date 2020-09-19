@@ -14,9 +14,10 @@
             --theme-primary-font-color: #949494;
             --text-primary: {{getFrontEndColor()}};
             --text-secondary: #263655;
+            --text-success: #17E5B4;
             --text-regular: #666666;
             --text-highlighted: #263655;
-            --bg-secondary: #f5fafe;
+            --bg-secondary: #F9F8FD;
         }
 
     </style>
@@ -33,7 +34,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202008060444')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202009200141')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>

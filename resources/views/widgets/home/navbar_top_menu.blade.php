@@ -29,8 +29,13 @@
             <ul class="uk-navbar-nav">
                 <li class="uk-visible@m"><button class="navbar-search uk-text-primary"><span class="search-icon"  uk-icon="icon: search"></span></button></li>
                 @if(Auth::check())
-                    <li class="uk-visible@m"><a href=""><span uk-icon="cart"></span></a></li>
-                    <li class="uk-visible@m"><a href=""><span uk-icon="bell"></span></a></li>
+                    <li class="uk-visible@m"><a href="{{route('cart.index')}}">
+                            <span uk-icon="cart"></span>
+                            <span class="uk-badge notify-badge cart-count">{{Cart::content()->count()}}</span>
+                        </a></li>
+                    <li class="uk-visible@m"><a href="">
+                            <span uk-icon="bell"></span>
+                        </a></li>
                     <li class="uk-visible@m">
                         <a class="uk-float-right">
                             <span uk-icon="world"></span>

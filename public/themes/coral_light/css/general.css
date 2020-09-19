@@ -27,6 +27,16 @@ uk card
     border-radius: 5px;
 
 }
+.uk-text-success{
+    color: var(--text-success);
+}
+.uk-button-success{
+    background-color: var(--text-success);
+    color: white;
+}
+.btn-delete:hover{
+    cursor: pointer;
+}
 /**
 
  */
@@ -160,6 +170,9 @@ p{
 }
 .navbar-logo{
     font-size: 26px;
+}
+.notify-badge{
+    background-color: var(--text-success);position: absolute; font-size: 10px; margin-top: -15px; margin-right: -15px; min-width: 15px;height: 15px;
 }
 /*breadcrumb*/
 .breadcrumb {

@@ -25,6 +25,7 @@
         'view all of my courses' => 'view all of my courses',
         'User Profile' => 'User Profile',
         'Avatar groups' => 'Avatar groups',
+        'Apply' => 'Apply',
 
 
 
@@ -240,6 +241,7 @@
         'Product' => 'Product',
         'Products' => 'Products',
         'Product info' => 'Product info',
+        'Product image' => 'Product image',
         'Product images' => 'Product images',
         'Type' => 'Type',
         'Quantity' => 'Quantity',
@@ -272,6 +274,23 @@
         'Sort by' => 'Sort by',
         'Apply Filter' => 'Apply Filter',
         'Filter prices' => 'Filter prices',
+        'Adding ...' => 'Adding ...',
+        'Added to cart' => 'Added to cart',
+        'Item is already added to your cart.' => 'Item is already added to your cart.',
+        'Item has been added successfully.' => 'Item has been added successfully.',
+
+        /*Cart*/
+        'Cart' => 'Cart',
+        'Card items' => 'Card items',
+        'Cart summary' => 'Cart summary',
+        'Subtotal' => 'Subtotal',
+        'Discount' => 'Discount',
+        'Grand Total' => 'Grand Total',
+        'Put discount coupon' => 'Put discount coupon',
+        'Pay by' => 'Pay by',
+        'Tiptop credits' => 'Tiptop credits',
+        'Credit card' => 'Credit card',
+        'PayPal' => 'PayPal',
 
 
 
@@ -346,6 +365,7 @@
 
         //orders
         'orders' => 'Orders',
+        'Place Order' => 'Place Order',
 
         // forms
         'forms' => 'Forms',

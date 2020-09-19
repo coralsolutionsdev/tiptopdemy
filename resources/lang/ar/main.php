@@ -124,6 +124,7 @@
         'view all of my courses' => 'عرض كل الدروس التي تم شرائها',
         'User Profile' => 'أدارة المستخدم',
         'Avatar groups' => 'مجموعات الصور الرمزية',
+        'Apply' => 'تطبيق',
 
 
 
@@ -267,6 +268,7 @@
         'Product' => 'المنتج',
         'Products' => 'المنتجات',
         'Product info' => 'بيانات المنتج',
+        'Product image' => 'صورة المنتج',
         'Product images' => 'صور المنتج',
         'Type' => 'النوع',
         'Quantity' => 'الكمية',
@@ -305,6 +307,29 @@
         'From' => 'من',
         'To' => 'إلى',
         'Filter prices' => 'فلترة الأسعار',
+        'Adding ...' => 'جارِ الإضافة ...',
+        'Added to cart' => ' في السلة',
+        'Item is already added to your cart.' => 'العنصر مضاف في سلة المشتريات.',
+        'Item has been added successfully.' => 'تمت اضافة العنصر بنجاح',
+
+
+
+        /*Cart*/
+        'Cart' => 'سلة المشتريات',
+        'Cart items' => 'عناصر عربة المشتريات',
+        'Cart summary' => 'ملخص سلة المشتريات',
+        'Subtotal' => 'المجموع الفرعي',
+        'Discount' => 'الخصم',
+        'Grand Total' => 'المبلغ الإجمالي',
+        'Put discount coupon' => 'ضع كوبون التخفيض',
+        'Pay by' => 'الدفع بواسطة',
+        'Tiptop credits' => 'رصيد تبتوب',
+        'Credit card' => 'بطاقة ائتمانية',
+        'PayPal' => 'بايبال',
+
+
+
+
 
 
 
@@ -377,6 +402,8 @@
 
         //orders
         'orders' => 'طلبات',
+        'Place Order' => 'تأكيد الشراء',
+
 
         // forms
         'forms' => 'النماذج',

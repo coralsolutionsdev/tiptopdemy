@@ -8,6 +8,7 @@ use App\Modules\Course\Lesson;
 use App\Modules\Group\HasGroup;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Tags\HasTags;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
@@ -245,6 +246,24 @@ class Product extends Model implements ReactableContract
     public function getColorPattern()
     {
         return ColorPattern::find($this->color_pattern_id);
+    }
+
+    /**
+     * Check if product is already added in cart
+     * @return bool
+     */
+
+    public function isInCart()
+    {
+        foreach (Cart::content() as $item){
+            $result = false;
+            if ($item->id == $this->id){
+                $result = true;
+                break;
+            }
+        }
+        return $result;
+
     }
 
     /*

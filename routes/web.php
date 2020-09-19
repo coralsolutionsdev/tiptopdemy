@@ -217,6 +217,13 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::resource('/lesson/{lesson}/form','FormController', ['only' => ['show']]);
 
             });
+            /* Cart */
+                Route::group(['prefix' => 'cart', 'namespace' => 'Store', 'as' => 'cart.'], function (){
+                    Route::post('/add','CartController@add')->name('add');
+                    Route::post('/destroy/item','CartController@destroyItem')->name('destroy.item');
+                    Route::resource('/','CartController', ['only' => ['index']]);
+
+                });
 
             }
             /*pages*/

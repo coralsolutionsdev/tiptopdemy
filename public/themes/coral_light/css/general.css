@@ -37,6 +37,15 @@ uk card
 .btn-delete:hover{
     cursor: pointer;
 }
+.uk-background-success{
+    background-color: var(--text-success);
+}
+.uk-background-warning{
+    background-color: var(--text-warning);
+}
+.uk-background-danger{
+    background-color: var(--text-danger);
+}
 /**
 
  */

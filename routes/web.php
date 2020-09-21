@@ -197,9 +197,12 @@ Route::group(['middleware'=>'installed'], function(){
             /* Gallery */
             Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
             Route::get('/gallery','Gallery\AlbumController@GetIndex')->name('gallery.main');
+
             /* Profile */
-            Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'show', 'update' ,'edit']])->middleware('active.account');
+            Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'update' ,'edit']])->middleware('active.account');
             Route::put('/profile/update', 'Site\ProfileController@update')->name('profile.update')->middleware('active.account');
+            Route::get('/profile/courses', 'Site\ProfileController@coursesIndex')->name('profile.courses.index');
+
             /* pages Routes */
             Route::get('/','PagesController@GetIndex')->name('main');
             Route::get('/about','PagesController@GetAbout');
@@ -222,9 +225,9 @@ Route::group(['middleware'=>'installed'], function(){
                     Route::post('/add','CartController@add')->name('add');
                     Route::post('/destroy/item','CartController@destroyItem')->name('destroy.item');
                     Route::resource('/','CartController', ['only' => ['index']]);
+                    Route::post('/place/order','CartController@placeOrder')->name('place.order');
 
                 });
-
             }
             /*pages*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');

@@ -33,7 +33,6 @@ class IdGenerator
         if (!array_key_exists('prefix', $configArr) || $configArr['prefix'] == '') {
             throw new Exception('Must specify a prefix of your ID');
         }
-
         if (array_key_exists('where', $configArr)) {
             if (is_string($configArr['where']))
                 throw new Exception('where clause must be an array, you provided string');
@@ -53,14 +52,13 @@ class IdGenerator
         preg_match("/(?<=\().+?(?=\))/", $fieldType, $tblFieldLength);
         $tableFieldLength = $tblFieldLength[0];
 
-        if (in_array($tableFieldType, ['int', 'bigint', 'numeric']) && !is_numeric($prefix)) {
-            throw new Exception("table field type is $tableFieldType but prefix is string");
-        }
+//        if (in_array($tableFieldType, ['int', 'bigint', 'numeric']) && !is_numeric($prefix)) {
+//            throw new Exception("table field type is $tableFieldType but prefix is string");
+//        }
 
         if ($length > $tableFieldLength) {
             throw new Exception('ID length is bigger then field length');
         }
-
         $prefixLength = strlen($configArr['prefix']);
         $idLength = $length - $prefixLength;
         $whereString = '';

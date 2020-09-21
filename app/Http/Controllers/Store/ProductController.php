@@ -346,7 +346,11 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $page_title =  $product->name;
-        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb = [
+                __('main.Store') => '',
+                __('main.Products') => '',
+                $product->name => '',
+            ];
         $firstLesson =  $product->lessons->first();
         if (!empty($firstLesson)){
             return redirect()->route('store.lesson.show', [$product->slug, $firstLesson->slug]);

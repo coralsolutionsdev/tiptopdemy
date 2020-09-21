@@ -129,42 +129,79 @@
             </div>
         </div>
         <br>
-        <div class="uk-margin">
-            @if(Auth::user()->hasRole('superadministrator') OR Auth::user()->hasRole('administrator'))
-            <a href="{{route('admin.dashboard')}}">
-                <div class="uk-grid-collapse" uk-grid>
-                    <div class="uk-width-1-6 uk-flex uk-flex-middle">
-                        <span class="uk-text-success" uk-icon="icon: tv"></span>
-                    </div>
-                    <div class="uk-width-5-6">
-                        <p class="uk-text-bold">{{__('main.manage')}}</p>
-                        <p class="uk-text-lighter uk-text-small">{{__('main.Manage your website')}}</p>
-                    </div>
-                </div>
-            </a>
-            @endif
+        <div class="">
+            <div class="uk-grid-small uk-child-width-1-2" uk-grid uk-height-match="target: > div > .uk-card">
+                <div class="uk-width-1-1">
+                    @if(Auth::user()->hasRole('superadministrator') OR Auth::user()->hasRole('administrator'))
+                        <div class="uk-card uk-card-default uk-card-body uk-background-secondary uk-box-shadow-hover-large" style="padding: 10px">
+                            <a href="{{route('admin.dashboard')}}">
+                                <div class="uk-light">
+                                    <span uk-icon="icon: desktop"></span>
+                                    <br>
+                                    <div class="uk-margin-remove uk-text-bold uk-text-danger">{{__('main.manage')}}</div>
+                                    <div class="uk-margin-remove uk-text-small">{{__('main.Manage your website')}}</div>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
 
-            <a href="{{route('profile.index')}}">
-                <div class="uk-grid-collapse" uk-grid>
-                    <div class="uk-width-1-6 uk-flex uk-flex-middle">
-                        <span class="uk-text-primary" uk-icon="icon: user"></span>
-                    </div>
-                    <div class="uk-width-5-6">
-                        <p class="uk-text-bold">{{__('main.profile')}}</p>
-                        <p class="uk-text-lighter uk-text-small">{{__('main.View and modify profile')}}</p>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-default uk-card-body uk-background-primary uk-box-shadow-hover-large" style="padding: 10px">
+                        <a href="{{route('profile.index')}}">
+                            <div class="uk-light">
+                                <span uk-icon="icon: user"></span>
+                                <br>
+                                <div class="uk-margin-remove uk-text-bold" style="font-size: 12px">{{__('main.profile')}}</div>
+                                <div class="uk-margin-remove" style="font-size: 10px">{{__('main.View and modify profile')}}</div>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            </a>
-
-            <div class="uk-grid-collapse" uk-grid>
-                <div class="uk-width-1-6 uk-flex uk-flex-middle">
-                    <span class="uk-text-warning" uk-icon="icon: calendar"></span>
+                <div>
+                    <div class="uk-card uk-card-default uk-card-body uk-background-success uk-box-shadow-hover-large" style="padding: 10px">
+                        <a href="{{route('profile.index')}}">
+                            <div class="uk-light">
+                                <span uk-icon="icon: calendar"></span>
+                                <br>
+                                <div class="uk-margin-remove uk-text-bold" style="font-size: 12px">{{__('main.My Courses')}}</div>
+                                <div class="uk-margin-remove" style="font-size: 10px">{{__('main.view all of my courses')}}</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-                <div class="uk-width-5-6">
-                    <p class="uk-text-bold">{{__('main.My Courses')}}</p>
-                    <p class="uk-text-lighter uk-text-small">{{__('main.view all of my courses')}}</p>
+                <div>
+                    <div class="uk-card uk-card-default uk-card-body uk-background-warning uk-box-shadow-hover-large" style="padding: 10px">
+                        <a href="{{route('profile.index')}}">
+                            <div class="uk-light">
+                                <div class="uk-margin-remove uk-text-bold" style="font-size: 24px">0 <span style="font-size: 14px">{{trans_choice('main.points', 0)}}</span></div>
+                                <div class="uk-margin-remove" style="font-size: 10px">{{__('main.The total archived points')}}</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-default uk-card-body uk-background-danger uk-box-shadow-hover-large" style="padding: 10px">
+                        <a href="{{route('profile.index')}}">
+                            <div class="uk-light">
+                                <div class="uk-margin-remove uk-text-bold" style="font-size: 24px">0.0 <span style="font-size: 14px">$</span></div>
+                                <div class="uk-margin-remove" style="font-size: 10px">{{__('main.Total tiptop credits')}}</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
+
+
+{{--            <div class="uk-grid-collapse" uk-grid>--}}
+{{--                <div class="uk-width-1-6 uk-flex uk-flex-middle">--}}
+{{--                    <span class="uk-text-warning" uk-icon="icon: calendar"></span>--}}
+{{--                </div>--}}
+{{--                <div class="uk-width-5-6">--}}
+{{--                    <p class="uk-text-bold">{{__('main.My Courses')}}</p>--}}
+{{--                    <p class="uk-text-lighter uk-text-small">{{__('main.view all of my courses')}}</p>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
         <div class="uk-position-bottom uk-padding-small">
             <a class="uk-button uk-button-primary uk-width-1-1" href="{{route('logout')}}"><span uk-icon="icon: sign-out"></span> {{__('main.log out')}}</a>

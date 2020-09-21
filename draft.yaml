@@ -1,20 +1,73 @@
 models:
-  Modules\Group\Group:
-    hash_id: string
+  Modules\Store\Invoice:
     title: string:400
-    slug: slug:400
+    order_id: id foreign:orders.id
+    order_number: string
+    date: timestamp
+    date_paid: timestamp
+    customer_name: nullable string:400
+    customer_phone_number: nullable string:400
+    billing_company_name: nullable string:400
+    billing_address: nullable text
+    billing_city: nullable string:400
+    billing_state: nullable string:400
+    billing_postcode: nullable integer
+    billing_country: nullable string:400
     description: nullable text
-    ancestor_id: id foreign:lists.id
-    position: nullable integer
-    type: nullable integer
-    owner_type: string
-    owner_id: id index
-    color_id: id foreign:color_patterns.id
     status: tinyInteger
-    creator_id: id foreign:users.id
-    editor_id: id foreign:users.id
+    type: nullable integer
+    currency: string:3
+    subtotal: decimal
+    grand_total: decimal
+    discount_type: nullable integer:10
+    discount_amount: nullable decimal
+    taxes: nullable text
+    payment_method: nullable integer
+    notes: nullable text
+    softDeletes
+    timestamps
+
     relationships:
-      hasMany: Lesson
-      belongsToMany: Product, User
+      belongsTo: User, Order
+
+#    customer_name: nullable string:400
+#    customer_phone_number: nullable string:400
+#    billing_company_name: nullable string:400
+#    billing_address: nullable text
+#    billing_city: nullable string:400
+#    billing_state: nullable string:400
+#    billing_postcode: nullable integer
+#    billing_country: nullable string:400
+#    shipping_company_name: nullable string:400
+#    shipping_address: nullable string:400
+#    shipping_city: nullable string:400
+#    shipping_state: nullable string:400
+#    shipping_postcode: nullable integer
+#    shipping_country: nullable string:400
+#    notes: nullable text
+#    creator_id: id foreign:users.id
+#    editor_id: id foreign:users.id
+#    softDeletes
+#    timestamps
+#
+#    relationships:
+#      belongsToMany: User
+#
+#  Modules\Store\OrderItem:
+#    order_id: id foreign:orders.id
+#    product_id: id foreign:products.id
+#    quantity: nullable integer
+#    unit_price: nullable decimal
+#    total_price: nullable decimal
+#    notes: nullable text
+#    status: tinyInteger
+#    creator_id: id foreign:users.id
+#    editor_id: id foreign:users.id
+#    softDeletes
+#    timestamps
+#
+#    relationships:
+#      belongsToMany: User, Order, Product
+
 
 

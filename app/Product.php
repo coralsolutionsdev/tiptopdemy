@@ -266,6 +266,19 @@ class Product extends Model implements ReactableContract
 
     }
 
+    /**
+     * Check if Auth user has purshased the product
+     * @return false
+     */
+    public function hasPurchased()
+    {
+        $user = getAuthUser();
+        if (is_null($user)){
+            return false;
+        }
+       return $user->products->where('id', $this->id)->first();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationship Methods

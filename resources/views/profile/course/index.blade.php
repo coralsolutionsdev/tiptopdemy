@@ -35,10 +35,38 @@
                     </div>
                 </div>
                 <div class="uk-width-4-5@m uk-width-1-1">
-                    <div class="uk-card uk-card-default uk-card-body">
-                        <div class="uk-padding-large uk-text-center">
-                            <img src="{{asset_image('/assets/reading_01.png')}}" width="300">
-                        </div>
+                    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+                        <h4 class="uk-text-bold text-highlighted">{{__('main.My Courses')}} ({{$products->count()}})</h4>
+                        <table id="cart-table" class="uk-table uk-table-divider uk-table-justify uk-table-middle uk-margin-remove ">
+                            <thead>
+                            <tr>
+                                <th width="150" class="">{{__('main.Product image')}}</th>
+                                <th class="uk-table-expand">{{__('main.Product info')}}</th>
+                                <th class="uk-table-small"></th>
+                            </tr>
+                            </thead>
+                            <tbody class="card-items">
+                            @forelse($products as $product)
+                                <tr class="cart-item">
+                                    <td>
+                                        <img data-src="{{$product->getProductPrimaryImage()}}" width="150" height="" alt="" uk-img>
+                                    </td>
+                                    <td>
+                                        <p class="uk-margin-remove"><a target="_blank" href="{{route('store.product.show', $product->slug)}}">{{ucfirst($product->name)}}</a></p>
+                                        <p class="uk-margin-remove" class="text-muted"><small>{{ucfirst($product->user->name)}} | {{$product->created_at->toFormattedDateString()}}</small></p>
+                                        <p class="uk-margin-remove">{{substr(strip_tags($product->description),0,50)}} {{strlen($product->description) > 50 ? "...": "" }}</p>
+                                    </td>
+                                    <td class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
+                                        <a class="uk-button uk-button-primary" href="{{route('store.product.show', $product->slug)}}"><span uk-icon="icon:  play-circle"></span> {{__('main.View lesson')}}</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td>{{__('main.There is no form items yet.')}}</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

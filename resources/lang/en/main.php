@@ -26,6 +26,9 @@
         'User Profile' => 'User Profile',
         'Avatar groups' => 'Avatar groups',
         'Apply' => 'Apply',
+        'The total archived points' => 'The total archived points',
+        'Available Tiptop credits' => 'Available Tiptop credits',
+
 
 
 
@@ -278,6 +281,7 @@
         'Added to cart' => 'Added to cart',
         'Item is already added to your cart.' => 'Item is already added to your cart.',
         'Item has been added successfully.' => 'Item has been added successfully.',
+        'View lesson' => 'View lesson',
 
         /*Cart*/
         'Cart' => 'Cart',
@@ -361,11 +365,14 @@
         'Please wait, items are loading.' => 'Please wait, items are loading.',
         'Please create a lesson first.' => 'Please create a lesson first.',
 //        'Marks' => '{0} There are none|[1,19] There are some|[20,*] There are many',
+        'points' => '{0} Point|[1,*] Points',
         'Marks' => '[1] Mark|[2,*] Marks',
 
         //orders
         'orders' => 'Orders',
         'Place Order' => 'Place Order',
+        'purchase complete' => 'Your purchase has been completed successfully, your order number is: :number.',
+
 
         // forms
         'forms' => 'Forms',

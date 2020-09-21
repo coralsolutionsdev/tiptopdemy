@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Laratrust\Traits\LaratrustUserTrait;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use Webpatser\Countries\Countries;
 
 class User extends Authenticatable implements ReacterableContract
 {
@@ -153,5 +154,19 @@ class User extends Authenticatable implements ReacterableContract
     {
         return 1;
     }
+    /*
+     |--------------------------------------------------------------------------
+     | Relationship Methods
+     |--------------------------------------------------------------------------
+     */
+    public function products()
+    {
+        return $this->belongsToMany('App\Product', 'product_user')->withPivot('quantity');;
+    }
+    public function country()
+    {
+        return $this->belongsTo(Countries::class, 'country_id');
+    }
+
 
 }

@@ -96,7 +96,6 @@ class Group extends Model
 
     public function editor()
     {
-        return $this->belongsTo(User
-        ::class);
+        return $this->belongsTo(User::class);
     }
 }

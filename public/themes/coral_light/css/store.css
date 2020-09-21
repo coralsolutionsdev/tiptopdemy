@@ -21,3 +21,6 @@
 .store .product a:hover{
     color: #494949;
 }
+.store a.uk-button-primary:hover{
+    color: #ffffff;
+}

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Site;
 
 use App\Jobs\SendValidationMail;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,6 +13,7 @@ use App\BlogPost;
 use App\GalleryImage;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -159,6 +162,17 @@ class ProfileController extends Controller
         }else{
             return redirect('/');
         }
+    }
+
+    /**
+     * View user Products
+     * @return Application|Factory|View
+     */
+    public function coursesIndex()
+    {
+        $user = Auth::user();
+        $products = $user->products;
+        return view('profile.course.index', compact('user', 'products'));
     }
 
 

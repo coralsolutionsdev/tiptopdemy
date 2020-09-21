@@ -13,7 +13,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
-	<div class="store uk-container" style="background-color: transparent">
+	<div class="store uk-container uk-margin-medium-bottom" style="background-color: transparent">
 	{{--header--}}
 	@include('store.products.frontend._page_header')
 	{{--body--}}
@@ -30,12 +30,12 @@
 					</div>
 					<div class="uk-width-expand">
 						@if(!empty($products) && $products->count() > 0)
-						<div class="uk-grid-small uk-child-width-1-3@m" uk-grid>
+						<div class="uk-grid-small uk-child-width-1-3@m" uk-grid="masonry: true">
 							@foreach($products as $product)
 							<div>
 								<div id="{{$product->id}}" class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
 									<a href="{{route('store.product.show', $product->slug)}}">
-										<div style="height: 200px; overflow: hidden">
+										<div style="max-height: 200px; overflow: hidden">
 											<div class="uk-text-center">
 												<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
 													<img class="product-primary-image" src="{{$product->getProductPrimaryImage()}}" alt="">
@@ -64,7 +64,11 @@
 											</div>
 										</a>
 										<div style="">
-											<button class="uk-button uk-button-primary uk-width-1-1 cart-action {{$product->isInCart() ? 'in-cart' : ''}} ">{!!  $product->isInCart() ? '<span uk-icon="icon: check"></span>'.__('main.Added to cart') : '<span uk-icon="icon: cart"></span>'.__('main.Add to cart') !!} </button>
+											@if($product->hasPurchased())
+												<a class="uk-button uk-button-primary uk-width-1-1" href="{{route('store.product.show', $product->slug)}}"><span uk-icon="icon:  play-circle"></span> {{__('main.View lesson')}}</a>
+											@else
+												<button class="uk-button uk-button-primary uk-width-1-1 cart-action {{$product->isInCart() ? 'in-cart' : ''}} ">{!!  $product->isInCart() ? '<span uk-icon="icon: check"></span>'.__('main.Added to cart') : '<span uk-icon="icon: cart"></span>'.__('main.Add to cart') !!} </button>
+											@endif
 										</div>
 									</div>
 								</div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Store\Invoice;
+use App\Modules\Store\Order;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
@@ -29,11 +31,6 @@ class CartController extends Controller
                 __('main.Cart') => '',
                 __('main.Products') => '',
             ];
-//        foreach (Cart::content() as $rowId => $item){
-//
-//        }
-//        Cart::remove('a775bac9cff7dec2b984e023b95206aa');
-//        dd(Cart::content());
         return view('cart.index', compact('page_title', 'breadcrumb'));
     }
 
@@ -135,5 +132,22 @@ class CartController extends Controller
             'grand_total' => Cart::priceTotal(),
         ];
         return response($cart, 200);
+    }
+
+    /**
+     * prpceed with cart order
+     * @param Request $request
+     */
+    public function placeOrder(Request $request)
+    {
+        if (Cart::content()->count() == 0){
+            session()->flash('warning',__('Your cart is empty'));
+            return redirect()->back();
+        }
+        $input = $request->only(['discount_coupons', 'pay_by']);
+        $order = Order::make($input, true);
+        Invoice::generate($order);
+        session()->flash('success',__('main.purchase complete', ['number' => $order->order_number]));
+        return redirect()->route('profile.courses.index');
     }
 }

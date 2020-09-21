@@ -125,6 +125,10 @@
         'User Profile' => 'أدارة المستخدم',
         'Avatar groups' => 'مجموعات الصور الرمزية',
         'Apply' => 'تطبيق',
+        'The total archived points' => 'مجموع النقاط المكتسبة',
+        'Available Tiptop credits' => 'رصيد تبتوب المتوفر',
+
+
 
 
 
@@ -311,12 +315,14 @@
         'Added to cart' => ' في السلة',
         'Item is already added to your cart.' => 'العنصر مضاف في سلة المشتريات.',
         'Item has been added successfully.' => 'تمت اضافة العنصر بنجاح',
+        'View lesson' => 'عرض الدرس',
+
 
 
 
         /*Cart*/
         'Cart' => 'سلة المشتريات',
-        'Cart items' => 'عناصر عربة المشتريات',
+        'Cart items' => 'عناصر سلة المشتريات',
         'Cart summary' => 'ملخص سلة المشتريات',
         'Subtotal' => 'المجموع الفرعي',
         'Discount' => 'الخصم',
@@ -399,10 +405,15 @@
         'Please wait, items are loading.' => 'يرجى الإنتظار يتم تحميل العناصر.',
         'Please create a lesson first.' => 'يرجى إنشاء درس أولاً.',
         'Marks' => '[1] درجة|[2,*] درجات',
+        'points' => '{0} نقطة |[1,*] نقاط',
+
 
         //orders
         'orders' => 'طلبات',
         'Place Order' => 'تأكيد الشراء',
+        'purchase complete' => 'لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: :number.',
+
+
 
 
         // forms

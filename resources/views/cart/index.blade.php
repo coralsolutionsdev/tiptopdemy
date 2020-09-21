@@ -15,14 +15,15 @@
 @section('content')
 	<div class="store uk-container" style="background-color: transparent">
 	{{--header--}}
-	@include('store.products.frontend._page_header')
+		@include('store.products.frontend._page_header')
 	{{--body--}}
+		{!! Form::open(['url' => route('cart.place.order'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
 		<div class="uk-grid-small uk-child-width-1-1 uk-margin-medium-bottom" uk-grid>
 			<div>
 				<div class="uk-grid-small" uk-grid>
 					<div class="uk-width-expand">
 						<div class="uk-card uk-card-default uk-card-body uk-padding-small">
-							<h5 class="text-highlighted uk-margin-small">{{__('main.Cart items')}} (<span class="cart-count">{{Cart::content()->count()}}</span>)</h5>
+							<h5 class="text-highlighted uk-margin-small uk-text-bold">{{__('main.Cart items')}} (<span class="cart-count">{{Cart::content()->count()}}</span>)</h5>
 							<table id="cart-table" class="uk-table uk-table-divider uk-table-justify uk-table-middle uk-margin-remove ">
 								<thead>
 								<tr>
@@ -64,35 +65,35 @@
 					</div>
 					<div class="uk-width-1-4 uk-visible@m">
 						<div class="uk-card uk-card-default uk-card-body uk-padding-small">
-							<div class="uk-grid-collapse" uk-grid>
+							<div class="uk-grid-small" uk-grid>
 								<div class="uk-width-1-1">
-									<h5 class="text-highlighted uk-margin-small-bottom">{{__('main.Cart summary')}}</h5>
+									<h5 class="text-highlighted uk-text-bold">{{__('main.Cart summary')}}</h5>
 								</div>
 								<div class="uk-width-1-2">{{__('main.Subtotal')}}:</div>
 								<div class="uk-width-1-2 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}} cart-subtotal">${{Cart::subtotal()}}</div>
-{{--								<div class="uk-width-2-3"><input class="uk-input uk-form-small" type="text" placeholder="{{__('main.Put discount coupon')}}"></div>--}}
+{{--								<div class="uk-width-2-3"><input class="uk-input uk-form-small" name="discount_coupon" type="text" placeholder="{{__('main.Put discount coupon')}}"></div>--}}
 {{--								<div class="uk-width-1-3 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}"><button class="uk-button uk-button-success uk-button-small uk-width-1-1">{{__('main.Apply')}}</button></div>--}}
 								<div class="uk-width-1-2">{{__('main.Discount')}}:</div>
 								<div class="uk-width-1-2 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">%0</div>
 								<div class="uk-width-1-2">{{__('main.Grand Total')}}:</div>
 								<div class="uk-width-1-2 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}"><h2 class="uk-text-bold"><span class="uk-text-primary">$</span><span class="cart-grand-total">{{Cart::priceTotal()}}</span></h2></div>
 								<div class="uk-width-1-1">
-									<h5 class="text-highlighted uk-margin-small-bottom" >{{__('main.Pay by')}}</h5>
+									<h5 class="text-highlighted uk-text-bold" >{{__('main.Pay by')}}</h5>
 								</div>
 								<div class="uk-width-1-2">
-									<label><input class="uk-radio" type="radio" name="pay_by" checked> {{__('main.Tiptop credits')}}:</label>
+									<label><input class="uk-radio" type="radio" name="pay_by" value="1" checked> {{__('main.Tiptop credits')}}:</label>
 								</div>
 								<div class="uk-width-1-2 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
 									<img data-src="{{asset_image('/assets/payment/tiptop.png')}}" width="75" height="" alt="" uk-img>
 								</div>
 								<div class="uk-width-1-2">
-									<label><input class="uk-radio" type="radio" name="pay_by"> {{__('main.Credit card')}}:</label>
+									<label><input class="uk-radio" type="radio" name="pay_by" value="2"> {{__('main.Credit card')}}:</label>
 								</div>
 								<div class="uk-width-1-2 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
 									<img data-src="{{asset_image('/assets/payment/visa.png')}}" width="75" height="" alt="" uk-img>
 								</div>
 								<div class="uk-width-1-2">
-									<label><input class="uk-radio" type="radio" name="pay_by"> {{__('main.PayPal')}}:</label>
+									<label><input class="uk-radio" type="radio" name="pay_by" value="3"> {{__('main.PayPal')}}:</label>
 								</div>
 								<div class="uk-width-1-2 uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
 									<img data-src="{{asset_image('/assets/payment/paypal.png')}}" width="75" height="" alt="" uk-img>
@@ -106,6 +107,7 @@
 				</div>
 			</div>
 		</div>
+		{!! Form::close() !!}
 	</div>
 	@include('partial.scripts._cart')
 @endsection

@@ -15,6 +15,8 @@
             --text-primary: {{getFrontEndColor()}};
             --text-secondary: #263655;
             --text-success: #17E5B4;
+            --text-warning: #faa05a;
+            --text-danger: #f0506e;
             --text-regular: #666666;
             --text-highlighted: #263655;
             --bg-secondary: #F9F8FD;
@@ -34,7 +36,7 @@
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202009200141')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202009212031')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>

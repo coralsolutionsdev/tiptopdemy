@@ -160,7 +160,7 @@
                 </div>
                 <div>
                     <div class="uk-card uk-card-default uk-card-body uk-background-success uk-box-shadow-hover-large" style="padding: 10px">
-                        <a href="{{route('profile.index')}}">
+                        <a href="{{route('profile.courses.index')}}">
                             <div class="uk-light">
                                 <span uk-icon="icon: calendar"></span>
                                 <br>

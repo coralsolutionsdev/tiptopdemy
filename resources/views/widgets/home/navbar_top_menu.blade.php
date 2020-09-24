@@ -174,7 +174,7 @@
                     <div class="uk-card uk-card-default uk-card-body uk-background-warning uk-box-shadow-hover-large" style="padding: 10px">
                         <a href="{{route('profile.index')}}">
                             <div class="uk-light">
-                                <div class="uk-margin-remove uk-text-bold" style="font-size: 24px">0 <span style="font-size: 14px">{{trans_choice('main.points', 0)}}</span></div>
+                                <div class="uk-margin-remove" style="font-size: 24px">0 <span style="font-size: 14px">{{trans_choice('main.points', 0)}}</span></div>
                                 <div class="uk-margin-remove" style="font-size: 10px">{{__('main.The total archived points')}}</div>
                             </div>
                         </a>
@@ -184,7 +184,7 @@
                     <div class="uk-card uk-card-default uk-card-body uk-background-danger uk-box-shadow-hover-large" style="padding: 10px">
                         <a href="{{route('profile.index')}}">
                             <div class="uk-light">
-                                <div class="uk-margin-remove uk-text-bold" style="font-size: 24px">0.0 <span style="font-size: 14px">$</span></div>
+                                <div class="uk-margin-remove" style="font-size: 24px">0.0 <span style="font-size: 14px">$</span></div>
                                 <div class="uk-margin-remove" style="font-size: 10px">{{__('main.Total tiptop credits')}}</div>
                             </div>
                         </a>

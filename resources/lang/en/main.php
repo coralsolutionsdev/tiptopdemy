@@ -27,7 +27,7 @@
         'Avatar groups' => 'Avatar groups',
         'Apply' => 'Apply',
         'The total archived points' => 'The total archived points',
-        'Available Tiptop credits' => 'Available Tiptop credits',
+        'Total tiptop credits' => 'Total tiptop credits',
 
 
 

@@ -126,7 +126,7 @@
         'Avatar groups' => 'مجموعات الصور الرمزية',
         'Apply' => 'تطبيق',
         'The total archived points' => 'مجموع النقاط المكتسبة',
-        'Available Tiptop credits' => 'رصيد تبتوب المتوفر',
+        'Total tiptop credits' => 'رصيد تبتوب المتوفر',
 
 
 

@@ -13,6 +13,7 @@
         "bumbummen99/shoppingcart": "^2.10",
         "cviebrock/eloquent-sluggable": "^6.0",
         "cybercog/laravel-love": "8.3.*",
+        "davejamesmiller/laravel-breadcrumbs": "5.x",
         "filp/whoops": "^2.7",
         "haruncpi/laravel-id-generator": "^1.0",
         "intervention/image": "^2.5",

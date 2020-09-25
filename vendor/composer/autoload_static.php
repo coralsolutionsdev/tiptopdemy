@@ -185,6 +185,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'F' => 
         array (
             'Faker\\' => 6,
+            'Facade\\IgnitionContracts\\' => 25,
         ),
         'E' => 
         array (
@@ -200,6 +201,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
             'DeepCopy\\' => 9,
+            'DaveJamesMiller\\Breadcrumbs\\' => 28,
         ),
         'C' => 
         array (
@@ -554,6 +556,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
         ),
+        'Facade\\IgnitionContracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facade/ignition-contracts/src',
+        ),
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
@@ -589,6 +595,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'DaveJamesMiller\\Breadcrumbs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src',
         ),
         'Cviebrock\\EloquentSluggable\\' => 
         array (
@@ -1139,7 +1149,6 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'CreateSitesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_11_093647_create_sites_table.php',
         'CreateTagTables' => __DIR__ . '/../..' . '/database/migrations/2019_07_27_131726_create_tag_tables.php',
         'CreateUniqueIdsTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_18_113825_create_unique_ids_table.php',
-        'CreateUserProductPivotTable' => __DIR__ . '/../..' . '/database/migrations/2020_09_21_103109_create_user_product_pivot_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'Cron\\AbstractField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/AbstractField.php',
         'Cron\\CronExpression' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/CronExpression.php',
@@ -1156,6 +1165,15 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Cviebrock\\EloquentSluggable\\SluggableObserver' => __DIR__ . '/..' . '/cviebrock/eloquent-sluggable/src/SluggableObserver.php',
         'Cviebrock\\EloquentSluggable\\SluggableScopeHelpers' => __DIR__ . '/..' . '/cviebrock/eloquent-sluggable/src/SluggableScopeHelpers.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
+        'DaveJamesMiller\\Breadcrumbs\\BreadcrumbsException' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/BreadcrumbsException.php',
+        'DaveJamesMiller\\Breadcrumbs\\BreadcrumbsGenerator' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/BreadcrumbsGenerator.php',
+        'DaveJamesMiller\\Breadcrumbs\\BreadcrumbsManager' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/BreadcrumbsManager.php',
+        'DaveJamesMiller\\Breadcrumbs\\BreadcrumbsServiceProvider' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/BreadcrumbsServiceProvider.php',
+        'DaveJamesMiller\\Breadcrumbs\\Exceptions\\DuplicateBreadcrumbException' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Exceptions/DuplicateBreadcrumbException.php',
+        'DaveJamesMiller\\Breadcrumbs\\Exceptions\\InvalidBreadcrumbException' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Exceptions/InvalidBreadcrumbException.php',
+        'DaveJamesMiller\\Breadcrumbs\\Exceptions\\UnnamedRouteException' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Exceptions/UnnamedRouteException.php',
+        'DaveJamesMiller\\Breadcrumbs\\Exceptions\\ViewNotSetException' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Exceptions/ViewNotSetException.php',
+        'DaveJamesMiller\\Breadcrumbs\\Facades\\Breadcrumbs' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Facades/Breadcrumbs.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
         'DeepCopy\\Exception\\PropertyException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/PropertyException.php',
@@ -1606,6 +1624,12 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Egulias\\EmailValidator\\Warning\\TLD' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/TLD.php',
         'Egulias\\EmailValidator\\Warning\\Warning' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/Warning.php',
         'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
+        'Facade\\IgnitionContracts\\BaseSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/BaseSolution.php',
+        'Facade\\IgnitionContracts\\HasSolutionsForThrowable' => __DIR__ . '/..' . '/facade/ignition-contracts/src/HasSolutionsForThrowable.php',
+        'Facade\\IgnitionContracts\\ProvidesSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/ProvidesSolution.php',
+        'Facade\\IgnitionContracts\\RunnableSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/RunnableSolution.php',
+        'Facade\\IgnitionContracts\\Solution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/Solution.php',
+        'Facade\\IgnitionContracts\\SolutionProviderRepository' => __DIR__ . '/..' . '/facade/ignition-contracts/src/SolutionProviderRepository.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Inn.php',

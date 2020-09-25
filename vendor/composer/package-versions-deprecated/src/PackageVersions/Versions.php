@@ -42,6 +42,7 @@ final class Versions
   'composer/package-versions-deprecated' => '1.11.99@c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855',
   'cviebrock/eloquent-sluggable' => '6.0.3@ebaefa01b810b93d0c33a0465eb6c53c38340388',
   'cybercog/laravel-love' => '8.3.1@a032e92d7c87334f8b67e6e7eb8f8a9ccea3c572',
+  'davejamesmiller/laravel-breadcrumbs' => '5.3.2@99f92a706faefb5e1816caa96e877a0184509e5b',
   'dnoegel/php-xdg-base-dir' => 'v0.1.1@8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd',
   'doctrine/cache' => '1.10.2@13e3381b25847283a91948d04640543941309727',
   'doctrine/dbal' => '2.10.4@47433196b6390d14409a33885ee42b6208160643',
@@ -50,6 +51,7 @@ final class Versions
   'doctrine/lexer' => '1.2.1@e864bbf5904cb8f5bb334f99209b48018522f042',
   'dragonmantank/cron-expression' => 'v2.3.0@72b6fbf76adb3cf5bc0db68559b33d41219aba27',
   'egulias/email-validator' => '2.1.20@f46887bc48db66c7f38f668eb7d6ae54583617ff',
+  'facade/ignition-contracts' => '1.0.1@aeab1ce8b68b188a43e81758e750151ad7da796b',
   'filp/whoops' => '2.7.3@5d5fe9bb3d656b514d455645b3addc5f7ba7714d',
   'graham-campbell/manager' => 'v4.6.0@e18c29f98adb770bd890b6d66b27ba4730272599',
   'guzzlehttp/guzzle' => '6.5.5@9d4290de1cfd701f38099ef7e183b64b4b7b0c5e',
@@ -167,7 +169,7 @@ final class Versions
   'symfony/yaml' => 'v5.1.5@a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.9.1@bafc69caeb4d49c39fd0779086c03a3738cbb389',
-  'laravel/laravel' => 'dev-master@874616e9a4b397e96db538eaaa90695f348464c4',
+  'laravel/laravel' => 'dev-200925-dev-breadcrumbs@81c79e609988721b98339dcab762411eb861403e',
 );
 
     private function __construct()

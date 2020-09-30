@@ -32,3 +32,10 @@
         <p>{{ session()->get('danger') }}</p>
     </div>
 @endif
+
+@if(session()->has('status'))
+    <div class="uk-alert-success uk-margin-small-top" uk-alert>
+        <a class="uk-alert-close" uk-close></a>
+        <p>{{ session()->get('status') }}</p>
+    </div>
+@endif

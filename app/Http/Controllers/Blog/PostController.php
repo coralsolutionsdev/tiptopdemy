@@ -9,6 +9,7 @@ use App\Page;
 use App\Services\FileAssetManagerService;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
@@ -25,12 +26,14 @@ use Storage;
 
 class PostController extends Controller
 {
-    protected $breadcrumb;
+    protected $modelName;
     protected $page_title;
-    
+    protected $breadcrumb;
+
     public function __construct()
     {
     $this->middleware('auth', ['except' => ['GetIndex','show', 'getComments']]);
+    $this->modelName = 'Blog';
     $this->page_title = 'Blog Posts';
     $this->breadcrumb = [
         'Blog' => '',
@@ -49,10 +52,16 @@ class PostController extends Controller
         $posts = BlogPost::latest()->paginate(15);
         return view('blog.posts.index', compact('page_title', 'breadcrumb','posts'));
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|View
+     */
      public function GetIndex(Request $request)
     {
+        $modelName = $this->modelName;
         $page_title =  $this->page_title;
-        $breadcrumb =  $this->breadcrumb;
+        $breadcrumb =  Breadcrumbs::render('profile');
         $search_key =  null;
         if(!empty($request->search_key)){
             $search_key =  $request->search_key;
@@ -60,7 +69,7 @@ class PostController extends Controller
         }else{
             $posts = BlogPost::latest()->where('status','1')->paginate(10);
         }
-        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','search_key'));
+        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','search_key', 'modelName'));
     }
 
     /**

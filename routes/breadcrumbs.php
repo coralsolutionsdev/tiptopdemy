@@ -6,3 +6,45 @@
 /**
  * Front end
  */
+
+// Home
+Breadcrumbs::for('home', function ($trail) {
+    $trail->push(__('main._home'), route('main'));
+});
+/*store*/
+// Home > Blog
+Breadcrumbs::for('store', function ($trail) {
+    $trail->parent('home');
+    $trail->push(__('main.Store'), route('store.products.main'));
+});
+// Home > Blog >
+Breadcrumbs::for('cart', function ($trail) {
+    $trail->parent('store');
+    $trail->push(__('main.Cart'), route('cart.index'));
+});
+
+// Home > Profile
+Breadcrumbs::for('profile', function ($trail) {
+    $trail->parent('home');
+    $trail->push(__('main.Profile'), route('profile.index'));
+});
+// Home > Profile > My Courses
+Breadcrumbs::for('courses', function ($trail) {
+    $trail->parent('profile');
+    $trail->push(__('main.My Courses'), route('profile.courses.index'));
+});
+// Home > Profile > Edit
+Breadcrumbs::for('profile.edit', function ($trail, $user) {
+    $trail->parent('profile');
+    $trail->push(__('main.Edit Profile'), route('profile.edit', $user->id));
+});
+// Home > Profile > My orders
+Breadcrumbs::for('orders', function ($trail) {
+    $trail->parent('profile');
+    $trail->push(__('main.My Orders'), route('profile.orders.index'));
+});
+// Home > Profile > My Observers List
+Breadcrumbs::for('observers', function ($trail) {
+    $trail->parent('profile');
+    $trail->push(__('main.Observers List'), route('profile.observers.index'));
+});

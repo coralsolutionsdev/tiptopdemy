@@ -15,7 +15,7 @@
 @section('content')
 	<div class="store uk-container uk-margin-medium-bottom" style="background-color: transparent">
 	{{--header--}}
-	@include('store.products.frontend._page_header')
+		@include('partial.frontend._page-header')
 	{{--body--}}
 		<div class="uk-grid-small uk-child-width-1-1" uk-grid>
 			<div class="uk-visible@m">

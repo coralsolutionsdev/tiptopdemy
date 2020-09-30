@@ -15,6 +15,23 @@
         'welcome back' => 'اهلا وسهلاً بعودتك',
         'site settings' => 'إعداادات الموقع',
 
+        // profile
+        'Home page' => 'الصفحة الرئيسية',
+        'Profile' => 'الملف الشخصي',
+        'Edit Profile' => 'تعديل الملف الشخصي',
+        'Observers List' => 'قائمة المراقبين',
+        'Account info' => 'معلومات الحساب',
+        'Password' => 'كلمة المرور',
+        'Current Current password' => 'كلمة المرور الحالية',
+        'New password' => 'كلمة المرور الجديدة',
+        'Confirm new password' => 'تأكيد كلمة المرور',
+        'Upload new image' => 'أضغط لرفع صورة جديدة',
+        'Set as default' => 'التعيين كأفتراضي',
+
+
+
+
+
 
 
         // Control panel lang
@@ -127,17 +144,15 @@
         'Apply' => 'تطبيق',
         'The total archived points' => 'مجموع النقاط المكتسبة',
         'Total tiptop credits' => 'رصيد تبتوب المتوفر',
+        'Course period' => 'مدة الكورس',
+        'Achievement and development' => 'الإنجاز والتطور',
+        'Efficiency' => 'الكفائة',
+        'days' => 'أيام',
+        'Days' => '[0,2] يوم|[3,10] أيام|[11,*] يوم',
+        '_units' => '[0,2] وحدة|[3,10] وحدات|[11,*] وحدة',
 
 
-
-
-
-
-
-
-
-
-
+        'Remaining' => 'المتبقي',
 
 
         // Meta
@@ -148,12 +163,7 @@
 
 
 
-
-
-
-
-
-// blog
+        // blog
         '_blog' => 'المدونة',
         '_posts' => 'المقالات',
         '_post_title' => 'عنوان المقال',
@@ -181,6 +191,7 @@
         'Search in Blog' => 'إبحث في المدونة',
         'search' => 'إبحث',
         'Read more' => 'إقرأ المزيد',
+        'View more' => 'عرض المزيد',
         'Blog Posts' => 'مقالات المدونة',
         'Blog' => 'المدونة',
         'Posts' => 'المقالات',
@@ -233,8 +244,6 @@
 		'_last_news' => 'آخر الأخبار',
 
 
-
-
 	// settings
 		'_desicription' => 'الوصف',
 		'_langauge' => 'اللغة',
@@ -243,10 +252,8 @@
 		'_registration' => 'التسجيل',
 		'_update' => 'تعديل',
 		'_submit' => 'ارسال',
-		'' => '',
-		'' => '',
-		'' => '',
-		'' => '',
+
+
 		// Site
 		'_home' => 'الرئيسية',	
 		'_about_us' => 'من نحن',	
@@ -412,6 +419,8 @@
         'orders' => 'طلبات',
         'Place Order' => 'تأكيد الشراء',
         'purchase complete' => 'لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: :number.',
+        'My Orders' => 'مشترياتي',
+
 
 
 

@@ -688,6 +688,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'AddLoveReactantIdToProductsTable' => __DIR__ . '/../..' . '/database/migrations/2020_05_12_033508_add_love_reactant_id_to_products_table.php',
         'AddLoveReacterIdToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_180127_add_love_reacter_id_to_users_table.php',
         'AddModulesToModulesTable' => __DIR__ . '/../..' . '/database/migrations/2018_04_15_022623_add_modules_to_modules_table.php',
+        'AddUserImagesAndCoversToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2020_09_29_214950_add_user_images_and_covers_to_users_table.php',
         'AlbertCht\\InvisibleReCaptcha\\Facades\\InvisibleReCaptcha' => __DIR__ . '/..' . '/albertcht/invisible-recaptcha/src/Facades/InvisibleReCaptcha.php',
         'AlbertCht\\InvisibleReCaptcha\\InvisibleReCaptcha' => __DIR__ . '/..' . '/albertcht/invisible-recaptcha/src/InvisibleReCaptcha.php',
         'AlbertCht\\InvisibleReCaptcha\\InvisibleReCaptchaServiceProvider' => __DIR__ . '/..' . '/albertcht/invisible-recaptcha/src/InvisibleReCaptchaServiceProvider.php',

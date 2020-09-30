@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Store;
 use App\Http\Controllers\Controller;
 use App\Modules\Store\Invoice;
 use App\Modules\Store\Order;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    protected $breadcrumb;
+    protected $modelName;
     protected $page_title;
+    protected $breadcrumb;
 
     public function __construct()
     {
+        $this->modelName = 'Store';
         $this->page_title = 'Shopping Cart';
         $this->breadcrumb = [
         ];
@@ -26,12 +29,10 @@ class CartController extends Controller
      */
     public function index()
     {
+        $modelName =  $this->modelName;
         $page_title =  __('main.Cart');
-        $breadcrumb = $this->breadcrumb + [
-                __('main.Cart') => '',
-                __('main.Products') => '',
-            ];
-        return view('cart.index', compact('page_title', 'breadcrumb'));
+        $breadcrumb =  Breadcrumbs::render('cart');
+        return view('cart.index', compact('modelName','page_title', 'breadcrumb'));
     }
 
     /**

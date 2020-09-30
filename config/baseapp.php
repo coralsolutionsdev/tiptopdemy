@@ -17,7 +17,7 @@ return [
     'banner_image_storage_path'   =>  'images' . '/' . 'banners',
     'post_image_storage_path'   =>  'images' . '/' . 'posts',
     'page_image_storage_path'   =>  'images' . '/' . 'pages',
-    'user_image_storage_path'   =>  'images' . '/' . 'avatars',
+    'user_image_storage_path'   =>  'images' . '/' . 'profile_pictures',
     'product_image_storage_path'   =>  'images' . '/' . 'products',
     'attachments_storage_path'   =>  'images' . '/' . 'products',
 ];

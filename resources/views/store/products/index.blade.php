@@ -7,6 +7,7 @@
     <section>
         {{--Page header--}}
         @include('manage.partials._page-header')
+        {!! Breadcrumbs::render('store') !!}
 
         {{--List of items--}}
         <div>

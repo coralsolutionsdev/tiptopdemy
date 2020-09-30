@@ -31,7 +31,7 @@
                 @if(Auth::check())
                     <li class="uk-visible@m"><a href="{{route('cart.index')}}">
                             <span uk-icon="cart"></span>
-                            <span class="uk-badge notify-badge cart-count">{{Cart::content()->count()}}</span>
+                            <span class="uk-badge uk-badge-mini icon-notify-badge uk-badge-success cart-count">{{Cart::content()->count()}}</span>
                         </a></li>
                     <li class="uk-visible@m"><a href="">
                             <span uk-icon="bell"></span>
@@ -162,7 +162,7 @@
                     <div class="uk-card uk-card-default uk-card-body uk-background-success uk-box-shadow-hover-large" style="padding: 10px">
                         <a href="{{route('profile.courses.index')}}">
                             <div class="uk-light">
-                                <span uk-icon="icon: calendar"></span>
+                                <i class="fas fa-graduation-cap" style="font-size: 16px"></i>
                                 <br>
                                 <div class="uk-margin-remove uk-text-bold" style="font-size: 12px">{{__('main.My Courses')}}</div>
                                 <div class="uk-margin-remove" style="font-size: 10px">{{__('main.view all of my courses')}}</div>

@@ -15,6 +15,7 @@ return array(
     'AddLoveReactantIdToProductsTable' => $baseDir . '/database/migrations/2020_05_12_033508_add_love_reactant_id_to_products_table.php',
     'AddLoveReacterIdToUsersTable' => $baseDir . '/database/migrations/2020_04_14_180127_add_love_reacter_id_to_users_table.php',
     'AddModulesToModulesTable' => $baseDir . '/database/migrations/2018_04_15_022623_add_modules_to_modules_table.php',
+    'AddUserImagesAndCoversToUsersTable' => $baseDir . '/database/migrations/2020_09_29_214950_add_user_images_and_covers_to_users_table.php',
     'AlbertCht\\InvisibleReCaptcha\\Facades\\InvisibleReCaptcha' => $vendorDir . '/albertcht/invisible-recaptcha/src/Facades/InvisibleReCaptcha.php',
     'AlbertCht\\InvisibleReCaptcha\\InvisibleReCaptcha' => $vendorDir . '/albertcht/invisible-recaptcha/src/InvisibleReCaptcha.php',
     'AlbertCht\\InvisibleReCaptcha\\InvisibleReCaptchaServiceProvider' => $vendorDir . '/albertcht/invisible-recaptcha/src/InvisibleReCaptchaServiceProvider.php',

@@ -10,6 +10,7 @@ use App\ProductImage;
 use App\ProductType;
 use App\Services\FileAssetManagerService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -25,10 +26,12 @@ class ProductController extends Controller
 {
     protected $breadcrumb;
     protected $page_title;
+    protected $modelName;
 
     public function __construct()
     {
         $this->page_title = 'Products';
+        $this->modelName = 'Store';
         $this->breadcrumb = [
             'Store' => '',
             'Products' => '',
@@ -286,7 +289,8 @@ class ProductController extends Controller
     public function getIndex(Request $request)
     {
         $page_title =  __('main.Store\'s products');
-        $breadcrumb =  $this->breadcrumb;
+        $modelName = $this->modelName;
+        $breadcrumb =  Breadcrumbs::render('store');
         $input = $request->input();
         // get collection by search
         $searchKey = ltrim(rtrim($request->input('search'), ' '), ' ');
@@ -335,7 +339,7 @@ class ProductController extends Controller
             });
         }
 
-        return view('store.products.frontend.index', compact('products','page_title','breadcrumb', 'searchKey'));
+        return view('store.products.frontend.index', compact('products','page_title', 'modelName','breadcrumb', 'searchKey'));
     }
 
     /**

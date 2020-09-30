@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Site;
 
 use App\Jobs\SendValidationMail;
+use App\Product;
+use App\Services\FileAssetManagerService;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -13,14 +16,22 @@ use App\BlogPost;
 use App\GalleryImage;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-     public function __construct()
+    protected $modelName;
+    protected $page_title;
+    protected $breadcrumb;
+
+    public function __construct()
     {
-    $this->middleware('auth', ['only' => ['index','edit','update']]);
+        $this->modelName = 'Profile';
+        $this->middleware('auth', ['only' => ['index','edit','update']]);
+
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,8 +39,11 @@ class ProfileController extends Controller
      */
     public function index()
     {
+        $modelName = $this->modelName;
+        $page_title = __('main.Home page');
+        $breadcrumb =  Breadcrumbs::render('profile');
         $user = Auth::user();
-        return view('profile.index', compact('user'));
+        return view('profile.index', compact('modelName', 'page_title', 'breadcrumb', 'user'));
     }
 
     /**
@@ -78,11 +92,16 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        $modelName = $this->modelName;
+        $page_title = __('main.Edit Profile');
+        $breadcrumb =  Breadcrumbs::render('profile.edit', $user);
         $posts_count = BlogPost::all()->where('user_id', '=', $id)->count();
         $pictures_count = GalleryImage::all()->where('user_id', '=', $id)->count();
-        $user = User::find($id);
-        return view('profile.edit', compact('user', 'posts_count', 'pictures_count'));
+        $countries = getCountries()->pluck('name', 'id')->toArray();
+        $directorates = getCountryDirectorates(368)->pluck('title', 'id')->toArray();
+        $scopes = getInstitutionScopes(368)->pluck('title', 'id')->toArray(); // iraq
+        return view('profile.edit', compact('modelName','page_title', 'breadcrumb', 'user', 'posts_count', 'pictures_count', 'countries', 'directorates', 'scopes'));
     }
 
     /**
@@ -93,11 +112,49 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $input = $request->only(['avatar']); //TODO: update all all
         $user = getAuthUser();
+        $input = $request->only($user->getFillable());
+        // update password
+        $passwordInputs = $request->only(['current_password', 'new_password', 'confirm_new_password']);
+        if (isset($passwordInputs['current_password'])){
+            if (!Hash::check($passwordInputs['current_password'], $user->password)){
+                session()->flash('danger', 'Your current password is not matching the password in our record.');
+                return redirect()->back();
+            }
+            if($passwordInputs['new_password'] != $passwordInputs['confirm_new_password']){
+                session()->flash('danger', 'Your new password is not matching the confirm password.');
+                return redirect()->back();
+            }
+            $input['password'] = bcrypt($passwordInputs['new_password']);
+
+        }
         $user->update($input);
+
+        // upload images
+        $uploadImage = $request->only(['upload_image']);
+        if (isset($uploadImage['upload_image'])){
+            if ($request->hasFile('upload_image')) {
+                // upload and save image
+                $image = $request->file('upload_image');
+                # code...
+                $user->attach($image, [
+                    'disk' => 'local',
+                    'title' => 'any',
+                    'group' => 'profile_images',
+                ]);
+            }
+        }
+        // delete images
+        $deletedImages = $request->only(['deleted_images']);
+        if (isset($deletedImages)){
+            foreach ($deletedImages['deleted_images'] as $deletedImage) {
+                $image = $user->attachment($deletedImage);
+                $image->delete();
+            }
+        }
         session()->flash('success', trans('main._update_msg'));
         return redirect()->back();
+//
     }
 
     /**
@@ -170,9 +227,39 @@ class ProfileController extends Controller
      */
     public function coursesIndex()
     {
+        $modelName = $this->modelName;
+        $page_title = __('main.My Courses');
+        $breadcrumb =  Breadcrumbs::render('courses');
         $user = Auth::user();
-        $products = $user->products;
-        return view('profile.course.index', compact('user', 'products'));
+        $products = $user->getCourses(Product::TYPE_COURSES); //view only lessons
+        return view('profile.course.index', compact('modelName', 'page_title' ,'breadcrumb', 'user', 'products'));
+    }
+
+    /**
+     * View user Products
+     * @return Application|Factory|View
+     */
+    public function ordersIndex()
+    {
+        $modelName = $this->modelName;
+        $page_title = __('main.My Orders');
+        $breadcrumb =  Breadcrumbs::render('orders');
+        $user = Auth::user();
+        $orders = $user->orders; //view only lessons
+        return view('profile.orders.index', compact('modelName', 'page_title' ,'breadcrumb', 'user', 'orders'));
+    }
+    /**
+     * View user Products
+     * @return Application|Factory|View
+     */
+    public function observersIndex()
+    {
+        $modelName = $this->modelName;
+        $page_title = __('main.Observers List');
+        $breadcrumb =  Breadcrumbs::render('observers');
+        $user = Auth::user();
+        $orders = $user->orders; //view only lessons
+        return view('profile.observers.index', compact('modelName', 'page_title' ,'breadcrumb', 'user', 'orders'));
     }
 
 

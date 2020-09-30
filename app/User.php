@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Modules\Comment\Commenter;
+use App\Modules\Store\Order;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +27,7 @@ class User extends Authenticatable implements ReacterableContract
      * @var array
      */
     protected $fillable = [
-        'name', 'first_name', 'middle_name', 'last_name', 'surname', 'mother_name', 'email', 'gender','phone_number', 'birth_date', 'avatar', 'cover', 'lang', 'verify_token', 'status', 'password', 'country_id',
+        'name', 'first_name', 'middle_name', 'last_name', 'surname', 'mother_name', 'email', 'gender','phone_number', 'birth_date', 'avatar', 'image', 'cover', 'lang', 'verify_token', 'status', 'password', 'country_id',
         'directorate_id', 'scope_id', 'field_id', 'field_option_id', 'level'
     ];
 
@@ -54,6 +55,7 @@ class User extends Authenticatable implements ReacterableContract
         self::STATUS_ACTIVE => 'Active',
         self::STATUS_DISABLED => 'Disabled'
     ];
+
 
     /**
      * Avatars
@@ -154,6 +156,17 @@ class User extends Authenticatable implements ReacterableContract
     {
         return 1;
     }
+    public function getCourses($productTypeId = null)
+    {
+        if (!is_null($productTypeId)){
+            return $this->products()->where('product_type_id', $productTypeId)->get();
+        }
+        return $this->products;
+    }
+    public function profileImages()
+    {
+        return $this->attachments()->where('group', 'profile_images')->get();
+    }
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods
@@ -161,11 +174,15 @@ class User extends Authenticatable implements ReacterableContract
      */
     public function products()
     {
-        return $this->belongsToMany('App\Product', 'product_user')->withPivot('quantity');;
+        return $this->belongsToMany('App\Product', 'product_user')->withPivot('quantity');
     }
     public function country()
     {
         return $this->belongsTo(Countries::class, 'country_id');
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'creator_id');
     }
 
 

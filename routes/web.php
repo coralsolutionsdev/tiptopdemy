@@ -202,9 +202,11 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'update' ,'edit']])->middleware('active.account');
             Route::put('/profile/update', 'Site\ProfileController@update')->name('profile.update')->middleware('active.account');
             Route::get('/profile/courses', 'Site\ProfileController@coursesIndex')->name('profile.courses.index');
+            Route::get('/profile/orders', 'Site\ProfileController@ordersIndex')->name('profile.orders.index');
+            Route::get('/profile/observers', 'Site\ProfileController@observersIndex')->name('profile.observers.index');
 
             /* pages Routes */
-            Route::get('/','PagesController@GetIndex')->name('main');
+            Route::get('/','PagesController@GetIndex')->name('main'); // change to home
             Route::get('/about','PagesController@GetAbout');
             Route::get('/contact','Site\ContactController@GetContact')->name('contact');
             Route::post('/contact','Site\ContactController@PostContact')->name('post.contact');
@@ -212,7 +214,7 @@ Route::group(['middleware'=>'installed'], function(){
             /* Store  */
             /*store*/
             Route::group(['prefix' => 'store', 'namespace' => 'Store', 'as' => 'store.'], function (){
-                Route::get('/' , 'ProductController@GetIndex')->name('products.main');
+                Route::get('/' , 'ProductController@GetIndex')->name('products.main'); // change to index
                 Route::resource('/category','CategoryController',  ['only' => ['show']]);
                 Route::resource('/product','ProductController',  ['only' => ['show']]);
                 Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']]);

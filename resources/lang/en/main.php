@@ -28,8 +28,27 @@
         'Apply' => 'Apply',
         'The total archived points' => 'The total archived points',
         'Total tiptop credits' => 'Total tiptop credits',
+        'Course period' => 'Course period',
+        'Achievement and development' => 'Achievement and development',
+        'Efficiency' => 'Efficiency',
+        'days' => 'Days',
+        'Days' => '[0,2] Day|[3,10] Days|[11,*] Day',
+        '_units' => '[0,2] Unit|[3,10] Units|[11,*] Unit',
 
+        'Remaining' => 'Remaining',
 
+        // profile
+        'Home page' => 'Home page',
+        'Profile' => 'Profile',
+        'Edit Profile' => 'Edit Profile',
+        'Observers List' => 'Observers List',
+        'Account info' => 'Account info',
+        'Password' => 'Password',
+        'Current Current password' => 'Current Current password',
+        'New password' => 'New password',
+        'Confirm new password' => 'Confirm new password',
+        'Upload new image' => 'Upload new image',
+        'Set as default' => 'Set as default',
 
 
 
@@ -160,6 +179,7 @@
         'Search in Blog' => 'Search in Blog',
         'search' => 'Search',
         'Read more' => 'Read more',
+        'View more' => 'View more',
         'Blog Posts' => 'Blog Posts',
         'Blog' => 'Blog',
         'Posts' => 'Posts',
@@ -372,6 +392,7 @@
         'orders' => 'Orders',
         'Place Order' => 'Place Order',
         'purchase complete' => 'Your purchase has been completed successfully, your order number is: :number.',
+        'My Orders' => 'My Orders',
 
 
         // forms

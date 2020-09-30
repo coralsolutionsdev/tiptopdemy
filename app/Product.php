@@ -54,6 +54,9 @@ class Product extends Model implements ReactableContract
         self::STATUS_DISABLED     => 'Hidden',
     ];
 
+    const TYPE_COURSES = 1;
+
+
     /**
      * Get the route key for the model.
      *

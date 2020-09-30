@@ -195,6 +195,7 @@ return [
         Cog\Laravel\Love\LoveEventServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+        DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider::class
 
 
     ],
@@ -254,6 +255,7 @@ return [
         'Countries' => Webpatser\Countries\CountriesFacade::class,
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
+        "Breadcrumbs" => DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::class
 
     ],
 

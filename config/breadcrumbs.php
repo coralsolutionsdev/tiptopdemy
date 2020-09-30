@@ -16,14 +16,14 @@ return [
     | - 'breadcrumbs::bulma'       - Bulma
     | - 'breadcrumbs::foundation6' - Foundation 6
     | - 'breadcrumbs::materialize' - Materialize
-    | - 'breadcrumbs::uikit'       - UIkit
+    | - 'breadcrumbs::uikit'       - uikit
     | - 'breadcrumbs::json-ld'     - JSON-LD Structured Data
     |
     | Or a custom view, e.g. '_partials/breadcrumbs'.
     |
     */
 
-    'view' => 'breadcrumbs::UIkit',
+    'view' => 'breadcrumbs::uikit',
 
     /*
     |--------------------------------------------------------------------------

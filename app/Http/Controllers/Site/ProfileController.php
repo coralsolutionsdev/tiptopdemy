@@ -146,7 +146,7 @@ class ProfileController extends Controller
         }
         // delete images
         $deletedImages = $request->only(['deleted_images']);
-        if (isset($deletedImages)){
+        if (!empty($deletedImages)){
             foreach ($deletedImages['deleted_images'] as $deletedImage) {
                 $image = $user->attachment($deletedImage);
                 $image->delete();

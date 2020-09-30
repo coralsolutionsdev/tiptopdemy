@@ -57,8 +57,10 @@
 										<div>
 											<div class="uk-grid-small uk-child-width-1-1@m uk-text-center" uk-grid>
 												<div>
-													<div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-large">
-														{{__('main.There is no form items yet.')}}
+													<div class="uk-card uk-card-default uk-padding uk-card-body uk-box-shadow-hover-small">
+														<div class="uk-alert-warning" uk-alert>
+															<p>{{__('main.There is no form items yet.')}}</p>
+														</div>
 													</div>
 												</div>
 											</div>

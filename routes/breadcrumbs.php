@@ -48,3 +48,16 @@ Breadcrumbs::for('observers', function ($trail) {
     $trail->parent('profile');
     $trail->push(__('main.Observers List'), route('profile.observers.index'));
 });
+/**
+ * Blog
+ */
+// Home > Blog
+Breadcrumbs::for('blog', function ($trail) {
+    $trail->parent('home');
+    $trail->push(__('main.Blog'), route('blog.posts.main'));
+});
+// Home > Blog > Post
+Breadcrumbs::for('blog.post.show', function ($trail, $post) {
+    $trail->parent('blog');
+    $trail->push($post->title, route('blog.posts.show', $post->slug));
+});

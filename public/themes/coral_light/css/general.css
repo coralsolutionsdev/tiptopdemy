@@ -122,7 +122,7 @@ nav .navbar-brand{
     background-color: white !important;
 }
 .bg-secondary{
-    background-color: var(--theme-secondary-bg-color);
+    background-color: var(--bg-secondary);
 }
 .border-primary{
     border: 1px solid var(--theme-primary-color);
@@ -282,6 +282,7 @@ p{
 .bog-categories a{
 
 }
+
 .blog-tags a{
     padding: 2px 10px;
     margin: 4px 2px;

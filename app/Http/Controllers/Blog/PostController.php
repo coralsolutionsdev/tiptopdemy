@@ -60,8 +60,8 @@ class PostController extends Controller
      public function GetIndex(Request $request)
     {
         $modelName = $this->modelName;
-        $page_title =  $this->page_title;
-        $breadcrumb =  Breadcrumbs::render('profile');
+        $page_title =   __('main.Blog Posts');
+        $breadcrumb =  Breadcrumbs::render('blog');
         $search_key =  null;
         if(!empty($request->search_key)){
             $search_key =  $request->search_key;
@@ -166,13 +166,12 @@ class PostController extends Controller
         $categories = Category::getRootCategories(Category::TYPE_POST);
         $posts = BlogPost::latest()->paginate(5);
         $search_key =  null;
+        $modelName = $this->modelName;
         $page_title =  $post->title;
-        $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                $post->title => ''
-            ];
+        $breadcrumb =  Breadcrumbs::render('blog.post.show', $post);
+
         $attachments = $post->attachments()->get();
-        return view('blog.frontend.show', compact('page_title', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key', 'attachments'));
+        return view('blog.frontend.show', compact('page_title', 'modelName', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key', 'attachments'));
     }
 
     /**

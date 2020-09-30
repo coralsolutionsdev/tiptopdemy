@@ -5,101 +5,105 @@
 @endsection
 @section('content')
     <section>
-        @include('partial.frontend._page-header')
-        <div class="uk-background-default pt-25">
-            <div class="uk-container">
-                <div class="" uk-grid>
-                    <div class="uk-width-1-4@m blog-sidebar">
-                        @widget('home.blog.side_bar_menu', ['search_key' => $search_key])
-                    </div>
-                    <div class="uk-width-3-4@m ">
-                        {{-- Posts cards --}}
-                        <div class="uk-child-width-1-1@m" uk-grid>
-                            <div>
-                                <div class="uk-card uk-card-clear">
-                                    @if(!empty($post->cover_image))
-                                    <div class="uk-inline-clip uk-transition-toggle" tabindex="0" style="width: 100%;max-height: 400px; overflow: hidden; object-fit: contain; margin-bottom: 10px">
-                                        <img class="uk-transition-scale-up uk-transition-opaque" src="{{$post->getMainImage()}}" alt="" style="width: 100%">
-                                    </div>
-                                    @endif
-                                    <div class="uk-card-body post-content" style="padding-left: 0px; padding-right: 0px; padding-top: 0px">
-                                        <h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
-                                        <div class="uk-grid-column-small uk-grid-row-large uk-child-width-1-2@s" uk-grid>
-                                            <div class="uk-flex uk-flex-middle">
-                                                <ul class="uk-iconnav uk-text-muted">
-                                                    <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: user; ratio: 0.8"></span><span><a href="#"> {{ucfirst($post->user->name)}}</a> </span></li>
-                                                    <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: calendar; ratio: 0.8"></span><span><a href="#"> {{$post->created_at->toFormattedDateString()}}</a></span></li>
-                                                    @if(!empty($post->categories()))
-                                                        <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: folder; ratio: 0.8"></span>
-                                                            @foreach($post->categories as $category)
-                                                                <span><a href=""> {{ucfirst($category->name)}}</a></span>@if($post->categories->count() > 1) <span> | </span> @endif
-                                                            @endforeach
-                                                        </li>
-                                                    @endif
-                                                </ul>
-                                            </div>
-                                            <div class="uk-text-{{getFloatKey('end')}} blog-post-actions">
-                                                @if(isLoginIn())
-                                                    <a class="uk-button uk-button-default post-reaction uk-text-danger {{$post->hasReaction('like')? 'reacted' : ''}}"><span class="post-reaction-count">{{$post->getReactionCount('like')}}</span> <span class="{{$post->hasReaction('like')? 'fas' : 'far'}} fa-heart post-reaction-icon"></span></a>
-                                                @else
-                                                    <span class="uk-button uk-text-danger {{$post->hasReaction('like')? 'reacted' : ''}}" style="padding: 0 10px" uk-tooltip="title: {{__('main.Please login to react with this post.')}}; pos: top"><span class="post-reaction-count">{{$post->getReactionCount('like')}}</span> <span class="{{$post->hasReaction('like')? 'fas' : 'far'}} fa-heart post-reaction-icon"></span></span>
-                                                @endif
-                                                <a href="" class="uk-button uk-button-default"><span uk-icon="icon: twitter" style="color: #29A4DA"></span></a>
-                                                <a href="" class="uk-button uk-button-default"><span uk-icon="icon: facebook" style="color: #0074EF"></span></a>
-                                            </div>
-                                        </div>
-                                        <p>
-                                            {!! $post->content !!}
-                                        </p>
-                                    </div>
-                                </div>
-                                {{--attachments--}}
-                                @if(!empty($attachments) && $attachments->count() > 0)
-
+        <div class="store uk-container uk-margin-medium-bottom" style="background-color: transparent">
+            {{--header--}}
+            @include('partial.frontend._page-header')
+            {{--body--}}
+            <div class="uk-grid-small uk-child-width-1-1" uk-grid>
+                <div>
+                    <div class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-4 uk-visible@m">
+                            <div class="uk-card uk-card-default uk-card-body" style="padding: 10px">
+                                @widget('home.blog.side_bar_menu', ['search_key' => $search_key])
+                            </div>
+                        </div>
+                        <div class="uk-width-expand">
+                            <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
                                 <div>
-                                    <h4>{{__('main.Attachments')}} (<span class="comment-count">{{$attachments->count()}}</span>)</h4>
-                                    <table class="uk-table uk-table-divider">
-                                        <thead>
-                                        <tr>
-                                            <th class="uk-table-shrink">{{__('main.File name')}}</th>
-                                            <th class="uk-table-expand">{{__('main.File Type')}}</th>
-                                            <th class="uk-width-small"> {{__('main.Download link')}}</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($attachments as $attachment)
-                                        <tr>
-                                            <td>{{$attachment->filename}}</td>
-                                            <td>{{$attachment->filetype}}</td>
-                                            <td><a target="_blank" class="uk-button uk-button-default uk-text-primary" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse(date('y-m-d'))->addDay())}}"><span uk-icon="icon: cloud-download"></span> <span>{{__('main.Download')}} </span></a></td>
-                                        </tr>
-                                        @endforeach
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                @endif
-                                {{--comments--}}
-                                <div>
-                                    <h4>{{__('main.Comments')}} (<span class="comment-count">{{$post->comments->where('status', 1)->count()}}</span>)</h4>
-                                    <ul id="list-0" class="main-comments-list uk-comment-list comments-list-0">
-                                        @if($post->allow_comments_status == 1)
-                                            @if(isLoginIn())
-                                                <li class="uk-fieldset main-comment-form">
-                                                    <div class="uk-margin">
-                                                        <textarea class="uk-textarea comment-text" rows="4" placeholder="{{__('main.Type your comment here ..')}}"></textarea>
-                                                    </div>
-                                                    <button class="uk-button uk-button-default add-comment">{{__('main.Comment')}}</button>
-                                                </li>
-                                            @else
-                                                <div>
-                                                    <div class="uk-card uk-card-body uk-text-center" style="border: 2px solid var(--theme-secondary-bg-color)">
-                                                        <p>{{__('main.To add comments you are required to login with your account.')}}</p>
-                                                        <a class="uk-button uk-button-primary" href="{{route('login')}}">{{__('main.Login now')}}</a>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
+                                        @if(!empty($post->cover_image))
+                                            <div class="uk-inline-clip uk-transition-toggle" tabindex="0" style="width: 100%;max-height: 400px; overflow: hidden; object-fit: contain; margin-bottom: 10px">
+                                                <img class="uk-transition-scale-up uk-transition-opaque" src="{{$post->getMainImage()}}" alt="" style="width: 100%">
+                                            </div>
                                         @endif
+                                        <div class="uk-card-body post-content" style="padding-left: 0px; padding-right: 0px; padding-top: 0px">
+                                            <h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
+                                            <div class="uk-grid-column-small uk-grid-row-large uk-child-width-1-2@s" uk-grid>
+                                                <div class="uk-flex uk-flex-middle">
+                                                    <ul class="uk-iconnav uk-text-muted">
+                                                        <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: user; ratio: 0.8"></span><span><a href="#"> {{ucfirst($post->user->name)}}</a> </span></li>
+                                                        <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: calendar; ratio: 0.8"></span><span><a href="#"> {{$post->created_at->toFormattedDateString()}}</a></span></li>
+                                                        @if(!empty($post->categories()))
+                                                            <li class="uk-flex uk-flex-middle"><span  uk-icon="icon: folder; ratio: 0.8"></span>
+                                                                @foreach($post->categories as $category)
+                                                                    <span><a href=""> {{ucfirst($category->name)}}</a></span>@if($post->categories->count() > 1) <span> | </span> @endif
+                                                                @endforeach
+                                                            </li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                                <div class="uk-text-{{getFloatKey('end')}} blog-post-actions">
+                                                    @if(isLoginIn())
+                                                        <a class="uk-button uk-button-default post-reaction uk-text-danger {{$post->hasReaction('like')? 'reacted' : ''}}"><span class="post-reaction-count">{{$post->getReactionCount('like')}}</span> <span class="{{$post->hasReaction('like')? 'fas' : 'far'}} fa-heart post-reaction-icon"></span></a>
+                                                    @else
+                                                        <span class="uk-button uk-text-danger {{$post->hasReaction('like')? 'reacted' : ''}}" style="padding: 0 10px" uk-tooltip="title: {{__('main.Please login to react with this post.')}}; pos: top"><span class="post-reaction-count">{{$post->getReactionCount('like')}}</span> <span class="{{$post->hasReaction('like')? 'fas' : 'far'}} fa-heart post-reaction-icon"></span></span>
+                                                    @endif
+                                                    <a href="" class="uk-button uk-button-default"><span uk-icon="icon: twitter" style="color: #29A4DA"></span></a>
+                                                    <a href="" class="uk-button uk-button-default"><span uk-icon="icon: facebook" style="color: #0074EF"></span></a>
+                                                </div>
+                                            </div>
+                                            <p>
+                                                {!! $post->content !!}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {{--attachments--}}
+                                    @if(!empty($attachments) && $attachments->count() > 0)
+
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
+                                            <h5 class="text-highlighted uk-text-bold">{{__('main.Attachments')}} (<span class="comment-count">{{$attachments->count()}}</span>)</h5>
+                                            <table class="uk-table uk-table-divider">
+                                                <thead>
+                                                <tr>
+                                                    <th class="uk-table-shrink">{{__('main.File name')}}</th>
+                                                    <th class="uk-table-expand">{{__('main.File Type')}}</th>
+                                                    <th class="uk-width-small"> {{__('main.Download link')}}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($attachments as $attachment)
+                                                    <tr>
+                                                        <td>{{$attachment->filename}}</td>
+                                                        <td>{{$attachment->filetype}}</td>
+                                                        <td><a target="_blank" class="uk-button uk-button-default uk-text-primary" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse(date('y-m-d'))->addDay())}}"><span uk-icon="icon: cloud-download"></span> <span>{{__('main.Download')}} </span></a></td>
+                                                    </tr>
+                                                @endforeach
+
+                                                </tbody>
+                                            </table>
+                                </div>
+                                    @endif
+                                    {{--comments--}}
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
+                                        <h5 class="text-highlighted uk-text-bold">{{__('main.Comments')}} (<span class="comment-count">{{$post->comments->where('status', 1)->count()}}</span>)</h5>
+                                        <ul id="list-0" class="main-comments-list uk-comment-list comments-list-0">
+                                            @if($post->allow_comments_status == 1)
+                                                @if(isLoginIn())
+                                                    <li class="uk-fieldset main-comment-form">
+                                                        <div class="uk-margin">
+                                                            <textarea class="uk-textarea comment-text" rows="4" placeholder="{{__('main.Type your comment here ..')}}"></textarea>
+                                                        </div>
+                                                        <button class="uk-button uk-button-default add-comment">{{__('main.Comment')}}</button>
+                                                    </li>
+                                                @else
+                                                    <div>
+                                                        <div class="uk-card uk-card-body uk-text-center" style="border: 2px solid var(--theme-secondary-bg-color)">
+                                                            <p>{{__('main.To add comments you are required to login with your account.')}}</p>
+                                                            <a class="uk-button uk-button-primary" href="{{route('login')}}">{{__('main.Login now')}}</a>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
                                             <li class="comment-loading-spinner">
                                                 <div class="uk-margin">
                                                     <div class="uk-text-center uk-text-primary">
@@ -112,50 +116,51 @@
                                                     </div>
                                                 </div>
                                             </li>
-@if(false)
-<li>
-    <article class="uk-comment bg-secondary uk-padding-small uk-visible-toggle" tabindex="-1">
-        <header class="uk-comment-header uk-position-relative">
-            <div class="uk-grid-medium" uk-grid>
-                <div class="uk-width-auto">
-                    <img class="uk-comment-avatar uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="80" height="80" alt="">
-                </div>
-                <div class="uk-width-expand">
-                    <div class="uk-grid-medium" uk-grid>
-                        <div class="uk-width-expand">
-                            <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#">Author</a></h4>
-                            <p class="uk-comment-meta uk-margin-remove-top"><a class="uk-link-reset" href="#">12 days ago</a></p>
-                        </div>
-                        <div class="uk-width-auto">
-                            <ul class="uk-list comment-actions">
-                                <li><button class="uk-button uk-button-default uk-text-danger" style="padding: 0 10px"><span>1</span> <span class="fas fa-heart"></span></button></li>
-                                <li><button class="uk-button uk-button-default uk-text-primary">Replay</button></li>
-                                <li>
-                                    <button class="uk-button uk-button-text" type="button" style="padding: 0 10px"><span uk-icon="icon:  more-vertical; ratio: 0.8"></span></button>
-                                    <div uk-dropdown="pos: bottom-right">
-                                        <ul class="uk-list" style="padding: 0px; margin: 0px">
-                                            <li><a href="#">Report</a></li>
-                                            <li><a href="#">Edit</a></li>
-                                            <li><a href="#">Reply</a></li>
+                                            @if(false)
+                                                <li>
+                                                    <article class="uk-comment bg-secondary uk-padding-small uk-visible-toggle" tabindex="-1">
+                                                        <header class="uk-comment-header uk-position-relative">
+                                                            <div class="uk-grid-medium" uk-grid>
+                                                                <div class="uk-width-auto">
+                                                                    <img class="uk-comment-avatar uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="80" height="80" alt="">
+                                                                </div>
+                                                                <div class="uk-width-expand">
+                                                                    <div class="uk-grid-medium" uk-grid>
+                                                                        <div class="uk-width-expand">
+                                                                            <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#">Author</a></h4>
+                                                                            <p class="uk-comment-meta uk-margin-remove-top"><a class="uk-link-reset" href="#">12 days ago</a></p>
+                                                                        </div>
+                                                                        <div class="uk-width-auto">
+                                                                            <ul class="uk-list comment-actions">
+                                                                                <li><button class="uk-button uk-button-default uk-text-danger" style="padding: 0 10px"><span>1</span> <span class="fas fa-heart"></span></button></li>
+                                                                                <li><button class="uk-button uk-button-default uk-text-primary">Replay</button></li>
+                                                                                <li>
+                                                                                    <button class="uk-button uk-button-text" type="button" style="padding: 0 10px"><span uk-icon="icon:  more-vertical; ratio: 0.8"></span></button>
+                                                                                    <div uk-dropdown="pos: bottom-right">
+                                                                                        <ul class="uk-list" style="padding: 0px; margin: 0px">
+                                                                                            <li><a href="#">Report</a></li>
+                                                                                            <li><a href="#">Edit</a></li>
+                                                                                            <li><a href="#">Reply</a></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="uk-comment-body">
+                                                                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </article>
+                                                    <ul>
+                                                    </ul>
+                                                </li>
+                                            @endif
+
                                         </ul>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="uk-comment-body">
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-                    </div>
-                </div>
-            </div>
-        </header>
-    </article>
-    <ul>
-    </ul>
-</li>
-@endif
-
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -163,6 +168,7 @@
                 </div>
             </div>
         </div>
+        @include('partial.scripts._cart')
     </section>
     <section>
         <div id="comment-submitted" class="uk-flex-top" uk-modal>

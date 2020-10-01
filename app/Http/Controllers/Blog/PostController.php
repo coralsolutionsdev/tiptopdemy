@@ -237,10 +237,12 @@ class PostController extends Controller
             // Delete old image
             FileAssetManagerService::ImageDestroy($post->image);
         }
+        $postImagesArray = isset($input['images'])? $input['images'] : array();
         if (!empty($post->images)){
             foreach ($post->images as $key => $image){
-                if (!array_key_exists($key,$input['images'])){
+                if (!array_key_exists($key,$postImagesArray)){
                     FileAssetManagerService::ImageDestroy($image);
+//                    unset($bar['quux']);
                 }
             }
         }

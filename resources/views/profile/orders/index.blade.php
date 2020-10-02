@@ -36,7 +36,7 @@
                                         <p>{{__('main.'.$order->getStatus())}}</p>
                                     </div>
                                 </td>
-                                <td class="uk-text-center"><a class="uk-button uk-button-primary" href="{{route('invoice.show', $order->getInvoiceHashedID())}}">{{__('main.View invoice')}}</a></td>
+                                <td class="uk-text-center"><a class="uk-button uk-button-primary" target="_blank" href="{{route('invoice.show', $order->getInvoiceHashedID())}}">{{__('main.View invoice')}}</a></td>
 
                             </tr>
                         @empty

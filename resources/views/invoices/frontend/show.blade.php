@@ -34,7 +34,7 @@
             color: #828691;
         }
         .uk-table td, .uk-table th {
-            padding: 5px 0px;
+            padding: 5px;
             vertical-align: top;
             color: #828691;
         }
@@ -118,15 +118,15 @@
                 <div class="uk-grid-collapse" uk-grid>
                     <div class="uk-width-2-3"></div>
                     <div class="uk-width-expand uk-grid-collapse">
-                        <div class="uk-grid-collapse" uk-grid style="border-top: 1px solid #D8D8D8;  padding: 10px 0px; margin-bottom: 10px">
+                        <div class="uk-grid-collapse" uk-grid style="border-top: 1px solid #D8D8D8;  padding: 10px 5px; margin-bottom: 10px">
                             <div class="uk-width-1-2"><p class="uk-margin-remove">{{__('main.Subtotal')}}</p></div>
                             <div class="uk-width-1-2 uk-text-muted uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">{{$invoice->subtotal}}</div>
                         </div>
-                        <div class="uk-grid-collapse" uk-grid style="border-top: 1px solid #D8D8D8;  padding: 10px 0px; margin-bottom: 10px">
+                        <div class="uk-grid-collapse" uk-grid style="border-top: 1px solid #D8D8D8;  padding: 10px 5px; margin-bottom: 10px">
                             <div class="uk-width-1-2"><p class="uk-margin-remove">{{__('main.Discount')}}</p></div>
                             <div class="uk-width-1-2 uk-text-muted uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">{{$invoice->discount_amount}}</div>
                         </div>
-                        <div class="uk-grid-collapse" uk-grid style="border-top: 1px solid #D8D8D8;  padding: 10px 0px; margin-bottom: 10px">
+                        <div class="uk-grid-collapse" uk-grid style="border-top: 1px solid #D8D8D8;  padding: 10px 5px; margin-bottom: 10px">
                             <div class="uk-width-1-2"><p class="uk-margin-remove">{{__('main.Grand Total')}}</p></div>
                             <div class="uk-width-1-2 uk-text-muted uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}} "><h3 class="uk-text-primary">{{$invoice->grand_total}} USD</h3></div>
                         </div>

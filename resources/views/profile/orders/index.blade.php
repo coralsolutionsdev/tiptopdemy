@@ -12,28 +12,32 @@
             {{--content--}}
             <div class="uk-width-expand">
                 <div class="uk-card uk-card-default uk-card-body uk-padding-small uk-padding-remove-top">
-                    <div class="uk-padding">
-                        <div class="uk-alert-warning uk-text-center" uk-alert>
-                            <p>
-                                This page is under development process.
-                            </p>
-                        </div>
-                    </div>
-                    @if(false)
+                    @if(true)
                     <table class="uk-table uk-table-divider uk-table-justify uk-table-middle uk-margin-remove ">
                         <thead>
                         <tr>
-                            <th class="uk-table-expand">{{__('main.Order info')}}</th>
-                            <th class="">{{__('main.Payment status')}}</th>
-                            <th class=""></th>
+                            <th class="uk-table-expand">{{__('main.Order no.')}}</th>
+                            <th class="uk-text-center">{{__('main.Purchasing date')}}</th>
+                            <th class="uk-text-center">{{__('main.Items count')}}</th>
+                            <th class="uk-text-center">{{__('main.Payment status')}}</th>
+                            <th class="uk-text-center">{{__('main.Invoice')}}</th>
                         </tr>
                         </thead>
                         <tbody class="card-items">
                         @forelse($orders as $order)
                             <tr class="">
-                                <td>s</td>
-                                <td>s</td>
-                                <td>s</td>
+                                <td>
+                                    <p class="uk-margin-remove uk-text-bold uk-text-primary">#{{$order->order_number}}</p>
+                                </td>
+                                <td class="uk-text-center"><p class="uk-margin-remove ">{{date_html($order->created_at)}}</p></td>
+                                <td class="uk-text-center">{{$order->items->count()}}</td>
+                                <td class="uk-text-center">
+                                    <div class="uk-alert-{{$order->getStatusColor()}}" uk-alert style="padding: 10px">
+                                        <p>{{$order->getStatus()}}</p>
+                                    </div>
+                                </td>
+                                <td class="uk-text-center"><a class="uk-button uk-button-primary" href="{{route('invoice.show', $order->getInvoiceHashedID())}}">{{__('main.View invoice')}}</a></td>
+
                             </tr>
                         @empty
                             <tr>

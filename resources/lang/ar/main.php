@@ -420,6 +420,21 @@
         'Place Order' => 'تأكيد الشراء',
         'purchase complete' => 'لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: :number.',
         'My Orders' => 'مشترياتي',
+        'Order no.' => 'رقم الطلب',
+        'Purchasing date' => 'تاريخ لاشراء',
+        'Items count' => 'عدد العناصر',
+        'Payment status' => 'حالة الدفع',
+        'Invoice' => 'الفاتورة',
+        'Invoice No' => 'رقم الفاتورة',
+        'Invoice Date' => 'تاريخ الفاتورة',
+        'Recipient' => 'المستلم',
+        'Item description' => 'وصف العنصر',
+        'Unit Price' => 'سعر الوحدة',
+        'Qty.' => 'الكمية',
+        'Total' => 'المجموع',
+        'Print invoice' => 'أطبع الفاتورة',
+        'View invoice' => 'عرض الفاتورة',
+        'Payment Completed' => 'المبلغ مدفوع كلياً',
 
 
 

@@ -18,6 +18,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Vinkla\Hashids\Facades\Hashids;
 
 class ProfileController extends Controller
 {

@@ -63,7 +63,7 @@
                             <div class="widget uk-box-shadow-hover-small" style="border-radius: 15px; background-color:white; border-color: #FFF4DE; min-height: 14em">
                                 <div class="" uk-grid>
                                     <div class="uk-width-1-2 ">
-                                        <img src="{{asset_image('/assets/Telecommuting-pana.png')}}" style="position: absolute; width: 270px; margin-top: -30px; margin-right: -20px">
+                                        <img src="{{asset_image('/assets/Telecommuting-pana.png')}}" style="position: absolute; width: 250px; margin-top: -15px; margin-right: -12px">
                                     </div>
                                     <div class="uk-width-1-2" style="padding:2em">
                                         <h3 class="uk-margin-remove uk-text-primary">الزيارات</h3>

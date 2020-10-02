@@ -182,7 +182,7 @@ class User extends Authenticatable implements ReacterableContract
     }
     public function orders()
     {
-        return $this->hasMany(Order::class, 'creator_id');
+        return $this->hasMany(Order::class, 'creator_id')->latest();
     }
 
 

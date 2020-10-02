@@ -7,6 +7,8 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
+use League\Flysystem\Exception;
+use Vinkla\Hashids\Facades\Hashids;
 
 
 class Invoice extends Model
@@ -66,7 +68,7 @@ class Invoice extends Model
         'status' => 'integer',
         'subtotal' => 'decimal:2',
         'grand_total' => 'decimal:2',
-        'discount_amount' => 'decimal',
+        'discount_amount' => 'decimal:2',
         'creator_id' => 'integer',
         'editor_id' => 'integer',
     ];
@@ -80,6 +82,16 @@ class Invoice extends Model
         'date',
         'date_paid',
     ];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     /**
      * @param Order $order
@@ -112,12 +124,41 @@ class Invoice extends Model
         return self::create($input);
     }
 
+    /**
+     * encode invoice hashed it
+     * user id , order id, invoice id
+     * @return string
+     */
+    public function encodeHashedId()
+    {
+        return  Hashids::encode($this->creator_id,$this->order_id,$this->id);
+    }
+
+    /**
+     * decode invoice hashed id
+     * @param $hashedId
+     * @return array
+     * @throws Exception
+     */
+    public static function decodeHashedId($hashedId)
+    {
+        if (is_null($hashedId) || empty($hashedId)){
+            throw new Exception('invalid hashed ID ');
+        }
+        $numbers = Hashids::decode($hashedId);
+        return [
+            'user_id' => $numbers[0],
+            'order_id' => $numbers[1],
+            'invoice_id' => $numbers[2],
+        ];
+
+    }
+
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods
      |--------------------------------------------------------------------------
      */
-
     public function seller()
     {
         return $this->belongsTo(User::class);

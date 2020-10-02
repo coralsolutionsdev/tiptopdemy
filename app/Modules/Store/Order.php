@@ -96,6 +96,8 @@ class Order extends Model
         self::STATUS_FRAUD              => 'Fraud',
     ];
 
+
+
     /**
      * create new order
      * @param $product_info
@@ -162,11 +164,50 @@ class Order extends Model
         return $order;
     }
 
+    /**
+     * return order text status
+     * @return string
+     */
+    public function getStatus()
+    {
+        return self::STATUS_ARRAY[$this->status];
+    }
+
+    /**
+     * return status color
+     * @return string
+     */
+    public function getStatusColor()
+    {
+        if (in_array($this->status , [self::STATUS_PAYMENT_COMPLETE])){
+            return 'success';
+        }
+    }
+
+    /**
+     * get invoice hashed id
+     * @return string
+     */
+    public function getInvoiceHashedID(){
+        $invoice = $this->invoice;
+        if (!empty($invoice)){
+            return $invoice->encodeHashedId();
+        }
+        return '';
+    }
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods
      |--------------------------------------------------------------------------
      */
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 
     public function creator()
     {

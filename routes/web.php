@@ -228,9 +228,13 @@ Route::group(['middleware'=>'installed'], function(){
                     Route::post('/destroy/item','CartController@destroyItem')->name('destroy.item');
                     Route::resource('/','CartController', ['only' => ['index']]);
                     Route::post('/place/order','CartController@placeOrder')->name('place.order');
-
                 });
             }
+            /* Invoice */
+            Route::group(['prefix' => 'invoice', 'namespace' => 'Store', 'as' => 'invoice.'], function (){
+                Route::get('/show/{hashedId}','InvoiceController@show')->name('show');
+            });
+
             /*pages*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
         });

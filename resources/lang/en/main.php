@@ -393,6 +393,21 @@
         'Place Order' => 'Place Order',
         'purchase complete' => 'Your purchase has been completed successfully, your order number is: :number.',
         'My Orders' => 'My Orders',
+        'Order no.' => 'Order no.',
+        'Purchasing date' => 'Purchasing date',
+        'Items count' => 'Items count',
+        'Payment status' => 'Payment status',
+        'Invoice' => 'Invoice',
+        'Invoice No' => 'Invoice No',
+        'Invoice Date' => 'Invoice Date',
+        'Recipient' => 'Recipient',
+        'Item description' => 'Item description',
+        'Unit Price' => 'Unit Price',
+        'Qty.' => 'Qty.',
+        'Total' => 'Total',
+        'Print invoice' => 'Print invoice',
+        'View invoice' => 'View invoice',
+        'Payment Completed' => 'Payment Completed',
 
 
         // forms

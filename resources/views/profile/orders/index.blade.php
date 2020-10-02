@@ -33,7 +33,7 @@
                                 <td class="uk-text-center">{{$order->items->count()}}</td>
                                 <td class="uk-text-center">
                                     <div class="uk-alert-{{$order->getStatusColor()}}" uk-alert style="padding: 10px">
-                                        <p>{{$order->getStatus()}}</p>
+                                        <p>{{__('main.'.$order->getStatus())}}</p>
                                     </div>
                                 </td>
                                 <td class="uk-text-center"><a class="uk-button uk-button-primary" href="{{route('invoice.show', $order->getInvoiceHashedID())}}">{{__('main.View invoice')}}</a></td>

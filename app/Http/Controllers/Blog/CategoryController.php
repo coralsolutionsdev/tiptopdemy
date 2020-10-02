@@ -96,7 +96,7 @@ class CategoryController extends Controller
         $search_key =  null;
         $modelName = $this->modelName;
         $breadcrumb =  Breadcrumbs::render('blog.category', $category);
-        $posts = $category->items()->paginate(5);
+        $posts = $category->items()->where('status', BlogPost::STATUS_ENABLED)->paginate(10);
         return view('blog.frontend.index', compact('modelName', 'page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search', 'search_key'));
     }
 

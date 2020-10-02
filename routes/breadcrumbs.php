@@ -61,3 +61,13 @@ Breadcrumbs::for('blog.post.show', function ($trail, $post) {
     $trail->parent('blog');
     $trail->push($post->title, route('blog.posts.show', $post->slug));
 });
+// Home > Blog > [Category]
+Breadcrumbs::for('blog.category', function ($trail, $category) {
+    $trail->parent('blog');
+    $trail->push($category->name, route('blog.category.show', $category->slug));
+});
+//// Home > Blog > [Category] > [Post]
+//Breadcrumbs::for('post', function ($trail, $post) {
+//    $trail->parent('category', $post->category);
+//    $trail->push($post->title, route('post', $post->id));
+//});

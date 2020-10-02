@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Blog;
 use App\Category;
 use App\GalleryAlbum;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,12 +19,14 @@ use Storage;
 
 class CategoryController extends Controller
 {
-    protected $breadcrumb;
+    protected $modelName;
     protected $page_title;
+    protected $breadcrumb;
 
     public function __construct()
     {
         $this->page_title = 'Blog Categories';
+        $this->modelName = 'Blog';
         $this->breadcrumb = [
             'blog' => '',
             'categories' => '',
@@ -88,12 +91,13 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $page_title =  $this->page_title;
-        $breadcrumb =  $this->breadcrumb;
+        $page_title =  $category->name;
         $blog_search =  null;
         $search_key =  null;
+        $modelName = $this->modelName;
+        $breadcrumb =  Breadcrumbs::render('blog.category', $category);
         $posts = $category->items()->paginate(5);
-        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search', 'search_key'));
+        return view('blog.frontend.index', compact('modelName', 'page_title', 'breadcrumb','posts','count','categories','postscount','all_posts','blog_search', 'search_key'));
     }
 
     public function filter(){

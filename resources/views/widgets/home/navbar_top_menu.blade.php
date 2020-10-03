@@ -57,7 +57,7 @@
                     </li>
                     <li>
                         <button class="uk-button uk-button-default" type="button" uk-toggle="target: #user-profile-offcanvas-nav">
-                            <img class="" src="{{Auth::user()->getProfilePicURL()}}" style="width: 35px; height: 35px; object-fit: cover; border-radius: 5px">
+                            <img class="uk-border-circle" src="{{Auth::user()->getProfilePicURL()}}" style="width: 35px; height: 35px; object-fit: cover;">
                         </button>
                     </li>
                     <li class="" style="display: none">
@@ -119,7 +119,7 @@
             <div class="uk-width-1-3 uk-flex uk-flex-middle">
                 <div>
                     <i class="fas fa-circle uk-text-success online"></i>
-                    <img class="" src="{{Auth::user()->getProfilePicURL()}}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px">
+                    <img class="uk-border-circle uk-image-glow-{{getAuthUser()->gender == 1 ? 'success' : 'pink'}}-small" src="{{Auth::user()->getProfilePicURL()}}" style="width: 60px; height: 60px; object-fit: cover;">
                 </div>
             </div>
             <div class="uk-width-2-3">

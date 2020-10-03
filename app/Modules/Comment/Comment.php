@@ -17,6 +17,7 @@ class Comment extends Model implements ReactableContract
     public function addDetails(){
         $this->likes = $this->getReactionCount('like');
         $this->commenter_profile_pic = $this->user->getProfilePicURL();
+        $this->commenter_gender = $this->user->gender;
         $this->commenter_name = $this->user->getUserName();
         $this->creation_date = $this->created_at->diffForHumans();
         $this->is_liked = ($this->hasReaction('like')) ? true :  false;

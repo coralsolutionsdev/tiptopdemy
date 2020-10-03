@@ -34,8 +34,10 @@
         'days' => 'Days',
         'Days' => '[0,1] Day|[2,10] Days|[11,*] Days',
         '_units' => '[0,1] Unit|[2,10] Units|[11,*] Units',
-
         'Remaining' => 'Remaining',
+        'Administrator' => 'Administrator',
+        'Manager' => 'Manager',
+        'Student' => 'Student',
 
         // profile
         'Home page' => 'Home page',

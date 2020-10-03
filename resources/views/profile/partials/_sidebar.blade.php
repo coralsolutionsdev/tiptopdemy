@@ -2,10 +2,7 @@
     {{--user avatar--}}
     <div class="uk-padding-small">
         <div class="uk-text-center">
-            <img class="uk-border-circle" src="{{Auth::user()->getProfilePicURL()}}" width="125" alt="Border circle" style="border: 5px solid #17E5B4 ;
-                             -webkit-box-shadow: 0px 0px 20px -3px rgba(23,229,180,0.8);
--moz-box-shadow: 0px 0px 20px -3px rgba(23,229,180,0.8);
-box-shadow: 0px 0px 20px -3px rgba(23,229,180,0.8); ">
+            <img class="uk-border-circle uk-image-glow-{{$user->gender == 1 ? 'success' : 'pink'}}"  src="{{Auth::user()->getProfilePicURL()}}" width="125" alt="Border circle">
         </div>
         <div  class="" style="margin-top: -30px; padding: 0 30px;">
             <button class="uk-button uk-button-primary uk-button-small" type="button" uk-toggle="target: #avatarsModal" style=" border-radius: 50%; border: 3px solid white; padding: 0px 8px"><i class="fas fa-camera"></i></button>
@@ -13,7 +10,11 @@ box-shadow: 0px 0px 20px -3px rgba(23,229,180,0.8); ">
     </div>
     <div class="uk-text-center">
         <span class="uk-text-bold uk-text-capitalize ">{{$user->first_name}} {{$user->surname}}</span><br>
-        <span class="uk-text-muted uk-text-capitalize">{{$user->getRole()->name}}</span>
+        @if(!empty($user->username))
+            <span class="uk-text-primary uk-text-capitalize"> {{$user->username}}</span><br>
+        @endif
+        <span class="uk-text-muted uk-text-capitalize">{{__('main.'.$user->getRole()->display_name)}}</span><br>
+
     </div>
     <div class="uk-margin-small uk-text-center">
         <a class="uk-button uk-button-default uk-button-gray" href="{{route('profile.edit', $user->id)}}">{{__('main.Edit Profile')}}</a>

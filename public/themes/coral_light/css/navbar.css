@@ -65,7 +65,7 @@
     position: absolute !important;
     border:  2px solid white;
     border-radius: 50%;
-    margin: -5px -5px 0 0;
+    /*margin: -5px -5px 0 0;*/
 }
 .uk-offcanvas-bar a{
     color: var(--text-highlighted) !important;

@@ -388,9 +388,13 @@
             var editBtn = '';
             var deleteBtn = '';
             var reportBtn = '';
+            var commenterRingColor = 'success';
             var reactionStatus = 'not-reacted';
             if(item.is_liked == true){
                 reactionStatus = 'reacted';
+            }
+            if(item.commenter_gender == 0){
+                commenterRingColor = 'pink';
             }
             var comment = item.comment.replace(/\n/g,"<br>");
             var likeClass = 'far';
@@ -428,7 +432,7 @@
                 '        <header class="uk-comment-header uk-position-relative">\n' +
                 '            <div class="uk-grid-medium" uk-grid>\n' +
                 '                <div class="uk-width-auto">\n' +
-                '                    <img class="uk-comment-avatar uk-border-circle" src="'+item.commenter_profile_pic+'" width="60" height="60" alt="">\n' +
+                '                    <img class="uk-comment-avatar uk-border-circle uk-image-glow-'+commenterRingColor+'-small" src="'+item.commenter_profile_pic+'" width="60" height="60" alt="">\n' +
                 '                </div>\n' +
                 '                <div class="uk-width-expand">\n' +
                 '                    <div class="uk-grid-medium" uk-grid>\n' +

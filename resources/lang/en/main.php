@@ -32,8 +32,8 @@
         'Achievement and development' => 'Achievement and development',
         'Efficiency' => 'Efficiency',
         'days' => 'Days',
-        'Days' => '[0,2] Day|[3,10] Days|[11,*] Day',
-        '_units' => '[0,2] Unit|[3,10] Units|[11,*] Unit',
+        'Days' => '[0,1] Day|[2,10] Days|[11,*] Days',
+        '_units' => '[0,1] Unit|[2,10] Units|[11,*] Units',
 
         'Remaining' => 'Remaining',
 
@@ -49,7 +49,8 @@
         'Confirm new password' => 'Confirm new password',
         'Upload new image' => 'Upload new image',
         'Set as default' => 'Set as default',
-
+        'Dear student, you can add your personal picture to be used for documents and certificates issuing.' => 'Dear student, you can add your personal picture to be used for documents and certificates issuing.',
+        'Platform members' => 'Platform members',
 
 
         '_main' => 'Overview',
@@ -141,6 +142,7 @@
         'add' => 'Add',
         'login' => 'Login',
         'register' => 'register',
+        'Members' => '{0} Member|[1,10] Members|[10,*] Members',
 
 
 
@@ -319,6 +321,7 @@
 
 
 
+
         // lessons
         'Add new Lesson' => 'Add new Lesson',
         'Add new Unit' => 'Add new Unit',
@@ -386,8 +389,8 @@
         'Please wait, items are loading.' => 'Please wait, items are loading.',
         'Please create a lesson first.' => 'Please create a lesson first.',
 //        'Marks' => '{0} There are none|[1,19] There are some|[20,*] There are many',
-        'points' => '{0} Point|[1,*] Points',
-        'Marks' => '[1] Mark|[2,*] Marks',
+        'points' => '[0,1] Point|[2,*] Points',
+        'Marks' => '[0,1] Mark|[2,*] Marks',
 
         //orders
         'orders' => 'Orders',

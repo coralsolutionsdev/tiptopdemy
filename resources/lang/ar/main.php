@@ -27,6 +27,8 @@
         'Confirm new password' => 'تأكيد كلمة المرور',
         'Upload new image' => 'أضغط لرفع صورة جديدة',
         'Set as default' => 'التعيين كأفتراضي',
+        'Members' => '{0} عضو|[1,10] أعضاء|[10,*] عضواً',
+
 
 
 
@@ -212,10 +214,8 @@
         'Blog Categories' => 'تصنيفات المدونة',
         'Post images'=> 'صور المنشور',
         'Select a default post image, or upload a new image'=> 'إختر صورة المنشور الافتراضية, او قم برفع صورة جديدة',
-
-
-
-
+        'Dear student, you can add your personal picture to be used for documents and certificates issuing.' => 'عزيزي الطالب, يمكنك إضافة صورتك الشخصية هنا لاستخدامها في طباعة الوثائق والشهادات.',
+        'Platform members' => 'أعضاء المنصة',
 
 
         // Gallery

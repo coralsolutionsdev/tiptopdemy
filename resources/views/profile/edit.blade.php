@@ -252,30 +252,40 @@
                             {!! Form::model($user, ['url' => route('profile.update', ['id' => $user->id]), 'method' => 'PATCH', 'class' => '', 'enctype' => 'multipart/form-data', 'autocomplete' => 'off']) !!}
 
                             <div class="uk-margin">
-                                <div class="uk-grid-small" uk-grid>
-                                    <div class="uk-width-1-1@m">
-                                        <div class="uk-grid-small" uk-grid>
-                                            <div class="">
-                                                <div uk-form-custom="target: true">
-                                                    <input type="file" name="upload_image">
-                                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="{{__('main.Upload new image')}}" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <p>{{__('main.Dear student, you can add your personal picture to be used for documents and certificates issuing.')}}</p>
+                            <div uk-form-custom>
+                                <input type="file" name="upload_image" class="image-upload-input">
+                                <button class="uk-button uk-button-default uk-button-upload" type="button" tabindex="-1">{{__('main.Upload new image')}} <span uk-icon="icon: cloud-upload"></span></button>
                             </div>
+                            <div class="uk-button-upload-items uk-margin-small">
+
+                            </div>
+                            <script>
+                                $('.image-upload-input').change(function (){
+                                    var file_names = $.map($(this).prop('files'), function(file)
+                                    {
+                                        return file.name;
+                                    });
+                                    var file_section = $('.uk-button-upload-items');
+                                    file_section.html('');
+                                    file_names.map(function(file_name)
+                                    {
+                                        file_section.append('<span><span uk-icon="icon: image"></span> '+file_name+'</span>');
+                                    });
+                                });
+                            </script>
+                        </div>
 
                             <div class="uk-margin">
                                 <div class="uk-grid-small" uk-grid>
                                     <div class="uk-width-1-1@m">
                                         <div class="uk-grid-small" uk-grid>
                                             @foreach($user->profileImages() as $image)
-                                            <div id="{{$image->key}}" class="uk-width-1-5@m uk-width-1-2 profile-picture">
+                                            <div id="{{$image->key}}" class="uk-width-1-4@m uk-width-1-2 profile-picture">
                                                 <span class="btn-hover delete-profile-pic" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>
                                                 <label class="">
                                                     <input type="radio" name="image" uk-tooltip="{{__('main.Set as default')}}" value="{{$image->key}}" {{$user->image == $image->key ? 'checked' : ''}}  style="position: absolute; margin-right: 30px; margin-top: 7px;">
-                                                    <img src="{{asset($image->url)}}" class="uk-box-shadow-hover-large" alt="" style="border-radius: 5px; width: 100%">
+                                                    <img src="{{asset($image->url)}}" class="uk-box-shadow-hover-medium" alt="" style="border-radius: 5px; width: 100%">
                                                 </label>
                                             </div>
                                             @endforeach

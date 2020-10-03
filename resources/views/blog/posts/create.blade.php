@@ -188,7 +188,7 @@
                                 <div class="uk-grid-small" uk-grid>
                                     <div class="uk-width-1-1@m">
                                         <div id="uploaded-images" class="uk-grid-small" uk-grid="masonry: true">
-                                            @if(!empty($post))
+                                            @if(!empty($post) && !empty($post->images))
                                                 @foreach($post->images as  $id => $image)
                                                     <div id="{{$id}}" class="uploaded-image uk-width-1-4@m uk-width-1-2">
                                                         <span class="btn-hover delete-uploaded-image" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>
@@ -332,7 +332,7 @@
                     // $('#uploaded-images').append('<div class="row d-flex align-items-center uploaded-images-item"><div class="col-6"><img src="'+json.item.url+'" width="100" alt=""><input type="hidden" name="images['+imageId+']" value="'+json.item.path+'"></div><div class="col-6 d-flex justify-content-end"><span id="'+imageId+'" class="btn btn-light btn-post-delete"><i class="far fa-trash-alt"></i></span></div></div>');
                     $('#uploaded-images').append('' +
                         '<div id="'+imageId+'" class="uk-width-1-3@m uk-width-1-2">\n' +
-                        '    <span class="btn-hover btn-post-image-delete" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>\n' +
+                        '    <span class="btn-hover delete-uploaded-image" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>\n' +
                         '    <label>\n' +
                         '        <input class="default-uploaded-image" type="radio" name="default_cover" uk-tooltip="{{__('main.Set as default')}}" value="1">\n' +
                         '        <input type="hidden" name="images['+imageId+']" value="'+json.item.path+'">\n' +

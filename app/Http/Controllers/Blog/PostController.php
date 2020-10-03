@@ -214,7 +214,7 @@ class PostController extends Controller
         FileAssetManagerService::ImageDestroy($post->cover_image);
         if (!empty($post->images)){
             foreach ($post->images as $key => $image){
-                    FileAssetManagerService::ImageDestroy($image);
+                FileAssetManagerService::ImageDestroy($image);
             }
         }
         $post->delete();

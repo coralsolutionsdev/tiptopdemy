@@ -124,7 +124,6 @@ class BlogPost extends Model implements ReactableContract
         $input['allow_comments_status'] = isset($input['allow_comments_status']) && !empty($input['allow_comments_status']) ? self::STATUS_ENABLED : self::STATUS_DISABLED;
         // default comment_status
         $input['default_comment_status'] = isset($input['default_comment_status']) && !empty($input['default_comment_status']) ? self::STATUS_ENABLED : self::STATUS_DISABLED;
-
         if (!empty($post)){
             //update post images
             $postImagesInputArray = isset($input['images']) && !empty($input['images'])? $input['images'] : array();
@@ -143,9 +142,12 @@ class BlogPost extends Model implements ReactableContract
                 if ($setFirstImageAsCover == true && !empty($postImages)){
                     $input['cover_image'] =  $postImages[array_key_first($postImages)];
                 }
-                $input['images'] = $postImages;
             }
         }
+        if (!isset($input['images'])){
+            $input['images'] =  null;
+        }
+
         // upload cover image
         if (isset($input['image'])) {
             // upload and save image

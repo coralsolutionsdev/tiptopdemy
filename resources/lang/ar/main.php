@@ -210,6 +210,9 @@
         'Allow Com.' => 'السماح بالتعليق',
         'View' => 'عرض',
         'Blog Categories' => 'تصنيفات المدونة',
+        'Post images'=> 'صور المنشور',
+        'Select a default post image, or upload a new image'=> 'إختر صورة المنشور الافتراضية, او قم برفع صورة جديدة',
+
 
 
 

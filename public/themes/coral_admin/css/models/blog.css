@@ -1,0 +1,13 @@
+.delete-uploaded-image{
+    background-color: white;
+    padding: 1px;
+    border-radius: 2px;
+    position: absolute;
+    margin: 3px 4px;
+}
+.delete-uploaded-image:hover{
+    cursor: pointer;
+}
+.default-uploaded-image{
+    position: absolute; margin: 10px 30px 10px 30px
+}

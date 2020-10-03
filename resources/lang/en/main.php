@@ -202,7 +202,8 @@
         'Loading' => 'Loading',
         'Please login to react with this post.' => 'Please login to react with this post.',
         'An error appended during loading, please refresh the page.' => 'An error appended during loading, please refresh the page.',
-
+        'Post images'=> 'Post images',
+        'Select a default post image, or upload a new image'=> 'Select a default post image, or upload a new image:',
 
         // Gallery
 		'_gallery' => 'Gallery',

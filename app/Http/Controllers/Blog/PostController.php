@@ -7,6 +7,7 @@ use App\Category;
 use App\Institution\InstitutionScope;
 use App\Page;
 use App\Services\FileAssetManagerService;
+use App\UniqueId;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
@@ -100,53 +101,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $input['user_id'] = Auth()->user()->id;
-
-        if(!empty($input['status'])){
-            $status = 1;
-        }else{
-            $status = 0;
-        }
-        $input['status'] = $status;
-        //
-        if(!empty($input['allow_comments_status'])){
-            $allow_comments_status = 1;
-        }else{
-            $allow_comments_status = 0;
-        }
-        $input['allow_comments_status'] = $allow_comments_status;
-        //
-        if(!empty($input['default_comment_status'])){
-            $default_comment_status = 1;
-        }else{
-            $default_comment_status = 0;
-        }
-        $input['default_comment_status'] = $default_comment_status;
-        // upload save image
-        if ($request->hasFile('image')) {
-            // upload and save image
-            $image = $request->file('image');
-            $location =  config('baseapp.post_image_storage_path');
-            $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-            $input['cover_image'] = $uploaded_image;
-        }
-        $post = BlogPost::create($input);
-        // update Category
-        $categories = $request->input('categories', array());
-        $post->categories()->sync($categories);
-
-        // update tags
-        $tags = $request->input('tags', array());
-        $post->syncTagsWithType($tags, 'post');
-        
-        // attachments
-        if (isset($input['attachments'])){
-            $comments = $input['attachments'];
-            foreach ($comments as $comment){
-                $post->attach($comment);
-            }
-        }
-
+        BlogPost::createOrUpdate($input);
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('posts.index');
 
@@ -208,71 +163,9 @@ class PostController extends Controller
     {
         $input = $request->all();
         $post = BlogPost::find($id);
-        if(!empty($input['status'])){
-            $status = 1;
-        }else{
-            $status = 0;
-        }
-        $input['status'] = $status;
-        //
-        if(!empty($input['allow_comments_status'])){
-            $allow_comments_status = 1;
-        }else{
-            $allow_comments_status = 0;
-        }
-        $input['allow_comments_status'] = $allow_comments_status;
-        //
-        if(!empty($input['default_comment_status'])){
-            $default_comment_status = 1;
-        }else{
-            $default_comment_status = 0;
-        }
-        $input['default_comment_status'] = $default_comment_status;
-        if ($request->hasFile('image')) {
-            // upload and save image
-            $image = $request->file('image');
-            $location =  config('baseapp.post_image_storage_path');
-            $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
-            $input['cover_image'] = $uploaded_image;
-            // Delete old image
-            FileAssetManagerService::ImageDestroy($post->image);
-        }
-        $postImagesArray = isset($input['images'])? $input['images'] : array();
-        if (!empty($post->images)){
-            foreach ($post->images as $key => $image){
-                if (!array_key_exists($key,$postImagesArray)){
-                    FileAssetManagerService::ImageDestroy($image);
-//                    unset($bar['quux']);
-                }
-            }
-        }
-        // update slug
-        if ($post->title != $request->input('title')){
-            $slug = SlugService::createSlug(BlogPost::class, 'slug', $request->input('title'), ['unique' => true]);
-            $post->slug = $slug;
-        }
-        // attachments
-        if (isset($input['attachments'])){
-            $comments = $input['attachments'];
-            foreach ($comments as $comment){
-                $post->attach($comment);
-            }
-        }
-
-        $post->update($input);
-
-        // update Category
-        $categories = $request->input('categories', array());
-        $post->categories()->sync($categories);
-
-        // update tags
-        $tags = $request->input('tags', array());
-        $post->syncTagsWithType($tags, 'post');
-
-        session()->flash('success', trans('main._success_msg'));
+        BlogPost::createOrUpdate($input , $post);
+        session()->flash('success', trans('main._update_msg'));
         return redirect()->route('posts.index');
-
-//        if ($request->isMethod('PUT')){
 
     }
 
@@ -381,6 +274,7 @@ class PostController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file;
+            $user = getAuthUser();
             $fileName = $file->getClientOriginalName();
 
             if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -408,7 +302,7 @@ class PostController extends Controller
 
             // Accept upload if there was no origin, or if it is an accepted origin
             $image = $file;
-            $location =  config('baseapp.post_image_storage_path');
+            $location =  config('baseapp.post_image_storage_path').'/'.$user->getCompanyId().'/'.$user->id;
             $path = FileAssetManagerService::ImageStore($image,$location);
 
             // Respond to the successful upload with JSON.

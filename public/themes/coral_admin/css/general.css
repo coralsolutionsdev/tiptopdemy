@@ -1,7 +1,7 @@
 /*@import url("fonts.css");*/
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400&display=swap');
 @import "editor.css";
-@import "navbar.css";
+@import "models/blog.css";
 html, body{
     padding: 0px;
     margin: 0px;
@@ -65,6 +65,9 @@ h1, h2, h3, h4, h5{
     display: block;
     padding: 0.5em;
     margin-bottom: 1em;
+}
+.uk-button-upload:hover{
+    cursor: pointer !important;
 }
 /*widths*/
 .w-200{

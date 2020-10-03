@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Modules\Comment\Commentable;
+use App\Services\FileAssetManagerService;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -100,6 +101,95 @@ class BlogPost extends Model implements ReactableContract
             $tags[$tag->name] = $tag->name;
         }
         return $tags;
+    }
+
+    /**
+     * @param $input
+     * @param null $post
+     * @return \Illuminate\Http\RedirectResponse|null
+     * @throws \Exception
+     */
+    public static function createOrUpdate($input, $post = null)
+    {
+        $user = getAuthUser();
+        if (empty($user)){
+            return redirect()->back();
+        }
+        $setFirstImageAsCover = false;
+        $coverImageId = null;
+        $input['user_id'] = $user->id;
+        // default status
+        $input['status'] = isset($input['status']) && !empty($input['status']) ? self::STATUS_ENABLED : self::STATUS_DISABLED;
+        // default allow_comments_status
+        $input['allow_comments_status'] = isset($input['allow_comments_status']) && !empty($input['allow_comments_status']) ? self::STATUS_ENABLED : self::STATUS_DISABLED;
+        // default comment_status
+        $input['default_comment_status'] = isset($input['default_comment_status']) && !empty($input['default_comment_status']) ? self::STATUS_ENABLED : self::STATUS_DISABLED;
+
+        if (!empty($post)){
+            //update post images
+            $postImagesInputArray = isset($input['images']) && !empty($input['images'])? $input['images'] : array();
+            if (!empty($post->images)){
+                $postImages = $post->images;
+                foreach ($post->images as $key => $image){
+                    if (empty($postImagesInputArray) || !array_key_exists($key,$postImagesInputArray)){
+                        FileAssetManagerService::ImageDestroy($image);
+                        unset($postImages[$key]);
+                        if ($image == $post->cover_image){ // if cover image deleted
+                            $setFirstImageAsCover = true;
+                        }
+                    }
+                }
+                // set default cover image
+                if ($setFirstImageAsCover == true && !empty($postImages)){
+                    $input['cover_image'] =  $postImages[array_key_first($postImages)];
+                }
+                $input['images'] = $postImages;
+            }
+        }
+        // upload cover image
+        if (isset($input['image'])) {
+            // upload and save image
+            $image = $input['image'];
+            $location =  config('baseapp.post_image_storage_path').'/'.$user->getCompanyId().'/'.$user->id;
+            $uploaded_image = FileAssetManagerService::ImageStore($image,$location);
+            $input['cover_image'] = $uploaded_image;
+            $coverImageId = generateRandomString(4);
+            $input['images'][$coverImageId] = $input['cover_image'];
+        }else{
+            // update selected default_cover
+            if (!empty($post)){
+                if (isset($input['default_cover']) && !empty($input['default_cover'])){
+                    if (array_key_exists($input['default_cover'],$postImagesInputArray)){
+                        $input['cover_image'] = $postImagesInputArray[$input['default_cover']];
+                    }
+                }
+            }
+        }
+
+        if (!empty($post)){
+            // update post
+            $post->update($input);
+        }else{
+            // create post
+            $post = BlogPost::create($input);
+        }
+
+        // update Category
+        $categories =!empty($input['categories']) ? $input['categories'] :  array();
+        $post->categories()->sync($categories);
+
+        // update tags
+        $tags =!empty($input['tags']) ? $input['tags'] :  array();
+        $post->syncTagsWithType($tags, 'post');
+
+        // attachments
+        if (isset($input['attachments'])){
+            $comments = $input['attachments'];
+            foreach ($comments as $comment){
+                $post->attach($comment);
+            }
+        }
+        return $post;
     }
 
     /*

@@ -145,28 +145,81 @@
         <div class="col-lg-12">
             <div class="card border-light">
                 <div class="card-body">
-                    <p>{{__('main.Images')}}</p>
+                    <p>{{__('main.Post images')}}</p>
                     <hr>
                     <div class="row col-12">
-                        <div class="col-lg-6 image-upload">
-                            <p>{{__('main.Cover image')}}</p>
+                        @if(false)
+                        <div class="col-lg-4 image-upload">
                             <div class="">
                                 @php
                                     $attachments_count = 1;
-                                    $image_source = (!empty($post) && !empty($post->image)) ? asset_image($post->image) : null;
+                                    $image_source = (!empty($post) && !empty($post->cover_image)) ? asset_image($post->cover_image) : null;
                                 @endphp
                                 @include('manage.partials._files-uploader')
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div id="post-images" style="padding: 0px 20px">
-                                <p>{{__('main.Images')}}</p>
-                            @if(!empty($post) && !empty($post->images))
+                        @endif
+                        <div class="col-lg-12">
+                            <div class="uk-margin">
+                                <p>{{__('main.Select a default post image, or upload a new image')}}</p>
+                                <div uk-form-custom>
+                                    <input type="file" name="image" class="image-upload-input">
+                                    <button class="uk-button uk-button-default uk-button-upload" type="button" tabindex="-1">{{__('main.Upload new image')}} <span uk-icon="icon: cloud-upload"></span></button>
+                                </div>
+                                <div class="uk-button-upload-items uk-margin-small">
+
+                                </div>
+                                <script>
+                                    $('.image-upload-input').change(function (){
+                                        var file_names = $.map($(this).prop('files'), function(file)
+                                        {
+                                            return file.name;
+                                        });
+                                        var file_section = $('.uk-button-upload-items');
+                                        file_section.html('');
+                                        file_names.map(function(file_name)
+                                        {
+                                            file_section.append('<span><span uk-icon="icon: image"></span> '+file_name+'</span>');
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-grid-small" uk-grid>
+                                    <div class="uk-width-1-1@m">
+                                        <div id="uploaded-images" class="uk-grid-small" uk-grid="masonry: true">
+                                            @if(!empty($post))
+                                                @foreach($post->images as  $id => $image)
+                                                    <div id="{{$id}}" class="uploaded-image uk-width-1-4@m uk-width-1-2">
+                                                        <span class="btn-hover delete-uploaded-image" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>
+                                                        <label>
+                                                            <input class="default-uploaded-image" type="radio" name="default_cover" uk-tooltip="{{__('main.Set as default')}}" value="{{$id}}" {{$image == $post->cover_image ? 'checked' : ''}}>
+                                                            <input type="hidden" name="images[{{$id}}]" value="{{$image}}">
+                                                            <img src="{{asset_image($image)}}" class="uk-box-shadow-hover-medium" alt="" style="border-radius: 5px; width: 100%">
+                                                        </label>
+                                                    </div>
+{{--<div id="" class="uk-width-1-3@m uk-width-1-2">--}}
+{{--    <span class="btn-hover" uk-tooltip="{{__('main.Delete')}}" style="position: absolute"><span class="uk-text-danger" uk-icon="icon: close"></span></span>--}}
+{{--    <label>--}}
+{{--        <input type="radio" name="default_cover" uk-tooltip="{{__('main.Set as default')}}" value=""  style="position: absolute; margin: 5px 20px 5px 20px">--}}
+{{--        <input type="hidden" name="images[]" value="">--}}
+{{--        <img src="" class="uk-box-shadow-hover-medium" alt="" style="border-radius: 5px; width: 100%">--}}
+{{--    </label>--}}
+{{--</div>--}}
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  style="padding: 0px 20px">
+                                @if(false)
+                                @if(!empty($post) && !empty($post->images))
                                     @foreach($post->images as $id => $image)
-                                        <div class="row d-flex align-items-center post-images-item"><div class="col-6"><img src="{{asset_image($image)}}" width="100" alt=""><input type="hidden" name="images[{{$id}}]" value="{{$image}}"></div><div class="col-6 d-flex justify-content-end"><span id="{{$id}}" class="btn btn-light btn-post-delete"><i class="far fa-trash-alt"></i></span></div></div>
+                                        <div class="row d-flex align-items-center uploaded-images-item"><div class="col-6"><img src="{{asset_image($image)}}" width="100" alt=""><input type="hidden" name="images[{{$id}}]" value="{{$image}}"></div><div class="col-6 d-flex justify-content-end"><span id="{{$id}}" class="btn btn-light btn-post-delete"><i class="far fa-trash-alt"></i></span></div></div>
                                     @endforeach
                                 @endif
-
+                                    @endif
                             </div>
                         </div>
                     </div>
@@ -214,15 +267,18 @@
 
         }
         deleteAttachment();
-        function deleteImage()
+        function deleteUploadedImage()
         {
-            $('.btn-post-delete').off('click');
-            $('.btn-post-delete').click(function () {
-                var item = $(this);
-                item.parent().parent().remove();
+            $('.delete-uploaded-image').off('click');
+            $('.delete-uploaded-image').click(function () {
+                if (!confirm('Are you sure that you want to remove this image?')){
+                    return false;
+                }
+                var item = $(this).closest('.uploaded-image');
+                item.remove();
             });
         }
-        deleteImage();
+        deleteUploadedImage();
         // generate random item code
         function generateRandomString(length) {
             var text = "";
@@ -273,8 +329,17 @@
                     }
                     // add input
                     var imageId = generateRandomString(4);
-                    $('#post-images').append('<div class="row d-flex align-items-center post-images-item"><div class="col-6"><img src="'+json.item.url+'" width="100" alt=""><input type="hidden" name="images['+imageId+']" value="'+json.item.path+'"></div><div class="col-6 d-flex justify-content-end"><span id="'+imageId+'" class="btn btn-light btn-post-delete"><i class="far fa-trash-alt"></i></span></div></div>');
-                    deleteImage();
+                    // $('#uploaded-images').append('<div class="row d-flex align-items-center uploaded-images-item"><div class="col-6"><img src="'+json.item.url+'" width="100" alt=""><input type="hidden" name="images['+imageId+']" value="'+json.item.path+'"></div><div class="col-6 d-flex justify-content-end"><span id="'+imageId+'" class="btn btn-light btn-post-delete"><i class="far fa-trash-alt"></i></span></div></div>');
+                    $('#uploaded-images').append('' +
+                        '<div id="'+imageId+'" class="uk-width-1-3@m uk-width-1-2">\n' +
+                        '    <span class="btn-hover btn-post-image-delete" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>\n' +
+                        '    <label>\n' +
+                        '        <input class="default-uploaded-image" type="radio" name="default_cover" uk-tooltip="{{__('main.Set as default')}}" value="1">\n' +
+                        '        <input type="hidden" name="images['+imageId+']" value="'+json.item.path+'">\n' +
+                        '        <img src="'+json.item.url+'" class="uk-box-shadow-hover-medium" alt="" style="border-radius: 5px; width: 100%">\n' +
+                        '    </label>\n' +
+                        '</div>');
+                    deleteUploadedImage();
                     success(json.item.url);
                 };
                 formData = new FormData();

@@ -157,8 +157,9 @@ class BlogPost extends Model implements ReactableContract
             $input['images'][$coverImageId] = $input['cover_image'];
         }else{
             // update selected default_cover
+            $input['cover_image'] = null;
             if (!empty($post)){
-                if (isset($input['default_cover']) && !empty($input['default_cover'])){
+                if (!empty($input['default_cover'])){
                     if (array_key_exists($input['default_cover'],$postImagesInputArray)){
                         $input['cover_image'] = $postImagesInputArray[$input['default_cover']];
                     }

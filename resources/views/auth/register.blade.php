@@ -182,7 +182,7 @@
                                         <div class="uk-grid-small" uk-grid>
                                             <div class="uk-inline uk-width-1-1">
                                                 <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: phone"></span>
-                                                <input class="uk-input {{ $errors->has('phone_number') ? ' uk-form-danger' : '' }}" name="phone_number" type="text" value="{{ old('phone_number') }}">
+                                                <input class="uk-input {{ $errors->has('phone_number') ? ' uk-form-danger' : '' }}" name="phone_number" type="text" value="{{ old('phone_number') }}" required>
                                             </div>
                                         </div>
                                     </div>

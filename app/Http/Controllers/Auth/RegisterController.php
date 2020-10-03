@@ -8,6 +8,7 @@ use App\Institution\InstitutionScopeField;
 use App\Institution\InstitutionScopeFieldOption;
 use App\Jobs\SendValidationMail;
 use App\Role;
+use App\UniqueId;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -76,6 +77,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $username = UniqueId::generate(['table' => 'users', 'length' => 8, 'prefix' =>'STU']);
         $user = User::create([
             'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'].' '.$data['surname'],
             'first_name' => $data['first_name'],
@@ -84,6 +86,7 @@ class RegisterController extends Controller
             'surname' => $data['surname'],
             'mother_name' => !empty($data['mother_name']) ? $data['mother_name'] : null,
             'email' => $data['email'],
+            'username' => $username,
             'gender' => $data['gender'],
             'phone_number' => !empty($data['phone_number']) ? $data['phone_number'] : null,
             'birth_date' => !empty($data['birth_date']) ? $data['birth_date'] : null,

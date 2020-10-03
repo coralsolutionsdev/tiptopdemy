@@ -45,12 +45,10 @@ class UniqueId extends Model
                 $whereString .= $row[0] . "=" . $row[1] . " AND ";
             }
         }
-        $whereString = rtrim($whereString, 'AND ');
-        $totalQuery = sprintf("SELECT count(%s) total FROM %s %s", $field, $configArr['table'], $whereString);
-        $total = DB::select($totalQuery);
+        $lastRecord = DB::table($configArr['table'])->orderBy('id', 'DESC')->first();
         $count = 1;
-        if (!empty($total[0]) &&  $total[0]->total){
-            $count = $total[0]->total + 1;
+        if (!empty($lastRecord)){
+            $count = $lastRecord->id + 1;
         }
         return $prefix .  str_pad($count, $idLength, '0', STR_PAD_LEFT);
 

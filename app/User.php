@@ -28,7 +28,7 @@ class User extends Authenticatable implements ReacterableContract
      */
     protected $fillable = [
         'name', 'first_name', 'middle_name', 'last_name', 'surname', 'mother_name', 'email', 'gender','phone_number', 'birth_date', 'avatar', 'image', 'cover', 'lang', 'verify_token', 'status', 'password', 'country_id',
-        'directorate_id', 'scope_id', 'field_id', 'field_option_id', 'level'
+        'directorate_id', 'scope_id', 'field_id', 'field_option_id', 'level', 'username'
     ];
 
     /**

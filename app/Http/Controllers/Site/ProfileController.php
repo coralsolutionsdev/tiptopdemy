@@ -44,7 +44,8 @@ class ProfileController extends Controller
         $page_title = __('main.Home page');
         $breadcrumb =  Breadcrumbs::render('profile');
         $user = Auth::user();
-        return view('profile.index', compact('modelName', 'page_title', 'breadcrumb', 'user'));
+        $usersCount = User::count() - 1;
+        return view('profile.index', compact('modelName', 'page_title', 'breadcrumb', 'user', 'usersCount'));
     }
 
     /**

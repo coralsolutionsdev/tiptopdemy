@@ -51,7 +51,7 @@
                                         <img src="{{asset_image('/assets/Wallet-pana.png')}}" style="position: absolute; width: 280px; margin-top: -30px; margin-right: -20px">
                                     </div>
                                     <div class="uk-width-1-2" style="padding:2em">
-                                        <h3 class="uk-margin-remove uk-text-danger">رصيدي</h3>
+                                        <h3 class="uk-margin-remove uk-text-danger">{{__('main.Tiptop credits')}}</h3>
                                         <p class="uk-margin-remove"> يوجد لديك <span class="uk-text-danger" style="font-size: 28px">0.0$</span> في محفظتك</p>
                                         <br>
 {{--                                        <a class="uk-button uk-button-default uk-button-gray" href="{{route('profile.courses.index')}}">{{__('main.View more')}}</a>--}}
@@ -66,8 +66,8 @@
                                         <img src="{{asset_image('/assets/Telecommuting-pana.png')}}" style="position: absolute; width: 250px; margin-top: -15px; margin-right: -12px">
                                     </div>
                                     <div class="uk-width-1-2" style="padding:2em">
-                                        <h3 class="uk-margin-remove uk-text-primary">الزيارات</h3>
-                                        <p class="uk-margin-remove"> انت الزائر رقم <span class="uk-text-primary" style="font-size: 28px">33</span> من مجموع 4500 طالب</p>
+                                        <h3 class="uk-margin-remove uk-text-primary">{{__('main.Platform members')}}</h3>
+                                        <p class="uk-margin-remove"> اصبح عدد اعضاء المنصة اليوم <span class="uk-text-primary" style="font-size: 28px">{{$usersCount}}</span> {{trans_choice('main.Members', $usersCount)}}</p>
                                         <br>
 {{--                                        <a class="uk-button uk-button-default uk-button-gray" href="{{route('profile.courses.index')}}">{{__('main.View more')}}</a>--}}
                                     </div>

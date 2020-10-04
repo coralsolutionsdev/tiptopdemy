@@ -191,6 +191,9 @@
                     </li>
                 @endif
                 <li class="">
+                    <a class="nav-link" href="{{Route('error.log')}}" target="_blank">{{__('main.Error log')}}</a>
+                </li>
+                <li class="">
                     <a class="nav-link" href="{{Route('setting.index')}}">{{__('admin.Settings')}}</a>
                 </li>
             </ul>

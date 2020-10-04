@@ -36,9 +36,9 @@
 								<td>
 									<div class="action_btn text-right" style="padding-top: 10px">
 										<ul>
-											<li class="">
-												<a target="_blank" href="{{route('profile.show', $user->id)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>
-											</li>
+{{--											<li class="">--}}
+{{--												<a target="_blank" href="{{route('profile.show', $user->id)}}" class="btn btn-light"><i class="fas fa-link" aria-hidden="true"></i></a>--}}
+{{--											</li>--}}
 											<li class="">
 												<a href="{{route('users.edit', $user->id)}}" class="btn btn-light"><i class="far fa-edit"></i></a>
 											</li>

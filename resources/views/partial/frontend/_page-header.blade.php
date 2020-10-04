@@ -2,7 +2,7 @@
     <div class="uk-grid">
         <div class="uk-width-expand">
             <div style="margin-bottom: -5px">
-                <p style="margin: 0 0 -5px 0">{{__('main.'.$modelName)}}</p>
+                <p style="margin: 0 0 -5px 0">{{!empty($modelName) ? __('main.'.$modelName) : __('main._home')}}</p>
                 <p class="uk-margin-remove text-highlighted" style="font-size: 26px; font-weight:700">{{__($page_title)}}</p>
             </div>
         </div>

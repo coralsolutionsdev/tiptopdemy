@@ -70,6 +70,11 @@
                         <div class="uk-container">
                             <div class="uk-margin uk-flex uk-flex-center" uk-grid>
                                 <div id="" class=" uk-width-5-6 " style="direction: {{$form->getDirection()}};">
+                                    <div class="uk-padding-small" >
+                                        <span><label class="uk-text-danger"><input class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded" type="checkbox" checked> {{__('main.Pass')}}</label></span>
+                                        <br>
+                                        <span><label class="uk-text-warning"><input class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded" type="checkbox" checked> {{__('main.Review')}}</label></span>
+                                    </div>
                                     <ul id="form-items" class="uk-grid-small" uk-grid>
                                         @if($formItems = $form->getGroupedItems())
                                             @forelse($formItems as $section => $items)

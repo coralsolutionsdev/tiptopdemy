@@ -471,7 +471,7 @@
         'Yes, Start the quiz' => 'نعم, إبدأ الإختبار',
         'back to the lesson' => 'العودة الى الدرس',
         'Quiz time finished' => 'إنتهى وقت الاختبار',
-        'the time to end this quiz has been finished, we hope you done well with it' => 'لقد انتهى الوقت المخصص لانهاء هذا الاختبار ، نأمل أن تكون قد أديته بشكل جيد.',
+        'the time to end this quiz has been finished, we hope you done well with it' => 'لقد انتهى الوقت المخصص للإجابة على هذا الاختبار ، نأمل أن تكون قد أديته بشكل جيد.',
         'Lesson quizzes' => 'إختبارات الدرس',
 
 

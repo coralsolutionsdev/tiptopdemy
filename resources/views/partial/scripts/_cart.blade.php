@@ -44,7 +44,6 @@
         $('.cart-action').click(function (){
             var btn = $(this);
             var product = btn.closest('.product');
-            var productId = product.attr('id');
             var cartCount = $('.cart-count');
             if (btn.hasClass('in-cart')){
                 UIkit.notification("<span uk-icon='icon: warning'></span> "+"{{__('main.Item is already added to your cart.')}}", {pos: 'top-center', status:'warning'})
@@ -53,12 +52,12 @@
             btn.html('<div uk-spinner="ratio: 0.6"></div>\n'+' {{__('main.Adding ...')}}')
 
             var data = {
-                'id': product.attr('id'),
-                'name':product.find('.product-name').html(),
+                'id': product.find('.product-id-input').val(),
+                'name':product.find('.product-name-input').val(),
                 'qty': 1,
-                'price': product.find('.product-price').html(),
-                'image': product.find('.product-primary-image').attr('src'),
-                'sku': product.find('.product-sku').html(),
+                'price': product.find('.product-price-input').val(),
+                'image': product.find('.product-primary-image-input').val(),
+                'sku': product.find('.product-sku-input').val(),
             };
             $.post('/cart/add',data).done(function (response) {
                 btn.html('<span uk-icon="icon: check"></span>'+' {{__('main.Added to cart')}}')

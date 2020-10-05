@@ -1,0 +1,31 @@
+.uk-checkbox-danger, .uk-checkbox-danger:focus{
+    border-color: #F0506E !important;
+    margin: 0px 2px;
+    background-color: white !important;
+}
+.uk-checkbox-danger:checked{
+    background-color: #F0506E !important;
+    border-color: #F0506E !important;
+    /*background-image: none;*/
+
+}
+.uk-checkbox-warning{
+    border-color: #faa05a !important;
+    margin: 0px 2px;
+    background-color: white !important;
+}
+.uk-checkbox-warning:checked{
+    background-color: #faa05a !important;
+    border-color: #faa05a !important;
+    /*background-image: none;*/
+
+}
+.uk-background-danger-light{
+    background-color: #FEF4F6;
+}
+.uk-background-warning-light{
+    background-color: #FFF6EE;
+}
+.uk-checkbox-rounded{
+    /*border-radius: 50% !important;*/
+}

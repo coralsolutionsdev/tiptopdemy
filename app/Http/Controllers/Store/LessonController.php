@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Course\Lesson;
 use App\Modules\Media\Media;
 use App\Product;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\Tags\Tag;
@@ -14,13 +15,16 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class LessonController extends Controller
 {
-    protected $breadcrumb;
+    protected $modelName;
     protected $page_title;
+    protected $breadcrumb;
 
     public function __construct()
     {
 //        $this->middleware('auth', ['except' => ['GetIndex','show', 'getComments']]);
         $this->page_title = 'Store Lessons';
+        $this->modelName = 'Store';
+
         $this->breadcrumb = [
             'Store' => '',
             'Lesson' => '',
@@ -141,13 +145,10 @@ class LessonController extends Controller
     public function show(Product $product, Lesson $lesson)
     {
         $page_title =  $lesson->title;
-        $breadcrumb =  [
-            __('main.Store') => '',
-            __('main.Products') => '',
-            $product->name => '',
-            __('main.Lessons') => '',
-            $lesson->title => '',
-        ];
+        $modelName = $this->modelName;
+//        dd($lesson->product);
+        $breadcrumb =  Breadcrumbs::render('store.product.lesson', $lesson);
+
         $prevLesson = null;
         $nextLesson = null;
         $productLessons =  $product->lessons->sortBy('position');
@@ -159,7 +160,7 @@ class LessonController extends Controller
             }
 
         }
-        return view('store.lessons.frontend.show', compact('product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson'));
+        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson'));
 
     }
 

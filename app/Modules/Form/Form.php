@@ -172,11 +172,16 @@ class Form extends Model
         $categories = isset($input['categories']) ? $input['categories'] : array();
         $form->categories()->sync($categories);
 
-
+        $sectionItemCount = 0;
+        $sectionAllowedQuestionsToAnswer = null;
         foreach ($iDs as $itemPosition => $id){
             $itemType = $typeArray[$id];
             if ($itemType == FormItem::TYPE_SECTION){
+                $sectionItemCount = 0;
                 $section++;
+                $sectionAllowedQuestionsToAnswer = isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null;
+            }else{
+                $sectionItemCount++;
             }
             $newItem = null;
             $newItemOptions = null;
@@ -203,6 +208,9 @@ class Form extends Model
                 'shuffle_questions' => isset($input['item_shuffle_questions'][$id]) ? 1 : 0,
                 'uniform' => isset($input['item_uniform'][$id]) ? 1 : 0,
                 'tags' => null,
+                'allowed_number' => isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null,
+                'correction' => isset($input['item_correction'][$id]) ? $input['item_correction'][$id] : 1,
+
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;
             $newItem['properties'] = $properties;
@@ -226,10 +234,12 @@ class Form extends Model
             if ($newFormItem->type == 0){
                 $currentSection = $newFormItem;
             }
-            if (!empty($currentSection)){
-                $currentSection->score = $currentSection->score + $newFormItem->score;
-            }
 
+            if (!empty($currentSection)){
+                if (empty($sectionAllowedQuestionsToAnswer) || $sectionAllowedQuestionsToAnswer >= $sectionItemCount){
+                    $currentSection->score = $currentSection->score + $newFormItem->score;
+                }
+            }
 
             // based on item form
             $multipleOptionsArray = [FormItem::TYPE_SHORT_ANSWER, FormItem::TYPE_SINGLE_CHOICE, FormItem::TYPE_MULTI_CHOICE, FormItem::TYPE_DROP_DOWN];
@@ -288,9 +298,7 @@ class Form extends Model
                 $currentSectionScore = $currentSectionScore  + $newFormItem->score;
                 $lastSectionItem->save();
             }
-
-
-        }
+        } // end of foreach
         return $form;
     }
     function clone($input)

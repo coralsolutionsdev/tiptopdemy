@@ -51,7 +51,7 @@
 </head>
 <body>
 {{storeLastUrl()}}
-<section style="background-color: var(--bg-secondary)">
+<section style="background-color: var(--bg-secondary);">
     <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
         <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
             <div class="double-bounce1"></div>
@@ -63,8 +63,10 @@
     <div class="uk-container">
         @include('partial.frontend._message')
     </div>
-    @yield('content')
-    <div>
+    <div style="min-height: calc(100vh - 170px);">
+        @yield('content')
+    </div>
+    <footer style="">
         <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
             <div class="">
                 <div class="uk-background-secondary uk-light uk-padding uk-panel">
@@ -72,8 +74,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </footer >
 
 </section>
 <section>

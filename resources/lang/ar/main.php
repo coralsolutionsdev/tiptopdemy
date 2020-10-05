@@ -151,11 +151,19 @@
         'Efficiency' => 'الكفائة',
         'days' => 'أيام',
         'Days' => '[0,2] يوم|[3,10] أيام|[11,*] يوم',
+        'Minutes' => '[0,2] دقيقة|[3,10] دقائق|[11,*] دقيقة',
+        'Seconds' => '[0,2] ثانية|[3,10] ثوان|[11,*] ثانية',
         '_units' => '[0,2] وحدة|[3,10] وحدات|[11,*] وحدة',
         'Remaining' => 'المتبقي',
         'Administrator' => 'مدير عام الموقع',
         'Manager' => 'مدير',
         'Student' => 'طالب',
+        'Pass' => 'ترك',
+        'Review' => 'مراجعة',
+        'Dear' => 'عزيزي, :name',
+        'Starting' => 'جارِ البدأ',
+
+
 
 
         // Meta
@@ -453,6 +461,14 @@
         'categories' => 'المصنفات',
         'template categories' => 'مصنفات القوالب',
         '_fill blank default paragraph' => 'ضع النص هناو ثم قم باختيار الكلمة المراد تحويلها الى فراغ و اضغط أضف فراغ.',
+        'Quiz period' => 'مدة الإختبار',
+        'this quiz have limited time to answer, which is' => 'الوقت المحدد لاكمال الإجابة على اسئلة هذا الإختبار هو',
+        'Are you sure that you want to start the quiz?' => 'هل انت متأكد انك مستعد لبدأ الإختبار؟',
+        'Yes, Start the quiz' => 'نعم, إبدأ الإختبار',
+        'back to the lesson' => 'العودة الى الدرس',
+        'Quiz time finished' => 'إنتهى وقت الاختبار',
+        'the time to end this quiz has been finished, we hope you done well with it' => 'لقد انتهى الوقت المخصص لانهاء هذا الاختبار ، نأمل أن تكون قد أديته بشكل جيد.',
+        'Lesson quizzes' => 'إختبارات الدرس',
 
 
 

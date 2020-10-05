@@ -29,7 +29,7 @@
 						@if($user->getRole()->name != 'superadministrator' || $current_user->isSuperAdmin())
 							<tr>
 								<td class="align-middle"><img src="{{$user->getProfilePicURL()}}" class="profile-picture-w-50"></td>
-								<td class="align-middle"><a href="" target="_balnk">{{ucfirst($user->name)}}</a></td>
+								<td class="align-middle"><a href="" target="_balnk">{{ucfirst($user->name)}}</a><br><small class="uk-text-muted">{{$user->username}}</small></td>
 								<td class="align-middle">{{$user->email}}</td>
 								<td class="align-middle">{{($user->gender == 1 ) ? trans('main._male') : trans('main._female')}}</td>
 								<td class="align-middle"> {{$user->getRole()->display_name}}</td>

@@ -38,6 +38,10 @@
         'Administrator' => 'Administrator',
         'Manager' => 'Manager',
         'Student' => 'Student',
+        'Pass' => 'Pass',
+        'Review' => 'Review',
+        'Dear' => 'Dear, :name',
+
 
         // profile
         'Home page' => 'Home page',
@@ -393,6 +397,9 @@
 //        'Marks' => '{0} There are none|[1,19] There are some|[20,*] There are many',
         'points' => '[0,1] Point|[2,*] Points',
         'Marks' => '[0,1] Mark|[2,*] Marks',
+        'Minutes' => '[0,1] Minute|[2,*] Minutes',
+        'Seconds' => '[0,1] Second|[2,*] Seconds',
+        'Starting' => 'Starting',
 
         //orders
         'orders' => 'Orders',
@@ -425,8 +432,14 @@
         'categories' => 'Categories',
         'template categories' => 'Template categories',
         '_fill blank default paragraph' => 'Add your paragraph here, the select the word that you want to convert to blank and click on insert blank.',
-
-
+        'Quiz period' => 'Quiz period',
+        'this quiz have limited time to answer, which is' => 'this quiz have limited time to answer, which is',
+        'Are you sure that you want to start the quiz?' => 'Are you sure that you want to start the quiz?',
+        'Yes, Start the quiz' => 'Yes, Start the quiz',
+        'back to the lesson' => 'back to the lesson',
+        'Quiz time finished' => 'Quiz time finished',
+        'the time to end this quiz has been finished, we hope you done well with it' => 'the time to end this quiz has been finished, we hope you done well with it',
+        'Lesson quizzes' => 'Lesson quizzes',
 
 
 

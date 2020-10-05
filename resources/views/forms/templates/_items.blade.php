@@ -102,6 +102,19 @@
                                         <label><input class="uk-checkbox input-shuffle-questions" type="checkbox"> <span style="margin: 0 0.5em">Shuffle Questions</span></label>
                                     </div>
                                 </div>
+                                <div class="uk-margin uk-grid-small score-section" uk-grid>
+                                    <div class="uk-width-1-5@m uk-flex uk-flex-middle">
+                                        <label>Questions number allowed to answer:</label>
+                                    </div>
+                                    <div class="uk-width-expand@m ">
+                                        <input type="number" class="uk-input uk-form-small input-section-allowed-number" placeholder="5" value="5">
+                                    </div>
+                                </div>
+                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                    <label>Correction:</label>
+                                    <label><input class="uk-radio input-correction-auto" type="radio" name="radio1" value="1" checked>  تلقائي  </label>
+                                    <label><input class="uk-radio input-correction-manual" type="radio" name="radio1" value="0">  يدوي  </label>
+                                </div>
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                                     <label for="">Topic:</label> {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
                                 </div>

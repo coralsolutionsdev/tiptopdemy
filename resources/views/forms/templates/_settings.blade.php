@@ -170,7 +170,7 @@
                                         Submission button title
                                     </div>
                                     <div class="uk-width-2-5@s">
-                                        <input class="uk-input uk-form-small" type="text" name="submission_title" value="{{!empty($formProperties)? $formProperties['submission_title'] : 'submit'}}">
+                                        <input class="uk-input uk-form-small" type="text" name="submission_title" value="{{!empty($formProperties)? $formProperties['submission_title'] : __('main.submit')}}">
                                     </div>
                                 </div>
                             </li>

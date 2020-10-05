@@ -76,10 +76,10 @@
             </div>
         </div>
         {{--Header end--}}
-        <div class="bg-secondary pt-25">
+        <div class="quiz-section bg-secondary pt-25 {{$hasTimeLimit == 1 ? 'hidden-div' : ''}}">
             <div class="uk-container">
                 <div class="uk-margin uk-flex uk-flex-center" uk-grid>
-                    <div class="uk-width-5-6" style="direction: {{$form->getDirection()}}">
+                    <div id="" class=" uk-width-5-6 " style="direction: {{$form->getDirection()}};">
                         <ul id="form-items" class="uk-grid-small" uk-grid>
                             @if($formItems = $form->getGroupedItems())
                                 @forelse($formItems as $section => $items)
@@ -92,7 +92,7 @@
                                                 <div class="uk-grid-small uk-text-center" uk-grid>
                                                     <div class="uk-width-auto@m">
                                                         <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 10px">
-                                                            <p class="uk-h4">{{$item->title}} ssssssssssssssss</p>
+                                                            <p class="uk-h4">{{$item->title}} </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -183,6 +183,9 @@
                                                 @foreach($items as $key => $item)
                                                 <div class="uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove" {!! $item->getToolTip() !!} style="padding: 2px 0px">
                                                     @if($item->type == \App\Modules\Form\FormItem::TYPE_SECTION)
+                                                        @php
+                                                            $questionsToAnswer = isset($item->properties['allowed_number']) ?  $item->properties['allowed_number'] : null;
+                                                        @endphp
                                                         <div class="uk-grid-small uk-text-center" uk-grid style="position: absolute; margin-top: -48px;">
                                                             <div class="uk-width-auto@m">
                                                                 <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 20px">
@@ -199,7 +202,7 @@
                                                             </div>
                                                         </div>
                                                     @else
-                                                        <div class="uk-grid-collapse" uk-grid>
+                                                        <div class="uk-grid-collapse question-row {{!empty($questionsToAnswer) && $questionsToAnswer < $key ? 'uk-background-danger-light' : ''}}" uk-grid>
                                                             <div class="uk-width-auto@m">
                                                                 {{$key}}:
                                                             </div>
@@ -211,7 +214,7 @@
                                                                 @elseif($item->type == \App\Modules\Form\FormItem::TYPE_SINGLE_CHOICE)
                                                                     @if($item->properties['display'] == 1)<br>@endif
                                                                     @foreach($item['options'] as $option)
-                                                                        <label><input class="uk-radio" type="radio"> {{$option['title']}}</label>@if($item->properties['display'] == 1)<br>@endif
+                                                                        <label><input class="uk-radio" type="radio" name="radio-{{$item->id}}"> {{$option['title']}}</label>@if($item->properties['display'] == 1)<br>@endif
                                                                     @endforeach
                                                                 @elseif($item->type == \App\Modules\Form\FormItem::TYPE_MULTI_CHOICE)
                                                                     @if($item->properties['display'] == 1)<br>@endif
@@ -234,6 +237,9 @@
                                                             </div>
                                                             <div class="uk-width-auto@m uk-text-lighter">
                                                                 {{$item->score}} Marks
+                                                                <label class=""><input uk-tooltip="{{__('main.Pass')}}" class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded pass-question" type="checkbox" name="section-drop" {{!empty($questionsToAnswer) && $questionsToAnswer < $key ? 'checked' : ''}}></label>
+                                                                <label><input uk-tooltip="{{__('main.Review')}}" class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded review-question" type="checkbox"></label>
+
                                                             </div>
                                                         </div>
                                                     @endif
@@ -257,6 +263,50 @@
                 </div>
             </div>
         </div>
+        <div id="quizHasTimeModal" uk-modal="bg-close: false">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">{{__('main.Quiz period')}}</h2>
+                </div>
+                <div class="uk-modal-body uk-text-center">
+                    <p>
+                        {{__('main.Dear', ['name' => getAuthUser()->first_name])}}, {{__('main.this quiz have limited time to answer, which is')}} {{$timeLimit}} {{trans_choice('main.Minutes',$timeLimit)}} <br>
+                        {{__('main.Are you sure that you want to start the quiz?')}}
+                    </p>
+                    <button class="uk-button uk-button-primary start-quiz">{{__('main.Yes, Start the quiz')}}</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="quizEndedModal" uk-modal="bg-close: false">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">{{__('main.Quiz time finished')}}</h2>
+                </div>
+                <div class="uk-modal-body uk-text-center">
+                    <p>
+                        {{__('main.Dear', ['name' => getAuthUser()->first_name])}}, {{__('main.the time to end this quiz has been finished, we hope you done well with it')}}<br>
+                    </p>
+                    <a href="{{route('store.lesson.show', [$product->slug, $lesson->slug])}}" class="uk-button uk-button-primary start-quiz">{{__('main.back to the lesson')}}</a>
+                </div>
+            </div>
+        </div>
+        {{--Counter--}}
+        <div class="quiz-countdown" style="padding: 10px; z-index: 99; position: fixed; bottom: 0; display: none">
+            <div class="uk-text-center uk-text-primary" style="position: absolute; margin-top: -20px; width: 90%">
+                <span uk-icon="icon: clock; ratio: 2"></span>
+            </div>
+            <div class="uk-box-shadow-small" style="padding:10px 20px; background-color: rgba(255, 255, 255, 0.9); border-radius: 5px">
+                <div class="uk-grid-small uk-child-width-auto countdown" uk-grid>
+                    <div class="uk-text-center">
+                        <h1 class="uk-margin-remove timer uk-heading-medium" id="time"><span style="font-size: 38px">{{__('main.Starting')}} ..</span></h1>
+{{--                        <small class="uk-margin-remove uk-flex uk-flex-left" style="padding: 0 10px">{{trans_choice('main.Minutes', 10)}}</small>--}}
+{{--                        <small class="uk-margin-remove uk-flex uk-flex-right" style="padding: 0 10px">{{trans_choice('main.Seconds', 10)}}</small>--}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </section>
     <div id="please-purchase" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
@@ -268,6 +318,7 @@
             </p>
         </div>
     </div>
+    @include('store.forms.frontend._show-script')
     <script>
         $('.submit-form').click(function () {
             UIkit.modal('#please-purchase').show();

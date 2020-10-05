@@ -619,6 +619,11 @@
 
         item.find('.input-uniform').attr('name', 'item_uniform['+itemId+']');
 
+        item.find('.input-section-allowed-number').attr('name', 'item_section_allowed_number['+itemId+']');
+
+        item.find('.input-correction-auto').attr('name', 'item_correction['+itemId+']');
+        item.find('.input-correction-manual').attr('name', 'item_correction['+itemId+']');
+
         // addMinyTinyEditor('.item-content-editor-'+itemId);
 
         // item tags
@@ -704,6 +709,15 @@
                         item.find('.input-display-inline').prop('checked', true);
                     }else if(properties.source == 1){
                         item.find('.input-display-block').prop('checked', true);
+                    }
+                }
+                item.find('.input-section-allowed-number').val(properties.allowed_number);
+
+                if(properties.correction != null){
+                    if(properties.correction == 1){
+                        item.find('.input-correction-auto').prop('checked', true);
+                    }else{
+                        item.find('.input-correction-manual').prop('checked', true);
                     }
                 }
 
@@ -887,10 +901,20 @@
             $('.update-type').val(0) // UPDATE_EXISTING_VERSION
         }
         updateBlanksHiddenValues();
+        if(count == 0){
+            if (!confirm('There is no question items in this form, are you sure you want to proceed?')){
+                return false;
+            }
+        }
         $('.form').submit();
     });
     $('.submit-form').click(function () {
         updateBlanksHiddenValues();
+        if(count == 0){
+            if (!confirm('There is no question items in this form, are you sure you want to proceed?')){
+                return false;
+            }
+        }
         $('.form').submit();
     });
     @if(!empty($form))

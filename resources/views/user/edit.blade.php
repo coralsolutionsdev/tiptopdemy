@@ -60,7 +60,7 @@
 										<div class="col-lg-10" style="padding: 10px 0 10px 10px; margin: 0px">
 											<select name="role" id="gender" class="custom-select col-12 form-control-dropdown">
 												@foreach($roles as $item)
-													<option value="{{$item->id}}"{{($user->hasRole($item->name))?'selected':''}}>{{$item->name}}</option>
+													<option value="{{$item->id}}"{{($user->hasRole($item->name))?'selected':''}}>{{$item->display_name}}</option>
 												@endforeach
 											</select>
 										</div>

@@ -20,13 +20,13 @@
                         <div class="uk-width-expand">
                             <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
                                 <div>
-                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
+                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">
                                         @if(!empty($post->cover_image))
                                             <div class="uk-inline-clip uk-transition-toggle" tabindex="0" style="width: 100%;max-height: 400px; overflow: hidden; object-fit: contain; margin-bottom: 10px">
                                                 <img class="uk-transition-scale-up uk-transition-opaque" src="{{$post->getMainImage()}}" alt="" style="width: 100%">
                                             </div>
                                         @endif
-                                        <div class="uk-card-body post-content" style="padding-left: 0px; padding-right: 0px; padding-top: 0px">
+                                        <div class="uk-card-body post-content uk-padding-small">
                                             <h3><a href="{{route('blog.posts.show',$post->slug)}}">{{$post->title}}</a></h3>
                                             <div class="uk-grid-column-small uk-grid-row-large uk-child-width-1-2@s" uk-grid>
                                                 <div class="uk-flex uk-flex-middle">

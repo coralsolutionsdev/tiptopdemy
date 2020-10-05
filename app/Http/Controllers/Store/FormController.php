@@ -97,7 +97,9 @@ class FormController extends Controller
             }
         }
         $displayType = !is_null($form['properties']['display_type']) ? $form['properties']['display_type'] : 1;
-        return view('store.forms.frontend.show', compact('product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'form', 'displayType'));
+        $hasTimeLimit = !empty($form->properties['has_time_limit']) ? $form->properties['has_time_limit'] : 0;
+        $timeLimit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
+        return view('store.forms.frontend.show', compact('product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'form', 'displayType', 'hasTimeLimit', 'timeLimit'));
 
     }
 
@@ -112,7 +114,8 @@ class FormController extends Controller
     {
         $page_title = $form->title;
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
-        return view('store.forms.create', compact('page_title', 'lesson', 'form', 'categories'));
+        $formProperties = $form->properties;
+        return view('store.forms.create', compact('page_title', 'lesson', 'form', 'categories', 'formProperties'));
     }
 
     /**

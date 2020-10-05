@@ -90,9 +90,10 @@
                                 </ul>
                             </div>
                         </div>
+                        <br>
+
                         @endif
 
-                        <br>
                         {{--Groups--}}
                         <div class="uk-card uk-card-default uk-card-body" style="padding: 10px">
                             <ul uk-accordion="multiple: true">

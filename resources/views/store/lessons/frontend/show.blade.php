@@ -18,18 +18,14 @@
                             <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; color: {{$product->getMainColorPattern()}}" onclick="$('#prev-form').submit()">
                                 <span uk-icon="icon: chevron-{{getFloatKey('end')}}"></span>
                             </div>
-                            <form id="prev-form" method="GET" action="{{!empty($prevLesson) ? route('store.lesson.show', [$product->slug, $prevLesson->slug]) : route('store.lesson.show', [$product->slug, $lesson->slug])}}">
-                            </form>
                         </div>
                         <div class="uk-width-expand@m">
                             <div class="uk-card uk-card-body uk-padding-small" style="background: linear-gradient(45deg,{{str_replace(['"', '[', ']'], '', json_encode($product->getColorPattern()->gradient))}}); color: #FFFFFF">
                                 <div class="uk-grid-small" uk-grid>
                                     @if(true)
-                                    <div class="uk-width-auto@m">
+                                    <div class="uk-width-auto@m uk-flex uk-flex-middle">
                                         <div class="uk-card uk-card-body uk-padding-remove">
-                                            <div class="thumbnail" style="width: 100px; height: 100px; border: 7px solid rgba(255,255,255,0.4); border-radius: 5px">
-                                                <img src="{{$product->getProductPrimaryImage()}}" class="portrait" alt="Image" width="200" height="200"/>
-                                            </div>
+                                            <img src="{{$product->getProductPrimaryImage()}}" alt="Paris" width="100" height="100" style="width:100px;  height:100px;  object-fit:cover; border: 7px solid rgba(255,255,255,0.4); border-radius: 5px">
                                         </div>
                                     </div>
                                     @endif
@@ -326,9 +322,7 @@
                 </div>
                 </div>
             </div>
-        </div>
     </div>
-    @include('partial.scripts._cart')
 </section>
-
+@include('partial.scripts._cart')
 @endsection

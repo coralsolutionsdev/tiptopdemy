@@ -8,6 +8,7 @@ use App\Modules\Course\Lesson;
 use App\Modules\Form\Form;
 use App\Modules\Form\FormItem;
 use App\Modules\Group\Group;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -16,13 +17,15 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class FormController extends Controller
 {
-    protected $breadcrumb;
+    protected $modelName;
     protected $page_title;
+    protected $breadcrumb;
 
     public function __construct()
     {
 //        $this->middleware('auth', ['except' => ['show']]);
         $this->page_title = 'Lesson quiz';
+        $this->modelName = 'Store';
         $this->breadcrumb = [
             'lesson' => '',
             'quiz' => '',
@@ -79,13 +82,8 @@ class FormController extends Controller
     {
         $page_title =  $form->title;
         $product = $lesson->product;
-        $breadcrumb =  [
-            __('main.Store') => '',
-            __('main.Products') => '',
-            $product->name => '',
-            __('main.Lessons') => '',
-            $lesson->title => '',
-        ];
+        $modelName = $this->modelName;
+        $breadcrumb =  Breadcrumbs::render('store.product.lesson.quiz', $lesson, $form);
         $prevLesson = null;
         $nextLesson = null;
         $productLessons =  $product->lessons->sortBy('position');
@@ -99,7 +97,7 @@ class FormController extends Controller
         $displayType = !is_null($form['properties']['display_type']) ? $form['properties']['display_type'] : 1;
         $hasTimeLimit = !empty($form->properties['has_time_limit']) ? $form->properties['has_time_limit'] : 0;
         $timeLimit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
-        return view('store.forms.frontend.show', compact('product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'form', 'displayType', 'hasTimeLimit', 'timeLimit'));
+        return view('store.forms.frontend.show', compact('modelName', 'product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'form', 'displayType', 'hasTimeLimit', 'timeLimit'));
 
     }
 

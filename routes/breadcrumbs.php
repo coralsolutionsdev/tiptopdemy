@@ -37,6 +37,11 @@ Breadcrumbs::for('store.product.lesson', function ($trail, $lesson) {
     $trail->parent('store.product', $lesson->product);
     $trail->push($lesson->title, route('store.lesson.show',[$lesson->product->slug, $lesson->slug]));
 });
+// Home > Store > Lesson > quiz
+Breadcrumbs::for('store.product.lesson.quiz', function ($trail, $lesson, $form) {
+    $trail->parent('store.product.lesson', $lesson);
+    $trail->push($form->title, route('store.form.show',[$lesson->slug, $form->hash_id]));
+});
 /**
  * profile
  */

@@ -15,6 +15,7 @@
         'welcome back' => 'اهلا وسهلاً بعودتك',
         'site settings' => 'إعداادات الموقع',
 
+
         // profile
         'Home page' => 'الصفحة الرئيسية',
         'Profile' => 'الملف الشخصي',
@@ -28,11 +29,14 @@
         'Upload new image' => 'أضغط لرفع صورة جديدة',
         'Set as default' => 'التعيين كأفتراضي',
         'Members' => '{0} عضو|[1,10] أعضاء|[10,*] عضواً',
-
-
-
-
-
+        'Thank you to join us' => 'شكرا لك للإنضمام الينا',
+        'One more step to activate your account' => 'خطوة أخرى لتفعيل حسابك',
+        'To complete your registration please verify your account' => 'لإكمال عملية التسجيل يرجى اكمال خطوات التحقق من حسابك',
+        'An email has been sent to your email' => 'تم إرسال بريد إلكتروني إلى عنوانك البريدي',
+        'with the activation instruction' => 'مع تعليمات التفعيل',
+        'If you haven\'t received your activation mail! please click on the link below' => 'إذا لم تتلق بريد التفعيل الخاص بك! الرجاء النقر على الرابط أدناه',
+        'Your account has been disable for a reason, to clarify about this issue lease contact the support team' => 'تم تعطيل حسابك لسبب ما ، لتوضيح هذه المشكلة ،يرجى الاتصال بفريق الدعم',
+        'Resend verification email' => 'أعد ارسال بريد التفعيل',
 
 
 

@@ -41,6 +41,14 @@
         'Pass' => 'Pass',
         'Review' => 'Review',
         'Dear' => 'Dear, :name',
+        'Thank you to join us' => 'Thank you to join us',
+        'One more step to activate your account' => 'One more step to activate your account',
+        'To complete your registration please verify your account' => 'To complete your registration please verify your account',
+        'An email has been sent to your email' => 'An email has been sent to your email',
+        'with the activation instruction' => 'with the activation instruction',
+        'If you haven\'t received your activation mail! please click on the link below' => 'If you haven\'t received your activation email! please click on the link below',
+        'Your account has been disable for a reason, to clarify about this issue lease contact the support team' => 'Your account has been disable for a reason, to clarify about this issue lease contact the support team',
+        'Resend verification email' => 'Resend verification email',
 
 
         // profile

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendValidationMail;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -37,11 +38,14 @@ class HomeController extends Controller
     }
 
     public function suspended(){
+        $modelName = 'Profile';
+        $page_title = __('main.Home page');
+        $breadcrumb =  Breadcrumbs::render('profile');
         $status = Auth::user()->status;
         if($status == User::STATUS_PENDING || $status == User::STATUS_DISABLED){
-            return view('profile.verification', compact('status'));
+            return view('profile.verification', compact('status', 'modelName', 'page_title', 'breadcrumb'));
         }
-        return redirect()->route('main');
+        return redirect()->route('main', compact('modelName', 'page_title', 'breadcrumb'));
         
 
         

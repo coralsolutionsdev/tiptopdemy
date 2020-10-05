@@ -24,7 +24,6 @@ class LessonController extends Controller
 //        $this->middleware('auth', ['except' => ['GetIndex','show', 'getComments']]);
         $this->page_title = 'Store Lessons';
         $this->modelName = 'Store';
-
         $this->breadcrumb = [
             'Store' => '',
             'Lesson' => '',
@@ -146,9 +145,7 @@ class LessonController extends Controller
     {
         $page_title =  $lesson->title;
         $modelName = $this->modelName;
-//        dd($lesson->product);
         $breadcrumb =  Breadcrumbs::render('store.product.lesson', $lesson);
-
         $prevLesson = null;
         $nextLesson = null;
         $productLessons =  $product->lessons->sortBy('position');

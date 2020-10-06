@@ -19,7 +19,6 @@
     <style>
         html, body{
             background-color: #F9F8FD;
-            height: 100%;
             font-size: 12px;
             font-family: 'Cairo';
         }

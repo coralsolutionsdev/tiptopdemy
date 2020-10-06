@@ -65,7 +65,7 @@
                                     </div>
                                     <div class="uk-width-auto@m uk-text-lighter">
                                         {{$item->score}} Marks
-                                        <label><input uk-tooltip="{{__('main.Pass')}}" class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded pass-question-{{$section}}" type="checkbox" name="section-drop" {{!empty($questionsToAnswer) && $questionsToAnswer < $key ? 'checked' : ''}}></label>
+                                        <label><input uk-tooltip="{{__('main.Pass')}}" class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded pass-question pass-question-{{$section}}" type="checkbox" name="section-drop" {{!empty($questionsToAnswer) && $questionsToAnswer < $key ? 'checked' : ''}}></label>
                                         <label><input uk-tooltip="{{__('main.Review')}}" class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded review-question" type="checkbox"></label>
                                     </div>
                                 </div>

@@ -46,4 +46,31 @@
         var row = $(this).closest('.question-row');
         row.toggleClass('uk-background-warning-light');
     });
+
+    $('.section-navigation').click(function (){
+        var btn = $(this);
+        var navType =  btn.attr('data-value')
+        var section = btn.closest('.section');
+        var sectionId = section.attr('id').split('-')[1];
+        var nextId = 0;
+        if (navType == 1){
+            nextId = parseInt(sectionId) + 1;
+        }else{
+            nextId = parseInt(sectionId) - 1;
+        }
+        var itemsNo = $('.section-'+sectionId+'-item').length;
+        var sectionAllowedNo = $('.section-'+sectionId+'-allowed-number').val();
+        var passedItemsNo = $('.pass-question-'+sectionId+':checkbox:checked').length;
+        var allowedToPass = parseInt(itemsNo) - parseInt(sectionAllowedNo);
+        if (sectionAllowedNo > 0){
+           var result = parseInt(itemsNo) - parseInt(passedItemsNo);
+           if (sectionAllowedNo != result){
+               UIkit.modal.alert('You should answer '+sectionAllowedNo+' questions and leave '+allowedToPass+' only.');
+               return false;
+           }
+        }
+        $('#section-'+sectionId).fadeOut(200, function (){
+            $('#section-'+nextId).fadeIn();
+        });
+    });
 </script>

@@ -448,6 +448,8 @@
         'Quiz time finished' => 'Quiz time finished',
         'the time to end this quiz has been finished, we hope you done well with it' => 'the time to end this quiz has been finished, we hope you done well with it',
         'Lesson quizzes' => 'Lesson quizzes',
+        'Previous' => 'Previous',
+        'Next' => 'Next',
 
 
 

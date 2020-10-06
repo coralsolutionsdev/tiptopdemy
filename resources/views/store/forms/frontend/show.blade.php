@@ -68,14 +68,44 @@
                 <div>
                     <div class="quiz-section bg-secondary pt-25 {{$hasTimeLimit == 1 ? 'hidden-div' : ''}}">
                         <div class="uk-container">
+                            {{--Form--}}
+                            <div class="uk-margin" style="direction: {{$form->getDirection()}};">
+                                {{--Form info--}}
+                                <div class="uk-margin-medium">
+                                    <span><label class="uk-text-danger"><input class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded" type="checkbox" checked> {{__('main.Pass')}}</label></span>
+                                    <br>
+                                    <span><label class="uk-text-warning"><input class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded" type="checkbox" checked> {{__('main.Review')}}</label></span>
+                                </div>
+                                {{--Form sections--}}
+                                <div class="uk-margin-medium-top" style="">
+                                    @if($formItems = $form->getGroupedItems())
+                                        <ul class="uk-list">
+                                            @forelse($formItems as $section => $items)
+                                                @if(!is_null($displayType) && $displayType == 1)
+                                                    this
+                                                @else
+                                                    @include('store.forms.frontend.displays._traditional')
+                                                @endif
+                                            @empty
+                                                no Items message
+                                            @endforelse
+                                        </ul>
+
+                                    @endif
+                                </div>
+
+                            </div>
+
+
+
                             <div class="uk-margin uk-flex uk-flex-center" uk-grid>
-                                <div id="" class=" uk-width-5-6 " style="direction: {{$form->getDirection()}};">
-                                    <div class="uk-padding-small" >
-                                        <span><label class="uk-text-danger"><input class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded" type="checkbox" checked> {{__('main.Pass')}}</label></span>
-                                        <br>
-                                        <span><label class="uk-text-warning"><input class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded" type="checkbox" checked> {{__('main.Review')}}</label></span>
-                                    </div>
-                                    <ul id="form-items" class="uk-grid-small" uk-grid>
+                                <div id="" class=" uk-width-5-6 " >
+
+                                    {{--if dispalay type is traditional (0) --}}
+
+
+                                    @if(false)
+                                    <ul id="form-items" class="uk-grid-small" uk-grid style="">
                                         @if($formItems = $form->getGroupedItems())
                                             @forelse($formItems as $section => $items)
                                                 @if(!is_null($displayType) && $displayType == 1)
@@ -173,7 +203,7 @@
                                                         @endforeach
                                                     @endif
                                                 @else
-                                                    <li class="form form-group uk-width-1-1@s bg-white uk-padding-small uk-grid-small" uk-grid style="margin: 3em 0px 0px 0px">
+                                                    <li id="{{$section}}" class="form form-group uk-width-1-1@s bg-white uk-padding-small uk-grid-small" uk-grid style="margin: 3em 0px 0px 0px">
                                                         @if(!empty($items))
                                                             @foreach($items as $key => $item)
                                                                 <div class="uk-width-{{$item->getWidth()}}@m uk-width-1-1@s uk-margin-remove" {!! $item->getToolTip() !!} style="padding: 2px 0px">
@@ -250,11 +280,8 @@
                                             @endforelse
                                         @endif
                                     </ul>
-
+                                    @endif
                                 </div>
-                            </div>
-                            <div class="uk-text-center" style="padding-bottom: 10px">
-                                <span class="uk-button uk-button-primary uk-margin-small-right submit-form uk-width-1-3@l" >{{ucfirst($form->properties['submission_title'])}}</span>
                             </div>
                         </div>
                     </div>

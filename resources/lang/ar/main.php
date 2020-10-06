@@ -473,6 +473,8 @@
         'Quiz time finished' => 'إنتهى وقت الاختبار',
         'the time to end this quiz has been finished, we hope you done well with it' => 'لقد انتهى الوقت المخصص للإجابة على هذا الاختبار ، نأمل أن تكون قد أديته بشكل جيد.',
         'Lesson quizzes' => 'إختبارات الدرس',
+        'Previous' => 'السابق',
+        'Next' => 'التالي',
 
 
 

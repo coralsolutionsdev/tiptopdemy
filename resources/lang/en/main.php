@@ -450,6 +450,9 @@
         'Lesson quizzes' => 'Lesson quizzes',
         'Previous' => 'Previous',
         'Next' => 'Next',
+        'only' => 'only',
+        'You should answer' => 'You should answer',
+        'questions and leave' => 'questions and leave',
 
 
 

@@ -65,7 +65,10 @@
         if (sectionAllowedNo > 0){
            var result = parseInt(itemsNo) - parseInt(passedItemsNo);
            if (sectionAllowedNo != result){
-               UIkit.modal.alert('You should answer '+sectionAllowedNo+' questions and leave '+allowedToPass+' only.');
+               var message = '{{__('main.You should answer')}} '+sectionAllowedNo+' {{__('main.questions and leave')}} '+allowedToPass+' {{__('main.only')}}.';
+               $('.alert-modal-message').html(message);
+               UIkit.modal('#alertModal').show();
+
                return false;
            }
         }

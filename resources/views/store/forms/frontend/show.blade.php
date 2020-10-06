@@ -409,8 +409,6 @@
             <div class="uk-grid-small uk-child-width-auto countdown" uk-grid>
                 <div class="uk-text-center">
                     <h1 class="uk-margin-remove timer uk-heading-medium" id="time"><span style="font-size: 38px">{{__('main.Starting')}} ..</span></h1>
-                    {{--                        <small class="uk-margin-remove uk-flex uk-flex-left" style="padding: 0 10px">{{trans_choice('main.Minutes', 10)}}</small>--}}
-                    {{--                        <small class="uk-margin-remove uk-flex uk-flex-right" style="padding: 0 10px">{{trans_choice('main.Seconds', 10)}}</small>--}}
                 </div>
             </div>
         </div>

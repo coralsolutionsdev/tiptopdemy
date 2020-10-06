@@ -475,6 +475,9 @@
         'Lesson quizzes' => 'إختبارات الدرس',
         'Previous' => 'السابق',
         'Next' => 'التالي',
+        'only' => 'فقط',
+        'You should answer' => 'يجيب عليك الإجابة على',
+        'questions and leave' => 'أسئلة وترك',
 
 
 

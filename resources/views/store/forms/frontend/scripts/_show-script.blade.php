@@ -35,10 +35,10 @@
     });
 </script>
 <script>
-    $('.pass-question').click(function (){
+    $('.leave-question').click(function (){
         var checkboxItem =  $(this);
-        var lastCheckboxItem = $( ".pass-question:checked").last();
-        var lastCheckboxItem = $( ".pass-question:checked").first();
+        var lastCheckboxItem = $( ".leave-question:checked").last();
+        var lastCheckboxItem = $( ".leave-question:checked").first();
         var row = checkboxItem.closest('.question-row');
         row.toggleClass('uk-background-danger-light');
     });
@@ -60,10 +60,10 @@
         }
         var itemsNo = $('.section-'+sectionId+'-item').length;
         var sectionAllowedNo = $('.section-'+sectionId+'-allowed-number').val();
-        var passedItemsNo = $('.pass-question-'+sectionId+':checkbox:checked').length;
+        var leaveedItemsNo = $('.leave-question-'+sectionId+':checkbox:checked').length;
         var allowedToPass = parseInt(itemsNo) - parseInt(sectionAllowedNo);
         if (sectionAllowedNo > 0){
-           var result = parseInt(itemsNo) - parseInt(passedItemsNo);
+           var result = parseInt(itemsNo) - parseInt(leaveedItemsNo);
            if (sectionAllowedNo != result){
                var message = '{{__('main.You should answer')}} '+sectionAllowedNo+' {{__('main.questions and leave')}} '+allowedToPass+' {{__('main.only')}}.';
                $('.alert-modal-message').html(message);
@@ -72,8 +72,12 @@
                return false;
            }
         }
-        $('#section-'+sectionId).fadeOut(200, function (){
-            $('#section-'+nextId).fadeIn();
-        });
+        if (navType == 3){
+            $('#quiz-form').submit();
+        }else{
+            $('#section-'+sectionId).fadeOut(200, function (){
+                $('#section-'+nextId).fadeIn();
+            });
+        }
     });
 </script>

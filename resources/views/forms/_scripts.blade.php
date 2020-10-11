@@ -621,8 +621,8 @@
 
         item.find('.input-section-allowed-number').attr('name', 'item_section_allowed_number['+itemId+']');
 
-        item.find('.input-correction-auto').attr('name', 'item_correction['+itemId+']');
-        item.find('.input-correction-manual').attr('name', 'item_correction['+itemId+']');
+        item.find('.input-evaluation-auto').attr('name', 'item_evaluation['+itemId+']');
+        item.find('.input-evaluation-manual').attr('name', 'item_evaluation['+itemId+']');
 
         // addMinyTinyEditor('.item-content-editor-'+itemId);
 
@@ -713,11 +713,11 @@
                 }
                 item.find('.input-section-allowed-number').val(properties.allowed_number);
 
-                if(properties.correction != null){
-                    if(properties.correction == 1){
-                        item.find('.input-correction-auto').prop('checked', true);
+                if(properties.evaluation != null){
+                    if(properties.evaluation == 1){
+                        item.find('.input-evaluation-auto').prop('checked', true);
                     }else{
-                        item.find('.input-correction-manual').prop('checked', true);
+                        item.find('.input-evaluation-manual').prop('checked', true);
                     }
                 }
 

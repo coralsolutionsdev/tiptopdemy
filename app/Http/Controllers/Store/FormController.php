@@ -94,7 +94,7 @@ class FormController extends Controller
                 break;
             }
         }
-        $displayType = !is_null($form['properties']['display_type']) ? $form['properties']['display_type'] : 1;
+        $displayType = !is_null($form->properties['display_type']) ? $form->properties['display_type'] : 1;
         $hasTimeLimit = !empty($form->properties['has_time_limit']) ? $form->properties['has_time_limit'] : 0;
         $timeLimit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
         return view('store.forms.frontend.show', compact('modelName', 'product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'form', 'displayType', 'hasTimeLimit', 'timeLimit'));

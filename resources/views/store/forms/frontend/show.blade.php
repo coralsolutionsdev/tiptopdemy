@@ -76,13 +76,26 @@
                                     <br>
                                     <span><label class="uk-text-warning"><input class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded" type="checkbox" checked> {{__('main.Review')}}</label></span>
                                 </div>
+
                                 {{--Form sections--}}
+                                {!! Form::open(['url' => route('form.response.store', $form->hash_id),'method' => 'POST', 'id' => 'quiz-form', 'enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
                                 <div class="uk-margin-medium-top" style="">
+                                    <input type="hidden" name="lesson_id" value="{{$lesson->id}}">
                                     @if($formItems = $form->getGroupedItems())
+                                        @php
+                                            $sectionCount = 0;
+                                        @endphp
                                         <ul class="uk-list">
+                                            @php $firstSection = null; @endphp
                                             @forelse($formItems as $section => $items)
+                                                @php
+                                                    $sectionCount++;
+                                                      if (empty($firstSection)){
+                                                            $firstSection = $sectionCount;
+                                                        }
+                                                @endphp
                                                 @if(!is_null($displayType) && $displayType == 1)
-                                                    this
+                                                    Under development process
                                                 @else
                                                     @include('store.forms.frontend.displays._traditional')
                                                 @endif
@@ -90,9 +103,9 @@
                                                 no Items message
                                             @endforelse
                                         </ul>
-
                                     @endif
                                 </div>
+                                {!! Form::close() !!}
 
                             </div>
 
@@ -414,7 +427,7 @@
         </div>
 
     </div>
-    @include('store.forms.frontend._show-script')
+    @include('store.forms.frontend.scripts._show-script')
     <script>
         $('.submit-form').click(function () {
             UIkit.modal('#please-purchase').show();

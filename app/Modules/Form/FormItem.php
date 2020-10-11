@@ -54,11 +54,23 @@ class FormItem extends Model
     const TYPE_DROP_DOWN = 5;
     const TYPE_FILL_THE_BLANK = 6;
 
-    public function getFillableBlank()
+    public static function getFormItemFillableBlank($itemId)
     {
+        $formItem = self::find($itemId);
+        if (!empty($formItem)){
+            return $formItem->getFillableBlank($formItem->id);
+        }
+        return null;
+    }
+    public function getFillableBlank($id = null)
+    {
+        if (is_null($id))
+        {
+            $id = $this->id;
+        }
         $paragraph = $this->options['paragraph'];
         $search = '#\<tag\>(.+?)\<\/tag\>#s';
-        $replace = ' <input class="input-blank" type="text"> ';
+        $replace = ' <span class="item-'.$id.'-paragraph-blank"><input class="input-blank" name="item_answer['.$id.'][]" type="text"></span> ';
         $string = "<tag>i dont know what is here</tag>";
         $fillable  = preg_replace($search,$replace,$paragraph);
 
@@ -93,6 +105,41 @@ class FormItem extends Model
         }
         return $tooltip;
     }
+    public static function getGroupSection($items)
+    {
+        return $items->where('type', self::TYPE_SECTION)->first();
+    }
+
+    public static function getItemsWithShuffleStatus($items)
+    {
+        // get section
+        $section = self::getGroupSection($items);
+        $questionsShuffle = isset($section['shuffle_questions']) ?  $section['shuffle_questions'] : 0;
+        if ($questionsShuffle == 1){ // 1 is shuffled.
+            return $items->shuffle();
+        }
+        return $items;
+    }
+    public function getDefaultAnswers($type = null)
+    {
+        $answers = array();
+        if (!empty($this->options)){
+            if (is_null($type)){
+                foreach ($this->options as $key => $option){
+                    if (isset($option['default']) && $option['default'] == 1){
+                        $answers[$option['id']] = [
+                            'value' => $option['title'],
+                            'score' => $option['mark'],
+                        ];
+                    }
+                }
+            } elseif ($type == self::TYPE_FILL_THE_BLANK){
+                $answers = !empty($this->options['paragraph_blanks']) ? $this->options['paragraph_blanks'] : array();
+            }
+        }
+        return $answers;
+    }
+
 
 
     public function users()

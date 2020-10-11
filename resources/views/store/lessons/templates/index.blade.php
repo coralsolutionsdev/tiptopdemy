@@ -29,10 +29,10 @@
                         });
                     </script>
 
-                    <div class="uk-child-width-1-6@s uk-text-center" uk-grid>
+                    <div class="uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-3@m uk-child-width-1-2@s uk-child-width-1-1 uk-text-center" uk-grid>
                         <div>
                             <a href="{{route('store.form.create', $lesson->slug)}}">
-                                <div class="uk-card uk-card-default uk-card-body uk-text-primary border-hover-primary uk-box-shadow-hover-large uk-flex uk-flex-middle uk-flex-center" style="min-height: 18em">
+                                <div class=" uk-card uk-card-default uk-card-body uk-text-primary border-hover-primary uk-box-shadow-hover-large uk-flex uk-flex-middle uk-flex-center" style="min-height: 18em; width: 100%">
                                     <div class="uk-margin">
                                         <div class="uk-padding-small"><span uk-icon="icon: plus-circle; ratio: 4"></span></div>
                                         <label>Create new</label>
@@ -42,7 +42,7 @@
                         </div>
                         @forelse($templates as $template)
                             <div>
-                                <div class="uk-card uk-card-default uk-card-body border-hover-primary uk-box-shadow-hover-large p-0" style="min-height: 18em">
+                                <div class=" uk-card uk-card-default uk-card-body border-hover-primary uk-box-shadow-hover-large p-0" style="min-height: 18em; width: 100%">
                                     <div class="uk-text-left uk-padding-small">
                                         <h4 class="uk-text-primary">{{$template->title}}</h4>
                                     </div>

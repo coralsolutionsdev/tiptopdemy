@@ -6,8 +6,10 @@
                 <p class="uk-margin-remove text-highlighted" style="font-size: 26px; font-weight:700">{{__($page_title)}}</p>
             </div>
         </div>
+        @if(!empty($breadcrumb))
         <div class="uk-width-auto uk-flex uk-flex-bottom">
             <span uk-icon="home" style="margin: 0 1em"></span>{!! $breadcrumb !!}
         </div>
+        @endif
     </div>
 </div>

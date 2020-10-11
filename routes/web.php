@@ -235,6 +235,12 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::get('/show/{hashedId}','InvoiceController@show')->name('show');
             });
 
+            /* Form */
+            Route::group(['prefix' => 'form', 'namespace' => 'Form', 'as' => 'form.'], function (){
+                Route::resource('/{form}/response','ResponseController', ['only' => ['store']]);
+                Route::resource('/response','ResponseController', ['only' => ['show']]);
+            });
+
             /*pages*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
         });

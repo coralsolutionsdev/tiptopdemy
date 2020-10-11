@@ -1,4 +1,5 @@
 <!-- Modal -->
+@if(!empty($form))
 <div class="modal fade" id="saveAsTemplate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -43,3 +44,4 @@
         </div>
     </div>
 </div>
+@endif

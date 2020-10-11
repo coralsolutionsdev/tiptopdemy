@@ -157,6 +157,9 @@
                                                 <th>{{__('main.Quiz name')}}</th>
                                                 <th class="uk-text-center">{{__('main.Items num.')}}</th>
                                                 <th class="uk-text-center">{{__('main.Quiz period')}}</th>
+                                                <td class="uk-text-center">{{__('main.Availability')}}</td>
+                                                <td class="uk-text-center">{{__('main.Results')}}</td>
+                                                <td></td>
                                                 <th class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}"></th>
                                             </tr>
                                             </thead>
@@ -169,11 +172,28 @@
                                                     <p class="uk-margin-remove">{!! $form->description !!}</p>
                                                 </td>
                                                 <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                                <td class="uk-text-center uk-text-success">
+                                                <td class="uk-text-center">
                                                     @if(!empty($form->properties['has_time_limit']) && $form->properties['has_time_limit'] == 1)
-                                                        {{$form->properties['time_limit']}} {{trans_choice('main.Minutes', $form->properties['time_limit'])}}
+                                                        <span class="uk-text-warning">{{$form->properties['time_limit']}} {{trans_choice('main.Minutes', $form->properties['time_limit'])}}</span>
                                                     @else
-                                                        Unlimited time
+                                                        <span class="uk-text-primary">{{__('main.Unlimited time')}}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    @if(!empty($form->getLastResponse()))
+                                                        <p class="uk-text-{{$form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED ? 'success' : 'warning'}}">{{__('main.'.$form->getLastResponse()->getStatus())}}</p>
+                                                    @else
+                                                        <p class="uk-text-primary">{{__('main.Available')}}</p>
+                                                    @endif
+                                                </td>
+                                                <td class="uk-text-center">
+                                                    @if(!empty($form->getLastResponse()) && $form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED)
+                                                        <p class="uk-margin-remove"><i class="far fa-check-circle uk-text-success"></i> {{$form->getLastResponse()->score_info['achieved_score']}} / {{$form->getLastResponse()->score_info['total_score']}}</p>
+                                                        @if($form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED)
+                                                        <a href="{{route('form.response.show', $form->getLastResponse()->hash_id)}}">{{__('main.View results')}}</a>
+                                                        @endif
+                                                    @else
+                                                        <p class="uk-text-muted">{{__('main.No results')}}</p>
                                                     @endif
                                                 </td>
                                                 <td class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">

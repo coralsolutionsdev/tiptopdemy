@@ -164,7 +164,7 @@
         'Student' => 'طالب',
         'Pass' => 'ترك',
         'Review' => 'مراجعة',
-        'Dear' => 'عزيزي, :name',
+        'Dear' => 'عزيزي :name',
         'Starting' => 'جارِ البدأ',
 
 
@@ -427,7 +427,7 @@
         'Display settings' => 'إعدادات العرض',
         'Please wait, items are loading.' => 'يرجى الإنتظار يتم تحميل العناصر.',
         'Please create a lesson first.' => 'يرجى إنشاء درس أولاً.',
-        'Marks' => '[1] درجة|[2,*] درجات',
+        'Marks' => '[0,2] درجة|[3,10] درجات|[11,*] درجة',
         'points' => '{0} نقطة |[1,*] نقاط',
 
 
@@ -478,6 +478,18 @@
         'only' => 'فقط',
         'You should answer' => 'يجيب عليك الإجابة على',
         'questions and leave' => 'أسئلة وترك',
+        'Please, purchase the lesson to complete' => 'يرجى شراء الكورس لاكمال هذه العملية',
+        'Quiz has been submitted successfully' => 'تم إرسال الاختبار بنجاح',
+        'Unlimited time' => 'وقت غير محدود',
+        'Availability' => 'التوفر',
+        'Available' => 'مُتاح',
+        'Completed' => 'مُكتمل',
+        'Pending' => 'قيد الانتظار',
+        'No results' => 'لا يوجد نتائج',
+        'Results' => 'النتائج',
+        'Passed successfully' => 'تم الأجتياز بنجاح',
+        'Failed' => 'لم يتم الاجتياز',
+        'View results' => 'عرض النتائج',
 
 
 

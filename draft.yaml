@@ -1,34 +1,21 @@
 models:
-  Modules\Store\Invoice:
+  Modules\Form\FormResponse:
     title: string:400
-    order_id: id foreign:orders.id
-    order_number: string
-    date: timestamp
-    date_paid: timestamp
-    customer_name: nullable string:400
-    customer_phone_number: nullable string:400
-    billing_company_name: nullable string:400
-    billing_address: nullable text
-    billing_city: nullable string:400
-    billing_state: nullable string:400
-    billing_postcode: nullable integer
-    billing_country: nullable string:400
-    description: nullable text
+    hash_id: string:400
+    form_id: id foreign:forms.id
+    ancestor_id: nullable id foreign:forms.id
+    responer_info: nullable text
+    data: nullable mediumText
     status: tinyInteger
     type: nullable integer
-    currency: string:3
-    subtotal: decimal
-    grand_total: decimal
-    discount_type: nullable integer:10
-    discount_amount: nullable decimal
-    taxes: nullable text
-    payment_method: nullable integer
     notes: nullable text
+    creator_id: nullable id foreign:users.id
+    editor_id: nullable id foreign:users.id
     softDeletes
     timestamps
 
     relationships:
-      belongsTo: User, Order
+      belongsTo: User, Form
 
 #    customer_name: nullable string:400
 #    customer_phone_number: nullable string:400

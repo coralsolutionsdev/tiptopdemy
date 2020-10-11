@@ -453,6 +453,18 @@
         'only' => 'only',
         'You should answer' => 'You should answer',
         'questions and leave' => 'questions and leave',
+        'Please, purchase the lesson to complete' => 'Please, purchase the lesson to complete',
+        'Quiz has been submitted successfully' => 'Quiz has been submitted successfully',
+        'Unlimited time' => 'Unlimited time',
+        'Availability' => 'Availability',
+        'Available' => 'Available',
+        'Completed' => 'Completed',
+        'Pending' => 'Pending',
+        'Results' => 'Results',
+        'Passed successfully' => 'Passed successfully',
+        'Failed' => 'Failed',
+        'No results' => 'No results',
+        'View results' => 'View results',
 
 
 

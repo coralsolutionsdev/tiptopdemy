@@ -4,9 +4,9 @@
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 <span class="uk-align-right">
-                    <span class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
-                    <span class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
-                    <span class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                    <span style="margin: 0 2px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+                    <span style="margin: 0 2px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
+                    <span style="margin: 0 2px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                 </span>
             </div>
             <div class="uk-margin-remove">
@@ -107,13 +107,13 @@
                                         <label>Questions number allowed to answer:</label>
                                     </div>
                                     <div class="uk-width-expand@m ">
-                                        <input type="number" class="uk-input uk-form-small input-section-allowed-number" placeholder="5" value="5">
+                                        <input type="number" class="uk-input uk-form-small input-section-allowed-number" placeholder="5">
                                     </div>
                                 </div>
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                    <label>Correction:</label>
-                                    <label><input class="uk-radio input-correction-auto" type="radio" name="radio1" value="1" checked>  تلقائي  </label>
-                                    <label><input class="uk-radio input-correction-manual" type="radio" name="radio1" value="0">  يدوي  </label>
+                                    <label>Evaluation:</label>
+                                    <label><input class="uk-radio input-evaluation-auto" type="radio" name="radio1" value="{{\App\Modules\Form\FormResponse::EVALUATION_TYPE_AUTO}}" checked>  تلقائي  </label>
+                                    <label><input class="uk-radio input-evaluation-manual" type="radio" name="radio1" value="{{\App\Modules\Form\FormResponse::EVALUATION_TYPE_MANUAL}}">  يدوي  </label>
                                 </div>
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                                     <label for="">Topic:</label> {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
@@ -173,10 +173,10 @@
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 <span class="uk-align-right">
-                    <span class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
-                    <span class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
-                    <span class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
-                    <span class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                    <span style="margin: 0 2px" class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
+                    <span style="margin: 0 2px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+                    <span style="margin: 0 2px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
+                    <span style="margin: 0 2px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                 </span>
             </div>
             <div class="uk-margin-remove">

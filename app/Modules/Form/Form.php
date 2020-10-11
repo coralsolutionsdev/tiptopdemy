@@ -209,7 +209,7 @@ class Form extends Model
                 'uniform' => isset($input['item_uniform'][$id]) ? 1 : 0,
                 'tags' => null,
                 'allowed_number' => isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null,
-                'correction' => isset($input['item_correction'][$id]) ? $input['item_correction'][$id] : 1,
+                'evaluation' => isset($input['item_evaluation'][$id]) ? $input['item_evaluation'][$id] : 1,
 
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;
@@ -271,10 +271,16 @@ class Form extends Model
                 $optionsArray = array();
                 if (!is_null($blankOptions)){
                     foreach ($blankOptions as $key => $optionItems){
+                        $itemsArray = array();
+                        foreach ($optionItems as $itemKey => $itemValue){
+                            $itemsArray[$itemKey] = [
+                                'value' => $itemValue,
+                                'score' => $blankOptionsMarks[$key][$itemKey],
+                            ];
+                        }
                         $optionsArray[] = [
                             'id' => $key,
-                            'items' => $optionItems,
-                            'marks' => $blankOptionsMarks,
+                            'items' => $itemsArray,
                         ];
                     }
                 }
@@ -362,6 +368,16 @@ class Form extends Model
 
     }
 
+    public function getLastResponse()
+    {
+        $user = getAuthUser();
+        $resp =  $this->responses()->where('creator_id', $user->id)->latest()->first();
+        if (!empty($resp)){
+            return $resp;
+        }
+        return null;
+    }
+
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods
@@ -392,6 +408,10 @@ class Form extends Model
     public function categories()
     {
         return $this->belongsToMany('App\Category');
+    }
+    public function responses()
+    {
+        return $this->hasMany(FormResponse::class);
     }
 
     public function creator()

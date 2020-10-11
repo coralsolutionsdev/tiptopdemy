@@ -9,6 +9,7 @@ Homestead.yaml
 npm-debug.log
 draft.yaml
 .env
+.blueprint
 public/uploads/logo/default.png
 public/templates/coral-sky/scss/bootstrap.scss
 public/templates/coral-sky/css/default-styles.css

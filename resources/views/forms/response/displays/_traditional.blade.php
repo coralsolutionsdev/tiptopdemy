@@ -51,9 +51,9 @@
                                         @if(!empty($item['answers']))
                                             @forelse($item['answers'] as $answer)
                                                 <span uk-tooltip="{{$answer['score']}} {{trans_choice('main.Marks', $answer['score'])}}" class="uk-text-{{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'success' : 'danger' }}">{{$answer['value']}} </span> <i class="far {{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'fa-check-circle uk-text-success' : 'fa-times-circle uk-text-danger' }}"></i> @if($item['properties']['display'] == 1)<br>@endif
-                                            @empty
-                                                no answers
                                             @endforelse
+                                        @else
+                                            <i class="far fa-times-circle uk-text-danger"></i>
                                         @endif
                                         @endif
 

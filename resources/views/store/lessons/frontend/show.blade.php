@@ -154,7 +154,7 @@
                                         <table class="uk-table uk-table-divider uk-table-middle">
                                             <thead>
                                             <tr>
-                                                <th>{{__('main.Quiz name')}}</th>
+                                                <th class="uk-width-1-3">{{__('main.Quiz name')}}</th>
                                                 <th class="uk-text-center">{{__('main.Items num.')}}</th>
                                                 <th class="uk-text-center">{{__('main.Quiz period')}}</th>
                                                 <td class="uk-text-center">{{__('main.Availability')}}</td>

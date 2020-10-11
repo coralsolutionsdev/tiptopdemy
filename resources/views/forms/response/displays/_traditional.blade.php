@@ -55,8 +55,6 @@
                                         @else
                                             <i class="far fa-times-circle uk-text-danger"></i>
                                         @endif
-                                        @endif
-
                                     </div>
                                     <div class="uk-width-auto@m">
                                        <span class="uk-text-success"> {{$item['evaluation_score']}}</span> / {{$item['score']}} <span class="uk-text-lighter">{{trans_choice('main.Marks', $item['evaluation_score'])}}</span>

@@ -47,15 +47,15 @@
                                             </div>
                                         @else
                                         {!! $item['title']!!}
-                                        @if($item['properties']['display'] == 1)<br>@endif
-                                        @if(!empty($item['answers']))
-                                            @forelse($item['answers'] as $answer)
-                                                <span uk-tooltip="{{$answer['score']}} {{trans_choice('main.Marks', $answer['score'])}}" class="uk-text-{{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'success' : 'danger' }}">{{$answer['value']}} </span> <i class="far {{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'fa-check-circle uk-text-success' : 'fa-times-circle uk-text-danger' }}"></i> @if($item['properties']['display'] == 1)<br>@endif
-                                            @endforelse
+                                            @if($item['properties']['display'] == 1)<br>@endif
+                                            @if(!empty($item['answers']))
+                                                @foreach($item['answers'] as $answer)
+                                                    <span uk-tooltip="{{$answer['score']}} {{trans_choice('main.Marks', $answer['score'])}}" class="uk-text-{{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'success' : 'danger' }}">{{$answer['value']}} </span> <i class="far {{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'fa-check-circle uk-text-success' : 'fa-times-circle uk-text-danger' }}"></i> @if($item['properties']['display'] == 1)<br>@endif
+                                                @endforeach
+                                            @else
+                                                <i class="far fa-times-circle uk-text-danger"></i>
+                                            @endif
                                         @endif
-                                    </div>
-                                    <div class="non">
-
                                     </div>
                                     <div class="uk-width-auto@m">
                                        <span class="uk-text-success"> {{$item['evaluation_score']}}</span> / {{$item['score']}} <span class="uk-text-lighter">{{trans_choice('main.Marks', $item['evaluation_score'])}}</span>

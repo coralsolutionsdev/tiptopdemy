@@ -8,7 +8,7 @@
             @endif
         @endforeach
     @else
-        <section>
+        <section class="">
             <div class="uk-container">
                 <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slideshow="autoplay: true" style="overflow: hidden">
 

@@ -71,6 +71,7 @@
             <div class="">
                 <div class="uk-background-secondary uk-light uk-padding uk-panel">
                     <p class="uk-h5 uk-text-meta">All copy rights served to TipTop @2020</p>
+                    <p class="uk-h5 uk-text-meta">dev by coral4host.com</p>
                 </div>
             </div>
         </div>

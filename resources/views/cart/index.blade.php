@@ -56,7 +56,7 @@
 								</tr>
 								@empty
 									<tr>
-										<td>{{__('main.There is no form items yet.')}}</td>
+										<td colspan="5" class="uk-text-center">{{__('main.There is no form items yet.')}}</td>
 									</tr>
 								@endforelse
 								</tbody>

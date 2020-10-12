@@ -83,10 +83,9 @@
                     </div>
                 @endforeach
             </div>
-            <p class="uk-text-right">
+            <div class="uk-text-right uk-margin-small">
                 <button class="uk-button uk-button-primary uk-width-1-1">{{__('main.Save')}}</button>
-                {{--                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>--}}
-            </p>
+            </div>
             {!! Form::close() !!}
 
         </div>

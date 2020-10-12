@@ -70,7 +70,7 @@
         <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
             <div class="">
                 <div class="uk-background-secondary uk-light uk-padding uk-panel">
-                    <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy 2020</p>
+                    <p class="uk-h5 uk-text-meta">All copy rights served to Tiptopdemy @2020</p>
                 </div>
             </div>
         </div>

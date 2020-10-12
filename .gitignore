@@ -1,6 +1,10 @@
 /node_modules
 /public/hot
-/public/storage
+/public/storage/images/posts
+/public/storage/images/banners
+/public/storage/images/profile_pictures
+/public/storage/attachments
+/public/storage/site
 #/storage/*.key
 /.idea
 /.vagrant

@@ -163,7 +163,7 @@
                 </div>
             </div>
             <div class="uk-background-primary">
-                <div class="uk-container uk-text-center">
+                <div class="uk-container uk-flex uk-flex-center">
                     <img src="{{asset_image('/assets/slides/03.png')}}" alt="">
                 </div>
             </div>

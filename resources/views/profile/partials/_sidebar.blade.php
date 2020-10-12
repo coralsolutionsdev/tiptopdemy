@@ -1,7 +1,7 @@
 <div class="uk-card uk-card-default uk-card-body" style="padding: 10px">
     {{--user avatar--}}
     <div class="uk-padding-small">
-        <div class="uk-text-center">
+        <div class="uk-flex uk-flex-center">
             <img class="uk-border-circle uk-image-glow-{{$user->gender == 1 ? 'success' : 'pink'}}"  src="{{Auth::user()->getProfilePicURL()}}" width="125" alt="Border circle">
         </div>
         <div  class="" style="margin-top: -30px; padding: 0 30px;">

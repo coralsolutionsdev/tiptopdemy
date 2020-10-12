@@ -17,6 +17,11 @@ Breadcrumbs::for('store', function ($trail) {
     $trail->parent('home');
     $trail->push(__('main.Store'), route('store.products.main'));
 });
+// Home > Store > category
+Breadcrumbs::for('store.category', function ($trail, $category) {
+    $trail->parent('store');
+    $trail->push($category->name, route('store.category.show', $category->slug));
+});
 // Home > Store > card
 Breadcrumbs::for('cart', function ($trail) {
     $trail->parent('store');

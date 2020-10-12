@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\Category;
 use App\Product;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -86,9 +87,8 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $page_title =  $category->name;
-        $breadcrumb =  $this->breadcrumb;
         $products = $category->items;
-
+        $breadcrumb =  Breadcrumbs::render('store.category', $category);
         return view('store.products.frontend.index', compact('products','page_title','breadcrumb', 'category'));
     }
 

@@ -40,7 +40,7 @@
     <div class="uk-margin-small">
         <ul class="uk-list uk-list-divider">
             @foreach($categories as $category)
-                <li style="padding: 5px 5px 0px 5px"><span><a href="{{route('blog.category.show', $category->slug)}}">{{$category->name}}</a></span><span class="uk-align-left"><span class="uk-badge uk-badge-mini uk-badge-success">{{$category->items()->count()}}</span></span></li>
+                <li style="padding: 5px 5px 0px 5px"><span><a href="{{route('blog.category.show', $category->slug)}}">{{$category->name}}</a></span><span class="uk-align-left"><span class="uk-badge uk-badge-mini uk-badge-success">{{$category->items()->where('status', \App\BlogPost::STATUS_ENABLED)->count()}}</span></span></li>
             @endforeach
         </ul>
     </div>

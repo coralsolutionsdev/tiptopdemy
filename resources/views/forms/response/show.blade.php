@@ -26,7 +26,7 @@
                                     <h2 class="text-highlighted">{{$response->score_info['achieved_score']}} / {{$response->score_info['total_score']}}</h2>
                                     @endif
                                 </div>
-                                    @if($response->score_info['passing_score_type'] == 1)
+                                    @if($response->score_info['passing_score_status'] == 1)
                                         <div class="uk-alert-success uk-margin-small" uk-alert>
                                             {{__('main.Passed successfully')}}
                                         </div>

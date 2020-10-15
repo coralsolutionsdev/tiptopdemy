@@ -69,66 +69,8 @@ class LessonController extends Controller
     public function store(Request $request, Product $product)
     {
         $input = $request->all();
-        $input['creator_id'] = getAuthUser()->id;
-        $input['editor_id'] = getAuthUser()->id;
         $input['product_id'] = $product->id;
-
-        if(!empty($input['status'])){
-            $status = 1;
-        }else{
-            $status = 0;
-        }
-        $input['status'] = $status;
-        if (false){
-            // allow comments
-            if(!empty($input['allow_comments_status'])){
-                $allow_comments_status = 1;
-            }else{
-                $allow_comments_status = 0;
-            }
-            $input['allow_comments_status'] = $allow_comments_status;
-            //
-            if(!empty($input['default_comment_status'])){
-                $default_comment_status = 1;
-            }else{
-                $default_comment_status = 0;
-            }
-            $input['default_comment_status'] = $default_comment_status;
-        }
-
-        $lesson = Lesson::create($input);
-        $lesson->slug = Hashids::encode(1,$product->id,$lesson->id);
-        $lesson->save();
-        // update Category
-        $groups = $request->input('groups', array());
-        $lesson->groups()->sync($groups);
-
-        // update tags
-//        $tags = $request->input('tags', array());
-//        $lesson->syncTagsWithType($tags, 'lesson');
-
-        // attachments
-        if (isset($input['attachments'])){
-            $attachments = $input['attachments'];
-            foreach ($attachments as $attachment){
-                $lesson->attach($attachment);
-            }
-        }
-        // add new media items
-        if (isset($input['new_media_url'])){
-            foreach ($input['new_media_url'] as $key => $newMedia){
-                $mediaInput['title'] = '';
-                $mediaInput['type'] = $input['new_media_type'][$key];
-                $mediaInput['storage_type'] = $input['new_media_type'][$key];
-                $mediaInput['source'] = $newMedia;
-                $mediaInput['status'] = 1;
-                $mediaInput['position'] = 0;
-                $media = Media::create($mediaInput);
-                $lesson->media()->attach($media->id);
-            }
-        }
-
-
+        $lesson = Lesson::createOrUpdate($input);
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
 
@@ -197,74 +139,7 @@ class LessonController extends Controller
     public function update(Request $request, Product $product, Lesson $lesson)
     {
         $input = $request->all();
-        $input['editor_id'] = getAuthUser()->id;
-
-        if(!empty($input['status'])){
-            $status = 1;
-        }else{
-            $status = 0;
-        }
-        $input['status'] = $status;
-        if (false){
-            // allow comments
-            if(!empty($input['allow_comments_status'])){
-                $allow_comments_status = 1;
-            }else{
-                $allow_comments_status = 0;
-            }
-            $input['allow_comments_status'] = $allow_comments_status;
-            //
-            if(!empty($input['default_comment_status'])){
-                $default_comment_status = 1;
-            }else{
-                $default_comment_status = 0;
-            }
-            $input['default_comment_status'] = $default_comment_status;
-        }
-
-        $lesson->update($input);
-        // update Category
-        $groups = $request->input('groups', array());
-        $lesson->groups()->sync($groups);
-
-        // update tags
-//        $tags = $request->input('tags', array());
-//        $lesson->syncTagsWithType($tags, 'lesson');
-
-        // attachments
-        if (isset($input['attachments'])){
-            $attachments = $input['attachments'];
-            foreach ($attachments as $attachment){
-                $lesson->attach($attachment);
-            }
-        }
-
-        // update existing media
-        if (!empty($lesson->media) && $lesson->media->count() > 0){
-            foreach ($lesson->media as $existingMedia){
-                if (array_key_exists (  $existingMedia->id ,$input['media_url'])){ // if key exist update the item
-                    $existingMedia->source = $input['media_url'][$existingMedia->id];
-                    $existingMedia->type = $input['media_type'][$existingMedia->id];
-                    $existingMedia->storage_type = $input['media_type'][$existingMedia->id];
-                    $existingMedia->save();
-                }else{ // if key exist remove the item
-                    $existingMedia->delete();
-                }
-            }
-        }
-        // add new media items
-        if (isset($input['new_media_url'])){
-            foreach ($input['new_media_url'] as $key => $newMedia){
-                $mediaInput['title'] = '';
-                $mediaInput['type'] = $input['new_media_type'][$key];
-                $mediaInput['storage_type'] = $input['new_media_type'][$key];
-                $mediaInput['source'] = $newMedia;
-                $mediaInput['status'] = 1;
-                $mediaInput['position'] = 0;
-                $media = Media::create($mediaInput);
-                $lesson->media()->attach($media->id);
-            }
-        }
+        Lesson::createOrUpdate($input, $lesson);
         session()->flash('success',__('Updated Successfully'));
         return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
     }

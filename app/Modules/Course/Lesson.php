@@ -28,6 +28,7 @@ class Lesson extends Model implements ReactableContract
         'product_id',
         'unit_id',
         'status',
+        'resources',
         'position',
         'creator_id',
         'editor_id',
@@ -42,6 +43,7 @@ class Lesson extends Model implements ReactableContract
         'id' => 'integer',
         'unit_id' => 'integer',
         'status' => 'integer',
+        'resources' => 'array',
         'creator_id' => 'integer',
         'editor_id' => 'integer',
     ];
@@ -53,6 +55,9 @@ class Lesson extends Model implements ReactableContract
         self::TYPE_PRESENTATION => 'Presentation',
         self::TYPE_QUIZ => 'Quiz',
     ];
+
+    const RESOURCES_TYPE_YOUTUBE_VIDEO = 1;
+    const RESOURCES_TYPE_HTML_PAGE = 2;
     /**
      * Get the route key for the model.
      *
@@ -108,6 +113,45 @@ class Lesson extends Model implements ReactableContract
         });
         return $forms;
     }
+    public function getResources()
+    {
+        return $this->resources;
+    }
+    public static function createOrUpdate($input, $lesson = null)
+    {
+        $user = getAuthUser();
+        if (empty($user)){
+            // error
+        }
+        $input['creator_id'] = $user->id;
+        if (!empty($lesson)){
+            $input['editor_id'] = $user->id;
+        }
+        $input['status'] = isset($input['status']) && !empty($input['status']) ? 1 : 0;
+
+        if (!empty($lesson)){
+            $lesson->update($input);
+        }else{
+            $lesson = self::create($input);
+        }
+
+        // update Category
+        $groups = !empty($input['groups']) ? $input['groups'] : array();
+        $lesson->groups()->sync($groups);
+
+        // update tags
+//        $tags = $request->input('tags', array());
+//        $lesson->syncTagsWithType($tags, 'lesson');
+
+        // attachments
+        if (isset($input['attachments'])){
+            $attachments = $input['attachments'];
+            foreach ($attachments as $attachment){
+                $lesson->attach($attachment);
+            }
+        }
+        return $lesson;
+    }
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods
@@ -130,10 +174,6 @@ class Lesson extends Model implements ReactableContract
     public function editor()
     {
         return $this->belongsTo(User::class, 'editor_id');
-    }
-    public function media()
-    {
-        return $this->belongsToMany(Media::class,'media_lesson', 'media_id', 'lesson_id');
     }
     public function forms()
     {

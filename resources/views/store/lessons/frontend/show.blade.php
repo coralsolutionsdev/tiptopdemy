@@ -138,13 +138,12 @@
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
                             <div>
                                 @if($lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION)
-                                    @if($media = $lesson->media)
+                                    @if($media = $lesson->getResources())
                                         @foreach($media as $mediaItem)
                                             <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">
-                                                @if($mediaItem->type == \App\Modules\Media\Media::TYPE_VIDEO)
-                                                    <iframe src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem->source)}}" class="uk-responsive-width" width="1920" height="1080" frameborder="0" uk-responsive></iframe>
+                                                @if($mediaItem['type'] == \App\Modules\Course\Lesson::RESOURCES_TYPE_YOUTUBE_VIDEO)
+                                                    <iframe src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem['url'])}}" class="uk-responsive-width" width="1920" height="1080" frameborder="0" uk-responsive></iframe>
                                                 @endif
-
                                             </div>
                                         @endforeach
                                     @endif
@@ -209,18 +208,6 @@
                                         </table>
 
                                     </div>
-                                    @if(false)
-                                    <div>
-                                            <div class="uk-placeholder uk-text-center">
-                                                <img src="{{asset_image('/assets/book_lover.png')}}" width="300">
-                                                <br>
-                                                <p style="font-size: 22px">{{$form->title}}</p>
-                                                <p>{!! $form->description !!}</p>
-
-                                            </div>
-
-                                    </div>
-                                    @endif
                                 @endif
 
                                 @if(false)

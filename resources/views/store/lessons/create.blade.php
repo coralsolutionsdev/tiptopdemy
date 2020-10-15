@@ -67,7 +67,19 @@
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.Media items')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                <div class="text-right"><span class="btn btn-primary add-media-item">{{__('main.Add Media Item')}}</span></div>
+                                <div class="text-right">
+                                    <div class="uk-inline">
+                                        <button class="uk-button uk-button-default" type="button">{{__('main.Add Media Item')}}</button>
+                                        <div uk-dropdown="mode: click">
+                                            <ul class="uk-list uk-text-left">
+                                                <li><a class="add-media-item" data-value="1"><span class="uk-text-primary"  uk-icon="icon: cloud-upload"></span>  Upload video</a></li>
+                                                <li><a class="add-media-item" data-value="2"><span class="uk-text-danger" uk-icon="icon: youtube"></span>  YouTube video</a></li>
+                                                <li><a class="add-media-item" data-value="3"><span class="" uk-icon="icon: code"></span>  HTML page</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+{{--                                    <span class="btn btn-primary add-media-item"></span>--}}
+                                </div>
                                 <div class="media-items pt-2">
                                     @if(!empty($lesson) && !empty($lesson->media))
                                     @foreach($lesson->media as $media)
@@ -171,59 +183,61 @@
                                 @endif
                             </div>
                         </div>
-                        @if(!empty($lesson))
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">{{__('main.Quiz name')}}</th>
-                                <th scope="col">{{__('main.version')}}</th>
-                                <th scope="col">{{__('main.Items num.')}}</th>
-                                <th scope="col" width="150">{{__('main.Actions')}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                        <div class="uk-padding-small">
                             @if(!empty($lesson))
-                            @forelse($lesson->forms as $form)
-                                <tr>
-                                    <td>{{$form->title}}</td>
-                                    <td class="uk-text-success">{{$form->version}}.0</td>
-                                    <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                    <td>
-                                        <div class="action_btn">
-                                            <ul>
-                                                <li class="">
-                                                    <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
-                                                </li>
-                                                <li class="">
-                                                    <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-                                                    <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
-                                                        {{csrf_field()}}
-                                                        {{method_field('DELETE')}}
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="uk-text-center">
-                                    {{__('main.There is no form items yet.')}}
-                                </td>
-                            </tr>
-                            @endforelse
-                            @endif
-                            </tbody>
-                        </table>
-                        @else
-                            <div class="uk-placeholder uk-text-center">
-                                <div class="uk-alert-warning" uk-alert>
-                                    <p>
-                                        {{__('main.Please create a lesson first.')}}
-                                    </p>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">{{__('main.Quiz name')}}</th>
+                                        <th scope="col">{{__('main.version')}}</th>
+                                        <th scope="col">{{__('main.Items num.')}}</th>
+                                        <th scope="col" width="150">{{__('main.Actions')}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @if(!empty($lesson))
+                                        @forelse($lesson->forms as $form)
+                                            <tr>
+                                                <td>{{$form->title}}</td>
+                                                <td class="uk-text-success">{{$form->version}}.0</td>
+                                                <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                                <td>
+                                                    <div class="action_btn">
+                                                        <ul>
+                                                            <li class="">
+                                                                <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                            </li>
+                                                            <li class="">
+                                                                <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                                <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
+                                                                    {{csrf_field()}}
+                                                                    {{method_field('DELETE')}}
+                                                                </form>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="uk-text-center">
+                                                    {{__('main.There is no form items yet.')}}
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @endif
+                                    </tbody>
+                                </table>
+                            @else
+                                <div class="uk-placeholder uk-text-center">
+                                    <div class="uk-alert-warning" uk-alert>
+                                        <p>
+                                            {{__('main.Please create a lesson first.')}}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
 
                     </div>
                 </div>
@@ -275,6 +289,12 @@
         deleteMediaItem();
         //
         $('.add-media-item').click(function () {
+
+            var btn = $(this);
+            var actionType = btn.attr('data-value');
+            console.log(actionType);
+
+
             $('.media-items').append(
                 '<div class="row form-group media-item">\n' +
                 '<div class="col-7">\n' +

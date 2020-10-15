@@ -27,6 +27,7 @@
         "rajurayhan/larastreamer": "^1.0",
         "rap2hpoutre/laravel-log-viewer": "1.4.*",
         "santigarcor/laratrust": "5.*.*",
+        "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-tags": "2.7.2",
         "vinkla/hashids": "7.0.*",
         "webpatser/laravel-countries": "1.5.*"

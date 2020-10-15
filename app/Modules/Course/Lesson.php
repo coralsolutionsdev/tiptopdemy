@@ -4,16 +4,19 @@ namespace App\Modules\Course;
 
 use App\Modules\Form\Form;
 use App\Modules\Group\Group;
-use App\Modules\Media\Media;
 use App\Product;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Lesson extends Model implements ReactableContract
+class Lesson extends Model implements ReactableContract, HasMedia
 {
     use Reactable;
+    use HasMediaTrait;
+
 
     /**
      * The attributes that are mass assignable.

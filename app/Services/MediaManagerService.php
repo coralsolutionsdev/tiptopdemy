@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Modules\Media\Media;
+use Illuminate\Support\Facades\Storage;
 
 class MediaManagerService
 {
@@ -37,6 +38,19 @@ class MediaManagerService
 
         return $media;
 
+    }
+
+    /**
+     * remove media from storage
+     * @param $media
+     */
+    public static function deleteMedia($media)
+    {
+        $user = getAuthUser();
+        if (empty($user) || empty($media)){
+            abort(500);
+        }
+        Storage::deleteDirectory('media/'.$user->getTenancyId().'/'.$user->id.'/'.md5($media->id).'/');
     }
 
 }

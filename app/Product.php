@@ -389,8 +389,6 @@ class Product extends Model implements ReactableContract, HasMedia
             foreach ($mediaRemovedItems as $mediaRemovedItemId){
                 $removedProductMedia = $productMedia->where('id', $mediaRemovedItemId)->first();
                 if (!empty($removedProductMedia)){
-                    // temporary solution
-                    Storage::deleteDirectory('media/'.$user->getTenancyId().'/'.$user->id.'/'.md5($removedProductMedia->id).'/');
                     $removedProductMedia->delete();
                 }
             }

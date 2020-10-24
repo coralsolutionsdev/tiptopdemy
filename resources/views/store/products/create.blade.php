@@ -258,7 +258,7 @@
                                                                     <input type="hidden" name="media_id[]" value="{{$image->id}}">
                                                                     <input type="hidden" name="media_position[]" value="0">
                                                                     <input type="hidden" name="media_new_file_order[]" value="">
-                                                                    <img data-src="{{$image->getUrl('card')}}" sizes="(min-width: 650px) 650px, 100vw" width="650" height="433" alt="" uk-img>
+                                                                    <img data-src="{{$image->getFullUrl('card')}}" sizes="(min-width: 650px) 650px, 100vw" width="650" height="433" alt="" uk-img>
                                                                 </div>
                                                             </div>
                                                         </li>

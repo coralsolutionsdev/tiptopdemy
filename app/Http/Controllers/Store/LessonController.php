@@ -251,7 +251,7 @@ class LessonController extends Controller
                     $status = Media::UPLOAD_TYPE_COMPLETED;
                     $message = 'Media has attached successfully';
                     $mediaId = $media->id;
-                    $mediaUrl = $media->getUrl();
+                    $mediaUrl = $media->getFullUrl();
                     $mediaName = $media->name;
                 }
             } else {

@@ -220,7 +220,7 @@ class Product extends Model implements ReactableContract, HasMedia
         if (!empty($images)){
             $image = $images->first();
             if (!empty($image)){
-                $path = $image->getUrl('card');
+                $path = $image->getFullUrl('card');
             }
         }
         return $path;
@@ -235,7 +235,7 @@ class Product extends Model implements ReactableContract, HasMedia
         if (!empty($images)){
             $image = $images->get(1);
             if (!empty($image)){
-                $path = $image->getUrl('card');
+                $path = $image->getFullUrl('card');
             }
         }
         return $path;

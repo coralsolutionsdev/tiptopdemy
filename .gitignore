@@ -2,6 +2,8 @@
 #/storage/*.key
 /.idea
 /.vagrant
+/storage/app/attachments
+/storage/app/public/media
 /public/storage/*
 Homestead.json
 Homestead.yaml

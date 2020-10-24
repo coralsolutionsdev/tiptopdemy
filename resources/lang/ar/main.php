@@ -429,6 +429,18 @@
         'Please create a lesson first.' => 'يرجى إنشاء درس أولاً.',
         'Marks' => '[0,2] درجة|[3,10] درجات|[11,*] درجة',
         'points' => '{0} نقطة |[1,*] نقاط',
+        'Upload a new video' => 'إرفع فيديو جديد',
+        'Youtube video' => 'فيديو YouTube',
+        'HTML page' => 'HTML صفحة',
+        'Media name' => 'إسم ملف الميديا',
+        'Video upload' => 'رفع ملف فيدو',
+        'Drag and drop your video file to upload, or' => 'قم بسحب الفيديو وإفلاتها للتحميل ، أو',
+        'Drag and drop your files to upload, or' => 'قم بسحب ملفاتك وإفلاتها للتحميل ، أو',
+        'selecting one' => 'أختر من ملفاتك',
+        'Start upload' => 'إبدأ الرفع',
+        'Click to attach your files' => 'أضغط لارفاق الملفات المراد رفعها',
+
+
 
 
         //orders

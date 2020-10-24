@@ -30,7 +30,7 @@
         $.get('/get/institution/scope/field/'+id+'/levels').done(function (response) {
             var levels = response.items;
             resetFieldLevels();
-            if (levels !== undefined){
+            if (levels !== undefined && levels !== null){
                 if(levels.length != 0){
                     $.each(levels, function (id, level) {
                         var selected = '';

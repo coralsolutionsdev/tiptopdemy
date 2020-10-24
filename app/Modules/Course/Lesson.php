@@ -4,6 +4,7 @@ namespace App\Modules\Course;
 
 use App\Modules\Form\Form;
 use App\Modules\Group\Group;
+use App\Modules\Media\Media;
 use App\Product;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,10 @@ class Lesson extends Model implements ReactableContract, HasMedia
     use Reactable;
     use HasMediaTrait;
 
+    public function getClassName()
+    {
+        return __CLASS__;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -85,21 +90,9 @@ class Lesson extends Model implements ReactableContract, HasMedia
      */
     public function deleteWithDependencies()
     {
-        $this->media->each(function ($item) {
-            $item->delete();
-        });
+        $mediaType = Media::TYPE_VIDEO;
+        $this->clearMediaCollection(Media::getGroup($mediaType));
         $this->delete();
-    }
-
-    /**
-     * return lesson first media
-     * @return mixed
-     */
-    public function getLessonFirstMedia()
-    {
-        if ($media = $this->media){
-            return $media->first();
-        }
     }
 
     /**
@@ -116,10 +109,22 @@ class Lesson extends Model implements ReactableContract, HasMedia
         });
         return $forms;
     }
+
+    /**
+     * return lesson resources array
+     * @return mixed
+     */
     public function getResources()
     {
         return $this->resources;
     }
+
+    /**
+     *  create or update item
+     * @param $input
+     * @param null $lesson
+     * @return |null
+     */
     public static function createOrUpdate($input, $lesson = null)
     {
         $user = getAuthUser();
@@ -153,6 +158,44 @@ class Lesson extends Model implements ReactableContract, HasMedia
                 $lesson->attach($attachment);
             }
         }
+
+        // remove resources
+        $removedResources = isset($input['removed-resources']) ? $input['removed-resources'] : null;
+        if (!empty($removedResources)){
+            foreach ($removedResources as $key => $removedId){
+                foreach ($lesson->resources as $lessonResource){
+                    if ($lessonResource['id'] == $removedId){
+                        if ($lessonResource['type'] == Media::TYPE_VIDEO){
+                            $media = $lesson->getMedia(Media::getGroup($lessonResource['type']))->where('id', $removedId)->first();
+                            if ($media){
+                                $media->delete();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $resources = array();
+        // re arrange resources
+        $resourcesId = $input['resourceId'];
+        if (!empty($resourcesId) && !empty($lesson->resources)){
+            foreach ($resourcesId as $key => $id){
+                foreach ($lesson->resources as $lessonResource){
+                    if ($lessonResource['id'] == $id){
+                        $resources[] = [
+                            'id' => $id,
+                            'url' => $lessonResource['url'],
+                            'name' => $lessonResource['name'],
+                            'type' => $lessonResource['type'],
+                        ];
+                    }
+                }
+            }
+        }
+
+        $lesson->resources = $resources;
+        $lesson->save();
+
         return $lesson;
     }
     /*

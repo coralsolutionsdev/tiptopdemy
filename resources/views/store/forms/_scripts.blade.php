@@ -37,7 +37,7 @@
         $('.open-config').off('click');
         $('.open-config').click(function () {
             var item = $(this).closest('.form-item');
-            var itemId = item.attr('id').split('-')[1]
+            var itemId = item.attr('id').split('-')[1];
             var configDiv = item.find('.item-config');
 
             // close currently opened settings.

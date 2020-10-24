@@ -59,7 +59,20 @@ class Group extends Model
         $this->delete();
     }
 
+    /**
+     * check if group has item
+     * @param $itemId
+     * @return mixed
+     */
+    public function hasItem($itemId){
+        return $this->items->where('id', $itemId)->first();
+    }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relationship Methods
+    |--------------------------------------------------------------------------
+    */
     public function lessons()
     {
         return $this->hasMany(Lesson::class)->orderBy('position');

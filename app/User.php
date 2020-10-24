@@ -5,21 +5,27 @@ namespace App;
 use App\Modules\Comment\Commenter;
 use App\Modules\Store\Order;
 use Bnb\Laravel\Attachments\HasAttachment;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Traits\LaratrustUserTrait;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use Spatie\Image\Exceptions\InvalidManipulation;
+use Spatie\MediaLibrary\Models\Media;
 use Webpatser\Countries\Countries;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class User extends Authenticatable implements ReacterableContract
+class User extends Authenticatable implements ReacterableContract, HasMedia
 {
     use Notifiable;
     use LaratrustUserTrait;
     use Reacterable;
     use HasAttachment;
     use Commenter;
+    use HasMediaTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -56,7 +62,6 @@ class User extends Authenticatable implements ReacterableContract
         self::STATUS_DISABLED => 'Disabled'
     ];
 
-
     /**
      * Avatars
      */
@@ -86,8 +91,6 @@ class User extends Authenticatable implements ReacterableContract
 
     /**
      * Gets the first role title
-     *
-     * @param $tenantId The associated company_id
      * @return mixed
      */
     public function getRole() {
@@ -99,6 +102,10 @@ class User extends Authenticatable implements ReacterableContract
         return $role;
     }
 
+    /**
+     * TODO: update this method
+     * @return bool
+     */
     public function IsAdmin(){
         if (Auth::user()->role == 'admin'){
             return true;
@@ -146,16 +153,34 @@ class User extends Authenticatable implements ReacterableContract
         }
         return $url;
     }
+
+    /**
+     * return user name
+     * @param false $fullName
+     * @return mixed
+     */
     public function getUserName($fullName = false)
     {
         $name = $this->name;
         return $name;
     }
 
+    /** return tenancy id
+     * @return int
+     */
     public function getCompanyId()
     {
         return 1;
     }
+    public function getTenancyId()
+    {
+        return 1;
+    }
+
+    /** TODO: need to review
+     * @param null $productTypeId
+     * @return Collection|mixed
+     */
     public function getCourses($productTypeId = null)
     {
         if (!is_null($productTypeId)){
@@ -163,9 +188,29 @@ class User extends Authenticatable implements ReacterableContract
         }
         return $this->products;
     }
+
+    /**
+     * TODO: need to review
+     * @return Collection
+     */
     public function profileImages()
     {
         return $this->attachments()->where('group', 'profile_images')->get();
+    }
+
+    /**
+     * Define media conversion settings
+     * @param Media|null $media
+     * @throws InvalidManipulation
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(100)
+            ->sharpen(10);
+        $this->addMediaConversion('card')
+            ->width(500)
+            ->sharpen(10);
     }
     /*
      |--------------------------------------------------------------------------

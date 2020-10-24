@@ -525,6 +525,10 @@ input[type=checkbox].toogle-switch:checked::after{
     border-bottom: 1px solid #CCCCCC;
     padding: 10px 0px;
 }
+/*store*/
+.resource-item-control, .media-item-control{
+    position: absolute; padding: 5px; border-radius: 0 0 3px 0; z-index: 10; margin-top: -2px;
+}
 /*File upload*/
 .files-uploader{
     color: #97A1A8;

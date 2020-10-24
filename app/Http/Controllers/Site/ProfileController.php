@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Site;
 
 use App\Jobs\SendValidationMail;
+use App\Modules\Media\Media;
 use App\Product;
 use App\Services\FileAssetManagerService;
+use App\Services\MediaManagerService;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -103,7 +105,8 @@ class ProfileController extends Controller
         $countries = getCountries()->pluck('name', 'id')->toArray();
         $directorates = getCountryDirectorates(368)->pluck('title', 'id')->toArray();
         $scopes = getInstitutionScopes(368)->pluck('title', 'id')->toArray(); // iraq
-        return view('profile.edit', compact('modelName','page_title', 'breadcrumb', 'user', 'posts_count', 'pictures_count', 'countries', 'directorates', 'scopes'));
+        $mediaType = Media::TYPE_PRODUCT_IMAGE;
+        return view('profile.edit', compact('modelName','page_title', 'breadcrumb', 'user', 'posts_count', 'pictures_count', 'countries', 'directorates', 'scopes', 'mediaType'));
     }
 
     /**
@@ -132,31 +135,57 @@ class ProfileController extends Controller
         }
         $user->update($input);
 
-        // upload images
-        $uploadImage = $request->only(['upload_image']);
-        if (isset($uploadImage['upload_image'])){
-            if ($request->hasFile('upload_image')) {
-                // upload and save image
-                $image = $request->file('upload_image');
-                # code...
-                $user->attach($image, [
-                    'disk' => 'local',
-                    'title' => 'any',
-                    'group' => 'profile_images',
-                ]);
+        $updatedTab = isset($request->updated_tab) ? $request->updated_tab : null;
+        // media upload
+        if (isset($updatedTab) && $updatedTab == 2){
+            $mediaInput = $request->only(['media_removed_ids', 'media_position', 'media_id', 'media_files', 'media_new_file_order']);
+            $mediaType = Media::TYPE_PROFILE_IMAGE;
+            $productMedia = $user->getMedia(Media::getGroup($mediaType));
+            // removed media items
+            $mediaRemovedItems = isset($mediaInput['media_removed_ids']) && !empty($mediaInput['media_removed_ids']) ? $mediaInput['media_removed_ids'] :  array();
+            if (!empty($mediaRemovedItems)){
+                foreach ($mediaRemovedItems as $mediaRemovedItemId){
+                    $removedProductMedia = $productMedia->where('id', $mediaRemovedItemId)->first();
+                    if (!empty($removedProductMedia)){
+                        $removedProductMedia->delete();
+                    }
+                }
             }
-        }
-        // delete images
-        $deletedImages = $request->only(['deleted_images']);
-        if (!empty($deletedImages)){
-            foreach ($deletedImages['deleted_images'] as $deletedImage) {
-                $image = $user->attachment($deletedImage);
-                $image->delete();
+
+            if (isset($mediaInput['media_position'])){
+                $mediaPosition = $mediaInput['media_position'];
+                if (!empty($mediaPosition)){
+                    foreach ($mediaPosition as $position => $value){
+                        if (isset($mediaInput['media_id'][$position]) && !empty($mediaInput['media_id'][$position])){
+                            $mediaItem = $productMedia->where('id', $mediaInput['media_id'][$position])->first();
+                            if (!empty($mediaItem)){
+                                // update position
+                                $mediaItem->order_column = $position;
+                                $mediaItem->save();
+
+                            }else { // add new item
+
+                                $image = $mediaInput['media_files'][$mediaInput['media_new_file_order'][$position]];
+
+                                $newMediaItem = MediaManagerService::store($user, $mediaType, $image);
+//                            dd('here', $newMediaItem);
+
+                                if ($newMediaItem){
+                                    $newMediaItem->order_column = $position;
+                                    $newMediaItem->save();
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }else{ // no product images
+                $user->clearMediaCollection(Media::getGroup($mediaType));
             }
         }
         session()->flash('success', trans('main._update_msg'));
         return redirect()->back();
-//
     }
 
     /**

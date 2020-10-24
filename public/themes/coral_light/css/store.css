@@ -24,3 +24,7 @@
 .store a.uk-button-primary:hover{
     color: #ffffff;
 }
+/*store*/
+.resource-item-control, .media-item-control{
+    position: absolute; padding: 5px; border-radius: 0 0 3px 3px; z-index: 10; margin-top: -2px;
+}

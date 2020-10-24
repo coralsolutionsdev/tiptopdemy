@@ -252,45 +252,29 @@
                             {!! Form::model($user, ['url' => route('profile.update', ['id' => $user->id]), 'method' => 'PATCH', 'class' => '', 'enctype' => 'multipart/form-data', 'autocomplete' => 'off']) !!}
 
                             <div class="uk-margin">
-                            <p>{{__('main.Dear student, you can add your personal picture to be used for documents and certificates issuing.')}}</p>
-                            <div uk-form-custom>
-                                <input type="file" name="upload_image" class="image-upload-input">
-                                <button class="uk-button uk-button-default uk-button-upload" type="button" tabindex="-1">{{__('main.Upload new image')}} <span uk-icon="icon: cloud-upload"></span></button>
-                            </div>
-                            <div class="uk-button-upload-items uk-margin-small">
-
-                            </div>
-                            <script>
-                                $('.image-upload-input').change(function (){
-                                    var file_names = $.map($(this).prop('files'), function(file)
-                                    {
-                                        return file.name;
-                                    });
-                                    var file_section = $('.uk-button-upload-items');
-                                    file_section.html('');
-                                    file_names.map(function(file_name)
-                                    {
-                                        file_section.append('<span><span uk-icon="icon: image"></span> '+file_name+'</span>');
-                                    });
-                                });
-                            </script>
-                        </div>
-
-                            <div class="uk-margin">
-                                <div class="uk-grid-small" uk-grid>
-                                    <div class="uk-width-1-1@m">
-                                        <div class="uk-grid-small" uk-grid>
-                                            @foreach($user->profileImages() as $image)
-                                            <div id="{{$image->key}}" class="uk-width-1-4@m uk-width-1-2 profile-picture">
-                                                <span class="btn-hover delete-profile-pic" uk-tooltip="{{__('main.Delete')}}"><span class="uk-text-danger" uk-icon="icon: close"></span></span>
-                                                <label class="">
-                                                    <input type="radio" name="image" uk-tooltip="{{__('main.Set as default')}}" value="{{$image->key}}" {{$user->image == $image->key ? 'checked' : ''}}  style="position: absolute; margin-right: 30px; margin-top: 7px;">
-                                                    <img src="{{asset($image->url)}}" class="uk-box-shadow-hover-medium" alt="" style="border-radius: 5px; width: 100%">
-                                                </label>
-                                            </div>
+                                <input type="hidden" name="updated_tab" value="2">
+                                <p>{{__('main.Dear student, you can add your personal picture to be used for documents and certificates issuing.')}}</p>
+                                <div>
+                                    @include('manage.partials._media_uploader')
+                                </div>
+                                <div>
+                                    <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-2@s uk-child-width-1-3@m media-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
+                                        @if(!empty($user) && $userMedia = $user->getMedia(\App\Modules\Media\Media::getGroup(\App\Modules\Media\Media::TYPE_PROFILE_IMAGE)))
+                                            @foreach($userMedia as $image)
+                                                <li id="media_item-{{$image->id}}">
+                                                    <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
+                                                        <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger media-delete" uk-icon="icon: trash"></span></div>
+                                                        <div>
+                                                            <input type="hidden" name="media_id[]" value="{{$image->id}}">
+                                                            <input type="hidden" name="media_position[]" value="0">
+                                                            <input type="hidden" name="media_new_file_order[]" value="">
+                                                            <img data-src="{{$image->getUrl('card')}}" sizes="(min-width: 650px) 650px, 100vw" width="650" height="433" alt="" uk-img>
+                                                        </div>
+                                                    </div>
+                                                </li>
                                             @endforeach
-                                        </div>
-                                    </div>
+                                        @endif
+                                    </ul>
                                 </div>
                             </div>
 
@@ -308,6 +292,7 @@
             </div>
         </div>
     </div>
+    @include('manage.partials._media_uploader_scripts')
     <script>
     $('.delete-profile-pic').click(function (){
         if (!confirm('Are you sure that you want to delete this item ?')){

@@ -6,23 +6,37 @@ use App\Modules\ColorPattern\ColorPattern;
 use App\Modules\ColorPattern\HasColorPattern;
 use App\Modules\Course\Lesson;
 use App\Modules\Group\HasGroup;
+use App\Modules\Media\Media;
+use App\Modules\Store\Invoice;
+use App\Modules\Store\Order;
+use App\Modules\Store\OrderItem;
+use App\Services\MediaManagerService;
 use Bnb\Laravel\Attachments\HasAttachment;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\RedirectResponse;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Tags\HasTags;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\File;
 
-class Product extends Model implements ReactableContract
+class Product extends Model implements ReactableContract, HasMedia
 {
-
     use Sluggable;
     use HasTags;
     use HasAttachment;
     use HasGroup;
     use HasColorPattern;
     use Reactable;
+    use HasMediaTrait;
 
 
     protected $fillable = [
@@ -201,12 +215,12 @@ class Product extends Model implements ReactableContract
      */
     public function getProductPrimaryImage()
     {
-        $path =  null;
-        $images = $this->getImages();
+        $path =  asset_image('assets/no-image.png');
+        $images = $this->getMedia(Media::getGroup(Media::TYPE_PRODUCT_IMAGE));
         if (!empty($images)){
             $image = $images->first();
             if (!empty($image)){
-                $path = $image->url;
+                $path = $image->getUrl('card');
             }
         }
         return $path;
@@ -217,11 +231,11 @@ class Product extends Model implements ReactableContract
     public function getProductAlternativeImage()
     {
         $path =  null;
-        $images = $this->getImages();
+        $images = $this->getMedia(Media::getGroup(Media::TYPE_PRODUCT_IMAGE));
         if (!empty($images)){
             $image = $images->get(1);
             if (!empty($image)){
-                $path = $image->url;
+                $path = $image->getUrl('card');
             }
         }
         return $path;
@@ -239,6 +253,7 @@ class Product extends Model implements ReactableContract
         }
         return $tags;
     }
+
     public function getAttributesWithType($type = null)
     {
         if (!is_null($type)){
@@ -246,6 +261,11 @@ class Product extends Model implements ReactableContract
         }
         return $this->attributes();
     }
+
+    /**
+     * return color pattern
+     * @return mixed
+     */
     public function getColorPattern()
     {
         return ColorPattern::find($this->color_pattern_id);
@@ -282,6 +302,129 @@ class Product extends Model implements ReactableContract
        return $user->products->where('id', $this->id)->first();
     }
 
+    /**
+     * Register media library conversation types
+     * @param \Spatie\MediaLibrary\Models\Media|null $media
+     * @throws InvalidManipulation
+     */
+    public function registerMediaConversions(\Spatie\MediaLibrary\Models\Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(100)
+            ->sharpen(10);
+        $this->addMediaConversion('card')
+            ->width(500)
+            ->sharpen(10);
+    }
+
+    /**
+     * register media allowed extensions
+     */
+    public function registerMediaCollections()
+    {
+        $this
+            ->addMediaCollection(Media::getGroup(Media::TYPE_PRODUCT_IMAGE))
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif']);
+
+    }
+
+    /**
+     * create or update item
+     * @param $input
+     * @param null $product
+     * @return RedirectResponse|null
+     */
+    public static function createOrUpdate($input, $product = null)
+    {
+        $user = getAuthUser();
+        if (empty($user)){
+            abort(500);
+        }
+        if (!empty($input['sku'])) {
+            if (Product::where('sku', $input['sku'])->where('id', '<>', $product->id)->count()) {
+                session()->flash('danger', 'This SKU is already in use! Please use another SKU instead.');
+                return back()->withInput();
+            }
+        }
+        if (empty($input['manage_stock'])) {
+            $input['manage_stock'] = 0;
+        }
+        $input['editor_id'] = $user->id;
+        // update slug
+        if (!is_null($product)){
+            if ($product->name != $input['name']){
+                $slug = SlugService::createSlug(Product::class, 'slug', $input['name'], ['unique' => true]);
+                $input['slug']= $slug;
+            }
+            $product->update($input);
+
+            // update Attribute
+            $attributes = $product->getAllProductAttr();
+            $attribute_values = [];
+            foreach ($attributes as $attribute) {
+                if (isset($input[$attribute->id]) && $value = $input[$attribute->id]) {
+                    $attribute_values[$attribute->id] = ['value' => is_array($value) ? json_encode($value) : $value];
+                }
+            }
+            $product->attributes()->sync($attribute_values);
+            //TODO: update cache values
+            //$product->updateAttributesCache();
+        }else{
+            $input['creator_id'] = $user->id;
+            $product = self::create($input);
+        }
+
+        // update Category
+        $categories = isset($input['categories']) ? $input['categories'] :  array();
+        $product->categories()->sync($categories);
+
+        // media update //
+        $mediaType = Media::TYPE_PRODUCT_IMAGE;
+        $productMedia = $product->getMedia(Media::getGroup($mediaType));
+        // removed media items
+        $mediaRemovedItems = isset($input['media_removed_ids']) && !empty($input['media_removed_ids']) ? $input['media_removed_ids'] :  array();
+        if (!empty($mediaRemovedItems)){
+            foreach ($mediaRemovedItems as $mediaRemovedItemId){
+                $removedProductMedia = $productMedia->where('id', $mediaRemovedItemId)->first();
+                if (!empty($removedProductMedia)){
+                    $removedProductMedia->delete();
+                }
+            }
+        }
+        // media upload
+        if (isset($input['media_position'])){
+            $mediaPosition = $input['media_position'];
+            if (!empty($mediaPosition)){
+                foreach ($mediaPosition as $position => $value){
+                    if (isset($input['media_id'][$position]) && !empty($input['media_id'][$position])){
+                        $mediaItem = $productMedia->where('id', $input['media_id'][$position])->first();
+                        if (!empty($mediaItem)){
+                            // update position
+                            $mediaItem->order_column = $position;
+                            $mediaItem->save();
+
+                        }else { // add new item
+                            $image = $input['media_files'][$input['media_new_file_order'][$position]];
+                            $newMediaItem = MediaManagerService::store($product, $mediaType, $image);
+                            if ($newMediaItem){
+                                $newMediaItem->order_column = $position;
+                                $newMediaItem->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }else{ // no product images
+            $product->clearMediaCollection(Media::getGroup($mediaType));
+        }
+
+        // update tags
+        $tags = isset($input['tags']) ? $input['tags'] : array();
+        $product->syncTagsWithType($tags, 'product');
+
+        return $product;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationship Methods
@@ -310,7 +453,7 @@ class Product extends Model implements ReactableContract
     /**
      * Many-To-Many Relationship Method for accessing the categories
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function categories()
     {
@@ -318,7 +461,7 @@ class Product extends Model implements ReactableContract
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function groups()
     {
@@ -371,7 +514,7 @@ class Product extends Model implements ReactableContract
 
     /**
      * Relationship to get product user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {

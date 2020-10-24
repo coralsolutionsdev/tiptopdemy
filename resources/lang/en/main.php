@@ -319,6 +319,16 @@
         'Item is already added to your cart.' => 'Item is already added to your cart.',
         'Item has been added successfully.' => 'Item has been added successfully.',
         'View lesson' => 'View lesson',
+        'Upload a new video' => 'Upload a new video',
+        'Youtube video' => 'Youtube video',
+        'HTML page' => 'HTML page',
+        'Media name' => 'Media name',
+        'Video upload' => 'Video upload',
+        'Drag and drop your files to upload, or' => 'Drag and drop your files to upload, or',
+        'Drag and drop your video file to upload, or' => 'Drag and drop your video file to upload, or',
+        'selecting one' => 'selecting one',
+        'Start upload' => 'Start upload',
+        'Click to attach your files' => 'Click to attach your files',
 
         /*Cart*/
         'Cart' => 'Cart',

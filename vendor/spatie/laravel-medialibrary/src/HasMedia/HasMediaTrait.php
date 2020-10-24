@@ -24,6 +24,7 @@ use Spatie\MediaLibrary\Models\Media;
 
 trait HasMediaTrait
 {
+
     /** @var Conversion[] */
     public $mediaConversions = [];
 

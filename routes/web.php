@@ -127,6 +127,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
             Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
             Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
+            Route::post('/media/attach','LessonController@attachMedia')->name('media.attach');
 
         });
         /*form*/
@@ -164,17 +165,25 @@ Route::group(['middleware'=>'installed'], function(){
          */
         Route::group(['namespace' => 'System', 'prefix' => 'system', 'as' => 'system.'], function() {
             Route::resource('countries', 'CountryController');
+            Route::resource('server', 'ServerController');
+
 //                Route::resource('errors', 'ErrorLogsController');
 //                Route::resource('server', 'ServerController');
 //                Route::get('cache/flush',['as' => 'cache.flush', 'uses' =>  'ServerController@flushCache']);
         });
-    });
+        /*
+         * Media
+         */
+        Route::post('/media/attach','Media\MediaController@ajaxStore')->name('ajax.media.attach');
+
+
+        });
 /* Admin Routes end */
 /* User Routes */
         Route::group(['middleware'=>'active'], function(){
 
             if (isModuleEnabled('blog_posts')){
-                /* Blog  */
+                /* Blog */
                 Route::group(['prefix' => 'blog','namespace' => 'Blog', 'as' => 'blog.'], function () {
                     Route::get('/' , 'PostController@GetIndex')->name('posts.main');
                     Route::resource('/category','CategoryController', ['only' => ['show']]);

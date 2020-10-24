@@ -39,7 +39,7 @@
 													<div style="max-height: 200px; overflow: hidden">
 														<div class="uk-text-center">
 															<div class="uk-inline-clip uk-transition-toggle" tabindex="0">
-																<img class="product-primary-image" src="{{$product->getProductPrimaryImage()}}" alt="">
+																<img class="product-primary-image" data-src="{{$product->getProductPrimaryImage()}}" sizes="(min-width: 500px) 500px, 100vw" width="500" alt="" uk-img>
 																<img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="">
 															</div>
 														</div>

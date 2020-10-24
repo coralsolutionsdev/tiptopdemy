@@ -101,7 +101,7 @@
                                     $lessonCount = 0;
                                 @endphp
                                 @foreach($product->groups as $id => $group)
-                                    <li class="{{$id == 0 ? 'uk-open' : ''}}" style="margin:0px 0px 10px 0px">
+                                    <li class="{{$group->hasItem($lesson->id) ? 'uk-open' : ''}}" style="margin:0px 0px 10px 0px">
                                         <a class="uk-accordion-title text-highlighted uk-secondary-bg" style="padding: 10px 20px" href="#">{{sprintf('%02d', $id+1)}} | {{$group->title}}</a>
                                         <div class="uk-accordion-content">
                                             @foreach($group->items as $itemId => $item)
@@ -110,18 +110,19 @@
                                                 @endphp
                                                 <a href="{{route('store.lesson.show', [$product->slug, $item->slug])}}">
                                                     <div class="uk-secondary-bg-hover">
-                                                        <div class="uk-grid-small uk-padding-small" uk-grid>
-                                                            <div class="uk-width-auto@s uk-text-center uk-flex uk-flex-middle">
-                                                                @if($item->id == $lesson->id)
-                                                                    <span class="uk-icon-box" style="height: 40px; width:40px; color: {{$product->getMainColorPattern()}}" uk-icon="icon: {{$lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION ? 'play-circle' : 'pencil'}}"></span>
-                                                                @else
-                                                                    <span class="uk-icon-box" style="height: 40px; width:40px;">{{sprintf('%02d', $lessonCount)}}</span>
-                                                                @endif
-                                                            </div>
-                                                            <div class="uk-width-expand@s uk-flex uk-flex-middle">
-                                                                <div>
-                                                                    <p style="padding: 0px; margin: 0px">{{$item->title}}</p>
-{{--                                                                    <p style="padding: 0px; margin: 0px" class="uk-flex uk-flex-middle"><span uk-icon="icon: clock; ratio: 0.6"></span> <span style="font-size: 13px; margin: 0 5px">3:00</span>  </p>--}}
+                                                        <div style="padding: 5px">
+                                                            <div class="uk-grid-small" uk-grid>
+                                                                <div class="uk-width-auto@s uk-text-center uk-flex uk-flex-middle">
+                                                                    @if($item->id == $lesson->id)
+                                                                        <span class="uk-icon-box" style="height: 40px; width:40px; color: {{$product->getMainColorPattern()}}" uk-icon="icon: {{$lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION ? 'play-circle' : 'pencil'}}"></span>
+                                                                    @else
+                                                                        <span class="uk-icon-box" style="height: 40px; width:40px;">{{sprintf('%02d', $lessonCount)}}</span>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="uk-width-expand@s uk-flex uk-flex-middle">
+                                                                    <div class="{{$item->id == $lesson->id ? 'uk-text-primary' : ''}}">
+                                                                        <p style="padding: 0px; margin: 0px">{{$item->title}}</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -136,80 +137,85 @@
                     </div>
                     <div class="uk-width-expand">
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
-                            <div>
                                 @if($lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION)
-                                    @if($media = $lesson->getResources())
-                                        @foreach($media as $mediaItem)
-                                            <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">
-                                                @if($mediaItem['type'] == \App\Modules\Course\Lesson::RESOURCES_TYPE_YOUTUBE_VIDEO)
-                                                    <iframe src="{{str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $mediaItem['url'])}}" class="uk-responsive-width" width="1920" height="1080" frameborder="0" uk-responsive></iframe>
-                                                @endif
+                                    @if($resources = $lesson->resources)
+                                        @foreach($resources as $resource)
+                                            <div>
+                                                <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">
+                                                    @if($resource['type'] == \App\Modules\Media\Media::TYPE_VIDEO)
+                                                        <video src="{{$resource['url']}}" loop muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>
+                                                    @elseif($resource['type'] == \App\Modules\Media\Media::TYPE_YOUTUBE || $resource['type'] == \App\Modules\Media\Media::TYPE_HTML_PAGE)
+                                                        <iframe src="{{$resource['url']}}" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endforeach
                                     @endif
                                 @elseif($lesson->type == \App\Modules\Course\Lesson::TYPE_QUIZ)
-                                    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
-                                        <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson quizzes')}}</h5>
-                                        <table class="uk-table uk-table-divider uk-table-middle">
-                                            <thead>
-                                            <tr>
-                                                <th class="uk-width-1-3">{{__('main.Quiz name')}}</th>
-                                                <th class="uk-text-center">{{__('main.Items num.')}}</th>
-                                                <th class="uk-text-center">{{__('main.Quiz period')}}</th>
-                                                <td class="uk-text-center">{{__('main.Availability')}}</td>
-                                                <td class="uk-text-center">{{__('main.Results')}}</td>
-                                                <td></td>
-                                                <th class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @forelse($lesson->getAvailableForms() as $form)
-
-                                            <tr>
-                                                <td>
-                                                    <p class="uk-margin-remove text-highlighted">{{$form->title}}</p>
-                                                    <p class="uk-margin-remove">{!! $form->description !!}</p>
-                                                </td>
-                                                <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                                <td class="uk-text-center">
-                                                    @if(!empty($form->properties['has_time_limit']) && $form->properties['has_time_limit'] == 1)
-                                                        <span class="uk-text-warning">{{$form->properties['time_limit']}} {{trans_choice('main.Minutes', $form->properties['time_limit'])}}</span>
-                                                    @else
-                                                        <span class="uk-text-primary">{{__('main.Unlimited time')}}</span>
-                                                    @endif
-                                                </td>
-                                                <td class="uk-text-center">
-                                                    @if(!empty($form->getLastResponse()))
-                                                        <p class="uk-text-{{$form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED ? 'success' : 'warning'}}">{{__('main.'.$form->getLastResponse()->getStatus())}}</p>
-                                                    @else
-                                                        <p class="uk-text-primary">{{__('main.Available')}}</p>
-                                                    @endif
-                                                </td>
-                                                <td class="uk-text-center">
-                                                    @if(!empty($form->getLastResponse()) && $form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED)
-                                                        <p class="uk-margin-remove"><i class="far fa-check-circle uk-text-success"></i> {{$form->getLastResponse()->score_info['achieved_score']}} / {{$form->getLastResponse()->score_info['total_score']}}</p>
-                                                        @if($form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED)
-                                                        <a href="{{route('form.response.show', $form->getLastResponse()->hash_id)}}">{{__('main.View results')}}</a>
-                                                        @endif
-                                                    @else
-                                                        <p class="uk-text-muted">{{__('main.No results')}}</p>
-                                                    @endif
-                                                </td>
-                                                <td class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
-                                                    <a class="uk-button uk-button-primary" href="{{route('store.form.show',[$lesson->slug, $form->hash_id])}}">{{__('main.Take the exam')}}</a>
-                                                </td>
-                                            </tr>
-                                            @empty
+                                    <div>
+                                        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
+                                            <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson quizzes')}}</h5>
+                                            <table class="uk-table uk-table-divider uk-table-middle">
+                                                <thead>
                                                 <tr>
-                                                    <td>{{__('main.There is no form items yet.')}}</td>
+                                                    <th class="uk-width-1-3">{{__('main.Quiz name')}}</th>
+                                                    <th class="uk-text-center">{{__('main.Items num.')}}</th>
+                                                    <th class="uk-text-center">{{__('main.Quiz period')}}</th>
+                                                    <td class="uk-text-center">{{__('main.Availability')}}</td>
+                                                    <td class="uk-text-center">{{__('main.Results')}}</td>
+                                                    <td></td>
+                                                    <th class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}"></th>
                                                 </tr>
-                                            @endforelse
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                @forelse($lesson->getAvailableForms() as $form)
 
+                                                    <tr>
+                                                        <td>
+                                                            <p class="uk-margin-remove text-highlighted">{{$form->title}}</p>
+                                                            <p class="uk-margin-remove">{!! $form->description !!}</p>
+                                                        </td>
+                                                        <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                                        <td class="uk-text-center">
+                                                            @if(!empty($form->properties['has_time_limit']) && $form->properties['has_time_limit'] == 1)
+                                                                <span class="uk-text-warning">{{$form->properties['time_limit']}} {{trans_choice('main.Minutes', $form->properties['time_limit'])}}</span>
+                                                            @else
+                                                                <span class="uk-text-primary">{{__('main.Unlimited time')}}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="uk-text-center">
+                                                            @if(!empty($form->getLastResponse()))
+                                                                <p class="uk-text-{{$form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED ? 'success' : 'warning'}}">{{__('main.'.$form->getLastResponse()->getStatus())}}</p>
+                                                            @else
+                                                                <p class="uk-text-primary">{{__('main.Available')}}</p>
+                                                            @endif
+                                                        </td>
+                                                        <td class="uk-text-center">
+                                                            @if(!empty($form->getLastResponse()) && $form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED)
+                                                                <p class="uk-margin-remove"><i class="far fa-check-circle uk-text-success"></i> {{$form->getLastResponse()->score_info['achieved_score']}} / {{$form->getLastResponse()->score_info['total_score']}}</p>
+                                                                @if($form->getLastResponse()->status == \App\Modules\Form\FormResponse::STATUS_FULLY_EVALUATED)
+                                                                    <a href="{{route('form.response.show', $form->getLastResponse()->hash_id)}}">{{__('main.View results')}}</a>
+                                                                @endif
+                                                            @else
+                                                                <p class="uk-text-muted">{{__('main.No results')}}</p>
+                                                            @endif
+                                                        </td>
+                                                        <td class="uk-text-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
+                                                            <a class="uk-button uk-button-primary" href="{{route('store.form.show',[$lesson->slug, $form->hash_id])}}">{{__('main.Take the exam')}}</a>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td>{{__('main.There is no form items yet.')}}</td>
+                                                    </tr>
+                                                @endforelse
+                                                </tbody>
+                                            </table>
+
+                                        </div>
                                     </div>
                                 @endif
-
+                            <div>
                                 @if(false)
                                 {{--attachments--}}
                                 @if(!empty($attachments) && $attachments->count() > 0)
@@ -320,7 +326,7 @@
                                 @endif
                             </div>
                             <div>
-                                <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
+                                <div class="uk-card uk-card-default uk-card-body uk-padding-small">
                                     <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>
                                     {!! $lesson->description !!}
                                 </div>
@@ -332,5 +338,8 @@
             </div>
     </div>
 </section>
+<script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+</script>
 @include('partial.scripts._cart')
 @endsection

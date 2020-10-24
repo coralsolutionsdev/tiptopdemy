@@ -12,7 +12,7 @@ return [
      * The maximum file size of an item in bytes.
      * Adding a larger file will result in an exception.
      */
-    'max_file_size' => 1024 * 1024 * 10,
+    'max_file_size' => 1024 * 1024 * 500,
 
     /*
      * This queue will be used to generate derived and responsive images.
@@ -85,7 +85,7 @@ return [
     /*
      * The class that contains the strategy for determining a media file's path.
      */
-    'path_generator' => null,
+    'path_generator' => \App\Generators\TenancyPathGenerator::class,
 
     /*
      * Medialibrary will try to optimize all converted images by removing

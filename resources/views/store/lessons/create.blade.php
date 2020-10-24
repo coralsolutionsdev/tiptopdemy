@@ -5,6 +5,7 @@
 @endsection
 @section('head')
     <link rel="stylesheet" href="{{asset('/plugins/input_tree/css/styles.css')}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
     <section>
@@ -65,44 +66,41 @@
                         <p>{{__('main.Presentations and Multimedia')}}</p>
                         <hr>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Media items')}}</div>
+                            <div class="col-lg-2 uk-padding">{{__('main.Media items')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 <div class="text-right">
-                                    <div class="uk-inline">
-                                        <button class="uk-button uk-button-default" type="button">{{__('main.Add Media Item')}}</button>
-                                        <div uk-dropdown="mode: click">
-                                            <ul class="uk-list uk-text-left">
-                                                <li><a class="add-media-item" data-value="1"><span class="uk-text-primary"  uk-icon="icon: cloud-upload"></span>  Upload video</a></li>
-                                                <li><a class="add-media-item" data-value="2"><span class="uk-text-danger" uk-icon="icon: youtube"></span>  YouTube video</a></li>
-                                                <li><a class="add-media-item" data-value="3"><span class="" uk-icon="icon: code"></span>  HTML page</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-{{--                                    <span class="btn btn-primary add-media-item"></span>--}}
+                                    <a href="#insertMediaModal" class="uk-button uk-button-default open-insert-media-modal" uk-toggle>{{__('main.Add Media Item')}}</a>
                                 </div>
                                 <div class="media-items pt-2">
-                                    @if(!empty($lesson) && !empty($lesson->media))
-                                    @foreach($lesson->media as $media)
-                                        <div class="row form-group media-item">
-                                            <div class="col-7">
-                                                <input type="text" name="media_url[{{$media->id}}]" value="{{$media->source}}" class="form-control">
-                                            </div>
-                                            <div class="col-4">
-                                                <select class="form-control" name="media_type[{{$media->id}}]">
-                                                    <option value="1" {{$media->type == 1 ? 'selected' : ''}}>Youtube</option>
-                                                    <option value="2" {{$media->type == 2 ? 'selected' : ''}}>Html page</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-1">
-                                                <span id="{{$media->id}}" class="btn btn-light btn-media-item-delete"><i class="far fa-trash-alt"></i></span>
-                                            </div>
-                                        </div>
-                                    @endforeach
+
+                                    @if(!empty($lesson))
+                                        <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s resource-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
+                                            @if(!empty($lesson->resources))
+                                                @foreach($lesson->resources as $resource)
+                                                <li id="resource-{{$resource['id']}}" class="resource-item" style="overflow: hidden">
+                                                    <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
+                                                        <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger resource-delete" uk-icon="icon: trash"></span></div>
+                                                        <div>
+                                                            <input type="hidden" name="resourceId[]" value="{{$resource['id']}}">
+                                                            @if($resource['type'] == \App\Modules\Media\Media::TYPE_VIDEO)
+                                                                <video src="{{$resource['url']}}" loop muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>
+                                                            @elseif($resource['type'] == \App\Modules\Media\Media::TYPE_YOUTUBE || $resource['type'] == \App\Modules\Media\Media::TYPE_HTML_PAGE)
+                                                                <iframe src="{{$resource['url']}}" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            @endif
+                                        </ul>
                                     @endif
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="removed-resources-items">
+
                 </div>
             </div>
             {!! Form::close() !!}
@@ -183,91 +181,145 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="uk-padding-small">
+                        @if(!empty($lesson))
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">{{__('main.Quiz name')}}</th>
+                                <th scope="col">{{__('main.version')}}</th>
+                                <th scope="col">{{__('main.Items num.')}}</th>
+                                <th scope="col" width="150">{{__('main.Actions')}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             @if(!empty($lesson))
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">{{__('main.Quiz name')}}</th>
-                                        <th scope="col">{{__('main.version')}}</th>
-                                        <th scope="col">{{__('main.Items num.')}}</th>
-                                        <th scope="col" width="150">{{__('main.Actions')}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @if(!empty($lesson))
-                                        @forelse($lesson->forms as $form)
-                                            <tr>
-                                                <td>{{$form->title}}</td>
-                                                <td class="uk-text-success">{{$form->version}}.0</td>
-                                                <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                                <td>
-                                                    <div class="action_btn">
-                                                        <ul>
-                                                            <li class="">
-                                                                <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
-                                                            </li>
-                                                            <li class="">
-                                                                <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-                                                                <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
-                                                                    {{csrf_field()}}
-                                                                    {{method_field('DELETE')}}
-                                                                </form>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="4" class="uk-text-center">
-                                                    {{__('main.There is no form items yet.')}}
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    @endif
-                                    </tbody>
-                                </table>
-                            @else
-                                <div class="uk-placeholder uk-text-center">
-                                    <div class="uk-alert-warning" uk-alert>
-                                        <p>
-                                            {{__('main.Please create a lesson first.')}}
-                                        </p>
-                                    </div>
-                                </div>
+                            @forelse($lesson->forms as $form)
+                                <tr>
+                                    <td>{{$form->title}}</td>
+                                    <td class="uk-text-success">{{$form->version}}.0</td>
+                                    <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                    <td>
+                                        <div class="action_btn">
+                                            <ul>
+                                                <li class="">
+                                                    <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                </li>
+                                                <li class="">
+                                                    <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                    <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
+                                                        {{csrf_field()}}
+                                                        {{method_field('DELETE')}}
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="uk-text-center">
+                                    {{__('main.There is no form items yet.')}}
+                                </td>
+                            </tr>
+                            @endforelse
                             @endif
-                        </div>
+                            </tbody>
+                        </table>
+                        @else
+                            <div class="uk-placeholder uk-text-center">
+                                <div class="uk-alert-warning" uk-alert>
+                                    <p>
+                                        {{__('main.Please create a lesson first.')}}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
 
                     </div>
                 </div>
-            </div>
         </div>
 
-        @if(!empty($lesson))
-{{--            <div class="row">--}}
-{{--                <div class="col-lg-12">--}}
-{{--                    <div class="d-flex justify-content-end">--}}
-{{--                        <form id="delete-form" method="post" action="{{route('store.categories.destroy', $lesson->id)}}">--}}
-{{--                            {{csrf_field()}}--}}
-{{--                            {{method_field('DELETE')}}--}}
-{{--                            <button class="btn btn-danger btn-cat-delete"><i class="far fa-trash-alt"></i> {{__('Delete')}}</button>--}}
-{{--                        </form>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-        @endif
+    </section>
+    <section>
+        <div id="insertMediaModal" uk-modal="bg-close: false">
+            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <h5 class="">{{__('main.Media items')}}</h5>
+                <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">
+                    <div>
+                        <ul uk-tab class="uk-flex-center media-tabs">
+                            <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_VIDEO}}"><span class="uk-text-primary" uk-icon="icon: cloud-upload"></span> {{__('main.Upload a new video')}}</a></li>
+                            <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_YOUTUBE}}"><span class="uk-text-danger" uk-icon="icon: youtube"></span> {{__('main.Youtube video')}}</a></li>
+                            <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_HTML_PAGE}}"><span uk-icon="icon: code"></span> {{__('main.HTML page')}}</a></li>
+                        </ul>
+                        <div class="uk-margin-small">
+                            <div class="uk-margin-small">
+                                <label class="uk-form-label" for="form-stacked-text">{{__('main.Media name')}}</label>
+                                <div class="uk-form-controls">
+                                    <input class="uk-input" type="text" name="media_name" placeholder="">
+                                    <input type="hidden" name="type" class="media_type" value="{{\App\Modules\Media\Media::TYPE_VIDEO}}"> {{--groups 1: uploaded video--}}
+                                </div>
+                            </div>
+                        </div>
 
+                        <ul class="uk-switcher uk-margin-small">
+                            <li>
+                                <div class="uk-margin-small">
+                                    <label class="uk-form-label" for="form-stacked-text">{{__('main.Video upload')}}</label>
+                                    <div class="js-upload uk-placeholder uk-text-center uk-margin-remove">
+                                        <span uk-icon="icon: cloud-upload"></span>
+                                        <span class="uk-text-middle">{{__('main.Drag and drop your video file to upload, or')}}</span>
+                                        <div uk-form-custom>
+                                            <input id="upload_file" type="file" class="uploader-input" name="upload_file" accept="video/*">
+                                            <span class="uk-link">{{__('main.selecting one')}}</span>
+                                        </div>
+                                        <div class="uploader-items">
+
+                                        </div>
+                                    </div>
+                                    <div class="uk-margin-small process-status">
+                                        <span class="process-word"></span> <span class="process-percentage"></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="uk-margin-small">
+                                    <label class="uk-form-label" for="form-stacked-text">Media Url</label>
+                                    <div class="uk-form-controls">
+                                        <input class="uk-input" name="youtube_url" type="text" placeholder="https://youtu.be/*****">
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="uk-margin-small">
+                                    <label class="uk-form-label" for="form-stacked-text">Media Url</label>
+                                    <div class="uk-form-controls">
+                                        <input class="uk-input" name="html_url" type="text" placeholder="https://domain-name.com/page-name.html">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div>
+                            <progress id="js-progressbar" class="uk-progress" value="0" max="100" style="display: none"></progress>
+                        </div>
+                    </div>
+                </form>
+                <p class="uk-text-right">
+{{--                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>--}}
+                    <button class="uk-button uk-button-primary attach-media" type="button">{{__('main.Start upload')}}</button>
+                </p>
+            </div>
+        </div>
     </section>
 
 @endsection
 @section('script')
     @include('partial.scripts._tinyemc')
+    @include('store.lessons._scripts')
     <script>
         $('.lesson-type').change(function () {
             var item = $(this);
             var itemId = item.val();
-            console.log(itemId);
             if(itemId == 1){
                 $('#quizzes').slideUp();
                 $('#presentations').slideDown();
@@ -280,7 +332,7 @@
             $('.btn-media-item-delete').off('click');
             $('.btn-media-item-delete').click(function () {
                 var item = $(this);
-                if(!confirm('Are syou sure that you want to remove this item?')){
+                if(!confirm('Are you sure that you want to remove this item?')){
                     return false;
                 }
                 item.closest('.media-item').remove();
@@ -289,12 +341,6 @@
         deleteMediaItem();
         //
         $('.add-media-item').click(function () {
-
-            var btn = $(this);
-            var actionType = btn.attr('data-value');
-            console.log(actionType);
-
-
             $('.media-items').append(
                 '<div class="row form-group media-item">\n' +
                 '<div class="col-7">\n' +
@@ -322,10 +368,6 @@
                 return false;
             }
         });
-
-
-
-
     </script>
     @endif
 @endsection

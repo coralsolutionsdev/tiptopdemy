@@ -25,7 +25,7 @@
 
     <link rel="stylesheet" href="{{url('/plugins/date_picker/css/bootstrap-datetimepicker.min.css')}}">
     <script src="{{url('/plugins/date_picker/js/bootstrap-datetimepicker.min.js')}}"></script>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
     <section>
@@ -243,41 +243,28 @@
                                 <div class="form-group row col-lg-12">
                                     <div class="col-lg-2 d-flex align-items-center">{{__('main.Images')}}</div>
                                     <div class="col-lg-10 padding-0 margin-0">
-                                        <div class="files-uploader text-center">
-                                            <div style="padding: 10px;">
-
-                                            </div>
-                                            <div>
-                                                <span class="btn btn-primary browse-files w-50">Browse Files</span>
-                                            </div>
-                                            {!! Form::file('new_image[]', ['id' => 'attachments-upload', 'style' => 'display:none', 'accept' => "application/zip, application/x-7z-compressed, application/x-rar-compressed, image/x-png, image/jpeg, image/png, application/pdf, application/msword, video/*, image/*, audio/*", 'multiple' => true]) !!}
+                                        <div>
+                                            @include('manage.partials._media_uploader')
                                         </div>
-                                        <div class="product-images-field">
-                                            @if(!empty($product) && !empty($product->getImages() ))
-                                                @foreach($product->getImages() as $image)
-                                                    <div id="{{$image->key}}" class="product-image" style="border: 1px solid var(--theme-primary-color); margin-top: 10px;">
-                                                        <div class="row col-lg-12 margin-0" style="padding: 10px 0px">
-                                                            <div class="col-lg-2 d-flex align-items-center">
-                                                                <img class="product-image" src="{{asset($image->url)}}" alt="" width="120">
-                                                                <input type="hidden" class="product-image-code" name="image_code[{{$image->id}}]" value="{{$image->key}}">
-                                                            </div>
-                                                            <div class="col-lg-7 d-flex align-items-center">
-                                                                <input type="text" class="form-control" name="image_description[{{$image->id}}]" placeholder="Image description (Optional)" value="{{$image->description}}">
-                                                            </div>
-                                                            <div class="col-lg-2 d-flex align-items-center">
-                                                                <input type="number" class="form-control" name="image_position[{{$image->id}}]" placeholder="Position" value="{{$image->position}}">
-                                                            </div>
-                                                            <div class="col-lg-1 d-flex align-items-center">
-                                                                <span class="btn btn-light btn-image-delete"><i class="far fa-trash-alt"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
+                                        <div>
+                                            <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-2@s uk-child-width-1-3@m media-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
 
-                                        </div>
-                                        <div class="product-images-deleted">
-
+                                                @if(!empty($product) && $productMedia = $product->getMedia(\App\Modules\Media\Media::getGroup(\App\Modules\Media\Media::TYPE_PRODUCT_IMAGE)))
+                                                    @foreach($productMedia as $image)
+                                                        <li id="media_item-{{$image->id}}">
+                                                            <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
+                                                                <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger media-delete" uk-icon="icon: trash"></span></div>
+                                                                <div>
+                                                                    <input type="hidden" name="media_id[]" value="{{$image->id}}">
+                                                                    <input type="hidden" name="media_position[]" value="0">
+                                                                    <input type="hidden" name="media_new_file_order[]" value="">
+                                                                    <img data-src="{{$image->getUrl('card')}}" sizes="(min-width: 650px) 650px, 100vw" width="650" height="433" alt="" uk-img>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -459,6 +446,7 @@
 @section('script')
     @include('partial.scripts._institutions')
     @include('partial.scripts._tinyemc')
+    @include('store.products._scripts')
     <script>
         /**
          * Set up
@@ -481,43 +469,11 @@
 
             return text;
         }
-        function deleteImage()
-        {
-            $('.btn-image-delete').off('click');
-            $('.btn-image-delete').click(function () {
-                if (!confirm('Are you sure that you want to remove this image?')){
-                    return false;
-                }
-                var item =  $(this).parent().parent().parent();
-                var itemId = item.attr('id');
-                if (itemId !== '' && itemId !== undefined){
-                    $('.product-images-deleted').append('<input type="hidden" name="image_deleted[]" value="'+itemId+'">');
-                }
-                item.remove();
-            });
-        }
+
         $('.drag-area,.browse-files,.image-area').click(function()
         {
             $('#attachments-upload').click();
         });
-        $('#attachments-upload').change(function(event)
-        {
-            var images = event.target.files;
-            $.each(images, function (i, image) {
-                var render = new FileReader();
-                var code = generateRandomString(6);
-                render.readAsDataURL(image);
-                render.onload = function (e) {
-                    var new_image = $('.product-image-template').clone().show().removeClass('product-image-template');
-                    new_image.find('.product-image').attr('src',e.target.result );
-                    new_image.find('.product-image-code').val(code);
-                    new_image.attr('id',code);
-                    $('.product-images-field').append(new_image);
-                    deleteImage();
-                }
-            })
-        });
-        deleteImage();
 
         $('.manage_stock').change(function () {
             if ($(this).is(":checked")) {

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Generators\TenancyPathGenerator;
 use App\Modules\ColorPattern\ColorPattern;
 use App\Modules\ColorPattern\HasColorPattern;
 use App\Modules\Course\Lesson;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Tags\HasTags;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
@@ -387,6 +389,8 @@ class Product extends Model implements ReactableContract, HasMedia
             foreach ($mediaRemovedItems as $mediaRemovedItemId){
                 $removedProductMedia = $productMedia->where('id', $mediaRemovedItemId)->first();
                 if (!empty($removedProductMedia)){
+                    // temporary solution
+                    Storage::deleteDirectory('media/'.$user->getTenancyId().'/'.$user->id.'/'.md5($removedProductMedia->id).'/');
                     $removedProductMedia->delete();
                 }
             }

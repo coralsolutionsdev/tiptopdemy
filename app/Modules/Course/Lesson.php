@@ -177,7 +177,7 @@ class Lesson extends Model implements ReactableContract, HasMedia
         }
         $resources = array();
         // re arrange resources
-        $resourcesId = $input['resourceId'];
+        $resourcesId = isset($input['resourceId']) ? $input['resourceId'] : null;
         if (!empty($resourcesId) && !empty($lesson->resources)){
             foreach ($resourcesId as $key => $id){
                 foreach ($lesson->resources as $lessonResource){
@@ -191,6 +191,9 @@ class Lesson extends Model implements ReactableContract, HasMedia
                     }
                 }
             }
+        }else{
+            $mediaType = Media::TYPE_VIDEO;
+            $lesson->clearMediaCollection(Media::getGroup($mediaType));
         }
 
         $lesson->resources = $resources;

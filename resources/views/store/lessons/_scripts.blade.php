@@ -64,8 +64,8 @@
         data.append('item_id',itemId);
         data.append('model_type',modelType);
         var processStatus = $('.process-status');
-        processStatus.find('.process-word').html('<span><div uk-spinner="ratio: 0.5"></div> Uploading:</span>')
-        processStatus.find('.process-percentage').html('<span>0%</span>')
+        processStatus.find('.process-word').html('<span class="uk-text-primary"><div uk-spinner="ratio: 0.5"></div> Uploading:</span>')
+        processStatus.find('.process-percentage').html('<span class="uk-text-primary">0%</span>')
 
         $.ajax({
             type: "POST",
@@ -84,7 +84,7 @@
                         //Do something with upload progress here
                         bar.show();
                         bar.attr('value', percentComplete);
-                        $('.process-percentage').html('<span>'+parseInt(percentComplete)+'%</span>')
+                        $('.process-percentage').html('<span class="uk-text-primary">'+parseInt(percentComplete)+'%</span>')
 
                     }
                 }, false);

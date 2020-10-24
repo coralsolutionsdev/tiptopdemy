@@ -64,8 +64,7 @@
         data.append('item_id',itemId);
         data.append('model_type',modelType);
         var processStatus = $('.process-status');
-        processStatus.addClass('uk-text-primary');
-        processStatus.find('.process-word').html('<span>Uploading:</span>')
+        processStatus.find('.process-word').html('<span><div uk-spinner="ratio: 0.5"></div> Uploading:</span>')
         processStatus.find('.process-percentage').html('<span>0%</span>')
 
         $.ajax({
@@ -85,7 +84,7 @@
                         //Do something with upload progress here
                         bar.show();
                         bar.attr('value', percentComplete);
-                        $('.process-percentage').html('<span class="uk-text-primary">'+parseInt(percentComplete)+'%</span>')
+                        $('.process-percentage').html('<span>'+parseInt(percentComplete)+'%</span>')
 
                     }
                 }, false);
@@ -102,6 +101,7 @@
                 if (status == {{\App\Modules\Media\Media::UPLOAD_TYPE_REFUSED}}){
                     resetProgressBar();
                     processStatus.find('.process-percentage').html('<span class="">0%</span>')
+                    processStatus.find('.process-word').html('<span class="uk-text-danger"><span uk-icon="icon: ban"></span> Canceled:</span>')
                     UIkit.notification("<span uk-icon='icon: warning'></span> "+ media.message, {pos: 'top-center', status:'warning'})
                 } else if(status = {{\App\Modules\Media\Media::UPLOAD_TYPE_COMPLETED}}){
                     UIkit.notification("<span uk-icon='icon: check'></span> "+ media.message, {pos: 'top-center', status:'success'})
@@ -122,6 +122,8 @@
                         '    </div>\n' +
                         '</li>');
                     deleteResourceItem();
+                    processStatus.find('.process-word').html('<span class="uk-text-success"><span uk-icon="icon: check"></span> Completed:</span>')
+
                 }
                 resetUploadForm(false);
             },

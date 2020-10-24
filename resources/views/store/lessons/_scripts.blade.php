@@ -83,10 +83,9 @@
                     if (evt.lengthComputable) {
                         var percentComplete = (evt.loaded / evt.total) * 100;
                         //Do something with upload progress here
-                        console.log(percentComplete)
                         bar.show();
                         bar.attr('value', percentComplete);
-                        $('.process-percentage').html('<span class="uk-text-primary">'+percentComplete+'%</span>')
+                        $('.process-percentage').html('<span class="uk-text-primary">'+parseInt(percentComplete)+'%</span>')
 
                     }
                 }, false);

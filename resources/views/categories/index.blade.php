@@ -24,6 +24,9 @@
             padding: 3px 5px;
             font-size: 12px;
         }
+        html, body{
+            height: 100%;
+        }
 
     </style>
 @endsection

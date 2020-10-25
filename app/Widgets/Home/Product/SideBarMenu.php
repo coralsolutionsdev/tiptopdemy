@@ -26,7 +26,7 @@ class SideBarMenu extends AbstractWidget
 //        $search_key = $config['search_key'];
         $search_key = '';
 
-        $categories = Category::where('type', Category::TYPE_PRODUCT, 3)->where('parent_id', 0)->get();
+        $categories = Category::where('type', Category::TYPE_PRODUCT, 3)->where('parent_id', 0)->where('status',Category::STATUS_ENABLED)->get();
         $tags = Tag::where('type', 'product')->get();
 
         return view('widgets.home.product.side_bar_menu', [

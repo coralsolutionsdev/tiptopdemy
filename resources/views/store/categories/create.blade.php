@@ -87,7 +87,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-end">
-                        <form id="delete-form" method="post" action="{{route('store.categories.destroy', $category->id)}}">
+                        <form id="delete-form" method="post" action="{{route('category.destroy', $category->slug)}}">
                             {{csrf_field()}}
                             {{method_field('DELETE')}}
                             <button class="btn btn-danger btn-cat-delete"><i class="far fa-trash-alt"></i> {{__('Delete')}}</button>

@@ -3,6 +3,7 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
@@ -121,6 +122,27 @@ class Category extends Model
             $result =  true;
         }
         return $result;
+    }
+
+    /**
+     * return only enabled items
+     * @return Builder[]|\Illuminate\Database\Eloquent\Collection|BelongsToMany[]|Collection|mixed
+     */
+    function getAvailableItems()
+    {
+        switch($this->type) {
+            case self::TYPE_POST:
+                return  $this->items()->where('status', BlogPost::STATUS_ENABLED)->get();
+                break;
+            case self::TYPE_PAGE:
+//              return $this->belongsToMany('App\Page');
+                return collect();
+                break;
+            case self::TYPE_PRODUCT:
+                return  $this->items()->where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->get();
+                break;
+        }
+
     }
     /*
     |--------------------------------------------------------------------------

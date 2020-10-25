@@ -81,7 +81,7 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $page_title =  $category->name;
-        $products = $category->items;
+        $products = $category->getAvailableItems();
         $breadcrumb =  Breadcrumbs::render('store.category', $category);
         return view('store.products.frontend.index', compact('products','page_title','breadcrumb', 'category'));
     }

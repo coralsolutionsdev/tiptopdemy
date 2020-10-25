@@ -427,6 +427,18 @@ class Product extends Model implements ReactableContract, HasMedia
         return $product;
     }
 
+    /**
+     * check if this product is available
+     * @return bool
+     */
+    function isAvailable()
+    {
+        if (in_array($this->status, [self::STATUS_AVAILABLE, self::STATUS_AVAILABLE_FOR_INSTITUTIONS])){
+            return true;
+        }
+        return false;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationship Methods

@@ -89,6 +89,9 @@ class LessonController extends Controller
      */
     public function show(Product $product, Lesson $lesson)
     {
+        if (!$product->isAvailable()){
+            return redirect()->route('main');
+        }
         $page_title =  $lesson->title;
         $modelName = $this->modelName;
         $breadcrumb =  Breadcrumbs::render('store.product.lesson', $lesson);

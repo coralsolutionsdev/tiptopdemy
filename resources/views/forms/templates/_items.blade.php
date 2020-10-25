@@ -4,9 +4,9 @@
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 <span class="uk-align-right">
-                    <span style="margin: 0 2px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
-                    <span style="margin: 0 2px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
-                    <span style="margin: 0 2px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                    <span style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+                    <span style="margin: 0 10px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
+                    <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                 </span>
             </div>
             <div class="uk-margin-remove">
@@ -173,10 +173,10 @@
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 <span class="uk-align-right">
-                    <span style="margin: 0 2px" class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
-                    <span style="margin: 0 2px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
-                    <span style="margin: 0 2px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
-                    <span style="margin: 0 2px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                    <span style="margin: 0 10px" class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
+                    <span style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+                    <span style="margin: 0 10px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
+                    <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                 </span>
             </div>
             <div class="uk-margin-remove">

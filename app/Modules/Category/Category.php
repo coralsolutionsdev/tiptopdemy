@@ -94,6 +94,9 @@ class Category extends Model
         if (empty($input['status'])){
             $input['status'] = 0;
         }
+        if (empty($input['show_on_menu'])){
+            $input['show_on_menu'] = 0;
+        }
         $user = getAuthUser();
         $input['editor_id'] = $user->id;
         if (!empty($category)){

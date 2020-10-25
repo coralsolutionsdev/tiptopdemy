@@ -67,13 +67,7 @@ class CategoryController extends Controller
             'position', 'meta_title', 'meta_keywords', 'meta_description',
             'type', 'status', 'images', 'show_on_menu']);
         $input['type'] = Category::TYPE_PRODUCT;
-        if (empty($input['position'])){
-            $input['position'] = 0;
-        }
-        if (empty($input['status'])){
-            $input['status'] = 0;
-        }
-        Category::create($input);
+        \App\Modules\Category\Category::createOrUpdate($input);
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('store.categories.index');
     }
@@ -123,13 +117,7 @@ class CategoryController extends Controller
             'position', 'meta_title', 'meta_keywords', 'meta_description',
             'type', 'status', 'images', 'show_on_menu']);
         $input['type'] = Category::TYPE_PRODUCT;
-        if (empty($input['position'])){
-            $input['position'] = 0;
-        }
-        if (empty($input['status'])){
-            $input['status'] = 0;
-        }
-        $category->update($input);
+        \App\Modules\Category\Category::createOrUpdate($input, $category);
         session()->flash('success',trans('main._update_msg'));
         return redirect()->route('store.categories.index');
     }

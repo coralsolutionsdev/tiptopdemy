@@ -49,7 +49,10 @@
         $("[name='type']").val(type);
     });
 
-
+    /**
+     * Attach medoa to lesson
+     */
+    @if(!empty($lesson))
     $('.attach-media').click(function (){
         var bar = $('#js-progressbar');
         $('#js-progressbar').attr('value',0).hide();
@@ -135,7 +138,7 @@
             }
         });
     });
-
+    @endif
     function deleteResourceItem(){
         $('.resource-delete').click(function (){
             var btn = $(this);

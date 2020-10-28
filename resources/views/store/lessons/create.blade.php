@@ -66,15 +66,14 @@
                         <p>{{__('main.Presentations and Multimedia')}}</p>
                         <hr>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 uk-padding">{{__('main.Media items')}}</div>
-                            <div class="col-lg-10 padding-0 margin-0">
+                            @if(!empty($lesson))
+                                <div class="col-lg-2 uk-padding">{{__('main.Media items')}}</div>
+                                <div class="col-lg-10 padding-0 margin-0">
                                 <div class="text-right">
                                     <a href="#insertMediaModal" class="uk-button uk-button-default open-insert-media-modal" uk-toggle>{{__('main.Add Media Item')}}</a>
                                 </div>
                                 <div class="media-items pt-2">
-
-                                    @if(!empty($lesson))
-                                        <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s resource-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
+                                    <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s resource-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
                                             @if(!empty($lesson->resources))
                                                 @foreach($lesson->resources as $resource)
                                                 <li id="resource-{{$resource['id']}}" class="resource-item" style="overflow: hidden">
@@ -93,9 +92,19 @@
                                                 @endforeach
                                             @endif
                                         </ul>
-                                    @endif
                                 </div>
                             </div>
+                            @else
+                                <div class="col-lg-12 p-0 m-0">
+                                    <div class="uk-placeholder uk-text-center">
+                                        <div class="uk-alert-warning" uk-alert>
+                                            <p>
+                                                {{__('main.Please create a lesson first.')}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

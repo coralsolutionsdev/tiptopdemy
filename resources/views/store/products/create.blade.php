@@ -39,23 +39,23 @@
             <div class="col-lg-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="product-info-tab" data-toggle="tab" href="#product-info" role="tab" aria-controls="product-info" aria-selected="true">{{__('main.Product info')}}</a>
+                        <a class="nav-link product-info-link active" id="product-info-tab" data-toggle="tab" href="#product-info" role="tab" aria-controls="product-info" aria-selected="true">{{__('main.Product info')}}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="images-tab" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false">{{__('main.Images')}}</a>
+                        <a class="nav-link images-link" id="images-tab" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false">{{__('main.Images')}}</a>
                     </li>
                     @if(!empty($product))
                     <li class="nav-item">
-                        <a class="nav-link" id="attributes-tab" data-toggle="tab" href="#attributes" role="tab" aria-controls="attributes" aria-selected="false">{{__('main.Attributes')}}</a>
+                        <a class="nav-link attributes-link" id="attributes-tab" data-toggle="tab" href="#attributes" role="tab" aria-controls="attributes" aria-selected="false">{{__('main.Attributes')}}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="lessons-tab" data-toggle="tab" href="#lessons" role="tab" aria-controls="lessons" aria-selected="false">{{__('main.Lessons')}}</a>
+                        <a class="nav-link lessons-link" id="lessons-tab" data-toggle="tab" href="#lessons" role="tab" aria-controls="lessons" aria-selected="false">{{__('main.Lessons')}}</a>
                     </li>
                     @endif
 
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="product-info" role="tabpanel" aria-labelledby="product-info-tab">
+                    <div class="tab-pane fade show product-info-tab active" id="product-info" role="tabpanel" aria-labelledby="product-info-tab">
                     {{--tab content--}}
                         <div class="card border-light">
                             <div class="card-body">
@@ -235,7 +235,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                    <div class="tab-pane fade images-tab" id="images" role="tabpanel" aria-labelledby="images-tab">
                         <div class="card border-light">
                             <div class="card-body">
                                 <p>{{__('main.Product images')}}</p>
@@ -272,7 +272,7 @@
                         </div>
                     </div>
                     @if(!empty($product))
-                    <div class="tab-pane fade" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
+                    <div class="tab-pane fade attributes-tab" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
                             <div class="card border-light">
                                 <div class="card-body">
                                     <p>{{__('main.Product attributes')}}</p>
@@ -333,7 +333,7 @@
                     </div>
                 {!! Form::close() !!}
 
-                    <div class="tab-pane fade" id="lessons" role="tabpanel" aria-labelledby="lessons-tab">
+                    <div class="tab-pane fade lessons-tab" id="lessons" role="tabpanel" aria-labelledby="lessons-tab">
                             <div class="card border-light">
                                 <div class="card-body">
                                     <p>{{__('main.Lessons')}}</p>

@@ -63,7 +63,7 @@ class GroupController extends Controller
         $input = $request->all();
         $group = $product->createGroup($input);
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('store.products.edit', $product->slug);
+        return redirect(route('store.products.edit', $product->slug). "/#lessons");
     }
 
     /**
@@ -110,7 +110,7 @@ class GroupController extends Controller
         $group->update($input);
         $selectedTab = 'lessons';
         session()->flash('success',__('Updated Successfully'));
-        return redirect()->route('store.products.edit', $product->slug);
+        return redirect(route('store.products.edit', $product->slug). "/#lessons");
     }
 
     /**
@@ -123,6 +123,6 @@ class GroupController extends Controller
     public function destroy(Product $product, Group $group)
     {
         $group->deleteWithDependencies();
-        return redirect()->route('store.products.edit', $product->slug);
+        return redirect(route('store.products.edit', $product->slug). "/#lessons");
     }
 }

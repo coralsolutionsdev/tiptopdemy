@@ -137,8 +137,7 @@
                     </div>
                     <div class="uk-width-expand">
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
-                                @if($lesson->type == \App\Modules\Course\Lesson::TYPE_PRESENTATION)
-                                    @if($resources = $lesson->resources)
+                            @if($resources = $lesson->resources)
                                         @foreach($resources as $resource)
                                             <div>
                                                 <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">
@@ -151,8 +150,8 @@
                                             </div>
                                         @endforeach
                                     @endif
-                                @elseif($lesson->type == \App\Modules\Course\Lesson::TYPE_QUIZ)
-                                    <div>
+
+                            <div>
                                         <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
                                             <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson quizzes')}}</h5>
                                             <table class="uk-table uk-table-divider uk-table-middle">
@@ -213,8 +212,7 @@
                                             </table>
 
                                         </div>
-                                    </div>
-                                @endif
+                            </div>
                             <div>
                                 @if(false)
                                 {{--attachments--}}

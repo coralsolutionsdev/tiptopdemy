@@ -54,4 +54,17 @@
         });
     }
     deleteResourceItem();
+    $(function () {
+        var pageURL =  window.location.href;
+        var tabId = pageURL.split('#')[1];
+        if (tabId !== undefined){
+            $('.nav-link').removeClass('active');
+            $('.'+tabId+'-link').addClass('active');
+            //
+            $('.tab-pane').removeClass('active');
+            $('.'+tabId+'-tab').addClass('active');
+            $('.'+tabId+'-tab').addClass('show');
+            window.scrollTo(0);
+        }
+    });
 </script>

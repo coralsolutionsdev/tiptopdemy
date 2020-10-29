@@ -1,6 +1,7 @@
 @extends('themes.'.getAdminThemeName().'.layout')
 @section('title', $page_title)
 @section('page-header-button')
+
     <button class="btn btn-primary btn-lg w-75"><span>{{!empty($lesson)? __('main.Save changes') : __('main.submit')}}</span></button>
 @endsection
 @section('head')
@@ -60,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div id="presentations" class="col-lg-12 {{(!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_PRESENTATION) ? 'hidden-div' : ''}}">
+            <div id="presentations" class="col-lg-12">
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Presentations and Multimedia')}}</p>
@@ -114,7 +115,7 @@
             </div>
             {!! Form::close() !!}
 
-            <div id="quizzes" class="col-lg-12 {{empty($lesson) || (!empty($lesson) && $lesson->type != \App\Modules\Course\Lesson::TYPE_QUIZ) ? 'hidden-div' : ''}}">
+            <div id="quizzes" class="col-lg-12">
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Quizzes')}}</p>
@@ -328,17 +329,17 @@
     @include('partial.scripts._tinyemc')
     @include('store.lessons._scripts')
     <script>
-        $('.lesson-type').change(function () {
-            var item = $(this);
-            var itemId = item.val();
-            if(itemId == 1){
-                $('#quizzes').slideUp();
-                $('#presentations').slideDown();
-            }else{
-                $('#presentations').slideUp();
-                $('#quizzes').slideDown();
-            }
-        });
+        // $('.lesson-type').change(function () {
+        //     var item = $(this);
+        //     var itemId = item.val();
+        //     if(itemId == 1){
+        //         $('#quizzes').slideUp();
+        //         $('#presentations').slideDown();
+        //     }else{
+        //         $('#presentations').slideUp();
+        //         $('#quizzes').slideDown();
+        //     }
+        // });
         function deleteMediaItem(){
             $('.btn-media-item-delete').off('click');
             $('.btn-media-item-delete').click(function () {

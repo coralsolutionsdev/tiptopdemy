@@ -76,7 +76,7 @@ class LessonController extends Controller
         $input['product_id'] = $product->id;
         $lesson = Lesson::createOrUpdate($input);
         session()->flash('success', trans('main._success_msg'));
-        return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
+        return redirect(route('store.products.edit', $product->slug). "/#lessons");
 
     }
 
@@ -132,8 +132,6 @@ class LessonController extends Controller
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         $modelType = $lesson->getClassName();
         $mediaItems = $lesson->getMedia('youtube_video');
-
-//        dd($lesson, $mediaItems, $mediaItems[0]->getFullUrl());
         return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags', 'categories'));
 
     }
@@ -151,7 +149,8 @@ class LessonController extends Controller
         $input = $request->all();
         Lesson::createOrUpdate($input, $lesson);
         session()->flash('success',__('Updated Successfully'));
-        return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
+        // re direct to courses
+        return redirect(route('store.products.edit', $product->slug). "/#lessons");
     }
 
     /**
@@ -168,7 +167,7 @@ class LessonController extends Controller
             $lesson->deleteWithDependencies();
         }
         session()->flash('success',__('Deleted Successfully'));
-        return redirect()->route('store.products.edit', $product->slug);
+        return redirect(route('store.products.edit', $product->slug). "/#lessons");
 
     }
 

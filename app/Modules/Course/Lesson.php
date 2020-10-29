@@ -12,6 +12,7 @@ use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Vinkla\Hashids\Facades\Hashids;
 
 class Lesson extends Model implements ReactableContract, HasMedia
 {
@@ -141,6 +142,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
             $lesson->update($input);
         }else{
             $lesson = self::create($input);
+            $lesson->slug = Hashids::encode($user->getTenancyId(),$input['product_id'],$lesson->id);
+            $lesson->save();
         }
 
         // update Category

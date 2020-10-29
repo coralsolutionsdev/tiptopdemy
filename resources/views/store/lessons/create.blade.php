@@ -191,49 +191,51 @@
                             </div>
                         </div>
                         @if(!empty($lesson))
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">{{__('main.Quiz name')}}</th>
-                                <th scope="col">{{__('main.version')}}</th>
-                                <th scope="col">{{__('main.Items num.')}}</th>
-                                <th scope="col" width="150">{{__('main.Actions')}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @if(!empty($lesson))
-                            @forelse($lesson->forms as $form)
+                        <div class="uk-padding-small">
+                            <table class="table table-striped">
+                                <thead>
                                 <tr>
-                                    <td>{{$form->title}}</td>
-                                    <td class="uk-text-success">{{$form->version}}.0</td>
-                                    <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                    <td>
-                                        <div class="action_btn">
-                                            <ul>
-                                                <li class="">
-                                                    <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
-                                                </li>
-                                                <li class="">
-                                                    <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
-                                                    <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
-                                                        {{csrf_field()}}
-                                                        {{method_field('DELETE')}}
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
+                                    <th scope="col">{{__('main.Quiz name')}}</th>
+                                    <th scope="col">{{__('main.version')}}</th>
+                                    <th scope="col">{{__('main.Items num.')}}</th>
+                                    <th scope="col" width="150">{{__('main.Actions')}}</th>
                                 </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="uk-text-center">
-                                    {{__('main.There is no form items yet.')}}
-                                </td>
-                            </tr>
-                            @endforelse
-                            @endif
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @if(!empty($lesson))
+                                    @forelse($lesson->forms as $form)
+                                        <tr>
+                                            <td>{{$form->title}}</td>
+                                            <td class="uk-text-success">{{$form->version}}.0</td>
+                                            <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                            <td>
+                                                <div class="action_btn">
+                                                    <ul>
+                                                        <li class="">
+                                                            <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                        </li>
+                                                        <li class="">
+                                                            <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                            <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
+                                                                {{csrf_field()}}
+                                                                {{method_field('DELETE')}}
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="uk-text-center">
+                                                {{__('main.There is no form items yet.')}}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
                         @else
                             <div class="uk-placeholder uk-text-center">
                                 <div class="uk-alert-warning" uk-alert>

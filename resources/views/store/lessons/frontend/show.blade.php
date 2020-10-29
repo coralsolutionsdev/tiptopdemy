@@ -150,9 +150,9 @@
                                             </div>
                                         @endforeach
                                     @endif
-
+                            @if(!empty($lesson->getAvailableForms()))
                             <div>
-                                        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
+                                <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
                                             <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson quizzes')}}</h5>
                                             <table class="uk-table uk-table-divider uk-table-middle">
                                                 <thead>
@@ -213,6 +213,7 @@
 
                                         </div>
                             </div>
+                            @endif
                             <div>
                                 @if(false)
                                 {{--attachments--}}

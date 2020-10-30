@@ -376,6 +376,8 @@
         'Add Media Item' => 'أضف عنصر ميديا',
         'Media items' => 'عناصر الميديا',
 
+        // Media
+        'Uploading' => 'جارِ الرفع ...',
 
         // Form
         'Quizzes' => 'إختبارات',

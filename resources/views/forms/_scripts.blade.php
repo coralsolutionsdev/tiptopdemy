@@ -917,24 +917,25 @@
         }
         $('.form').submit();
     });
-    @if(!empty($form))
+
+    @if(empty($form))
+        /*Add section by default*/
+         drawFormItem(typeSection);
+        $('#formSettingModal').modal('show');
+    @else
         var formId = '{{$form->hash_id}}';
         $('.items-message').html(
             '<span class="uk-text-primary" uk-spinner="ratio: 2"></span></br></br>\n' +
             '{{__('main.Please wait, items are loading.')}}'
         );
-        $.get('/manage/form/'+formId+'/get/items').done(function (items) {
-            if(items.length < 1){
-                resetFormItems();
-            }
-            items.map(function (item) {
-                drawFormItem(item.type, item);
-            });
+    $.get('/manage/form/'+formId+'/get/items').done(function (items) {
+        if(items.length < 1){
+            resetFormItems();
+        }
+        items.map(function (item) {
+            drawFormItem(item.type, item);
         });
-        @else
-        /*Add section by default*/
-        drawFormItem(typeSection);
-        // $('#formSettingModal').modal('show');
+    });
     @endif
 
 

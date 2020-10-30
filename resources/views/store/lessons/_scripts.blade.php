@@ -54,6 +54,7 @@
      */
     @if(!empty($lesson))
     $('.attach-media').click(function (){
+        var btn = $(this);
         var bar = $('#js-progressbar');
         $('#js-progressbar').attr('value',0).hide();
         var form = $('#insertMediaModalForm')[0];
@@ -69,7 +70,8 @@
         var processStatus = $('.process-status');
         processStatus.find('.process-word').html('<span class="uk-text-primary"><div uk-spinner="ratio: 0.5"></div> Uploading:</span>')
         processStatus.find('.process-percentage').html('<span class="uk-text-primary">0%</span>')
-
+        btn.attr('disabled', true);
+        btn.html("{{__('main.Uploading')}}");
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -78,7 +80,7 @@
             processData: false,
             contentType: false,
             cache: false,
-            timeout: 600000,
+            // timeout: 600000,
             xhr: function() {
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt) {
@@ -129,12 +131,17 @@
 
                 }
                 resetUploadForm(false);
+                btn.attr('disabled', false);
+                btn.html("{{__('main.Start upload')}}");
             },
             error: function (e) {
                 resetProgressBar();
+                console.log(e);
                 UIkit.notification("<span uk-icon='icon: warning'></span> "+ "Unable to upload media, max file size is 500MB.", {pos: 'top-center', status:'danger'})
                 resetUploadForm();
                 processStatus.find('.process-percentage').html('<span class="">0%</span>')
+                btn.attr('disabled', false);
+                btn.html("{{__('main.Start upload')}}");
             }
         });
     });

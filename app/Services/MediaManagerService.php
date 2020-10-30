@@ -5,7 +5,9 @@ namespace App\Services;
 
 
 use App\Modules\Media\Media;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class MediaManagerService
 {
@@ -22,13 +24,22 @@ class MediaManagerService
         $media = null;
         if (!empty($modelItem) && !empty($mediaType) && !empty($mediaFile)){
             if (in_array($mediaType, [Media::TYPE_VIDEO, Media::TYPE_IMAGE, Media::TYPE_PRODUCT_IMAGE, Media::TYPE_PROFILE_IMAGE])){
-                $media = $modelItem
-                    ->addMedia($mediaFile)
-                    ->toMediaCollection(Media::getGroup($mediaType));
+                try {
+                    $media = $modelItem
+                        ->addMedia($mediaFile)
+                        ->toMediaCollection(Media::getGroup($mediaType));
+                } catch (FileException $e){
+                    Log::error($e);
+                }
             } elseif (in_array($mediaType, [Media::TYPE_YOUTUBE, Media::TYPE_HTML_PAGE])){
-                $media = $modelItem
-                    ->addMediaFromUrl($mediaFile)
-                    ->toMediaCollection(Media::getGroup($mediaType));
+                try {
+                    $media = $modelItem
+                        ->addMediaFromUrl($mediaFile)
+                        ->toMediaCollection(Media::getGroup($mediaType));
+                } catch (FileException $e){
+                    Log::error($e);
+                }
+
             }
             if (!empty($media) && !empty($mediaName)){
                 $media->name = $mediaName;

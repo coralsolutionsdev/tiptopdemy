@@ -362,6 +362,10 @@
         'Store\'s products' => 'Store\'s products',
         'Price range' => 'Price range',
 
+
+    // Media
+        'Uploading' => 'Uploading ...',
+
     // Form
         'Add Quiz' => 'Add Quiz',
         'Quiz name' => 'Quiz name',

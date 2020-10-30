@@ -191,13 +191,13 @@ class LessonController extends Controller
         $status = Media::UPLOAD_TYPE_IN_PROCESS; // 0 pending, 1 success,  2 not allowed
         $mediaType = $input['type'];
         $file = $request->file;;
-        $youtubeUrl = $input['youtube_url'];
-        $htmlUrl = $input['html_url'];
+        $youtubeUrl = isset($input['youtube_url']) ?  $input['youtube_url'] : null;
+        $htmlUrl = isset($input['html_url']) ? $input['html_url'] : null;
         $mediaName = isset($input['media_name']) && !empty($input['media_name']) ? $input['media_name'] : null;
 
         // associated model collection
-        $itemId = $input['item_id'];
-        $model = $input['model_type'];
+        $itemId = isset($input['item_id']) ? $input['item_id'] : null;
+        $model = isset($input['model_type']) ? $input['model_type'] : null;
 
         if (empty($itemId) && empty($model)){
             // error

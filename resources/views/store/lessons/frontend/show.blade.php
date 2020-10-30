@@ -137,6 +137,12 @@
                     </div>
                     <div class="uk-width-expand">
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
+                            <div> {{-- Description --}}
+                                <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+                                    <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>
+                                    {!! $lesson->description !!}
+                                </div>
+                            </div>
                             @if($resources = $lesson->resources)
                                         @foreach($resources as $resource)
                                             <div>
@@ -323,12 +329,6 @@
                                     </ul>
                                 </div>
                                 @endif
-                            </div>
-                            <div>
-                                <div class="uk-card uk-card-default uk-card-body uk-padding-small">
-                                    <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>
-                                    {!! $lesson->description !!}
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -148,7 +148,7 @@
                                             <div>
                                                 <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">
                                                     @if($resource['type'] == \App\Modules\Media\Media::TYPE_VIDEO)
-                                                        <video src="{{$resource['url']}}" loop muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>
+                                                        <video src="{{$resource['url']}}" playsinline controls disablepictureinpicture controlsList="nodownload"></video>
                                                     @elseif($resource['type'] == \App\Modules\Media\Media::TYPE_YOUTUBE || $resource['type'] == \App\Modules\Media\Media::TYPE_HTML_PAGE)
                                                         <iframe src="{{$resource['url']}}" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>
                                                     @endif

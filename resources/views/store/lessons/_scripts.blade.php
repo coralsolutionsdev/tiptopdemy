@@ -85,10 +85,14 @@
                 xhr.upload.addEventListener("progress", function(evt) {
                     if (evt.lengthComputable) {
                         var percentComplete = (evt.loaded / evt.total) * 100;
+                        var currentPercentage = percentComplete.toFixed(1);
+                        if (percentComplete == 100){
+                            currentPercentage = parseInt(percentComplete);
+                        }
                         //Do something with upload progress here
                         bar.show();
                         bar.attr('value', percentComplete);
-                        $('.process-percentage').html('<span class="uk-text-primary">'+parseInt(percentComplete)+'%</span>')
+                        $('.process-percentage').html('<span class="uk-text-primary">'+currentPercentage+'%</span>')
                     }
                 }, false);
                 return xhr;
@@ -138,10 +142,11 @@
             error: function (e) {
                 resetProgressBar();
                 console.log(e);
-                UIkit.notification("<span uk-icon='icon: warning'></span> "+ "Unable to upload media, max file size is 1GB.", {pos: 'top-center', status:'danger'})
+                UIkit.notification("<span uk-icon='icon: warning'></span> "+ e.statusText, {pos: 'top-center', status:'danger'})
                 resetUploadForm();
                 processStatus.find('.process-percentage').html('<span class="">0%</span>')
                 btn.attr('disabled', false);
+                processStatus.find('.process-word').html('<span class="uk-text-danger"><span uk-icon="icon: ban"></span> Canceled:</span>')
                 btn.html("{{__('main.Start upload')}}");
             }
         });

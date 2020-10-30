@@ -137,7 +137,7 @@
             error: function (e) {
                 resetProgressBar();
                 console.log(e);
-                UIkit.notification("<span uk-icon='icon: warning'></span> "+ "Unable to upload media, max file size is 500MB.", {pos: 'top-center', status:'danger'})
+                UIkit.notification("<span uk-icon='icon: warning'></span> "+ "Unable to upload media, max file size is 1GB.", {pos: 'top-center', status:'danger'})
                 resetUploadForm();
                 processStatus.find('.process-percentage').html('<span class="">0%</span>')
                 btn.attr('disabled', false);

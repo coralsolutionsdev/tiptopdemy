@@ -80,7 +80,6 @@
             processData: false,
             contentType: false,
             cache: false,
-            // timeout: 600000,
             xhr: function() {
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt) {
@@ -90,49 +89,51 @@
                         bar.show();
                         bar.attr('value', percentComplete);
                         $('.process-percentage').html('<span class="uk-text-primary">'+parseInt(percentComplete)+'%</span>')
-
                     }
                 }, false);
                 return xhr;
             },
             complete: function (response){
-                var media = response.responseJSON.media;
-                var status = media.status;
-                var type = media.type;
-                var url = media.url;
-                var id = media.id;
-                var video = null;
+                console.log(response);
+                if (response.responseJSON != undefined){
+                    var media = response.responseJSON.media;
+                    var status = media.status;
+                    var type = media.type;
+                    var url = media.url;
+                    var id = media.id;
+                    var video = null;
 
-                if (status == {{\App\Modules\Media\Media::UPLOAD_TYPE_REFUSED}}){
-                    resetProgressBar();
-                    processStatus.find('.process-percentage').html('<span class="">0%</span>')
-                    processStatus.find('.process-word').html('<span class="uk-text-danger"><span uk-icon="icon: ban"></span> Canceled:</span>')
-                    UIkit.notification("<span uk-icon='icon: warning'></span> "+ media.message, {pos: 'top-center', status:'warning'})
-                } else if(status = {{\App\Modules\Media\Media::UPLOAD_TYPE_COMPLETED}}){
-                    UIkit.notification("<span uk-icon='icon: check'></span> "+ media.message, {pos: 'top-center', status:'success'})
-                    // insert media
-                    if (type == {{\App\Modules\Media\Media::TYPE_VIDEO}}){
-                        video = '<video src="'+url+'" loop muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>';
-                    } else if (type == {{\App\Modules\Media\Media::TYPE_YOUTUBE}} || type == {{\App\Modules\Media\Media::TYPE_HTML_PAGE}}){
-                        video = '<iframe src="'+url+'" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>';
+                    if (status == {{\App\Modules\Media\Media::UPLOAD_TYPE_REFUSED}}){
+                        resetProgressBar();
+                        processStatus.find('.process-percentage').html('<span class="">0%</span>')
+                        processStatus.find('.process-word').html('<span class="uk-text-danger"><span uk-icon="icon: ban"></span> Canceled:</span>')
+                        UIkit.notification("<span uk-icon='icon: warning'></span> "+ media.message, {pos: 'top-center', status:'warning'})
+                    } else if(status = {{\App\Modules\Media\Media::UPLOAD_TYPE_COMPLETED}}){
+                        UIkit.notification("<span uk-icon='icon: check'></span> "+ media.message, {pos: 'top-center', status:'success'})
+                        // insert media
+                        if (type == {{\App\Modules\Media\Media::TYPE_VIDEO}}){
+                            video = '<video src="'+url+'" loop muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>';
+                        } else if (type == {{\App\Modules\Media\Media::TYPE_YOUTUBE}} || type == {{\App\Modules\Media\Media::TYPE_HTML_PAGE}}){
+                            video = '<iframe src="'+url+'" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>';
+                        }
+                        $('.resource-items-list').append('' +
+                            '<li id="resource-'+id+'" class="resource-item" style="overflow: hidden">\n' +
+                            '    <div class="uk-card uk-card-default uk-card-body uk-padding-remove">\n' +
+                            '        <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger resource-delete" uk-icon="icon: trash"></span></div>\n' +
+                            '        <div>\n' +
+                            '           <input type="hidden" name="resourceId[]" value="'+id+'">\n' +
+                            '            '+video+'\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '</li>');
+                        deleteResourceItem();
+                        processStatus.find('.process-word').html('<span class="uk-text-success"><span uk-icon="icon: check"></span> Completed:</span>')
+
                     }
-                    $('.resource-items-list').append('' +
-                        '<li id="resource-'+id+'" class="resource-item" style="overflow: hidden">\n' +
-                        '    <div class="uk-card uk-card-default uk-card-body uk-padding-remove">\n' +
-                        '        <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger resource-delete" uk-icon="icon: trash"></span></div>\n' +
-                        '        <div>\n' +
-                        '           <input type="hidden" name="resourceId[]" value="'+id+'">\n' +
-                        '            '+video+'\n' +
-                        '        </div>\n' +
-                        '    </div>\n' +
-                        '</li>');
-                    deleteResourceItem();
-                    processStatus.find('.process-word').html('<span class="uk-text-success"><span uk-icon="icon: check"></span> Completed:</span>')
-
+                    resetUploadForm(false);
+                    btn.attr('disabled', false);
+                    btn.html("{{__('main.Start upload')}}");
                 }
-                resetUploadForm(false);
-                btn.attr('disabled', false);
-                btn.html("{{__('main.Start upload')}}");
             },
             error: function (e) {
                 resetProgressBar();

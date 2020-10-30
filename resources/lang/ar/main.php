@@ -166,6 +166,7 @@
         'Review' => 'مراجعة',
         'Dear' => 'عزيزي :name',
         'Starting' => 'جارِ البدأ',
+        'Display type' => 'نوع العرض',
 
 
 

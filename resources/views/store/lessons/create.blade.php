@@ -197,8 +197,9 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">{{__('main.Quiz name')}}</th>
-                                    <th scope="col">{{__('main.version')}}</th>
-                                    <th scope="col">{{__('main.Items num.')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Display type')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.version')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
                                     <th scope="col" width="150">{{__('main.Actions')}}</th>
                                 </tr>
                                 </thead>
@@ -207,8 +208,9 @@
                                     @forelse($lesson->forms as $form)
                                         <tr>
                                             <td>{{$form->title}}</td>
-                                            <td class="uk-text-success">{{$form->version}}.0</td>
-                                            <td>{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                            <td class="uk-text-center">{{$form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
+                                            <td class="uk-text-success uk-text-center">{{$form->version}}.0</td>
+                                            <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
                                             <td>
                                                 <div class="action_btn">
                                                     <ul>

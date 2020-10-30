@@ -418,6 +418,7 @@
         'Minutes' => '[0,1] Minute|[2,*] Minutes',
         'Seconds' => '[0,1] Second|[2,*] Seconds',
         'Starting' => 'Starting',
+        'Display type' => 'Display type',
 
         //orders
         'orders' => 'Orders',

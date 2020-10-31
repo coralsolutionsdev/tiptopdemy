@@ -1,16 +1,17 @@
 <div class="bg-white" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
     <nav class=" bg-white uk-container" uk-navbar>
         {{--Logo--}}
-        <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'start' : 'end')}}">
-            <ul class="uk-navbar-nav navbar-icon-uk" style="margin: 0px 5px">
-                <li><a href="{{url('/')}}"><img src="{{asset_image(getSite()->logo)}}" style="height: 35px" alt=""></a></li>
-                <li class="uk-visible@m site-name" style="">
-                    <a class="uk-navbar-item uk-logo navbar-logo" href="{{route('main')}}">
-                        <span class="site-name">{{getSite()->name}}</span><span style="color: var(--theme-primary-color);"> &#9679;</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+{{--        <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'start' : 'end')}}">--}}
+{{--        <div class="uk-navbar-end">--}}
+{{--            <ul class="uk-navbar-nav navbar-icon-uk" style="margin: 0px 5px">--}}
+{{--                <li><a href="{{url('/')}}"><img src="{{asset_image(getSite()->logo)}}" style="height: 35px" alt=""></a></li>--}}
+{{--                <li class="uk-visible@m site-name" style="">--}}
+{{--                    <a class="uk-navbar-item uk-logo navbar-logo" href="{{route('main')}}">--}}
+{{--                        <span class="site-name">{{getSite()->name}}</span><span style="color: var(--theme-primary-color);"> &#9679;</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--            </ul>--}}
+{{--        </div>--}}
         {{--Top menu--}}
         <div class="uk-visible@m uk-navbar-center">
             <ul class="uk-navbar-nav menu-items">
@@ -25,7 +26,8 @@
             </div>
         </div>
         {{--User menu--}}
-        <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">
+{{--        <div class="uk-navbar-{{getFloatKey((getLanguage() == 'ar')? 'end' : 'start')}}">--}}
+        <div class="uk-navbar-start">
             <ul class="uk-navbar-nav">
                 <li class="uk-visible@m"><button class="navbar-search uk-text-primary"><span class="search-icon"  uk-icon="icon: search"></span></button></li>
                 @if(Auth::check())

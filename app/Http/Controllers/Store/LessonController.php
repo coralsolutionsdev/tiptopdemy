@@ -179,7 +179,8 @@ class LessonController extends Controller
 
     public function attachMedia(Request $request)
     {
-
+//        ini_set('max_execution_time', 3600);
+//        ini_set('post_max_size', '3600M');
 
         $input =  $request->all();
         $message = null;
@@ -258,13 +259,11 @@ class LessonController extends Controller
 //                    $mediaUrl = $media->getFullUrl();
 //                    $mediaName = $media->name;
 //                }
-
-                /////// temp
                 $status = Media::UPLOAD_TYPE_COMPLETED;
                 $message = 'Media has attached successfully';
                 $mediaId = 0;
-                $mediaUrl = 'media/';
-                $mediaName = 'dev named';
+                $mediaUrl = '/';
+                $mediaName = 'dev';
             } else {
                 $mediaId = generateRandomString(4);;
                 $mediaUrl = $mediaFile;

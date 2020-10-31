@@ -360,20 +360,15 @@ function generateUniqueId($moduleName = null)
     return $uniqueId->unique_id;
 
 }
-function getFloatKey($position)
+function getFloatKey($position, $dirType = null)
 {
-    if (getSite()->lang == 'ar'){
-        if ($position == 'start'){
-            return 'right';
-        }else{
-            return 'left';
-        }
-    }else{
-        if ($position == 'start'){
-            return 'left';
-        }else{
-            return 'right';
-        }
+    $start = 'right';
+    $end = 'left';
+    $siteLang = getLanguage();
+    if ($position == 'start'){
+        return $siteLang == 'en' ? $end : $start;
+    } elseif ($position == 'end'){
+        return $siteLang == 'en' ? $start : $end;
     }
 }
 /**

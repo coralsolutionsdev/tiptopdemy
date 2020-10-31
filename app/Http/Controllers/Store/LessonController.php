@@ -179,6 +179,8 @@ class LessonController extends Controller
 
     public function attachMedia(Request $request)
     {
+
+
         $input =  $request->all();
         $message = null;
         $media = null;
@@ -248,14 +250,21 @@ class LessonController extends Controller
         // if allowed to upload
         if ($status == Media::UPLOAD_TYPE_IN_PROCESS){
             if ($mediaType == Media::TYPE_VIDEO){
-                $media =  MediaManagerService::store($lesson, $mediaType, $mediaFile, $mediaName);
-                if (!empty($media)){
-                    $status = Media::UPLOAD_TYPE_COMPLETED;
-                    $message = 'Media has attached successfully';
-                    $mediaId = $media->id;
-                    $mediaUrl = $media->getFullUrl();
-                    $mediaName = $media->name;
-                }
+//                $media =  MediaManagerService::store($lesson, $mediaType, $mediaFile, $mediaName);
+//                if (!empty($media)){
+//                    $status = Media::UPLOAD_TYPE_COMPLETED;
+//                    $message = 'Media has attached successfully';
+//                    $mediaId = $media->id;
+//                    $mediaUrl = $media->getFullUrl();
+//                    $mediaName = $media->name;
+//                }
+
+                /////// temp
+                $status = Media::UPLOAD_TYPE_COMPLETED;
+                $message = 'Media has attached successfully';
+                $mediaId = 0;
+                $mediaUrl = 'media/';
+                $mediaName = 'dev named';
             } else {
                 $mediaId = generateRandomString(4);;
                 $mediaUrl = $mediaFile;

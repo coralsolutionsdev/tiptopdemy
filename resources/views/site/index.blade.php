@@ -104,6 +104,7 @@
     </div>
     {!! Form::close() !!}
     <div class="uk-card uk-card-body uk-card-default uk-padding-small">
+
         <div class="col">upload_max_filesize: {{ini_get('upload_max_filesize')}}</div>
         <div class="col">max_execution_time: {{ini_get('max_execution_time')}}</div>
         <div class="col">post_max_size: {{ini_get('post_max_size')}}</div>

@@ -178,7 +178,7 @@ final class Versions
   'symfony/yaml' => 'v5.1.5@a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.9.1@bafc69caeb4d49c39fd0779086c03a3738cbb389',
-  'laravel/laravel' => 'dev-master@66f263066db50dbaad7470abf6c40e9bf6a657a1',
+  'laravel/laravel' => 'dev-201105-dev-file-manager@4f2637218c75b08d650f8429205253df4695fc1b',
 );
 
     private function __construct()

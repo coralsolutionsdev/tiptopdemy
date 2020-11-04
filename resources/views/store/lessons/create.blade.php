@@ -259,23 +259,13 @@
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <h5 class="">{{__('main.Media items')}}</h5>
+
                 <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">
                     <div>
                         <ul uk-tab class="uk-flex-center media-tabs">
                             <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_VIDEO}}"><span class="uk-text-primary" uk-icon="icon: cloud-upload"></span> {{__('main.Upload a new video')}}</a></li>
-                            <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_YOUTUBE}}"><span class="uk-text-danger" uk-icon="icon: youtube"></span> {{__('main.Youtube video')}}</a></li>
-                            <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_HTML_PAGE}}"><span uk-icon="icon: code"></span> {{__('main.HTML page')}}</a></li>
+                            <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_HTML_PAGE}}"><span class="uk-text-primary" uk-icon="icon: code"></span> {{__('main.Embed')}}</a></li>
                         </ul>
-                        <div class="uk-margin-small">
-                            <div class="uk-margin-small">
-                                <label class="uk-form-label" for="form-stacked-text">{{__('main.Media name')}}</label>
-                                <div class="uk-form-controls">
-                                    <input class="uk-input" type="text" name="media_name" placeholder="">
-                                    <input type="hidden" name="type" class="media_type" value="{{\App\Modules\Media\Media::TYPE_VIDEO}}"> {{--groups 1: uploaded video--}}
-                                </div>
-                            </div>
-                        </div>
-
                         <ul class="uk-switcher uk-margin-small">
                             <li>
                                 <div class="uk-margin-small">
@@ -291,24 +281,25 @@
 
                                         </div>
                                     </div>
-                                    <div class="uk-margin-small process-status">
-                                        <span class="process-word"></span> <span class="process-percentage"></span>
+                                    <div class="uk-margin-small">
+                                        <span class="process-icon"></span> <span class="process-status"></span>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="uk-margin-small">
-                                    <label class="uk-form-label" for="form-stacked-text">Media Url</label>
+                                    <div class="uk-form-label">Embed URL</div>
                                     <div class="uk-form-controls">
-                                        <input class="uk-input" name="youtube_url" type="text" placeholder="https://youtu.be/*****">
+                                        <select class="uk-select" name="type">
+                                            <option value="{{\App\Modules\Media\Media::TYPE_YOUTUBE}}" selected>{{__('main.Youtube')}}</option>
+                                            <option value="{{\App\Modules\Media\Media::TYPE_HTML_PAGE}}">{{__('main.HTML page')}}</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </li>
-                            <li>
                                 <div class="uk-margin-small">
-                                    <label class="uk-form-label" for="form-stacked-text">Media Url</label>
+                                    <div class="uk-form-label">Embed link</div>
                                     <div class="uk-form-controls">
-                                        <input class="uk-input" name="html_url" type="text" placeholder="https://domain-name.com/page-name.html">
+                                        <input class="uk-input" name="embed_url" type="text">
                                     </div>
                                 </div>
                             </li>
@@ -319,7 +310,6 @@
                     </div>
                 </form>
                 <p class="uk-text-right">
-{{--                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>--}}
                     <button class="uk-button uk-button-primary attach-media" type="button">{{__('main.Start upload')}}</button>
                 </p>
             </div>

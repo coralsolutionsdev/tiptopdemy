@@ -14,8 +14,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Spatie\Tags\Tag;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Vinkla\Hashids\Facades\Hashids;
+
 
 class LessonController extends Controller
 {
@@ -104,7 +110,6 @@ class LessonController extends Controller
                 $nextLesson = $productLessons->get($key+1);
                 break;
             }
-
         }
         return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson'));
 
@@ -179,8 +184,6 @@ class LessonController extends Controller
 
     public function attachMedia(Request $request)
     {
-//        ini_set('max_execution_time', 3600);
-//        ini_set('post_max_size', '3600M');
 
         $input =  $request->all();
         $message = null;
@@ -192,84 +195,58 @@ class LessonController extends Controller
         $mediaType = null;
         $mediaFileName = null;
         $status = Media::UPLOAD_TYPE_IN_PROCESS; // 0 pending, 1 success,  2 not allowed
-        $mediaType = $input['type'];
-        $file = $request->file;;
-        $youtubeUrl = isset($input['youtube_url']) ?  $input['youtube_url'] : null;
-        $htmlUrl = isset($input['html_url']) ? $input['html_url'] : null;
-        $mediaName = isset($input['media_name']) && !empty($input['media_name']) ? $input['media_name'] : null;
-
-        // associated model collection
+        $mediaType = isset($input['type']) ? $input['type'] : null;
+        $embedUrl = isset($input['embed_url']) ?  $input['embed_url'] : null;
         $itemId = isset($input['item_id']) ? $input['item_id'] : null;
-        $model = isset($input['model_type']) ? $input['model_type'] : null;
-
-        if (empty($itemId) && empty($model)){
-            // error
-            $message = 'Undefiled model';
-            $status = Media::UPLOAD_TYPE_REFUSED;
-        }
         $lesson = Lesson::find($itemId);
-//        $lesson = $model::find($itemId);
 
-        if (empty($lesson)){
-            $message = 'Undefiled model item';
-            $status = Media::UPLOAD_TYPE_REFUSED;
-        }
-        if (empty($mediaType)){
-            $message = 'Undefiled media type';
-            $status = Media::UPLOAD_TYPE_REFUSED;
-        }
-        if ($mediaType == Media::TYPE_VIDEO){
-            if (!empty($file)){
-                // check if its allowed to upload the file
-                $fileExtension = $file->getClientOriginalExtension();
-                if (!Media::isExtensionAllowed($fileExtension)){
-                    $message = 'Media file is not supported';
-                    $status = Media::UPLOAD_TYPE_REFUSED;
+        // if request has file
+        if ($request->hasFile('upload_file')) {
+            $mediaType = Media::TYPE_VIDEO;
+            // create the file receiver
+            $receiver = new FileReceiver("upload_file", $request, HandlerFactory::classFromRequest($request));
 
+            // check if the upload is success, throw exception or return response you need
+            if ($receiver->isUploaded() === false) {
+                throw new UploadMissingFileException();
+            }
+
+            // receive the file
+            $save = $receiver->receive();
+
+            // check if the upload has finished (in chunk mode it will send smaller files)
+            if ($save->isFinished()) {
+                // save the file and return any response you need, current example uses `move` function. If you are
+                // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
+//            return $this->saveFile($save->getFile());
+                try {
+                    $media = $lesson
+                        ->addMedia($save->getFile())
+                        ->toMediaCollection(Media::getGroup(Media::TYPE_VIDEO));
+                } catch (FileException $e){
+                    Log::error($e);
                 }
-                $mediaFile = $file;
-            }else{
-                $message = 'Undefiled media file';
-                $status = Media::UPLOAD_TYPE_REFUSED;
             }
-        } elseif ($mediaType == Media::TYPE_YOUTUBE){
-            if (empty($youtubeUrl)){
-                $message = 'Undefiled youtube url';
-                $status = Media::UPLOAD_TYPE_REFUSED;
-            }
-
-            // $mediaFile = $youtubeUrl;
-            $mediaFile = str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $youtubeUrl);
-        } elseif ($mediaType == Media::TYPE_HTML_PAGE){
-            if (empty($htmlUrl)){
-                $message = 'Undefiled HTML url';
-                $status = Media::UPLOAD_TYPE_REFUSED;
-            }
-            $mediaFile = $htmlUrl;
-        }
-
-        // if allowed to upload
-        if ($status == Media::UPLOAD_TYPE_IN_PROCESS){
-            if ($mediaType == Media::TYPE_VIDEO){
-//                $media =  MediaManagerService::store($lesson, $mediaType, $mediaFile, $mediaName);
-//                if (!empty($media)){
-//                    $status = Media::UPLOAD_TYPE_COMPLETED;
-//                    $message = 'Media has attached successfully';
-//                    $mediaId = $media->id;
-//                    $mediaUrl = $media->getFullUrl();
-//                    $mediaName = $media->name;
-//                }
+            if (!empty($media)){
                 $status = Media::UPLOAD_TYPE_COMPLETED;
                 $message = 'Media has attached successfully';
-                $mediaId = 0;
-                $mediaUrl = '/';
-                $mediaName = 'dev';
-            } else {
-                $mediaId = generateRandomString(4);;
-                $mediaUrl = $mediaFile;
-                $message = 'Media has attached successfully';
-
+                $mediaId = $media->id;
+                $mediaUrl = $media->getFullUrl();
+                $mediaName = $media->name;
             }
+        } else { // else
+            if (!empty($input['embed_url'])){
+                if (!empty($mediaType) && $mediaType == Media::TYPE_YOUTUBE){
+                    $embedUrl = str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $embedUrl);
+                }
+                $mediaId = generateRandomString(4);
+                $status = Media::UPLOAD_TYPE_COMPLETED;
+                $message = 'Media has attached successfully';
+                $mediaUrl = $embedUrl;
+                $mediaName = '';
+            }
+        }
+        if (!empty($lesson)){
             // add media to lesson resources
             $resources = $lesson->resources;
             $resources[] = [
@@ -283,13 +260,14 @@ class LessonController extends Controller
         }
 
         $media = [
-            'message' => $message,
             'status' => $status,
+            'message' => $message,
             'id' => $mediaId,
             'url' => $mediaUrl,
             'name' => $mediaName,
             'type' => $mediaType,
         ];
-        return response( ['media' => $media], 200);
+        return response($media, 200);
+
     }
 }

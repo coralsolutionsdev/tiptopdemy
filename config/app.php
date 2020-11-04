@@ -195,7 +195,8 @@ return [
         Cog\Laravel\Love\LoveEventServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider::class
+        DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider::class,
+        Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
 
 
     ],

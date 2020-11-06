@@ -262,10 +262,6 @@
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <h5 class="">{{__('main.Media items')}}</h5>
-
-                <div id="mydropzone" class="dropzone">
-                </div>
-                @if(false)
                 <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">
                     <div>
                         <ul uk-tab class="uk-flex-center media-tabs">
@@ -276,16 +272,7 @@
                             <li>
                                 <div class="uk-margin-small">
                                     <label class="uk-form-label" for="form-stacked-text">{{__('main.Video upload')}}</label>
-                                    <div class="js-upload uk-placeholder uk-text-center uk-margin-remove">
-                                        <span uk-icon="icon: cloud-upload"></span>
-                                        <span class="uk-text-middle">{{__('main.Drag and drop your video file to upload, or')}}</span>
-                                        <div uk-form-custom>
-                                            <input id="upload_file" type="file" class="uploader-input" name="upload_file" accept="video/*">
-                                            <span class="uk-link">{{__('main.selecting one')}}</span>
-                                        </div>
-                                        <div class="uploader-items">
-
-                                        </div>
+                                    <div id="mydropzone" class="dropzone uk-placeholder uk-margin-remove">
                                     </div>
                                     <div class="uk-margin-small">
                                         <span class="process-icon"></span> <span class="process-status"></span>
@@ -310,15 +297,14 @@
                                 </div>
                             </li>
                         </ul>
-                        <div>
-                            <progress id="js-progressbar" class="uk-progress" value="0" max="100" style="display: none"></progress>
-                        </div>
+{{--                        <div>--}}
+{{--                            <progress id="js-progressbar" class="uk-progress" value="0" max="100"></progress>--}}
+{{--                        </div>--}}
                     </div>
                 </form>
                 <p class="uk-text-right">
                     <button class="uk-button uk-button-primary attach-media" type="button">{{__('main.Start upload')}}</button>
                 </p>
-                @endif
             </div>
         </div>
     </section>

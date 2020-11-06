@@ -15,6 +15,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
@@ -180,9 +181,11 @@ class LessonController extends Controller
      * attach lesson media
      * @param Request $request
      * @return Application|ResponseFactory|Response
+     * @throws UploadMissingFileException
+     * @throws UploadFailedException
      */
 
-    public function attachMedia(Request $request)
+    public function attachMediaOld(Request $request)
     {
 
         $input =  $request->all();
@@ -216,9 +219,6 @@ class LessonController extends Controller
 
             // check if the upload has finished (in chunk mode it will send smaller files)
             if ($save->isFinished()) {
-                // save the file and return any response you need, current example uses `move` function. If you are
-                // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
-//            return $this->saveFile($save->getFile());
                 try {
                     $media = $lesson
                         ->addMedia($save->getFile())
@@ -268,6 +268,35 @@ class LessonController extends Controller
             'type' => $mediaType,
         ];
         return response($media, 200);
+
+    }
+    public function attachMedia(Request $request)
+    {
+
+        // create the file receiver
+        $receiver = new FileReceiver("upload_file", $request, HandlerFactory::classFromRequest($request));
+
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
+        }
+
+        // receive the file
+        $save = $receiver->receive();
+
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) {
+            // save the file and return any response you need, current example uses `move` function. If you are
+            // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
+//            return $this->saveFile($save->getFile());
+        }
+
+        // we are in chunk mode, lets send the current progress
+        $handler = $save->handler();
+
+        return response()->json([
+            "done" => $handler->getPercentageDone(),
+        ]);
 
     }
 }

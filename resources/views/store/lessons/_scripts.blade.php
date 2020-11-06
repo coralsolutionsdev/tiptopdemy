@@ -54,19 +54,21 @@
     /**
      * Attach medoa to lesson
      */
-    Dropzone.autoDiscover = false;
-    $(document).ready(function() {
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $("div#mydropzone").dropzone({
-            url: "{{route('store.media.attach')}}",
-            headers: {
-                'x-csrf-token': CSRF_TOKEN,
-            },
-        });
+    {{--Dropzone.autoDiscover = false;--}}
+    {{--$(document).ready(function() {--}}
+    {{--    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
+    {{--    $("div#mydropzone").dropzone({--}}
+    {{--        url: "{{route('store.media.attach')}}",--}}
+    {{--        timeout: 180000,--}}
 
-    });
-    @if(false)
-{{--    @if(!empty($lesson))--}}
+    {{--        headers: {--}}
+    {{--            'x-csrf-token': CSRF_TOKEN,--}}
+    {{--        },--}}
+    {{--    });--}}
+
+    {{--});--}}
+{{--    @if(false)--}}
+    @if(!empty($lesson))
     $('.attach-media').click(function (){
         var btn = $(this);
         var bar = $('#js-progressbar');
@@ -92,26 +94,26 @@
             processData: false,
             contentType: false,
             cache: false,
-            xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        var percentComplete = (evt.loaded / evt.total) * 100;
-                        var currentPercentage = percentComplete.toFixed(1);
-                        //Do something with upload progress here
-                        bar.show();
-                        bar.attr('value', percentComplete);
-                        if (percentComplete == 100){
-                            currentPercentage = parseInt(percentComplete);
-                            $('.process-status').html('<span class="uk-text-primary"> Processing: '+currentPercentage+'%</span>');
-                        }else {
-                            $('.process-status').html('<span class="uk-text-primary"> Uploading: '+currentPercentage+'%</span>');
-                        }
-
-                    }
-                }, false);
-                return xhr;
-            },
+            // xhr: function() {
+            //     var xhr = new window.XMLHttpRequest();
+            //     xhr.upload.addEventListener("progress", function(evt) {
+            //         if (evt.lengthComputable) {
+            //             var percentComplete = (evt.loaded / evt.total) * 100;
+            //             var currentPercentage = percentComplete.toFixed(1);
+            //             //Do something with upload progress here
+            //             bar.show();
+            //             bar.attr('value', percentComplete);
+            //             if (percentComplete == 100){
+            //                 currentPercentage = parseInt(percentComplete);
+            //                 $('.process-status').html('<span class="uk-text-primary"> Processing: '+currentPercentage+'%</span>');
+            //             }else {
+            //                 $('.process-status').html('<span class="uk-text-primary"> Uploading: '+currentPercentage+'%</span>');
+            //             }
+            //
+            //         }
+            //     }, false);
+            //     return xhr;
+            // },
             complete: function (response){
                 console.log(response)
                     {{--if (response.responseJSON != undefined){--}}

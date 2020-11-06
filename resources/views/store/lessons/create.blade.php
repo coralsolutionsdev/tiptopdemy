@@ -263,9 +263,9 @@
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <h5 class="">{{__('main.Media items')}}</h5>
 
-                <div id="mydropzone" class="dropzone">
-                </div>
-                @if(false)
+{{--                <div id="mydropzone" class="dropzone">--}}
+{{--                </div>--}}
+                @if(true)
                 <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">
                     <div>
                         <ul uk-tab class="uk-flex-center media-tabs">

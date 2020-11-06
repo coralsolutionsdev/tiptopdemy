@@ -4,66 +4,194 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    $('.uploader-input').change(function (){
-        var file_names = $.map($(this).prop('files'), function(file)
-        {
-            return file.name;
-        });
-        var file_section = $('.uploader-items');
-        file_section.html('');
-        file_names.map(function(file_name)
-        {
-            file_section.append('<span><span uk-icon="icon: play-circle"></span> '+file_name+'</span>');
-        });
-    });
+    {{--$('.uploader-input').change(function (){--}}
+    {{--    var file_names = $.map($(this).prop('files'), function(file)--}}
+    {{--    {--}}
+    {{--        return file.name;--}}
+    {{--    });--}}
+    {{--    var file_section = $('.uploader-items');--}}
+    {{--    file_section.html('');--}}
+    {{--    file_names.map(function(file_name)--}}
+    {{--    {--}}
+    {{--        file_section.append('<span><span uk-icon="icon: play-circle"></span> '+file_name+'</span>');--}}
+    {{--    });--}}
+    {{--});--}}
 
     function resetProgressBar(){
         var bar = $('#js-progressbar');
         bar.attr('value', 0)
-
     }
-    function resetUploadForm($resetType = true)
-    {
-        $('#insertMediaModalForm').get(0).reset();
-        if ($resetType ==  true){
-            $("[name='type']").val({{\App\Modules\Media\Media::TYPE_YOUTUBE}});
-        }
-        $('.uploader-items').html('');
-    }
-    function resetInsertMediaModal()
-    {
-        resetUploadForm();
-        resetProgressBar();
-        $('.process-icon').html('')
-        $('.process-status').html('');
+    {{--function resetUploadForm($resetType = true)--}}
+    {{--{--}}
+    {{--    $('#insertMediaModalForm').get(0).reset();--}}
+    {{--    if ($resetType ==  true){--}}
+    {{--        $("[name='type']").val({{\App\Modules\Media\Media::TYPE_YOUTUBE}});--}}
+    {{--    }--}}
+    {{--    $('.uploader-items').html('');--}}
+    {{--}--}}
+    {{--function resetInsertMediaModal()--}}
+    {{--{--}}
+    {{--    resetUploadForm();--}}
+    {{--    resetProgressBar();--}}
+    {{--    $('.process-icon').html('')--}}
+    {{--    $('.process-status').html('');--}}
 
-        UIkit.tab('.media-tabs').show(0);
-    }
-    $('.open-insert-media-modal').click(function (){
-        resetInsertMediaModal();
-    });
+    {{--    UIkit.tab('.media-tabs').show(0);--}}
+    {{--}--}}
+    {{--$('.open-insert-media-modal').click(function (){--}}
+    {{--    resetInsertMediaModal();--}}
+    {{--});--}}
 
-    $('.media-tab-item').click(function (){
-        var btn = $(this);
-        var type = btn.attr('data-value');
-        resetInsertMediaModal();
-        resetUploadForm();
-        // $("[name='type']").val(type);
-    });
+    {{--$('.media-tab-item').click(function (){--}}
+    {{--    var btn = $(this);--}}
+    {{--    var type = btn.attr('data-value');--}}
+    {{--    resetInsertMediaModal();--}}
+    {{--    resetUploadForm();--}}
+    {{--    // $("[name='type']").val(type);--}}
+    {{--});--}}
 
     /**
      * Attach medoa to lesson
      */
     Dropzone.autoDiscover = false;
+
+
     $(document).ready(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $("div#mydropzone").dropzone({
             url: "{{route('store.media.attach')}}",
             timeout: 3600000,
-
             headers: {
                 'x-csrf-token': CSRF_TOKEN,
             },
+            acceptedFiles: "video/*",
+            maxFiles: 5,
+            uploadMultiple: false,
+            addedfile: function addedfile(file) {
+                var _this2 = this;
+                if (this.element === this.previewsContainer) {
+                    this.element.classList.add("dz-started");
+                }
+
+                if (this.previewsContainer) {
+                    file.previewElement = Dropzone.createElement(this.options.previewTemplate.trim());
+                    file.previewTemplate = file.previewElement; // Backwards compatibility
+
+                    this.previewsContainer.appendChild(file.previewElement);
+                    var _iteratorNormalCompletion3 = true;
+                    var _didIteratorError3 = false;
+                    var _iteratorError3 = undefined;
+
+                    try {
+                        for (var _iterator3 = file.previewElement.querySelectorAll("[data-dz-name]")[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                            var node = _step3.value;
+                            node.textContent = file.name;
+                        }
+                    } catch (err) {
+                        _didIteratorError3 = true;
+                        _iteratorError3 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+                                _iterator3["return"]();
+                            }
+                        } finally {
+                            if (_didIteratorError3) {
+                                throw _iteratorError3;
+                            }
+                        }
+                    }
+
+                    var _iteratorNormalCompletion4 = true;
+                    var _didIteratorError4 = false;
+                    var _iteratorError4 = undefined;
+
+                    try {
+                        for (var _iterator4 = file.previewElement.querySelectorAll("[data-dz-size]")[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                            node = _step4.value;
+                            node.innerHTML = this.filesize(file.size);
+                        }
+                    } catch (err) {
+                        _didIteratorError4 = true;
+                        _iteratorError4 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+                                _iterator4["return"]();
+                            }
+                        } finally {
+                            if (_didIteratorError4) {
+                                throw _iteratorError4;
+                            }
+                        }
+                    }
+
+                    if (this.options.addRemoveLinks) {
+                        file._removeLink = Dropzone.createElement("<a class=\"dz-remove\" href=\"javascript:undefined;\" data-dz-remove>".concat(this.options.dictRemoveFile, "</a>"));
+                        file.previewElement.appendChild(file._removeLink);
+                    }
+
+                    var removeFileEvent = function removeFileEvent(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        if (file.status === Dropzone.UPLOADING) {
+                            return Dropzone.confirm(_this2.options.dictCancelUploadConfirmation, function () {
+                                return _this2.removeFile(file);
+                            });
+                        } else {
+                            if (_this2.options.dictRemoveFileConfirmation) {
+                                return Dropzone.confirm(_this2.options.dictRemoveFileConfirmation, function () {
+                                    return _this2.removeFile(file);
+                                });
+                            } else {
+                                return _this2.removeFile(file);
+                            }
+                        }
+                    };
+
+                    var _iteratorNormalCompletion5 = true;
+                    var _didIteratorError5 = false;
+                    var _iteratorError5 = undefined;
+
+                    try {
+                        for (var _iterator5 = file.previewElement.querySelectorAll("[data-dz-remove]")[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                            var removeLink = _step5.value;
+                            removeLink.addEventListener("click", removeFileEvent);
+                        }
+                    } catch (err) {
+                        _didIteratorError5 = true;
+                        _iteratorError5 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+                                _iterator5["return"]();
+                            }
+                        } finally {
+                            if (_didIteratorError5) {
+                                throw _iteratorError5;
+                            }
+                        }
+                    }
+                }
+            },
+            success: function(file, response){
+                // Look at the output in you browser console, if there is something interesting
+                console.log(file.xhr.response);
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            uploadprogress: function ( file, progress){
+                if (file.previewElement){
+                    // $('#js-progressbar').attr('value', progress)
+                    for (var _iterator8 = file.previewElement.querySelectorAll("[data-dz-uploadprogress]")[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+                        var node = _step8.value;
+                        node.nodeName === 'PROGRESS' ? node.value = progress : node.style.width = "".concat(progress, "%");
+                    }
+                }
+            },
+
         });
 
     });

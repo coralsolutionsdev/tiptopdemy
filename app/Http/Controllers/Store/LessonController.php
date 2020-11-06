@@ -296,6 +296,7 @@ class LessonController extends Controller
 
         return response()->json([
             "done" => $handler->getPercentageDone(),
+            "media" => 'hahah',
         ]);
 
     }

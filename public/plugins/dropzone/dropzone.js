@@ -440,7 +440,7 @@ function (_Emitter) {
         /**
          * The text used before any files are dropped.
          */
-        dictDefaultMessage: "Drop files here to upload",
+        dictDefaultMessage: "Drop your files here to upload  <span uk-icon='icon:  cloud-upload'></span>",
 
         /**
          * The text that replaces the default message text it the browser is not supported.
@@ -757,7 +757,6 @@ function (_Emitter) {
         // Receives `file`
         addedfile: function addedfile(file) {
           var _this2 = this;
-
           if (this.element === this.previewsContainer) {
             this.element.classList.add("dz-started");
           }

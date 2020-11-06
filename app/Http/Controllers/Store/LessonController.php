@@ -274,7 +274,7 @@ class LessonController extends Controller
     {
 
         // create the file receiver
-        $receiver = new FileReceiver("upload_file", $request, HandlerFactory::classFromRequest($request));
+        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
 
         // check if the upload is success, throw exception or return response you need
         if ($receiver->isUploaded() === false) {

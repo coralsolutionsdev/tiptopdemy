@@ -54,21 +54,21 @@
     /**
      * Attach medoa to lesson
      */
-    {{--Dropzone.autoDiscover = false;--}}
-    {{--$(document).ready(function() {--}}
-    {{--    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
-    {{--    $("div#mydropzone").dropzone({--}}
-    {{--        url: "{{route('store.media.attach')}}",--}}
-    {{--        timeout: 180000,--}}
+    Dropzone.autoDiscover = false;
+    $(document).ready(function() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $("div#mydropzone").dropzone({
+            url: "{{route('store.media.attach')}}",
+            timeout: 3600000,
 
-    {{--        headers: {--}}
-    {{--            'x-csrf-token': CSRF_TOKEN,--}}
-    {{--        },--}}
-    {{--    });--}}
+            headers: {
+                'x-csrf-token': CSRF_TOKEN,
+            },
+        });
 
-    {{--});--}}
-{{--    @if(false)--}}
-    @if(!empty($lesson))
+    });
+    @if(false)
+{{--    @if(!empty($lesson))--}}
     $('.attach-media').click(function (){
         var btn = $(this);
         var bar = $('#js-progressbar');

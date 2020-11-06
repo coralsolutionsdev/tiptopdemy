@@ -54,7 +54,19 @@
     /**
      * Attach medoa to lesson
      */
-    @if(!empty($lesson))
+    Dropzone.autoDiscover = false;
+    $(document).ready(function() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $("div#mydropzone").dropzone({
+            url: "{{route('store.media.attach')}}",
+            headers: {
+                'x-csrf-token': CSRF_TOKEN,
+            },
+        });
+
+    });
+    @if(false)
+{{--    @if(!empty($lesson))--}}
     $('.attach-media').click(function (){
         var btn = $(this);
         var bar = $('#js-progressbar');

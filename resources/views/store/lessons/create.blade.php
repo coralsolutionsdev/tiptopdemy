@@ -7,6 +7,9 @@
 @section('head')
     <link rel="stylesheet" href="{{asset('/plugins/input_tree/css/styles.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{asset('plugins/dropzone/dropzone.css')}}">
+    <script src="{{asset('/plugins/dropzone/dropzone.js')}}"></script>
+
 @endsection
 @section('content')
     <section>
@@ -260,6 +263,9 @@
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <h5 class="">{{__('main.Media items')}}</h5>
 
+                <div id="mydropzone" class="dropzone">
+                </div>
+                @if(false)
                 <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">
                     <div>
                         <ul uk-tab class="uk-flex-center media-tabs">
@@ -312,6 +318,7 @@
                 <p class="uk-text-right">
                     <button class="uk-button uk-button-primary attach-media" type="button">{{__('main.Start upload')}}</button>
                 </p>
+                @endif
             </div>
         </div>
     </section>
@@ -321,17 +328,6 @@
     @include('partial.scripts._tinyemc')
     @include('store.lessons._scripts')
     <script>
-        // $('.lesson-type').change(function () {
-        //     var item = $(this);
-        //     var itemId = item.val();
-        //     if(itemId == 1){
-        //         $('#quizzes').slideUp();
-        //         $('#presentations').slideDown();
-        //     }else{
-        //         $('#presentations').slideUp();
-        //         $('#quizzes').slideDown();
-        //     }
-        // });
         function deleteMediaItem(){
             $('.btn-media-item-delete').off('click');
             $('.btn-media-item-delete').click(function () {

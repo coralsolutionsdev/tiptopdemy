@@ -14,6 +14,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
@@ -275,17 +276,7 @@ class LessonController extends Controller
     }
     public function attachMedia(Request $request, Lesson $lesson)
     {
-        $message =  null;
-        $media = null;
-        $mediaFile = null;
-        $mediaId = null;
-        $mediaUrl = null;
-        $mediaName = null;
-        $mediaType = Media::TYPE_VIDEO;
-        $mediaFileName = null;
-        $status = Media::UPLOAD_TYPE_IN_PROCESS; // 0 pending, 1 success,  2 not allowed
-
-
+        $media = array();
         // create the file receiver
         $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
 
@@ -300,47 +291,46 @@ class LessonController extends Controller
         // check if the upload has finished (in chunk mode it will send smaller files)
         if ($save->isFinished()) {
             // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
-            // return $this->saveFile($save->getFile());
             $file = $save->getFile();
-            $type = strstr($file->getMimeType(), '/', true);
             try {
-                $mediaFile = $lesson
-                    ->addMedia($file)
-                    ->toMediaCollection($type);
-
-                $status = Media::UPLOAD_TYPE_COMPLETED;
-                $message = 'Media has attached successfully';
-                $mediaId = $mediaFile->id;
-                $mediaUrl = $mediaFile->getFullUrl();
-                $mediaName = $mediaFile->name;
-
+                 $media = $this->saveVideoFile($file, $lesson);
             } catch (FileException $e){
-                Log::error($e);
-            } catch (DiskDoesNotExist $e) {
-                Log::error($e);
-            } catch (FileDoesNotExist $e) {
-                Log::error($e);
-            } catch (FileIsTooBig $e) {
                 Log::error($e);
             }
 
         }
 
-        // we are in chunk mode, lets send the current progress
-//        $handler = $save->handler();
 
-//        if (!empty($lesson)){
-//            // add media to lesson resources
-//            $resources = $lesson->resources;
-//            $resources[] = [
-//                'id' => $mediaId,
-//                'url' => $mediaUrl,
-//                'name' => $mediaName,
-//                'type' => $mediaType,
-//            ];
-//            $lesson->resources = $resources;
-//            $lesson->save();
-//        }
+        return response()->json($media);
+
+    }
+
+    protected function saveVideoFile(UploadedFile $file, $lesson)
+    {
+//        $fileName = $this->createFilename($file);
+        // Group files by mime type
+//        $mime = str_replace('/', '-', $file->getMimeType());
+        $type = strstr($file->getMimeType(), '/', true);
+        $mediaType = Media::TYPE_VIDEO;
+
+        // Group files by the date (week
+        $dateFolder = date("Y-m-W");
+
+        // Build the file path
+//        $filePath = "upload/{$mime}/{$dateFolder}/";
+//        $finalPath = storage_path("app/".$filePath);
+//
+//        // move the file name
+//        $file->move($finalPath, $fileName);
+        $mediaFile = $lesson
+            ->addMedia($file)
+            ->toMediaCollection($type);
+
+        $status = Media::UPLOAD_TYPE_COMPLETED;
+        $message = 'Media has attached successfully';
+        $mediaId = $mediaFile->id;
+        $mediaUrl = $mediaFile->getFullUrl();
+        $mediaName = $mediaFile->name;
 
         $media = [
             'status' => $status,
@@ -351,8 +341,8 @@ class LessonController extends Controller
             'type' => $mediaType,
         ];
 
-        return response()->json($media);
-
+//        return response()->json($media);
+        return $media;
     }
 
 }

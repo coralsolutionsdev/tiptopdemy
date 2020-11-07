@@ -109,6 +109,7 @@
 
                 if (file.xhr.response){
                     var media = JSON.parse(file.xhr.response);
+                    console.log(media);
                     drawMediaItem(media);
                     submitBtn.attr('disabled', false);
                     submitBtn.html("{{__('main.Start upload')}}");

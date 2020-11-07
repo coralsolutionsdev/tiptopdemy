@@ -110,7 +110,7 @@
                 if (file.xhr.response){
                     var media = JSON.parse(file.xhr.response);
                     console.log(media);
-                    drawMediaItem(media);
+                    // drawMediaItem(media);
                     submitBtn.attr('disabled', false);
                     submitBtn.html("{{__('main.Start upload')}}");
                     $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check; ratio: 1.2"></span></span>')

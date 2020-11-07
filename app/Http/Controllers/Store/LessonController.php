@@ -293,7 +293,7 @@ class LessonController extends Controller
             // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
             $file = $save->getFile();
             try {
-                 $media = $this->saveVideoFile($file, $lesson);
+                 $media = $this->saveFile($file);
             } catch (FileException $e){
                 Log::error($e);
             }
@@ -305,44 +305,82 @@ class LessonController extends Controller
 
     }
 
-    protected function saveVideoFile(UploadedFile $file, $lesson)
+    protected function saveFile(UploadedFile $file)
     {
-//        $fileName = $this->createFilename($file);
+        $fileName = $this->createFilename($file);
         // Group files by mime type
-//        $mime = str_replace('/', '-', $file->getMimeType());
-        $type = strstr($file->getMimeType(), '/', true);
-        $mediaType = Media::TYPE_VIDEO;
-
+        $mime = str_replace('/', '-', $file->getMimeType());
         // Group files by the date (week
         $dateFolder = date("Y-m-W");
 
         // Build the file path
-//        $filePath = "upload/{$mime}/{$dateFolder}/";
-//        $finalPath = storage_path("app/".$filePath);
-//
-//        // move the file name
-//        $file->move($finalPath, $fileName);
-        $mediaFile = $lesson
-            ->addMedia($file)
-            ->toMediaCollection($type);
+        $filePath = "public/media/temp/{$mime}/{$dateFolder}/";
+        $finalPath = storage_path("app/".$filePath);
 
-        $status = Media::UPLOAD_TYPE_COMPLETED;
-        $message = 'Media has attached successfully';
-        $mediaId = $mediaFile->id;
-        $mediaUrl = $mediaFile->getFullUrl();
-        $mediaName = $mediaFile->name;
+        // move the file name
+        $file->move($finalPath, $fileName);
 
-        $media = [
-            'status' => $status,
-            'message' => $message,
-            'id' => $mediaId,
-            'url' => $mediaUrl,
-            'name' => $mediaName,
-            'type' => $mediaType,
-        ];
-
-//        return response()->json($media);
-        return $media;
+        return response()->json([
+            'path' => $filePath,
+            'name' => $fileName,
+            'mime_type' => $mime
+        ]);
     }
+
+    /**
+     * Create unique filename for uploaded file
+     * @param UploadedFile $file
+     * @return string
+     */
+    protected function createFilename(UploadedFile $file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filename = str_replace(".".$extension, "", $file->getClientOriginalName()); // Filename without extension
+
+        // Add timestamp hash to name of the file
+        $filename .= "_" . md5(time()) . "." . $extension;
+
+        return $filename;
+    }
+
+//    protected function saveVideoFile(UploadedFile $file, $lesson)
+//    {
+////        $fileName = $this->createFilename($file);
+//        // Group files by mime type
+////        $mime = str_replace('/', '-', $file->getMimeType());
+//        $type = strstr($file->getMimeType(), '/', true);
+//        $mediaType = Media::TYPE_VIDEO;
+//
+//        // Group files by the date (week
+//        $dateFolder = date("Y-m-W");
+//
+//        // Build the file path
+////        $filePath = "upload/{$mime}/{$dateFolder}/";
+////        $finalPath = storage_path("app/".$filePath);
+////
+////        // move the file name
+////        $file->move($finalPath, $fileName);
+//        $mediaFile = $lesson
+//            ->addMedia($file)
+//            ->toMediaCollection($type);
+//
+//        $status = Media::UPLOAD_TYPE_COMPLETED;
+//        $message = 'Media has attached successfully';
+//        $mediaId = $mediaFile->id;
+//        $mediaUrl = $mediaFile->getFullUrl();
+//        $mediaName = $mediaFile->name;
+//
+//        $media = [
+//            'status' => $status,
+//            'message' => $message,
+//            'id' => $mediaId,
+//            'url' => $mediaUrl,
+//            'name' => $mediaName,
+//            'type' => $mediaType,
+//        ];
+//
+////        return response()->json($media);
+//        return $media;
+//    }
 
 }

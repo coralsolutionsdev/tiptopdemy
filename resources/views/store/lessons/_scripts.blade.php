@@ -57,26 +57,42 @@
      */
     function drawMediaItem(media)
     {
-        var type = media.type;
-        var video = null;
-        var url = media.url;
-        var id = media.id;
-        // insert media
-        if (type == {{\App\Modules\Media\Media::TYPE_VIDEO}}){
-            video = '<video src="'+url+'" muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>';
-        } else if (type == {{\App\Modules\Media\Media::TYPE_YOUTUBE}} || type == {{\App\Modules\Media\Media::TYPE_HTML_PAGE}}){
-            video = '<iframe src="'+url+'" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>';
-        }
-        $('.resource-items-list').append('' +
-            '<li id="resource-'+id+'" class="resource-item" style="overflow: hidden">\n' +
-            '    <div class="uk-card uk-card-default uk-card-body uk-padding-remove">\n' +
-            '        <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger resource-delete" uk-icon="icon: trash"></span></div>\n' +
-            '        <div>\n' +
-            '           <input type="hidden" name="resourceId[]" value="'+id+'">\n' +
-            '            '+video+'\n' +
-            '        </div>\n' +
-            '    </div>\n' +
-            '</li>');
+        var data = {
+            'name': media.name,
+            'path': media.path,
+            'mime_type': media.mime_type,
+            'file_type': media.file_type,
+            'extension': media.extension,
+            'duration': media.duration,
+        };
+        $.post('{{route('store.add.resources.item', $lesson->slug)}}',data).done(function (response) {
+            var media = response;
+            var type = media.type;
+            var url = media.url;
+            var id = media.id;
+            var video = null;
+            // insert media
+            if (type == {{\App\Modules\Media\Media::TYPE_VIDEO}}){
+                video = '<video src="'+url+'" muted playsinline controls disablepictureinpicture controlsList="nodownload"></video>';
+            } else if (type == {{\App\Modules\Media\Media::TYPE_YOUTUBE}} || type == {{\App\Modules\Media\Media::TYPE_HTML_PAGE}}){
+                video = '<iframe src="'+url+'" class="uk-responsive-width" width="1920" height="1080" controls controlsList="nodownload" frameborder="0" uk-responsive></iframe>';
+            }
+            $('.resource-items-list').append('' +
+                '<li id="resource-'+id+'" class="resource-item" style="overflow: hidden">\n' +
+                '    <div class="uk-card uk-card-default uk-card-body uk-padding-remove">\n' +
+                '        <div class="bg-white uk-box-shadow-hover-medium resource-item-control"><span class="uk-sortable-handle uk-margin-small-right hover-primary" uk-icon="icon: table"></span> <span uk-tooltip="{{__('main.delete')}}" class="hover-danger resource-delete" uk-icon="icon: trash"></span></div>\n' +
+                '        <div>\n' +
+                '           <input type="hidden" name="resourceId[]" value="'+id+'">\n' +
+                '            '+video+'\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '</li>');
+
+                UIkit.notification("<span uk-icon='icon: check'></span> "+ response.message, {pos: 'top-center', status:'success'})
+                $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check"></span></span>')
+                $('.process-status').html('<span class="uk-text-success"> Completed: 100%</span>');
+        });
+
     }
 
 
@@ -85,7 +101,7 @@
         acceptedFiles: "video/*",
         maxFiles: 1,
         timeout: 3600000,
-        autoProcessQueue: true,
+        autoProcessQueue: false,
         chunking: true,
         maxFilesize: 400000000,
         chunkSize: 1000000,
@@ -94,6 +110,7 @@
         init: function() {
             // stop auto upload
             var submitBtn = $('#dropZoneStartUpload');
+            var cancelBtn = $('#dropZoneCancelUpload');
             var myDropZone = this;
             submitBtn.click(function (){
                 if (myDropZone.files && myDropZone.files.length > 0){
@@ -101,9 +118,18 @@
                     myDropZone.processQueue();
                     submitBtn.attr('disabled', true);
                     submitBtn.html("{{__('main.Uploading')}}");
+                    cancelBtn.show();
                 } else {
                     UIkit.notification("<span uk-icon='icon: check'></span> Please select a file to upload first.", {pos: 'top-center', status:'warning'})
                 }
+            });
+            cancelBtn.click(function (){
+                myDropZone.removeAllFiles(true);
+                $('.process-icon').html('<span class="uk-text-warning"><span uk-icon="icon: warning"></span></span>')
+                $('.process-status').html('<span class="uk-text-warning"> Uploading canceled</span>');
+                cancelBtn.hide();
+                submitBtn.attr('disabled', false);
+                submitBtn.html("{{__('main.Start upload')}}");
             });
             this.on("addedfile", function(file) {
                 // alert("Added file.");
@@ -113,19 +139,21 @@
                 var _this = this;
                     _this.removeAllFiles();
                 }
-
                 if (file.xhr.response){
                     var media = JSON.parse(file.xhr.response);
-                    console.log(media);
-                    // drawMediaItem(media);
+                    // console.log(media, media.path);
                     submitBtn.attr('disabled', false);
                     submitBtn.html("{{__('main.Start upload')}}");
-                    $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check; ratio: 1.2"></span></span>')
-                    $('.process-status').html('<span class="uk-text-success"> Completed: 100%</span>');
+                    cancelBtn.hide();
+                    // $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check"></span></span>')
+                    $('.process-status').html('<span class="uk-text-success"> Processing: 99.9%</span>');
+                    drawMediaItem(media);
 
                 }
             });
-            this.on("uploadprogress", function(file, progress) {
+            this.on("uploadprogress", function(file, progress, bytesSent) {
+                progress = bytesSent / file.size * 100;
+                $('.dz-upload').width(progress + "%");
                 if (progress < 100){
                     $('.process-status').html('<span class="uk-text-primary"> Uploading: '+progress.toFixed(1)+'%</span>');
                 }

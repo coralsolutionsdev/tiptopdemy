@@ -17,6 +17,7 @@
         "filp/whoops": "^2.7",
         "haruncpi/laravel-id-generator": "^1.0",
         "intervention/image": "^2.5",
+        "james-heinrich/getid3": "^1.9",
         "laravel/framework": "6.*.*",
         "laravel/nexmo-notification-channel": "^2.0",
         "laravel/slack-notification-channel": "^2.0",

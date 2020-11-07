@@ -280,10 +280,11 @@
                                             @csrf
                                         </form>
                                     </div>
-                                    <h5 class="uk-margin-small">
+                                    <div class="uk-margin-small">
                                         <span class="process-icon"></span> <span class="process-status"></span>
-                                    </h5>
+                                    </div>
                                     <p class="uk-text-right">
+                                        <button id="dropZoneCancelUpload" class="uk-button uk-button-danger" type="button" style="display: none">Cancel</button>
                                         <button id="dropZoneStartUpload" class="uk-button uk-button-primary" type="button">{{__('main.Start upload')}}</button>
                                     </p>
                                 </div>

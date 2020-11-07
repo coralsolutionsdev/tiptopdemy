@@ -112,6 +112,8 @@
                     drawMediaItem(media);
                     submitBtn.attr('disabled', false);
                     submitBtn.html("{{__('main.Start upload')}}");
+                    $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check; ratio: 1.2"></span></span>')
+                    $('.process-status').html('<span class="uk-text-success"> Completed: 100%</span>');
 
                 }
             });
@@ -120,8 +122,7 @@
                     $('.process-status').html('<span class="uk-text-primary"> Uploading: '+progress.toFixed(1)+'%</span>');
 
                 } else if (progress == 100){
-                    $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check; ratio: 1.2"></span></span>')
-                    $('.process-status').html('<span class="uk-text-success"> Completed: 100%</span>');
+                    $('.process-status').html('<span class="uk-text-success"> Processing: 100%</span>');
                 }
             });
         }

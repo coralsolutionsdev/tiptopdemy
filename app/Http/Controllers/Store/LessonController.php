@@ -303,26 +303,26 @@ class LessonController extends Controller
             // return $this->saveFile($save->getFile());
             $file = $save->getFile();
             $type = strstr($file->getMimeType(), '/', true);
-//            try {
-//                $mediaFile = $lesson
-//                    ->addMedia($file)
-//                    ->toMediaCollection($type);
-//
-//                $status = Media::UPLOAD_TYPE_COMPLETED;
-//                $message = 'Media has attached successfully';
-//                $mediaId = $mediaFile->id;
-//                $mediaUrl = $mediaFile->getFullUrl();
-//                $mediaName = $mediaFile->name;
-//
-//            } catch (FileException $e){
-//                Log::error($e);
-//            } catch (DiskDoesNotExist $e) {
-//                Log::error($e);
-//            } catch (FileDoesNotExist $e) {
-//                Log::error($e);
-//            } catch (FileIsTooBig $e) {
-//                Log::error($e);
-//            }
+            try {
+                $mediaFile = $lesson
+                    ->addMedia($file)
+                    ->toMediaCollection($type);
+
+                $status = Media::UPLOAD_TYPE_COMPLETED;
+                $message = 'Media has attached successfully';
+                $mediaId = $mediaFile->id;
+                $mediaUrl = $mediaFile->getFullUrl();
+                $mediaName = $mediaFile->name;
+
+            } catch (FileException $e){
+                Log::error($e);
+            } catch (DiskDoesNotExist $e) {
+                Log::error($e);
+            } catch (FileDoesNotExist $e) {
+                Log::error($e);
+            } catch (FileIsTooBig $e) {
+                Log::error($e);
+            }
 
         }
 

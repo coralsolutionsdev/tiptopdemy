@@ -4,6 +4,7 @@
 /.vagrant
 /storage/app/attachments
 /storage/app/public/media
+/storage/app/public/chunks
 /public/storage/*
 Homestead.json
 Homestead.yaml

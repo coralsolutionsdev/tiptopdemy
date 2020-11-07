@@ -79,11 +79,18 @@
             '</li>');
     }
 
+
     Dropzone.options.dropzoneForm = {
+        // Setup chunking
         acceptedFiles: "video/*",
         maxFiles: 1,
         timeout: 3600000,
-        autoProcessQueue: false,
+        autoProcessQueue: true,
+        chunking: true,
+        maxFilesize: 400000000,
+        chunkSize: 1000000,
+        // If true, the individual chunks of a file are being uploaded simultaneously.
+        parallelChunkUploads: false,
         init: function() {
             // stop auto upload
             var submitBtn = $('#dropZoneStartUpload');
@@ -121,16 +128,9 @@
             this.on("uploadprogress", function(file, progress) {
                 if (progress < 100){
                     $('.process-status').html('<span class="uk-text-primary"> Uploading: '+progress.toFixed(1)+'%</span>');
-
-                } else if (progress == 100){
-                    $('.process-status').html('<span class="uk-text-success"> Processing: 100%</span>');
                 }
             });
         }
-
-
-
-
     }
     @if(false)
 

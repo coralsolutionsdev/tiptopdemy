@@ -19,6 +19,9 @@ use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
 use Spatie\Tags\Tag;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Vinkla\Hashids\Facades\Hashids;
@@ -270,8 +273,18 @@ class LessonController extends Controller
         return response($media, 200);
 
     }
-    public function attachMedia(Request $request)
+    public function attachMedia(Request $request, Lesson $lesson)
     {
+        $message =  null;
+        $media = null;
+        $mediaFile = null;
+        $mediaId = null;
+        $mediaUrl = null;
+        $mediaName = null;
+        $mediaType = Media::TYPE_VIDEO;
+        $mediaFileName = null;
+        $status = Media::UPLOAD_TYPE_IN_PROCESS; // 0 pending, 1 success,  2 not allowed
+
 
         // create the file receiver
         $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
@@ -286,18 +299,60 @@ class LessonController extends Controller
 
         // check if the upload has finished (in chunk mode it will send smaller files)
         if ($save->isFinished()) {
-            // save the file and return any response you need, current example uses `move` function. If you are
             // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
-//            return $this->saveFile($save->getFile());
+            // return $this->saveFile($save->getFile());
+            $file = $save->getFile();
+            $type = strstr($file->getMimeType(), '/', true);
+            try {
+                $mediaFile = $lesson
+                    ->addMedia($file)
+                    ->toMediaCollection($type);
+
+                $status = Media::UPLOAD_TYPE_COMPLETED;
+                $message = 'Media has attached successfully';
+                $mediaId = $mediaFile->id;
+                $mediaUrl = $mediaFile->getFullUrl();
+                $mediaName = $mediaFile->name;
+
+            } catch (FileException $e){
+                Log::error($e);
+            } catch (DiskDoesNotExist $e) {
+                Log::error($e);
+            } catch (FileDoesNotExist $e) {
+                Log::error($e);
+            } catch (FileIsTooBig $e) {
+                Log::error($e);
+            }
+
         }
 
         // we are in chunk mode, lets send the current progress
-        $handler = $save->handler();
+//        $handler = $save->handler();
 
-        return response()->json([
-            "done" => $handler->getPercentageDone(),
-            "media" => 'hahah',
-        ]);
+        if (!empty($lesson)){
+            // add media to lesson resources
+            $resources = $lesson->resources;
+            $resources[] = [
+                'id' => $mediaId,
+                'url' => $mediaUrl,
+                'name' => $mediaName,
+                'type' => $mediaType,
+            ];
+            $lesson->resources = $resources;
+            $lesson->save();
+        }
+
+        $media = [
+            'status' => $status,
+            'message' => $message,
+            'id' => $mediaId,
+            'url' => $mediaUrl,
+            'name' => $mediaName,
+            'type' => $mediaType,
+        ];
+
+        return response()->json($media);
 
     }
+
 }

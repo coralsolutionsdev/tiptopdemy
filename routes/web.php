@@ -127,7 +127,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
             Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
             Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
-            Route::post('/media/attach','LessonController@attachMedia')->name('media.attach');
+            Route::post('lesson/{lesson}/media/attach','LessonController@attachMedia')->name('media.attach');
+
 
         });
         /*form*/
@@ -166,6 +167,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::group(['namespace' => 'System', 'prefix' => 'system', 'as' => 'system.'], function() {
             Route::resource('countries', 'CountryController');
             Route::resource('server', 'ServerController');
+            Route::resource('file-manager', 'FileManagerController');
 
 //                Route::resource('errors', 'ErrorLogsController');
 //                Route::resource('server', 'ServerController');

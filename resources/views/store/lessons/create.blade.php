@@ -257,26 +257,35 @@
         </div>
 
     </section>
+
     <section>
         <div id="insertMediaModal" uk-modal="bg-close: false">
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
                 <button class="uk-modal-close-default" type="button" uk-close></button>
                 <h5 class="">{{__('main.Media items')}}</h5>
-                <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">
+{{--                <form id="insertMediaModalForm" action="" method="POST" enctype="multipart/form-data">--}}
                     <div>
                         <ul uk-tab class="uk-flex-center media-tabs">
                             <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_VIDEO}}"><span class="uk-text-primary" uk-icon="icon: cloud-upload"></span> {{__('main.Upload a new video')}}</a></li>
                             <li><a class="media-tab-item" href="#" data-value="{{\App\Modules\Media\Media::TYPE_HTML_PAGE}}"><span class="uk-text-primary" uk-icon="icon: code"></span> {{__('main.Embed')}}</a></li>
                         </ul>
-                        <ul class="uk-switcher uk-margin-small">
+                        <ul class="uk-switcher uk-margin-small uk-margin-remove-bottom">
                             <li>
                                 <div class="uk-margin-small">
                                     <label class="uk-form-label" for="form-stacked-text">{{__('main.Video upload')}}</label>
-                                    <div id="mydropzone" class="dropzone uk-placeholder uk-margin-remove">
+{{--                                    <div id="mydropzone" class="dropzone uk-placeholder uk-margin-remove">--}}
+{{--                                    </div>--}}
+                                    <div class="uk-placeholder uk-margin-remove uk-padding-remove uk-flex uk-flex-center">
+                                        <form id="dropzoneForm" action="{{route('store.media.attach', $lesson->slug)}}" class="dropzone uk-width-1-1 uk-flex uk-flex-center" id="myAwesomeDropzone" enctype="multipart/form-data">
+                                            @csrf
+                                        </form>
                                     </div>
-                                    <div class="uk-margin-small">
+                                    <h5 class="uk-margin-small">
                                         <span class="process-icon"></span> <span class="process-status"></span>
-                                    </div>
+                                    </h5>
+                                    <p class="uk-text-right">
+                                        <button id="dropZoneStartUpload" class="uk-button uk-button-primary" type="button">{{__('main.Start upload')}}</button>
+                                    </p>
                                 </div>
                             </li>
                             <li>
@@ -301,10 +310,7 @@
 {{--                            <progress id="js-progressbar" class="uk-progress" value="0" max="100"></progress>--}}
 {{--                        </div>--}}
                     </div>
-                </form>
-                <p class="uk-text-right">
-                    <button class="uk-button uk-button-primary attach-media" type="button">{{__('main.Start upload')}}</button>
-                </p>
+{{--                </form>--}}
             </div>
         </div>
     </section>

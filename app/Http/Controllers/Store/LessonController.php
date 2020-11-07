@@ -274,9 +274,7 @@ class LessonController extends Controller
         return response($media, 200);
 
     }
-    public function attachMedia(Request $request, Lesson $lesson)
-    {
-        $media = array();
+    public function attachMedia(Request $request) {
         // create the file receiver
         $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
 
@@ -290,21 +288,56 @@ class LessonController extends Controller
 
         // check if the upload has finished (in chunk mode it will send smaller files)
         if ($save->isFinished()) {
+            // save the file and return any response you need, current example uses `move` function. If you are
             // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
-            $file = $save->getFile();
-            try {
-                 $media = $this->saveFile($file);
-            } catch (FileException $e){
-                Log::error($e);
-            }
-
+            return $this->saveFile($save->getFile());
         }
 
+        // we are in chunk mode, lets send the current progress
+        $handler = $save->handler();
 
-        return response()->json($media);
-
+        return response()->json([
+            "done" => $handler->getPercentageDone(),
+        ]);
     }
+//    public function attachMedia(Request $request, Lesson $lesson)
+//    {
+//        $media = array();
+//        // create the file receiver
+//        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+//
+//        // check if the upload is success, throw exception or return response you need
+//        if ($receiver->isUploaded() === false) {
+//            throw new UploadMissingFileException();
+//        }
+//
+//        // receive the file
+//        $save = $receiver->receive();
+//
+//        // check if the upload has finished (in chunk mode it will send smaller files)
+//        if ($save->isFinished()) {
+//            // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
+//            $file = $save->getFile();
+//            try {
+//                 $media = $this->saveFile($file);
+//            } catch (FileException $e){
+//                Log::error($e);
+//            }
+//
+//        }
+//
+//
+//        return response()->json($media);
+//
+//    }
 
+    /**
+     * Saves the file
+     *
+     * @param UploadedFile $file
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function saveFile(UploadedFile $file)
     {
         $fileName = $this->createFilename($file);

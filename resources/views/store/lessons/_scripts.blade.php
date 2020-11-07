@@ -146,7 +146,7 @@
                     submitBtn.html("{{__('main.Start upload')}}");
                     cancelBtn.hide();
                     // $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check"></span></span>')
-                    $('.process-status').html('<span class="uk-text-success"> Processing: 99.9%</span>');
+                    $('.process-status').html('<span class="uk-text-success"> Processing: (Please keep this window opened)</span>');
                     drawMediaItem(media);
 
                 }
@@ -154,7 +154,7 @@
             this.on("uploadprogress", function(file, progress, bytesSent) {
                 progress = bytesSent / file.size * 100;
                 $('.dz-upload').width(progress + "%");
-                if (progress < 100){
+                if (progress < 99.9){
                     $('.process-status').html('<span class="uk-text-primary"> Uploading: '+progress.toFixed(1)+'%</span>');
                 }
             });

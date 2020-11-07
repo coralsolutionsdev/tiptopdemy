@@ -227,7 +227,7 @@ class LessonController extends Controller
             Storage::deleteDirectory($input['path']);
 
         }
-        
+
         return response()->json([
             'status' => $status,
             'message' => $message,

@@ -303,44 +303,44 @@ class LessonController extends Controller
             // return $this->saveFile($save->getFile());
             $file = $save->getFile();
             $type = strstr($file->getMimeType(), '/', true);
-            try {
-                $mediaFile = $lesson
-                    ->addMedia($file)
-                    ->toMediaCollection($type);
-
-                $status = Media::UPLOAD_TYPE_COMPLETED;
-                $message = 'Media has attached successfully';
-                $mediaId = $mediaFile->id;
-                $mediaUrl = $mediaFile->getFullUrl();
-                $mediaName = $mediaFile->name;
-
-            } catch (FileException $e){
-                Log::error($e);
-            } catch (DiskDoesNotExist $e) {
-                Log::error($e);
-            } catch (FileDoesNotExist $e) {
-                Log::error($e);
-            } catch (FileIsTooBig $e) {
-                Log::error($e);
-            }
+//            try {
+//                $mediaFile = $lesson
+//                    ->addMedia($file)
+//                    ->toMediaCollection($type);
+//
+//                $status = Media::UPLOAD_TYPE_COMPLETED;
+//                $message = 'Media has attached successfully';
+//                $mediaId = $mediaFile->id;
+//                $mediaUrl = $mediaFile->getFullUrl();
+//                $mediaName = $mediaFile->name;
+//
+//            } catch (FileException $e){
+//                Log::error($e);
+//            } catch (DiskDoesNotExist $e) {
+//                Log::error($e);
+//            } catch (FileDoesNotExist $e) {
+//                Log::error($e);
+//            } catch (FileIsTooBig $e) {
+//                Log::error($e);
+//            }
 
         }
 
         // we are in chunk mode, lets send the current progress
 //        $handler = $save->handler();
 
-        if (!empty($lesson)){
-            // add media to lesson resources
-            $resources = $lesson->resources;
-            $resources[] = [
-                'id' => $mediaId,
-                'url' => $mediaUrl,
-                'name' => $mediaName,
-                'type' => $mediaType,
-            ];
-            $lesson->resources = $resources;
-            $lesson->save();
-        }
+//        if (!empty($lesson)){
+//            // add media to lesson resources
+//            $resources = $lesson->resources;
+//            $resources[] = [
+//                'id' => $mediaId,
+//                'url' => $mediaUrl,
+//                'name' => $mediaName,
+//                'type' => $mediaType,
+//            ];
+//            $lesson->resources = $resources;
+//            $lesson->save();
+//        }
 
         $media = [
             'status' => $status,

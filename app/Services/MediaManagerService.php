@@ -114,7 +114,7 @@ class MediaManagerService
         $mediaType = Media::TYPE_VIDEO;
 
         // Group files by the date (week
-        $userPath = $user->getTenancyId().'/'.$user->id;
+        $userPath = md5($user->getTenancyId()).'/'.md5($user->id);
         $fileFolder = md5($fileName);
 
         // Build the file path

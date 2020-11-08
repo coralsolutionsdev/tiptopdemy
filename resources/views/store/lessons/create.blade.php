@@ -74,7 +74,7 @@
                                 <div class="col-lg-2 uk-padding">{{__('main.Media items')}}</div>
                                 <div class="col-lg-10 padding-0 margin-0">
                                 <div class="text-right">
-                                    <a href="#insertMediaModal" class="uk-button uk-button-default open-insert-media-modal" uk-toggle>{{__('main.Add Media Item')}}</a>
+                                    <a href="#insertMediaModal" class="uk-button uk-button-default open-insert-media-modal" uk-toggle><span uk-icon="plus-circle"></span> {{__('main.Add Media Item')}}</a>
                                 </div>
                                 <div class="media-items pt-2">
                                     <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s resource-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
@@ -127,8 +127,8 @@
                             <div class="col-lg-12 text-right" style="padding: 10px">
                                 @if(!empty($lesson))
                                     <!-- Button trigger modal -->
-                                    <a href="{{route('store.get.form.templates', $lesson->slug)}}" class="uk-button uk-button-primary">
-                                        {{__('main.Add Quiz')}}
+                                    <a href="{{route('store.get.form.templates', $lesson->slug)}}" class="uk-button uk-button-default">
+                                        <span uk-icon="plus-circle"></span> {{__('main.Add Quiz')}}
                                     </a>
                                     <!-- Modal -->
                                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -233,7 +233,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="uk-text-center">
+                                            <td colspan="5" class="uk-text-center">
                                                 {{__('main.There is no form items yet.')}}
                                             </td>
                                         </tr>
@@ -276,9 +276,11 @@
 {{--                                    <div id="mydropzone" class="dropzone uk-placeholder uk-margin-remove">--}}
 {{--                                    </div>--}}
                                     <div class="uk-placeholder uk-margin-remove uk-padding-remove uk-flex uk-flex-center">
-                                        <form id="dropzoneForm" action="{{route('store.media.attach', $lesson->slug)}}" class="dropzone uk-width-1-1 uk-flex uk-flex-center" id="myAwesomeDropzone" enctype="multipart/form-data">
+                                        @if(!empty($lesson))
+                                        <form id="dropzoneForm" action="{{route('store.media.attach')}}" class="dropzone uk-width-1-1 uk-flex uk-flex-center" id="myAwesomeDropzone" enctype="multipart/form-data">
                                             @csrf
                                         </form>
+                                        @endif
                                     </div>
                                     <div class="uk-margin-small">
                                         <span class="process-icon"></span> <span class="process-status"></span>
@@ -293,7 +295,7 @@
                                 <div class="uk-margin-small">
                                     <div class="uk-form-label">Embed URL</div>
                                     <div class="uk-form-controls">
-                                        <select class="uk-select" name="type">
+                                        <select class="uk-select" name="media_type">
                                             <option value="{{\App\Modules\Media\Media::TYPE_YOUTUBE}}" selected>{{__('main.Youtube')}}</option>
                                             <option value="{{\App\Modules\Media\Media::TYPE_HTML_PAGE}}">{{__('main.HTML page')}}</option>
                                         </select>
@@ -305,6 +307,13 @@
                                         <input class="uk-input" name="embed_url" type="text">
                                     </div>
                                 </div>
+                                <div class="uk-margin-small">
+                                    <span class="process-icon"></span> <span class="process-status"></span>
+                                </div>
+                                <p class="uk-text-right">
+                                    <button id="resourceCancelUpload" class="uk-button uk-button-danger" type="button" style="display: none">Cancel</button>
+                                    <button id="resourceStartUpload" class="uk-button uk-button-primary" type="button">{{__('main.Start upload')}}</button>
+                                </p>
                             </li>
                         </ul>
 {{--                        <div>--}}
@@ -320,39 +329,6 @@
 @section('script')
     @include('partial.scripts._tinyemc')
     @include('store.lessons._scripts')
-    <script>
-        function deleteMediaItem(){
-            $('.btn-media-item-delete').off('click');
-            $('.btn-media-item-delete').click(function () {
-                var item = $(this);
-                if(!confirm('Are you sure that you want to remove this item?')){
-                    return false;
-                }
-                item.closest('.media-item').remove();
-            });
-        }
-        deleteMediaItem();
-        //
-        $('.add-media-item').click(function () {
-            $('.media-items').append(
-                '<div class="row form-group media-item">\n' +
-                '<div class="col-7">\n' +
-                '    <input type="text" name="new_media_url[]" class="form-control" placeholder="https://example.com/example_path">\n' +
-                '</div>\n' +
-                '<div class="col-4">\n' +
-                '    <select class="form-control" name="new_media_type[]">\n' +
-                '        <option value="1">Youtube</option>\n' +
-                '        <option value="2">Html page</option>\n' +
-                '    </select>\n' +
-                '</div>\n' +
-                '<div class="col-1">\n' +
-                '    <span id="" class="btn btn-light btn-media-item-delete"><i class="far fa-trash-alt"></i></span>\n' +
-                '</div>\n' +
-                '</div>'
-            );
-            deleteMediaItem();
-        });
-    </script>
     @if(!empty($lesson))
     <script>
         var itemName = '{{$lesson->name}}';

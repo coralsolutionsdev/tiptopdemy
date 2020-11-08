@@ -12,6 +12,7 @@ use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -21,6 +22,7 @@ use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
@@ -183,49 +185,84 @@ class LessonController extends Controller
 
     }
 
-
+    /**
+     * upload media TODO: change function name and controller
+     * @param Request $request
+     * @return JsonResponse
+     * @throws UploadFailedException
+     * @throws UploadMissingFileException
+     */
     public function attachMedia(Request $request) {
         // create the file receiver
         $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
         return MediaManagerService::uploadChunkFiles($receiver);
     }
 
+    /**
+     * @param Request $request
+     * @param Lesson $lesson
+     * @return JsonResponse
+     * @throws DiskDoesNotExist
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     * @throws FileCannotBeAdded
+     */
     public function addResourcesItem(Request $request, Lesson $lesson){
-        $input = $request->only(['name', 'path', 'mime_type', 'file_type', 'extension', 'duration']);
+        $input = $request->only(['name', 'path', 'mime_type', 'file_type', 'media_type', 'extension', 'duration']);
         $message = $mediaId = $mediaUrl = $mediaType = $mediaName = null;
         $status = Media::UPLOAD_TYPE_REFUSED;
+        $mediaType = isset($input['media_type']) ? $input['media_type'] : null;
 
-        if (!empty($lesson) && file_exists(storage_path("app/public/".$input['path'].$input['name']))){
+        if (!empty($mediaType)){
+            if ($mediaType == Media::TYPE_VIDEO){
+                // save media from file url
+                // check if file is already exist
+                if (!empty($lesson) && file_exists(storage_path("app/public/".$input['path'].$input['name']))){
 
-            if ($input['file_type'] == 'video'){
-                $mediaType = Media::TYPE_VIDEO;
-            }
+                    $fileUrl = 'storage/'.$input['path'].$input['name'];
+                    // create media record
+                    $media = $lesson
+                        ->addMediaFromUrl($fileUrl)
+                        ->withCustomProperties([
+                            'extension' => !empty($input['extension']) ? $input['extension'] : null,
+                            'duration' => !empty($input['duration']) ? $input['duration'] : null,
+                        ])
+                        ->toMediaCollection($input['file_type']);
 
-            $fileUrl = 'storage/'.$input['path'].$input['name'];
-            $media = $lesson
-            ->addMediaFromUrl($fileUrl)
-            ->toMediaCollection($input['file_type']);
-
-            if (!empty($media)){
-                $mediaId = $media->id;
+                    if (!empty($media)){
+                        $mediaId = $media->id;
+                        $status = Media::UPLOAD_TYPE_COMPLETED;
+                        $message = 'Media has attached successfully';
+                        $mediaUrl = $media->getFullUrl();
+                        $mediaName = $media->name;
+                    }
+                    // remove file from storage
+                    Storage::deleteDirectory($input['path']);
+                }
+            } elseif (in_array($mediaType, [Media::TYPE_YOUTUBE, Media::TYPE_HTML_PAGE])){
+                $embedUrl = $input['path'];
+                if ($mediaType == Media::TYPE_YOUTUBE){
+                    $embedUrl = str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $input['path']);
+                }
+                $mediaId = generateRandomString(6);
                 $status = Media::UPLOAD_TYPE_COMPLETED;
                 $message = 'Media has attached successfully';
-                $mediaUrl = $media->getFullUrl();
-                $mediaName = $media->name;
-
-                // add media to lesson resources
-                $resources = $lesson->resources;
-                $resources[] = [
-                    'id' => $mediaId,
-                    'url' => $mediaUrl,
-                    'name' => $mediaName,
-                    'type' => $mediaType,
-                ];
-                $lesson->resources = $resources;
-                $lesson->save();
+                $mediaUrl = $embedUrl;
+                $mediaName = $input['name'];
             }
-            Storage::deleteDirectory($input['path']);
+        }
 
+        if (!empty($lesson)){
+            // add media to lesson resources
+            $resources = $lesson->resources;
+            $resources[] = [
+                'id' => $mediaId,
+                'url' => $mediaUrl,
+                'name' => $mediaName,
+                'type' => $mediaType,
+            ];
+            $lesson->resources = $resources;
+            $lesson->save();
         }
 
         return response()->json([
@@ -237,84 +274,5 @@ class LessonController extends Controller
             'type' => $mediaType,
         ]);
     }
-//    public function attachMedia(Request $request, Lesson $lesson)
-//    {
-//        $media = array();
-//        // create the file receiver
-//        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
-//
-//        // check if the upload is success, throw exception or return response you need
-//        if ($receiver->isUploaded() === false) {
-//            throw new UploadMissingFileException();
-//        }
-//
-//        // receive the file
-//        $save = $receiver->receive();
-//
-//        // check if the upload has finished (in chunk mode it will send smaller files)
-//        if ($save->isFinished()) {
-//            // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
-//            $file = $save->getFile();
-//            try {
-//                 $media = $this->saveFile($file);
-//            } catch (FileException $e){
-//                Log::error($e);
-//            }
-//
-//        }
-//
-//
-//        return response()->json($media);
-//
-//    }
-
-    /**
-     * Saves the file
-     *
-     * @param UploadedFile $file
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-
-
-//    protected function saveVideoFile(UploadedFile $file, $lesson)
-//    {
-////        $fileName = $this->createFilename($file);
-//        // Group files by mime type
-////        $mime = str_replace('/', '-', $file->getMimeType());
-//        $type = strstr($file->getMimeType(), '/', true);
-//        $mediaType = Media::TYPE_VIDEO;
-//
-//        // Group files by the date (week
-//        $dateFolder = date("Y-m-W");
-//
-//        // Build the file path
-////        $filePath = "upload/{$mime}/{$dateFolder}/";
-////        $finalPath = storage_path("app/".$filePath);
-////
-////        // move the file name
-////        $file->move($finalPath, $fileName);
-//        $mediaFile = $lesson
-//            ->addMedia($file)
-//            ->toMediaCollection($type);
-//
-//        $status = Media::UPLOAD_TYPE_COMPLETED;
-//        $message = 'Media has attached successfully';
-//        $mediaId = $mediaFile->id;
-//        $mediaUrl = $mediaFile->getFullUrl();
-//        $mediaName = $mediaFile->name;
-//
-//        $media = [
-//            'status' => $status,
-//            'message' => $message,
-//            'id' => $mediaId,
-//            'url' => $mediaUrl,
-//            'name' => $mediaName,
-//            'type' => $mediaType,
-//        ];
-//
-////        return response()->json($media);
-//        return $media;
-//    }
 
 }

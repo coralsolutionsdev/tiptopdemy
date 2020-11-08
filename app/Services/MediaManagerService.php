@@ -66,6 +66,12 @@ class MediaManagerService
         Storage::deleteDirectory('media/'.$user->getTenancyId().'/'.$user->id.'/'.md5($media->id).'/');
     }
 
+    /**
+     * upload big files with chunking
+     * @param $receiver
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UploadMissingFileException
+     */
     public static function uploadChunkFiles($receiver)
     {
         // check if the upload is success, throw exception or return response you need
@@ -88,22 +94,33 @@ class MediaManagerService
 
         return response()->json();
     }
+
+    /**
+     * save uploaded file
+     * @param UploadedFile $file
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected static function saveFile(UploadedFile $file)
     {
         $fileName = self::createFilename($file);
-
+        $user = getAuthUser();
+        if (empty($user)){
+            abort('500');
+        }
         // Group files by mime type
         $mime = str_replace('/', '-', $file->getMimeType());
-        $type = strstr($file->getMimeType(), '/', true);
         $fileExtension = $file->getClientOriginalExtension();
+        $type = strstr($file->getMimeType(), '/', true);
+        $mediaType = Media::TYPE_VIDEO;
 
         // Group files by the date (week
-        $dateFolder = md5($fileName);
+        $userPath = $user->getTenancyId().'/'.$user->id;
+        $fileFolder = md5($fileName);
 
         // Build the file path
-        $filePath = "public/media/temp/{$dateFolder}/";
+        $filePath = "public/media/temp/{$userPath}/{$fileFolder}/";
         $finalPath = storage_path("app/".$filePath);
-        $storageFilePath = "media/temp/{$dateFolder}/";
+        $storageFilePath = "media/temp/{$userPath}/{$fileFolder}/";
 
         // move the file name
         $file->move($finalPath, $fileName);
@@ -113,6 +130,7 @@ class MediaManagerService
             'path' => $storageFilePath,
             'name' => $fileName,
             'file_type' => $type,
+            'media_type' => $mediaType,
             'mime_type' => $mime,
             'extension' => $fileExtension,
             'duration' => $duration,
@@ -134,6 +152,11 @@ class MediaManagerService
 
         return $filename;
     }
+    /**
+     * calculate video duration
+     * @param $full_video_path
+     * @return false|string
+     */
     protected static function getDuration($full_video_path)
     {
         $getID3 = new \getID3;

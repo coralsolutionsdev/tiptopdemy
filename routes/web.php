@@ -127,7 +127,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
             Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
             Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
-            Route::post('lesson/{lesson}/media/attach','LessonController@attachMedia')->name('media.attach');
+            Route::post('media/attach','LessonController@attachMedia')->name('media.attach');
             Route::post('lesson/{lesson}/add/resources/item','LessonController@addResourcesItem')->name('add.resources.item');
 
 

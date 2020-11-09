@@ -445,4 +445,12 @@ function generateRandomString($length = 10) {
     return $randomString;
 }
 
+function getAuthUserMediaStoragePath(){
+    $user = getAuthUser();
+    if (!empty($user)){
+        return 'media/'.md5($user->getTenancyId()).'/'.md5($user->id).'/';
+    }
+    return 'media/guests';
+}
+
 

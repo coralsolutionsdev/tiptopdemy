@@ -19,6 +19,8 @@
             {!! Form::open(['url' => route('store.lessons.store', $product->slug),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
         @include('manage.partials._page-header')
+            {{$product->slug, $lesson->slug}}
+            <a href="{{route('store.lesson.edit.content', [$product->slug, $lesson->slug])}}">edit containt</a>
         <div class="form-panel row">
             <div class="col-lg-12">
                 <div class="card border-light">
@@ -211,7 +213,7 @@
                                     @forelse($lesson->forms as $form)
                                         <tr>
                                             <td>{{$form->title}}</td>
-                                            <td class="uk-text-center">{{$form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
+                                            <td class="uk-text-center">{{!empty($form->properties) && $form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
                                             <td class="uk-text-success uk-text-center">{{$form->version}}.0</td>
                                             <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
                                             <td>

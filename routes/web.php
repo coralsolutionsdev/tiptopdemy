@@ -129,6 +129,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
             Route::post('media/attach','LessonController@attachMedia')->name('media.attach');
             Route::post('lesson/{lesson}/add/resources/item','LessonController@addResourcesItem')->name('add.resources.item');
+            // temp
+            Route::get('/product/{product}/lessons/{lesson}/edit/content','LessonController@editContent')->name('lesson.edit.content');
 
 
         });

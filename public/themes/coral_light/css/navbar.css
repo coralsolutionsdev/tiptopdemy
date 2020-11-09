@@ -37,7 +37,7 @@
     border-color: var(--text-primary) !important;
 }
 /*Canvas*/
-.uk-offcanvas-bar {
+.light-offcanvas .uk-offcanvas-bar {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -50,45 +50,45 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
-.uk-offcanvas-bar{
+.light-offcanvas .uk-offcanvas-bar{
     background-color: white;
 }
-.uk-offcanvas-bar .text-highlighted{
+.light-offcanvas .uk-offcanvas-bar .text-highlighted{
      color: var(--text-highlighted) !important;
  }
-.uk-offcanvas-bar p{
+.light-offcanvas .uk-offcanvas-bar p{
     color: var(--text-regular) !important;
     margin: 0px;
     padding: 0px;
 }
-.uk-offcanvas-bar .online{
+.light-offcanvas .uk-offcanvas-bar .online{
     position: absolute !important;
     border:  2px solid white;
     border-radius: 50%;
     /*margin: -5px -5px 0 0;*/
 }
-.uk-offcanvas-bar a{
+.light-offcanvas .uk-offcanvas-bar a{
     color: var(--text-highlighted) !important;
 }
-.uk-offcanvas-bar .uk-text-primary{
+.light-offcanvas .uk-offcanvas-bar .uk-text-primary{
     color: var(--text-primary) !important;
 }
-.uk-offcanvas-bar .uk-text-small{
+.light-offcanvas .uk-offcanvas-bar .uk-text-small{
    font-size: 12px;
 }
-.uk-offcanvas-bar .uk-button-primary{
+.light-offcanvas .uk-offcanvas-bar .uk-button-primary{
     background-color: var(--text-primary) !important;
     color: white !important;
 }
-.uk-offcanvas-bar .uk-button-default{
+.light-offcanvas .uk-offcanvas-bar .uk-button-default{
     background-color: #F8F8F8 !important;
     color: #222222 !important;
 }
-.uk-offcanvas-bar .uk-button-primary:hover, .uk-offcanvas-bar .uk-button-default:hover, .uk-offcanvas-bar .uk-button-default:focus{
+.light-offcanvas .uk-offcanvas-bar .uk-button-primary:hover, .uk-offcanvas-bar .uk-button-default:hover, .uk-offcanvas-bar .uk-button-default:focus{
     background-color: #222222 !important;
     color: white;
 }
-.uk-offcanvas-bar .uk-active a, .uk-offcanvas-bar .uk-nav-header{
+.light-offcanvas .uk-offcanvas-bar .uk-active a, .uk-offcanvas-bar .uk-nav-header{
     color: var(--text-primary) !important;
 }
 

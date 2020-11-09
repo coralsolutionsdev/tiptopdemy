@@ -9,11 +9,7 @@ class TenancyPathGenerator implements PathGenerator
 {
     public function getPath(Media $media) : string
     {
-        $user = getAuthUser();
-        if (!empty($user)){
-            return 'media/'.$user->getTenancyId().'/'.$user->id.'/'.md5($media->id).'/';
-        }
-        return 'media/'.md5($media->id).'/';
+        return getAuthUserMediaStoragePath().md5($media->id).'/';
     }
 
     public function getPathForConversions(Media $media) : string

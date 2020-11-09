@@ -274,5 +274,9 @@ class LessonController extends Controller
             'type' => $mediaType,
         ]);
     }
+    public function editContent(Product $product, Lesson $lesson)
+    {
+        return view('system.page-builder.index');
+    }
 
 }

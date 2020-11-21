@@ -371,9 +371,8 @@ class Form extends Model
     public function getLastResponse()
     {
         $user = getAuthUser();
-        $resp =  $this->responses()->where('creator_id', $user->id)->latest()->first();
-        if (!empty($resp)){
-            return $resp;
+        if ($user && $resp =  $this->responses()->where('creator_id', $user->id)->latest()->first()){
+            return $resp;   
         }
         return null;
     }

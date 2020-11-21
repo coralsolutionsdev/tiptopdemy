@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- THEME CSS -->
 
-{{--  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">--}}
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <script src="{{ asset('/js/jquery-3.3.1.min.js')}}"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">{{--    <!--Semantic UI-->--}}
   <!--tailwindcss UI-->
@@ -30,215 +30,145 @@
 
 {{--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/grapesjs/0.12.17/grapes.min.js">--}}
 {{--  <script src="https://cdnjs.cloudflare.com/ajax/libs/grapesjs/0.12.17/css/grapes.min.css"></script>--}}
-  <link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css">
-  <script src="//unpkg.com/grapesjs"></script>
+  <script src="{{asset('plugins/page_builder/js/builder.js')}}"></script>
+  <link rel="stylesheet" href="{{asset('plugins/page_builder/css/builder.css')}}">
 
-  <style>
-    .uk-card-secondary-light{
-      background-color: #2e2e2e;
-    }
-    #gjs {
-      /*border: 3px solid #444;*/
-    }
-
-    /* Reset some default styling */
-    .gjs-cv-canvas {
-      top: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .gjs-block {
-      width: auto;
-      height: auto;
-      min-height: auto;
-    }
-    .editor-row {
-      display: flex;
-      justify-content: flex-start;
-      align-items: stretch;
-      flex-wrap: nowrap;
-      height: 300px;
-    }
-
-    .editor-canvas {
-      flex-grow: 1;
-    }
-
-    .panel__right {
-      flex-basis: 230px;
-      position: relative;
-      overflow-y: auto;
-    }
-  </style>
 </head>
 <body>
-
-<div class="panel__top">
-  <div class="panel__basic-actions"></div>
-</div>
-<div class="editor-row">
-  <div class="editor-canvas">
-    <div id="gjs">
-      
-    </div>
-  </div>
-  <div class="panel__right">
-    <div class="layers-container"></div>
-  </div>
-</div>
-<div id="blocks"></div>
-
-
-
-
-
-
-@if(false)
-
-
-  <div style="position: fixed; top: 50vh">
-    <button class="uk-button uk-button-secondary uk-margin-small-right" type="button" uk-toggle="target: #pageBuilderPanel" style="padding: 10px 5px; border-radius: 0 5px 5px 0; background-color: #222222"><span uk-icon="icon: settings"></span></button>
-  </div>
-  <div id="pageBuilderPanel" uk-offcanvas="mode: push; overlay: true">
-    <div class="uk-offcanvas-bar uk-padding-small">
-      <div class="uk-margin-small">
-        <h5>Basic</h5>
-      </div>
-
-      @if(false)
-        <div class="uk-grid-small uk-grid-match uk-child-width-1-2@s uk-text-center" uk-grid>
-          <div>
-            <div class="uk-card uk-card-secondary-light uk-card-body">
-              <i class="fas fa-heading fa-3x"></i><br>
-              <p>Heading</p>
-            </div>
-          </div>
-          <div>
-            <div class="uk-card uk-card-secondary-light uk-card-body">
-              <i class="fas fa-align-left fa-3x"></i><br>
-              <p>Text Editor</p>
-            </div>
-          </div>
-          <div>
-            <div class="uk-card uk-card-secondary-light uk-card-body">
-              <i class="far fa-image fa-3x"></i><br>
-              <p>Image</p>
-            </div>
-          </div>
-          <div>
-            <div class="uk-card uk-card-secondary-light uk-card-body">
-              <i class="fab fa-youtube fa-3x"></i><br>
-              <p>Video</p>
-            </div>
-          </div>
-
+{{--page-editor--}}
+{{--<div>--}}
+{{--  <div class="uk-child-width-1-1" uk-grid>--}}
+{{--    <div>--}}
+{{--      <div class="uk-inline uk-dark">--}}
+{{--        <img src="https://getuikit.com/docs/images/light.jpg" alt="">--}}
+{{--        <div>--}}
+{{--          <a class="uk-position-absolute uk-transform-center pin" style="left: 20%; top: 30%; opacity: 0.8" href="#" uk-marker></a>--}}
+{{--          <div uk-dropdown="mode: click">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>--}}
+{{--        </div>--}}
+{{--        <a class="uk-position-absolute uk-transform-center" style="left: 60%; top: 40%" href="#" uk-marker></a>--}}
+{{--        <a class="uk-position-absolute uk-transform-center" style="left: 80%; top: 70%" href="#" uk-marker></a>--}}
+{{--      </div>--}}
+{{--    </div>--}}
+{{--  </div>--}}
+{{--</div>--}}
+<div class="uk-grid-collapse" uk-grid>
+  <div id="pb-control" class="pb-control uk-width-1-5@m" style="background-color: #34383C; height: 100vh">
+    <div class="pb-control-header">
+      <div class="uk-grid-collapse uk-light uk-padding-small" uk-grid>
+        <div class="uk-width-expand@m">
+          <h5 class=""><b>PageBuilder</b></h5>
         </div>
-      @endif
+        <div class="uk-width-auto@m">
+            <span uk-icon="icon: thumbnails; ratio: 1"></span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="uk-inline" style="position: fixed; right: 3%; bottom: 5%;z-index: 99">
-    <button class="uk-button uk-button-secondary" type="button" style="border-radius: 50%; padding: 5px 15px"><span uk-icon="plus"></span></button>
-    <div uk-dropdown>
-      <ul class="uk-nav uk-dropdown-nav">
-        <li class="uk-active"><a href="#">Active</a></li>
-        <li><a href="#">Item</a></li>
-        <li class="uk-nav-header">Header</li>
-        <li><a href="#">Item</a></li>
-        <li><a href="#">Item</a></li>
-        <li class="uk-nav-divider"></li>
-        <li><a href="#">Item</a></li>
+    <div>
+      <ul class="uk-padding-small" uk-accordion="multiple: true">
+        <li class="uk-open">
+          <a class="uk-accordion-title" href="#">Basic</a>
+          <div class="uk-accordion-content">
+            <div id="pb-items" class=" uk-grid-small uk-grid-match uk-child-width-1-2@s uk-text-center" uk-grid>
+              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
+                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
+                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><i class="fas fa-align-left fa-2x"></i></div>
+                  <div class="pb-element-title-wrapper">Text editor</div>
+                </div>
+              </div>
+              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
+                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
+                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><span uk-icon="icon:image; ratio:1.5"></span></div>
+                  <div class="pb-element-title-wrapper">Image</div>
+                </div>
+              </div>
+              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
+                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
+                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><span uk-icon="icon:play-circle; ratio:1.5"></span></div>
+                  <div class="pb-element-title-wrapper">Video</div>
+                </div>
+              </div>
+              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
+                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
+                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><i class="far fa-images fa-2x"></i></div>
+                  <div class="pb-element-title-wrapper">Hotspot</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
+  <div class="uk-width-expand@m">
+    <div style="position: fixed; top: 50vh">
+      <button class="uk-button uk-margin-small-right pb-control-toggle"><span class="" uk-icon="icon: chevron-left"></span></button>
+    </div>
+    <div class="uk-container">
+      <div style="padding-top: 25px">
+        <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-sortable="handle: .uk-sortable-handle" uk-grid>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="position: fixed; bottom: 5%; right: 3%">
+  <button class="uk-button uk-button-secondary" style="border-radius: 50%; padding: 1px 10px"><span uk-icon="icon: plus"></span></button>
+  <div class="uk-padding-remove" uk-dropdown="mode: click">
+    <div class="uk-grid-small uk-child-width-1-1@s uk-text-center uk-padding-small" uk-grid>
+      <div>
+        <div class="uk-grid-collapse uk-child-width-1-1@s uk-text-center pb-draggable-item" pb-draggableType="column" pb-columns-count="1" draggable="true" uk-grid>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="uk-grid-collapse uk-child-width-1-2@s uk-text-center pb-draggable-item" pb-draggableType="column" pb-columns-count="2" draggable="true" uk-grid>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="uk-grid-collapse uk-child-width-1-3@s uk-text-center pb-draggable-item" pb-draggableType="column" pb-columns-count="3" draggable="true" uk-grid>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+@if(false)
+  <li>
+    <div class="pb-row uk-card bg-white uk-padding-remove">
+      <!--row control bar-->
+      <span class="pb-row-control-bar uk-background-primary uk-light uk-position-top-center" style="margin-top: -24px; padding:2px 5px; border-radius: 5px 5px 0 0">
+                <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
+                <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
+                <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
+              </span>
+      <div class="pb-row-components">
+
+      </div>
+    </div>
+  </li>
 @endif
+@include('system.page-builder._scripts')
 
-<script>
-
-  const editor = grapesjs.init({
-    // Indicate where to init the editor. You can also pass an HTMLElement
-    container: '#gjs',
-    // Get the content for the canvas directly from the element
-    // As an alternative we could use: `components: '<h1>Hello World Component!</h1>'`,
-    fromElement: true,
-    // Size of the editor
-    height: '300px',
-    width: 'auto',
-    // Disable the storage manager for the moment
-    storageManager: false,
-    // Avoid any default panel
-    blockManager: {
-      appendTo: '#blocks',
-      blocks: [
-        {
-          id: 'section', // id is mandatory
-          label: '<b>Section</b>', // You can use HTML/SVG inside labels
-          attributes: { class:'gjs-block-section' },
-          content: `<section>
-          <h1>This is a simple title</h1>
-          <div>This is just a Lorem text: Lorem ipsum dolor sit amet</div>
-        </section>`,
-        }, {
-          id: 'text',
-          label: 'Text',
-          content: '<div data-gjs-type="text">Insert your text here</div>',
-        }, {
-          id: 'image',
-          label: 'Image',
-          // Select the component once it's dropped
-          select: true,
-          // You can pass components as a JSON instead of a simple HTML string,
-          // in this case we also use a defined component type `image`
-          content: { type: 'image' },
-          // This triggers `active` event on dropped components and the `image`
-          // reacts by opening the AssetManager
-          activate: true,
-        }
-      ]
-    }, ///
-    layerManager: {
-      appendTo: '.layers-container'
-    },
-    // We define a default panel as a sidebar to contain layers
-    panels: {
-      defaults: [{
-        id: 'layers',
-        el: '.panel__right',
-        // Make the panel resizable
-        resizable: {
-          maxDim: 350,
-          minDim: 200,
-          tc: 0, // Top handler
-          cl: 1, // Left handler
-          cr: 0, // Right handler
-          bc: 0, // Bottom handler
-          // Being a flex child we need to change `flex-basis` property
-          // instead of the `width` (default)
-          keyWidth: 'flex-basis',
-        },
-      }]
-    }
-
-
-
-  });
-  const blockManager = editor.BlockManager;
-  blockManager.add('h1-block', {
-    label: 'Heading',
-    content: '<h1>Put your title here</h1>',
-    category: 'Basic',
-    attributes: {
-      title: 'Insert h1 block'
-    }
-  });
-  blockManager.add('h1-blockww', {
-    label: 'Headingwww',
-    content: '<h1>Put your title here</h1>',
-    category: 'Basic',
-    attributes: {
-      title: 'Insert h1 block'
-    }
-  });
-
-</script>
 </body>
 </html>

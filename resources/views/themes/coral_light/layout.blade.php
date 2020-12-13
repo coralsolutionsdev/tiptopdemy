@@ -109,6 +109,7 @@
                                 </div>
                             </div>
                         </form>
+                        @if(false)
                         <div class="uk-text-center">
                             Or, Login with..
                         </div>
@@ -123,6 +124,7 @@
                                 <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

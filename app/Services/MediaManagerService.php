@@ -66,6 +66,7 @@ class MediaManagerService
         Storage::deleteDirectory('media/'.$user->getTenancyId().'/'.$user->id.'/'.md5($media->id).'/');
     }
 
+
     /**
      * upload big files with chunking
      * @param $receiver
@@ -95,14 +96,46 @@ class MediaManagerService
         return response()->json();
     }
 
+
+    /**
+     * upload big files with chunking
+     * @param $receiver
+     * @return array
+     * @throws UploadMissingFileException
+     */
+    public static function uploadChunkedFile($receiver)
+    {
+        $media = null;
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
+        }
+
+        // receive the file
+        $save = $receiver->receive();
+
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) {
+            // save the file and return any response you need, current example uses `move` function. If you are
+            // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
+            $media = self::saveChunkedFile($save->getFile());
+        }
+
+        // we are in chunk mode, lets send the current progress
+//        $handler = $save->handler();
+
+        return $media;
+    }
+
     /**
      * save uploaded file
      * @param UploadedFile $file
      * @return \Illuminate\Http\JsonResponse
      */
-    protected static function saveFile(UploadedFile $file)
+    public static function saveFile(UploadedFile $file)
     {
         $fileName = self::createFilename($file);
+        $duration = null;
         $user = getAuthUser();
         if (empty($user)){
             abort('500');
@@ -125,7 +158,9 @@ class MediaManagerService
         // move the file name
         $file->move($finalPath, $fileName);
         $fullPath = $finalPath.$fileName;
-        $duration =  self::getDuration($fullPath);
+        if ($type == Media::TYPE_VIDEO){
+            $duration =  self::getDuration($fullPath);
+        }
         return response()->json([
             'path' => $storageFilePath,
             'name' => $fileName,
@@ -135,6 +170,52 @@ class MediaManagerService
             'extension' => $fileExtension,
             'duration' => $duration,
         ]);
+    }
+
+
+    /**
+     * save uploaded file
+     * @param UploadedFile $file
+     * @return array
+     */
+    public static function saveChunkedFile(UploadedFile $file)
+    {
+        $fileName = self::createFilename($file);
+        $duration = null;
+        $user = getAuthUser();
+        if (empty($user)){
+            abort('500');
+        }
+        // Group files by mime type
+        $mime = str_replace('/', '-', $file->getMimeType());
+        $fileExtension = $file->getClientOriginalExtension();
+        $type = strstr($file->getMimeType(), '/', true);
+        $mediaType = Media::TYPE_VIDEO;
+
+        // Group files by the date (week
+        $userPath = md5($user->getTenancyId()).'/'.md5($user->id);
+        $fileFolder = md5($fileName);
+
+        // Build the file path
+        $filePath = "public/media/temp/{$userPath}/{$fileFolder}/";
+        $finalPath = storage_path("app/".$filePath);
+        $storageFilePath = "media/temp/{$userPath}/{$fileFolder}/";
+
+        // move the file name
+        $file->move($finalPath, $fileName);
+        $fullPath = $finalPath.$fileName;
+        if ($type == Media::TYPE_VIDEO){
+            $duration =  self::getDuration($fullPath);
+        }
+        return [
+            'path' => $storageFilePath,
+            'name' => $fileName,
+            'file_type' => $type,
+            'media_type' => $mediaType,
+            'mime_type' => $mime,
+            'extension' => $fileExtension,
+            'duration' => $duration,
+        ];
     }
 
     /**

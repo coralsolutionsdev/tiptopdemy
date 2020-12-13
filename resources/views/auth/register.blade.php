@@ -9,7 +9,8 @@
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
                     <div class="uk-card uk-card-default uk-card-body uk-width-3-5@m register-card">
                         <h3 class="uk-card-title">{{__('Register')}}</h3>
-
+                        Register is closed now
+                        @if(false)
                         <form class="uk-form-stacked " role="form" method="POST" action="{{ route('register') }}" autocomplete="on">
                             {{ csrf_field() }}
                             {{-- Form item--}}
@@ -214,10 +215,13 @@
                                 <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    @if(false)
     @include('auth._scripts')
+    @endif
 @endsection

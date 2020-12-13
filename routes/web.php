@@ -180,7 +180,10 @@ Route::group(['middleware'=>'installed'], function(){
          * Media
          */
         Route::post('/media/attach','Media\MediaController@ajaxStore')->name('ajax.media.attach');
-
+        Route::group(['prefix' => 'media', 'namespace' => 'Media', 'as' => 'media.'], function (){
+            Route::resource('/','MediaController');
+            Route::get('/get/library/items','MediaController@getMediaLibrary')->name('get.library.items');
+        });
 
         });
 /* Admin Routes end */

@@ -276,7 +276,9 @@ class LessonController extends Controller
     }
     public function editContent(Product $product, Lesson $lesson)
     {
-        return view('system.page-builder.index');
+        $mediaOwner = $lesson->getClassName();
+
+        return view('system.page-builder.index', compact('mediaOwner'));
     }
 
 }

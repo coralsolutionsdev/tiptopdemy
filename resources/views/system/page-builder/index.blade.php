@@ -15,12 +15,16 @@
   {{--    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">--}}
   <!--UiKit UI-->
   @if(getLanguage() == 'ar')
-  <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>
+{{--  <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>--}}
+  <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
   @else
   <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
   @endif
+
   <!--site Css-->
   <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202010241400')}}">
+  <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202010241400')}}">
+  <link rel="stylesheet" href="{{url('themes/general/modules/css/file-manager.css?v=202010241400')}}">
 
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -33,84 +37,78 @@
   <script src="{{asset('plugins/page_builder/js/builder.js')}}"></script>
   <link rel="stylesheet" href="{{asset('plugins/page_builder/css/builder.css')}}">
 
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{asset('plugins/dropzone/dropzone.css')}}">
+  <script src="{{asset('/plugins/dropzone/dropzone.js')}}"></script>
+  <style>
+    :root{
+      --theme-secondary-bg-color: #F3F5F9;
+      --theme-primary-color: {{getFrontEndColor()}};
+      --theme-primary-font-color: #949494;
+      --text-primary: {{getFrontEndColor()}};
+      --text-secondary: #263655;
+      --text-success: #17E5B4;
+      --text-warning: #faa05a;
+      --text-danger: #f0506e;
+      --text-regular: #666666;
+      --text-highlighted: #263655;
+      --bg-secondary: #F9F8FD;
+    }
+  </style>
 </head>
 <body>
-{{--page-editor--}}
-{{--<div>--}}
-{{--  <div class="uk-child-width-1-1" uk-grid>--}}
-{{--    <div>--}}
-{{--      <div class="uk-inline uk-dark">--}}
-{{--        <img src="https://getuikit.com/docs/images/light.jpg" alt="">--}}
-{{--        <div>--}}
-{{--          <a class="uk-position-absolute uk-transform-center pin" style="left: 20%; top: 30%; opacity: 0.8" href="#" uk-marker></a>--}}
-{{--          <div uk-dropdown="mode: click">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>--}}
-{{--        </div>--}}
-{{--        <a class="uk-position-absolute uk-transform-center" style="left: 60%; top: 40%" href="#" uk-marker></a>--}}
-{{--        <a class="uk-position-absolute uk-transform-center" style="left: 80%; top: 70%" href="#" uk-marker></a>--}}
-{{--      </div>--}}
-{{--    </div>--}}
-{{--  </div>--}}
-{{--</div>--}}
-<div class="uk-grid-collapse" uk-grid>
-  <div id="pb-control" class="pb-control uk-width-1-5@m" style="background-color: #34383C; height: 100vh">
-    <div class="pb-control-header">
-      <div class="uk-grid-collapse uk-light uk-padding-small" uk-grid>
-        <div class="uk-width-expand@m">
-          <h5 class=""><b>PageBuilder</b></h5>
-        </div>
-        <div class="uk-width-auto@m">
-            <span uk-icon="icon: thumbnails; ratio: 1"></span>
-        </div>
+<div class="display-table">
+  <div class="uk-grid-collapse display-table-row" uk-grid>
+    @include('system.page-builder._control')
+    <div class="uk-width-expand@m display-table-cell">
+      <div style="position: fixed; top: 50vh">
+        <button class="uk-button uk-margin-small-right pb-control-toggle"><span class="" uk-icon="icon: chevron-left"></span></button>
       </div>
-    </div>
-    <div>
-      <ul class="uk-padding-small" uk-accordion="multiple: true">
-        <li class="uk-open">
-          <a class="uk-accordion-title" href="#">Basic</a>
-          <div class="uk-accordion-content">
-            <div id="pb-items" class=" uk-grid-small uk-grid-match uk-child-width-1-2@s uk-text-center" uk-grid>
-              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
-                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
-                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><i class="fas fa-align-left fa-2x"></i></div>
-                  <div class="pb-element-title-wrapper">Text editor</div>
+      <div class="">
+        <div style="padding-top: 25px">
+          <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-sortable="handle: .uk-sortable-handle" uk-grid>
+            @if(true)
+            <li>
+              <div class="pb-row uk-card bg-white uk-padding-remove uk-container">
+                <!--row control bar-->
+                <span class="pb-row-control-bar uk-background-primary uk-light uk-position-top-center" style="margin-top: -24px; padding:2px 5px; border-radius: 5px 5px 0 0">
+                <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
+                <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
+                <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
+              </span>
+                <div class="pb-row-components">
+                  <div class="pb-grid uk-grid-small"  uk-grid>
+                    <div class="pb-grid-column uk-width-1-1 uk-width-1-2@m"><span class="pb-column-control-bar uk-light">
+                      <span class=""><span uk-icon="icon: close; ratio: 0.5"></span></span>
+                    </span>
+                      <div class="pb-column-content pb-empty-column uk-text-center">
+
+                        <div class="pb-widget-wrapperuk-inline-clip uk-inline-clip-show-overflow uk-transition-toggle" tabindex="0">
+                            <div class="">
+                              <img src="https://getuikit.com/docs/images/light.jpg" alt="">
+                              <div class="pb-hotspot-marker-items">
+                                <div class="pb-hotspot-marker uk-dark">
+                                  <a class="uk-position-absolute uk-transform-center pin" style="left: 20%; top: 30%; opacity: 0.8" href="#" uk-marker></a>
+                                  <div uk-dropdown="mode: click" class="uk-padding-small">This is my Marker description</div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
-                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
-                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><span uk-icon="icon:image; ratio:1.5"></span></div>
-                  <div class="pb-element-title-wrapper">Image</div>
-                </div>
-              </div>
-              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
-                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
-                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><span uk-icon="icon:play-circle; ratio:1.5"></span></div>
-                  <div class="pb-element-title-wrapper">Video</div>
-                </div>
-              </div>
-              <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="">
-                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem" draggable="true">
-                  <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><i class="far fa-images fa-2x"></i></div>
-                  <div class="pb-element-title-wrapper">Hotspot</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div class="uk-width-expand@m">
-    <div style="position: fixed; top: 50vh">
-      <button class="uk-button uk-margin-small-right pb-control-toggle"><span class="" uk-icon="icon: chevron-left"></span></button>
-    </div>
-    <div class="uk-container">
-      <div style="padding-top: 25px">
-        <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-sortable="handle: .uk-sortable-handle" uk-grid>
-        </ul>
+            </li>
+            @endif
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <div style="position: fixed; bottom: 5%; right: 3%">
   <button class="uk-button uk-button-secondary" style="border-radius: 50%; padding: 1px 10px"><span uk-icon="icon: plus"></span></button>
@@ -168,7 +166,8 @@
     </div>
   </li>
 @endif
+@include('partial.scripts._tinyemc')
 @include('system.page-builder._scripts')
-
+@include('system.file-manager._scripts')
 </body>
 </html>

@@ -6,6 +6,7 @@
     <section>
         <div class="pt-25" style="background-color: #F3F5F9">
             <div class="uk-container">
+                @if(false)
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
                     <div class="uk-card uk-card-default uk-card-body uk-width-3-5@m register-card">
                         <h3 class="uk-card-title">{{__('Register')}}</h3>
@@ -216,8 +217,11 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </section>
+    @if(false)
     @include('auth._scripts')
+    @endif
 @endsection

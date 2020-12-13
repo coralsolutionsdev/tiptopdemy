@@ -41,8 +41,8 @@ Route::group(['middleware'=>'installed'], function(){
 
         Route::get('/verify/{email}/{verify_token}', 'HomeController@sendVerifyEmailDone')->name('sendverifyemail');
     /* Socialite login*/
-        Route::get('/login/{driver}', 'Auth\LoginController@redirectToProvider')->name('login.socialite');
-        Route::get('/login/{driver}/callback', 'Auth\LoginController@handleProviderCallback');
+//        Route::get('/login/{driver}', 'Auth\LoginController@redirectToProvider')->name('login.socialite');
+//        Route::get('/login/{driver}/callback', 'Auth\LoginController@handleProviderCallback');
 
 /* Admin Routes */
         Route::group(['prefix' => 'manage', 'middleware' => 'role:superadministrator|administrator'], function () {

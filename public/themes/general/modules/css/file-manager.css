@@ -1,0 +1,21 @@
+.media-item .selected-media-icon{
+    display: none;
+    position: absolute; right: 0; margin-right: -10px;  margin-top: -10px;
+}
+.media-item img{
+    border: 5px solid white;
+}
+.selected-media-item img{
+    border: 5px solid dodgerblue;
+}
+.media-item img:hover{
+    cursor: pointer;
+}
+.selected-media-item .selected-media-icon{
+    display: flex;
+}
+#media-items{
+    max-height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

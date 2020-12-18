@@ -33,6 +33,7 @@ class Lesson extends Model implements ReactableContract, HasMedia
         'title',
         'slug',
         'description',
+        'content',
         'type',
         'product_id',
         'unit_id',
@@ -53,6 +54,7 @@ class Lesson extends Model implements ReactableContract, HasMedia
         'unit_id' => 'integer',
         'status' => 'integer',
         'resources' => 'array',
+        'content' => 'array',
         'creator_id' => 'integer',
         'editor_id' => 'integer',
     ];

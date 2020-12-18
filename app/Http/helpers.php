@@ -445,4 +445,16 @@ function generateRandomString($length = 10) {
     return $randomString;
 }
 
+function getAuthUserMediaStoragePath(){
+    $user = getAuthUser();
+    if (!empty($user)){
+        return 'media/'.md5($user->getTenancyId()).'/'.md5($user->id).'/';
+    }
+    return 'media/guests';
+}
 
+function getFileSize($bytes, $decimals = 2){
+    $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+    $factor = floor((strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+}

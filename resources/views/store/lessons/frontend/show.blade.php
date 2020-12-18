@@ -2,6 +2,7 @@
 @section('title', $page_title)
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202010241400')}}">
 @endsection
 @section('content')
 <section>
@@ -137,13 +138,19 @@
                     </div>
                     <div class="uk-width-expand">
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
+                            @if(!empty($lesson->content && !empty($lesson->content['html'])))
                             <div> {{-- Description --}}
                                 <div class="uk-card uk-card-default uk-card-body uk-padding-small">
-                                    <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>
-                                    {!! $lesson->description !!}
+{{--                                    <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>--}}
+{{--                                    {!! $lesson->description !!}--}}
+                                    <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-grid>
+                                        {!! $lesson->content['html'] !!}
+                                    </ul>
                                 </div>
                             </div>
-                            @if($resources = $lesson->resources)
+                            @endif
+
+                        @if($resources = $lesson->resources)
                                         @foreach($resources as $resource)
                                             <div>
                                                 <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-remove" style="overflow: hidden">

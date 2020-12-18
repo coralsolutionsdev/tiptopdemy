@@ -6,8 +6,20 @@ use App\Modules\Course\Lesson;
 use App\Modules\Media\Media;
 use App\Http\Controllers\Controller;
 use App\Services\MediaManagerService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Illuminate\Support\Facades\Storage;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class MediaController extends Controller
 {
     /**
@@ -17,7 +29,10 @@ class MediaController extends Controller
      */
     public function index()
     {
-        //
+        $page_title =  'File Manager';
+        $breadcrumb =  [];
+
+        return view('system.file-manager.index', compact('page_title','breadcrumb'));
     }
 
     /**
@@ -31,11 +46,44 @@ class MediaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * upload media
+     * @param Request $request
+     * @return JsonResponse
+     * @throws UploadFailedException
+     * @throws UploadMissingFileException
      */
+    public function store(Request $request): JsonResponse
+    {
+        // create the file receiver
+        $modal = getAuthUser();
+        if (empty($modal)){
+            abort(500);
+        }
+        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
+        }
+
+        // receive the file
+        $save = $receiver->receive();
+
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) {
+            // save the file and return any response you need, current example uses `move` function. If you are
+            // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
+            return MediaManagerService::attachMedia($save->getFile(), $modal);
+        }
+
+        // we are in chunk mode, lets send the current progress
+        // @var AbstractHandler $handler */
+        // $handler = $save->handler();
+
+        return response()->json();
+    }
+
+
     public function ajaxStore(Request $request)
     {
         $input =  $request->all();
@@ -185,5 +233,33 @@ class MediaController extends Controller
     public function destroy(Media $media)
     {
         //
+    }
+
+    public function getMediaLibrary()
+    {
+        $user = getAuthUser();
+        $mediaItems = $user->getMedia('file_manager');
+        $mediaItems = $mediaItems->map(function ($item) {
+            $item->url = $item->getFullUrl();
+            $item->creation_date = date_html($item->created_at);
+            return $item->only(['id', 'name', 'url','creation_date', 'custom_properties']);
+
+        })->toArray();
+        return response()->json($mediaItems);
+
+    }
+    public function ajaxDestroy(Media $media)
+    {
+        // TODO: check if use can remove this media item
+        $user = getAuthUser();
+        if (!empty($user)){
+            $userMedia = $user->getMedia('file_manager')->where('id', $media->id)->first();
+            if (!empty($userMedia) && $userMedia->id == $media->id){
+                $media->delete();
+                return response('success', 200);
+            }
+        }
+        return response('error', 503);
+
     }
 }

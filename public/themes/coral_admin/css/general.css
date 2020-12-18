@@ -1,7 +1,7 @@
 /*@import url("fonts.css");*/
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400&display=swap');
-@import "editor.css";
-@import "models/blog.css";
+@import "editor.css?v=202012182000";
+@import "models/blog.css?v=202012182000";
 html, body{
     padding: 0px;
     margin: 0px;
@@ -608,6 +608,10 @@ ul.layout-item-banners li{
     border: 5px solid var(--theme-primary-color);
     border-color: var(--theme-primary-color) transparent var(--theme-primary-color) transparent;
     animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.media-item:hover{
+    cursor: pointer;
 }
 
 @keyframes lds-dual-ring {

@@ -33,8 +33,10 @@
                         </div>
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.Description')}}</div>
-                            <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::textarea('description',  !empty($lesson) ? $lesson->description : null, ['class' => 'form-control content-editor', 'rows' => '15']) !!}
+                            <div class="col-lg-10 uk-padding margin-0 uk-placeholder uk-text-center">
+{{--                                {!! Form::textarea('description',  !empty($lesson) ? $lesson->description : null, ['class' => 'form-control', 'rows' => '5']) !!}--}}
+                                <a class="uk-button uk-button-primary" href="{{route('store.lesson.edit.content', [$product->slug, $lesson->slug])}}"><span uk-icon="icon: thumbnails"></span> edit content with page builder</a>
+
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
@@ -211,7 +213,7 @@
                                     @forelse($lesson->forms as $form)
                                         <tr>
                                             <td>{{$form->title}}</td>
-                                            <td class="uk-text-center">{{$form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
+                                            <td class="uk-text-center">{{!empty($form->properties) && $form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
                                             <td class="uk-text-success uk-text-center">{{$form->version}}.0</td>
                                             <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
                                             <td>

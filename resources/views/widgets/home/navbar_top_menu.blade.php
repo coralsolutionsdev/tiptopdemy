@@ -93,7 +93,7 @@
     </nav>
 </div>
 
-<div id="top-menu-offcanvas-nav" class="uk-light" uk-offcanvas="mode: slide; overlay: true; flip:true">
+<div id="top-menu-offcanvas-nav" class="uk-light light-offcanvas" uk-offcanvas="mode: slide; overlay: true; flip:true">
     <div class="uk-offcanvas-bar">
         @if(!Auth::user())
             <div class="uk-padding-small">
@@ -113,7 +113,7 @@
     </div>
 </div>
 @if(Auth::check())
-<div id="user-profile-offcanvas-nav" class="uk-light" uk-offcanvas="mode: slide; overlay: true; flip:true">
+<div id="user-profile-offcanvas-nav" class="uk-light light-offcanvas" uk-offcanvas="mode: slide; overlay: true; flip:true">
     <div class="uk-offcanvas-bar">
         <h5 class="text-highlighted uk-text-bold uk-text-primary">{{__('main.User Profile')}}</h5>
         <div class="uk-grid-collapse" uk-grid>

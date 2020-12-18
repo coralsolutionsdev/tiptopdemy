@@ -179,7 +179,7 @@ final class Versions
   'symfony/yaml' => 'v5.1.5@a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.9.1@bafc69caeb4d49c39fd0779086c03a3738cbb389',
-  'laravel/laravel' => 'dev-master@3b18630383b0bc8ae2b200c0133d92cf7b9c76b0',
+  'laravel/laravel' => 'dev-20119-dev-coral-page-builder@cb41ce01e8386f55f0957083658629e92bd5fa83',
 );
 
     private function __construct()

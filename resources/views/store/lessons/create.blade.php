@@ -74,6 +74,51 @@
                     </div>
                 </div>
             </div>
+            <div id="attachments" class="col-lg-12">
+                <div class="card border-light">
+                    <div class="card-body">
+                        <p>{{__('main.Attachments')}}</p>
+                        <hr>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Add attachment')}}</div>
+                            <div class="col-lg-5" style="padding: 10px 0 10px 10px; margin: 0px">
+                                <div class="custom-file">
+                                    <input type="file" name="attachments[]" multiple >
+                                </div>
+                            </div>
+                        </div>
+
+                        @if(!empty($attachments))
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">{{__('main.File name')}}</th>
+                                    <th scope="col">{{__('main.File Type')}}</th>
+                                    <th scope="col">{{__('main.Download link')}}</th>
+                                    <th scope="col" width="30">{{__('main.Actions')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($attachments as $attachment)
+                                    {{--                                {{dd($attachment)}}--}}
+                                    <tr>
+                                        <td>{{$attachment->filename}}</td>
+                                        <td>{{$attachment->filetype}}</td>
+                                        <td><a target="_blank" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse(date('y-m-d'))->addDay())}}">Download</a></td>
+                                        <td><span id="{{$attachment->key}}" class="btn btn-light btn-delete delete-attachment"><i class="far fa-trash-alt"></i></span></td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan="4" class="attachment-message">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
             <div id="presentations" class="col-lg-12">
                 <div class="card border-light">
                     <div class="card-body">
@@ -347,6 +392,20 @@
                 return false;
             }
         });
+        function deleteAttachment()
+        {
+            $('.delete-attachment').click(function () {
+                $('.attachment-message').html('<span class="uk-text-warning uk-flex uk-flex-middle"><span uk-spinner="ratio: 0.5" class="uk-margin-small-left uk-margin-small-right"></span> Deleting attachment .., Please wait</span>\n');
+                var lessonId = '{{!empty($lesson->slug) ?  $lesson->slug : ''}}';
+                var item = $(this);
+                var key = item.attr('id');
+                $.post('/manage/store/lesson/'+lessonId+'/attachment/'+key+'/delete').done(function (response) {
+                    item.parent().parent().remove();
+                    $('.attachment-message').html('<span class="text-success"><i class="far fa-check-circle"></i> attachment deleted</span>\n');
+                });
+            });
+        }
+        deleteAttachment();
     </script>
     @endif
 @endsection

@@ -228,7 +228,6 @@
                             </div>
                             @endif
                             <div>
-                                @if(false)
                                 {{--attachments--}}
                                 @if(!empty($attachments) && $attachments->count() > 0)
 
@@ -237,7 +236,7 @@
                                         <table class="uk-table uk-table-divider">
                                             <thead>
                                             <tr>
-                                                <th class="uk-table-shrink">{{__('main.File name')}}</th>
+                                                <th class="">{{__('main.File name')}}</th>
                                                 <th class="uk-table-expand">{{__('main.File Type')}}</th>
                                                 <th class="uk-width-small"> {{__('main.Download link')}}</th>
                                             </tr>
@@ -245,7 +244,7 @@
                                             <tbody>
                                             @foreach($attachments as $attachment)
                                                 <tr>
-                                                    <td>{{$attachment->filename}}</td>
+                                                    <td class="uk-width-auto">{{$attachment->filename}}</td>
                                                     <td>{{$attachment->filetype}}</td>
                                                     <td><a target="_blank" class="uk-button uk-button-default uk-text-primary" href="{{$attachment->getTemporaryUrl(\Carbon\Carbon::parse(date('y-m-d'))->addDay())}}"><span uk-icon="icon: cloud-download"></span> <span>{{__('main.Download')}} </span></a></td>
                                                 </tr>
@@ -254,7 +253,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                @endif
                                 @endif
                                 @if(false)
                                 {{--comments--}}

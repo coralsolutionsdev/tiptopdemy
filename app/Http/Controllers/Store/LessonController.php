@@ -122,7 +122,8 @@ class LessonController extends Controller
                 break;
             }
         }
-        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson'));
+        $attachments = $lesson->attachments()->get();
+        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'attachments'));
 
     }
 
@@ -148,8 +149,9 @@ class LessonController extends Controller
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         $modelType = $lesson->getClassName();
         $mediaItems = $lesson->getMedia('youtube_video');
+        $attachments = $lesson->attachments()->get();
 
-        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags', 'categories'));
+        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags', 'categories', 'attachments'));
 
     }
 
@@ -313,6 +315,22 @@ class LessonController extends Controller
         $lesson->save();
         session()->flash('success',__('Updated Successfully'));
         return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
+    }
+
+    /**
+     * delete attachment
+     * @param Lesson $lesson
+     * @param $key
+     * @return Application|ResponseFactory|Response
+     * @throws Exception
+     */
+    function attachmentDelete(Lesson $lesson, $key)
+    {
+        $attachment = $lesson->attachment($key);
+        if ($attachment){
+            $attachment->delete();
+        }
+        return response($key, 200);
     }
 
 }

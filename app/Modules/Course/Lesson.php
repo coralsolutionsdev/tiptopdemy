@@ -7,6 +7,7 @@ use App\Modules\Group\Group;
 use App\Modules\Media\Media;
 use App\Product;
 use App\User;
+use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
@@ -18,6 +19,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
 {
     use Reactable;
     use HasMediaTrait;
+    use HasAttachment;
+
 
     public function getClassName()
     {

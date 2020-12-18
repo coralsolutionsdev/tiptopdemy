@@ -39,7 +39,9 @@
                                 <a class="uk-button uk-button-primary" href="{{route('store.lesson.edit.content', [$product->slug, $lesson->slug])}}"><span uk-icon="icon: thumbnails"></span> edit content with page builder</a>
                                 @else
                                     <div class="uk-alert-warning" uk-alert>
-                                        <p>Please save the lesson first to edit page content.</p>
+                                        <p>
+                                            {{__('main.Please create a lesson first.')}}
+                                        </p>
                                     </div>
 
                                 @endif

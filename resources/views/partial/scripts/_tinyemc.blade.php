@@ -3,7 +3,7 @@
     var miniToolBar = "bold italic underline | alignleft aligncenter alignright alignjustify | image media | forecolor backcolor | fontsizeselect";
 
     function addTinyEditor(item, fullToolBar, menubar){
-        var storeUrl =  '{{ route('attachment.image.upload', array(), false) . '?_token=' . csrf_token() }}';
+        var storeUrl =  '{{ route('media.image.upload', array(), false) . '?_token=' . csrf_token() }}';
         tinymce.init({
             selector: item,
             branding: false,

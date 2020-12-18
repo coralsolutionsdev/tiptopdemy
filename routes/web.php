@@ -186,6 +186,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/','MediaController');
             Route::get('/get/library/items','MediaController@getMediaLibrary')->name('get.library.items');
             Route::post('/ajax/delete/{media}','MediaController@ajaxDestroy')->name('ajax.destroy');
+            Route::post('/ajax/image/upload','MediaController@editorImageUpload')->name('image.upload');
+
         });
 
         });

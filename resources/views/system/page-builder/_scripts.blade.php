@@ -838,6 +838,7 @@
             });
 
         $('.submit-content-form').off('click').click(function (){
+            resetOpenWidgetSettings();
             $("input[name=content]").val($('#pb-content').html());
             $('#contentForm').submit();
         });

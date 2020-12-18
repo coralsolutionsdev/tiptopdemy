@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Media;
 use App\Modules\Course\Lesson;
 use App\Modules\Media\Media;
 use App\Http\Controllers\Controller;
+use App\Services\FileAssetManagerService;
 use App\Services\MediaManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,8 @@ use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Vinkla\Hashids\Facades\Hashids;
+
 class MediaController extends Controller
 {
     /**
@@ -260,6 +263,65 @@ class MediaController extends Controller
             }
         }
         return response('error', 503);
+
+    }
+
+    function editorImageUpload(Request $request)
+    {
+
+        if ($request->hasFile('file')) {
+            $user = getAuthUser();
+            $mediaInfo = $path = $url = null;
+            $file = $request->file;
+            $companyHashId = Hashids::encode(1);
+            $fileName = $file->getClientOriginalName();
+
+            if (isset($_SERVER['HTTP_ORIGIN'])) {
+                // same-origin requests won't set an origin. If the origin is set, it must be valid.
+                if ($_SERVER['HTTP_ORIGIN'] == url('/')) {
+                    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                } else {
+                    header("HTTP/1.0 403 Origin Denied");
+                    return;
+                }
+            }
+
+            /*
+              If your script needs to receive cookies, set images_upload_credentials : true in
+              the configuration and enable the following two headers.
+            */
+            // header('Access-Control-Allow-Credentials: true');
+            // header('P3P: CP="There is no P3P policy."');
+
+            // Sanitize input
+            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $fileName)) {
+                header("HTTP/1.0 500 Invalid file name.");
+                return;
+            }
+
+            // Accept upload if there was no origin, or if it is an accepted origin
+            $image = $file;
+//            $location =  'attachments/'.$companyHashId.'/images';
+//            $path = FileAssetManagerService::ImageStore($image,$location);
+            $media = MediaManagerService::attachMedia($image, $user);
+            if (!empty($media)){
+                $mediaInfo = $media->original;
+                $path = $mediaInfo['path'];
+                $url =  $mediaInfo['url'];
+            }
+            // Respond to the successful upload with JSON.
+            // Use a location key to specify the path to the saved image resource.
+            // { location : '/your/uploaded/image/file'}
+//            $attachmentUrl = url('storage/'.$path);
+            $item = [
+                'path' =>  $path,
+                'url' =>  $url,
+            ];
+            echo json_encode(array('item' => $item));
+        } else {
+            // Notify editor that the upload failed
+            header("HTTP/1.0 500 Server Error");
+        }
 
     }
 }

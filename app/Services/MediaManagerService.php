@@ -266,6 +266,7 @@ class MediaManagerService
                 'id' => $mediaFile->id,
                 'name' => $mediaFile->name,
                 'url' => $mediaFile->getFullUrl(),
+                'path' => $mediaFile->getPath(),
                 'mime_type' => $mime,
                 'file_type' => $fileType,
                 'extension' => $fileExtension,

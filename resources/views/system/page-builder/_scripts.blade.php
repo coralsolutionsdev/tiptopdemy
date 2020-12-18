@@ -216,6 +216,9 @@
             var item = $(event.closest('.pb-content-item'));
             var contentItemId = item.attr('id');
             activeContentItemId = contentItemId;
+            var paddingVal = item.find('.pb-row-components').css('padding-left').replace('px','');
+            $('.current-padding-value').html(paddingVal)
+            $('.input-padding-value').val(paddingVal)
             $('.pb-content-item-settings-wrapper').show();
             updateContentItemSettings();
 

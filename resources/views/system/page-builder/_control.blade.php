@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="uk-margin-small pb-dark">
-                    <label class="uk-form-label" for="form-stacked-text">Border margin (<span class="current-padding-value"></span>px)</label>
+                    <label class="uk-form-label" for="form-stacked-text">Border padding (<span class="current-padding-value"></span>px)</label>
                     <div class="slidecontainer">
                         <input type="range" class="left-position uk-width-1-1 input-padding-value" min="0" max="50" value="5">
                     </div>
@@ -238,12 +238,12 @@
                         Click on the image to add
                     </div>
                     <div class="marker-editor" style="display: none">
-                        <div class="uk-margin-small">
-                            <label class="uk-form-label" for="form-stacked-text">Title</label>
-                            <div class="uk-form-controls">
-                                <input class="uk-input mama"type="text" placeholder="Some text...">
-                            </div>
-                        </div>
+{{--                        <div class="uk-margin-small">--}}
+{{--                            <label class="uk-form-label" for="form-stacked-text">Title</label>--}}
+{{--                            <div class="uk-form-controls">--}}
+{{--                                <input class="uk-input mama"type="text" placeholder="Some text...">--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="uk-margin-small">
                             <label class="uk-form-label" for="form-stacked-text">Description</label>
                             <div class="uk-form-controls">

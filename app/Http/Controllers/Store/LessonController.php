@@ -12,12 +12,15 @@ use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
@@ -274,11 +277,42 @@ class LessonController extends Controller
             'type' => $mediaType,
         ]);
     }
+
+    /**
+     * edit lesson content
+     * @param Product $product
+     * @param Lesson $lesson
+     * @return Application|Factory|View
+     */
     public function editContent(Product $product, Lesson $lesson)
     {
         $mediaOwner = $lesson->getClassName();
+        $htmlContent = '';
+        if (!empty($lesson) && !empty($lesson->content) && !empty($lesson->content['html'])){
+            $htmlContent = $lesson->content['html'];
+        }
+        $updateRoute = route('store.lesson.update.content', [$product->slug, $lesson->slug]);
+        return view('system.page-builder.index', compact('mediaOwner', 'product', 'lesson', 'htmlContent', 'updateRoute'));
+    }
 
-        return view('system.page-builder.index', compact('mediaOwner'));
+    /**
+     * update lesson content
+     * @param Request $request
+     * @param Product $product
+     * @param Lesson $lesson
+     * @return RedirectResponse
+     */
+    public function updateContent(Request $request, Product $product, Lesson $lesson): RedirectResponse
+    {
+        $input = $request->only(['content']);
+        $contentArr = [
+            'html' => $input['content'],
+            'editor_version' => 1.00,
+        ];
+        $lesson->content = $contentArr;
+        $lesson->save();
+        session()->flash('success',__('Updated Successfully'));
+        return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
     }
 
 }

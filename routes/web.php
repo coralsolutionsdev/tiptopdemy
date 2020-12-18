@@ -131,6 +131,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::post('lesson/{lesson}/add/resources/item','LessonController@addResourcesItem')->name('add.resources.item');
             // temp
             Route::get('/product/{product}/lessons/{lesson}/edit/content','LessonController@editContent')->name('lesson.edit.content');
+            Route::put('/product/{product}/lessons/{lesson}/edit/content','LessonController@updateContent')->name('lesson.update.content');
 
 
         });
@@ -180,9 +181,11 @@ Route::group(['middleware'=>'installed'], function(){
          * Media
          */
         Route::post('/media/attach','Media\MediaController@ajaxStore')->name('ajax.media.attach');
+
         Route::group(['prefix' => 'media', 'namespace' => 'Media', 'as' => 'media.'], function (){
             Route::resource('/','MediaController');
             Route::get('/get/library/items','MediaController@getMediaLibrary')->name('get.library.items');
+            Route::post('/ajax/delete/{media}','MediaController@ajaxDestroy')->name('ajax.destroy');
         });
 
         });

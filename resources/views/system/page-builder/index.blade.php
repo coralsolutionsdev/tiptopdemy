@@ -56,59 +56,59 @@
     }
   </style>
 </head>
-<body>
+<body id="pb">
 <div class="display-table">
   <div class="uk-grid-collapse display-table-row" uk-grid>
     @include('system.page-builder._control')
     <div class="uk-width-expand@m display-table-cell">
-      <div style="position: fixed; top: 50vh">
+      <div style="position: fixed; top: 50vh; z-index: 999">
         <button class="uk-button uk-margin-small-right pb-control-toggle"><span class="" uk-icon="icon: chevron-left"></span></button>
       </div>
       <div class="">
         <div style="padding-top: 25px">
-          <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-sortable="handle: .uk-sortable-handle" uk-grid>
-            @if(true)
-            <li>
-              <div class="pb-row uk-card bg-white uk-padding-remove uk-container">
-                <!--row control bar-->
-                <span class="pb-row-control-bar uk-background-primary uk-light uk-position-top-center" style="margin-top: -24px; padding:2px 5px; border-radius: 5px 5px 0 0">
-                <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
-                <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
-                <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
-              </span>
-                <div class="pb-row-components">
-                  <div class="pb-grid uk-grid-small"  uk-grid>
-                    <div class="pb-grid-column uk-width-1-1 uk-width-1-2@m"><span class="pb-column-control-bar uk-light">
-                      <span class=""><span uk-icon="icon: close; ratio: 0.5"></span></span>
-                    </span>
-                      <div class="pb-column-content pb-empty-column uk-text-center">
-
-                        <div class="pb-widget-wrapperuk-inline-clip uk-inline-clip-show-overflow uk-transition-toggle" tabindex="0">
-                            <div class="">
-                              <img src="https://getuikit.com/docs/images/light.jpg" alt="">
-                              <div class="pb-hotspot-marker-items">
-                                <div class="pb-hotspot-marker uk-dark">
-                                  <a class="uk-position-absolute uk-transform-center pin" style="left: 20%; top: 30%; opacity: 0.8" href="#" uk-marker></a>
-                                  <div uk-dropdown="mode: click" class="uk-padding-small">This is my Marker description</div>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-            @endif
+          <ul id="pb-content" class="pb-editable-content pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-sortable="handle: .uk-sortable-handle" uk-grid>
+            {!! $htmlContent !!}
           </ul>
         </div>
       </div>
     </div>
   </div>
 </div>
+@if(false)
+  <li>
+    <div class="pb-row uk-card bg-white uk-padding-remove uk-container">
+      <!--row control bar-->
+      <span class="pb-row-control-bar uk-background-primary uk-light uk-position-top-center" style="margin-top: -24px; padding:2px 5px; border-radius: 5px 5px 0 0">
+                <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
+                <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
+                <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
+              </span>
+      <div class="pb-row-components">
+        <div class="pb-grid uk-grid-small"  uk-grid>
+          <div class="pb-grid-column uk-width-1-1 uk-width-1-2@m"><span class="pb-column-control-bar uk-light">
+                      <span class=""><span uk-icon="icon: close; ratio: 0.5"></span></span>
+                    </span>
+            <div class="pb-column-content pb-empty-column uk-text-center">
 
+              <div class="pb-widget-wrapperuk-inline-clip uk-inline-clip-show-overflow uk-transition-toggle" tabindex="0">
+                <div class="">
+                  <img src="https://getuikit.com/docs/images/light.jpg" alt="">
+                  <div class="pb-hotspot-marker-items">
+                    <div class="pb-hotspot-marker uk-dark">
+                      <a class="uk-position-absolute uk-transform-center pin" style="left: 20%; top: 30%; opacity: 0.8" href="#" uk-marker></a>
+                      <div uk-dropdown="mode: click" class="uk-padding-small">This is my Marker description</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+@endif
 
 <div style="position: fixed; bottom: 5%; right: 3%">
   <button class="uk-button uk-button-secondary" style="border-radius: 50%; padding: 1px 10px"><span uk-icon="icon: plus"></span></button>
@@ -146,6 +146,45 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <div class="uk-grid-collapse uk-child-width-1-4@s uk-text-center pb-draggable-item" pb-draggableType="column" pb-columns-count="4" draggable="true" uk-grid>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="uk-grid-collapse uk-child-width-1-5@s uk-text-center pb-draggable-item" pb-draggableType="column" pb-columns-count="5" draggable="true" uk-grid>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+          <div>
+            <div class="uk-padding-small" style="background-color: #e3e3e3; border: 2px solid white"></div>
+          </div>
+        </div>
+      </div>
+
+
 
 
     </div>

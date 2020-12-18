@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Modules\Media\Media;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -70,10 +71,10 @@ class MediaManagerService
     /**
      * upload big files with chunking
      * @param $receiver
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws UploadMissingFileException
      */
-    public static function uploadChunkFiles($receiver)
+    public static function uploadChunkFiles($receiver): JsonResponse
     {
         // check if the upload is success, throw exception or return response you need
         if ($receiver->isUploaded() === false) {
@@ -103,8 +104,9 @@ class MediaManagerService
      * @return array
      * @throws UploadMissingFileException
      */
-    public static function uploadChunkedFile($receiver)
+    public static function uploadChunkedFile($receiver): ?array
     {
+
         $media = null;
         // check if the upload is success, throw exception or return response you need
         if ($receiver->isUploaded() === false) {
@@ -130,7 +132,7 @@ class MediaManagerService
     /**
      * save uploaded file
      * @param UploadedFile $file
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public static function saveFile(UploadedFile $file)
     {
@@ -219,11 +221,72 @@ class MediaManagerService
     }
 
     /**
+     * Saves the file
+     *
+     * @param UploadedFile $file
+     * @param $modal
+     * @return JsonResponse
+     */
+    public static function attachMedia(UploadedFile $file, $modal): JsonResponse
+    {
+        $user = getAuthUser();
+        if (empty($user) || empty($modal)){
+            abort(500);
+        }
+        $filePlaytimeString = $filePlaytimeSeconds = $fileSize = null;
+        // Group files by mime type
+        $mime = str_replace('/', '-', $file->getMimeType());
+        // File extension
+        $fileExtension = $file->getClientOriginalExtension();
+        // File Type
+        $fileType = strstr($file->getMimeType(), '/', true);
+        // File properties
+        if ($fileType == 'video'){
+            $filePlaytimeString = MediaManagerService::getProperties($file, 'playtime_string');
+            $filePlaytimeSeconds = MediaManagerService::getProperties($file, 'playtime_seconds');
+        }
+        $fileSize = MediaManagerService::getProperties($file, 'filesize');
+
+        // attach media file name
+        $mediaFile = $modal->addMedia($file)
+            ->withCustomProperties([
+                'group' => null,
+                'extension' => !empty($fileExtension) ? $fileExtension : null,
+                'file_type' => !empty($fileType) ? $fileType : null,
+                'mime_type' => !empty($mime) ? $mime : null,
+                'playtime_string' => $filePlaytimeString,
+                'playtime_seconds' => $filePlaytimeSeconds,
+                'file_size' => $fileSize,
+                'file_size_string' => getFileSize($fileSize, 1),
+            ])->toMediaCollection('file_manager');
+
+
+        if (!empty($mediaFile)){
+            return response()->json([
+                'id' => $mediaFile->id,
+                'name' => $mediaFile->name,
+                'url' => $mediaFile->getFullUrl(),
+                'mime_type' => $mime,
+                'file_type' => $fileType,
+                'extension' => $fileExtension,
+                'playtime_string' => $filePlaytimeString,
+                'playtime_seconds' => $filePlaytimeSeconds,
+                'file_size' => $fileSize,
+                'file_size_string' => getFileSize($fileSize, 1),
+                'created_at' => date_html($mediaFile->created_at),
+            ]);
+        }
+        return response()->json();
+
+    }
+
+
+    /**
      * Create unique filename for uploaded file
      * @param UploadedFile $file
      * @return string
      */
-    protected static function createFilename(UploadedFile $file)
+    public static function createFilename(UploadedFile $file): string
     {
         $extension = $file->getClientOriginalExtension();
         $filename = str_replace(".".$extension, "", $file->getClientOriginalName()); // Filename without extension
@@ -244,6 +307,22 @@ class MediaManagerService
         $file = $getID3->analyze($full_video_path);
         $playtime_seconds = $file['playtime_seconds'];
         return date('H:i:s', $playtime_seconds);
+    }
+
+    /**
+     * get properties by key
+     * @param $full_video_path
+     * @param $propertiesValue
+     * @return mixed|null
+     */
+    public static function getProperties($full_video_path, $propertiesValue)
+    {
+        $getID3 = new \getID3;
+        $file = $getID3->analyze($full_video_path);
+        if (!empty($propertiesValue) && !empty($file[$propertiesValue])){
+            return $file[$propertiesValue];
+        }
+        return null;
     }
 
 }

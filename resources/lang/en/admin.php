@@ -39,6 +39,7 @@ return [
     'Roles'=>'Roles',
     'Languages'=>'Languages',
     'Countries'=>'Countries',
+    'File Manager'=>'File Manager',
     // forms
     'forms' => 'Forms',
     'all forms' => 'All forms',

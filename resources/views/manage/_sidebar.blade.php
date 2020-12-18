@@ -159,6 +159,12 @@
             <span class="">{{__('admin.Banners')}}</span>
         </a>
     </li>
+    <li class="nav-group">
+        <a class="" href="{{route('media.index')}}">
+            <i class="fas fa-photo-video"></i>
+            <span class="">{{__('admin.File Manager')}}</span>
+        </a>
+    </li>
     <li>
         <div class="menu-title">{{__('admin.Settings')}}</div>
     </li>

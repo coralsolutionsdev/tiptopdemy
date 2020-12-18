@@ -20,6 +20,3 @@
     </div>
 </div>
 @endif
-<form id="dropzoneMediaForm" action="{{route('media.store')}}" class="dropzone uk-width-1-1 uk-flex uk-flex-center" id="myAwesomeDropzone" enctype="multipart/form-data">
-    @csrf
-</form>

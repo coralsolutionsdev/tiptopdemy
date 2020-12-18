@@ -22,6 +22,15 @@
                     var myText = tinyMCE.activeEditor.getContent();
                     $(this.targetElm).closest('.title-section')
                         .find('.hidden-input-title').val(myText);
+
+                    $(this.targetElm).closest('.marker-editor')
+                        .find('.hidden-textarea-input').val(myText);
+                    if (activeMarkerId != 'undefined'){
+                        var marker = $('#pbMarker-'+activeMarkerId);
+                        marker.find('.pb-hotspot-marker-description').html($('.hidden-textarea-input').val());
+                    }
+
+
                 });
             },
             toolbar1: fullToolBar,

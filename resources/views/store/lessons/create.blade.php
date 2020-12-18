@@ -19,8 +19,6 @@
             {!! Form::open(['url' => route('store.lessons.store', $product->slug),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
         @include('manage.partials._page-header')
-            {{$product->slug, $lesson->slug}}
-            <a href="{{route('store.lesson.edit.content', [$product->slug, $lesson->slug])}}">edit containt</a>
         <div class="form-panel row">
             <div class="col-lg-12">
                 <div class="card border-light">
@@ -35,8 +33,10 @@
                         </div>
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.Description')}}</div>
-                            <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::textarea('description',  !empty($lesson) ? $lesson->description : null, ['class' => 'form-control content-editor', 'rows' => '15']) !!}
+                            <div class="col-lg-10 uk-padding margin-0 uk-placeholder uk-text-center">
+{{--                                {!! Form::textarea('description',  !empty($lesson) ? $lesson->description : null, ['class' => 'form-control', 'rows' => '5']) !!}--}}
+                                <a class="uk-button uk-button-primary" href="{{route('store.lesson.edit.content', [$product->slug, $lesson->slug])}}"><span uk-icon="icon: thumbnails"></span> edit content with page builder</a>
+
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">

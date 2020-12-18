@@ -40,6 +40,8 @@ return [
     'Roles'=>'الأدوار',
     'Languages'=>'اللغات',
     'Countries'=>'البلدان',
+    'File Manager'=>'مدير الملفات',
+
     // forms
     'forms' => 'Forms',
     'all forms' => 'All forms',

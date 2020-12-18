@@ -17,7 +17,9 @@ use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
-
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class MediaController extends Controller
 {
     /**
@@ -27,7 +29,10 @@ class MediaController extends Controller
      */
     public function index()
     {
-        //
+        $page_title =  'File Manager';
+        $breadcrumb =  [];
+
+        return view('system.file-manager.index', compact('page_title','breadcrumb'));
     }
 
     /**
@@ -41,105 +46,44 @@ class MediaController extends Controller
     }
 
     /**
-     * upload media TODO: change function name and controller
+     * upload media
      * @param Request $request
      * @return JsonResponse
      * @throws UploadFailedException
      * @throws UploadMissingFileException
      */
-    public function storeNaN(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
-        return MediaManagerService::uploadChunkFiles($receiver);
-    }
-
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     * @throws UploadFailedException
-     * @throws UploadMissingFileException
-     */
-    public function store(Request $request) {
-        // Response for the files - completed and uncompleted
-        $files = $mediaFile = $mediaFileInfo = [];
-        $user = getAuthUser();
-        if (empty($user)){
+        // create the file receiver
+        $modal = getAuthUser();
+        if (empty($modal)){
             abort(500);
         }
-        // Get array of files from request
-        $files = $request->file('file');
+        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
 
-        if (!empty($files)){
-            if (is_array($files)) {
-            //throw new UploadMissingFileException();
-                // Loop sent files
-                foreach ($files as $file) {
-                    // Instead of passing the index name, pass the UploadFile object from the $files array we are looping
-                    // Exception is thrown if file upload is invalid (size limit, etc)
-                    // Create the file receiver via dynamic handler
-                    $receiver = new FileReceiver($file, $request, HandlerFactory::classFromRequest($request));
-                    // or via static handler usage
-//            $receiver = new FileReceiver($file, $request, ContentRangeUploadHandler::class);
-
-                    if ($receiver->isUploaded()) {
-                        continue;
-                    }
-                    // receive the file
-                    $save = $receiver->receive();
-
-                    // check if the upload has finished (in chunk mode it will send smaller files)
-                    if ($save->isFinished()) {
-                        // save the file and return any response you need
-//                $files[] = $this->saveFile($save->getFile());
-                        $files[] = MediaManagerService::saveFile($save->getFile());;
-                    } else {
-                        // we are in chunk mode, lets send the current progress
-
-                        /** @var ContentRangeUploadHandler $handler */
-                        $handler = $save->handler();
-
-                        // Add the completed file
-                        $files[] = [
-                            "progress" => $handler->getPercentageDone(),
-                            "finished" => false
-                        ];
-                    }
-                }
-            }else{
-                $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
-                $media =  MediaManagerService::uploadChunkedFile($receiver);
-                if (file_exists(storage_path("app/public/".$media['path'].$media['name']))){
-                    $fileUrl = 'storage/'.$media['path'].$media['name'];
-                    $mediaType = isset($media['media_type']) ? $media['media_type'] : null;
-
-                    // create media record
-                    $mediaFile = $user
-                        ->addMediaFromUrl($fileUrl)
-                        ->withCustomProperties([
-                            'group' => null,
-                            'extension' => !empty($media['extension']) ? $media['extension'] : null,
-                            'duration' => !empty($media['duration']) ? $media['duration'] : null,
-                        ])->toMediaCollection('file_manager');
-                    if (!empty($media)){
-                        $mediaFileInfo = [
-                            'id' =>  $mediaFile->id,
-                            'url' => $mediaFile->getFullUrl(),
-                            'name' => $mediaFile->name,
-                            'type' => $mediaType,
-                        ];
-                    }
-                    Storage::deleteDirectory($media['path']);
-                }
-            }
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
         }
-        return response()->json($mediaFileInfo);
+
+        // receive the file
+        $save = $receiver->receive();
+
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) {
+            // save the file and return any response you need, current example uses `move` function. If you are
+            // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
+            return MediaManagerService::attachMedia($save->getFile(), $modal);
+        }
+
+        // we are in chunk mode, lets send the current progress
+        // @var AbstractHandler $handler */
+        // $handler = $save->handler();
+
+        return response()->json();
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function ajaxStore(Request $request)
     {
         $input =  $request->all();
@@ -297,12 +241,25 @@ class MediaController extends Controller
         $mediaItems = $user->getMedia('file_manager');
         $mediaItems = $mediaItems->map(function ($item) {
             $item->url = $item->getFullUrl();
-            return $item->only(['id', 'name', 'url', 'custom_properties']);
+            $item->creation_date = date_html($item->created_at);
+            return $item->only(['id', 'name', 'url','creation_date', 'custom_properties']);
 
         })->toArray();
-
-//        $mediaItems = $mediaItems->get();
         return response()->json($mediaItems);
+
+    }
+    public function ajaxDestroy(Media $media)
+    {
+        // TODO: check if use can remove this media item
+        $user = getAuthUser();
+        if (!empty($user)){
+            $userMedia = $user->getMedia('file_manager')->where('id', $media->id)->first();
+            if (!empty($userMedia) && $userMedia->id == $media->id){
+                $media->delete();
+                return response('success', 200);
+            }
+        }
+        return response('error', 503);
 
     }
 }

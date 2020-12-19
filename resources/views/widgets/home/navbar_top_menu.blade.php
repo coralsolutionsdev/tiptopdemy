@@ -93,7 +93,7 @@
     </nav>
 </div>
 
-<div id="top-menu-offcanvas-nav" class="uk-light light-offcanvas" uk-offcanvas="mode: slide; overlay: true; flip:true">
+<div id="top-menu-offcanvas-nav" class="uk-light light-offcanvas" uk-offcanvas="overlay: true">
     <div class="uk-offcanvas-bar">
         @if(!Auth::user())
             <div class="uk-padding-small">
@@ -113,7 +113,7 @@
     </div>
 </div>
 @if(Auth::check())
-<div id="user-profile-offcanvas-nav" class="uk-light light-offcanvas" uk-offcanvas="mode: slide; overlay: true; flip:true">
+<div id="user-profile-offcanvas-nav" class="uk-light light-offcanvas" uk-offcanvas="overlay: true">
     <div class="uk-offcanvas-bar">
         <h5 class="text-highlighted uk-text-bold uk-text-primary">{{__('main.User Profile')}}</h5>
         <div class="uk-grid-collapse" uk-grid>
@@ -131,7 +131,7 @@
         </div>
         <br>
         <div class="">
-            <div class="uk-grid-small uk-child-width-1-2" uk-grid uk-height-match="target: > div > .uk-card">
+            <div class="uk-grid-small uk-grid-match uk-child-width-1-2" uk-grid uk-height-match="target: > div > .uk-card">
                 <div class="uk-width-1-1">
                     @if(Auth::user()->hasRole('superadministrator') OR Auth::user()->hasRole('administrator'))
                         <div class="uk-card uk-card-default uk-card-body uk-background-secondary uk-box-shadow-hover-large" style="padding: 10px">
@@ -145,7 +145,6 @@
                             </a>
                         </div>
                     @endif
-
                 </div>
                 <div>
                     <div class="uk-card uk-card-default uk-card-body uk-background-primary uk-box-shadow-hover-large" style="padding: 10px">

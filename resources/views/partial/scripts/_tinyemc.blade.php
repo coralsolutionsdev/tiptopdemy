@@ -74,7 +74,13 @@
                 formData.append('file', blobInfo.blob(), blobInfo.filename());
                 xhr.send(formData);
 
-            }
+            },
+            audio_template_callback: function(data) {
+                return `<audio class="audio-file" controls controlsList="nodownload">
+                        <source class="audio-source" src="`+data.source+`" type="audio/mpeg">
+                    </audio>`;
+                // return '<audio controls controlsList="nodownload">' + '\n<source src="' + data.source + '"' + (data.sourcemime ? ' type="' + data.sourcemime + '"' : '') + ' />\n' + (data.altsource ? '<source src="' + data.altsource + '"' + (data.altsourcemime ? ' type="' + data.altsourcemime + '"' : '') + ' />\n' : '') + '</audio>';
+            },
 
         });
     }

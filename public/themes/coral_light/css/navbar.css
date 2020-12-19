@@ -38,17 +38,17 @@
 }
 /*Canvas*/
 .light-offcanvas .uk-offcanvas-bar {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -270px;
-    box-sizing: border-box;
-    width: 270px;
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*right: -270px;*/
+    /*box-sizing: border-box;*/
+    /*width: 270px;*/
     padding: 20px 20px;
-    /*background: white;*/
-    /*color: var(--text-highlighted) !important;*/
+    /*!*background: white;*!*/
+    /*!*color: var(--text-highlighted) !important;*!*/
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    /*-webkit-overflow-scrolling: touch;*/
 }
 .light-offcanvas .uk-offcanvas-bar{
     background-color: white;

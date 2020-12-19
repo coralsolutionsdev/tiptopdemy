@@ -140,7 +140,7 @@
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
                             @if(!empty($lesson->content && !empty($lesson->content['html'])))
                             <div> {{-- Description --}}
-                                <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+                                <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
 {{--                                    <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>--}}
 {{--                                    {!! $lesson->description !!}--}}
                                     <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-grid>
@@ -344,6 +344,9 @@
 </section>
 <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
+    $('.audio-file').map(function (){
+        $(this).attr('controlsList','nodownload')
+    });
 </script>
 @include('partial.scripts._cart')
 @endsection

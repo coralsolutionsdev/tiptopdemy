@@ -138,12 +138,14 @@
         });
 
         $('.pb-view-widgets-list').click(function (){
+            resetOpenWidgetSettings();
             $('.pb-setting-wrapper').slideUp();
             $('.pb-page-wrapper').slideUp();
             $('.pb-widgets-wrapper').slideDown();
             $('.pb-content-item-settings-wrapper').slideUp();
         });
         $('.pb-view-page-settings').click(function (){
+            resetOpenWidgetSettings();
             $('.pb-setting-wrapper').slideUp();
             $('.pb-widgets-wrapper').slideUp();
             $('.pb-page-wrapper').show();
@@ -425,7 +427,7 @@
             markersDiv.append('' +
                 '<div id="pbMarker-'+markerId+'" class="pb-hotspot-marker uk-dark" color-class-value="uk-dark">\n' +
                 '  <a class="uk-position-absolute uk-transform-center pb-marker-pin pin" top-value="'+topPercentage+'" left-value="'+leftPercentage+'" style="left: '+leftPercentage+'%; top: '+topPercentage+'%; opacity: 0.8" href="#" uk-marker></a>\n' +
-                '  <div uk-dropdown="mode: click" class="uk-padding-small pb-hotspot-marker-description">This is my Marker description</div>\n' +
+                '  <div uk-dropdown="mode: click;pos: top-center" class="uk-padding-small pb-hotspot-marker-description">This is my Marker description</div>\n' +
                 '</div>');
             updateWidgetSettings();
         };

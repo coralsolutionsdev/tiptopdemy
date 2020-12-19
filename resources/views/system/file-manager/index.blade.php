@@ -132,7 +132,7 @@
         <div class="uk-offcanvas-bar" style="background-color: #1E1E2D">
             <button class="uk-offcanvas-close" type="button" uk-close></button>
             <div class="uk-margin-small">
-                <div class="media-item-preview">
+                <div class="media-item-preview uk-width-expand">
 
                 </div>
                 <hr>
@@ -215,7 +215,10 @@
                         $('.media-item-preview').html('<img data-src="'+item.attr('url-value')+'" width="1800" height="1200" alt="" uk-img>');
                     }else if(type == 'video'){
                         $('.media-item-preview').html('<video src="'+item.attr('url-value')+'" playsinline controls disablepictureinpicture controlsList="nodownload"></video>');
-
+                    }else if(type == 'audio'){
+                        $('.media-item-preview').html(`<audio controls controlsList="nodownload">
+                        <source class="audio-source" src="`+item.attr('url-value')+`" type="audio/mpeg">
+                    </audio>`);
                     }
                     $('.media-item-name').html(item.attr('name-value'));
                     $('.media-item-extension').html(item.attr('extension-value'));
@@ -299,7 +302,7 @@
 
             Dropzone.options.dropzoneForm = {
                 // Setup chunking
-                acceptedFiles: "image/*,video/*",
+                acceptedFiles: "image/*,video/*,audio/*",
                 maxFiles: 5,
                 timeout: 3600000,
                 autoProcessQueue: true,

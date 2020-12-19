@@ -31,12 +31,14 @@
 {{--    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">--}}
     <!--UiKit UI-->
     @if(getLanguage() == 'ar')
-        <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>
+        <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
+
+{{--        <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit-rtl.min.css')}}"/>--}}
     @else
         <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     @endif
     <!--site Css-->
-    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202010241400')}}">
+    <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202012190900')}}">
 
     <!-- scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -51,32 +53,30 @@
 </head>
 <body>
 {{storeLastUrl()}}
-<section style="background-color: var(--bg-secondary);">
-    <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
-        <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
+<div class="uk-child-width-1-1@s uk-grid-collapse" uk-grid style="background-color: var(--bg-secondary);">
+    <div>
+        @widget('home.navbar_top_menu')
+        <div class="uk-container">
+            @include('partial.frontend._message')
         </div>
-    </div>
-    {{--Navbar--}}
-    @widget('home.navbar_top_menu')
-    <div class="uk-container">
-        @include('partial.frontend._message')
     </div>
     <div style="min-height: calc(100vh - 170px);">
-        @yield('content')
-    </div>
-    <footer style="">
-        <div class="uk-child-width-1-1@s uk-text-center" uk-grid>
-            <div class="">
-                <div class="uk-background-secondary uk-light uk-padding uk-panel">
-                    <p class="uk-h5 uk-text-meta uk-margin-small">All copy rights served to TipTop @2020</p>
-                </div>
+        <div class="uk-flex uk-flex-center uk-flex-middle" style="position: fixed;   z-index: 999; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: none">
+            <div class="spinner" style="background-color: white; border-radius: 50%; padding: 10px">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
             </div>
         </div>
-    </footer>
-
-</section>
+        @yield('content')
+    </div>
+    <div>
+        <div class="">
+            <div class="uk-background-secondary uk-light uk-padding uk-panel uk-text-center">
+                <p class="uk-h5 uk-text-meta uk-margin-small">All copy rights served to TipTop @2020</p>
+            </div>
+        </div>
+    </div>
+</div>
 <section>
     <div id="login-modal" uk-modal>
         <div class="uk-modal-dialog uk-margin-auto-vertical">
@@ -110,20 +110,20 @@
                             </div>
                         </form>
                         @if(false)
-                        <div class="uk-text-center">
-                            Or, Login with..
-                        </div>
-                        <div class="uk-margin {{empty( env('FACEBOOK_CLIENT_ID')) ? 'disabled-div' : ''}}">
-                            <div class="uk-inline uk-width-1-1">
-                                <a href="{{route('login.socialite','facebook')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</a>
+                            <div class="uk-text-center">
+                                Or, Login with..
                             </div>
-                        </div>
-{{--                       --}}
-                        <div class="uk-margin {{empty( env('GOOGLE_CLIENT_ID')) ? 'disabled-div' : ''}}">
-                            <div class="uk-inline uk-width-1-1">
-                                <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
+                            <div class="uk-margin {{empty( env('FACEBOOK_CLIENT_ID')) ? 'disabled-div' : ''}}">
+                                <div class="uk-inline uk-width-1-1">
+                                    <a href="{{route('login.socialite','facebook')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</a>
+                                </div>
                             </div>
-                        </div>
+                            {{--                       --}}
+                            <div class="uk-margin {{empty( env('GOOGLE_CLIENT_ID')) ? 'disabled-div' : ''}}">
+                                <div class="uk-inline uk-width-1-1">
+                                    <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -138,6 +138,7 @@
         </div>
     </div>
 </section>
+
 <div id="alertModal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>

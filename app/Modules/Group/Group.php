@@ -4,12 +4,15 @@ namespace App\Modules\Group;
 
 use App\Modules\ColorPattern\ColorPattern;
 use App\Modules\Course\Lesson;
+use App\Modules\modelTrail;
 use App\Product;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
+    use modelTrail;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,6 +48,8 @@ class Group extends Model
         'creator_id' => 'integer',
         'editor_id' => 'integer',
     ];
+
+    const TYPE_FILE_MANAGER = 1;
 
     public function getRouteKeyName()
     {

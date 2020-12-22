@@ -173,6 +173,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('countries', 'CountryController');
             Route::resource('server', 'ServerController');
             Route::resource('file-manager', 'FileManagerController');
+            Route::post('group/ajax/create', 'GroupController@ajaxStore')->name('group.ajax.create');
+            Route::get('group/ajax/get/type/{type}/groups', 'GroupController@ajaxGetIndex')->name('group.ajax.get.index');
 
 //                Route::resource('errors', 'ErrorLogsController');
 //                Route::resource('server', 'ServerController');

@@ -5,6 +5,7 @@ namespace App\Modules\Course;
 use App\Modules\Form\Form;
 use App\Modules\Group\Group;
 use App\Modules\Media\Media;
+use App\Modules\modelTrail;
 use App\Product;
 use App\User;
 use Bnb\Laravel\Attachments\HasAttachment;
@@ -20,12 +21,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
     use Reactable;
     use HasMediaTrait;
     use HasAttachment;
+    use modelTrail;
 
-
-    public function getClassName()
-    {
-        return __CLASS__;
-    }
 
     /**
      * The attributes that are mass assignable.

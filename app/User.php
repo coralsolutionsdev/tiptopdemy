@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Modules\Comment\Commenter;
+use App\Modules\Group\HasGroup;
+use App\Modules\modelTrail;
 use App\Modules\Store\Order;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,6 +28,9 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     use HasAttachment;
     use Commenter;
     use HasMediaTrait;
+    use HasGroup;
+    use modelTrail;
+
 
     /**
      * The attributes that are mass assignable.

@@ -8,6 +8,7 @@ use App\Modules\ColorPattern\HasColorPattern;
 use App\Modules\Course\Lesson;
 use App\Modules\Group\HasGroup;
 use App\Modules\Media\Media;
+use App\Modules\modelTrail;
 use App\Modules\Store\Invoice;
 use App\Modules\Store\Order;
 use App\Modules\Store\OrderItem;
@@ -39,6 +40,8 @@ class Product extends Model implements ReactableContract, HasMedia
     use HasColorPattern;
     use Reactable;
     use HasMediaTrait;
+    use modelTrail;
+
 
 
     protected $fillable = [
@@ -474,13 +477,7 @@ class Product extends Model implements ReactableContract, HasMedia
         return $this->belongsToMany('App\Category');
     }
 
-    /**
-     * @return HasMany
-     */
-    public function groups()
-    {
-        return $this->hasMany('App\Modules\Group\Group', 'owner_id')->where('owner_type', $this->getClassName())->orderBy('position');
-    }
+
     public function lessons()
     {
         return $this->hasMany(Lesson::class, 'product_id')->orderBy('position');

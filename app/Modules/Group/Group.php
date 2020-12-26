@@ -4,6 +4,7 @@ namespace App\Modules\Group;
 
 use App\Modules\ColorPattern\ColorPattern;
 use App\Modules\Course\Lesson;
+use App\Modules\Media\Media;
 use App\Modules\modelTrail;
 use App\Product;
 use App\User;
@@ -73,6 +74,9 @@ class Group extends Model
         return $this->items->where('id', $itemId)->first();
     }
 
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Relationship Methods
@@ -82,7 +86,11 @@ class Group extends Model
     {
         return $this->hasMany(Lesson::class)->orderBy('position');
     }
-    public function items()
+    public function mediaItems()
+    {
+        return $this->belongsToMany(Media::class,'group_item','group_id', 'model_id')->withPivot('model_id','model_type');
+    }
+    public function getLessons()
     {
         return $this->belongsToMany(Lesson::class)->orderBy('position');
     }

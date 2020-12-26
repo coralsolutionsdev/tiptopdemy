@@ -105,7 +105,7 @@
                                     <li class="{{$group->hasItem($lesson->id) ? 'uk-open' : ''}}" style="margin:0px 0px 10px 0px">
                                         <a class="uk-accordion-title text-highlighted uk-secondary-bg" style="padding: 10px 20px" href="#">{{sprintf('%02d', $id+1)}} | {{$group->title}}</a>
                                         <div class="uk-accordion-content">
-                                            @foreach($group->items as $itemId => $item)
+                                            @foreach($group->getLessons as $itemId => $item)
                                                 @php
                                                     $lessonCount++;
                                                 @endphp

@@ -530,6 +530,9 @@ input[type=checkbox].toogle-switch:checked::after{
     position: absolute; padding: 5px; border-radius: 0 0 3px 0; z-index: 10; margin-top: -2px;
 }
 /*File upload*/
+.on-move{
+    /*opacity: 0.5;*/
+}
 .files-uploader{
     color: #97A1A8;
     background-color: #F6F7FB;
@@ -542,6 +545,9 @@ input[type=checkbox].toogle-switch:checked::after{
     cursor: pointer;
     border: 1.5px dashed var(--theme-primary-color);
     transition: all 0.9s ease;
+}
+.media-group:hover{
+    cursor: pointer;
 }
 .pagination{
     padding: 10px;

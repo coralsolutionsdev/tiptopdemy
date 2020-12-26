@@ -188,6 +188,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::group(['prefix' => 'media', 'namespace' => 'Media', 'as' => 'media.'], function (){
             Route::resource('/','MediaController');
             Route::get('/get/library/items','MediaController@getMediaLibrary')->name('get.library.items');
+            Route::post('/ajax/move/item','MediaController@ajaxMove')->name('ajax.move');
             Route::post('/ajax/delete/{media}','MediaController@ajaxDestroy')->name('ajax.destroy');
             Route::post('/ajax/image/upload','MediaController@editorImageUpload')->name('image.upload');
 

@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Modules\Group\Group;
 use App\Modules\Media\Media;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
@@ -227,12 +228,13 @@ class MediaManagerService
      * @param $modal
      * @return JsonResponse
      */
-    public static function attachMedia(UploadedFile $file, $modal): JsonResponse
+    public static function attachMedia(UploadedFile $file, $modal, $groupSlug =  null): JsonResponse
     {
         $user = getAuthUser();
         if (empty($user) || empty($modal)){
             abort(500);
         }
+
         $filePlaytimeString = $filePlaytimeSeconds = $fileSize = null;
         // Group files by mime type
         $mime = str_replace('/', '-', $file->getMimeType());
@@ -250,7 +252,7 @@ class MediaManagerService
         // attach media file name
         $mediaFile = $modal->addMedia($file)
             ->withCustomProperties([
-                'group' => null,
+                'group' => $groupSlug,
                 'extension' => !empty($fileExtension) ? $fileExtension : null,
                 'file_type' => !empty($fileType) ? $fileType : null,
                 'mime_type' => !empty($mime) ? $mime : null,
@@ -260,6 +262,14 @@ class MediaManagerService
                 'file_size_string' => getFileSize($fileSize, 1),
             ])->toMediaCollection('file_manager');
 
+        if (!is_null($groupSlug)){
+            $group = Group::where('slug', $groupSlug)->first();
+                $group->mediaItems()->sync([
+                [
+                    'model_id' => $mediaFile->id,
+                ]
+            ]);
+        }
 
         if (!empty($mediaFile)){
             return response()->json([

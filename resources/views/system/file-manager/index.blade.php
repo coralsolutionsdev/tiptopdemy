@@ -44,7 +44,7 @@
                 <div>
                     <ul class="uk-tab-right" uk-tab="connect: #component-tab-left; animation: uk-animation-fade">
                         <li>
-                            <a href="" class="" style="padding: 10px">
+                            <a href="" class="home-folder" style="padding: 10px">
                                 <div class="uk-grid-collapse uk-grid-match uk-flex uk-flex-middle" uk-grid>
                                     <div class="uk-width-1-6 uk-text-center ">
                                         <span uk-icon="icon: thumbnails; ratio: 1.3"></span>
@@ -83,7 +83,24 @@
                 </div>
             </div>
             <div class="uk-width-expand@m">
-                <div class="bg-white" style="border-left: 1px solid #DFE3E7; padding: 25px; min-height: 400px">
+                <div class="bg-white" style="border-left: 1px solid #DFE3E7; border-bottom: 1px solid #DFE3E7; padding: 10px 25px;">
+                    <div class="uk-text-center" uk-grid>
+                        <div class="uk-width-auto@m uk-flex uk-flex-middle">
+                            <ul class="uk-breadcrumb">
+                                <li><a class="home-folder"><span uk-icon="icon: home"></span></a></li>
+{{--                                <li><a c>Folder name</a></li>--}}
+                            </ul>
+                        </div>
+                        <div class="uk-width-expand@m uk-flex uk-flex-middle" style="min-height: 40px">
+                            <div class="uk-text-primary loading-spinner" style="display: none"><span class="uk-margin-small-right" uk-spinner="ratio: 0.6"></span> Loading data</div>
+                        </div>
+                        <div class="uk-width-auto@m uk-flex uk-flex-middle" style="min-height: 40px">
+                            <button class="uk-button uk-button-default paste-moved-media" style="display: none">Paste</button>
+{{--                            <button class="uk-button uk-button-danger" style="display: none">Delete Folder</button>--}}
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white" style="border-left: 1px solid #DFE3E7; border-bottom: 1px solid #DFE3E7; padding: 25px; min-height: 400px">
                     <ul id="component-tab-left" class="uk-switcher">
                         <li>
                             <h5>All Folders</h5>
@@ -129,7 +146,6 @@
                         </li>
 
                     </ul>
-
                 </div>
             </div>
         </div>
@@ -184,6 +200,7 @@
                 <div class="uk-placeholder">
                     <form id="dropzoneForm" action="{{route('media.store')}}" class="dropzone uk-width-1-1 uk-flex uk-flex-center" id="myAwesomeDropzone" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="group" class="file-uploader-group">
                     </form>
                 </div>
                 <div class="" style="padding: 0px">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Media;
 
 use App\Modules\Course\Lesson;
+use App\Modules\Group\Group;
 use App\Modules\Media\Media;
 use App\Http\Controllers\Controller;
 use App\Services\FileAssetManagerService;
@@ -34,7 +35,6 @@ class MediaController extends Controller
     {
         $page_title =  'File Manager';
         $breadcrumb =  [];
-
         return view('system.file-manager.index', compact('page_title','breadcrumb'));
     }
 
@@ -58,6 +58,7 @@ class MediaController extends Controller
     public function store(Request $request): JsonResponse
     {
         // create the file receiver
+        $group = $request->group;
         $modal = getAuthUser();
         if (empty($modal)){
             abort(500);
@@ -76,7 +77,7 @@ class MediaController extends Controller
         if ($save->isFinished()) {
             // save the file and return any response you need, current example uses `move` function. If you are
             // not using move, you need to manually delete the file by unlink($save->getFile()->getPathname())
-            return MediaManagerService::attachMedia($save->getFile(), $modal);
+            return MediaManagerService::attachMedia($save->getFile(), $modal, $group);
         }
 
         // we are in chunk mode, lets send the current progress
@@ -238,11 +239,18 @@ class MediaController extends Controller
         //
     }
 
-    public function getMediaLibrary()
+    public function getMediaLibrary(Request $request)
     {
+        $input = $request->only(['group', 'type']);
         $user = getAuthUser();
+        $group = $input['group'];
         $mediaItems = $user->getMedia('file_manager');
-        $mediaItems = $mediaItems->map(function ($item) {
+        $mediaItems = $mediaItems->filter(function ($mediaItem) use($group){
+            if ($mediaItem->getCustomProperty('group') == $group){
+                return true;
+            }
+            return false;
+        })->map(function ($item) {
             $item->url = $item->getFullUrl();
             $item->creation_date = date_html($item->created_at);
             return $item->only(['id', 'name', 'url','creation_date', 'custom_properties']);
@@ -263,6 +271,69 @@ class MediaController extends Controller
             }
         }
         return response('error', 503);
+
+    }
+
+    public function ajaxMove(Request $request)
+    {
+        $user = getAuthUser();
+        $input = $request->only(['id', 'group_slug']);
+        $id = $input['id'];
+        $inputGroupSlug = $input['group_slug'];
+        $mediaItem = $user->getMedia('file_manager')->where('id', $id)->first();
+        $status =  null;
+        $statusText = '';
+        $statusMessage = '';
+        if (!empty($mediaItem)){ // get media item to be moved
+            // current group slug
+            $mediaItemGroupSlug = $mediaItem->getCustomProperty('group');
+            $currentGroup = !empty($mediaItemGroupSlug) ? Group::where('slug',$mediaItemGroupSlug)->first() : null;
+            $nextGroup = !empty($inputGroupSlug) ?  Group::where('slug', $inputGroupSlug)->first() : null;
+            // check if item need to be moved
+            if ($mediaItemGroupSlug != $inputGroupSlug){
+                // from root to folder
+                // null to group
+                if (empty($currentGroup) && !empty($nextGroup)){
+                    $nextGroup->mediaItems()->attach([
+                        [
+                            'model_id' => $mediaItem->id,
+                        ]
+                    ]);
+                } elseif (!empty($currentGroup) && !empty($nextGroup)){ // from folder to folder
+                    $currentGroup->mediaItems()->detach([
+                        [
+                            'model_id' => $mediaItem->id,
+                        ]
+                    ]);
+                    $nextGroup->mediaItems()->attach([
+                        [
+                            'model_id' => $mediaItem->id,
+                        ]
+                    ]);
+                } elseif (!empty($currentGroup) && empty($nextGroup)){ // from folder to root
+                    $currentGroup->mediaItems()->detach([
+                        [
+                            'model_id' => $mediaItem->id,
+                        ]
+                    ]);
+                }
+                $mediaItem->setCustomProperty('group', $inputGroupSlug);
+                $mediaItem->save();
+                $statusText = 'success';
+                $statusMessage = 'Media has moved successfully';
+            }else{
+                $statusText = 'warning';
+                $statusMessage = 'Media is already in this folder';
+            }
+
+
+        }
+        $data = [
+            'status' => $status,
+            'statusText' => $statusText,
+            'statusMessage' => $statusMessage,
+        ];
+        return response($data, 200);
 
     }
 

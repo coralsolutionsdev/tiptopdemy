@@ -373,7 +373,7 @@
                                                 <div class="col-lg-12" style="padding: 0 15px">
                                                     <table class="uk-table uk-table-justify uk-table-divider">
                                                         <tbody>
-                                                        @forelse($group->items as $itemId => $item)
+                                                        @forelse($group->getLessons as $itemId => $item)
                                                             <tr>
                                                                 <td class="uk-table-shrink align-middle"><span>{{sprintf('%02d', $itemId+1)}}</span></td>
                                                                 <td class="uk-table-expand align-middle">{{$item->title}}</td>

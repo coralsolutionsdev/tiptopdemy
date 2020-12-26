@@ -39,4 +39,5 @@ trait HasGroup
     {
         return $this->hasMany('App\Modules\Group\Group', 'owner_id')->where('owner_type', $this->getClassName())->orderBy('position');
     }
+
 }

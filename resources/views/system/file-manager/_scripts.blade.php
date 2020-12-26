@@ -330,6 +330,8 @@
         $.get('{{ route('media.get.library.items')}}', data)
             .done(function (response) {
                 $('.file-manager-items').html('');
+                $('.file-manager-image-items').html('');
+                $('.file-manager-video-items').html('');
                 $.each( response, function( key, media ) {
                     var item = {
                         id:media.id,

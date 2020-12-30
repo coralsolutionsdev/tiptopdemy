@@ -4,6 +4,8 @@ use App\Category;
 use App\Institution\Directorate;
 use App\Institution\InstitutionScope;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Auth;
 use App\Module;
@@ -457,4 +459,28 @@ function getFileSize($bytes, $decimals = 2){
     $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
     $factor = floor((strlen($bytes) - 1) / 3);
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+}
+
+/**
+ * @param $captcha
+ * @return false|mixed
+ * @throws GuzzleException
+ */
+
+function recaptchaValidate($captcha)
+{
+    if (is_null($captcha)){
+        return array();
+    }
+    $client = new Client([
+        'base_uri' => 'https://google.com/recaptcha/api/',
+        'timeout' => 2.0
+    ]);
+    $response = $client->request('POST', 'siteverify', [
+        'query' => [
+            'secret' => config('baseapp.google_recaptcha_secret'),
+            'response' => $captcha]
+    ]);
+    $response = json_decode($response->getBody()->getContents(), true);
+    return  $response;
 }

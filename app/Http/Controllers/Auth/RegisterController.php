@@ -11,6 +11,8 @@ use App\Role;
 use App\UniqueId;
 use App\User;
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
+use http\Env\Request;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -78,6 +80,21 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $username = UniqueId::generate(['table' => 'users', 'length' => 8, 'prefix' =>'STU']);
+        // recaptcha validation
+        $captcha = $data['g-recaptcha-response'];
+        $client = new Client([
+            'base_uri' => 'https://google.com/recaptcha/api/',
+            'timeout' => 2.0
+        ]);
+        $response = $client->request('POST', 'siteverify', [
+            'query' => [
+                'secret' => config('baseapp.google_recaptcha_secret'),
+                'response' => $captcha]
+        ]);
+        $response = json_decode($response->getBody()->getContents(), true);
+        if (!$response['success']){
+            return null;
+        }
         $user = User::create([
             'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'].' '.$data['surname'],
             'first_name' => $data['first_name'],

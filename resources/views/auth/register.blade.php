@@ -1,19 +1,48 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', 'register')
 @section('head')
+    <!-- IMPORTANT!!! remember CSRF token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type="text/javascript">
+        function callbackThen(response){
+            // read HTTP status
+            // console.log(response.status);
+
+            // read Promise object
+            response.json().then(function(data){
+                // console.log(data);
+            });
+        }
+        function callbackCatch(error){
+            console.error('Error:', error)
+        }
+        function myCustomValidation(token) {
+            $('.recaptcha-validation-required').attr('disabled', false)
+            $("[name='g-recaptcha-response']").val(token);
+        }
+    </script>
+
+    {!! htmlScriptTagJsApi([
+           'action' => 'homepage',
+           'callback_then' => 'callbackThen',
+           'callback_catch' => 'callbackCatch',
+           'custom_validation' => 'myCustomValidation'
+       ]) !!}
+
 @endsection
 @section('content')
     <section>
         <div class="pt-25" style="background-color: #F3F5F9">
             <div class="uk-container">
-                @if(false)
+                @if(true)
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
                     <div class="uk-card uk-card-default uk-card-body uk-width-3-5@m register-card">
                         <h3 class="uk-card-title">{{__('Register')}}</h3>
                         Register is closed now
-                        @if(false)
+                        @if(true)
                         <form class="uk-form-stacked " role="form" method="POST" action="{{ route('register') }}" autocomplete="on">
                             {{ csrf_field() }}
+                            <input type="hidden" name="g-recaptcha-response" >
                             {{-- Form item--}}
                             <div class="uk-margin">
                                 <div class="uk-grid-small" uk-grid>
@@ -201,21 +230,22 @@
                             @endif
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
-                                    <button class="uk-button uk-button-primary uk-width-1-1">{{__('Register')}}</button>
+                                    <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required" disabled>{{__('Register')}}</button>
                                 </div>
                             </div>
                         </form>
-                        <div class="uk-text-center" style="padding-bottom: 15px">
-                            Or, register with..
-                        </div>
-                        <div class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
-                            <div class="disabled-div">
-                                <button class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</button>
-                            </div>
-                            <div class="disabled-div">
-                                <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>
-                            </div>
-                        </div>
+
+{{--                        <div class="uk-text-center" style="padding-bottom: 15px">--}}
+{{--                            Or, register with..--}}
+{{--                        </div>--}}
+{{--                        <div class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>--}}
+{{--                            <div class="disabled-div">--}}
+{{--                                <button class="uk-button uk-button-primary uk-width-1-1" style="background-color: #3B5998"><span class="uk-margin-small-right" uk-icon="facebook"></span> Facebook</button>--}}
+{{--                            </div>--}}
+{{--                            <div class="disabled-div">--}}
+{{--                                <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         @endif
                     </div>
                 </div>
@@ -223,7 +253,5 @@
             </div>
         </div>
     </section>
-    @if(false)
     @include('auth._scripts')
-    @endif
 @endsection

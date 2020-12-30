@@ -234,8 +234,20 @@ class ProfileController extends Controller
     }
 
 
-    public function reSendActivationEmail()
+    public function reSendActivationEmail(Request $request)
     {
+        $request->validate([
+            'g-recaptcha-response' => 'required',
+        ]);
+
+        $input = $request->only(['g-recaptcha-response']);
+        $captcha = $input['g-recaptcha-response'];
+        $response = recaptchaValidate($captcha);
+        if (!$response['success']){
+            session()->flash('warring', __('captcha is not correct.'));
+
+            return redirect()->back();
+        }
         $user = Auth::user();
         if (!empty($user)){
             // send validation email

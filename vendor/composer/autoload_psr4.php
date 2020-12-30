@@ -117,6 +117,7 @@ return array(
     'Bnb\\Uuid\\' => array($vendorDir . '/bnbwebexpertise/php-uuid/src'),
     'Bnb\\Laravel\\Attachments\\' => array($vendorDir . '/bnbwebexpertise/laravel-attachments/src'),
     'Blueprint\\' => array($vendorDir . '/laravel-shift/blueprint/src'),
+    'Biscolab\\ReCaptcha\\' => array($vendorDir . '/biscolab/laravel-recaptcha/src'),
     'Arrilot\\Widgets\\' => array($vendorDir . '/arrilot/laravel-widgets/src'),
     'App\\' => array($baseDir . '/app'),
     'AlbertCht\\InvisibleReCaptcha\\' => array($vendorDir . '/albertcht/invisible-recaptcha/src'),

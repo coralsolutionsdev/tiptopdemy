@@ -197,6 +197,8 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider::class,
         Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
+
 
 
     ],
@@ -256,7 +258,9 @@ return [
         'Countries' => Webpatser\Countries\CountriesFacade::class,
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
-        "Breadcrumbs" => DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::class
+        "Breadcrumbs" => DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::class,
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+
 
     ],
 

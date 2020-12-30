@@ -37,7 +37,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::post('/login/page', 'Admin\LoginController@login')->name('login.custom');
 		Route::get('/suspended','HomeController@suspended')->name('suspended');
         Route::get('account/activate', ['as' => 'account.activate', 'uses' => 'Site\ProfileController@verifyEmail']);
-        Route::get('account/resend_activation_mail', ['as' => 'account.resend.activation', 'uses' => 'Site\ProfileController@reSendActivationEmail']);
+        Route::post('account/resend_activation_mail', ['as' => 'account.resend.activation', 'uses' => 'Site\ProfileController@reSendActivationEmail']);
 
         Route::get('/verify/{email}/{verify_token}', 'HomeController@sendVerifyEmailDone')->name('sendverifyemail');
     /* Socialite login*/

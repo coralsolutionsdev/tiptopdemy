@@ -1,5 +1,35 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', Auth::user()->name)
+@section('head')
+    <!-- IMPORTANT!!! remember CSRF token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type="text/javascript">
+        function callbackThen(response){
+            // read HTTP status
+            // console.log(response.status);
+
+            // read Promise object
+            response.json().then(function(data){
+                // console.log(data);
+            });
+        }
+        function callbackCatch(error){
+            console.error('Error:', error)
+        }
+        function myCustomValidation(token) {
+            $('.recaptcha-validation-required').attr('disabled', false)
+            $("[name='g-recaptcha-response']").val(token);
+        }
+    </script>
+
+    {!! htmlScriptTagJsApi([
+           'action' => 'homepage',
+           'callback_then' => 'callbackThen',
+           'callback_catch' => 'callbackCatch',
+           'custom_validation' => 'myCustomValidation'
+       ]) !!}
+
+@endsection
 @section('content')
     <div class="profile uk-container uk-margin-medium-bottom" style="background-color: transparent">
         {{--header--}}
@@ -16,7 +46,12 @@
                             {{__('main.An email has been sent to your email')}} "<strong class="color-primary">{{Auth::user()->email}}</strong>" {{__('main.with the activation instruction')}}.
                         </p>
                         <p>{{__('main.If you haven\'t received your activation mail! please click on the link below')}}.</p>
-                        <a class="uk-button uk-button-primary" href="{{route('account.resend.activation')}}">{{__('main.Resend verification email')}}</a>
+                        {!! Form::open(['url' => route('account.resend.activation'),'method' => 'POST']) !!}
+                        <input type="hidden" name="g-recaptcha-response" >
+                        <button class="uk-button uk-button-primary recaptcha-validation-required" disabled>{{__('main.Resend verification email')}}</button>
+                        {!! Form::close() !!}
+
+
                     @else
                         <img src="{{asset_image('/assets/reading_01.png')}}" width="200">
                         <h4 class="uk-card-title uk-text-danger uk-text-normal">{{__('Oops, something wrong!')}}</h4>

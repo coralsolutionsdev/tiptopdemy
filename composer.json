@@ -9,6 +9,7 @@
         "ext-json": "*",
         "albertcht/invisible-recaptcha": "^1.8",
         "arrilot/laravel-widgets": "^3.12",
+        "biscolab/laravel-recaptcha": "^5.0",
         "bnbwebexpertise/laravel-attachments": "1.0.*",
         "bumbummen99/shoppingcart": "^2.10",
         "cviebrock/eloquent-sluggable": "^6.0",

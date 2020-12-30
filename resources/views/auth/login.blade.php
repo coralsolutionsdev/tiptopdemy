@@ -1,11 +1,41 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', 'Login')
+@section('head')
+    <!-- IMPORTANT!!! remember CSRF token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type="text/javascript">
+        function callbackThen(response){
+            // read HTTP status
+            // console.log(response.status);
+
+            // read Promise object
+            response.json().then(function(data){
+                // console.log(data);
+            });
+        }
+        function callbackCatch(error){
+            console.error('Error:', error)
+        }
+        function myCustomValidation(token) {
+            $('.recaptcha-validation-required').attr('disabled', false)
+            $("[name='g-recaptcha-response']").val(token);
+        }
+    </script>
+
+    {!! htmlScriptTagJsApi([
+           'action' => 'homepage',
+           'callback_then' => 'callbackThen',
+           'callback_catch' => 'callbackCatch',
+           'custom_validation' => 'myCustomValidation'
+       ]) !!}
+
+@endsection
 @section('content')
     <section>
-        <div class="pt-25" style="background-color: #F3F5F9">
+        <div class="pt-25" style="">
             <div class="uk-container">
-                <div class="uk-flex uk-flex-center" uk-grid>
-                    <div class="uk-card uk-card-default uk-card-body uk-width-3-4@m uk-padding">
+                <div class="uk-flex uk-flex-center" uk-grid style="padding-top: 5%">
+                    <div class="uk-card uk-card-default uk-card-body uk-width-1-4@m uk-padding">
                         <div class="uk-grid-divider uk-child-width-expand@s" uk-grid>
                             <div>
                                 <div class="uk-text-center">
@@ -37,7 +67,7 @@
                                     </div>
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
-                                            <button class="uk-button uk-button-primary uk-width-1-1">log in</button>
+                                            <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required" disabled>{{__('log in')}}</button>
                                         </div>
                                     </div>
                                 </form>
@@ -54,17 +84,6 @@
                                     </div>
                                 </div>
                                 @endif
-                            </div>
-                            <div>
-                                <div class="uk-flex-center uk-text-center" style="padding-top: 20px">
-                                    <div>
-                                        <img src="{{asset_image('/assets/tutorial.png')}}" width="150">
-                                        <p class="uk-text-bold" style="font-size: 18px">{{getSite()->name}}</p>
-                                        <p style="margin: 0px; padding: 0px; text-align: justify; text-justify: inter-word">
-                                            {{getSite()->description}}
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

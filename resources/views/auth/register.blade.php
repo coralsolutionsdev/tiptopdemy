@@ -22,24 +22,22 @@
         }
     </script>
 
-    {!! htmlScriptTagJsApi([
-           'action' => 'homepage',
-           'callback_then' => 'callbackThen',
-           'callback_catch' => 'callbackCatch',
-           'custom_validation' => 'myCustomValidation'
-       ]) !!}
+{{--    {!! htmlScriptTagJsApi([--}}
+{{--           'action' => 'homepage',--}}
+{{--           'callback_then' => 'callbackThen',--}}
+{{--           'callback_catch' => 'callbackCatch',--}}
+{{--           'custom_validation' => 'myCustomValidation'--}}
+{{--       ]) !!}--}}
 
 @endsection
 @section('content')
     <section>
-        <div class="pt-25" style="background-color: #F3F5F9">
+        <div class="pt-25">
             <div class="uk-container">
-                @if(true)
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
                     <div class="uk-card uk-card-default uk-card-body uk-width-3-5@m register-card">
                         <h3 class="uk-card-title">{{__('Register')}}</h3>
-                        Register is closed now
-                        @if(true)
+                        @if(getSite()->registration == 1)
                         <form class="uk-form-stacked " role="form" method="POST" action="{{ route('register') }}" autocomplete="on">
                             {{ csrf_field() }}
                             <input type="hidden" name="g-recaptcha-response" >
@@ -246,12 +244,20 @@
 {{--                                <a href="{{route('login.socialite','google')}}" class="uk-button uk-button-primary uk-width-1-1" style="background-color: #D34836"><span class="uk-margin-small-right" uk-icon="google"></span> Google</a>--}}
 {{--                            </div>--}}
 {{--                        </div>--}}
+                        @else
+                            <div class="uk-alert-warning" uk-alert>
+                                <p>
+                                    <span uk-icon="icon: warning"></span>
+                                    Registration is not available right now, for more information please contact us.
+                                </p>
+                            </div>
                         @endif
                     </div>
                 </div>
-                @endif
             </div>
         </div>
     </section>
+    @if(getSite()->registration == 1)
     @include('auth._scripts')
+    @endif
 @endsection

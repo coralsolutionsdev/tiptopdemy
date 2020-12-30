@@ -84,7 +84,7 @@ class RegisterController extends Controller
         $captcha = $data['g-recaptcha-response'];
         $client = new Client([
             'base_uri' => 'https://google.com/recaptcha/api/',
-            'timeout' => 2.0
+            'timeout' => 5.0
         ]);
         $response = $client->request('POST', 'siteverify', [
             'query' => [

@@ -22,19 +22,19 @@
         }
     </script>
 
-    {!! htmlScriptTagJsApi([
-           'action' => 'homepage',
-           'callback_then' => 'callbackThen',
-           'callback_catch' => 'callbackCatch',
-           'custom_validation' => 'myCustomValidation'
-       ]) !!}
+{{--    {!! htmlScriptTagJsApi([--}}
+{{--           'action' => 'homepage',--}}
+{{--           'callback_then' => 'callbackThen',--}}
+{{--           'callback_catch' => 'callbackCatch',--}}
+{{--           'custom_validation' => 'myCustomValidation'--}}
+{{--       ]) !!}--}}
 
 @endsection
 @section('content')
     <section>
         <div class="pt-25" style="">
             <div class="uk-container">
-                <div class="uk-flex uk-flex-center" uk-grid style="padding-top: 5%">
+                <div class="uk-flex uk-flex-center" uk-grid>
                     <div class="uk-card uk-card-default uk-card-body uk-width-1-4@m uk-padding">
                         <div class="uk-grid-divider uk-child-width-expand@s" uk-grid>
                             <div>

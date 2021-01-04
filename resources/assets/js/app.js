@@ -16,7 +16,10 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('memorize-create', require('./components/admin/form/memorize/create.vue'));
+Vue.component('memorize-index', require('./components/admin/form/memorize/index.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#vue-app'
 });
+

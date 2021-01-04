@@ -70,7 +70,7 @@
     <div>
         <input type="hidden" name="item_id[]" value="`+newId+`">
         <textarea class="uk-textarea option-description memories-content-`+newId+`" name="item_description[`+newId+`]"></textarea>
-    </di v>
+    </div>
     <hr>
     <div>
         <div class="uk-grid-small uk-child-width-1-2" uk-grid>

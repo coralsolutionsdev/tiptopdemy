@@ -64,7 +64,6 @@
 {{--		{{$templates->links()}}--}}
 	</div>
 </section>
-<script src="{{asset('/js/app.js')}}"></script>
 
 @endsection
 @section('script')

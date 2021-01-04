@@ -5,7 +5,9 @@
       <tr>
         <th class="uk-width-small">Memorize info</th>
         <th>Answers Count</th>
-        <th class="uk-text-right"></th>
+        <th class="uk-text-right">
+          <div uk-spinner="ratio: 0.8" class="uk-text-primary loading-spinner"></div>
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -40,9 +42,15 @@ export default {
   },
   methods: {
     fetchItems(){
+      $('.loading-spinner').fadeIn();
       fetch('/api/memorize')
       .then(res => res.json())
       .then(res => {
+        setTimeout(
+            function()
+            {
+              $('.loading-spinner').fadeOut("slow");
+            }, 300);
         // console.log(res.data);
         this.items = res.data;
       })

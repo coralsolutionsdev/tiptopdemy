@@ -1985,6 +1985,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
@@ -2001,9 +2003,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     fetchItems: function fetchItems() {
       var _this = this;
 
+      $('.loading-spinner').fadeIn();
       fetch('/api/memorize').then(function (res) {
         return res.json();
       }).then(function (res) {
+        setTimeout(function () {
+          $('.loading-spinner').fadeOut("slow");
+        }, 300);
         // console.log(res.data);
         _this.items = res.data;
       });
@@ -4667,7 +4673,7 @@ if (typeof jQuery === 'undefined') {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(36)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 /* 36 */
@@ -33179,7 +33185,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "uk-width-small"
   }, [_vm._v("Memorize info")]), _vm._v(" "), _c('th', [_vm._v("Answers Count")]), _vm._v(" "), _c('th', {
     staticClass: "uk-text-right"
-  })])])
+  }, [_c('div', {
+    staticClass: "uk-text-primary loading-spinner",
+    attrs: {
+      "uk-spinner": "ratio: 0.8"
+    }
+  })])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
     staticClass: "uk-button uk-button-small uk-action-btn uk-button-default ck-button-primary"

@@ -3,14 +3,17 @@
     <table class="uk-table uk-table-middle uk-table-divider">
       <thead>
       <tr>
-        <th class="uk-width-small">Memorize</th>
+        <th class="uk-width-small">Memorize info</th>
         <th>Answers Count</th>
         <th class="uk-text-right"></th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="item in items">
-        <td>{{ item.title }}</td>
+        <td  class="align-middle">
+          <p class="uk-margin-remove">{{ item.title }}</p>
+          <p class="uk-margin-remove text-muted"><small> {{item.creator_name}} | {{item.creation_date}}</small></p>
+        </td>
         <td>{{ item.option_count }}</td>
         <td class="uk-text-right">
           <a v-bind:href="item.edit_link">
@@ -40,7 +43,7 @@ export default {
       fetch('/api/memorize')
       .then(res => res.json())
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         this.items = res.data;
       })
     },

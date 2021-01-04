@@ -21,6 +21,8 @@ class FormItem extends JsonResource
             'title' => $this->title,
             'option_count' => sizeof($this->options),
             'edit_link' => route('form.memorize.edit', $this->hash_id),
+            'creator_name' => $this->creator_name,
+            'creation_date' => $this->creation_date,
         ];
     }
     public function with($request): array

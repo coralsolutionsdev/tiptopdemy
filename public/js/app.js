@@ -1982,6 +1982,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
@@ -2001,7 +2004,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       fetch('/api/memorize').then(function (res) {
         return res.json();
       }).then(function (res) {
-        console.log(res.data);
+        // console.log(res.data);
         _this.items = res.data;
       });
     },
@@ -4664,7 +4667,7 @@ if (typeof jQuery === 'undefined') {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(36)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 /* 36 */
@@ -33146,7 +33149,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('table', {
     staticClass: "uk-table uk-table-middle uk-table-divider"
   }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.items), function(item) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(item.option_count))]), _vm._v(" "), _c('td', {
+    return _c('tr', [_c('td', {
+      staticClass: "align-middle"
+    }, [_c('p', {
+      staticClass: "uk-margin-remove"
+    }, [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', {
+      staticClass: "uk-margin-remove text-muted"
+    }, [_c('small', [_vm._v(" " + _vm._s(item.creator_name) + " | " + _vm._s(item.creation_date))])])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(item.option_count))]), _vm._v(" "), _c('td', {
       staticClass: "uk-text-right"
     }, [_c('a', {
       attrs: {
@@ -33168,7 +33177,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', {
     staticClass: "uk-width-small"
-  }, [_vm._v("Memorize")]), _vm._v(" "), _c('th', [_vm._v("Answers Count")]), _vm._v(" "), _c('th', {
+  }, [_vm._v("Memorize info")]), _vm._v(" "), _c('th', [_vm._v("Answers Count")]), _vm._v(" "), _c('th', {
     staticClass: "uk-text-right"
   })])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;

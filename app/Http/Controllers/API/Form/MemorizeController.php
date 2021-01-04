@@ -17,6 +17,10 @@ class MemorizeController extends Controller
     public function index()
     {
         $items = FormItem::where('type', FormItem::TYPE_MEMORIZE)->latest()->paginate(15);
+        $items->map(function ($item){
+            $item->creator_name = ucfirst($item->creator->name);
+            $item->creation_date = $item->created_at->toFormattedDateString();
+        });
         return FormItemResource::collection($items);
 
     }

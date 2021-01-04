@@ -22,12 +22,12 @@
         }
     </script>
 
-{{--    {!! htmlScriptTagJsApi([--}}
-{{--           'action' => 'homepage',--}}
-{{--           'callback_then' => 'callbackThen',--}}
-{{--           'callback_catch' => 'callbackCatch',--}}
-{{--           'custom_validation' => 'myCustomValidation'--}}
-{{--       ]) !!}--}}
+    {!! htmlScriptTagJsApi([
+           'action' => 'homepage',
+           'callback_then' => 'callbackThen',
+           'callback_catch' => 'callbackCatch',
+           'custom_validation' => 'myCustomValidation'
+       ]) !!}
 
 @endsection
 @section('content')

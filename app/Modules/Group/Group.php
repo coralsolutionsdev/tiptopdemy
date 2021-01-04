@@ -86,6 +86,10 @@ class Group extends Model
     {
         return $this->hasMany(Lesson::class)->orderBy('position');
     }
+    public function items()
+    {
+        return $this->belongsToMany(Lesson::class)->orderBy('position');
+    }
     public function mediaItems()
     {
         return $this->belongsToMany(Media::class,'group_item','group_id', 'model_id')->withPivot('model_id','model_type');

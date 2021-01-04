@@ -19,7 +19,7 @@
 	{{--List of items--}}
 	<div id="vue-app">
 		<memorize-index></memorize-index>
-		@if(false)
+		@if(true)
 		<div class="card border-light table-card">
 			<div class="card-body pt-0 p-3">
 				<table class="uk-table uk-table-justify uk-table-divider">
@@ -64,7 +64,7 @@
 {{--		{{$templates->links()}}--}}
 	</div>
 </section>
-<script src="{{asset('/js/app.js')}}"></script>
+{{--<script src="{{asset('/js/app.js')}}"></script>--}}
 
 @endsection
 @section('script')

@@ -146,6 +146,10 @@ Route::group(['middleware'=>'installed'], function(){
 
                 Route::resource('/categories','CategoryController',  ['except' => ['show']]);
                 Route::get('/categories/type/{type}','CategoryController@create')->name('create.withType');
+
+                Route::resource('/memorize','MemorizeController',  ['except' => ['show']]);
+
+
             });
         /*category*/
             Route::resource('/category','Category\CategoryController',  ['except' => ['show']]);

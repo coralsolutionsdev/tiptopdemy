@@ -180,7 +180,7 @@ final class Versions
   'symfony/yaml' => 'v5.1.5@a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.9.1@bafc69caeb4d49c39fd0779086c03a3738cbb389',
-  'laravel/laravel' => 'dev-201227-dev-recaptcha@3ac35518f5db9b1d54010bdffbf004edb64e90f9',
+  'laravel/laravel' => 'dev-201230-dev-memorize@594736aca14787834bd4eb75080a3c1e31eb35db',
 );
 
     private function __construct()

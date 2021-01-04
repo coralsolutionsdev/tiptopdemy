@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
-                                            <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required" disabled>{{__('log in')}}</button>
+                                            <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required">{{__('log in')}}</button>
                                         </div>
                                     </div>
                                 </form>

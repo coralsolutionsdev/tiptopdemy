@@ -87,6 +87,9 @@
                 <li class="">
                     <a class="nav-link" href="{{Route('category.index.type', \App\Modules\Category\Category::ROUTE_FORM_TEMPLATE)}}">{{__('main.template categories')}}</a>
                 </li>
+                <li class="">
+                    <a class="nav-link" href="{{Route('form.memorize.index')}}">{{__('Memorizes')}}</a>
+                </li>
             </ul>
         </div>
     </li>
@@ -96,7 +99,7 @@
             <i class="fas fa-shopping-cart"></i>
             <span class="">{{__('admin.Store')}}</span>
         </a>
-        <div class="collapse {{ (Request::is('manage/store*') ? 'show' :'')}}" id="nav-group-store">
+        <div class="collapse {{ (Request::is('form/store*') ? 'show' :'')}}" id="nav-group-store">
             <ul style="">
                 <li class="">
                     <a class="nav-link" href="{{Route('store.products.index')}}">{{__('admin.Products')}}</a>

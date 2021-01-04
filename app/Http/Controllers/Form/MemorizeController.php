@@ -32,8 +32,8 @@ class MemorizeController extends Controller
 
         $page_title =  'Memorises';
         $breadcrumb =  $this->breadcrumb;
-
-        return view('forms.memorize.index', compact('page_title', 'breadcrumb'));
+        $memorizes = FormItem::where('type', FormItem::TYPE_MEMORIZE)->latest()->paginate(15);
+        return view('forms.memorize.index', compact('page_title', 'breadcrumb', 'memorizes'));
 
     }
 

@@ -204,6 +204,8 @@ class ProductController extends Controller
                 if ($product->scope_id == $user->scope_id && $product->field_id == $user->field_id && $product->field_option_id == $user->field_option_id && $product->level == $user->level){
                     $result = true;
                 }
+            }elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE && ($user->hasRole('superadministrator') || $user->hasRole('administrator'))){
+                $result = true;
             }
             return $result;
         });

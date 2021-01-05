@@ -200,6 +200,7 @@ class ProductController extends Controller
         $products = $products->filter(function ($product) use($user){
             $result = false;
             if ($product->status == Product::STATUS_AVAILABLE){
+                $result = true;
             } elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
                 if ($product->scope_id == $user->scope_id && $product->field_id == $user->field_id && $product->field_option_id == $user->field_option_id && $product->level == $user->level){
                     $result = true;

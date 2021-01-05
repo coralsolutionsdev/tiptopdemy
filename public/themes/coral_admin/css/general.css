@@ -6,6 +6,7 @@ html, body{
     padding: 0px;
     margin: 0px;
     font-family: 'Cairo','Rubik', sans-serif;
+    height: 100vh;
 }
 body{
     margin: auto;

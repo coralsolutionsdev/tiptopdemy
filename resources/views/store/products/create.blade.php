@@ -8,6 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
     <style>
+        html, body{
+            /*height: 100%;*/
+        }
         .select2-container--default .select2-selection--multiple{
             border-radius: 2px !important;
             border: 1px solid #CED4DA;

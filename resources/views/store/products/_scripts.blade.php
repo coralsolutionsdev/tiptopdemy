@@ -45,7 +45,7 @@
             var btn = $(this);
             var media =  btn.closest('li');
             var mediaId =  media.attr('id').split('-')[1];
-            UIkit.modal.confirm('Are you sure that you want to delete this item?').then(function () {
+            UIkit.modal.confirm('<h3 class="uk-text-warning uk-margin-remove">Alert!</h3>Are you sure that you want to delete this media item?').then(function() {
                 media.remove();
             }, function () {
                 return false;

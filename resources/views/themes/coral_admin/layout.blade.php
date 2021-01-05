@@ -107,7 +107,6 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="{{asset('/js/app.js?v=202101041200')}}"></script>
 @yield('script')
 </body>
 </html>

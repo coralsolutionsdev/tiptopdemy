@@ -186,15 +186,27 @@ class ProductController extends Controller
         $modelName = $this->modelName;
         $breadcrumb =  Breadcrumbs::render('store');
         $input = $request->input();
+        $user = getAuthUser();
         // get collection by search
         $searchKey = ltrim(rtrim($request->input('search'), ' '), ' ');
         $search_in_category = $request->input('category') ? : 0;
-        // get collection
+         //get collection
         if (!empty($searchKey)){
-            $products = Product::where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->where('name', 'LIKE', '%' . $searchKey . '%')->orWhere('sku', 'LIKE', '%' . $searchKey . '%')->latest()->get();
+            $products = Product::where('name', 'LIKE', '%' . $searchKey . '%')->orWhere('sku', 'LIKE', '%' . $searchKey . '%')->latest()->get();
         }else{
-            $products = Product::where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->latest()->get();
+            $products = Product::latest()->get();
         }
+        // check if product available for user
+        $products = $products->filter(function ($product) use($user){
+            $result = false;
+            if ($product->status == Product::STATUS_AVAILABLE){
+            } elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
+                if ($product->scope_id == $user->scope_id && $product->field_id == $user->field_id && $product->field_option_id == $user->field_option_id && $product->level == $user->level){
+                    $result = true;
+                }
+            }
+            return $result;
+        });
         if (!empty($search_in_category != 0)){ // 0 is searching in all categories
             $products = $products->filter(function ($product) use($search_in_category){
                 if ($product->status == Product::STATUS_AVAILABLE || $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){

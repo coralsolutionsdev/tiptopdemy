@@ -40,7 +40,7 @@
 
 </head>
 <body>
-<div id="admin_panel" class="display-table">
+<div id="admin_panel" class="display-table" style="min-height: 100vh">
     <div class="display-table-row">
         <div class="display-table-cell sidebar">
             <nav class="navbar navbar-light bg-light">
@@ -107,7 +107,6 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="{{asset('/js/app.js?v=202101041200')}}"></script>
 @yield('script')
 </body>
 </html>

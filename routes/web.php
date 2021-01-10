@@ -126,6 +126,10 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/product/{product}/groups','GroupController');
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
             Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
+            Route::resource('/lesson/{lesson}/memorize','MemorizeController', ['except' => ['show']]);
+            Route::get('/lesson/memorize/get/items/','MemorizeController@getItems')->name('memorize.get.items');
+
+
             Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
             Route::post('media/attach','LessonController@attachMedia')->name('media.attach');
             Route::post('lesson/{lesson}/add/resources/item','LessonController@addResourcesItem')->name('add.resources.item');
@@ -176,7 +180,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::group(['namespace' => 'System', 'prefix' => 'system', 'as' => 'system.'], function() {
             Route::resource('countries', 'CountryController');
             Route::resource('server', 'ServerController');
-            Route::resource('file-manager', 'FileManagerController');
+//            Route::resource('file-manager', 'FileManagerController');
             Route::post('group/ajax/create', 'GroupController@ajaxStore')->name('group.ajax.create');
             Route::get('group/ajax/get/type/{type}/groups', 'GroupController@ajaxGetIndex')->name('group.ajax.get.index');
 

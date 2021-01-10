@@ -104,13 +104,17 @@ class Lesson extends Model implements ReactableContract, HasMedia
      */
     public function getAvailableForms()
     {
-        $forms = $this->forms->filter(function ($form) {
-            if ($form->children->count() == 0){
-                return true;
-            }
-            return false;
-        });
+        $forms = collect();
+        if (!empty($this->getFormsWithType(Form::TYPE_FORM))){
+            $forms = $this->getFormsWithType(Form::TYPE_FORM)->filter(function ($form) {
+                if ($form->children->count() == 0){
+                    return true;
+                }
+                return false;
+            });
+        }
         return $forms;
+
     }
 
     /**
@@ -205,6 +209,15 @@ class Lesson extends Model implements ReactableContract, HasMedia
         $lesson->save();
 
         return $lesson;
+    }
+    public function getFormsWithType($type = null){
+        if (!empty($type)){
+            if (!empty($this->forms)){
+                return $this->forms->where('type', $type);
+            }
+            return collect();
+        }
+        return $this->forms;
     }
     /*
      |--------------------------------------------------------------------------

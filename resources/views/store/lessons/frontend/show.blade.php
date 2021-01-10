@@ -167,7 +167,7 @@
                             <div>
                                 <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small">
                                             <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson quizzes')}}</h5>
-                                            <table class="uk-table uk-table-divider uk-table-middle" style="display: block; overflow-x: auto;">
+                                            <table class="uk-table uk-table-divider uk-table-middle" style="display: block; overflow-x: auto; overflow-y: hidden">
                                                 <thead>
                                                 <tr>
                                                     <th class="uk-width-1-3">{{__('main.Quiz name')}}</th>

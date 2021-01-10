@@ -40,7 +40,7 @@
 
 </head>
 <body>
-<div id="admin_panel" class="display-table">
+<div id="admin_panel" class="display-table" style="min-height: 100vh">
     <div class="display-table-row">
         <div class="display-table-cell sidebar">
             <nav class="navbar navbar-light bg-light">

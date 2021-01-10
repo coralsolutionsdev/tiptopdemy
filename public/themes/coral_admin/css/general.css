@@ -624,7 +624,7 @@ ul.layout-item-banners li{
 /*Memorize*/
 .memorize-item-language-label,.memorize-item-status-label{
     width: 100%;
-    padding: 10px 15px;
+    padding: 9px 15px;
     border: 1px solid #DFE3E7;
     border-radius: 5px;
 }
@@ -634,6 +634,7 @@ ul.layout-item-banners li{
 .memorize-item-language-label input[type='radio'], .memorize-item-status-label input[type='radio']{
     position: absolute;
     opacity: 0;
+    /*color: transparent;*/
 }
 .memorize-item-en-label.checked, .memorize-item-ar-label.checked{
     border: 1px solid #0096FB;
@@ -650,7 +651,13 @@ ul.layout-item-banners li{
 .transparent{
     opacity: 0.5;
 }
-
+.add-memorize-item{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.memorize-groups-lists img:hover{
+    cursor: pointer;
+}
 @keyframes lds-dual-ring {
     0% {
         transform: rotate(0deg);

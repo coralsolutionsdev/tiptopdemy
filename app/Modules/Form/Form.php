@@ -6,10 +6,12 @@ use App\Modules\Course\Lesson;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Tags\HasTags;
 use Vinkla\Hashids\Facades\Hashids;
 
 class Form extends Model
 {
+    use HasTags;
     /**
      * The attributes that are mass assignable.
      *
@@ -60,6 +62,8 @@ class Form extends Model
 
     const TYPE_FORM = 1;
     const TYPE_FORM_TEMPLATE = 2;
+    const TYPE_MEMORIZE = 3;
+    const TYPE_MEMORIZE_TEMPLATE = 4;
 
     // updating types
     const CREATE_NEW_VERSION = 1;
@@ -68,6 +72,13 @@ class Form extends Model
     const OWNER_TYPE_LESSON = 1;
     const OWNER_TYPES_ARRAY = [
         self::OWNER_TYPE_LESSON => 'App\Modules\Course\Lesson'
+    ];
+
+    const MEMORIZE_LEVELS = [
+        1 => 'Elementary',
+        2 => 'Intermediate',
+        3 => 'Advanced',
+        4 => 'Master',
     ];
 
     /**
@@ -307,6 +318,11 @@ class Form extends Model
         } // end of foreach
         return $form;
     }
+
+    /**
+     * @param $input
+     * @return Form
+     */
     function clone($input)
     {
         $owner = null;
@@ -352,6 +368,80 @@ class Form extends Model
 
         return $newForm;
     }
+
+    /**
+     * @param $input
+     * @param null $owner
+     * @param null $form
+     * @return mixed
+     */
+
+    public static function createOrUpdateWithType($input,$owner = null, $form = null){
+        $user = getAuthUser();
+        if (!$user){
+            abort(500);
+        }
+        $existingForm = !empty($form) ? $form : null;
+        $input['version'] = !empty($existingForm) ? $existingForm->version : 0;
+        $input['master_id'] = null;
+        $input['status'] = 1;
+        $input['editor_id'] = $user->id;
+        $input['properties'] = [
+            'level' => isset($input['level']) ? $input['level'] : 1,
+            'time_to_answer' => isset($input['time_to_answer']) ? $input['time_to_answer'] : 1,
+            'type_titles' => [
+                FormItem::TYPE_MEMORIZE_TERM => isset($input['form_item_type_title']) && isset($input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM]) ? $input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM] : 'Terms group',
+                FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A => isset($input['form_item_type_title']) && isset($input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A]) ? $input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A] : 'Translations group',
+            ],
+        ];
+        $ownerId = !empty($owner) ? $owner->id : 0;
+        $typesArray = isset($input['item_type']) ? $input['item_type'] : null;
+        if (empty($form)){
+            $input['creator_id'] = $user->id;
+            $form = Form::create($input);
+            $form->slug = Hashids::encode($user->getTenancyId(),$ownerId,$form->id); // change this
+            $form->hash_id = Hashids::encode($user->getTenancyId(),$ownerId,$form->id);
+            $form->save();
+            if(!empty($owner)){
+                $owner->forms()->attach($form->id);
+            }
+        }else{
+            $form->update($input);
+        }
+
+        // update tags
+        $tags =!empty($input['tags']) ? $input['tags'] :  array();
+        $form->syncTagsWithType($tags, 'memorize');
+
+        if (!empty($typesArray)){
+            foreach ($typesArray as $id => $type){
+                $formItemInput['title'] = isset($input['item_title']) && isset($input['item_title'][$id]) ? $input['item_title'][$id] : '';
+                $formItemInput['status'] = isset($input['item_status']) && isset($input['item_status'][$id]) ? $input['item_status'][$id] : 0;
+                $formItemInput['type'] = $type;
+                $formItemInput['form_id'] = $form->id;
+                $formItemInput['creator_id'] = $user->id;
+                $formItemInput['editor_id'] = $user->id;
+                $formItemInput['properties']  = [
+                    'media_url' => isset($input['item_media_url']) && isset($input['item_media_url'][$id]) ? $input['item_media_url'][$id] : '',
+                ];
+
+                $formItem = FormItem::find($id);
+                if (empty($formItem)){
+                    $newFormItem = FormItem::create($formItemInput);
+                    $newFormItem->hash_id = Hashids::encode($user->getTenancyId(),$form->id,$newFormItem->id);
+                    $newFormItem->save();
+                }else{
+                    $formItem->update($formItemInput);
+                }
+
+            }
+        }
+        return $form;
+    }
+
+    /**
+     * @return string
+     */
     public function getDirection()
     {
         $d = $this->properties['direction'];
@@ -375,6 +465,19 @@ class Form extends Model
             return $resp;   
         }
         return null;
+    }
+    /**
+     * Get the array list of this product tags
+     * @return array
+     */
+    public function getTags(): array
+    {
+        $spatie_tags = $this->tagsWithType('memorize');
+        $tags = array();
+        foreach($spatie_tags as $tag) {
+            $tags[$tag->name] = $tag->name;
+        }
+        return $tags;
     }
 
     /*

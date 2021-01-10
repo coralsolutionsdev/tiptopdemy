@@ -263,7 +263,7 @@
                                 </thead>
                                 <tbody>
                                 @if(!empty($lesson))
-                                    @forelse($lesson->forms as $form)
+                                    @forelse($lesson->getFormsWithType(\App\Modules\Form\Form::TYPE_FORM) as $form)
                                         <tr>
                                             <td>{{$form->title}}</td>
                                             <td class="uk-text-center">{{!empty($form->properties) && $form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
@@ -309,6 +309,79 @@
 
                     </div>
                 </div>
+
+            <div id="memorize" class="col-lg-12">
+                <div class="card border-light">
+                    <div class="card-body">
+                        <p>{{__('Memorizes')}}</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-12 text-right" style="padding: 10px">
+                            @if(!empty($lesson))
+                                <!-- Button trigger modal -->
+                                <a href="{{route('store.memorize.create', $lesson->slug)}}" class="uk-button uk-button-default">
+                                    <span uk-icon="plus-circle"></span> {{__('main.Add Quiz')}}
+                                </a>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @if(!empty($lesson))
+                        <div class="uk-padding-small">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">{{__('main.Quiz name')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
+                                    <th scope="col" width="150">{{__('main.Actions')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if(!empty($lesson))
+                                    @forelse($lesson->getFormsWithType(\App\Modules\Form\Form::TYPE_MEMORIZE) as $form)
+                                        <tr>
+                                            <td>{{$form->title}}</td>
+                                            <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                            <td>
+                                                <div class="action_btn">
+                                                    <ul>
+                                                        <li class="">
+                                                            <a href="{{route('store.memorize.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                        </li>
+                                                        <li class="">
+                                                            <span id="{{$form->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
+                                                            <form id="delete-form" method="post" action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
+                                                                {{csrf_field()}}
+                                                                {{method_field('DELETE')}}
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="uk-text-center">
+                                                {{__('main.There is no form items yet.')}}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="uk-placeholder uk-text-center">
+                            <div class="uk-alert-warning" uk-alert>
+                                <p>
+                                    {{__('main.Please create a lesson first.')}}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
         </div>
 
     </section>

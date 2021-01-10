@@ -87,9 +87,9 @@
                 <li class="">
                     <a class="nav-link" href="{{Route('category.index.type', \App\Modules\Category\Category::ROUTE_FORM_TEMPLATE)}}">{{__('main.template categories')}}</a>
                 </li>
-                <li class="">
-                    <a class="nav-link" href="{{Route('form.memorize.index')}}">{{__('Memorizes')}}</a>
-                </li>
+{{--                <li class="">--}}
+{{--                    <a class="nav-link" href="{{Route('form.memorize.index')}}">{{__('Memorizes')}}</a>--}}
+{{--                </li>--}}
             </ul>
         </div>
     </li>

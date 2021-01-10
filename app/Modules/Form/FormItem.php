@@ -57,7 +57,10 @@ class FormItem extends Model
     const TYPE_MULTI_CHOICE = 4;
     const TYPE_DROP_DOWN = 5;
     const TYPE_FILL_THE_BLANK = 6;
-    const TYPE_MEMORIZE = 7;
+    const TYPE_MEMORIZE_TERM = 20;
+    const TYPE_MEMORIZE_TERM_TRANSLATE_A = 21;
+    const TYPE_MEMORIZE_MEDIA_IMAGE = 30;
+    const TYPE_MEMORIZE_MEDIA_AUDIO = 31;
 
     const MEMORIZE_LEVELS = [
         1 => 'Elementary',
@@ -74,19 +77,6 @@ class FormItem extends Model
     public function getRouteKeyName()
     {
         return 'hash_id';
-    }
-    /**
-     * Get the array list of this product tags
-     * @return array
-     */
-    public function getTags(): array
-    {
-        $spatie_tags = $this->tagsWithType('memorize');
-        $tags = array();
-        foreach($spatie_tags as $tag) {
-            $tags[$tag->name] = $tag->name;
-        }
-        return $tags;
     }
 
     public static function getFormItemFillableBlank($itemId)

@@ -12,6 +12,9 @@
         .select2-container--default.select2-container--focus .select2-selection--multiple{
             border: 1px solid #0099FF !important;
         }
+        html,body{
+
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -21,12 +24,13 @@
 @endsection
 @section('content')
     <section>
-        @if(!empty($memorize))
-            {!! Form::open(['url' => route('form.memorize.update', $memorize->hash_id),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+        @if(!empty($form))
+            {!! Form::open(['url' => $storeRoute,'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @else
-            {!! Form::open(['url' => route('form.memorize.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+            {!! Form::open(['url' => $storeRoute,'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
-        @include('manage.partials._page-header')
+
+            @include('manage.partials._page-header')
         <div class="form-panel row">
             <div class=" col-lg-12">
                 <div class="card border-light">
@@ -36,13 +40,13 @@
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Memorize term')}}</div>
                             <div class="col-lg-3 padding-0 margin-0">
-                                {!! Form::text('title',!empty($memorize) ? $memorize->title : null,['class' => 'uk-input ','required' => true,'placeholder' => __('Memorize term')]) !!}
+                                {!! Form::text('title',!empty($form) ? $form->title : null,['class' => 'uk-input ','required' => true,'placeholder' => __('Memorize term')]) !!}
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Notes')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                <textarea class="uk-textarea memorize-description-editor" name="description" rows="15" placeholder="Add your notes hare ..">{{!empty($memorize) ? $memorize->description : ''}}</textarea>
+                                <textarea class="uk-textarea memorize-description-editor" name="description" rows="15" placeholder="Add your notes hare ..">{{!empty($form) ? $form->description : ''}}</textarea>
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
@@ -54,126 +58,180 @@
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Time to answer')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::number('time_to_answer',!empty($memorize) && !empty($memorize['properties']) ? $memorize['properties']['time_to_answer'] : 5,['class' => 'uk-input uk-width-1-3 ','required' => true, 'min' => 0]) !!}  in seconds
+                                {!! Form::number('time_to_answer',!empty($form) && !empty($form['properties']) ? $form['properties']['time_to_answer'] : 5,['class' => 'uk-input uk-width-1-3 ','required' => true, 'min' => 0]) !!}  in seconds
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Level')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
-                                {!! Form::select('level', \App\Modules\Form\FormItem::MEMORIZE_LEVELS, !empty($memorize) && !empty($memorize['properties']) ? $memorize['properties']['level'] : null, ['class' => 'uk-select uk-width-1-3']) !!}
+                                {!! Form::select('level', \App\Modules\Form\FormItem::MEMORIZE_LEVELS, !empty($form) && !empty($form['properties']) ? $form['properties']['level'] : null, ['class' => 'uk-select uk-width-1-3']) !!}
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card border-light">
+                    <div class="card-body">
+                        <p>{{__('main.Basic input')}}</p>
+                        <hr>
                         <div class="form-group row col-lg-12">
-                            <div class="col-lg-2 d-flex align-items-center">{{__('Answers')}}</div>
-                            <div class="col-lg-10 padding-0 margin-0">
-                                <div class="uk-text-right">
-                                    <span class="uk-button uk-button-default add-item" onclick="addNewItem()"><span uk-icon="icon: plus-circle"></span> add answer</span>
-                                </div>
-                                <ul class="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s uk-text-center items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
-                                    @if(!empty($memorize['options']))
-                                        @foreach($memorize['options'] as $id => $option)
-                                        <li id="memorize-{{$id}}">
-                                        <div class="uk-card uk-card-default uk-card-body uk-padding-small">
-                                            <div class="uk-margin-small-bottom uk-grid-collapse"  uk-grid>
-                                                <div class="uk-width-expand@m">
-                                                </div>
-                                                <div class="uk-width-auto@m">
-                                                    <span class="uk-sortable-handle uk-margin-small-right uk-text-center" uk-icon="icon: table"></span>
-                                                    <span class="uk-text-center hover-danger" uk-icon="icon: trash" onclick="deleteItem(this)"></span>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="item_id[]" value="{{$id}}">
-                                                <textarea class="uk-textarea option-description memories-content-{{$id}}" name="item_description[{{$id}}]">{!! $option['description'] !!}</textarea>
-                                            </div>
-                                            <hr>
-                                            <div>
-                                                <div class="uk-grid-small uk-child-width-1-2" uk-grid>
-                                                    <div>
-                                                        <label class="memorize-item-language-label memorize-item-en-label {{$option['lang'] == 'en' ? 'checked' : ''}}">
-                                                            <input class="uk-radio" type="radio" name="item_lang[{{$id}}]" value="en" {{$option['lang'] == 'en' ? 'checked' : ''}}>
-                                                            English
-                                                        </label>
-                                                    </div>
-                                                    <div>
-                                                        <label class="memorize-item-language-label memorize-item-ar-label {{$option['lang'] == 'ar' ? 'checked' : ''}}">
-                                                            <input class="uk-radio" type="radio" name="item_lang[{{$id}}]" value="ar" {{$option['lang'] == 'ar' ? 'checked' : ''}}>
-                                                            عربي
-                                                        </label>
-                                                    </div>
-                                                    <div>
-                                                        <label class="memorize-item-status-label memorize-item-status-correct-label {{$option['status'] == '1' ? 'checked' : ''}}">
-                                                            <input class="uk-radio" type="radio" name="item_status[{{$id}}]" value="1" {{$option['status'] == '1' ? 'checked' : ''}}>
-                                                            <i class="far fa-check-circle"></i> Correct
-                                                        </label>
-                                                    </div>
-                                                    <div>
-                                                        <label class="memorize-item-status-label memorize-item-status-incorrect-label {{$option['status'] == '0' ? 'checked' : ''}}">
-                                                            <input class="uk-radio" type="radio" name="item_status[{{$id}}]" value="0" {{$option['status'] == '0' ? 'checked' : ''}}>
-                                                            <i class="far fa-times-circle"></i> Incorrect
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="uk-margin-small">
-                                                <input type="text" class="uk-input" placeholder="Add Meaning here" name="item_default_title[{{$id}}]" value="{{$option['default_title']}}">
-                                            </div>
-                                        </div>
-                                    </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-                                @if(false)
-                                <div>
-                                    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
-                                        <div>
-{{--                                                <label class="uk-form-label"></label>--}}
-                                            <textarea class="uk-textarea memories-content"></textarea>
-                                        </div>
-                                        <hr>
-                                        <div>
-                                            <div class="uk-grid-small uk-child-width-1-2" uk-grid>
-                                                <div>
-                                                    <label class="memorize-item-language-label checked">
-                                                        <input class="uk-radio" type="radio" name="lang">
-                                                        English
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label class="memorize-item-language-label">
-                                                        <input class="uk-radio" type="radio" name="lang">
-                                                        عربي
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label class="memorize-item-status-label checked">
-                                                        <input class="uk-radio" type="radio" name="lang">
-                                                        <i class="far fa-check-circle"></i> Correct
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label class="memorize-item-status-label">
-                                                        <input class="uk-radio" type="radio" name="lang">
-                                                        <i class="far fa-times-circle"></i> Incorrect
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="uk-margin-small">
-                                            <input type="text" class="uk-input" placeholder="Add Meaning here">
-                                        </div>
-                                        <div class="uk-margin-small">
-                                            <select class="uk-select">
-                                                <option>Very Easy</option>
-                                                <option class="uk-text-primary">Easy</option>
-                                                <option class="uk-text-success" selected>Moderate</option>
-                                                <option class="uk-text-warning">Hard</option>
-                                                <option class="uk-text-danger">Expert</option>
-                                            </select>
-                                        </div>
+                            <div class="col-lg-2">{{__('Answers')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0 memorize-groups-lists">
+                                <div class="uk-placeholder uk-margin-small">
+
+                                    <div class="uk-margin-small">
+                                        <input name="form_item_type_title[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}]" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}-title" value="English" style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}})"><span uk-icon="icon: plus-circle"></span></span>
                                     </div>
+                                    <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
+                                        @if(false)
+                                        <li>
+                                            <div class="memorize-item uk-grid-small" uk-grid>
+                                                <div class="uk-width-1-1"><input type="text" class="uk-input" placeholder="Word item"></div>
+                                                <div class="uk-width-expand">
+                                                    <div class="uk-grid-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-correct-label checked">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="1">
+                                                                <i class="far fa-check-circle"></i> Correct
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-incorrect-label">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="0">
+                                                                <i class="far fa-times-circle"></i> Incorrect
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-auto">
+                                                    <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endif
+                                    </ul>
+
                                 </div>
-                                @endif
+                                <div class="uk-placeholder uk-margin-small">
+
+                                    <div class="uk-margin-small">
+                                        <input name="form_item_type_title[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}]" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}-title" value="عربي" style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}})"><span uk-icon="icon: plus-circle"></span></span>
+                                    </div>
+                                    <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
+                                        @if(false)
+                                        <li>
+                                            <div class="memorize-item uk-grid-small" uk-grid>
+                                                <div class="uk-width-1-1"><input type="text" class="uk-input" placeholder="Word item"></div>
+                                                <div class="uk-width-expand">
+                                                    <div class="uk-grid-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-correct-label checked">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="1">
+                                                                <i class="far fa-check-circle"></i> Correct
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-incorrect-label">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="0">
+                                                                <i class="far fa-times-circle"></i> Incorrect
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-auto">
+                                                    <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endif
+                                    </ul>
+
+                                </div>
+                                <div class="uk-placeholder uk-margin-small">
+
+                                    <div class="uk-margin-small">
+                                        <input name="form_item_type_title" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}}-title" value="Image" disabled style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}})"><span uk-icon="icon: plus-circle"></span></span>
+                                    </div>
+                                    <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
+                                        @if(false)
+                                        <li>
+                                            <div class="memorize-item uk-grid-small" uk-grid>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-grid-small" uk-grid>
+                                                        <div class="uk-width-1-1">
+                                                            <img src="{{asset_image('assets/no-image.png')}}"  sizes="(min-width: 650px) 650px, 100vw" width="650" height="" alt="" uk-img>
+                                                        </div>
+                                                        <div class="uk-width-1-1"><span class="uk-button uk-button-default uk-width-1-1">Change</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-expand">
+                                                    <div class="uk-grid-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-correct-label checked">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="1">
+                                                                <i class="far fa-check-circle"></i> Correct
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-incorrect-label">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="0">
+                                                                <i class="far fa-times-circle"></i> Incorrect
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-auto">
+                                                    <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endif
+                                    </ul>
+
+                                </div>
+                                <div class="uk-placeholder uk-margin-small">
+
+                                    <div class="uk-margin-small">
+                                        <input name="form_item_type_title" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}}-title" value="Audio" disabled style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}})"><span uk-icon="icon: plus-circle"></span></span>
+                                    </div>
+                                    <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
+                                        @if(false)
+                                        <li>
+                                            <div class="memorize-item uk-grid-small" uk-grid>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-grid-small" uk-grid>
+                                                        <div class="uk-width-1-1">
+                                                            <audio controls>
+                                                                <source src="" type="audio/mpeg" class="audio-file" controls controlsList="nodownload">
+                                                            </audio>
+                                                        </div>
+                                                        <div class="uk-width-1-1"><span class="uk-button uk-button-default uk-width-1-1">Change</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-expand">
+                                                    <div class="uk-grid-small uk-child-width-1-2" uk-grid>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-correct-label checked">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="1">
+                                                                <i class="far fa-check-circle"></i> Correct
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="memorize-item-status-label memorize-item-status-incorrect-label">
+                                                                <input class="uk-radio" type="radio" name="item_status[]" value="0">
+                                                                <i class="far fa-times-circle"></i> Incorrect
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-auto">
+                                                    <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endif
+                                    </ul>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -183,6 +241,22 @@
         </div>
 
             {!! Form::close() !!}
+
+            <div id="mediaModal" uk-modal>
+                <div class="uk-modal-dialog uk-margin-auto-vertical">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                        <h5 class="">Media source</h5>
+                    </div>
+                    <div class="uk-modal-body">
+                        <label class="uk-form-label">Media source:</label>
+                        <input type="text" class="uk-input media-source-input" placeholder="https://domain.com/link-xxx">
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-primary uk-modal-close" type="button">Done</button>
+                    </div>
+                </div>
+            </div>
 
     </section>
 @endsection

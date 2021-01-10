@@ -2,6 +2,11 @@
 
     var toolBar = 'image media';
 
+    let formItemTerm = {{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}};
+    let formItemTermTranslateA = {{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}};
+    let formItemImage = {{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}};
+    let formItemAudio = {{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}};
+
     addMinyTinyEditor('.memorize-description-editor');
 
     // functions
@@ -43,6 +48,11 @@
             addTinyEditor('.memories-content-'+itemId, toolBar, false);
 
         });
+        $('.media-source-input').off('change').change(function (){
+            var mediaSrc = $(this).val();
+            $('#memorizeMedia-'+currentOnEditMemorizeItemId).attr('src', mediaSrc);
+            $('.item-media-url-'+currentOnEditMemorizeItemId).val(mediaSrc);
+        });
 
     }
     function deleteItem(event)
@@ -53,63 +63,168 @@
             console.log('Rejected.')
         });
     }
-    function addNewItem()
-    {
-        var newId = generateRandomString(6);
-        $('.items-list').append(`
-    <li id="memorize-`+newId+`" class="memorize-item">
-    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
-    <div class="uk-margin-small-bottom uk-grid-collapse"  uk-grid>
-        <div class="uk-width-expand@m">
-        </div>
-        <div class="uk-width-auto@m">
-            <span class="uk-sortable-handle uk-margin-small-right uk-text-center" uk-icon="icon: table"></span>
-            <span class="uk-text-center hover-danger" uk-icon="icon: trash" onclick="deleteItem(this)"></span>
-        </div>
-    </div>
-    <div>
-        <input type="hidden" name="item_id[]" value="`+newId+`">
-        <textarea class="uk-textarea option-description memories-content-`+newId+`" name="item_description[`+newId+`]"></textarea>
-    </div>
-    <hr>
-    <div>
-        <div class="uk-grid-small uk-child-width-1-2" uk-grid>
-            <div>
-                <label class="memorize-item-language-label memorize-item-en-label checked">
-                    <input class="uk-radio" type="radio" name="item_lang[`+newId+`]" value="en" checked>
-                    English
-                </label>
-            </div>
-            <div>
-                <label class="memorize-item-language-label memorize-item-ar-label">
-                    <input class="uk-radio" type="radio" name="item_lang[`+newId+`]" value="ar">
-                    عربي
-                </label>
-            </div>
-            <div>
-                <label class="memorize-item-status-label memorize-item-status-correct-label checked">
-                    <input class="uk-radio" type="radio" name="item_status[`+newId+`]" value="1" checked>
-                    <i class="far fa-check-circle"></i> Correct
-                </label>
-            </div>
-            <div>
-                <label class="memorize-item-status-label memorize-item-status-incorrect-label">
-                    <input class="uk-radio" type="radio" name="item_status[`+newId+`]" value="0">
-                    <i class="far fa-times-circle"></i> Incorrect
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class="uk-margin-small">
-        <input type="text" class="uk-input" placeholder="Add Meaning here" name="item_default_title[`+newId+`]">
-    </div>
-</div>
-</li>`);
+    var currentOnEditMemorizeItemId = null;
+    function openMediaModal(event){
+        var item = event.closest('li');
+        var itemId = $(item).find('.memorize-item').attr('id').split('-')[1];
+        currentOnEditMemorizeItemId = itemId;
+        $('.media-source-input').val($('#memorizeMedia-'+itemId).attr('src'));
+        UIkit.modal("#mediaModal").show();
 
-        addTinyEditor('.memories-content-'+newId, toolBar, false);
+    }
+
+    function addFormItem(groupType, item = null)
+    {
+        var itemId = generateRandomString(6);
+        var ItemsUl = $('.group-'+groupType+'-items-list');
+        var termTypesArray = [formItemTerm, formItemTermTranslateA];
+        var placeholderExtraWord = $('.memorize-group-'+groupType+'-title').val();
+        var title = '';
+        var correctStatus = '';
+        var unCorrectStatus = 'checked';
+        var imageSrcUrl = '{{asset_image('assets/no-image.png')}}';
+        var audioSrcUrl = '';
+        if (item != null){
+            title = item.title;
+            itemId = item.id;
+            if (item.status == 1){
+                correctStatus = 'checked';
+                unCorrectStatus = '';
+
+            }else{
+                unCorrectStatus = 'checked';
+            }
+            if (groupType == formItemImage){
+
+                if (item.properties.media_url != undefined && item.properties.media_url  != ''){
+                    imageSrcUrl = item.properties.media_url ;
+                }
+            } else if (groupType == formItemAudio){
+                if (item.properties.media_url != undefined && item.properties.media_url  != ''){
+                    audioSrcUrl = item.properties.media_url ;
+                }
+            }
+        }
+        if (termTypesArray.includes(groupType)){
+            ItemsUl.append(`<li>
+                <div id="memorizeItem-`+itemId+`" class="memorize-item uk-grid-small" uk-grid>
+                    <div class="uk-width-1-1">
+                        <input type="hidden" name="item_type[`+itemId+`]" value="`+groupType+`">
+                        <input type="text" class="uk-input" name="item_title[`+itemId+`]" placeholder="Word item (`+placeholderExtraWord+`)" value="`+title+`">
+                    </div>
+                    <div class="uk-width-expand">
+                        <div class="uk-grid-small uk-child-width-1-2@xl uk-child-width-1-1@l uk-child-width-1-1@m uk-child-width-1-1@s" uk-grid>
+                            <div>
+                                <label class="memorize-item-status-label memorize-item-status-correct-label `+correctStatus+`">
+                                    <input class="uk-radio" type="radio" name="item_status[`+itemId+`]" value="1" `+correctStatus+`>
+                                    <i class="far fa-check-circle"></i> Correct
+                                </label>
+                            </div>
+                            <div>
+                                <label class="memorize-item-status-label memorize-item-status-incorrect-label `+unCorrectStatus+`">
+                                    <input class="uk-radio" type="radio" name="item_status[`+itemId+`]" value="0" `+unCorrectStatus+`>
+                                    <i class="far fa-times-circle"></i> Incorrect
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-auto">
+                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                    </div>
+                </div>
+            </li>`);
+        } else if (groupType == formItemImage){
+            ItemsUl.append(`
+            <li>
+                <div id="memorizeItem-`+itemId+`" class="memorize-item uk-grid-small" uk-grid>
+                    <div class="uk-width-1-1">
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-1">
+                                <input type="hidden" name="item_type[`+itemId+`]" value="`+groupType+`">
+                                <input type="hidden" class="item-media-url-`+itemId+`" name="item_media_url[`+itemId+`]" value="`+imageSrcUrl+`">
+                                <img onclick="openMediaModal(this)" id="memorizeMedia-`+itemId+`" src="`+imageSrcUrl+`"  sizes="(min-width: 650px) 650px, 100vw" width="650" height="" alt="" uk-img>
+                            </div>
+                            <div class="uk-width-1-1"><span onclick="openMediaModal(this)" class="uk-button uk-button-default uk-width-1-1">Change</span></div>
+                        </div>
+                    </div>
+                    <div class="uk-width-expand">
+                        <div class="uk-grid-small uk-child-width-1-2@xl uk-child-width-1-1@l uk-child-width-1-1@m uk-child-width-1-1@s" uk-grid>
+                            <div>
+                                <label class="memorize-item-status-label memorize-item-status-correct-label `+correctStatus+`">
+                                    <input class="uk-radio" type="radio" name="item_status[`+itemId+`]" value="1" `+correctStatus+`>
+                                    <i class="far fa-check-circle"></i> Correct
+                                </label>
+                            </div>
+                            <div>
+                                <label class="memorize-item-status-label memorize-item-status-incorrect-label `+unCorrectStatus+`">
+                                    <input class="uk-radio" type="radio" name="item_status[`+itemId+`]" value="0" `+unCorrectStatus+`>
+                                    <i class="far fa-times-circle"></i> Incorrect
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-auto">
+                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                    </div>
+                </div>
+            </li>`);
+        }else if (groupType == formItemAudio){
+            ItemsUl.append(`
+            <li>
+                <div id="memorizeItem-`+itemId+`" class="memorize-item uk-grid-small" uk-grid>
+                    <div class="uk-width-1-1">
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="uk-width-1-1">
+                                <input type="hidden" name="item_type[`+itemId+`]" value="`+groupType+`">
+                                <input type="hidden" name="item_media_url[`+itemId+`]" value="">
+                                <audio controls>
+                                    <source id="memorizeMedia-`+itemId+`" src="`+audioSrcUrl+`" type="audio/mpeg" class="audio-file" controls controlsList="nodownload">
+                                </audio>
+                            </div>
+                            <div class="uk-width-1-1"><span onclick="openMediaModal(this)" class="uk-button uk-button-default uk-width-1-1">Change</span></div>
+                        </div>
+                    </div>
+                    <div class="uk-width-expand">
+                        <div class="uk-grid-small uk-child-width-1-2@xl uk-child-width-1-1@l uk-child-width-1-1@m uk-child-width-1-1@s" uk-grid>
+                            <div>
+                                <label class="memorize-item-status-label memorize-item-status-correct-label `+correctStatus+`">
+                                    <input class="uk-radio" type="radio" name="item_status[`+itemId+`]" value="1" `+correctStatus+`>
+                                    <i class="far fa-check-circle"></i> Correct
+                                </label>
+                            </div>
+                            <div>
+                                <label class="memorize-item-status-label memorize-item-status-incorrect-label `+unCorrectStatus+`">
+                                    <input class="uk-radio" type="radio" name="item_status[`+itemId+`]" value="0" `+unCorrectStatus+`>
+                                    <i class="far fa-times-circle"></i> Incorrect
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-auto">
+                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                    </div>
+                </div>
+            </li>`);
+        }
+
         itemActions();
 
     }
+    @if(!empty($form))
+        var data = {
+            'hash_id': '{{$form->hash_id}}',
+        };
+        $.get('{{route('store.memorize.get.items')}}', data).done(function (items){
+            items.map(function (item) {
+                addFormItem(item.type, item);
+            });
+        });
+    @else
+        addFormItem(formItemTerm);
+        addFormItem(formItemTermTranslateA);
+        addFormItem(formItemImage);
+        addFormItem(formItemAudio);
+    @endif
 
     addTinyEditor('.option-description', toolBar, false);
     itemActions();

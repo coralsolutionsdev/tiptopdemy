@@ -98,11 +98,6 @@ class Group extends Model
     {
         return $this->belongsToMany(Lesson::class)->orderBy('position');
     }
-    public function items()
-    {
-        return $this->belongsToMany(Lesson::class)->orderBy('position');
-    }
-
     public function products()
     {
         return $this->belongsToMany(Product::class);

@@ -105,7 +105,7 @@
                 }
             }
         }
-        if (termTypesArray.includes(groupType)){
+        if (groupType == formItemTerm || groupType == formItemTermTranslateA){
             ItemsUl.append(`<li>
                 <div id="memorizeItem-`+itemId+`" class="memorize-item uk-grid-small" uk-grid>
                     <div class="uk-width-1-1">

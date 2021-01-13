@@ -62,6 +62,12 @@
                             </div>
                         </div>
                         <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('Memorize question')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0">
+                                {!! Form::text('item_question',!empty($form) && !empty($form['properties']) && !empty($form['properties']['item_question']) ? $form['properties']['item_question'] : '',['class' => 'uk-input uk-width-1-1 ', 'placeholder' => 'What is your memorize question? (optional)']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('Level')}}</div>
                             <div class="col-lg-10 padding-0 margin-0">
                                 {!! Form::select('level', \App\Modules\Form\FormItem::MEMORIZE_LEVELS, !empty($form) && !empty($form['properties']) ? $form['properties']['level'] : null, ['class' => 'uk-select uk-width-1-3']) !!}

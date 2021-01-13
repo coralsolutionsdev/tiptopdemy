@@ -50,8 +50,11 @@
         });
         $('.media-source-input').off('change').change(function (){
             var mediaSrc = $(this).val();
-            $('#memorizeMedia-'+currentOnEditMemorizeItemId).attr('src', mediaSrc);
             $('.item-media-url-'+currentOnEditMemorizeItemId).val(mediaSrc);
+            var media = $('#memorizeMedia-'+currentOnEditMemorizeItemId);
+            media.attr('src', mediaSrc)
+            // media.remove();
+
         });
 
     }
@@ -142,7 +145,9 @@
                             <div class="uk-width-1-1">
                                 <input type="hidden" name="item_type[`+itemId+`]" value="`+groupType+`">
                                 <input type="hidden" class="item-media-url-`+itemId+`" name="item_media_url[`+itemId+`]" value="`+imageSrcUrl+`">
-                                <img onclick="openMediaModal(this)" id="memorizeMedia-`+itemId+`" src="`+imageSrcUrl+`"  sizes="(min-width: 650px) 650px, 100vw" width="650" height="" alt="" uk-img>
+                                <div style="height: 200px; width: 100%;">
+<img onclick="openMediaModal(this)" id="memorizeMedia-`+itemId+`" src="`+imageSrcUrl+`"  style="height: 100%" alt="" uk-img>
+                                </div>
                             </div>
                             <div class="uk-width-1-1"><span onclick="openMediaModal(this)" class="uk-button uk-button-default uk-width-1-1">Change</span></div>
                         </div>
@@ -164,11 +169,12 @@
                         </div>
                     </div>
                     <div class="uk-width-auto">
-                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
+                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip=""><span uk-icon="icon: trash"></span></span>
                     </div>
                 </div>
             </li>`);
         }else if (groupType == formItemAudio){
+            console.log(item);
             ItemsUl.append(`
             <li>
                 <div id="memorizeItem-`+itemId+`" class="memorize-item uk-grid-small" uk-grid>
@@ -176,9 +182,9 @@
                         <div class="uk-grid-small" uk-grid>
                             <div class="uk-width-1-1">
                                 <input type="hidden" name="item_type[`+itemId+`]" value="`+groupType+`">
-                                <input type="hidden" name="item_media_url[`+itemId+`]" value="">
-                                <audio controls>
-                                    <source id="memorizeMedia-`+itemId+`" src="`+audioSrcUrl+`" type="audio/mpeg" class="audio-file" controls controlsList="nodownload">
+                                <input type="hidden" class="item-media-url-`+itemId+`" name="item_media_url[`+itemId+`]" value="`+audioSrcUrl+`">
+                                <audio controls controlsList="nodownload" id="memorizeMedia-`+itemId+`">
+                                  <source src="`+audioSrcUrl+`" class="audio-file" type="audio/mpeg">
                                 </audio>
                             </div>
                             <div class="uk-width-1-1"><span onclick="openMediaModal(this)" class="uk-button uk-button-default uk-width-1-1">Change</span></div>

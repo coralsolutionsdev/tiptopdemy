@@ -33,8 +33,13 @@
                         </div>
                         <div class="form-group row col-lg-12">
                             <div class="col-lg-2 d-flex align-items-center">{{__('main.Description')}}</div>
+                            <div class="col-lg-10 uk-padding-remove margin-0 uk-text-center">
+                                {!! Form::textarea('description',  !empty($lesson) ? $lesson->description : null, ['class' => 'form-control content-editor', 'rows' => '20']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('main.Content')}}</div>
                             <div class="col-lg-10 uk-padding margin-0 uk-placeholder uk-text-center">
-{{--                                {!! Form::textarea('description',  !empty($lesson) ? $lesson->description : null, ['class' => 'form-control', 'rows' => '5']) !!}--}}
                                 @if(!empty($lesson))
                                 <a class="uk-button uk-button-primary" href="{{route('store.lesson.edit.content', [$product->slug, $lesson->slug])}}"><span uk-icon="icon: thumbnails"></span> edit content with page builder</a>
                                 @else

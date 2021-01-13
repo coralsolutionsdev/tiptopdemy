@@ -387,6 +387,7 @@ class Form extends Model
         $input['status'] = 1;
         $input['editor_id'] = $user->id;
         $input['properties'] = [
+            'item_question' => isset($input['item_question']) ? $input['item_question'] : '',
             'level' => isset($input['level']) ? $input['level'] : 1,
             'time_to_answer' => isset($input['time_to_answer']) ? $input['time_to_answer'] : 1,
             'type_titles' => [

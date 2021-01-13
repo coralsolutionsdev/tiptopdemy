@@ -414,6 +414,18 @@ class Form extends Model
         $tags =!empty($input['tags']) ? $input['tags'] :  array();
         $form->syncTagsWithType($tags, 'memorize');
 
+
+        // deleted items
+        if (isset($input['deleted_items']) && !empty($input['deleted_items'])){
+            foreach ($input['deleted_items'] as $deleted_item_id) {
+                $deletedItem = FormItem::find($deleted_item_id);
+                if (!empty($deleted_item_id)){
+                    $deletedItem->delete();
+                }
+            }
+        }
+
+        // create or update items
         if (!empty($typesArray)){
             foreach ($typesArray as $id => $type){
                 $formItemInput['title'] = isset($input['item_title']) && isset($input['item_title'][$id]) ? $input['item_title'][$id] : '';

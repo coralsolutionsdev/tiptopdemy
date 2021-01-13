@@ -61,6 +61,9 @@
     function deleteItem(event)
     {
         UIkit.modal.confirm('<h3 class="uk-text-warning uk-margin-remove">Alert!</h3>Are you sure that you want to remove this item?').then(function() {
+            var item = $(event);
+            var itemId = item.closest('.memorize-item').attr('id').split('-')[1];
+            $('#deleted-items').append('<input type="hidden" name="deleted_items[]" value="'+itemId+'">');
             event.closest('li').remove();
         }, function () {
             console.log('Rejected.')
@@ -169,7 +172,7 @@
                         </div>
                     </div>
                     <div class="uk-width-auto">
-                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip=""><span uk-icon="icon: trash"></span></span>
+                        <span onclick="deleteItem(this)" class="uk-button uk-button-small uk-action-btn uk-button-default ck-button-danger" uk-tooltip="{{__('main.delete')}}"><span uk-icon="icon: trash"></span></span>
                     </div>
                 </div>
             </li>`);

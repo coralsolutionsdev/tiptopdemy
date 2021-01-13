@@ -245,6 +245,8 @@
             </div>
 
         </div>
+            <div id="deleted-items">
+            </div>
 
             {!! Form::close() !!}
 

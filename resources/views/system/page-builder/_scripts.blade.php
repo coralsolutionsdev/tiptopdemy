@@ -783,8 +783,11 @@
             resetSelectedMedia();
             getSelectedMediaItemId();
         }
-
-        $.get('{{ route('media.get.library.items')}}')
+        var data = {
+            group:null,
+            type:null
+        }
+        $.get('{{ route('media.get.library.items')}}', data)
             .done(function (response) {
 
                 $('#media-items').html('');

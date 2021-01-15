@@ -198,8 +198,7 @@ return [
         DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider::class,
         Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
-
-
+        MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
 
     ],
 

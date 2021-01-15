@@ -126,6 +126,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::resource('/product/{product}/groups','GroupController');
             Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
             Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
+
             Route::resource('/lesson/{lesson}/memorize','MemorizeController', ['except' => ['show']]);
             Route::get('/lesson/memorize/get/items/','MemorizeController@getItems')->name('memorize.get.items');
 

@@ -8,6 +8,20 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import Vue from 'vue';
+import VueInternationalization from 'vue-i18n';
+import Locale from '../../js/vue-i18n-locales.generated';
+
+Vue.use(VueInternationalization);
+
+// const lang = document.documentElement.lang.substr(0, 2);
+const lang = document.documentElement.lang.substr(0, 2);
+// or however you determine your current app locale
+
+const i18n = new VueInternationalization({
+    locale: lang,
+    messages: Locale
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16,10 +30,16 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('lesson-show', require('./components/frontend/lessons/Show.vue'));
 Vue.component('memorize-create', require('./components/admin/form/memorize/create.vue'));
 Vue.component('memorize-index', require('./components/admin/form/memorize/index.vue'));
 
+// If you want to use it in your vue components
+
+
+
 const app = new Vue({
-    el: '#vue-app'
+    el: '#vue-app',
+    i18n,
 });
 

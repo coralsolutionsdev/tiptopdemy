@@ -153,6 +153,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         array (
             'MyCLabs\\Enum\\' => 13,
             'Monolog\\' => 8,
+            'MartinLindhe\\VueInternationalizationGenerator\\' => 46,
         ),
         'L' => 
         array (
@@ -497,6 +498,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'MartinLindhe\\VueInternationalizationGenerator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/martinlindhe/laravel-vue-i18n-generator/src',
+        ),
         'League\\OAuth1\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/oauth1-client/src',
@@ -764,6 +769,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\GalleryAlbum' => __DIR__ . '/../..' . '/app/GalleryAlbum.php',
         'App\\GalleryImage' => __DIR__ . '/../..' . '/app/GalleryImage.php',
         'App\\Generators\\TenancyPathGenerator' => __DIR__ . '/../..' . '/app/Generators/TenancyPathGenerator.php',
+        'App\\Http\\Controllers\\API\\Form\\MemorizeController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/Form/MemorizeController.php',
         'App\\Http\\Controllers\\Academy\\DirectorateController' => __DIR__ . '/../..' . '/app/Http/Controllers/Academy/DirectorateController.php',
         'App\\Http\\Controllers\\Admin\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminController.php',
         'App\\Http\\Controllers\\Admin\\AttachmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AttachmentController.php',
@@ -819,6 +825,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Controllers\\Store\\InvoiceController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/InvoiceController.php',
         'App\\Http\\Controllers\\Store\\ItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ItemController.php',
         'App\\Http\\Controllers\\Store\\LessonController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/LessonController.php',
+        'App\\Http\\Controllers\\Store\\MemorizeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/MemorizeController.php',
         'App\\Http\\Controllers\\Store\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/OrderController.php',
         'App\\Http\\Controllers\\Store\\ProductAttributeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductAttributeController.php',
         'App\\Http\\Controllers\\Store\\ProductAttributeOptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Store/ProductAttributeOptionController.php',
@@ -842,6 +849,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\CreateStoreItem' => __DIR__ . '/../..' . '/app/Http/Requests/CreateStoreItem.php',
+        'App\\Http\\Resources\\Form\\FormItem' => __DIR__ . '/../..' . '/app/Http/Resources/Form/FormItem.php',
         'App\\Institution\\Directorate' => __DIR__ . '/../..' . '/app/Institution/Directorate.php',
         'App\\Institution\\Institution' => __DIR__ . '/../..' . '/app/Institution/Institution.php',
         'App\\Institution\\InstitutionScope' => __DIR__ . '/../..' . '/app/Institution/InstitutionScope.php',
@@ -3804,6 +3812,9 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'League\\OAuth1\\Client\\Signature\\RsaSha1Signature' => __DIR__ . '/..' . '/league/oauth1-client/src/Signature/RsaSha1Signature.php',
         'League\\OAuth1\\Client\\Signature\\Signature' => __DIR__ . '/..' . '/league/oauth1-client/src/Signature/Signature.php',
         'League\\OAuth1\\Client\\Signature\\SignatureInterface' => __DIR__ . '/..' . '/league/oauth1-client/src/Signature/SignatureInterface.php',
+        'MartinLindhe\\VueInternationalizationGenerator\\Commands\\GenerateInclude' => __DIR__ . '/..' . '/martinlindhe/laravel-vue-i18n-generator/src/Commands/GenerateInclude.php',
+        'MartinLindhe\\VueInternationalizationGenerator\\Generator' => __DIR__ . '/..' . '/martinlindhe/laravel-vue-i18n-generator/src/Generator.php',
+        'MartinLindhe\\VueInternationalizationGenerator\\GeneratorProvider' => __DIR__ . '/..' . '/martinlindhe/laravel-vue-i18n-generator/src/GeneratorProvider.php',
         'Mockery' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'Mockery\\Adapter\\Phpunit\\MockeryPHPUnitIntegration' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegration.php',
         'Mockery\\Adapter\\Phpunit\\MockeryTestCase' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryTestCase.php',

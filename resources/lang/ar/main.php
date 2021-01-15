@@ -340,6 +340,7 @@
         'Item is already added to your cart.' => 'العنصر مضاف في سلة المشتريات.',
         'Item has been added successfully.' => 'تمت اضافة العنصر بنجاح',
         'View lesson' => 'عرض الدرس',
+        '_memorize dear student' => 'عزيزي الطالب لديك مجموعة من التعابير المهمة التي يجب التعرف عليا قبل دخولك للدرس.',
 
 
 

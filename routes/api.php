@@ -13,5 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('/memorize','API\Form\MemorizeController@index');
+Route::get('/product/lesson/{lesson}/memorize/items','API\Form\MemorizeController@getItems');
 
 

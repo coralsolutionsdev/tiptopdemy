@@ -1,6 +1,6 @@
 @if(true)
 <!doctype html>
-<html lang="en" dir="{{getLanguage() == 'ar'? 'rtl': ''}}">
+<html lang="{{getLanguage()}}" dir="{{getLanguage() == 'ar'? 'rtl': ''}}">
 <head>
     <link rel="icon" href="{{asset_image('/assets/favicon/favicon.ico')}}" type="image/x-icon">
     <!-- Required meta tags -->

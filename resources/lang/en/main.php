@@ -330,6 +330,8 @@
         'selecting one' => 'selecting one',
         'Start upload' => 'Start upload',
         'Click to attach your files' => 'Click to attach your files',
+        '_memorize dear student' => 'Dear student, you have a set of important memorize terms you might need to know before starting this lesson',
+
 
         /*Cart*/
         'Cart' => 'Cart',

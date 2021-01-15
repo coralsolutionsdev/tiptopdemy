@@ -150,6 +150,7 @@ final class Versions
   'hamcrest/hamcrest-php' => 'v1.2.2@b37020aa976fa52d3de9aa904aa2522dc518f79c',
   'laravel-shift/blueprint' => 'v1.18.0@ef82b5b463dddc18a3ea11277b942dba8053f5b8',
   'laravel-shift/faker-registry' => 'v0.1.0@051c1d50f428b699ee9456072f9c54cb073a006f',
+  'martinlindhe/laravel-vue-i18n-generator' => '0.1.46@ddc52890f0204dff64d25e30c3473332904c6138',
   'mockery/mockery' => '0.9.11@be9bf28d8e57d67883cba9fcadfcff8caab667f8',
   'myclabs/deep-copy' => '1.10.1@969b211f9a51aa1f6c01d1d2aef56d3bd91598e5',
   'phar-io/manifest' => '1.0.1@2df402786ab5368a0169091f61a7c1e0eb6852d0',
@@ -180,7 +181,7 @@ final class Versions
   'symfony/yaml' => 'v5.1.5@a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.9.1@bafc69caeb4d49c39fd0779086c03a3738cbb389',
-  'laravel/laravel' => 'dev-201230-dev-memorize@594736aca14787834bd4eb75080a3c1e31eb35db',
+  'laravel/laravel' => 'dev-210113-dev-memorize@846eed1fb270c628c1488d8124a8a8b953e4500f',
 );
 
     private function __construct()

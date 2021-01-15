@@ -4,7 +4,11 @@
 <p><i class="fa fa-home" aria-hidden="true"></i>
  Dashboard</p>
 @endsection
+@section('head')
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
+
 <section>
 		<div class="uk-grid-small uk-width-1-1" uk-grid style="padding-top: 1em">
 			<div class="uk-width-2-3@m">
@@ -41,11 +45,18 @@
 				</div>
 			</div>
 			<div class="uk-width-2-3@m">
-				@widget('admin.dashboard.changes_log')
+				<div id="vue-app">
+					@php
+					$postId = 20;
+					@endphp
+					<example v-bind:post_id="{{$postId}}"></example>
+				</div>
+{{--				@widget('admin.dashboard.changes_log')--}}
 			</div>
 			<div class="uk-width-1-3@m">
 				@widget('admin.dashboard.recent_users')
 			</div>
 		</div>
+	<script src="{{asset('js/app.js')}}"></script>
 </section>
 @endsection

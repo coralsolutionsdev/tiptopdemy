@@ -4,7 +4,10 @@ namespace App\Http\Controllers\API\Form;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Form\FormItem as FormItemResource;
+use App\Modules\Course\Lesson;
+use App\Modules\Form\Form;
 use App\Modules\Form\FormItem;
+use App\Product;
 use Illuminate\Http\Request;
 
 class MemorizeController extends Controller
@@ -14,15 +17,22 @@ class MemorizeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = FormItem::where('type', FormItem::TYPE_MEMORIZE)->latest()->paginate(15);
+        $input = $request->only('id');
+        $items = FormItem::where('type', Form::TYPE_MEMORIZE)->latest()->paginate(15);
         $items->map(function ($item){
             $item->creator_name = ucfirst($item->creator->name);
             $item->creation_date = $item->created_at->toFormattedDateString();
         });
-        return FormItemResource::collection($items);
+        return response('mehmet', 200);
+//        return FormItemResource::collection($items);
 
+    }
+    public function getItems(Lesson $lesson)
+    {
+        $items = $lesson->getFormsWithType(Form::TYPE_MEMORIZE);
+        return response($items, 200);
     }
 
     /**

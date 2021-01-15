@@ -69,6 +69,7 @@ return array(
     'Nexmo\\Laravel\\' => array($vendorDir . '/nexmo/laravel/src'),
     'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'MartinLindhe\\VueInternationalizationGenerator\\' => array($vendorDir . '/martinlindhe/laravel-vue-i18n-generator/src'),
     'League\\OAuth1\\Client\\' => array($vendorDir . '/league/oauth1-client/src'),
     'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Glide\\' => array($vendorDir . '/league/glide/src'),

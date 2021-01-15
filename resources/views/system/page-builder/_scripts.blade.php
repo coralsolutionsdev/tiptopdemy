@@ -192,7 +192,7 @@
             // });
             // $(document).on('change', '.hotspot-color', function() {
             //     inputLeftValue = $(this).val();
-            //     console.log(inputLeftValue)
+
             //     editableMarker.attr('color-class-value', )
             //     if (inputLeftValue == 'uk-dark'){
             //         editableMarker.removeClass('uk-light');
@@ -506,25 +506,8 @@
                 this.on("complete", function(file) {
                     if (file.xhr.response){
                         var item = JSON.parse(file.xhr.response)
-                        drawMediaItem(item);
+                        drawItem(item);
                     }
-
-
-                    {{--if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length == 0){--}}
-                    {{--    var _this = this;--}}
-                    {{--    _this.removeAllFiles();--}}
-                    {{--}--}}
-                    {{--if (file.xhr.response){--}}
-                    {{--    var media = JSON.parse(file.xhr.response);--}}
-                    {{--    // console.log(media, media.path);--}}
-                    {{--    submitBtn.attr('disabled', false);--}}
-                    {{--    submitBtn.html("{{__('main.Start upload')}}");--}}
-                    {{--    cancelBtn.hide();--}}
-                    {{--    // $('.process-icon').html('<span class="uk-text-success"><span uk-icon="icon: check"></span></span>')--}}
-                    {{--    $('.process-status').html('<span class="uk-text-success"> Processing: (Please keep this window opened)</span>');--}}
-                    {{--    drawMediaItem(media);--}}
-
-                    {{--}--}}
                 });
                 this.on("success", function(event) {
                     if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length == 0){
@@ -561,7 +544,6 @@
                 index.parent().hide()
                 switch(openedWidgetType) {
                     case 'image':
-                        console.log(openedWidgetType);
                         if (index.attr('type-value') == 'image'){
                             index.parent().show()
                         }
@@ -610,7 +592,6 @@
         $('.replace-widget-image').click(function (){
             var widgetImage = $('#'+openedWidgetSetting);
             if (openedWidgetType == 'video'){
-                console.log(selectedMediaItemId)
                 var mediaUrl = $('#'+selectedMediaItemId).find('.media-item-preview').attr('src');
                 widgetImage.html('<video src="'+mediaUrl+'" class="uk-responsive-width pb-widget-video" width="1920" height="1080" playsinline controls disablepictureinpicture controlsList="nodownload" uk-responsive></video>');
 
@@ -745,7 +726,6 @@
                     var markerPinLeft = parseInt(x);
                     var markerPinTop = parseInt(y);
                     var markerColor = 'uk-dark';
-                    // console.log(markerPinTop)
 
                     var widgetId = openedWidgetSetting;
                     var markerId = generateRandomString(6);
@@ -786,24 +766,7 @@
 
 
         });
-
-        // function drawMediaItem(item)
-        // {
-        //     $('#media-items').prepend('' +
-        //         '<div id="mediaItem-'+item.id+'" class="media-item">\n' +
-        //         '   <span class="uk-icon-button selected-media-icon" uk-icon="check"></span>\n' +
-        //         '   <img class="uk-box-shadow-hover-medium media-item-preview" data-src="'+item.url+'" sizes="(min-width: 650px) 650px, 100vw" width="650" alt="" uk-img>\n' +
-        //         '</div>');
-        //
-        // }
-
-        // function drawMediaItem(item)
-        // {
-        //     console.log(item);
-        //     $('#media-items').prepend('');
-        // }
-        function drawMediaItem(item)
-        {
+        function drawItem(item){
             var imageUrl = item.url;
             var prevTag =  null;
             if (item.file_type == "image"){
@@ -821,11 +784,12 @@
             getSelectedMediaItemId();
         }
 
-
         $.get('{{ route('media.get.library.items')}}')
             .done(function (response) {
+
                 $('#media-items').html('');
-                response.map(function (media){
+
+                $.each( response, function( key, media ) {
                     var item = {
                         id:media.id,
                         name:media.name,
@@ -835,8 +799,9 @@
                         extension:media.custom_properties.extension,
                         creation_date:media.creation_date,
                     }
-                    drawMediaItem(item);
+                    drawItem(item);
                 });
+
             });
 
         $('.submit-content-form').off('click').click(function (){

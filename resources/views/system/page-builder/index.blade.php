@@ -207,6 +207,6 @@
 @endif
 @include('partial.scripts._tinyemc')
 @include('system.page-builder._scripts')
-@include('system.file-manager._scripts')
+{{--@include('system.file-manager._scripts')--}}
 </body>
 </html>

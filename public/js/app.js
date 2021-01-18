@@ -3889,7 +3889,7 @@ if (token) {
             "Preview": "معاينة",
             "File size": "حجم الملف",
             "Created at": "أنشأ بتاريخ",
-            "Url link": "ؤابط الملف",
+            "Url link": "رابط الملف",
             "Folder name": "إسم المجلد",
             "Files count": "عدد الملفات",
             "Sub Folders count": "عدد المجلدات الداخلية"
@@ -38856,7 +38856,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('img', {
     staticStyle: {
       "border-radius": "10px",
-      "max-height": "200px",
+      "max-height": "300px",
       "object-fit": "cover"
     },
     attrs: {
@@ -38909,7 +38909,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('div', [_c('p', {
     staticClass: "uk-text-primary uk-margin-remove"
-  }, [_vm._v("Format")]), _vm._v(" "), _c('p', {
+  }, [_vm._v(_vm._s(_vm.$t('main.Format')))]), _vm._v(" "), _c('p', {
     staticClass: "uk-margin-remove",
     domProps: {
       "innerHTML": _vm._s(_vm.previewFile.custom_properties.extension)

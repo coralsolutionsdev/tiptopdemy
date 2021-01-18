@@ -539,7 +539,7 @@ export default {
             "Preview": "معاينة",
             "File size": "حجم الملف",
             "Created at": "أنشأ بتاريخ",
-            "Url link": "ؤابط الملف",
+            "Url link": "رابط الملف",
             "Folder name": "إسم المجلد",
             "Files count": "عدد الملفات",
             "Sub Folders count": "عدد المجلدات الداخلية"

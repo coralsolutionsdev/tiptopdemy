@@ -109,7 +109,7 @@
                     <!--file preview-->
                     <div v-if="previewFile != null" class="uk-grid-small uk-child-width-1-1@s" uk-grid>
                       <div class="uk-text-center" v-if="previewFile.custom_properties.file_type == 'image'">
-                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; max-height: 200px; object-fit:cover">
+                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; max-height: 300px; object-fit:cover">
                       </div>
                       <div v-else-if="previewFile.custom_properties.file_type == 'video'">
                         <video :src="previewFile.url" playsinline controls disablepictureinpicture controlsList="nodownload"></video>
@@ -124,7 +124,7 @@
                         <input @change="updateFileTitle()" type="text" class="uk-input" v-model="previewFile.name">
                       </div>
                       <div>
-                        <p class="uk-text-primary uk-margin-remove">Format</p>
+                        <p class="uk-text-primary uk-margin-remove">{{ $t('main.Format') }}</p>
                         <p class="uk-margin-remove" v-html="previewFile.custom_properties.extension"></p>
                       </div>
                       <div>

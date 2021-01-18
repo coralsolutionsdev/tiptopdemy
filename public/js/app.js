@@ -38809,12 +38809,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })])]), _vm._v(" "), _c('div', {
       staticClass: "file-info uk-margin-small-top"
-    }, [_c('p', {
+    }, [_c('div', {
       staticClass: "uk-margin-remove",
       domProps: {
         "innerHTML": _vm._s(file.name)
       }
-    }), _vm._v(" "), _c('p', {
+    }), _vm._v(" "), _c('div', {
       staticClass: "uk-margin-remove uk-text-muted",
       domProps: {
         "innerHTML": _vm._s(file.custom_properties.file_size_string)

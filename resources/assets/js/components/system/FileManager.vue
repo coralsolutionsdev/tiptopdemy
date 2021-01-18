@@ -97,8 +97,8 @@
                             </div>
                           </div>
                           <div class="file-info uk-margin-small-top">
-                            <p class="uk-margin-remove" v-html="file.name"></p>
-                            <p class="uk-margin-remove uk-text-muted" v-html="file.custom_properties.file_size_string"></p>
+                            <div class="uk-margin-remove" v-html="file.name"></div>
+                            <div class="uk-margin-remove uk-text-muted" v-html="file.custom_properties.file_size_string"></div>
                           </div>
                         </div>
                       </div>

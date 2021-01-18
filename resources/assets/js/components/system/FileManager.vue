@@ -374,20 +374,48 @@ name: "FileManager",
             this.hideLoading();
           });
     },
-    updateFile(id, title ,groupSlug){
+    updateFile(id, title ,groupSlug, refreshPage = true){
       this.loadingMode = true;
       const data = { id:id, title:title, group_slug:groupSlug };
       axios.post('/manage/media/ajax/move/item', data)
           .then(res => {
             this.onMoveItemId = this.onMoveItemType = null;
-            this.fetchFiles();
+            if (refreshPage){
+              this.fetchFiles();
+            }
             this.hideLoading();
-            // this.fetchGroups();
           })
           .catch(error => {
             console.log(error);
             this.hideLoading();
           });
+    },
+    updateFolder(id, title ,ancestorId, refreshPage = true){
+      this.loadingMode = true;
+      const data = { id:id, title:title,  group_slug:ancestorId };
+      axios.post('/manage/system/group/ajax/update', data)
+          .then(res => {
+            this.onMoveItemId = this.onMoveItemType = null;
+            if (refreshPage){
+              this.fetchGroups();
+              this.fetchFiles();
+            }
+            this.hideLoading();
+          })
+          .catch(error => {
+            console.log(error);
+            this.hideLoading();
+          });
+    },
+    updateFolderTitle(){
+      var previewTitle = this.previewFolder ? this.previewFolder.title : null;
+      var previewId = this.previewFolder ? this.previewFolder.id : null;
+      this.updateFolder(previewId, previewTitle, this.groupSlug, false);
+    },
+    updateFileTitle(){
+      var previewTitle = this.previewFile ? this.previewFile.name : null;
+      var previewId = this.previewFile ? this.previewFile.id : null;
+      this.updateFile(previewId, previewTitle, this.groupSlug, false);
     },
     createFolder(){
       const data = {  title:'New folder', ancestor_slug:this.groupSlug };
@@ -401,31 +429,6 @@ name: "FileManager",
             console.log(error);
             this.hideLoading();
           });
-    },
-    updateFolder(id, title ,ancestorId){
-      this.loadingMode = true;
-      const data = { id:id, title:title,  group_slug:ancestorId };
-      axios.post('/manage/system/group/ajax/update', data)
-          .then(res => {
-            this.onMoveItemId = this.onMoveItemType = null;
-            this.fetchGroups();
-            this.fetchFiles();
-            this.hideLoading();
-          })
-          .catch(error => {
-            console.log(error);
-            this.hideLoading();
-          });
-    },
-    updateFolderTitle(){
-      var previewTitle = this.previewFolder ? this.previewFolder.title : null;
-      var previewId = this.previewFolder ? this.previewFolder.id : null;
-      this.updateFolder(previewId, previewTitle, this.groupSlug );
-    },
-    updateFileTitle(){
-      var previewTitle = this.previewFile ? this.previewFile.name : null;
-      var previewId = this.previewFile ? this.previewFile.id : null;
-      this.updateFile(previewId, previewTitle, this.groupSlug );
     },
     hideLoading(){
       setTimeout(()=>{

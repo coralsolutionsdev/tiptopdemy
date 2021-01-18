@@ -3193,55 +3193,62 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
     updateFile: function updateFile(id, title, groupSlug) {
       var _this4 = this;
 
+      var refreshPage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+
       this.loadingMode = true;
       var data = { id: id, title: title, group_slug: groupSlug };
       axios.post('/manage/media/ajax/move/item', data).then(function (res) {
         _this4.onMoveItemId = _this4.onMoveItemType = null;
-        _this4.fetchFiles();
+        if (refreshPage) {
+          _this4.fetchFiles();
+        }
         _this4.hideLoading();
-        // this.fetchGroups();
       }).catch(function (error) {
         console.log(error);
         _this4.hideLoading();
-      });
-    },
-    createFolder: function createFolder() {
-      var _this5 = this;
-
-      var data = { title: 'New folder', ancestor_slug: this.groupSlug };
-      axios.post('/manage/system/group/ajax/create', data).then(function (res) {
-        // this.fetchFiles();
-        _this5.fetchGroups();
-        _this5.hideLoading();
-      }).catch(function (error) {
-        console.log(error);
-        _this5.hideLoading();
       });
     },
     updateFolder: function updateFolder(id, title, ancestorId) {
-      var _this6 = this;
+      var _this5 = this;
+
+      var refreshPage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
       this.loadingMode = true;
       var data = { id: id, title: title, group_slug: ancestorId };
       axios.post('/manage/system/group/ajax/update', data).then(function (res) {
-        _this6.onMoveItemId = _this6.onMoveItemType = null;
-        _this6.fetchGroups();
-        _this6.fetchFiles();
-        _this6.hideLoading();
+        _this5.onMoveItemId = _this5.onMoveItemType = null;
+        if (refreshPage) {
+          _this5.fetchGroups();
+          _this5.fetchFiles();
+        }
+        _this5.hideLoading();
       }).catch(function (error) {
         console.log(error);
-        _this6.hideLoading();
+        _this5.hideLoading();
       });
     },
     updateFolderTitle: function updateFolderTitle() {
       var previewTitle = this.previewFolder ? this.previewFolder.title : null;
       var previewId = this.previewFolder ? this.previewFolder.id : null;
-      this.updateFolder(previewId, previewTitle, this.groupSlug);
+      this.updateFolder(previewId, previewTitle, this.groupSlug, false);
     },
     updateFileTitle: function updateFileTitle() {
       var previewTitle = this.previewFile ? this.previewFile.name : null;
       var previewId = this.previewFile ? this.previewFile.id : null;
-      this.updateFile(previewId, previewTitle, this.groupSlug);
+      this.updateFile(previewId, previewTitle, this.groupSlug, false);
+    },
+    createFolder: function createFolder() {
+      var _this6 = this;
+
+      var data = { title: 'New folder', ancestor_slug: this.groupSlug };
+      axios.post('/manage/system/group/ajax/create', data).then(function (res) {
+        // this.fetchFiles();
+        _this6.fetchGroups();
+        _this6.hideLoading();
+      }).catch(function (error) {
+        console.log(error);
+        _this6.hideLoading();
+      });
     },
     hideLoading: function hideLoading() {
       var _this7 = this;

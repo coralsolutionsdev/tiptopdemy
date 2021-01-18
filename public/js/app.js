@@ -3167,9 +3167,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
     pasteItem: function pasteItem() {
       if (this.onMoveItemId) {
         if (this.onMoveItemType === this.activeItemTypeFile) {
-          this.updateFile(this.onMoveItemId, null, this.groupSlug);
+          this.updateFile(this.onMoveItemId, null, this.groupSlug, false);
         } else {
-          this.updateFolder(this.onMoveItemId, null, this.groupSlug);
+          this.updateFolder(this.onMoveItemId, null, this.groupSlug, false);
         }
       }
     },

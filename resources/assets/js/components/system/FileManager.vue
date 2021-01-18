@@ -349,9 +349,9 @@ name: "FileManager",
     pasteItem(){
       if (this.onMoveItemId){
         if (this.onMoveItemType === this.activeItemTypeFile){
-          this.updateFile(this.onMoveItemId, null, this.groupSlug);
+          this.updateFile(this.onMoveItemId, null, this.groupSlug, false);
         }else{
-          this.updateFolder(this.onMoveItemId, null, this.groupSlug );
+          this.updateFolder(this.onMoveItemId, null, this.groupSlug, false);
         }
       }
     },

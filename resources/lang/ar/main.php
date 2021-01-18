@@ -509,6 +509,7 @@
 
         // file manager
         'File upload' => 'رفع الملفات',
+        'Format' => 'نوع الملف',
         'Files' => 'الملفات',
         'Folders' => 'المجلدات',
         'files' => 'ملفات',

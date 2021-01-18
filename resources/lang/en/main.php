@@ -486,6 +486,7 @@
 
         // file manager
         'File upload' => 'File upload',
+        'Format' => 'Format',
         'Files' => 'Files',
         'Folders' => 'Folders',
         'files' => 'Files',

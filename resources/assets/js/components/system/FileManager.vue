@@ -259,7 +259,7 @@ name: "FileManager",
       });
     },
     fetchGroups(){ // get all media groups
-      this.allFolders = [];
+      this.folders = [];
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {

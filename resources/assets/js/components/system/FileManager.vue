@@ -97,8 +97,8 @@
                             </div>
                           </div>
                           <div class="file-info uk-margin-small-top">
-                            <div class="uk-margin-remove" v-html="file.name"></div>
-                            <div class="uk-margin-remove uk-text-muted" v-html="file.custom_properties.file_size_string"></div>
+                            <p class="uk-margin-remove" style=" word-wrap: break-word;" v-html="file.name"></p>
+                            <p class="uk-margin-remove uk-text-muted" v-html="file.custom_properties.file_size_string"></p>
                           </div>
                         </div>
                       </div>
@@ -108,12 +108,24 @@
                   <div v-if="previewMode" class="uk-width-1-3" style="background-color: #F9F9FB; padding: 10px;min-height: 72vh; display: block">
                     <!--file preview-->
                     <div v-if="previewFile != null" class="uk-grid-small uk-child-width-1-1@s" uk-grid>
-                      <div>
+                      <div v-if="previewFile.custom_properties.file_type == 'image'">
                         <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px">
+                      </div>
+                      <div v-else-if="previewFile.custom_properties.file_type == 'video'">
+                        <video :src="previewFile.url" playsinline controls disablepictureinpicture controlsList="nodownload"></video>
+                      </div>
+                      <div v-else-if="previewFile.custom_properties.file_type == 'audio'">
+                        <audio controls controlsList="nodownload">
+                          <source :src="previewFile.url" type="audio/mpeg">
+                        </audio>
                       </div>
                       <div>
                         <p class="uk-text-primary uk-margin-remove">{{ $t('main.File name') }}</p>
                         <input @change="updateFileTitle()" type="text" class="uk-input" v-model="previewFile.name">
+                      </div>
+                      <div>
+                        <p class="uk-text-primary uk-margin-remove">Format</p>
+                        <p class="uk-margin-remove" v-html="previewFile.custom_properties.extension"></p>
                       </div>
                       <div>
                         <p class="uk-text-primary uk-margin-remove">{{$t('main.File size')}}</p>

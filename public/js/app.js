@@ -2984,6 +2984,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // .....
 var token = document.head.querySelector('meta[name="csrf-token"]').content;
@@ -38809,12 +38821,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })])]), _vm._v(" "), _c('div', {
       staticClass: "file-info uk-margin-small-top"
-    }, [_c('div', {
+    }, [_c('p', {
       staticClass: "uk-margin-remove",
+      staticStyle: {
+        "word-wrap": "break-word"
+      },
       domProps: {
         "innerHTML": _vm._s(file.name)
       }
-    }), _vm._v(" "), _c('div', {
+    }), _vm._v(" "), _c('p', {
       staticClass: "uk-margin-remove uk-text-muted",
       domProps: {
         "innerHTML": _vm._s(file.custom_properties.file_size_string)
@@ -38833,7 +38848,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-grid": ""
     }
-  }, [_c('div', [_c('img', {
+  }, [(_vm.previewFile.custom_properties.file_type == 'image') ? _c('div', [_c('img', {
     staticStyle: {
       "border-radius": "10px"
     },
@@ -38842,7 +38857,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "alt": "",
       "uk-img": ""
     }
-  })]), _vm._v(" "), _c('div', [_c('p', {
+  })]) : (_vm.previewFile.custom_properties.file_type == 'video') ? _c('div', [_c('video', {
+    attrs: {
+      "src": _vm.previewFile.url,
+      "playsinline": "",
+      "controls": "",
+      "disablepictureinpicture": "",
+      "controlsList": "nodownload"
+    }
+  })]) : (_vm.previewFile.custom_properties.file_type == 'audio') ? _c('div', [_c('audio', {
+    attrs: {
+      "controls": "",
+      "controlsList": "nodownload"
+    }
+  }, [_c('source', {
+    attrs: {
+      "src": _vm.previewFile.url,
+      "type": "audio/mpeg"
+    }
+  })])]) : _vm._e(), _vm._v(" "), _c('div', [_c('p', {
     staticClass: "uk-text-primary uk-margin-remove"
   }, [_vm._v(_vm._s(_vm.$t('main.File name')))]), _vm._v(" "), _c('input', {
     directives: [{
@@ -38866,6 +38899,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         if ($event.target.composing) { return; }
         _vm.$set(_vm.previewFile, "name", $event.target.value)
       }
+    }
+  })]), _vm._v(" "), _c('div', [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove"
+  }, [_vm._v("Format")]), _vm._v(" "), _c('p', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewFile.custom_properties.extension)
     }
   })]), _vm._v(" "), _c('div', [_c('p', {
     staticClass: "uk-text-primary uk-margin-remove"

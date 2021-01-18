@@ -3060,9 +3060,12 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
     fetchFiles: function fetchFiles() {
       var _this = this;
 
+      var refreshPage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       // get all media files
       this.loadingMode = true;
-      this.files = [];
+      if (refreshPage) {
+        this.files = [];
+      }
       axios.get('/manage/media/get/items', {
         params: {
           group: this.groupSlug
@@ -3079,8 +3082,11 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
     fetchGroups: function fetchGroups() {
       var _this2 = this;
 
+      var refreshPage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       // get all media groups
-      this.folders = [];
+      if (refreshPage) {
+        this.folders = [];
+      }
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {
@@ -3199,9 +3205,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var data = { id: id, title: title, group_slug: groupSlug };
       axios.post('/manage/media/ajax/move/item', data).then(function (res) {
         _this4.onMoveItemId = _this4.onMoveItemType = null;
-        if (refreshPage) {
-          _this4.fetchFiles();
-        }
+        _this4.fetchFiles(refreshPage);
         _this4.hideLoading();
       }).catch(function (error) {
         console.log(error);
@@ -3217,10 +3221,8 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var data = { id: id, title: title, group_slug: ancestorId };
       axios.post('/manage/system/group/ajax/update', data).then(function (res) {
         _this5.onMoveItemId = _this5.onMoveItemType = null;
-        if (refreshPage) {
-          _this5.fetchGroups();
-          _this5.fetchFiles();
-        }
+        _this5.fetchGroups(refreshPage);
+        _this5.fetchFiles(refreshPage);
         _this5.hideLoading();
       }).catch(function (error) {
         console.log(error);
@@ -3243,7 +3245,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var data = { title: 'New folder', ancestor_slug: this.groupSlug };
       axios.post('/manage/system/group/ajax/create', data).then(function (res) {
         // this.fetchFiles();
-        _this6.fetchGroups();
+        _this6.fetchGroups(false);
         _this6.hideLoading();
       }).catch(function (error) {
         console.log(error);
@@ -3263,8 +3265,8 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var _this8 = this;
 
       console.log('success');
-      this.fetchFiles();
-      this.fetchGroups();
+      this.fetchFiles(false);
+      this.fetchGroups(false);
       // this.success = true
       // window.toastr.success('', 'Event : vdropzone-success')
       setTimeout(function () {

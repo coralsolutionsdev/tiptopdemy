@@ -240,9 +240,11 @@ name: "FileManager",
       this.previewMode = !this.previewMode;
 
     },
-    fetchFiles(){ // get all media files
+    fetchFiles(refreshPage = true){ // get all media files
       this.loadingMode = true;
-      this.files = [];
+      if (refreshPage){
+        this.files = [];
+      }
       axios.get('/manage/media/get/items', {
         params: {
           group: this.groupSlug,
@@ -258,8 +260,10 @@ name: "FileManager",
         this.hideLoading();
       });
     },
-    fetchGroups(){ // get all media groups
-      this.folders = [];
+    fetchGroups(refreshPage = true){ // get all media groups
+      if (refreshPage){
+        this.folders = [];
+      }
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {
@@ -380,9 +384,7 @@ name: "FileManager",
       axios.post('/manage/media/ajax/move/item', data)
           .then(res => {
             this.onMoveItemId = this.onMoveItemType = null;
-            if (refreshPage){
-              this.fetchFiles();
-            }
+              this.fetchFiles(refreshPage);
             this.hideLoading();
           })
           .catch(error => {
@@ -396,10 +398,8 @@ name: "FileManager",
       axios.post('/manage/system/group/ajax/update', data)
           .then(res => {
             this.onMoveItemId = this.onMoveItemType = null;
-            if (refreshPage){
-              this.fetchGroups();
-              this.fetchFiles();
-            }
+              this.fetchGroups(refreshPage);
+              this.fetchFiles(refreshPage);
             this.hideLoading();
           })
           .catch(error => {
@@ -422,7 +422,7 @@ name: "FileManager",
       axios.post('/manage/system/group/ajax/create', data)
           .then(res => {
             // this.fetchFiles();
-            this.fetchGroups();
+            this.fetchGroups(false);
             this.hideLoading();
           })
           .catch(error => {
@@ -439,8 +439,8 @@ name: "FileManager",
     // dropzone methods
     vSuccess(file, response) {
       console.log('success');
-      this.fetchFiles();
-      this.fetchGroups();
+      this.fetchFiles(false);
+      this.fetchGroups(false);
       // this.success = true
       // window.toastr.success('', 'Event : vdropzone-success')
       setTimeout(()=>{

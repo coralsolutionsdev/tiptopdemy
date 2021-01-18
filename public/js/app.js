@@ -7197,7 +7197,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+exports.push([module.i, "\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
 
 /***/ }),
 /* 51 */
@@ -38802,6 +38802,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('div', {
       staticClass: "image-wrapper"
     }, [(file.custom_properties.file_type === 'image') ? _c('img', {
+      staticClass: "img-preview",
       attrs: {
         "data-src": file.url,
         "alt": "",
@@ -38848,10 +38849,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-grid": ""
     }
-  }, [(_vm.previewFile.custom_properties.file_type == 'image') ? _c('div', [_c('img', {
+  }, [(_vm.previewFile.custom_properties.file_type == 'image') ? _c('div', {
+    staticClass: "uk-text-center"
+  }, [_c('img', {
     staticStyle: {
       "border-radius": "10px",
-      "width": "100%"
+      "max-height": "200px",
+      "object-fit": "cover"
     },
     attrs: {
       "data-src": _vm.previewFile.url,

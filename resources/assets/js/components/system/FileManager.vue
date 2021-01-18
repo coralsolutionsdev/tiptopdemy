@@ -91,7 +91,7 @@
                         <div :class="{active:activeFileId == file.id, onMove:onMoveItemId == file.id}" class="file image-file" @click="openFilePreview(file)">
 
                           <div class="image-wrapper">
-                            <img :data-src="file.url" alt="" uk-img v-if="file.custom_properties.file_type === 'image'">
+                            <img :data-src="file.url" alt="" uk-img v-if="file.custom_properties.file_type === 'image'" class="img-preview">
                             <div v-else style="padding: 25px 10px 5px 10px">
                               <img class="uk-margin" :data-src="'/storage/assets/file_icons/'+file.custom_properties.extension+'.png'" alt="" width="60" uk-img>
                             </div>
@@ -108,8 +108,8 @@
                   <div v-if="previewMode" class="uk-width-1-3" style="background-color: #F9F9FB; padding: 10px;min-height: 72vh; display: block">
                     <!--file preview-->
                     <div v-if="previewFile != null" class="uk-grid-small uk-child-width-1-1@s" uk-grid>
-                      <div v-if="previewFile.custom_properties.file_type == 'image'">
-                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; width: 100%">
+                      <div class="uk-text-center" v-if="previewFile.custom_properties.file_type == 'image'">
+                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; max-height: 200px; object-fit:cover">
                       </div>
                       <div v-else-if="previewFile.custom_properties.file_type == 'video'">
                         <video :src="previewFile.url" playsinline controls disablepictureinpicture controlsList="nodownload"></video>
@@ -467,6 +467,10 @@ name: "FileManager",
 </script>
 
 <style scoped>
+  .img-preview{
+    max-height:150px;
+    object-fit:cover;
+  }
   .navbar-list li{
     display: inline-block;
   }

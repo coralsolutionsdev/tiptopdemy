@@ -184,6 +184,7 @@ Route::group(['middleware'=>'installed'], function(){
 //            Route::resource('file-manager', 'FileManagerController');
             Route::post('group/ajax/create', 'GroupController@ajaxStore')->name('group.ajax.create');
             Route::get('group/ajax/get/type/{type}/groups', 'GroupController@ajaxGetIndex')->name('group.ajax.get.index');
+            Route::post('group/ajax/update', 'GroupController@ajaxUpdate');
 
 //                Route::resource('errors', 'ErrorLogsController');
 //                Route::resource('server', 'ServerController');
@@ -197,6 +198,7 @@ Route::group(['middleware'=>'installed'], function(){
         Route::group(['prefix' => 'media', 'namespace' => 'Media', 'as' => 'media.'], function (){
             Route::resource('/','MediaController');
             Route::get('/get/library/items','MediaController@getMediaLibrary')->name('get.library.items');
+            Route::get('/get/items','MediaController@getItems')->name('get.library.items');
             Route::post('/ajax/move/item','MediaController@ajaxMove')->name('ajax.move');
             Route::post('/ajax/delete/{media}','MediaController@ajaxDestroy')->name('ajax.destroy');
             Route::post('/ajax/image/upload','MediaController@editorImageUpload')->name('image.upload');

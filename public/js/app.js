@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 53);
+/******/ 	return __webpack_require__(__webpack_require__.s = 78);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,7 +73,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(8);
+var bind = __webpack_require__(11);
 
 /*global toString:true*/
 
@@ -89,6 +89,27 @@ var toString = Object.prototype.toString;
  */
 function isArray(val) {
   return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is a Buffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Buffer, otherwise false
+ */
+function isBuffer(val) {
+  return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
+    && typeof val.constructor.isBuffer === 'function' && val.constructor.isBuffer(val);
 }
 
 /**
@@ -148,16 +169,6 @@ function isNumber(val) {
 }
 
 /**
- * Determine if a value is undefined
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if the value is undefined, otherwise false
- */
-function isUndefined(val) {
-  return typeof val === 'undefined';
-}
-
-/**
  * Determine if a value is an Object
  *
  * @param {Object} val The value to test
@@ -165,6 +176,21 @@ function isUndefined(val) {
  */
 function isObject(val) {
   return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a plain Object
+ *
+ * @param {Object} val The value to test
+ * @return {boolean} True if value is a plain Object, otherwise false
+ */
+function isPlainObject(val) {
+  if (toString.call(val) !== '[object Object]') {
+    return false;
+  }
+
+  var prototype = Object.getPrototypeOf(val);
+  return prototype === null || prototype === Object.prototype;
 }
 
 /**
@@ -248,13 +274,19 @@ function trim(str) {
  *  typeof document -> undefined
  *
  * react-native:
- *  typeof document.createElement -> undefined
+ *  navigator.product -> 'ReactNative'
+ * nativescript
+ *  navigator.product -> 'NativeScript' or 'NS'
  */
 function isStandardBrowserEnv() {
+  if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
+                                           navigator.product === 'NativeScript' ||
+                                           navigator.product === 'NS')) {
+    return false;
+  }
   return (
     typeof window !== 'undefined' &&
-    typeof document !== 'undefined' &&
-    typeof document.createElement === 'function'
+    typeof document !== 'undefined'
   );
 }
 
@@ -277,7 +309,7 @@ function forEach(obj, fn) {
   }
 
   // Force an array if not already something iterable
-  if (typeof obj !== 'object' && !isArray(obj)) {
+  if (typeof obj !== 'object') {
     /*eslint no-param-reassign:0*/
     obj = [obj];
   }
@@ -317,8 +349,12 @@ function forEach(obj, fn) {
 function merge(/* obj1, obj2, obj3, ... */) {
   var result = {};
   function assignValue(val, key) {
-    if (typeof result[key] === 'object' && typeof val === 'object') {
+    if (isPlainObject(result[key]) && isPlainObject(val)) {
       result[key] = merge(result[key], val);
+    } else if (isPlainObject(val)) {
+      result[key] = merge({}, val);
+    } else if (isArray(val)) {
+      result[key] = val.slice();
     } else {
       result[key] = val;
     }
@@ -349,14 +385,29 @@ function extend(a, b, thisArg) {
   return a;
 }
 
+/**
+ * Remove byte order marker. This catches EF BB BF (the UTF-8 BOM)
+ *
+ * @param {string} content with BOM
+ * @return {string} content value without BOM
+ */
+function stripBOM(content) {
+  if (content.charCodeAt(0) === 0xFEFF) {
+    content = content.slice(1);
+  }
+  return content;
+}
+
 module.exports = {
   isArray: isArray,
   isArrayBuffer: isArrayBuffer,
+  isBuffer: isBuffer,
   isFormData: isFormData,
   isArrayBufferView: isArrayBufferView,
   isString: isString,
   isNumber: isNumber,
   isObject: isObject,
+  isPlainObject: isPlainObject,
   isUndefined: isUndefined,
   isDate: isDate,
   isFile: isFile,
@@ -368,7 +419,8 @@ module.exports = {
   forEach: forEach,
   merge: merge,
   extend: extend,
-  trim: trim
+  trim: trim,
+  stripBOM: stripBOM
 };
 
 
@@ -376,132 +428,60 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
 
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
 
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
 
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(27);
-
-var PROTECTION_PREFIX = /^\)\]\}',?\n/;
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(4);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(4);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      data = data.replace(PROTECTION_PREFIX, '');
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMehtodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports) {
 
 // this module is a runtime utility for cleaner component module output and will
@@ -558,19 +538,268 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(75)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(19);
-var buildURL = __webpack_require__(22);
-var parseHeaders = __webpack_require__(28);
-var isURLSameOrigin = __webpack_require__(26);
-var createError = __webpack_require__(7);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(21);
+var settle = __webpack_require__(27);
+var cookies = __webpack_require__(30);
+var buildURL = __webpack_require__(12);
+var buildFullPath = __webpack_require__(24);
+var parseHeaders = __webpack_require__(35);
+var isURLSameOrigin = __webpack_require__(33);
+var createError = __webpack_require__(8);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -582,38 +811,23 @@ module.exports = function xhrAdapter(config) {
     }
 
     var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if ("development" !== 'test' &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
 
     // HTTP basic authentication
     if (config.auth) {
       var username = config.auth.username || '';
-      var password = config.auth.password || '';
+      var password = config.auth.password ? unescape(encodeURIComponent(config.auth.password)) : '';
       requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
     }
 
-    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+    var fullPath = buildFullPath(config.baseURL, config.url);
+    request.open(config.method.toUpperCase(), buildURL(fullPath, config.params, config.paramsSerializer), true);
 
     // Set the request timeout in MS
     request.timeout = config.timeout;
 
     // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
+    request.onreadystatechange = function handleLoad() {
+      if (!request || request.readyState !== 4) {
         return;
       }
 
@@ -630,9 +844,8 @@ module.exports = function xhrAdapter(config) {
       var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
       var response = {
         data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        status: request.status,
+        statusText: request.statusText,
         headers: responseHeaders,
         config: config,
         request: request
@@ -644,11 +857,23 @@ module.exports = function xhrAdapter(config) {
       request = null;
     };
 
+    // Handle browser request cancellation (as opposed to a manual cancellation)
+    request.onabort = function handleAbort() {
+      if (!request) {
+        return;
+      }
+
+      reject(createError('Request aborted', config, 'ECONNABORTED', request));
+
+      // Clean up request
+      request = null;
+    };
+
     // Handle low level network errors
     request.onerror = function handleError() {
       // Real errors are hidden from us by the browser
       // onerror should only fire if it's a network error
-      reject(createError('Network Error', config));
+      reject(createError('Network Error', config, null, request));
 
       // Clean up request
       request = null;
@@ -656,7 +881,12 @@ module.exports = function xhrAdapter(config) {
 
     // Handle timeout
     request.ontimeout = function handleTimeout() {
-      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED'));
+      var timeoutErrorMessage = 'timeout of ' + config.timeout + 'ms exceeded';
+      if (config.timeoutErrorMessage) {
+        timeoutErrorMessage = config.timeoutErrorMessage;
+      }
+      reject(createError(timeoutErrorMessage, config, 'ECONNABORTED',
+        request));
 
       // Clean up request
       request = null;
@@ -666,12 +896,10 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(24);
-
       // Add xsrf header
-      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
-          cookies.read(config.xsrfCookieName) :
-          undefined;
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
+        cookies.read(config.xsrfCookieName) :
+        undefined;
 
       if (xsrfValue) {
         requestHeaders[config.xsrfHeaderName] = xsrfValue;
@@ -692,8 +920,8 @@ module.exports = function xhrAdapter(config) {
     }
 
     // Add withCredentials to request if needed
-    if (config.withCredentials) {
-      request.withCredentials = true;
+    if (!utils.isUndefined(config.withCredentials)) {
+      request.withCredentials = !!config.withCredentials;
     }
 
     // Add responseType to request if needed
@@ -701,7 +929,9 @@ module.exports = function xhrAdapter(config) {
       try {
         request.responseType = config.responseType;
       } catch (e) {
-        if (request.responseType !== 'json') {
+        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+        if (config.responseType !== 'json') {
           throw e;
         }
       }
@@ -731,7 +961,7 @@ module.exports = function xhrAdapter(config) {
       });
     }
 
-    if (requestData === undefined) {
+    if (!requestData) {
       requestData = null;
     }
 
@@ -742,7 +972,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -768,7 +998,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -780,31 +1010,232 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(18);
+var enhanceError = __webpack_require__(26);
 
 /**
- * Create an Error with the specified message, config, error code, and response.
+ * Create an Error with the specified message, config, error code, request and response.
  *
  * @param {string} message The error message.
  * @param {Object} config The config.
  * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
  * @returns {Error} The created error.
  */
-module.exports = function createError(message, config, code, response) {
+module.exports = function createError(message, config, code, request, response) {
   var error = new Error(message);
-  return enhanceError(error, config, code, response);
+  return enhanceError(error, config, code, request, response);
 };
 
 
 /***/ }),
-/* 8 */
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(0);
+
+/**
+ * Config-specific merge-function which creates a new config-object
+ * by merging two configuration objects together.
+ *
+ * @param {Object} config1
+ * @param {Object} config2
+ * @returns {Object} New object resulting from merging config2 to config1
+ */
+module.exports = function mergeConfig(config1, config2) {
+  // eslint-disable-next-line no-param-reassign
+  config2 = config2 || {};
+  var config = {};
+
+  var valueFromConfig2Keys = ['url', 'method', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy', 'params'];
+  var defaultToConfig2Keys = [
+    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'timeoutMessage', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'decompress',
+    'maxContentLength', 'maxBodyLength', 'maxRedirects', 'transport', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath', 'responseEncoding'
+  ];
+  var directMergeKeys = ['validateStatus'];
+
+  function getMergedValue(target, source) {
+    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
+      return utils.merge(target, source);
+    } else if (utils.isPlainObject(source)) {
+      return utils.merge({}, source);
+    } else if (utils.isArray(source)) {
+      return source.slice();
+    }
+    return source;
+  }
+
+  function mergeDeepProperties(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  }
+
+  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
+    }
+  });
+
+  utils.forEach(mergeDeepPropertiesKeys, mergeDeepProperties);
+
+  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  utils.forEach(directMergeKeys, function merge(prop) {
+    if (prop in config2) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (prop in config1) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  var axiosKeys = valueFromConfig2Keys
+    .concat(mergeDeepPropertiesKeys)
+    .concat(defaultToConfig2Keys)
+    .concat(directMergeKeys);
+
+  var otherKeys = Object
+    .keys(config1)
+    .concat(Object.keys(config2))
+    .filter(function filterAxiosKeys(key) {
+      return axiosKeys.indexOf(key) === -1;
+    });
+
+  utils.forEach(otherKeys, mergeDeepProperties);
+
+  return config;
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(34);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(5);
+  } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(5);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Accept');
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+  maxBodyLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -822,7 +1253,84 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 9 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(0);
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      } else {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    var hashmarkIndex = url.indexOf('#');
+    if (hashmarkIndex !== -1) {
+      url = url.slice(0, hashmarkIndex);
+    }
+
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1012,15 +1520,60 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 10 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(51);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(55)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../css-loader/index.js!./vue2Dropzone.min.css", function() {
+			var newContent = require("!!../../css-loader/index.js!./vue2Dropzone.min.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define(t):(e=e||self).vue2Dropzone=t()}(this,function(){"use strict";var e,t=(function(e){var t=function(){function e(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,i,n){return i&&e(t.prototype,i),n&&e(t,n),t}}();function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var r=function(){function e(){n(this,e)}return t(e,[{key:"on",value:function(e,t){return this._callbacks=this._callbacks||{},this._callbacks[e]||(this._callbacks[e]=[]),this._callbacks[e].push(t),this}},{key:"emit",value:function(e){this._callbacks=this._callbacks||{};var t=this._callbacks[e];if(t){for(var i=arguments.length,n=Array(i>1?i-1:0),r=1;r<i;r++)n[r-1]=arguments[r];for(var o=0,s=s=t;;){if(o>=s.length)break;s[o++].apply(this,n)}}return this}},{key:"off",value:function(e,t){if(!this._callbacks||0===arguments.length)return this._callbacks={},this;var i=this._callbacks[e];if(!i)return this;if(1===arguments.length)return delete this._callbacks[e],this;for(var n=0;n<i.length;n++){if(i[n]===t){i.splice(n,1);break}}return this}}]),e}(),o=function(e){function o(e,t){n(this,o);var r,s=i(this,(o.__proto__||Object.getPrototypeOf(o)).call(this)),a=void 0;if(s.element=e,s.version=o.version,s.defaultOptions.previewTemplate=s.defaultOptions.previewTemplate.replace(/\n*/g,""),s.clickableElements=[],s.listeners=[],s.files=[],"string"==typeof s.element&&(s.element=document.querySelector(s.element)),!s.element||null==s.element.nodeType)throw new Error("Invalid dropzone element.");if(s.element.dropzone)throw new Error("Dropzone already attached.");o.instances.push(s),s.element.dropzone=s;var l,u=null!=(r=o.optionsForElement(s.element))?r:{};if(s.options=o.extend({},s.defaultOptions,u,null!=t?t:{}),s.options.forceFallback||!o.isBrowserSupported())return l=s.options.fallback.call(s),i(s,l);if(null==s.options.url&&(s.options.url=s.element.getAttribute("action")),!s.options.url)throw new Error("No URL provided.");if(s.options.acceptedFiles&&s.options.acceptedMimeTypes)throw new Error("You can't provide both 'acceptedFiles' and 'acceptedMimeTypes'. 'acceptedMimeTypes' is deprecated.");if(s.options.uploadMultiple&&s.options.chunking)throw new Error("You cannot set both: uploadMultiple and chunking.");return s.options.acceptedMimeTypes&&(s.options.acceptedFiles=s.options.acceptedMimeTypes,delete s.options.acceptedMimeTypes),null!=s.options.renameFilename&&(s.options.renameFile=function(e){return s.options.renameFilename.call(s,e.name,e)}),s.options.method=s.options.method.toUpperCase(),(a=s.getExistingFallback())&&a.parentNode&&a.parentNode.removeChild(a),!1!==s.options.previewsContainer&&(s.options.previewsContainer?s.previewsContainer=o.getElement(s.options.previewsContainer,"previewsContainer"):s.previewsContainer=s.element),s.options.clickable&&(!0===s.options.clickable?s.clickableElements=[s.element]:s.clickableElements=o.getElements(s.options.clickable,"clickable")),s.init(),s}return function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}(o,r),t(o,null,[{key:"initClass",value:function(){this.prototype.Emitter=r,this.prototype.events=["drop","dragstart","dragend","dragenter","dragover","dragleave","addedfile","addedfiles","removedfile","thumbnail","error","errormultiple","processing","processingmultiple","uploadprogress","totaluploadprogress","sending","sendingmultiple","success","successmultiple","canceled","canceledmultiple","complete","completemultiple","reset","maxfilesexceeded","maxfilesreached","queuecomplete"],this.prototype.defaultOptions={url:null,method:"post",withCredentials:!1,timeout:3e4,parallelUploads:2,uploadMultiple:!1,chunking:!1,forceChunking:!1,chunkSize:2e6,parallelChunkUploads:!1,retryChunks:!1,retryChunksLimit:3,maxFilesize:256,paramName:"file",createImageThumbnails:!0,maxThumbnailFilesize:10,thumbnailWidth:120,thumbnailHeight:120,thumbnailMethod:"crop",resizeWidth:null,resizeHeight:null,resizeMimeType:null,resizeQuality:.8,resizeMethod:"contain",filesizeBase:1e3,maxFiles:null,headers:null,clickable:!0,ignoreHiddenFiles:!0,acceptedFiles:null,acceptedMimeTypes:null,autoProcessQueue:!0,autoQueue:!0,addRemoveLinks:!1,previewsContainer:null,hiddenInputContainer:"body",capture:null,renameFilename:null,renameFile:null,forceFallback:!1,dictDefaultMessage:"Drop files here to upload",dictFallbackMessage:"Your browser does not support drag'n'drop file uploads.",dictFallbackText:"Please use the fallback form below to upload your files like in the olden days.",dictFileTooBig:"File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",dictInvalidFileType:"You can't upload files of this type.",dictResponseError:"Server responded with {{statusCode}} code.",dictCancelUpload:"Cancel upload",dictUploadCanceled:"Upload canceled.",dictCancelUploadConfirmation:"Are you sure you want to cancel this upload?",dictRemoveFile:"Remove file",dictRemoveFileConfirmation:null,dictMaxFilesExceeded:"You can not upload any more files.",dictFileSizeUnits:{tb:"TB",gb:"GB",mb:"MB",kb:"KB",b:"b"},init:function(){},params:function(e,t,i){if(i)return{dzuuid:i.file.upload.uuid,dzchunkindex:i.index,dztotalfilesize:i.file.size,dzchunksize:this.options.chunkSize,dztotalchunkcount:i.file.upload.totalChunkCount,dzchunkbyteoffset:i.index*this.options.chunkSize}},accept:function(e,t){return t()},chunksUploaded:function(e,t){t()},fallback:function(){var e=void 0;this.element.className=this.element.className+" dz-browser-not-supported";for(var t=0,i=i=this.element.getElementsByTagName("div");;){if(t>=i.length)break;var n=i[t++];if(/(^| )dz-message($| )/.test(n.className)){e=n,n.className="dz-message";break}}e||(e=o.createElement('<div class="dz-message"><span></span></div>'),this.element.appendChild(e));var r=e.getElementsByTagName("span")[0];return r&&(null!=r.textContent?r.textContent=this.options.dictFallbackMessage:null!=r.innerText&&(r.innerText=this.options.dictFallbackMessage)),this.element.appendChild(this.getFallbackForm())},resize:function(e,t,i,n){var r={srcX:0,srcY:0,srcWidth:e.width,srcHeight:e.height},o=e.width/e.height;null==t&&null==i?(t=r.srcWidth,i=r.srcHeight):null==t?t=i*o:null==i&&(i=t/o);var s=(t=Math.min(t,r.srcWidth))/(i=Math.min(i,r.srcHeight));if(r.srcWidth>t||r.srcHeight>i)if("crop"===n)o>s?(r.srcHeight=e.height,r.srcWidth=r.srcHeight*s):(r.srcWidth=e.width,r.srcHeight=r.srcWidth/s);else{if("contain"!==n)throw new Error("Unknown resizeMethod '"+n+"'");o>s?i=t/o:t=i*o}return r.srcX=(e.width-r.srcWidth)/2,r.srcY=(e.height-r.srcHeight)/2,r.trgWidth=t,r.trgHeight=i,r},transformFile:function(e,t){return(this.options.resizeWidth||this.options.resizeHeight)&&e.type.match(/image.*/)?this.resizeImage(e,this.options.resizeWidth,this.options.resizeHeight,this.options.resizeMethod,t):t(e)},previewTemplate:'<div class="dz-preview dz-file-preview">\n  <div class="dz-image"><img data-dz-thumbnail /></div>\n  <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Error</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <g id="Check-+-Oval-2" sketch:type="MSLayerGroup" stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">\n          <path d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" sketch:type="MSShapeGroup"></path>\n        </g>\n      </g>\n    </svg>\n  </div>\n</div>',drop:function(e){return this.element.classList.remove("dz-drag-hover")},dragstart:function(e){},dragend:function(e){return this.element.classList.remove("dz-drag-hover")},dragenter:function(e){return this.element.classList.add("dz-drag-hover")},dragover:function(e){return this.element.classList.add("dz-drag-hover")},dragleave:function(e){return this.element.classList.remove("dz-drag-hover")},paste:function(e){},reset:function(){return this.element.classList.remove("dz-started")},addedfile:function(e){var t=this;if(this.element===this.previewsContainer&&this.element.classList.add("dz-started"),this.previewsContainer){e.previewElement=o.createElement(this.options.previewTemplate.trim()),e.previewTemplate=e.previewElement,this.previewsContainer.appendChild(e.previewElement);for(var i=0,n=n=e.previewElement.querySelectorAll("[data-dz-name]");;){if(i>=n.length)break;var r=n[i++];r.textContent=e.name}for(var s=0,a=a=e.previewElement.querySelectorAll("[data-dz-size]");!(s>=a.length);)(r=a[s++]).innerHTML=this.filesize(e.size);this.options.addRemoveLinks&&(e._removeLink=o.createElement('<a class="dz-remove" href="javascript:undefined;" data-dz-remove>'+this.options.dictRemoveFile+"</a>"),e.previewElement.appendChild(e._removeLink));for(var l=function(i){return i.preventDefault(),i.stopPropagation(),e.status===o.UPLOADING?o.confirm(t.options.dictCancelUploadConfirmation,function(){return t.removeFile(e)}):t.options.dictRemoveFileConfirmation?o.confirm(t.options.dictRemoveFileConfirmation,function(){return t.removeFile(e)}):t.removeFile(e)},u=0,d=d=e.previewElement.querySelectorAll("[data-dz-remove]");;){if(u>=d.length)break;d[u++].addEventListener("click",l)}}},removedfile:function(e){return null!=e.previewElement&&null!=e.previewElement.parentNode&&e.previewElement.parentNode.removeChild(e.previewElement),this._updateMaxFilesReachedClass()},thumbnail:function(e,t){if(e.previewElement){e.previewElement.classList.remove("dz-file-preview");for(var i=0,n=n=e.previewElement.querySelectorAll("[data-dz-thumbnail]");;){if(i>=n.length)break;var r=n[i++];r.alt=e.name,r.src=t}return setTimeout(function(){return e.previewElement.classList.add("dz-image-preview")},1)}},error:function(e,t){if(e.previewElement){e.previewElement.classList.add("dz-error"),"String"!=typeof t&&t.error&&(t=t.error);for(var i=0,n=n=e.previewElement.querySelectorAll("[data-dz-errormessage]");;){if(i>=n.length)break;n[i++].textContent=t}}},errormultiple:function(){},processing:function(e){if(e.previewElement&&(e.previewElement.classList.add("dz-processing"),e._removeLink))return e._removeLink.innerHTML=this.options.dictCancelUpload},processingmultiple:function(){},uploadprogress:function(e,t,i){if(e.previewElement)for(var n=0,r=r=e.previewElement.querySelectorAll("[data-dz-uploadprogress]");;){if(n>=r.length)break;var o=r[n++];"PROGRESS"===o.nodeName?o.value=t:o.style.width=t+"%"}},totaluploadprogress:function(){},sending:function(){},sendingmultiple:function(){},success:function(e){if(e.previewElement)return e.previewElement.classList.add("dz-success")},successmultiple:function(){},canceled:function(e){return this.emit("error",e,this.options.dictUploadCanceled)},canceledmultiple:function(){},complete:function(e){if(e._removeLink&&(e._removeLink.innerHTML=this.options.dictRemoveFile),e.previewElement)return e.previewElement.classList.add("dz-complete")},completemultiple:function(){},maxfilesexceeded:function(){},maxfilesreached:function(){},queuecomplete:function(){},addedfiles:function(){}},this.prototype._thumbnailQueue=[],this.prototype._processingThumbnail=!1}},{key:"extend",value:function(e){for(var t=arguments.length,i=Array(t>1?t-1:0),n=1;n<t;n++)i[n-1]=arguments[n];for(var r=0,o=o=i;;){if(r>=o.length)break;var s=o[r++];for(var a in s){var l=s[a];e[a]=l}}return e}}]),t(o,[{key:"getAcceptedFiles",value:function(){return this.files.filter(function(e){return e.accepted}).map(function(e){return e})}},{key:"getRejectedFiles",value:function(){return this.files.filter(function(e){return!e.accepted}).map(function(e){return e})}},{key:"getFilesWithStatus",value:function(e){return this.files.filter(function(t){return t.status===e}).map(function(e){return e})}},{key:"getQueuedFiles",value:function(){return this.getFilesWithStatus(o.QUEUED)}},{key:"getUploadingFiles",value:function(){return this.getFilesWithStatus(o.UPLOADING)}},{key:"getAddedFiles",value:function(){return this.getFilesWithStatus(o.ADDED)}},{key:"getActiveFiles",value:function(){return this.files.filter(function(e){return e.status===o.UPLOADING||e.status===o.QUEUED}).map(function(e){return e})}},{key:"init",value:function(){var e=this;if("form"===this.element.tagName&&this.element.setAttribute("enctype","multipart/form-data"),this.element.classList.contains("dropzone")&&!this.element.querySelector(".dz-message")&&this.element.appendChild(o.createElement('<div class="dz-default dz-message"><span>'+this.options.dictDefaultMessage+"</span></div>")),this.clickableElements.length){!function t(){return e.hiddenFileInput&&e.hiddenFileInput.parentNode.removeChild(e.hiddenFileInput),e.hiddenFileInput=document.createElement("input"),e.hiddenFileInput.setAttribute("type","file"),(null===e.options.maxFiles||e.options.maxFiles>1)&&e.hiddenFileInput.setAttribute("multiple","multiple"),e.hiddenFileInput.className="dz-hidden-input",null!==e.options.acceptedFiles&&e.hiddenFileInput.setAttribute("accept",e.options.acceptedFiles),null!==e.options.capture&&e.hiddenFileInput.setAttribute("capture",e.options.capture),e.hiddenFileInput.style.visibility="hidden",e.hiddenFileInput.style.position="absolute",e.hiddenFileInput.style.top="0",e.hiddenFileInput.style.left="0",e.hiddenFileInput.style.height="0",e.hiddenFileInput.style.width="0",o.getElement(e.options.hiddenInputContainer,"hiddenInputContainer").appendChild(e.hiddenFileInput),e.hiddenFileInput.addEventListener("change",function(){var i=e.hiddenFileInput.files;if(i.length)for(var n=0,r=r=i;!(n>=r.length);){var o=r[n++];e.addFile(o)}return e.emit("addedfiles",i),t()})}()}this.URL=null!==window.URL?window.URL:window.webkitURL;for(var t=0,i=i=this.events;;){if(t>=i.length)break;var n=i[t++];this.on(n,this.options[n])}this.on("uploadprogress",function(){return e.updateTotalUploadProgress()}),this.on("removedfile",function(){return e.updateTotalUploadProgress()}),this.on("canceled",function(t){return e.emit("complete",t)}),this.on("complete",function(t){if(0===e.getAddedFiles().length&&0===e.getUploadingFiles().length&&0===e.getQueuedFiles().length)return setTimeout(function(){return e.emit("queuecomplete")},0)});var r=function(e){return e.stopPropagation(),e.preventDefault?e.preventDefault():e.returnValue=!1};return this.listeners=[{element:this.element,events:{dragstart:function(t){return e.emit("dragstart",t)},dragenter:function(t){return r(t),e.emit("dragenter",t)},dragover:function(t){var i=void 0;try{i=t.dataTransfer.effectAllowed}catch(e){}return t.dataTransfer.dropEffect="move"===i||"linkMove"===i?"move":"copy",r(t),e.emit("dragover",t)},dragleave:function(t){return e.emit("dragleave",t)},drop:function(t){return r(t),e.drop(t)},dragend:function(t){return e.emit("dragend",t)}}}],this.clickableElements.forEach(function(t){return e.listeners.push({element:t,events:{click:function(i){return(t!==e.element||i.target===e.element||o.elementInside(i.target,e.element.querySelector(".dz-message")))&&e.hiddenFileInput.click(),!0}}})}),this.enable(),this.options.init.call(this)}},{key:"destroy",value:function(){return this.disable(),this.removeAllFiles(!0),(null!=this.hiddenFileInput?this.hiddenFileInput.parentNode:void 0)&&(this.hiddenFileInput.parentNode.removeChild(this.hiddenFileInput),this.hiddenFileInput=null),delete this.element.dropzone,o.instances.splice(o.instances.indexOf(this),1)}},{key:"updateTotalUploadProgress",value:function(){var e=void 0,t=0,i=0;if(this.getActiveFiles().length){for(var n=0,r=r=this.getActiveFiles();;){if(n>=r.length)break;var o=r[n++];t+=o.upload.bytesSent,i+=o.upload.total}e=100*t/i}else e=100;return this.emit("totaluploadprogress",e,i,t)}},{key:"_getParamName",value:function(e){return"function"==typeof this.options.paramName?this.options.paramName(e):this.options.paramName+(this.options.uploadMultiple?"["+e+"]":"")}},{key:"_renameFile",value:function(e){return"function"!=typeof this.options.renameFile?e.name:this.options.renameFile(e)}},{key:"getFallbackForm",value:function(){var e,t=void 0;if(e=this.getExistingFallback())return e;var i='<div class="dz-fallback">';this.options.dictFallbackText&&(i+="<p>"+this.options.dictFallbackText+"</p>"),i+='<input type="file" name="'+this._getParamName(0)+'" '+(this.options.uploadMultiple?'multiple="multiple"':void 0)+' /><input type="submit" value="Upload!"></div>';var n=o.createElement(i);return"FORM"!==this.element.tagName?(t=o.createElement('<form action="'+this.options.url+'" enctype="multipart/form-data" method="'+this.options.method+'"></form>')).appendChild(n):(this.element.setAttribute("enctype","multipart/form-data"),this.element.setAttribute("method",this.options.method)),null!=t?t:n}},{key:"getExistingFallback",value:function(){for(var e=function(e){for(var t=0,i=i=e;;){if(t>=i.length)break;var n=i[t++];if(/(^| )fallback($| )/.test(n.className))return n}},t=["div","form"],i=0;i<t.length;i++){var n,r=t[i];if(n=e(this.element.getElementsByTagName(r)))return n}}},{key:"setupEventListeners",value:function(){return this.listeners.map(function(e){return function(){var t=[];for(var i in e.events){var n=e.events[i];t.push(e.element.addEventListener(i,n,!1))}return t}()})}},{key:"removeEventListeners",value:function(){return this.listeners.map(function(e){return function(){var t=[];for(var i in e.events){var n=e.events[i];t.push(e.element.removeEventListener(i,n,!1))}return t}()})}},{key:"disable",value:function(){var e=this;return this.clickableElements.forEach(function(e){return e.classList.remove("dz-clickable")}),this.removeEventListeners(),this.disabled=!0,this.files.map(function(t){return e.cancelUpload(t)})}},{key:"enable",value:function(){return delete this.disabled,this.clickableElements.forEach(function(e){return e.classList.add("dz-clickable")}),this.setupEventListeners()}},{key:"filesize",value:function(e){var t=0,i="b";if(e>0){for(var n=["tb","gb","mb","kb","b"],r=0;r<n.length;r++){var o=n[r];if(e>=Math.pow(this.options.filesizeBase,4-r)/10){t=e/Math.pow(this.options.filesizeBase,4-r),i=o;break}}t=Math.round(10*t)/10}return"<strong>"+t+"</strong> "+this.options.dictFileSizeUnits[i]}},{key:"_updateMaxFilesReachedClass",value:function(){return null!=this.options.maxFiles&&this.getAcceptedFiles().length>=this.options.maxFiles?(this.getAcceptedFiles().length===this.options.maxFiles&&this.emit("maxfilesreached",this.files),this.element.classList.add("dz-max-files-reached")):this.element.classList.remove("dz-max-files-reached")}},{key:"drop",value:function(e){if(e.dataTransfer){this.emit("drop",e);for(var t=[],i=0;i<e.dataTransfer.files.length;i++)t[i]=e.dataTransfer.files[i];if(this.emit("addedfiles",t),t.length){var n=e.dataTransfer.items;n&&n.length&&null!=n[0].webkitGetAsEntry?this._addFilesFromItems(n):this.handleFiles(t)}}}},{key:"paste",value:function(e){if(null!=(t=null!=e?e.clipboardData:void 0,i=function(e){return e.items},null!=t?i(t):void 0)){var t,i;this.emit("paste",e);var n=e.clipboardData.items;return n.length?this._addFilesFromItems(n):void 0}}},{key:"handleFiles",value:function(e){for(var t=0,i=i=e;;){if(t>=i.length)break;var n=i[t++];this.addFile(n)}}},{key:"_addFilesFromItems",value:function(e){var t=this;return function(){for(var i=[],n=0,r=r=e;;){if(n>=r.length)break;var o,s=r[n++];null!=s.webkitGetAsEntry&&(o=s.webkitGetAsEntry())?o.isFile?i.push(t.addFile(s.getAsFile())):o.isDirectory?i.push(t._addFilesFromDirectory(o,o.name)):i.push(void 0):null!=s.getAsFile&&(null==s.kind||"file"===s.kind)?i.push(t.addFile(s.getAsFile())):i.push(void 0)}return i}()}},{key:"_addFilesFromDirectory",value:function(e,t){var i=this,n=e.createReader(),r=function(e){return t=console,i="log",n=function(t){return t.log(e)},null!=t&&"function"==typeof t[i]?n(t,i):void 0;var t,i,n};return function e(){return n.readEntries(function(n){if(n.length>0){for(var r=0,o=o=n;!(r>=o.length);){var s=o[r++];s.isFile?s.file(function(e){if(!i.options.ignoreHiddenFiles||"."!==e.name.substring(0,1))return e.fullPath=t+"/"+e.name,i.addFile(e)}):s.isDirectory&&i._addFilesFromDirectory(s,t+"/"+s.name)}e()}return null},r)}()}},{key:"accept",value:function(e,t){return this.options.maxFilesize&&e.size>1024*this.options.maxFilesize*1024?t(this.options.dictFileTooBig.replace("{{filesize}}",Math.round(e.size/1024/10.24)/100).replace("{{maxFilesize}}",this.options.maxFilesize)):o.isValidFile(e,this.options.acceptedFiles)?null!=this.options.maxFiles&&this.getAcceptedFiles().length>=this.options.maxFiles?(t(this.options.dictMaxFilesExceeded.replace("{{maxFiles}}",this.options.maxFiles)),this.emit("maxfilesexceeded",e)):this.options.accept.call(this,e,t):t(this.options.dictInvalidFileType)}},{key:"addFile",value:function(e){var t=this;return e.upload={uuid:o.uuidv4(),progress:0,total:e.size,bytesSent:0,filename:this._renameFile(e),chunked:this.options.chunking&&(this.options.forceChunking||e.size>this.options.chunkSize),totalChunkCount:Math.ceil(e.size/this.options.chunkSize)},this.files.push(e),e.status=o.ADDED,this.emit("addedfile",e),this._enqueueThumbnail(e),this.accept(e,function(i){return i?(e.accepted=!1,t._errorProcessing([e],i)):(e.accepted=!0,t.options.autoQueue&&t.enqueueFile(e)),t._updateMaxFilesReachedClass()})}},{key:"enqueueFiles",value:function(e){for(var t=0,i=i=e;;){if(t>=i.length)break;var n=i[t++];this.enqueueFile(n)}return null}},{key:"enqueueFile",value:function(e){var t=this;if(e.status!==o.ADDED||!0!==e.accepted)throw new Error("This file can't be queued because it has already been processed or was rejected.");if(e.status=o.QUEUED,this.options.autoProcessQueue)return setTimeout(function(){return t.processQueue()},0)}},{key:"_enqueueThumbnail",value:function(e){var t=this;if(this.options.createImageThumbnails&&e.type.match(/image.*/)&&e.size<=1024*this.options.maxThumbnailFilesize*1024)return this._thumbnailQueue.push(e),setTimeout(function(){return t._processThumbnailQueue()},0)}},{key:"_processThumbnailQueue",value:function(){var e=this;if(!this._processingThumbnail&&0!==this._thumbnailQueue.length){this._processingThumbnail=!0;var t=this._thumbnailQueue.shift();return this.createThumbnail(t,this.options.thumbnailWidth,this.options.thumbnailHeight,this.options.thumbnailMethod,!0,function(i){return e.emit("thumbnail",t,i),e._processingThumbnail=!1,e._processThumbnailQueue()})}}},{key:"removeFile",value:function(e){if(e.status===o.UPLOADING&&this.cancelUpload(e),this.files=s(this.files,e),this.emit("removedfile",e),0===this.files.length)return this.emit("reset")}},{key:"removeAllFiles",value:function(e){null==e&&(e=!1);for(var t=0,i=i=this.files.slice();;){if(t>=i.length)break;var n=i[t++];(n.status!==o.UPLOADING||e)&&this.removeFile(n)}return null}},{key:"resizeImage",value:function(e,t,i,n,r){var s=this;return this.createThumbnail(e,t,i,n,!0,function(t,i){if(null==i)return r(e);var n=s.options.resizeMimeType;null==n&&(n=e.type);var a=i.toDataURL(n,s.options.resizeQuality);return"image/jpeg"!==n&&"image/jpg"!==n||(a=u.restore(e.dataURL,a)),r(o.dataURItoBlob(a))})}},{key:"createThumbnail",value:function(e,t,i,n,r,o){var s=this,a=new FileReader;return a.onload=function(){if(e.dataURL=a.result,"image/svg+xml"!==e.type)return s.createThumbnailFromUrl(e,t,i,n,r,o);null!=o&&o(a.result)},a.readAsDataURL(e)}},{key:"createThumbnailFromUrl",value:function(e,t,i,n,r,o,s){var a=this,u=document.createElement("img");return s&&(u.crossOrigin=s),u.onload=function(){var s=function(e){return e(1)};return"undefined"!=typeof EXIF&&null!==EXIF&&r&&(s=function(e){return EXIF.getData(u,function(){return e(EXIF.getTag(this,"Orientation"))})}),s(function(r){e.width=u.width,e.height=u.height;var s=a.options.resize.call(a,e,t,i,n),d=document.createElement("canvas"),c=d.getContext("2d");switch(d.width=s.trgWidth,d.height=s.trgHeight,r>4&&(d.width=s.trgHeight,d.height=s.trgWidth),r){case 2:c.translate(d.width,0),c.scale(-1,1);break;case 3:c.translate(d.width,d.height),c.rotate(Math.PI);break;case 4:c.translate(0,d.height),c.scale(1,-1);break;case 5:c.rotate(.5*Math.PI),c.scale(1,-1);break;case 6:c.rotate(.5*Math.PI),c.translate(0,-d.width);break;case 7:c.rotate(.5*Math.PI),c.translate(d.height,-d.width),c.scale(-1,1);break;case 8:c.rotate(-.5*Math.PI),c.translate(-d.height,0)}l(c,u,null!=s.srcX?s.srcX:0,null!=s.srcY?s.srcY:0,s.srcWidth,s.srcHeight,null!=s.trgX?s.trgX:0,null!=s.trgY?s.trgY:0,s.trgWidth,s.trgHeight);var p=d.toDataURL("image/png");if(null!=o)return o(p,d)})},null!=o&&(u.onerror=o),u.src=e.dataURL}},{key:"processQueue",value:function(){var e=this.options.parallelUploads,t=this.getUploadingFiles().length,i=t;if(!(t>=e)){var n=this.getQueuedFiles();if(n.length>0){if(this.options.uploadMultiple)return this.processFiles(n.slice(0,e-t));for(;i<e;){if(!n.length)return;this.processFile(n.shift()),i++}}}}},{key:"processFile",value:function(e){return this.processFiles([e])}},{key:"processFiles",value:function(e){for(var t=0,i=i=e;;){if(t>=i.length)break;var n=i[t++];n.processing=!0,n.status=o.UPLOADING,this.emit("processing",n)}return this.options.uploadMultiple&&this.emit("processingmultiple",e),this.uploadFiles(e)}},{key:"_getFilesWithXhr",value:function(e){return this.files.filter(function(t){return t.xhr===e}).map(function(e){return e})}},{key:"cancelUpload",value:function(e){if(e.status===o.UPLOADING){for(var t=this._getFilesWithXhr(e.xhr),i=0,n=n=t;;){if(i>=n.length)break;n[i++].status=o.CANCELED}void 0!==e.xhr&&e.xhr.abort();for(var r=0,s=s=t;;){if(r>=s.length)break;var a=s[r++];this.emit("canceled",a)}this.options.uploadMultiple&&this.emit("canceledmultiple",t)}else e.status!==o.ADDED&&e.status!==o.QUEUED||(e.status=o.CANCELED,this.emit("canceled",e),this.options.uploadMultiple&&this.emit("canceledmultiple",[e]));if(this.options.autoProcessQueue)return this.processQueue()}},{key:"resolveOption",value:function(e){if("function"==typeof e){for(var t=arguments.length,i=Array(t>1?t-1:0),n=1;n<t;n++)i[n-1]=arguments[n];return e.apply(this,i)}return e}},{key:"uploadFile",value:function(e){return this.uploadFiles([e])}},{key:"uploadFiles",value:function(e){var t=this;this._transformFiles(e,function(i){if(e[0].upload.chunked){var n=e[0],r=i[0];n.upload.chunks=[];var s=function(){for(var i=0;void 0!==n.upload.chunks[i];)i++;if(!(i>=n.upload.totalChunkCount)){var s=i*t.options.chunkSize,a=Math.min(s+t.options.chunkSize,n.size),l={name:t._getParamName(0),data:r.webkitSlice?r.webkitSlice(s,a):r.slice(s,a),filename:n.upload.filename,chunkIndex:i};n.upload.chunks[i]={file:n,index:i,dataBlock:l,status:o.UPLOADING,progress:0,retries:0},t._uploadData(e,[l])}};if(n.upload.finishedChunkUpload=function(i){var r=!0;i.status=o.SUCCESS,i.dataBlock=null,i.xhr=null;for(var a=0;a<n.upload.totalChunkCount;a++){if(void 0===n.upload.chunks[a])return s();n.upload.chunks[a].status!==o.SUCCESS&&(r=!1)}r&&t.options.chunksUploaded(n,function(){t._finished(e,"",null)})},t.options.parallelChunkUploads)for(var a=0;a<n.upload.totalChunkCount;a++)s();else s()}else{for(var l=[],u=0;u<e.length;u++)l[u]={name:t._getParamName(u),data:i[u],filename:e[u].upload.filename};t._uploadData(e,l)}})}},{key:"_getChunk",value:function(e,t){for(var i=0;i<e.upload.totalChunkCount;i++)if(void 0!==e.upload.chunks[i]&&e.upload.chunks[i].xhr===t)return e.upload.chunks[i]}},{key:"_uploadData",value:function(e,t){for(var i=this,n=new XMLHttpRequest,r=0,s=s=e;;){if(r>=s.length)break;s[r++].xhr=n}e[0].upload.chunked&&(e[0].upload.chunks[t[0].chunkIndex].xhr=n);var a=this.resolveOption(this.options.method,e),l=this.resolveOption(this.options.url,e);n.open(a,l,!0),n.timeout=this.resolveOption(this.options.timeout,e),n.withCredentials=!!this.options.withCredentials,n.onload=function(t){i._finishedUploading(e,n,t)},n.onerror=function(){i._handleUploadError(e,n)},(null!=n.upload?n.upload:n).onprogress=function(t){return i._updateFilesUploadProgress(e,n,t)};var u={Accept:"application/json","Cache-Control":"no-cache","X-Requested-With":"XMLHttpRequest"};for(var d in this.options.headers&&o.extend(u,this.options.headers),u){var c=u[d];c&&n.setRequestHeader(d,c)}var p=new FormData;if(this.options.params){var h=this.options.params;for(var f in"function"==typeof h&&(h=h.call(this,e,n,e[0].upload.chunked?this._getChunk(e[0],n):null)),h){var m=h[f];p.append(f,m)}}for(var v=0,g=g=e;;){if(v>=g.length)break;var k=g[v++];this.emit("sending",k,n,p)}this.options.uploadMultiple&&this.emit("sendingmultiple",e,n,p),this._addFormElementData(p);for(var y=0;y<t.length;y++){var b=t[y];p.append(b.name,b.data,b.filename)}this.submitRequest(n,p,e)}},{key:"_transformFiles",value:function(e,t){for(var i=this,n=[],r=0,o=function(o){i.options.transformFile.call(i,e[o],function(i){n[o]=i,++r===e.length&&t(n)})},s=0;s<e.length;s++)o(s)}},{key:"_addFormElementData",value:function(e){if("FORM"===this.element.tagName)for(var t=0,i=i=this.element.querySelectorAll("input, textarea, select, button");;){if(t>=i.length)break;var n=i[t++],r=n.getAttribute("name"),o=n.getAttribute("type");if(o&&(o=o.toLowerCase()),null!=r)if("SELECT"===n.tagName&&n.hasAttribute("multiple"))for(var s=0,a=a=n.options;;){if(s>=a.length)break;var l=a[s++];l.selected&&e.append(r,l.value)}else(!o||"checkbox"!==o&&"radio"!==o||n.checked)&&e.append(r,n.value)}}},{key:"_updateFilesUploadProgress",value:function(e,t,i){var n=void 0;if(void 0!==i){if(n=100*i.loaded/i.total,e[0].upload.chunked){var r=e[0],o=this._getChunk(r,t);o.progress=n,o.total=i.total,o.bytesSent=i.loaded,r.upload.progress=0,r.upload.total=0,r.upload.bytesSent=0;for(var s=0;s<r.upload.totalChunkCount;s++)void 0!==r.upload.chunks[s]&&void 0!==r.upload.chunks[s].progress&&(r.upload.progress+=r.upload.chunks[s].progress,r.upload.total+=r.upload.chunks[s].total,r.upload.bytesSent+=r.upload.chunks[s].bytesSent);r.upload.progress=r.upload.progress/r.upload.totalChunkCount}else for(var a=0,l=l=e;;){if(a>=l.length)break;var u=l[a++];u.upload.progress=n,u.upload.total=i.total,u.upload.bytesSent=i.loaded}for(var d=0,c=c=e;;){if(d>=c.length)break;var p=c[d++];this.emit("uploadprogress",p,p.upload.progress,p.upload.bytesSent)}}else{var h=!0;n=100;for(var f=0,m=m=e;;){if(f>=m.length)break;var v=m[f++];100===v.upload.progress&&v.upload.bytesSent===v.upload.total||(h=!1),v.upload.progress=n,v.upload.bytesSent=v.upload.total}if(h)return;for(var g=0,k=k=e;;){if(g>=k.length)break;var y=k[g++];this.emit("uploadprogress",y,n,y.upload.bytesSent)}}}},{key:"_finishedUploading",value:function(e,t,i){var n=void 0;if(e[0].status!==o.CANCELED&&4===t.readyState){if("arraybuffer"!==t.responseType&&"blob"!==t.responseType&&(n=t.responseText,t.getResponseHeader("content-type")&&~t.getResponseHeader("content-type").indexOf("application/json")))try{n=JSON.parse(n)}catch(e){i=e,n="Invalid JSON response from server."}this._updateFilesUploadProgress(e),200<=t.status&&t.status<300?e[0].upload.chunked?e[0].upload.finishedChunkUpload(this._getChunk(e[0],t)):this._finished(e,n,i):this._handleUploadError(e,t,n)}}},{key:"_handleUploadError",value:function(e,t,i){if(e[0].status!==o.CANCELED){if(e[0].upload.chunked&&this.options.retryChunks){var n=this._getChunk(e[0],t);if(n.retries++<this.options.retryChunksLimit)return void this._uploadData(e,[n.dataBlock]);console.warn("Retried this chunk too often. Giving up.")}for(var r=0,s=s=e;;){if(r>=s.length)break;s[r++],this._errorProcessing(e,i||this.options.dictResponseError.replace("{{statusCode}}",t.status),t)}}}},{key:"submitRequest",value:function(e,t,i){e.send(t)}},{key:"_finished",value:function(e,t,i){for(var n=0,r=r=e;;){if(n>=r.length)break;var s=r[n++];s.status=o.SUCCESS,this.emit("success",s,t,i),this.emit("complete",s)}if(this.options.uploadMultiple&&(this.emit("successmultiple",e,t,i),this.emit("completemultiple",e)),this.options.autoProcessQueue)return this.processQueue()}},{key:"_errorProcessing",value:function(e,t,i){for(var n=0,r=r=e;;){if(n>=r.length)break;var s=r[n++];s.status=o.ERROR,this.emit("error",s,t,i),this.emit("complete",s)}if(this.options.uploadMultiple&&(this.emit("errormultiple",e,t,i),this.emit("completemultiple",e)),this.options.autoProcessQueue)return this.processQueue()}}],[{key:"uuidv4",value:function(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){var t=16*Math.random()|0;return("x"===e?t:3&t|8).toString(16)})}}]),o}();o.initClass(),o.version="5.5.1",o.options={},o.optionsForElement=function(e){return e.getAttribute("id")?o.options[a(e.getAttribute("id"))]:void 0},o.instances=[],o.forElement=function(e){if("string"==typeof e&&(e=document.querySelector(e)),null==(null!=e?e.dropzone:void 0))throw new Error("No Dropzone found for given element. This is probably because you're trying to access it before Dropzone had the time to initialize. Use the `init` option to setup any additional observers on your Dropzone.");return e.dropzone},o.autoDiscover=!0,o.discover=function(){var e=void 0;if(document.querySelectorAll)e=document.querySelectorAll(".dropzone");else{e=[];var t=function(t){return function(){for(var i=[],n=0,r=r=t;;){if(n>=r.length)break;var o=r[n++];/(^| )dropzone($| )/.test(o.className)?i.push(e.push(o)):i.push(void 0)}return i}()};t(document.getElementsByTagName("div")),t(document.getElementsByTagName("form"))}return function(){for(var t=[],i=0,n=n=e;;){if(i>=n.length)break;var r=n[i++];!1!==o.optionsForElement(r)?t.push(new o(r)):t.push(void 0)}return t}()},o.blacklistedBrowsers=[/opera.*(Macintosh|Windows Phone).*version\/12/i],o.isBrowserSupported=function(){var e=!0;if(window.File&&window.FileReader&&window.FileList&&window.Blob&&window.FormData&&document.querySelector)if("classList"in document.createElement("a"))for(var t=0,i=i=o.blacklistedBrowsers;;){if(t>=i.length)break;i[t++].test(navigator.userAgent)&&(e=!1)}else e=!1;else e=!1;return e},o.dataURItoBlob=function(e){for(var t=atob(e.split(",")[1]),i=e.split(",")[0].split(":")[1].split(";")[0],n=new ArrayBuffer(t.length),r=new Uint8Array(n),o=0,s=t.length,a=0<=s;a?o<=s:o>=s;a?o++:o--)r[o]=t.charCodeAt(o);return new Blob([n],{type:i})};var s=function(e,t){return e.filter(function(e){return e!==t}).map(function(e){return e})},a=function(e){return e.replace(/[\-_](\w)/g,function(e){return e.charAt(1).toUpperCase()})};o.createElement=function(e){var t=document.createElement("div");return t.innerHTML=e,t.childNodes[0]},o.elementInside=function(e,t){if(e===t)return!0;for(;e=e.parentNode;)if(e===t)return!0;return!1},o.getElement=function(e,t){var i=void 0;if("string"==typeof e?i=document.querySelector(e):null!=e.nodeType&&(i=e),null==i)throw new Error("Invalid `"+t+"` option provided. Please provide a CSS selector or a plain HTML element.");return i},o.getElements=function(e,t){var i=void 0,n=void 0;if(e instanceof Array){n=[];try{for(var r=0,o=o=e;!(r>=o.length);)i=o[r++],n.push(this.getElement(i,t))}catch(e){n=null}}else if("string"==typeof e){n=[];for(var s=0,a=a=document.querySelectorAll(e);!(s>=a.length);)i=a[s++],n.push(i)}else null!=e.nodeType&&(n=[e]);if(null==n||!n.length)throw new Error("Invalid `"+t+"` option provided. Please provide a CSS selector, a plain HTML element or a list of those.");return n},o.confirm=function(e,t,i){return window.confirm(e)?t():null!=i?i():void 0},o.isValidFile=function(e,t){if(!t)return!0;t=t.split(",");for(var i=e.type,n=i.replace(/\/.*$/,""),r=0,o=o=t;;){if(r>=o.length)break;var s=o[r++];if("."===(s=s.trim()).charAt(0)){if(-1!==e.name.toLowerCase().indexOf(s.toLowerCase(),e.name.length-s.length))return!0}else if(/\/\*$/.test(s)){if(n===s.replace(/\/.*$/,""))return!0}else if(i===s)return!0}return!1},"undefined"!=typeof jQuery&&null!==jQuery&&(jQuery.fn.dropzone=function(e){return this.each(function(){return new o(this,e)})}),null!==e?e.exports=o:window.Dropzone=o,o.ADDED="added",o.QUEUED="queued",o.ACCEPTED=o.QUEUED,o.UPLOADING="uploading",o.PROCESSING=o.UPLOADING,o.CANCELED="canceled",o.ERROR="error",o.SUCCESS="success";var l=function(e,t,i,n,r,o,s,a,l,u){var d=function(e){e.naturalWidth;var t=e.naturalHeight,i=document.createElement("canvas");i.width=1,i.height=t;var n=i.getContext("2d");n.drawImage(e,0,0);for(var r=n.getImageData(1,0,1,t).data,o=0,s=t,a=t;a>o;)0===r[4*(a-1)+3]?s=a:o=a,a=s+o>>1;var l=a/t;return 0===l?1:l}(t);return e.drawImage(t,i,n,r,o,s,a,l,u/d)},u=function(){function e(){n(this,e)}return t(e,null,[{key:"initClass",value:function(){this.KEY_STR="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="}},{key:"encode64",value:function(e){for(var t="",i=void 0,n=void 0,r="",o=void 0,s=void 0,a=void 0,l="",u=0;o=(i=e[u++])>>2,s=(3&i)<<4|(n=e[u++])>>4,a=(15&n)<<2|(r=e[u++])>>6,l=63&r,isNaN(n)?a=l=64:isNaN(r)&&(l=64),t=t+this.KEY_STR.charAt(o)+this.KEY_STR.charAt(s)+this.KEY_STR.charAt(a)+this.KEY_STR.charAt(l),i=n=r="",o=s=a=l="",u<e.length;);return t}},{key:"restore",value:function(e,t){if(!e.match("data:image/jpeg;base64,"))return t;var i=this.decode64(e.replace("data:image/jpeg;base64,","")),n=this.slice2Segments(i),r=this.exifManipulation(t,n);return"data:image/jpeg;base64,"+this.encode64(r)}},{key:"exifManipulation",value:function(e,t){var i=this.getExifArray(t),n=this.insertExif(e,i);return new Uint8Array(n)}},{key:"getExifArray",value:function(e){for(var t=void 0,i=0;i<e.length;){if(255===(t=e[i])[0]&225===t[1])return t;i++}return[]}},{key:"insertExif",value:function(e,t){var i=e.replace("data:image/jpeg;base64,",""),n=this.decode64(i),r=n.indexOf(255,3),o=n.slice(0,r),s=n.slice(r),a=o;return a=(a=a.concat(t)).concat(s)}},{key:"slice2Segments",value:function(e){for(var t=0,i=[];;){if(255===e[t]&218===e[t+1])break;if(255===e[t]&216===e[t+1])t+=2;else{var n=t+(256*e[t+2]+e[t+3])+2,r=e.slice(t,n);i.push(r),t=n}if(t>e.length)break}return i}},{key:"decode64",value:function(e){var t=void 0,i=void 0,n="",r=void 0,o=void 0,s="",a=0,l=[];for(/[^A-Za-z0-9\+\/\=]/g.exec(e)&&console.warn("There were invalid base64 characters in the input text.\nValid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\nExpect errors in decoding."),e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");t=this.KEY_STR.indexOf(e.charAt(a++))<<2|(r=this.KEY_STR.indexOf(e.charAt(a++)))>>4,i=(15&r)<<4|(o=this.KEY_STR.indexOf(e.charAt(a++)))>>2,n=(3&o)<<6|(s=this.KEY_STR.indexOf(e.charAt(a++))),l.push(t),64!==o&&l.push(i),64!==s&&l.push(n),t=i=n="",r=o=s="",a<e.length;);return l}}]),e}();u.initClass(),o._autoDiscoverFunction=function(){if(o.autoDiscover)return o.discover()},function(e,t){var i=!1,n=!0,r=e.document,o=r.documentElement,s=r.addEventListener?"addEventListener":"attachEvent",a=r.addEventListener?"removeEventListener":"detachEvent",l=r.addEventListener?"":"on",u=function n(o){if("readystatechange"!==o.type||"complete"===r.readyState)return("load"===o.type?e:r)[a](l+o.type,n,!1),!i&&(i=!0)?t.call(e,o.type||o):void 0};if("complete"!==r.readyState){if(r.createEventObject&&o.doScroll){try{n=!e.frameElement}catch(e){}n&&function e(){try{o.doScroll("left")}catch(t){return void setTimeout(e,50)}return u("poll")}()}r[s](l+"DOMContentLoaded",u,!1),r[s](l+"readystatechange",u,!1),e[s](l+"load",u,!1)}}(window,o._autoDiscoverFunction)}(e={exports:{}},e.exports),e.exports),i={getSignedURL(e,t){let i={filePath:e.name,contentType:e.type};return new Promise((n,r)=>{var o=new FormData;let s=new XMLHttpRequest,a="function"==typeof t.signingURL?t.signingURL(e):t.signingURL;s.open("POST",a),s.onload=function(){200==s.status?n(JSON.parse(s.response)):r(s.statusText)},s.onerror=function(e){console.error("Network Error : Could not send request to AWS (Maybe CORS errors)"),r(e)},!0===t.withCredentials&&(s.withCredentials=!0),Object.entries(t.headers||{}).forEach(([e,t])=>{s.setRequestHeader(e,t)}),i=Object.assign(i,t.params||{}),Object.entries(i).forEach(([e,t])=>{o.append(e,t)}),s.send(o)})},sendFile(e,t,i){var n=i?this.setResponseHandler:this.sendS3Handler;return this.getSignedURL(e,t).then(t=>n(t,e)).catch(e=>e)},setResponseHandler(e,t){t.s3Signature=e.signature,t.s3Url=e.postEndpoint},sendS3Handler(e,t){let i=new FormData,n=e.signature;return Object.keys(n).forEach(function(e){i.append(e,n[e])}),i.append("file",t),new Promise((t,n)=>{let r=new XMLHttpRequest;r.open("POST",e.postEndpoint),r.onload=function(){if(201==r.status){var e=(new window.DOMParser).parseFromString(r.response,"text/xml").firstChild.children[0].innerHTML;t({success:!0,message:e})}else{var i=(new window.DOMParser).parseFromString(r.response,"text/xml").firstChild.children[0].innerHTML;n({success:!1,message:i+". Request is marked as resolved when returns as status 201"})}},r.onerror=function(e){var t=(new window.DOMParser).parseFromString(r.response,"text/xml").firstChild.children[1].innerHTML;n({success:!1,message:t})},r.send(i)})}};t.autoDiscover=!1;return function(e,t,i,n,r,o,s,a,l,u){"boolean"!=typeof s&&(l=a,a=s,s=!1);var d,c="function"==typeof i?i.options:i;if(e&&e.render&&(c.render=e.render,c.staticRenderFns=e.staticRenderFns,c._compiled=!0,r&&(c.functional=!0)),n&&(c._scopeId=n),o?(d=function(e){(e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),t&&t.call(this,l(e)),e&&e._registeredComponents&&e._registeredComponents.add(o)},c._ssrRegister=d):t&&(d=s?function(){t.call(this,u(this.$root.$options.shadowRoot))}:function(e){t.call(this,a(e))}),d)if(c.functional){var p=c.render;c.render=function(e,t){return d.call(t),p(e,t)}}else{var h=c.beforeCreate;c.beforeCreate=h?[].concat(h,d):[d]}return i}({render:function(){var e=this.$createElement,t=this._self._c||e;return t("div",{ref:"dropzoneElement",class:{"vue-dropzone dropzone":this.includeStyling},attrs:{id:this.id}},[this.useCustomSlot?t("div",{staticClass:"dz-message"},[this._t("default",[this._v("Drop files here to upload")])],2):this._e()])},staticRenderFns:[]},void 0,{props:{id:{type:String,required:!0,default:"dropzone"},options:{type:Object,required:!0},includeStyling:{type:Boolean,default:!0,required:!1},awss3:{type:Object,required:!1,default:null},destroyDropzone:{type:Boolean,default:!0,required:!1},duplicateCheck:{type:Boolean,default:!1,required:!1},useCustomSlot:{type:Boolean,default:!1,required:!1}},data:()=>({isS3:!1,isS3OverridesServerPropagation:!1,wasQueueAutoProcess:!0}),computed:{dropzoneSettings(){let e={thumbnailWidth:200,thumbnailHeight:200};return Object.keys(this.options).forEach(function(t){e[t]=this.options[t]},this),null!==this.awss3&&(e.autoProcessQueue=!1,this.isS3=!0,this.isS3OverridesServerPropagation=!1===this.awss3.sendFileToServer,void 0!==this.options.autoProcessQueue&&(this.wasQueueAutoProcess=this.options.autoProcessQueue),this.isS3OverridesServerPropagation&&(e.url=(e=>e[0].s3Url))),e}},mounted(){if(this.$isServer&&this.hasBeenMounted)return;this.hasBeenMounted=!0,this.dropzone=new t(this.$refs.dropzoneElement,this.dropzoneSettings);let e=this;this.dropzone.on("thumbnail",function(t,i){e.$emit("vdropzone-thumbnail",t,i)}),this.dropzone.on("addedfile",function(t){var i,n;if(e.duplicateCheck&&this.files.length)for(i=0,n=this.files.length;i<n-1;i++)this.files[i].name===t.name&&this.files[i].size===t.size&&this.files[i].lastModifiedDate.toString()===t.lastModifiedDate.toString()&&(this.removeFile(t),e.$emit("vdropzone-duplicate-file",t));e.$emit("vdropzone-file-added",t),e.isS3&&e.wasQueueAutoProcess&&!t.manuallyAdded&&e.getSignedAndUploadToS3(t)}),this.dropzone.on("addedfiles",function(t){e.$emit("vdropzone-files-added",t)}),this.dropzone.on("removedfile",function(t){e.$emit("vdropzone-removed-file",t),t.manuallyAdded&&null!==e.dropzone.options.maxFiles&&e.dropzone.options.maxFiles++}),this.dropzone.on("success",function(t,i){if(e.$emit("vdropzone-success",t,i),e.isS3){if(e.isS3OverridesServerPropagation){var n=(new window.DOMParser).parseFromString(i,"text/xml").firstChild.children[0].innerHTML;e.$emit("vdropzone-s3-upload-success",n)}e.wasQueueAutoProcess&&e.setOption("autoProcessQueue",!1)}}),this.dropzone.on("successmultiple",function(t,i){e.$emit("vdropzone-success-multiple",t,i)}),this.dropzone.on("error",function(t,i,n){e.$emit("vdropzone-error",t,i,n),this.isS3&&e.$emit("vdropzone-s3-upload-error")}),this.dropzone.on("errormultiple",function(t,i,n){e.$emit("vdropzone-error-multiple",t,i,n)}),this.dropzone.on("sending",function(t,i,n){if(e.isS3)if(e.isS3OverridesServerPropagation){let e=t.s3Signature;Object.keys(e).forEach(function(t){n.append(t,e[t])})}else n.append("s3ObjectLocation",t.s3ObjectLocation);e.$emit("vdropzone-sending",t,i,n)}),this.dropzone.on("sendingmultiple",function(t,i,n){e.$emit("vdropzone-sending-multiple",t,i,n)}),this.dropzone.on("complete",function(t){e.$emit("vdropzone-complete",t)}),this.dropzone.on("completemultiple",function(t){e.$emit("vdropzone-complete-multiple",t)}),this.dropzone.on("canceled",function(t){e.$emit("vdropzone-canceled",t)}),this.dropzone.on("canceledmultiple",function(t){e.$emit("vdropzone-canceled-multiple",t)}),this.dropzone.on("maxfilesreached",function(t){e.$emit("vdropzone-max-files-reached",t)}),this.dropzone.on("maxfilesexceeded",function(t){e.$emit("vdropzone-max-files-exceeded",t)}),this.dropzone.on("processing",function(t){e.$emit("vdropzone-processing",t)}),this.dropzone.on("processingmultiple",function(t){e.$emit("vdropzone-processing-multiple",t)}),this.dropzone.on("uploadprogress",function(t,i,n){e.$emit("vdropzone-upload-progress",t,i,n)}),this.dropzone.on("totaluploadprogress",function(t,i,n){e.$emit("vdropzone-total-upload-progress",t,i,n)}),this.dropzone.on("reset",function(){e.$emit("vdropzone-reset")}),this.dropzone.on("queuecomplete",function(){e.$emit("vdropzone-queue-complete")}),this.dropzone.on("drop",function(t){e.$emit("vdropzone-drop",t)}),this.dropzone.on("dragstart",function(t){e.$emit("vdropzone-drag-start",t)}),this.dropzone.on("dragend",function(t){e.$emit("vdropzone-drag-end",t)}),this.dropzone.on("dragenter",function(t){e.$emit("vdropzone-drag-enter",t)}),this.dropzone.on("dragover",function(t){e.$emit("vdropzone-drag-over",t)}),this.dropzone.on("dragleave",function(t){e.$emit("vdropzone-drag-leave",t)}),e.$emit("vdropzone-mounted")},beforeDestroy(){this.destroyDropzone&&this.dropzone.destroy()},methods:{manuallyAddFile:function(e,t){e.manuallyAdded=!0,this.dropzone.emit("addedfile",e);let i=!1;if((t.indexOf(".svg")>-1||t.indexOf(".png")>-1||t.indexOf(".jpg")>-1||t.indexOf(".jpeg")>-1||t.indexOf(".gif")>-1||t.indexOf(".webp")>-1)&&(i=!0),this.dropzone.options.createImageThumbnails&&i&&e.size<=1024*this.dropzone.options.maxThumbnailFilesize*1024){t&&this.dropzone.emit("thumbnail",e,t);for(var n=e.previewElement.querySelectorAll("[data-dz-thumbnail]"),r=0;r<n.length;r++)n[r].style.width=this.dropzoneSettings.thumbnailWidth+"px",n[r].style.height=this.dropzoneSettings.thumbnailHeight+"px",n[r].style["object-fit"]="contain"}this.dropzone.emit("complete",e),this.dropzone.options.maxFiles&&this.dropzone.options.maxFiles--,this.dropzone.files.push(e),this.$emit("vdropzone-file-added-manually",e)},setOption:function(e,t){this.dropzone.options[e]=t},removeAllFiles:function(e){this.dropzone.removeAllFiles(e)},processQueue:function(){let e=this.dropzone;this.isS3&&!this.wasQueueAutoProcess?this.getQueuedFiles().forEach(e=>{this.getSignedAndUploadToS3(e)}):this.dropzone.processQueue(),this.dropzone.on("success",function(){e.options.autoProcessQueue=!0}),this.dropzone.on("queuecomplete",function(){e.options.autoProcessQueue=!1})},init:function(){return this.dropzone.init()},destroy:function(){return this.dropzone.destroy()},updateTotalUploadProgress:function(){return this.dropzone.updateTotalUploadProgress()},getFallbackForm:function(){return this.dropzone.getFallbackForm()},getExistingFallback:function(){return this.dropzone.getExistingFallback()},setupEventListeners:function(){return this.dropzone.setupEventListeners()},removeEventListeners:function(){return this.dropzone.removeEventListeners()},disable:function(){return this.dropzone.disable()},enable:function(){return this.dropzone.enable()},filesize:function(e){return this.dropzone.filesize(e)},accept:function(e,t){return this.dropzone.accept(e,t)},addFile:function(e){return this.dropzone.addFile(e)},removeFile:function(e){this.dropzone.removeFile(e)},getAcceptedFiles:function(){return this.dropzone.getAcceptedFiles()},getRejectedFiles:function(){return this.dropzone.getRejectedFiles()},getFilesWithStatus:function(){return this.dropzone.getFilesWithStatus()},getQueuedFiles:function(){return this.dropzone.getQueuedFiles()},getUploadingFiles:function(){return this.dropzone.getUploadingFiles()},getAddedFiles:function(){return this.dropzone.getAddedFiles()},getActiveFiles:function(){return this.dropzone.getActiveFiles()},getSignedAndUploadToS3(e){var t=i.sendFile(e,this.awss3,this.isS3OverridesServerPropagation);this.isS3OverridesServerPropagation?t.then(()=>{setTimeout(()=>this.dropzone.processFile(e))}):t.then(t=>{t.success?(e.s3ObjectLocation=t.message,setTimeout(()=>this.dropzone.processFile(e)),this.$emit("vdropzone-s3-upload-success",t.message)):void 0!==t.message?this.$emit("vdropzone-s3-upload-error",t.message):this.$emit("vdropzone-s3-upload-error","Network Error : Could not send request to AWS. (Maybe CORS error)")}),t.catch(e=>{alert(e)})},setAWSSigningURL(e){this.isS3&&(this.awss3.signingURL=e)}}},void 0,!1,void 0,void 0,void 0)});
+//# sourceMappingURL=vue2Dropzone.js.map
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+if (false) {
+  module.exports = require('./vue.common.prod.js')
+} else {
+  module.exports = __webpack_require__(76)
+}
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(73);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_vue_i18n_locales_generated__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_vue_i18n_locales_generated__ = __webpack_require__(44);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -1028,9 +1581,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(33);
+__webpack_require__(43);
 
-window.Vue = __webpack_require__(51);
+window.Vue = __webpack_require__(16);
 
 
 
@@ -1052,10 +1605,11 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_1_vue_i18n__["a" /* default */]({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('example', __webpack_require__(41));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('lesson-show', __webpack_require__(63));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-create', __webpack_require__(42));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-index', __webpack_require__(43));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('example', __webpack_require__(58));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('lesson-show', __webpack_require__(62));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-create', __webpack_require__(59));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-index', __webpack_require__(60));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('file-manager', __webpack_require__(63));
 
 // If you want to use it in your vue components
 
@@ -1066,28 +1620,29 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 });
 
 /***/ }),
-/* 11 */
+/* 18 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 12 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(13);
+module.exports = __webpack_require__(20);
 
 /***/ }),
-/* 13 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(8);
-var Axios = __webpack_require__(15);
-var defaults = __webpack_require__(2);
+var bind = __webpack_require__(11);
+var Axios = __webpack_require__(22);
+var mergeConfig = __webpack_require__(9);
+var defaults = __webpack_require__(10);
 
 /**
  * Create an instance of Axios
@@ -1116,19 +1671,22 @@ axios.Axios = Axios;
 
 // Factory for creating new instances
 axios.create = function create(instanceConfig) {
-  return createInstance(utils.merge(defaults, instanceConfig));
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(5);
-axios.CancelToken = __webpack_require__(14);
-axios.isCancel = __webpack_require__(6);
+axios.Cancel = __webpack_require__(6);
+axios.CancelToken = __webpack_require__(21);
+axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(29);
+axios.spread = __webpack_require__(36);
+
+// Expose isAxiosError
+axios.isAxiosError = __webpack_require__(32);
 
 module.exports = axios;
 
@@ -1137,13 +1695,13 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 14 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(5);
+var Cancel = __webpack_require__(6);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1201,18 +1759,17 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 15 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(16);
-var dispatchRequest = __webpack_require__(17);
-var isAbsoluteURL = __webpack_require__(25);
-var combineURLs = __webpack_require__(23);
+var buildURL = __webpack_require__(12);
+var InterceptorManager = __webpack_require__(23);
+var dispatchRequest = __webpack_require__(25);
+var mergeConfig = __webpack_require__(9);
 
 /**
  * Create a new instance of Axios
@@ -1236,16 +1793,21 @@ Axios.prototype.request = function request(config) {
   /*eslint no-param-reassign:0*/
   // Allow for axios('example/url'[, config]) a la fetch API
   if (typeof config === 'string') {
-    config = utils.merge({
-      url: arguments[0]
-    }, arguments[1]);
+    config = arguments[1] || {};
+    config.url = arguments[0];
+  } else {
+    config = config || {};
   }
 
-  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
+  config = mergeConfig(this.defaults, config);
 
-  // Support baseURL config
-  if (config.baseURL && !isAbsoluteURL(config.url)) {
-    config.url = combineURLs(config.baseURL, config.url);
+  // Set config.method
+  if (config.method) {
+    config.method = config.method.toLowerCase();
+  } else if (this.defaults.method) {
+    config.method = this.defaults.method.toLowerCase();
+  } else {
+    config.method = 'get';
   }
 
   // Hook up interceptors middleware
@@ -1267,13 +1829,19 @@ Axios.prototype.request = function request(config) {
   return promise;
 };
 
+Axios.prototype.getUri = function getUri(config) {
+  config = mergeConfig(this.defaults, config);
+  return buildURL(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
+};
+
 // Provide aliases for supported request methods
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
   /*eslint func-names:0*/
   Axios.prototype[method] = function(url, config) {
-    return this.request(utils.merge(config || {}, {
+    return this.request(mergeConfig(config || {}, {
       method: method,
-      url: url
+      url: url,
+      data: (config || {}).data
     }));
   };
 });
@@ -1281,7 +1849,7 @@ utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
 utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
   /*eslint func-names:0*/
   Axios.prototype[method] = function(url, data, config) {
-    return this.request(utils.merge(config || {}, {
+    return this.request(mergeConfig(config || {}, {
       method: method,
       url: url,
       data: data
@@ -1293,7 +1861,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 16 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1352,16 +1920,43 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 17 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isAbsoluteURL = __webpack_require__(31);
+var combineURLs = __webpack_require__(29);
+
+/**
+ * Creates a new URL by combining the baseURL with the requestedURL,
+ * only when the requestedURL is not already an absolute URL.
+ * If the requestURL is absolute, this function returns the requestedURL untouched.
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} requestedURL Absolute or relative URL to combine
+ * @returns {string} The combined full path
+ */
+module.exports = function buildFullPath(baseURL, requestedURL) {
+  if (baseURL && !isAbsoluteURL(requestedURL)) {
+    return combineURLs(baseURL, requestedURL);
+  }
+  return requestedURL;
+};
+
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(20);
-var isCancel = __webpack_require__(6);
-var defaults = __webpack_require__(2);
+var transformData = __webpack_require__(28);
+var isCancel = __webpack_require__(7);
+var defaults = __webpack_require__(10);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -1395,7 +1990,7 @@ module.exports = function dispatchRequest(config) {
   config.headers = utils.merge(
     config.headers.common || {},
     config.headers[config.method] || {},
-    config.headers || {}
+    config.headers
   );
 
   utils.forEach(
@@ -1438,7 +2033,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 18 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1450,27 +2045,50 @@ module.exports = function dispatchRequest(config) {
  * @param {Error} error The error to update.
  * @param {Object} config The config.
  * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
  * @returns {Error} The error.
  */
-module.exports = function enhanceError(error, config, code, response) {
+module.exports = function enhanceError(error, config, code, request, response) {
   error.config = config;
   if (code) {
     error.code = code;
   }
+
+  error.request = request;
   error.response = response;
+  error.isAxiosError = true;
+
+  error.toJSON = function toJSON() {
+    return {
+      // Standard
+      message: this.message,
+      name: this.name,
+      // Microsoft
+      description: this.description,
+      number: this.number,
+      // Mozilla
+      fileName: this.fileName,
+      lineNumber: this.lineNumber,
+      columnNumber: this.columnNumber,
+      stack: this.stack,
+      // Axios
+      config: this.config,
+      code: this.code
+    };
+  };
   return error;
 };
 
 
 /***/ }),
-/* 19 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -1481,7 +2099,6 @@ var createError = __webpack_require__(7);
  */
 module.exports = function settle(resolve, reject, response) {
   var validateStatus = response.config.validateStatus;
-  // Note: status is not exposed by XDomainRequest
   if (!response.status || !validateStatus || validateStatus(response.status)) {
     resolve(response);
   } else {
@@ -1489,6 +2106,7 @@ module.exports = function settle(resolve, reject, response) {
       'Request failed with status code ' + response.status,
       response.config,
       null,
+      response.request,
       response
     ));
   }
@@ -1496,7 +2114,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 20 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1523,125 +2141,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
-
-var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-function E() {
-  this.message = 'String contains an invalid character';
-}
-E.prototype = new Error;
-E.prototype.code = 5;
-E.prototype.name = 'InvalidCharacterError';
-
-function btoa(input) {
-  var str = String(input);
-  var output = '';
-  for (
-    // initialize result and counter
-    var block, charCode, idx = 0, map = chars;
-    // if the next str index does not exist:
-    //   change the mapping table to "="
-    //   check if d has no fractional digits
-    str.charAt(idx | 0) || (map = '=', idx % 1);
-    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
-  ) {
-    charCode = str.charCodeAt(idx += 3 / 4);
-    if (charCode > 0xFF) {
-      throw new E();
-    }
-    block = block << 8 | charCode;
-  }
-  return output;
-}
-
-module.exports = btoa;
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(0);
-
-function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%40/gi, '@').
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
-}
-
-/**
- * Build a URL by appending params to the end
- *
- * @param {string} url The base of the url (e.g., http://www.google.com)
- * @param {object} [params] The params to be appended
- * @returns {string} The formatted url
- */
-module.exports = function buildURL(url, params, paramsSerializer) {
-  /*eslint no-param-reassign:0*/
-  if (!params) {
-    return url;
-  }
-
-  var serializedParams;
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils.isURLSearchParams(params)) {
-    serializedParams = params.toString();
-  } else {
-    var parts = [];
-
-    utils.forEach(params, function serialize(val, key) {
-      if (val === null || typeof val === 'undefined') {
-        return;
-      }
-
-      if (utils.isArray(val)) {
-        key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
-        val = [val];
-      }
-
-      utils.forEach(val, function parseValue(v) {
-        if (utils.isDate(v)) {
-          v = v.toISOString();
-        } else if (utils.isObject(v)) {
-          v = JSON.stringify(v);
-        }
-        parts.push(encode(key) + '=' + encode(v));
-      });
-    });
-
-    serializedParams = parts.join('&');
-  }
-
-  if (serializedParams) {
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-  }
-
-  return url;
-};
-
-
-/***/ }),
-/* 23 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1655,12 +2155,14 @@ module.exports = function buildURL(url, params, paramsSerializer) {
  * @returns {string} The combined URL
  */
 module.exports = function combineURLs(baseURL, relativeURL) {
-  return baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '');
+  return relativeURL
+    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    : baseURL;
 };
 
 
 /***/ }),
-/* 24 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1672,55 +2174,55 @@ module.exports = (
   utils.isStandardBrowserEnv() ?
 
   // Standard browser envs support document.cookie
-  (function standardBrowserEnv() {
-    return {
-      write: function write(name, value, expires, path, domain, secure) {
-        var cookie = [];
-        cookie.push(name + '=' + encodeURIComponent(value));
+    (function standardBrowserEnv() {
+      return {
+        write: function write(name, value, expires, path, domain, secure) {
+          var cookie = [];
+          cookie.push(name + '=' + encodeURIComponent(value));
 
-        if (utils.isNumber(expires)) {
-          cookie.push('expires=' + new Date(expires).toGMTString());
+          if (utils.isNumber(expires)) {
+            cookie.push('expires=' + new Date(expires).toGMTString());
+          }
+
+          if (utils.isString(path)) {
+            cookie.push('path=' + path);
+          }
+
+          if (utils.isString(domain)) {
+            cookie.push('domain=' + domain);
+          }
+
+          if (secure === true) {
+            cookie.push('secure');
+          }
+
+          document.cookie = cookie.join('; ');
+        },
+
+        read: function read(name) {
+          var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+          return (match ? decodeURIComponent(match[3]) : null);
+        },
+
+        remove: function remove(name) {
+          this.write(name, '', Date.now() - 86400000);
         }
-
-        if (utils.isString(path)) {
-          cookie.push('path=' + path);
-        }
-
-        if (utils.isString(domain)) {
-          cookie.push('domain=' + domain);
-        }
-
-        if (secure === true) {
-          cookie.push('secure');
-        }
-
-        document.cookie = cookie.join('; ');
-      },
-
-      read: function read(name) {
-        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-        return (match ? decodeURIComponent(match[3]) : null);
-      },
-
-      remove: function remove(name) {
-        this.write(name, '', Date.now() - 86400000);
-      }
-    };
-  })() :
+      };
+    })() :
 
   // Non standard browser env (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return {
-      write: function write() {},
-      read: function read() { return null; },
-      remove: function remove() {}
-    };
-  })()
+    (function nonStandardBrowserEnv() {
+      return {
+        write: function write() {},
+        read: function read() { return null; },
+        remove: function remove() {}
+      };
+    })()
 );
 
 
 /***/ }),
-/* 25 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1741,7 +2243,25 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 26 */
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determines whether the payload is an error thrown by Axios
+ *
+ * @param {*} payload The value to test
+ * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+ */
+module.exports = function isAxiosError(payload) {
+  return (typeof payload === 'object') && (payload.isAxiosError === true);
+};
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1754,69 +2274,69 @@ module.exports = (
 
   // Standard browser envs have full support of the APIs needed to test
   // whether the request URL is of the same origin as current location.
-  (function standardBrowserEnv() {
-    var msie = /(msie|trident)/i.test(navigator.userAgent);
-    var urlParsingNode = document.createElement('a');
-    var originURL;
+    (function standardBrowserEnv() {
+      var msie = /(msie|trident)/i.test(navigator.userAgent);
+      var urlParsingNode = document.createElement('a');
+      var originURL;
 
-    /**
+      /**
     * Parse a URL to discover it's components
     *
     * @param {String} url The URL to be parsed
     * @returns {Object}
     */
-    function resolveURL(url) {
-      var href = url;
+      function resolveURL(url) {
+        var href = url;
 
-      if (msie) {
+        if (msie) {
         // IE needs attribute set twice to normalize properties
+          urlParsingNode.setAttribute('href', href);
+          href = urlParsingNode.href;
+        }
+
         urlParsingNode.setAttribute('href', href);
-        href = urlParsingNode.href;
+
+        // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+        return {
+          href: urlParsingNode.href,
+          protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+          host: urlParsingNode.host,
+          search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+          hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+          hostname: urlParsingNode.hostname,
+          port: urlParsingNode.port,
+          pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+            urlParsingNode.pathname :
+            '/' + urlParsingNode.pathname
+        };
       }
 
-      urlParsingNode.setAttribute('href', href);
+      originURL = resolveURL(window.location.href);
 
-      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
-      return {
-        href: urlParsingNode.href,
-        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
-        host: urlParsingNode.host,
-        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
-        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
-        hostname: urlParsingNode.hostname,
-        port: urlParsingNode.port,
-        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
-                  urlParsingNode.pathname :
-                  '/' + urlParsingNode.pathname
-      };
-    }
-
-    originURL = resolveURL(window.location.href);
-
-    /**
+      /**
     * Determine if a URL shares the same origin as the current location
     *
     * @param {String} requestURL The URL to test
     * @returns {boolean} True if URL shares the same origin, otherwise false
     */
-    return function isURLSameOrigin(requestURL) {
-      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
-      return (parsed.protocol === originURL.protocol &&
+      return function isURLSameOrigin(requestURL) {
+        var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+        return (parsed.protocol === originURL.protocol &&
             parsed.host === originURL.host);
-    };
-  })() :
+      };
+    })() :
 
   // Non standard browser envs (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return function isURLSameOrigin() {
-      return true;
-    };
-  })()
+    (function nonStandardBrowserEnv() {
+      return function isURLSameOrigin() {
+        return true;
+      };
+    })()
 );
 
 
 /***/ }),
-/* 27 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1835,13 +2355,22 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 28 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
+
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
 
 /**
  * Parse headers into an object
@@ -1870,7 +2399,14 @@ module.exports = function parseHeaders(headers) {
     val = utils.trim(line.substr(i + 1));
 
     if (key) {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
     }
   });
 
@@ -1879,7 +2415,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 29 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1913,11 +2449,24 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 30 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_dropzone__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_dropzone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue2_dropzone__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_dropzone_dist_vue2Dropzone_min_css__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_dropzone_dist_vue2Dropzone_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue2_dropzone_dist_vue2Dropzone_min_css__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1967,11 +2516,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    vueDropzone: __WEBPACK_IMPORTED_MODULE_0_vue2_dropzone___default.a
+  },
   props: ['post_id'],
 
   data: function data() {
     return {
+      dropzoneOptions: {
+        url: 'https://httpbin.org/post',
+        thumbnailWidth: 150,
+        maxFilesize: 0.5,
+        headers: { "My-Awesome-Header": "header value" }
+      },
       message: 'Hello Vue!',
       todos: [{ text: 'Learn JavaScript' }, { text: 'Learn Vue' }, { text: 'Build something awesome' }],
       answers: [{ text: 'Learn JavaScript' }, { text: 'Learn Vue' }, { text: 'Build something awesome' }],
@@ -1991,9 +2551,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    // calcAge: function (){
-    //   return this.age * 2;
-    // }
+    vfileAdded: function vfileAdded(file) {
+      console.log('success');
+    },
+    vsuccess: function vsuccess(file, response) {
+      console.log('success uploaded');
+    }
   },
   computed: {
     // a computed getter
@@ -2026,6 +2589,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     }
   },
+
   watch: {
     dollar: function dollar(price) {
       this.dinnar = price * 1400;
@@ -2037,7 +2601,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 31 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2065,7 +2629,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 32 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2139,11 +2703,580 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 33 */
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Memorize"
+});
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Memorize_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Show",
+  // props: [
+  //   'lesson_slug'
+  // ],
+  props: ['postTitle', 'lessonSlug'],
+  data: function data() {
+    return {
+      name: 'mehmet',
+      items: [],
+      itemCount: 0
+
+    };
+  },
+  created: function created() {
+    this.fetchItems();
+  },
+
+  methods: {
+    fetchItems: function fetchItems() {
+      var _this = this;
+
+      // fetch('/api/memorize')
+      // // .then(res => res.json())
+      // .then(res => {
+      //   console.log(res);
+      // });
+      axios.get('/api/product/lesson/' + this.lessonSlug + '/memorize/items', {
+        params: {
+          id: 12345
+        }
+      }).then(function (res) {
+        console.log(res.data);
+        _this.items = res.data;
+      });
+    }
+  },
+  components: {
+    memorize: __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default.a
+  }
+});
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_dropzone__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_dropzone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue2_dropzone__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_dropzone_dist_vue2Dropzone_min_css__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_dropzone_dist_vue2Dropzone_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue2_dropzone_dist_vue2Dropzone_min_css__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// .....
+var token = document.head.querySelector('meta[name="csrf-token"]').content;
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "FileManager",
+  data: function data() {
+    return {
+      dropzoneOptions: {
+        url: '/manage/media',
+        thumbnailWidth: 200,
+        addRemoveLinks: true,
+        // Setup chunking
+        acceptedFiles: "image/*,video/*,audio/*",
+        maxFiles: 5,
+        timeout: 3600000,
+        autoProcessQueue: true,
+        chunking: true,
+        maxFilesize: 400000000,
+        chunkSize: 1000000,
+        // If true, the individual chunks of a file are being uploaded simultaneously.
+        parallelChunkUploads: false,
+        headers: { 'X-CSRF-TOKEN': token }
+      },
+      loadingMode: false,
+      previewMode: false,
+      uploadMode: false,
+      folders: [],
+      allFolders: [],
+      files: [],
+      previewFile: null,
+      previewFolder: null,
+      items: null,
+      currentGroup: null,
+      groupSlug: null,
+      groupName: 'Files',
+      ancestor_slug: null,
+      activeFileId: null,
+      activeFolderId: null,
+      activeItemType: null,
+      activeItemTypeFile: 1, // file
+      activeItemTypeFolder: 2, // group
+      selectedItemType: null,
+      onMoveItemId: null,
+      onMoveItemType: null
+    };
+  },
+  created: function created() {
+    this.fetchFiles();
+    this.fetchGroups();
+  },
+
+  methods: {
+    togglePreview: function togglePreview() {
+      this.previewMode = !this.previewMode;
+      this.activeFileId = null;
+      this.previewFile = null;
+    },
+    fetchFiles: function fetchFiles() {
+      var _this = this;
+
+      // get all media files
+      this.loadingMode = true;
+      axios.get('/manage/media/get/items', {
+        params: {
+          group: this.groupSlug
+        }
+      }).then(function (res) {
+        // console.log(res.data);
+        _this.files = res.data;
+        _this.hideLoading();
+      }).catch(function (error) {
+        console.log(error);
+        _this.hideLoading();
+      });
+    },
+    fetchGroups: function fetchGroups() {
+      var _this2 = this;
+
+      // get all media groups
+      this.loadingMode = true;
+      axios.get('/manage/system/group/ajax/get/type/1/groups', {
+        params: {
+          ancestor_slug: this.groupSlug
+        }
+      }).then(function (res) {
+        _this2.folders = res.data;
+        if (_this2.currentGroup == null) {
+          _this2.allFolders = res.data;
+        }
+        _this2.hideLoading();
+      }).catch(function (error) {
+        console.log(error);
+        _this2.hideLoading();
+      });
+    },
+    goHome: function goHome() {
+      this.uploadMode = false;
+      this.currentGroup = null;
+      this.groupSlug = null;
+      this.groupName = 'Files';
+      this.previewMode = false;
+      this.previewFile = null;
+      this.previewFolder = null;
+      this.fetchFiles();
+      this.fetchGroups();
+    },
+    openFilePreview: function openFilePreview(file) {
+      this.previewMode = true;
+      this.previewFolder = null;
+      this.activeFolderId = null;
+      this.previewFile = file;
+      this.activeFileId = file.id;
+      this.activeItemType = this.activeItemTypeFile;
+      this.selectedItemType = this.activeItemTypeFile;
+    },
+    openFolderPreview: function openFolderPreview(folder) {
+      this.previewMode = true;
+      this.previewFile = null;
+      this.activeFileId = null;
+      this.previewFolder = folder;
+      this.activeFolderId = folder.id;
+      this.activeItemType = this.activeItemTypeFolder;
+      this.selectedItemType = this.activeItemTypeFolder;
+    },
+    openFolder: function openFolder(folder) {
+      this.uploadMode = false;
+      this.previewFile = null;
+      this.previewFolder = null;
+      this.previewMode = false;
+      this.activeFileId = null;
+      this.currentGroup = folder;
+      this.groupSlug = folder.slug;
+      this.groupName = folder.title;
+      this.fetchFiles();
+      this.fetchGroups();
+    },
+    copyFileUrl: function copyFileUrl() {
+      var text = this.previewFile.url;
+      var $temp = $("<input>");
+      $("body").append($temp);
+      $temp.val(text).select();
+      document.execCommand("copy");
+      $temp.remove();
+      UIkit.notification("<span uk-icon='icon: check'></span> File url copied to clipboard.", { pos: 'top-center', status: 'success' });
+    },
+    putItemOnMove: function putItemOnMove() {
+      this.onMoveItemId = this.onMoveItemType = null;
+      this.onMoveItemType = this.activeItemType;
+      if (this.activeFileId || this.activeFolderId) {
+        if (this.onMoveItemType === this.activeItemTypeFile) {
+          this.onMoveItemId = this.activeFileId;
+        } else {
+          this.onMoveItemId = this.activeFolderId;
+        }
+      }
+    },
+    pasteItem: function pasteItem() {
+      if (this.onMoveItemId) {
+        if (this.onMoveItemType === this.activeItemTypeFile) {
+          this.updateFile(this.onMoveItemId, null, this.groupSlug);
+        } else {
+          this.updateFolder(this.onMoveItemId, null, this.groupSlug);
+        }
+      }
+    },
+    destroyItem: function destroyItem() {
+      if (this.selectedItemType === this.activeItemTypeFile) {
+        this.destroyFile(this.activeFileId);
+      } else if (this.selectedItemType === this.activeItemTypeFolder) {
+        // this.updateFolder(this.onMoveItemId, null, this.groupSlug );
+        UIkit.notification("Group deleting is under development, please try again later.", { pos: 'top-center', status: 'warning' });
+      }
+    },
+    destroyFile: function destroyFile(id) {
+      var _this3 = this;
+
+      this.loadingMode = true;
+      axios.post('/manage/media/ajax/delete/' + id).then(function (res) {
+        _this3.activeFileId = _this3.activeFile = null;
+        _this3.previewMode = false;
+        _this3.fetchFiles();
+        _this3.hideLoading();
+        // this.fetchGroups();
+      }).catch(function (error) {
+        console.log(error);
+        _this3.hideLoading();
+      });
+    },
+    updateFile: function updateFile(id, title, groupSlug) {
+      var _this4 = this;
+
+      this.loadingMode = true;
+      var data = { id: id, title: title, group_slug: groupSlug };
+      axios.post('/manage/media/ajax/move/item', data).then(function (res) {
+        _this4.onMoveItemId = _this4.onMoveItemType = null;
+        _this4.fetchFiles();
+        _this4.hideLoading();
+        // this.fetchGroups();
+      }).catch(function (error) {
+        console.log(error);
+        _this4.hideLoading();
+      });
+    },
+    createFolder: function createFolder() {
+      var _this5 = this;
+
+      var data = { title: 'New folder', ancestor_slug: this.groupSlug };
+      axios.post('/manage/system/group/ajax/create', data).then(function (res) {
+        // this.fetchFiles();
+        _this5.fetchGroups();
+        _this5.hideLoading();
+      }).catch(function (error) {
+        console.log(error);
+        _this5.hideLoading();
+      });
+    },
+    updateFolder: function updateFolder(id, title, ancestorId) {
+      var _this6 = this;
+
+      this.loadingMode = true;
+      var data = { id: id, title: title, group_slug: ancestorId };
+      axios.post('/manage/system/group/ajax/update', data).then(function (res) {
+        _this6.onMoveItemId = _this6.onMoveItemType = null;
+        _this6.fetchGroups();
+        _this6.fetchFiles();
+        _this6.hideLoading();
+      }).catch(function (error) {
+        console.log(error);
+        _this6.hideLoading();
+      });
+    },
+    updateFolderTitle: function updateFolderTitle() {
+      var previewTitle = this.previewFolder ? this.previewFolder.title : null;
+      var previewId = this.previewFolder ? this.previewFolder.id : null;
+      this.updateFolder(previewId, previewTitle, this.groupSlug);
+    },
+    updateFileTitle: function updateFileTitle() {
+      var previewTitle = this.previewFile ? this.previewFile.name : null;
+      var previewId = this.previewFile ? this.previewFile.id : null;
+      this.updateFile(previewId, previewTitle, this.groupSlug);
+    },
+    hideLoading: function hideLoading() {
+      var _this7 = this;
+
+      setTimeout(function () {
+        _this7.loadingMode = false;
+      }, 300);
+    },
+
+    // dropzone methods
+    vSuccess: function vSuccess(file, response) {
+      var _this8 = this;
+
+      console.log('success');
+      this.fetchFiles();
+      this.fetchGroups();
+      // this.success = true
+      // window.toastr.success('', 'Event : vdropzone-success')
+      setTimeout(function () {
+        _this8.$refs.myVueDropzone.removeFile(file);
+      }, 1500);
+      UIkit.notification("<span uk-icon='icon: check'></span> File has uploaded successfully.", { pos: 'top-center', status: 'success' });
+    },
+    vProgress: function vProgress(totalProgress, totalBytes, totalBytesSent) {
+      // var progress = totalBytesSent / totalProgress.size * 100;
+      // $('.dz-progress').width(progress + "%");
+      // if (progress > 99.9){
+      //   progress = 100
+      // }
+      console.log(totalProgress, totalBytes, totalBytesSent);
+      // this.progress = true
+      // this.myProgress = Math.floor(totalProgress)
+      // // window.toastr.success('', 'Event : vdropzone-sending')
+    },
+    vSending: function vSending(file, xhr, formData) {
+      // this.sending = true
+      // window.toastr.warning('', 'Event : vdropzone-sending');
+      formData.append('group', this.groupSlug);
+    }
+  },
+  components: {
+    vueDropzone: __WEBPACK_IMPORTED_MODULE_0_vue2_dropzone___default.a
+  }
+});
+
+/***/ }),
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(38);
+window._ = __webpack_require__(53);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -2152,9 +3285,9 @@ window._ = __webpack_require__(38);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(37);
+  window.$ = window.jQuery = __webpack_require__(52);
 
-  __webpack_require__(34);
+  __webpack_require__(45);
 } catch (e) {}
 
 /**
@@ -2163,7 +3296,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(12);
+window.axios = __webpack_require__(19);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -2197,7 +3330,1244 @@ if (token) {
 // });
 
 /***/ }),
-/* 34 */
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    "ar": {
+        "login": "دخول",
+        "home": "الرئيسية",
+        "blog": "المدونة",
+        "store": "المتجر",
+        "contact": "إتصل بنا",
+        "Register": "التسجيل",
+        "Full name": "اسم المستخدم",
+        "Mother name": "اسم الام كاملا",
+        "Email": "البريد الالكتروني",
+        "get started": "سجل اللان",
+        "Latest Posts": "احدث المنشورات",
+        "news": "الاخبار",
+        "READ MORE": "تابع القراءة",
+        "Password": "كلمة المرور",
+        "First name": "الاسم",
+        "Father's name": "اسم الاب",
+        "Grandpa's name": "اسم الجد",
+        "Surname": "اللقب",
+        "Password confirm": "تاكيد كلمة المرور",
+        "Birthday": "تاريخ الميلاد",
+        "Phone number": "رقم الهاتف",
+        "Directorates": "المحافظة",
+        "Gender": "الجنس",
+        "School kind": "نوع المدرسة",
+        "School level": "المرحلة الدراسية",
+        "Male": "ذكر",
+        "Female": "انثى",
+        "Or, register with..": "او التسجيل باستخدام",
+        "The email has already been taken": "هذا الايميل مسجل مسبقا",
+        "Warning": "تنبيه",
+        "country": "البلد",
+        "Tags": "اكثر ما يتم البحث عنه",
+        "Categories": "العناوين المتوفرة بالصفحة",
+        "Study kind": "الدراسة",
+        "Blog Categories": "أقسام المدونة",
+        "Blog Posts": "مقالات المدونة",
+        "Blog": "المدونة",
+        "Posts": "المقالات",
+        "please fill out this field.": "املأ هذا الجزء",
+        "avatar_group_0": "مجموعة المُدرسين",
+        "avatar_group_2": "مجموعة طلاب الثانوية",
+        "admin": {
+            "Main Menu": "القائمة الرئيسية",
+            "Dashboard": "لوحة القيادة",
+            "Pages": "الصفحات",
+            "Contact": "معلومات الإتصال",
+            "Users": "المستخدمين",
+            "Menus": "القوائم",
+            "Institutions": "المؤسسات",
+            "All Institutions": "قائمة المؤسسات",
+            "Institution Scopes": "نطاقات المؤسسات",
+            "Directorates": "المديريات",
+            "Academies": "الأكاديميات",
+            "Acceptable scopes": "النطاقات المتاحة للوصول",
+            "Scope options": "خيارات النطاق",
+            "Modules": "الإضافات",
+            "Blog": "المدونة",
+            "Posts": "المقالات",
+            "Categories": "الأقسام",
+            "Banners": "الإعلاتات",
+            "Store": "المتجر",
+            "Products": "المنتجات",
+            "Product Types": "أنواع المنتجات",
+            "Attribute sets": "مجموعات السمات",
+            "Tags": "العلامات",
+            "Settings": "إعدادات",
+            "Layouts": "التخطيطات",
+            "Roles": "الأدوار",
+            "Languages": "اللغات",
+            "Countries": "البلدان",
+            "File Manager": "مدير الملفات",
+            "forms": "Forms",
+            "all forms": "All forms",
+            "templates": "Templates"
+        },
+        "auth": {
+            "failed": "البريد الالكتروني او كلمة المرور هذه لا تتطابق مع سجلاتنا, يرجى التأكد ومعاودة المحاولة.",
+            "Password": "كلمة المرور",
+            "Confirm Password": "تأكيد كلمة المرور",
+            "Forgot Password?": "هل نسيت كلمة المرور؟",
+            "Reset Password": "إعادة تعيين كلمة المرور",
+            "E-Mail Address": "عنوان البريد الإلكتروني",
+            "Send Password Reset Link": "إرسال رابط إعادة تعيين كلمة السر",
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+        },
+        "main": {
+            "welcome": "مرحبا",
+            "users": "مستخدمين",
+            "new user today": "[1] مستخدم جديد اليوم|[2,*] مستخدمين جدد اليوم",
+            "new product today": "[1] منتج جديد اليوم|[2,*] منتجات جديدة اليوم",
+            "new post today": "[1] مقال جديد اليوم|[2,*] مقالات جديدة اليوم",
+            "new order today": "[1] طلب جديد اليوم|[2,*] طلبات جديدة اليوم",
+            "latest products": "آخر المنتجات",
+            "view the recently added products": "عرض آخر المنتجات التي تم اضافتها",
+            "latest users": "أخر المستخدمين",
+            "view the recently registered products": "عرض آخر المستخدمين المسجلين",
+            "welcome back": "اهلا وسهلاً بعودتك",
+            "site settings": "إعداادات الموقع",
+            "Home page": "الصفحة الرئيسية",
+            "Profile": "الملف الشخصي",
+            "Edit Profile": "تعديل الملف الشخصي",
+            "Observers List": "قائمة المراقبين",
+            "Account info": "معلومات الحساب",
+            "Password": "كلمة المرور",
+            "Current Current password": "كلمة المرور الحالية",
+            "New password": "كلمة المرور الجديدة",
+            "Confirm new password": "تأكيد كلمة المرور",
+            "Upload new image": "أضغط لرفع صورة جديدة",
+            "Set as default": "التعيين كأفتراضي",
+            "Members": "{0} عضو|[1,10] أعضاء|[10,*] عضواً",
+            "Thank you to join us": "شكرا لك للإنضمام الينا",
+            "One more step to activate your account": "خطوة أخرى لتفعيل حسابك",
+            "To complete your registration please verify your account": "لإكمال عملية التسجيل يرجى اكمال خطوات التحقق من حسابك",
+            "An email has been sent to your email": "تم إرسال بريد إلكتروني إلى عنوانك البريدي",
+            "with the activation instruction": "مع تعليمات التفعيل",
+            "If you haven't received your activation mail! please click on the link below": "إذا لم تتلق بريد التفعيل الخاص بك! الرجاء النقر على الرابط أدناه",
+            "Your account has been disable for a reason, to clarify about this issue lease contact the support team": "تم تعطيل حسابك لسبب ما ، لتوضيح هذه المشكلة ،يرجى الاتصال بفريق الدعم",
+            "Resend verification email": "أعد ارسال بريد التفعيل",
+            "_main": "الرئيسية",
+            "_users": "المستخدمين",
+            "_dashboard": "لوحة التحكم",
+            "_admin_dashboard": "لوحة تحكم الإدارة",
+            "_avatar": "الصورة",
+            "_name": "الأسم",
+            "_email": "البريد الإلكتروني",
+            "_setting": "الاعدادات",
+            "_gender": "الجنس",
+            "_role": "المستوى",
+            "_actions": "العمليات",
+            "_male": "ذكر",
+            "_female": "أنثى",
+            "_admin": "مدير",
+            "_user": "مستخدم",
+            "_about_me": "عني",
+            "_add": "إضافة",
+            "Edit": "تعديل",
+            "Description": "الوصف",
+            "_select": "أختر",
+            "_link": "الرابط",
+            "_pages": "الصفحات",
+            "_menus": "القوائم",
+            "_success_msg": "تمت الإضافة بنجاح",
+            "_update_msg": "نم التعديل بنجاح",
+            "_delete_msg": "نم الحذف بنجاح",
+            "_save_msg": "تم الحفظ بنجاح",
+            "_quick_links": "روابط سريعة",
+            "_profile": "الملف الشخصي",
+            "_logout": "خروج",
+            "_here": "هنا",
+            "_for_more_info": "للمزيد من المعلومات إتصل بنا",
+            "_reg_not_allowed": "التسجيل مغلق حاليا.",
+            "_site_is_offline": "الموقع تحت الصيانة",
+            "Website is currently offline.": "الموقع مغلق حالياً.",
+            "_copy_right": "جميع الحقوق محفوظة لـ",
+            "manage": "لوحة تحكم الإدارة",
+            "profile": "الملف الشخصي",
+            "log out": "تسجيل الخروج",
+            "Error log": "سجل الأخطاء",
+            "Create": "جديد",
+            "Basic input": "المعلومات الأساسية",
+            "Title": "العنوان",
+            "Content": "المحتوى",
+            "Tags": "الأوسمة",
+            "Create new tag": "أدخل وسم جديد",
+            "Properties": "الخصائص",
+            "Status": "حالة النشر",
+            "Allow Comments": "السماح بالتعليقات",
+            "Approved Comment Status": "الموافقة على التعليقات مباشرة",
+            "Category": "القسم",
+            "Parent Category": "التصنيف الأب",
+            "Attachments": "المرفقات",
+            "Add attachment": "إضافة مرفق",
+            "Images": "الصور",
+            "Cover image": "صورة الغلاف",
+            "File name": "أسم الملف",
+            "File Type": "نوع الملف",
+            "Download link": "رابط التحميل",
+            "Download": "تحميل",
+            "Actions": "العمليات",
+            "submit": "إرسال",
+            "Save changes": "حفظ التغيرات",
+            "Save": "حفظ",
+            "Save as new ver.": "حفظ كإصدار جديد",
+            "Position": "الترتيب",
+            "Show on menu": "العرض في القائمة الرئيسية",
+            "Please Select Category": "قم بإختيار التصنيف",
+            "Edit Comment": "تعديل التعليق",
+            "Updating": "جارِ التحرير",
+            "Loading": "جارِ التحميل",
+            "Please login to react with this post.": "يرجى تسجيل الدخول لاضافة التفاعل.",
+            "An error appended during loading, please refresh the page.": "حدث خطأ اثناء التحميل, يرجى اعادة تحميل الصفحة.",
+            "Report": "الإبلاغ عن المحتوى",
+            "Remove": "حذف",
+            "Appearance": "المضهر",
+            "Color pattern": "نمط اللون",
+            "By": "بواسطة",
+            "Cancel": "إلغاء",
+            "Reset": "إعادة تعيين",
+            "Placeholder": "النص التوضيحي",
+            "Fill the blank": "إملأ الفراغاات",
+            "Fill the blank question": "إملاء الفراغات في النص",
+            "Close": "إغلاق",
+            "Difficulty": "الصعوبة",
+            "Items num.": "عدد العناصر",
+            "Back": "عودة",
+            "version": "الإصدار",
+            "Oops": "عُذراً",
+            "Ok": "حسناً",
+            "view": "عرض",
+            "view all": "عرض الكُل",
+            "edit": "تعديل",
+            "delete": "حذف",
+            "add": "أضِف",
+            "login": "الدخول",
+            "register": "سجِل الآن!",
+            "Search here": "إبحث هنا ..",
+            "Main menu": "القائمة الرئيسية",
+            "hi": "أهلاً, {name}",
+            "My Courses": "كورساتي",
+            "Manage your website": "ادارة فعاليات الموقع",
+            "View and modify profile": "عرض و تعديل الملف الشخصي",
+            "view all of my courses": "عرض كل الدروس التي تم شرائها",
+            "User Profile": "أدارة المستخدم",
+            "Avatar groups": "مجموعات الصور الرمزية",
+            "Apply": "تطبيق",
+            "The total archived points": "مجموع النقاط المكتسبة",
+            "Total tiptop credits": "رصيد تبتوب المتوفر",
+            "Course period": "مدة الكورس",
+            "Achievement and development": "الإنجاز والتطور",
+            "Efficiency": "الكفائة",
+            "days": "أيام",
+            "Days": "[0,2] يوم|[3,10] أيام|[11,*] يوم",
+            "Minutes": "[0,2] دقيقة|[3,10] دقائق|[11,*] دقيقة",
+            "Seconds": "[0,2] ثانية|[3,10] ثوان|[11,*] ثانية",
+            "_units": "[0,2] وحدة|[3,10] وحدات|[11,*] وحدة",
+            "Remaining": "المتبقي",
+            "Administrator": "مدير عام الموقع",
+            "Manager": "مدير",
+            "Student": "طالب",
+            "Pass": "ترك",
+            "Review": "مراجعة",
+            "Dear": "عزيزي {name}",
+            "Starting": "جارِ البدأ",
+            "Display type": "نوع العرض",
+            "Meta input": "مدخلات الميتا",
+            "Meta Title": "عنوان الميتا",
+            "Meta Keywords": "كلمات الميتا الدلالية",
+            "Meta Description": "وصف الميتا",
+            "_blog": "المدونة",
+            "_posts": "المقالات",
+            "_post_title": "عنوان المقال",
+            "_new_posts": "مقال جديد",
+            "_new_post": "إنشاء مقال",
+            "_edit_post": "تعديل المقال",
+            "_title": "العنوان",
+            "_image": "الصورة",
+            "_auther": "المحرر",
+            "_body": "النص",
+            "_slug": "الرابط المختصر",
+            "_new_category": "قسم جديد",
+            "_categories": "الأقسام",
+            "_date": "التاريخ",
+            "_status": "حالة النشر",
+            "_publish": "حالة النشر",
+            "_unpublished": "غير منشور",
+            "_published": "منشور",
+            "_draft": "مسودة",
+            "_last_posts": "آخر المقالات",
+            "_cat_delete_confirm": "هل انت متأكد انك تريد حذف هذا التصنيف ؟",
+            "_cat_delete_confirm_details": "حذف هذا التصنيف سوف يحذف جميع المقلات المدرجة ضمنه!",
+            "_latest_posts": "آخر المقالات",
+            "_tags": "الأوسمة",
+            "Search in Blog": "إبحث في المدونة",
+            "search": "إبحث",
+            "Read more": "إقرأ المزيد",
+            "View more": "عرض المزيد",
+            "Blog Posts": "مقالات المدونة",
+            "Blog": "المدونة",
+            "Posts": "المقالات",
+            "posts": "المقالات",
+            "Comments": "التعليقات",
+            "Replay": "إضافة رد",
+            "Comment": "تعليق",
+            "Comment removed successfully": "تم حذف التعليق بنجاح",
+            "Comment added successfully": "تمت إضافة التعليق بنجاح",
+            "Type your comment here ..": "أضف تعليقك في هذه الخانة ..",
+            "Login now": "قم بتسجيل الدخول الآن",
+            "To add comments you are required to login with your account.": "لإضافة التعليقات يجب عليك تسجيل الدخول الى حسابك.",
+            "Cover Image": "صورة الغلاف",
+            "Details": "التفاصيل",
+            "Reactions": "التفاعل",
+            "Allow Com.": "السماح بالتعليق",
+            "View": "عرض",
+            "Blog Categories": "تصنيفات المدونة",
+            "Post images": "صور المنشور",
+            "Select a default post image, or upload a new image": "إختر صورة المنشور الافتراضية, او قم برفع صورة جديدة",
+            "Dear student, you can add your personal picture to be used for documents and certificates issuing.": "عزيزي الطالب, يمكنك إضافة صورتك الشخصية هنا لاستخدامها في طباعة الوثائق والشهادات.",
+            "Platform members": "أعضاء المنصة",
+            "_gallery": "المعرض",
+            "_albums": "الألبومات",
+            "_album": "الألبوم",
+            "_album_select": "أختر الألبوم",
+            "_new_album": "إضافة ألبوم",
+            "_pictures": "الصور",
+            "_images": "الصور",
+            "_upload": "تحميل",
+            "_album_delete_confirm": "هل انت متأكد انك تريد حذف هذا الألبوم ؟",
+            "_album_delete_confirm_details": "حذف هذا الألبوم سوف يحذف جميع الصور المدرجة ضمنه!",
+            "_models": "الإضافات",
+            "_banners": "الإعلانات",
+            "_banner": "إعلان",
+            "_banner_size": "حجم الإعلان",
+            "_carousels": "السلايدات",
+            "_new_model": "إنشاء إعلان",
+            "_edit_model": "تعديل الإعلان",
+            "_text_pos": "موقع النص",
+            "_model_size": "حجم الإعلان",
+            "_model_font": "لون الخط",
+            "_order_id": "التسلسل",
+            "_position": "الموقع",
+            "_last_news": "آخر الأخبار",
+            "_desicription": "الوصف",
+            "_langauge": "اللغة",
+            "_theme": "القالب",
+            "_active": "حالة الموقع",
+            "_registration": "التسجيل",
+            "_update": "تعديل",
+            "_submit": "ارسال",
+            "_home": "الرئيسية",
+            "_about_us": "من نحن",
+            "_login": "دخول",
+            "_password": "كلمة المرور",
+            "_confirm": "تأكيد",
+            "_remember_me": "تذكرني",
+            "_forgot_pass": "هل نسيت كلمة المرور ؟",
+            "_register": "تسجيل",
+            "_contact_us": "إتصل بنا",
+            "_contact_info": "معلومات الإتصال",
+            "_send_your_msg": "أرسل رسالتك هنا",
+            "_message": "نص الرسالة",
+            "_contact": "جهة إتصال",
+            "_subject": "الموضوع",
+            "Store": "المتجر",
+            "Store Categories": "تصنيفات المتجر",
+            "Product": "المنتج",
+            "Products": "المنتجات",
+            "Product info": "بيانات المنتج",
+            "Product image": "صورة المنتج",
+            "Product images": "صور المنتج",
+            "Type": "النوع",
+            "Quantity": "الكمية",
+            "Price": "السعر",
+            "SKU": "SKU كود",
+            "Attributes": "السمات",
+            "Product attributes": "سمات المنتج",
+            "Lessons": "الدروس",
+            "lessons": "دروس",
+            "Show list of categories": "أضهر قائمة الأقسام",
+            "Manage Stock": "إدارة الكمية المتوفرة",
+            "Units": "الوحدات",
+            "units": "وحدات",
+            "Add to cart": "أضف الى سلة المشتريات",
+            "Buy now": "إشتري الآن",
+            "This course includes": "هذه الدورة تحتويى على:",
+            "downloadable resources": "مصادر قابلة للتحميل",
+            "Full lifetime access": "امكانية الوصول مدى الحياة",
+            "Certificate of Completion": "شهادة اكمال الدورة",
+            "Showing products": "عرض المنتجات",
+            "Default Sort": "ترتيب افتراضي",
+            "Sort by name": "ترتيب حسب الإسم",
+            "Sort by position": "ترتيب حسب الترتيب",
+            "Price low to high": "السعر من الأرخص الى الأغلى",
+            "Price high to low": "السعر من الأغلى الى الارخص",
+            "of": "من",
+            "Search in Store": "إبحث في المتجر",
+            "To complete this step, please purchase the item first": "لإكمال هذه الخطوة, يرجى شراء المنتج اولاً",
+            "Search in store": "إبحث في المتجر",
+            "Filter by Category": "فلترة التصنيفات",
+            "Sort by": "عرض النتائج حسب",
+            "Apply Filter": "فلتر التصنيفات",
+            "Products browser": "تصفح المنتجات",
+            "Store's products": " منتجات المتجر",
+            "Price range": "نطاق السعر",
+            "From": "من",
+            "To": "إلى",
+            "Filter prices": "فلترة الأسعار",
+            "Adding ...": "جارِ الإضافة ...",
+            "Added to cart": " في السلة",
+            "Item is already added to your cart.": "العنصر مضاف في سلة المشتريات.",
+            "Item has been added successfully.": "تمت اضافة العنصر بنجاح",
+            "View lesson": "عرض الدرس",
+            "_memorize dear student": "عزيزي الطالب لديك مجموعة من التعابير المهمة التي يجب التعرف عليا قبل دخولك للدرس.",
+            "Cart": "سلة المشتريات",
+            "Cart items": "عناصر سلة المشتريات",
+            "Cart summary": "ملخص سلة المشتريات",
+            "Subtotal": "المجموع الفرعي",
+            "Discount": "الخصم",
+            "Grand Total": "المبلغ الإجمالي",
+            "Put discount coupon": "ضع كوبون التخفيض",
+            "Pay by": "الدفع بواسطة",
+            "Tiptop credits": "رصيد تبتوب",
+            "Credit card": "بطاقة ائتمانية",
+            "PayPal": "بايبال",
+            "Add new Lesson": "أضف درس جديد",
+            "Add new Unit": "أضف وحدة جديدة",
+            "Store Lessons": "دروس المتجر",
+            "Presentations and Multimedia": "العروض التقديمية و الوسائط",
+            "video link": "رابط الفيديو",
+            "Lesson description": "وصف الدرس",
+            "There is no available lessons in this unit": "لا يوجد دروس متوفرة في هذه الوحدة",
+            "Add Media Item": "أضف عنصر ميديا",
+            "Media items": "عناصر الميديا",
+            "Uploading": "جارِ الرفع ...",
+            "Quizzes": "إختبارات",
+            "quizzes": "إختبارات",
+            "Add Quiz": "أضف إختبار",
+            "Quiz name": "إسم الإختبار",
+            "Quiz Type": "نوع الإختبار",
+            "Short text": "إجابة قصيرة",
+            "Long text": "إجابة طويلة",
+            "For single line text fields": "لإجابات السطر الواحد",
+            "For paragraph text fields": "لإجابات النصوص الطويلة",
+            "Drop menu": "قائمة منسدلة",
+            "To select from menu": "للإختيار من القائمة المنسدلة",
+            "Single choice": "خيار واحد",
+            "Ratio allowing one choice": "يسمح بإجابة واحدة",
+            "Multiple choice": "إجابات متعددة",
+            "Allowing multi choice": "يسمح بأختيار اجابات متعددة",
+            "Section": "قسم",
+            "The section": "القسم",
+            "Section Title": "عنوان القسم",
+            "Create new section": "إنشاء قسم جديد",
+            "There is no form items yet, please select new item from the items list": "لا يوجد عناصر متاحة, يرجى الأختيار من قائمة العناصر للإضافة ",
+            "There is no form items yet.": "لا يوجد عناصر متاحة.",
+            "Press here to edit the default question.": "إضغط هنا لتعديل السؤال الإفتراضي",
+            "You can add description and instructions, or remove it from the question settings": "تستطيع إضافة بعض الوصف و التعليمات, او يمكنك حذفها من إعدادات السؤال",
+            "First option": "الخيار الأول",
+            "Option title": "عنوان الخيار",
+            "Option": "الخيار",
+            "Default": "إفتراضي",
+            "Delete": "حذف",
+            "Add Option": "أضف خيار",
+            "Question Options": "خيارات العنصر",
+            "Question Width": "عرض العنصر",
+            "General settings": "الإعدادات العامة",
+            "Score": "التقييم",
+            "Remark": "الدرجة",
+            "Add blank": "أضف فراغ",
+            "Delete blank": "حذف الفراغ",
+            "Quiz settings": "إعدادات الإمتحان",
+            "Quiz title": "عنوان الإمتحان",
+            "Quiz description": "وصف الإمتحان",
+            "Take the exam": "إبدأ الأمتحان",
+            "Your answer": "ضع إجابتك هنا",
+            "Source": "المصدر",
+            "Internal": "من المنهج",
+            "External": "خارجي",
+            "Recommending": "الترشيحات",
+            "Recommended": "وزاري",
+            "Not recommended": "غير مرشح",
+            "Display settings": "إعدادات العرض",
+            "Please wait, items are loading.": "يرجى الإنتظار يتم تحميل العناصر.",
+            "Please create a lesson first.": "يرجى إنشاء درس أولاً.",
+            "Marks": "[0,2] درجة|[3,10] درجات|[11,*] درجة",
+            "points": "{0} نقطة |[1,*] نقاط",
+            "Upload a new video": "إرفع فيديو جديد",
+            "HTML page": "HTML صفحة",
+            "Embed": "تضمين",
+            "Media name": "إسم ملف الميديا",
+            "Video upload": "رفع ملف فيدو",
+            "Drag and drop your video file to upload, or": "قم بسحب الفيديو وإفلاتها للتحميل ، أو",
+            "Drag and drop your files to upload, or": "قم بسحب ملفاتك وإفلاتها للتحميل ، أو",
+            "selecting one": "أختر من ملفاتك",
+            "Start upload": "إبدأ الرفع",
+            "Click to attach your files": "أضغط لارفاق الملفات المراد رفعها",
+            "orders": "طلبات",
+            "Place Order": "تأكيد الشراء",
+            "purchase complete": "لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: {number}.",
+            "My Orders": "مشترياتي",
+            "Order no.": "رقم الطلب",
+            "Purchasing date": "تاريخ لاشراء",
+            "Items count": "عدد العناصر",
+            "Payment status": "حالة الدفع",
+            "Invoice": "الفاتورة",
+            "Invoice No": "رقم الفاتورة",
+            "Invoice Date": "تاريخ الفاتورة",
+            "Recipient": "المستلم",
+            "Item description": "وصف العنصر",
+            "Unit Price": "سعر الوحدة",
+            "Qty.": "الكمية",
+            "Total": "المجموع",
+            "Print invoice": "أطبع الفاتورة",
+            "View invoice": "عرض الفاتورة",
+            "Payment Completed": "المبلغ مدفوع كلياً",
+            "forms": "النماذج",
+            "choose answer": "إختر الإجابة",
+            "all forms": "جميع النماذج",
+            "templates": "القوالب",
+            "save as Template": "حفظ كقالب",
+            "categories": "المصنفات",
+            "template categories": "مصنفات القوالب",
+            "_fill blank default paragraph": "ضع النص هناو ثم قم باختيار الكلمة المراد تحويلها الى فراغ و اضغط أضف فراغ.",
+            "Quiz period": "مدة الإختبار",
+            "this quiz have limited time to answer, which is": "الوقت المحدد لاكمال الإجابة على اسئلة هذا الإختبار هو",
+            "Are you sure that you want to start the quiz?": "هل انت متأكد انك مستعد لبدأ الإختبار؟",
+            "Yes, Start the quiz": "نعم, إبدأ الإختبار",
+            "back to the lesson": "العودة الى الدرس",
+            "Quiz time finished": "إنتهى وقت الاختبار",
+            "the time to end this quiz has been finished, we hope you done well with it": "لقد انتهى الوقت المخصص للإجابة على هذا الاختبار ، نأمل أن تكون قد أديته بشكل جيد.",
+            "Lesson quizzes": "إختبارات الدرس",
+            "Previous": "السابق",
+            "Next": "التالي",
+            "only": "فقط",
+            "You should answer": "يجيب عليك الإجابة على",
+            "questions and leave": "أسئلة وترك",
+            "Please, purchase the lesson to complete": "يرجى شراء الكورس لاكمال هذه العملية",
+            "Quiz has been submitted successfully": "تم إرسال الاختبار بنجاح",
+            "Unlimited time": "وقت غير محدود",
+            "Availability": "التوفر",
+            "Available": "مُتاح",
+            "Completed": "مُكتمل",
+            "Pending": "قيد الانتظار",
+            "No results": "لا يوجد نتائج",
+            "Results": "النتائج",
+            "Passed successfully": "تم الأجتياز بنجاح",
+            "Failed": "لم يتم الاجتياز",
+            "View results": "عرض النتائج",
+            "File upload": "رفع الملفات",
+            "Files": "الملفات",
+            "Folders": "المجلدات",
+            "files": "ملفات",
+            "folders": "مجلدات",
+            "New folder": "مجلد جديد",
+            "Move": "نقل",
+            "Paste": "لصق",
+            "Copy link": "نسخ الرابط",
+            "Preview": "معاينة",
+            "File size": "حجم الملف",
+            "Created at": "أنشأ بتاريخ",
+            "Url link": "ؤابط الملف",
+            "Folder name": "إسم المجلد",
+            "Files count": "عدد الملفات",
+            "Sub Folders count": "عدد المجلدات الداخلية"
+        },
+        "pagination": {
+            "previous": "&laquo; Previous",
+            "next": "Next &raquo;"
+        },
+        "passwords": {
+            "password": "Passwords must be at least six characters and match the confirmation.",
+            "reset": "Your password has been reset!",
+            "sent": "We have e-mailed your password reset link!",
+            "token": "This password reset token is invalid.",
+            "user": "We can't find a user with that e-mail address."
+        },
+        "validation": {
+            "accepted": "The {attribute} must be accepted.",
+            "active_url": "The {attribute} is not a valid URL.",
+            "after": "The {attribute} must be a date after {date}.",
+            "after_or_equal": "The {attribute} must be a date after or equal to {date}.",
+            "alpha": "The {attribute} may only contain letters.",
+            "alpha_dash": "The {attribute} may only contain letters, numbers, and dashes.",
+            "alpha_num": "The {attribute} may only contain letters and numbers.",
+            "array": "The {attribute} must be an array.",
+            "before": "The {attribute} must be a date before {date}.",
+            "before_or_equal": "The {attribute} must be a date before or equal to {date}.",
+            "between": {
+                "numeric": "The {attribute} must be between {min} and {max}.",
+                "file": "The {attribute} must be between {min} and {max} kilobytes.",
+                "string": "The {attribute} must be between {min} and {max} characters.",
+                "array": "The {attribute} must have between {min} and {max} items."
+            },
+            "boolean": "The {attribute} field must be true or false.",
+            "confirmed": "The {attribute} confirmation does not match.",
+            "date": "The {attribute} is not a valid date.",
+            "date_format": "The {attribute} does not match the format {format}.",
+            "different": "The {attribute} and {other} must be different.",
+            "digits": "The {attribute} must be {digits} digits.",
+            "digits_between": "The {attribute} must be between {min} and {max} digits.",
+            "dimensions": "The {attribute} has invalid image dimensions.",
+            "distinct": "The {attribute} field has a duplicate value.",
+            "email": "The {attribute} must be a valid email address.",
+            "exists": "The selected {attribute} is invalid.",
+            "file": "The {attribute} must be a file.",
+            "filled": "The {attribute} field must have a value.",
+            "image": "The {attribute} must be an image.",
+            "in": "The selected {attribute} is invalid.",
+            "in_array": "The {attribute} field does not exist in {other}.",
+            "integer": "The {attribute} must be an integer.",
+            "ip": "The {attribute} must be a valid IP address.",
+            "ipv4": "The {attribute} must be a valid IPv4 address.",
+            "ipv6": "The {attribute} must be a valid IPv6 address.",
+            "json": "The {attribute} must be a valid JSON string.",
+            "max": {
+                "numeric": "The {attribute} may not be greater than {max}.",
+                "file": "The {attribute} may not be greater than {max} kilobytes.",
+                "string": "The {attribute} may not be greater than {max} characters.",
+                "array": "The {attribute} may not have more than {max} items."
+            },
+            "mimes": "The {attribute} must be a file of type: {values}.",
+            "mimetypes": "The {attribute} must be a file of type: {values}.",
+            "min": {
+                "numeric": "The {attribute} must be at least {min}.",
+                "file": "The {attribute} must be at least {min} kilobytes.",
+                "string": "The {attribute} must be at least {min} characters.",
+                "array": "The {attribute} must have at least {min} items."
+            },
+            "not_in": "The selected {attribute} is invalid.",
+            "numeric": "The {attribute} must be a number.",
+            "present": "The {attribute} field must be present.",
+            "regex": "The {attribute} format is invalid.",
+            "required": "The {attribute} field is required.",
+            "required_if": "The {attribute} field is required when {other} is {value}.",
+            "required_unless": "The {attribute} field is required unless {other} is in {values}.",
+            "required_with": "The {attribute} field is required when {values} is present.",
+            "required_with_all": "The {attribute} field is required when {values} is present.",
+            "required_without": "The {attribute} field is required when {values} is not present.",
+            "required_without_all": "The {attribute} field is required when none of {values} are present.",
+            "same": "The {attribute} and {other} must match.",
+            "size": {
+                "numeric": "The {attribute} must be {size}.",
+                "file": "The {attribute} must be {size} kilobytes.",
+                "string": "The {attribute} must be {size} characters.",
+                "array": "The {attribute} must contain {size} items."
+            },
+            "string": "The {attribute} must be a string.",
+            "timezone": "The {attribute} must be a valid zone.",
+            "unique": "The {attribute} has already been taken.",
+            "uploaded": "The {attribute} failed to upload.",
+            "url": "The {attribute} format is invalid.",
+            "custom": {
+                "attribute-name": {
+                    "rule-name": "custom-message"
+                }
+            },
+            "attributes": []
+        }
+    },
+    "en": {
+        "admin": {
+            "Main Menu": "Main Menu",
+            "Dashboard": "Dashboard",
+            "Pages": "Pages",
+            "Contact": "Contact",
+            "Users": "Users",
+            "Menus": "Menus",
+            "Institutions": "Institutions",
+            "All Institutions": "All Institutions",
+            "Institution Scopes": "Institution Scopes",
+            "Directorates": "Directorates",
+            "Academies": "Academies",
+            "Acceptable scopes": "Acceptable scopes",
+            "Scope options": "Scope options",
+            "Modules": "Modules",
+            "Blog": "Blog",
+            "Posts": "Posts",
+            "Categories": "Categories",
+            "Banners": "Banners",
+            "Store": "Store",
+            "Products": "Products",
+            "Product Types": "Product Types",
+            "Attribute sets": "Attribute sets",
+            "Tags": "Tags",
+            "Settings": "Settings",
+            "Layouts": "Layouts",
+            "Roles": "Roles",
+            "Languages": "Languages",
+            "Countries": "Countries",
+            "File Manager": "File Manager",
+            "forms": "Forms",
+            "all forms": "All forms",
+            "templates": "Templates"
+        },
+        "auth": {
+            "failed": "These credentials do not match our records.",
+            "Password": "Password",
+            "Confirm Password": "Confirm Password",
+            "Reset Password": "Reset Password",
+            "Forgot Password?": "Forgot Password?",
+            "E-Mail Address": "E-Mail Address",
+            "Send Password Reset Link": "Send Password Reset Link",
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+        },
+        "main": {
+            "welcome": "Welcome",
+            "users": "Users",
+            "new user today": "[1] New user today|[2,*] New users today",
+            "new product today": "[1] New product today|[2,*] New products today",
+            "new post today": "[1] New post today|[2,*] New posts today",
+            "new order today": "[1] New order today|[2,*] New orders today",
+            "latest products": "Latest products",
+            "view the recently added products": "View the recently added products",
+            "latest users": "Latest users",
+            "view the recently registered products": "View the recently registered products",
+            "welcome back": "Welcome back",
+            "site settings": "Site settings",
+            "From": "From",
+            "To": "To",
+            "Search here": "Search here ..",
+            "Main menu": "Main menu",
+            "hi": "Hi, {name}",
+            "My Courses": "My Courses",
+            "Manage your website": "Manage your website",
+            "View and modify profile": "View and modify profile",
+            "view all of my courses": "view all of my courses",
+            "User Profile": "User Profile",
+            "Avatar groups": "Avatar groups",
+            "Apply": "Apply",
+            "The total archived points": "The total archived points",
+            "Total tiptop credits": "Total tiptop credits",
+            "Course period": "Course period",
+            "Achievement and development": "Achievement and development",
+            "Efficiency": "Efficiency",
+            "days": "Days",
+            "Days": "[0,1] Day|[2,10] Days|[11,*] Days",
+            "_units": "[0,1] Unit|[2,10] Units|[11,*] Units",
+            "Remaining": "Remaining",
+            "Administrator": "Administrator",
+            "Manager": "Manager",
+            "Student": "Student",
+            "Pass": "Pass",
+            "Review": "Review",
+            "Dear": "Dear, {name}",
+            "Thank you to join us": "Thank you to join us",
+            "One more step to activate your account": "One more step to activate your account",
+            "To complete your registration please verify your account": "To complete your registration please verify your account",
+            "An email has been sent to your email": "An email has been sent to your email",
+            "with the activation instruction": "with the activation instruction",
+            "If you haven't received your activation mail! please click on the link below": "If you haven't received your activation email! please click on the link below",
+            "Your account has been disable for a reason, to clarify about this issue lease contact the support team": "Your account has been disable for a reason, to clarify about this issue lease contact the support team",
+            "Resend verification email": "Resend verification email",
+            "Home page": "Home page",
+            "Profile": "Profile",
+            "Edit Profile": "Edit Profile",
+            "Observers List": "Observers List",
+            "Account info": "Account info",
+            "Password": "Password",
+            "Current Current password": "Current Current password",
+            "New password": "New password",
+            "Confirm new password": "Confirm new password",
+            "Upload new image": "Upload new image",
+            "Set as default": "Set as default",
+            "Dear student, you can add your personal picture to be used for documents and certificates issuing.": "Dear student, you can add your personal picture to be used for documents and certificates issuing.",
+            "Platform members": "Platform members",
+            "_main": "Overview",
+            "_dashboard": "Dashboard",
+            "_users": "Users",
+            "_new_posts": "New posts",
+            "_setting": "Setting",
+            "_admin_dashboard": "Admin Dashboard",
+            "_avatar": "Avatar",
+            "_name": "Name",
+            "_email": "Email Address",
+            "_gender": "Gender",
+            "_role": "Role",
+            "_actions": "Actions",
+            "_male": "Male",
+            "_female": "Female",
+            "_admin": "Admin",
+            "_user": "User",
+            "_add": "New",
+            "Edit": "Edit",
+            "Description": "Description",
+            "_select": "Select",
+            "_pages": "Pages",
+            "_menus": "Menus",
+            "_success_msg": "Added successfully",
+            "_update_msg": "Updated successfully",
+            "_delete_msg": "Deleted successfully",
+            "_save_msg": "Saved successfully",
+            "_quick_links": "Quick Links",
+            "_profile": "Profile",
+            "_logout": "Logout",
+            "_here": "here",
+            "_for_more_info": "For more information contact us",
+            "_reg_not_allowed": "Registration is not available right now.",
+            "_site_is_offline": "The site is under maintenance",
+            "Website is currently offline.": "The website is currently offline.",
+            "_copy_right": "All Rights Reserved to",
+            "manage": "manage",
+            "profile": "profile",
+            "log out": "log out",
+            "Error log": "Error log",
+            "Create": "Create",
+            "Basic input": "Basic input",
+            "Title": "Title",
+            "Content": "Content",
+            "Tags": "Tags",
+            "Create new tag": "Insert new tag",
+            "Properties": "Properties",
+            "Status": "Status",
+            "Allow Comments": "Allow Comments",
+            "Approved Comment Status": "Approved Comment Status",
+            "Category": "Category",
+            "Parent Category": "Parent Category",
+            "Attachments": "Attachments",
+            "Add attachment": "Add attachment",
+            "Images": "Images",
+            "Cover image": "Cover image",
+            "File name": "File name",
+            "File Type": "File Type",
+            "Download link": "Download link",
+            "Download": "Download",
+            "Actions": "Actions",
+            "submit": "Submit",
+            "Save changes": "Save changes",
+            "Save": "Save",
+            "Save as new ver.": "Save as new ver.",
+            "Position": "Position",
+            "Show on menu": "Show on menu",
+            "Please Select Category": "Please Select Category",
+            "Report": "Report",
+            "Remove": "Remove",
+            "Appearance": "Appearance",
+            "Color pattern": "Color pattern",
+            "By": "By",
+            "Cancel": "Cancel",
+            "Reset": "Reset",
+            "Placeholder": "Placeholder",
+            "Close": "Close",
+            "Difficulty": "Difficulty",
+            "Items num.": "Items num.",
+            "Back": "Back",
+            "version": "Version",
+            "Oops": "Oops",
+            "Ok": "Ok",
+            "view": "View",
+            "view all": "View all",
+            "edit": "Edit",
+            "delete": "Delete",
+            "add": "Add",
+            "login": "Login",
+            "register": "register",
+            "Members": "{0} Member|[1,10] Members|[10,*] Members",
+            "Meta input": "Meta input",
+            "Meta Title": "Meta Title",
+            "Meta Keywords": "Meta Keywords",
+            "Meta Description": "Meta Description",
+            "_posts": "Posts",
+            "_post_title": "Post title",
+            "_new_post": "New Post",
+            "_edit_post": "Post edit",
+            "_title": "Title",
+            "_image": "Image",
+            "_auther": "Auther",
+            "_body": "Post body",
+            "_slug": "Slug URL",
+            "_category": "Category",
+            "_new_category": "New Category",
+            "_categories": "Categories",
+            "_date": "Date",
+            "_status": "Status",
+            "_unpublished": "Unpublished",
+            "_published": "Published",
+            "_draft": "draft",
+            "_last_posts": "Last Posts",
+            "_cat_delete_confirm": "Are you sure that you want to delete this category?",
+            "_cat_delete_confirm_details": "Deleting this, will delete all posts in this category",
+            "_latest_posts": "Latest Posts",
+            "_tags": "Tags",
+            "Search in Blog": "Search in Blog",
+            "search": "Search",
+            "Read more": "Read more",
+            "View more": "View more",
+            "Blog Posts": "Blog Posts",
+            "Blog": "Blog",
+            "Posts": "Posts",
+            "posts": "Posts",
+            "Replay": "Replay",
+            "Comments": "Comments",
+            "Comment": "Comment",
+            "Comment removed successfully": "Comment removed successfully",
+            "Comment added successfully": "Comment added successfully",
+            "Type your comment here ..": "Type your comment here ..",
+            "To add comments you are required to login with your account.": "To add comments you are required to login with your account.",
+            "Cover Image": "Cover Image",
+            "Details": "Details",
+            "Reactions": "Reactions",
+            "Allow Com.": "Allow Com.",
+            "View": "View",
+            "Blog Categories": "Blog Categories",
+            "Edit Comment": "Edit Comment",
+            "Updating": "Updating",
+            "Loading": "Loading",
+            "Please login to react with this post.": "Please login to react with this post.",
+            "An error appended during loading, please refresh the page.": "An error appended during loading, please refresh the page.",
+            "Post images": "Post images",
+            "Select a default post image, or upload a new image": "Select a default post image, or upload a new image:",
+            "_gallery": "Gallery",
+            "_albums": "Albums",
+            "_album": "Album",
+            "_album_select": "Select an album",
+            "_new_album": "New Albums",
+            "_pictures": "Pictures",
+            "_upload": "Upload",
+            "_album_delete_confirm": "Are you sure that you want to delete this album?",
+            "_album_delete_confirm_details": "Deleting this, will delete all pictures in this album",
+            "_models": "Models",
+            "_banners": "Banners",
+            "_banner": "Banner",
+            "_new_model": "New model",
+            "_edit_model": "Model edit",
+            "_model_size": "Model size",
+            "_model_font": "Model font",
+            "_carousels": "Carousels",
+            "_order_id": "Order",
+            "_text_pos": "text position",
+            "_last_news": "Last News",
+            "_desicription": "Desicription",
+            "_langauge": "Langauge",
+            "_theme": "Theme",
+            "_active": "Active",
+            "_registration": "Registration",
+            "_update": "Update",
+            "_home": "Home",
+            "_about_us": "About Us",
+            "_blog": "Blog",
+            "_login": "Login",
+            "_password": "Password",
+            "_confirm": "Confirm",
+            "_remember_me": "Remember Me",
+            "_forgot_pass": "Forgot password ?",
+            "_register": "Register",
+            "_contact_us": "Contact us",
+            "_contact_info": "Contact info",
+            "_send_your_msg": "SEND YOUR MESSAGE",
+            "_message": "the messege",
+            "_contact": "contact",
+            "_subject": "Subject",
+            "Store": "Store",
+            "Store Categories": "Store Categories",
+            "Product": "Product",
+            "Products": "Products",
+            "Product info": "Product info",
+            "Product image": "Product image",
+            "Product images": "Product images",
+            "Type": "Type",
+            "Quantity": "Quantity",
+            "Price": "Price",
+            "SKU": "SKU",
+            "Attributes": "Attributes",
+            "Product attributes": "Product attributes",
+            "Lessons": "Lessons",
+            "lessons": "Lessons",
+            "Show list of categories": "Show list of categories",
+            "Manage Stock": "Manage Stock",
+            "units": "Units",
+            "Add to cart": "Add to cart",
+            "Buy now": "Buy now",
+            "This course includes": "This course includes",
+            "downloadable resources": "downloadable resources",
+            "Full lifetime access": "Full lifetime access",
+            "Certificate of Completion": "Certificate of Completion",
+            "Showing products": "Showing result",
+            "Default Sort": "Default Sort",
+            "Sort by name": "Sort by name",
+            "Sort by position": "Sort by position",
+            "Price low to high": "Price low to high",
+            "Price high to low": "Price high to low",
+            "of": "of",
+            "Search in Store": "Search in Store",
+            "To complete this step, please purchase the item first": "To complete this step, please purchase the item first",
+            "Search in store": "Search in store",
+            "Filter by Category": "Filter by Category",
+            "Sort by": "Sort by",
+            "Apply Filter": "Apply Filter",
+            "Filter prices": "Filter prices",
+            "Adding ...": "Adding ...",
+            "Added to cart": "Added to cart",
+            "Item is already added to your cart.": "Item is already added to your cart.",
+            "Item has been added successfully.": "Item has been added successfully.",
+            "View lesson": "View lesson",
+            "Upload a new video": "Upload a new video",
+            "Youtube": "Youtube",
+            "HTML page": "HTML page",
+            "Embed": "Embed",
+            "Media name": "Media name",
+            "Video upload": "Video upload",
+            "Drag and drop your files to upload, or": "Drag and drop your files to upload, or",
+            "Drag and drop your video file to upload, or": "Drag and drop your video file to upload, or",
+            "selecting one": "selecting one",
+            "Start upload": "Start upload",
+            "Click to attach your files": "Click to attach your files",
+            "_memorize dear student": "Dear student, you have a set of important memorize terms you might need to know before starting this lesson",
+            "Cart": "Cart",
+            "Card items": "Card items",
+            "Cart summary": "Cart summary",
+            "Subtotal": "Subtotal",
+            "Discount": "Discount",
+            "Grand Total": "Grand Total",
+            "Put discount coupon": "Put discount coupon",
+            "Pay by": "Pay by",
+            "Tiptop credits": "Tiptop credits",
+            "Credit card": "Credit card",
+            "PayPal": "PayPal",
+            "Add new Lesson": "Add new Lesson",
+            "Add new Unit": "Add new Unit",
+            "Store Lessons": "Store Lessons",
+            "Presentations and Multimedia": "Presentations and Multimedia",
+            "video link": "video link",
+            "Lesson description": "Lesson description",
+            "Quizzes": "Quizzes",
+            "quizzes": "Quizzes",
+            "There is no available lessons in this unit": "There is no available lessons in this unit",
+            "Add Media Item": "Add Media Item",
+            "Media items": "Media items",
+            "Products browser": "Products browser",
+            "Store's products": "Store's products",
+            "Price range": "Price range",
+            "Uploading": "Uploading ...",
+            "Add Quiz": "Add Quiz",
+            "Quiz name": "Quiz name",
+            "Quiz Type": "Quiz Type",
+            "Short text": "Short text",
+            "Long text": "Long text",
+            "For single line text fields": "For single line text fields",
+            "For paragraph text fields": "For paragraph text fields",
+            "Drop menu": "Drop menu",
+            "To select from menu": "To select from menu",
+            "Single choice": "Single choice",
+            "Ratio allowing one choice": "Ratio allowing one choice",
+            "Multiple choice": "Multiple choice",
+            "Allowing multi choice": "Allowing multi choice",
+            "Section": "Section",
+            "The section": "The section",
+            "Section Title": "Section Title",
+            "Create new section": "Create new section",
+            "There is no form items yet, please select new item from the items list": "There is no form items yet, please select new item from the items list",
+            "There is no form items yet.": "There is no form items yet.",
+            "Press here to edit the default question.": "Press here to edit the default question.",
+            "You can add description and instructions, or remove it from the question settings": "You can add description and instructions, or remove it from the question settings",
+            "First option": "First option",
+            "Option title": "Option title",
+            "Option": "Option",
+            "Default": "Default",
+            "Delete": "Delete",
+            "Add Option": "Add Option",
+            "Question Options": "Question Options",
+            "General settings": "General settings",
+            "Score": "Score",
+            "Remark": "Remark",
+            "Fill the blank": "Fill the blank",
+            "Fill the blank question": "Fill the blank question",
+            "Add blank": "Add blank",
+            "Delete blank": "Delete blank",
+            "Quiz settings": "Quiz settings",
+            "Quiz title": "Quiz title",
+            "Quiz description": "Quiz description",
+            "Take the exam": "Take the exam",
+            "Your answer": "Your answer",
+            "Source": "Source",
+            "Internal": "Internal",
+            "External": "External",
+            "Recommending": "Recommending",
+            "Recommended": "Recommended",
+            "Display settings": "Display settings",
+            "Not recommended": "Not recommended",
+            "Please wait, items are loading.": "Please wait, items are loading.",
+            "Please create a lesson first.": "Please create a lesson first.",
+            "points": "[0,1] Point|[2,*] Points",
+            "Marks": "[0,1] Mark|[2,*] Marks",
+            "Minutes": "[0,1] Minute|[2,*] Minutes",
+            "Seconds": "[0,1] Second|[2,*] Seconds",
+            "Starting": "Starting",
+            "Display type": "Display type",
+            "orders": "Orders",
+            "Place Order": "Place Order",
+            "purchase complete": "Your purchase has been completed successfully, your order number is: {number}.",
+            "My Orders": "My Orders",
+            "Order no.": "Order no.",
+            "Purchasing date": "Purchasing date",
+            "Items count": "Items count",
+            "Payment status": "Payment status",
+            "Invoice": "Invoice",
+            "Invoice No": "Invoice No",
+            "Invoice Date": "Invoice Date",
+            "Recipient": "Recipient",
+            "Item description": "Item description",
+            "Unit Price": "Unit Price",
+            "Qty.": "Qty.",
+            "Total": "Total",
+            "Print invoice": "Print invoice",
+            "View invoice": "View invoice",
+            "Payment Completed": "Payment Completed",
+            "forms": "Forms",
+            "choose answer": "choose answer",
+            "all forms": "All forms",
+            "templates": "Templates",
+            "save as Template": "Save as Template",
+            "categories": "Categories",
+            "template categories": "Template categories",
+            "_fill blank default paragraph": "Add your paragraph here, the select the word that you want to convert to blank and click on insert blank.",
+            "Quiz period": "Quiz period",
+            "this quiz have limited time to answer, which is": "this quiz have limited time to answer, which is",
+            "Are you sure that you want to start the quiz?": "Are you sure that you want to start the quiz?",
+            "Yes, Start the quiz": "Yes, Start the quiz",
+            "back to the lesson": "back to the lesson",
+            "Quiz time finished": "Quiz time finished",
+            "the time to end this quiz has been finished, we hope you done well with it": "the time to end this quiz has been finished, we hope you done well with it",
+            "Lesson quizzes": "Lesson quizzes",
+            "Previous": "Previous",
+            "Next": "Next",
+            "only": "only",
+            "You should answer": "You should answer",
+            "questions and leave": "questions and leave",
+            "Please, purchase the lesson to complete": "Please, purchase the lesson to complete",
+            "Quiz has been submitted successfully": "Quiz has been submitted successfully",
+            "Unlimited time": "Unlimited time",
+            "Availability": "Availability",
+            "Available": "Available",
+            "Completed": "Completed",
+            "Pending": "Pending",
+            "Results": "Results",
+            "Passed successfully": "Passed successfully",
+            "Failed": "Failed",
+            "No results": "No results",
+            "View results": "View results",
+            "File upload": "File upload",
+            "Files": "Files",
+            "Folders": "Folders",
+            "files": "Files",
+            "folders": "Folders",
+            "New folder": "New folder",
+            "Move": "Move",
+            "Paste": "Paste",
+            "Copy link": "Copy link",
+            "Preview": "Preview",
+            "File size": "File size",
+            "Created at": "Created at",
+            "Url link": "Url link",
+            "Folder name": "Folder name",
+            "Files count": "Files count",
+            "Sub Folders count": "Sub Folders count"
+        },
+        "pagination": {
+            "previous": "&laquo; Previous",
+            "next": "Next &raquo;"
+        },
+        "passwords": {
+            "password": "Passwords must be at least six characters and match the confirmation.",
+            "reset": "Your password has been reset!",
+            "sent": "We have e-mailed your password reset link!",
+            "token": "This password reset token is invalid.",
+            "user": "We can't find a user with that e-mail address."
+        },
+        "validation": {
+            "accepted": "The {attribute} must be accepted.",
+            "active_url": "The {attribute} is not a valid URL.",
+            "after": "The {attribute} must be a date after {date}.",
+            "after_or_equal": "The {attribute} must be a date after or equal to {date}.",
+            "alpha": "The {attribute} may only contain letters.",
+            "alpha_dash": "The {attribute} may only contain letters, numbers, and dashes.",
+            "alpha_num": "The {attribute} may only contain letters and numbers.",
+            "array": "The {attribute} must be an array.",
+            "before": "The {attribute} must be a date before {date}.",
+            "before_or_equal": "The {attribute} must be a date before or equal to {date}.",
+            "between": {
+                "numeric": "The {attribute} must be between {min} and {max}.",
+                "file": "The {attribute} must be between {min} and {max} kilobytes.",
+                "string": "The {attribute} must be between {min} and {max} characters.",
+                "array": "The {attribute} must have between {min} and {max} items."
+            },
+            "boolean": "The {attribute} field must be true or false.",
+            "confirmed": "The {attribute} confirmation does not match.",
+            "date": "The {attribute} is not a valid date.",
+            "date_format": "The {attribute} does not match the format {format}.",
+            "different": "The {attribute} and {other} must be different.",
+            "digits": "The {attribute} must be {digits} digits.",
+            "digits_between": "The {attribute} must be between {min} and {max} digits.",
+            "dimensions": "The {attribute} has invalid image dimensions.",
+            "distinct": "The {attribute} field has a duplicate value.",
+            "email": "The {attribute} must be a valid email address.",
+            "exists": "The selected {attribute} is invalid.",
+            "file": "The {attribute} must be a file.",
+            "filled": "The {attribute} field must have a value.",
+            "image": "The {attribute} must be an image.",
+            "in": "The selected {attribute} is invalid.",
+            "in_array": "The {attribute} field does not exist in {other}.",
+            "integer": "The {attribute} must be an integer.",
+            "ip": "The {attribute} must be a valid IP address.",
+            "ipv4": "The {attribute} must be a valid IPv4 address.",
+            "ipv6": "The {attribute} must be a valid IPv6 address.",
+            "json": "The {attribute} must be a valid JSON string.",
+            "max": {
+                "numeric": "The {attribute} may not be greater than {max}.",
+                "file": "The {attribute} may not be greater than {max} kilobytes.",
+                "string": "The {attribute} may not be greater than {max} characters.",
+                "array": "The {attribute} may not have more than {max} items."
+            },
+            "mimes": "The {attribute} must be a file of type: {values}.",
+            "mimetypes": "The {attribute} must be a file of type: {values}.",
+            "min": {
+                "numeric": "The {attribute} must be at least {min}.",
+                "file": "The {attribute} must be at least {min} kilobytes.",
+                "string": "The {attribute} must be at least {min} characters.",
+                "array": "The {attribute} must have at least {min} items."
+            },
+            "not_in": "The selected {attribute} is invalid.",
+            "numeric": "The {attribute} must be a number.",
+            "present": "The {attribute} field must be present.",
+            "regex": "The {attribute} format is invalid.",
+            "required": "The {attribute} field is required.",
+            "required_if": "The {attribute} field is required when {other} is {value}.",
+            "required_unless": "The {attribute} field is required unless {other} is in {values}.",
+            "required_with": "The {attribute} field is required when {values} is present.",
+            "required_with_all": "The {attribute} field is required when {values} is present.",
+            "required_without": "The {attribute} field is required when {values} is not present.",
+            "required_without_all": "The {attribute} field is required when none of {values} are present.",
+            "same": "The {attribute} and {other} must match.",
+            "size": {
+                "numeric": "The {attribute} must be {size}.",
+                "file": "The {attribute} must be {size} kilobytes.",
+                "string": "The {attribute} must be {size} characters.",
+                "array": "The {attribute} must contain {size} items."
+            },
+            "string": "The {attribute} must be a string.",
+            "timezone": "The {attribute} must be a valid zone.",
+            "unique": "The {attribute} has already been taken.",
+            "uploaded": "The {attribute} failed to upload.",
+            "url": "The {attribute} format is invalid.",
+            "custom": {
+                "attribute-name": {
+                    "rule-name": "custom-message"
+                }
+            },
+            "attributes": []
+        }
+    }
+});
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports) {
 
 /*!
@@ -4783,70 +7153,49 @@ if (typeof jQuery === 'undefined') {
 
 
 /***/ }),
-/* 35 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(36)();
+exports = module.exports = __webpack_require__(1)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)();
+exports.push([module.i, "\n.vue-dropzone>.dz-preview .dz-image{\r\n  border-radius:20px;\n}\r\n\r\n", ""]);
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)();
 exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
-/* 36 */
-/***/ (function(module, exports) {
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
+exports = module.exports = __webpack_require__(1)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
-/* 37 */
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)();
+exports.push([module.i, "\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)();
+exports.push([module.i, "/*\n * The MIT License\n * Copyright (c) 2012 Matias Meno <m@tias.me>\n */\n@-webkit-keyframes passing-through {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30%, 70% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); }\n  100% {\n    opacity: 0;\n    -webkit-transform: translateY(-40px);\n    -moz-transform: translateY(-40px);\n    -ms-transform: translateY(-40px);\n    -o-transform: translateY(-40px);\n    transform: translateY(-40px); } }\n@-moz-keyframes passing-through {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30%, 70% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); }\n  100% {\n    opacity: 0;\n    -webkit-transform: translateY(-40px);\n    -moz-transform: translateY(-40px);\n    -ms-transform: translateY(-40px);\n    -o-transform: translateY(-40px);\n    transform: translateY(-40px); } }\n@keyframes passing-through {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30%, 70% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); }\n  100% {\n    opacity: 0;\n    -webkit-transform: translateY(-40px);\n    -moz-transform: translateY(-40px);\n    -ms-transform: translateY(-40px);\n    -o-transform: translateY(-40px);\n    transform: translateY(-40px); } }\n@-webkit-keyframes slide-in {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); } }\n@-moz-keyframes slide-in {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); } }\n@keyframes slide-in {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); } }\n@-webkit-keyframes pulse {\n  0% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); }\n  10% {\n    -webkit-transform: scale(1.1);\n    -moz-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    -o-transform: scale(1.1);\n    transform: scale(1.1); }\n  20% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n@-moz-keyframes pulse {\n  0% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); }\n  10% {\n    -webkit-transform: scale(1.1);\n    -moz-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    -o-transform: scale(1.1);\n    transform: scale(1.1); }\n  20% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n@keyframes pulse {\n  0% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); }\n  10% {\n    -webkit-transform: scale(1.1);\n    -moz-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    -o-transform: scale(1.1);\n    transform: scale(1.1); }\n  20% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n.dropzone, .dropzone * {\n  box-sizing: border-box; }\n\n.dropzone {\n  min-height: 150px;\n  border: 2px solid rgba(0, 0, 0, 0.3);\n  background: white;\n  padding: 20px 20px; }\n  .dropzone.dz-clickable {\n    cursor: pointer; }\n    .dropzone.dz-clickable * {\n      cursor: default; }\n    .dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {\n      cursor: pointer; }\n  .dropzone.dz-started .dz-message {\n    display: none; }\n  .dropzone.dz-drag-hover {\n    border-style: solid; }\n    .dropzone.dz-drag-hover .dz-message {\n      opacity: 0.5; }\n  .dropzone .dz-message {\n    text-align: center;\n    margin: 2em 0; }\n  .dropzone .dz-preview {\n    position: relative;\n    display: inline-block;\n    vertical-align: top;\n    margin: 16px;\n    min-height: 100px; }\n    .dropzone .dz-preview:hover {\n      z-index: 1000; }\n      .dropzone .dz-preview:hover .dz-details {\n        opacity: 1; }\n    .dropzone .dz-preview.dz-file-preview .dz-image {\n      border-radius: 20px;\n      background: #999;\n      background: linear-gradient(to bottom, #eee, #ddd); }\n    .dropzone .dz-preview.dz-file-preview .dz-details {\n      opacity: 1; }\n    .dropzone .dz-preview.dz-image-preview {\n      background: white; }\n      .dropzone .dz-preview.dz-image-preview .dz-details {\n        -webkit-transition: opacity 0.2s linear;\n        -moz-transition: opacity 0.2s linear;\n        -ms-transition: opacity 0.2s linear;\n        -o-transition: opacity 0.2s linear;\n        transition: opacity 0.2s linear; }\n    .dropzone .dz-preview .dz-remove {\n      font-size: 14px;\n      text-align: center;\n      display: block;\n      cursor: pointer;\n      border: none; }\n      .dropzone .dz-preview .dz-remove:hover {\n        text-decoration: underline; }\n    .dropzone .dz-preview:hover .dz-details {\n      opacity: 1; }\n    .dropzone .dz-preview .dz-details {\n      z-index: 20;\n      position: absolute;\n      top: 0;\n      left: 0;\n      opacity: 0;\n      font-size: 13px;\n      min-width: 100%;\n      max-width: 100%;\n      padding: 2em 1em;\n      text-align: center;\n      color: rgba(0, 0, 0, 0.9);\n      line-height: 150%; }\n      .dropzone .dz-preview .dz-details .dz-size {\n        margin-bottom: 1em;\n        font-size: 16px; }\n      .dropzone .dz-preview .dz-details .dz-filename {\n        white-space: nowrap; }\n        .dropzone .dz-preview .dz-details .dz-filename:hover span {\n          border: 1px solid rgba(200, 200, 200, 0.8);\n          background-color: rgba(255, 255, 255, 0.8); }\n        .dropzone .dz-preview .dz-details .dz-filename:not(:hover) {\n          overflow: hidden;\n          text-overflow: ellipsis; }\n          .dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {\n            border: 1px solid transparent; }\n      .dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {\n        background-color: rgba(255, 255, 255, 0.4);\n        padding: 0 0.4em;\n        border-radius: 3px; }\n    .dropzone .dz-preview:hover .dz-image img {\n      -webkit-transform: scale(1.05, 1.05);\n      -moz-transform: scale(1.05, 1.05);\n      -ms-transform: scale(1.05, 1.05);\n      -o-transform: scale(1.05, 1.05);\n      transform: scale(1.05, 1.05);\n      -webkit-filter: blur(8px);\n      filter: blur(8px); }\n    .dropzone .dz-preview .dz-image {\n      border-radius: 20px;\n      overflow: hidden;\n      width: 120px;\n      height: 120px;\n      position: relative;\n      display: block;\n      z-index: 10; }\n      .dropzone .dz-preview .dz-image img {\n        display: block; }\n    .dropzone .dz-preview.dz-success .dz-success-mark {\n      -webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -moz-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -ms-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -o-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1); }\n    .dropzone .dz-preview.dz-error .dz-error-mark {\n      opacity: 1;\n      -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -moz-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -ms-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -o-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1); }\n    .dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark {\n      pointer-events: none;\n      opacity: 0;\n      z-index: 500;\n      position: absolute;\n      display: block;\n      top: 50%;\n      left: 50%;\n      margin-left: -27px;\n      margin-top: -27px; }\n      .dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {\n        display: block;\n        width: 54px;\n        height: 54px; }\n    .dropzone .dz-preview.dz-processing .dz-progress {\n      opacity: 1;\n      -webkit-transition: all 0.2s linear;\n      -moz-transition: all 0.2s linear;\n      -ms-transition: all 0.2s linear;\n      -o-transition: all 0.2s linear;\n      transition: all 0.2s linear; }\n    .dropzone .dz-preview.dz-complete .dz-progress {\n      opacity: 0;\n      -webkit-transition: opacity 0.4s ease-in;\n      -moz-transition: opacity 0.4s ease-in;\n      -ms-transition: opacity 0.4s ease-in;\n      -o-transition: opacity 0.4s ease-in;\n      transition: opacity 0.4s ease-in; }\n    .dropzone .dz-preview:not(.dz-processing) .dz-progress {\n      -webkit-animation: pulse 6s ease infinite;\n      -moz-animation: pulse 6s ease infinite;\n      -ms-animation: pulse 6s ease infinite;\n      -o-animation: pulse 6s ease infinite;\n      animation: pulse 6s ease infinite; }\n    .dropzone .dz-preview .dz-progress {\n      opacity: 1;\n      z-index: 1000;\n      pointer-events: none;\n      position: absolute;\n      height: 16px;\n      left: 50%;\n      top: 50%;\n      margin-top: -8px;\n      width: 80px;\n      margin-left: -40px;\n      background: rgba(255, 255, 255, 0.9);\n      -webkit-transform: scale(1);\n      border-radius: 8px;\n      overflow: hidden; }\n      .dropzone .dz-preview .dz-progress .dz-upload {\n        background: #333;\n        background: linear-gradient(to bottom, #666, #444);\n        position: absolute;\n        top: 0;\n        left: 0;\n        bottom: 0;\n        width: 0;\n        -webkit-transition: width 300ms ease-in-out;\n        -moz-transition: width 300ms ease-in-out;\n        -ms-transition: width 300ms ease-in-out;\n        -o-transition: width 300ms ease-in-out;\n        transition: width 300ms ease-in-out; }\n    .dropzone .dz-preview.dz-error .dz-error-message {\n      display: block; }\n    .dropzone .dz-preview.dz-error:hover .dz-error-message {\n      opacity: 1;\n      pointer-events: auto; }\n    .dropzone .dz-preview .dz-error-message {\n      pointer-events: none;\n      z-index: 1000;\n      position: absolute;\n      display: block;\n      display: none;\n      opacity: 0;\n      -webkit-transition: opacity 0.3s ease;\n      -moz-transition: opacity 0.3s ease;\n      -ms-transition: opacity 0.3s ease;\n      -o-transition: opacity 0.3s ease;\n      transition: opacity 0.3s ease;\n      border-radius: 8px;\n      font-size: 13px;\n      top: 130px;\n      left: -10px;\n      width: 140px;\n      background: #be2626;\n      background: linear-gradient(to bottom, #be2626, #a92222);\n      padding: 0.5em 1.2em;\n      color: white; }\n      .dropzone .dz-preview .dz-error-message:after {\n        content: '';\n        position: absolute;\n        top: -6px;\n        left: 64px;\n        width: 0;\n        height: 0;\n        border-left: 6px solid transparent;\n        border-right: 6px solid transparent;\n        border-bottom: 6px solid #be2626; }\n.vue-dropzone{border:2px solid #e5e5e5;font-family:Arial,sans-serif;letter-spacing:.2px;color:#777;transition:.2s linear}.vue-dropzone:hover{background-color:#f6f6f6}.vue-dropzone>i{color:#ccc}.vue-dropzone>.dz-preview .dz-image{border-radius:0;width:100%;height:100%}.vue-dropzone>.dz-preview .dz-image img:not([src]){width:200px;height:200px}.vue-dropzone>.dz-preview .dz-image:hover img{transform:none;-webkit-filter:none}.vue-dropzone>.dz-preview .dz-details{bottom:0;top:0;color:#fff;background-color:rgba(33,150,243,.8);transition:opacity .2s linear;text-align:left}.vue-dropzone>.dz-preview .dz-details .dz-filename{overflow:hidden}.vue-dropzone>.dz-preview .dz-details .dz-filename span,.vue-dropzone>.dz-preview .dz-details .dz-size span{background-color:transparent}.vue-dropzone>.dz-preview .dz-details .dz-filename:not(:hover) span{border:none}.vue-dropzone>.dz-preview .dz-details .dz-filename:hover span{background-color:transparent;border:none}.vue-dropzone>.dz-preview .dz-progress .dz-upload{background:#ccc}.vue-dropzone>.dz-preview .dz-remove{position:absolute;z-index:30;color:#fff;margin-left:15px;padding:10px;top:inherit;bottom:15px;border:2px #fff solid;text-decoration:none;text-transform:uppercase;font-size:.8rem;font-weight:800;letter-spacing:1.1px;opacity:0}.vue-dropzone>.dz-preview:hover .dz-remove{opacity:1}.vue-dropzone>.dz-preview .dz-error-mark,.vue-dropzone>.dz-preview .dz-success-mark{margin-left:auto;margin-top:auto;width:100%;top:35%;left:0}.vue-dropzone>.dz-preview .dz-error-mark svg,.vue-dropzone>.dz-preview .dz-success-mark svg{margin-left:auto;margin-right:auto}.vue-dropzone>.dz-preview .dz-error-message{margin-left:auto;margin-right:auto;left:0;width:100%;text-align:center}.vue-dropzone>.dz-preview .dz-error-message:after{display:none}", ""]);
+
+/***/ }),
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -15725,7 +18074,7 @@ return jQuery;
 
 
 /***/ }),
-/* 38 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -15742,7 +18091,7 @@ return jQuery;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.15';
+  var VERSION = '4.17.20';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -19449,8 +21798,21 @@ return jQuery;
      * @returns {Array} Returns the new sorted array.
      */
     function baseOrderBy(collection, iteratees, orders) {
+      if (iteratees.length) {
+        iteratees = arrayMap(iteratees, function(iteratee) {
+          if (isArray(iteratee)) {
+            return function(value) {
+              return baseGet(value, iteratee.length === 1 ? iteratee[0] : iteratee);
+            }
+          }
+          return iteratee;
+        });
+      } else {
+        iteratees = [identity];
+      }
+
       var index = -1;
-      iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseUnary(getIteratee()));
+      iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
 
       var result = baseMap(collection, function(value, key, collection) {
         var criteria = arrayMap(iteratees, function(iteratee) {
@@ -19707,6 +22069,10 @@ return jQuery;
         var key = toKey(path[index]),
             newValue = value;
 
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return object;
+        }
+
         if (index != lastIndex) {
           var objValue = nested[key];
           newValue = customizer ? customizer(objValue, key, nested) : undefined;
@@ -19859,11 +22225,14 @@ return jQuery;
      *  into `array`.
      */
     function baseSortedIndexBy(array, value, iteratee, retHighest) {
-      value = iteratee(value);
-
       var low = 0,
-          high = array == null ? 0 : array.length,
-          valIsNaN = value !== value,
+          high = array == null ? 0 : array.length;
+      if (high === 0) {
+        return 0;
+      }
+
+      value = iteratee(value);
+      var valIsNaN = value !== value,
           valIsNull = value === null,
           valIsSymbol = isSymbol(value),
           valIsUndefined = value === undefined;
@@ -21348,10 +23717,11 @@ return jQuery;
       if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
         return false;
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(array);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var arrStacked = stack.get(array);
+      var othStacked = stack.get(other);
+      if (arrStacked && othStacked) {
+        return arrStacked == other && othStacked == array;
       }
       var index = -1,
           result = true,
@@ -21513,10 +23883,11 @@ return jQuery;
           return false;
         }
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(object);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var objStacked = stack.get(object);
+      var othStacked = stack.get(other);
+      if (objStacked && othStacked) {
+        return objStacked == other && othStacked == object;
       }
       var result = true;
       stack.set(object, other);
@@ -24897,6 +27268,10 @@ return jQuery;
      * // The `_.property` iteratee shorthand.
      * _.filter(users, 'active');
      * // => objects for ['barney']
+     *
+     * // Combining several predicates using `_.overEvery` or `_.overSome`.
+     * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+     * // => objects for ['fred', 'barney']
      */
     function filter(collection, predicate) {
       var func = isArray(collection) ? arrayFilter : baseFilter;
@@ -25646,15 +28021,15 @@ return jQuery;
      * var users = [
      *   { 'user': 'fred',   'age': 48 },
      *   { 'user': 'barney', 'age': 36 },
-     *   { 'user': 'fred',   'age': 40 },
+     *   { 'user': 'fred',   'age': 30 },
      *   { 'user': 'barney', 'age': 34 }
      * ];
      *
      * _.sortBy(users, [function(o) { return o.user; }]);
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 30]]
      *
      * _.sortBy(users, ['user', 'age']);
-     * // => objects for [['barney', 34], ['barney', 36], ['fred', 40], ['fred', 48]]
+     * // => objects for [['barney', 34], ['barney', 36], ['fred', 30], ['fred', 48]]
      */
     var sortBy = baseRest(function(collection, iteratees) {
       if (collection == null) {
@@ -30529,11 +32904,11 @@ return jQuery;
 
       // Use a sourceURL for easier debugging.
       // The sourceURL gets injected into the source that's eval-ed, so be careful
-      // with lookup (in case of e.g. prototype pollution), and strip newlines if any.
-      // A newline wouldn't be a valid sourceURL anyway, and it'd enable code injection.
+      // to normalize all kinds of whitespace, so e.g. newlines (and unicode versions of it) can't sneak in
+      // and escape the comment, thus injecting code that gets evaled.
       var sourceURL = '//# sourceURL=' +
         (hasOwnProperty.call(options, 'sourceURL')
-          ? (options.sourceURL + '').replace(/[\r\n]/g, ' ')
+          ? (options.sourceURL + '').replace(/\s/g, ' ')
           : ('lodash.templateSources[' + (++templateCounter) + ']')
         ) + '\n';
 
@@ -30566,8 +32941,6 @@ return jQuery;
 
       // If `variable` is not specified wrap a with-statement around the generated
       // code to add the data object to the top of the scope chain.
-      // Like with sourceURL, we take care to not check the option's prototype,
-      // as this configuration is a code injection vector.
       var variable = hasOwnProperty.call(options, 'variable') && options.variable;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
@@ -31274,6 +33647,9 @@ return jQuery;
      * values against any array or object value, respectively. See `_.isEqual`
      * for a list of supported value comparisons.
      *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
+     *
      * @static
      * @memberOf _
      * @since 3.0.0
@@ -31289,6 +33665,10 @@ return jQuery;
      *
      * _.filter(objects, _.matches({ 'a': 4, 'c': 6 }));
      * // => [{ 'a': 4, 'b': 5, 'c': 6 }]
+     *
+     * // Checking for several possible values
+     * _.filter(objects, _.overSome([_.matches({ 'a': 1 }), _.matches({ 'a': 4 })]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matches(source) {
       return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
@@ -31302,6 +33682,9 @@ return jQuery;
      * **Note:** Partial comparisons will match empty array and empty object
      * `srcValue` values against any array or object value, respectively. See
      * `_.isEqual` for a list of supported value comparisons.
+     *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
      *
      * @static
      * @memberOf _
@@ -31319,6 +33702,10 @@ return jQuery;
      *
      * _.find(objects, _.matchesProperty('a', 4));
      * // => { 'a': 4, 'b': 5, 'c': 6 }
+     *
+     * // Checking for several possible values
+     * _.filter(objects, _.overSome([_.matchesProperty('a', 1), _.matchesProperty('a', 4)]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matchesProperty(path, srcValue) {
       return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG));
@@ -31542,6 +33929,10 @@ return jQuery;
      * Creates a function that checks if **all** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -31568,6 +33959,10 @@ return jQuery;
      * Creates a function that checks if **any** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -31587,6 +33982,9 @@ return jQuery;
      *
      * func(NaN);
      * // => false
+     *
+     * var matchesFunc = _.overSome([{ 'a': 1 }, { 'a': 2 }])
+     * var matchesPropertyFunc = _.overSome([['a', 1], ['a', 2]])
      */
     var overSome = createOver(arraySome);
 
@@ -32842,10 +35240,10 @@ return jQuery;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(52)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(77)(module)))
 
 /***/ }),
-/* 39 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -33035,10 +35433,262 @@ return jQuery;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(13)))
 
 /***/ }),
-/* 40 */
+/* 55 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+var stylesInDom = {},
+	memoize = function(fn) {
+		var memo;
+		return function () {
+			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+			return memo;
+		};
+	},
+	isOldIE = memoize(function() {
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+	}),
+	getHeadElement = memoize(function () {
+		return document.head || document.getElementsByTagName("head")[0];
+	}),
+	singletonElement = null,
+	singletonCounter = 0,
+	styleElementsInsertedAtTop = [];
+
+module.exports = function(list, options) {
+	if(typeof DEBUG !== "undefined" && DEBUG) {
+		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the bottom of <head>.
+	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+	var styles = listToStyles(list);
+	addStylesToDom(styles, options);
+
+	return function update(newList) {
+		var mayRemove = [];
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+		if(newList) {
+			var newStyles = listToStyles(newList);
+			addStylesToDom(newStyles, options);
+		}
+		for(var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+			if(domStyle.refs === 0) {
+				for(var j = 0; j < domStyle.parts.length; j++)
+					domStyle.parts[j]();
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+}
+
+function addStylesToDom(styles, options) {
+	for(var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+		if(domStyle) {
+			domStyle.refs++;
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles(list) {
+	var styles = [];
+	var newStyles = {};
+	for(var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+		if(!newStyles[id])
+			styles.push(newStyles[id] = {id: id, parts: [part]});
+		else
+			newStyles[id].parts.push(part);
+	}
+	return styles;
+}
+
+function insertStyleElement(options, styleElement) {
+	var head = getHeadElement();
+	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+	if (options.insertAt === "top") {
+		if(!lastStyleElementInsertedAtTop) {
+			head.insertBefore(styleElement, head.firstChild);
+		} else if(lastStyleElementInsertedAtTop.nextSibling) {
+			head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			head.appendChild(styleElement);
+		}
+		styleElementsInsertedAtTop.push(styleElement);
+	} else if (options.insertAt === "bottom") {
+		head.appendChild(styleElement);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement(styleElement) {
+	styleElement.parentNode.removeChild(styleElement);
+	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+	if(idx >= 0) {
+		styleElementsInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement(options) {
+	var styleElement = document.createElement("style");
+	styleElement.type = "text/css";
+	insertStyleElement(options, styleElement);
+	return styleElement;
+}
+
+function createLinkElement(options) {
+	var linkElement = document.createElement("link");
+	linkElement.rel = "stylesheet";
+	insertStyleElement(options, linkElement);
+	return linkElement;
+}
+
+function addStyle(obj, options) {
+	var styleElement, update, remove;
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+		styleElement = singletonElement || (singletonElement = createStyleElement(options));
+		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+	} else if(obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function") {
+		styleElement = createLinkElement(options);
+		update = updateLink.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+			if(styleElement.href)
+				URL.revokeObjectURL(styleElement.href);
+		};
+	} else {
+		styleElement = createStyleElement(options);
+		update = applyToTag.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle(newObj) {
+		if(newObj) {
+			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+				return;
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag(styleElement, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = styleElement.childNodes;
+		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+		if (childNodes.length) {
+			styleElement.insertBefore(cssNode, childNodes[index]);
+		} else {
+			styleElement.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag(styleElement, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		styleElement.setAttribute("media", media)
+	}
+
+	if(styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = css;
+	} else {
+		while(styleElement.firstChild) {
+			styleElement.removeChild(styleElement.firstChild);
+		}
+		styleElement.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink(linkElement, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	if(sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = linkElement.href;
+
+	linkElement.href = URL.createObjectURL(blob);
+
+	if(oldSrc)
+		URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -33094,7 +35744,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(39);
+__webpack_require__(54);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -33105,17 +35755,2219 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 41 */
+/* 57 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/*!
+ * vue-i18n v8.22.3 
+ * (c) 2021 kazuya kawaguchi
+ * Released under the MIT License.
+ */
+/*  */
+
+/**
+ * constants
+ */
+
+var numberFormatKeys = [
+  'compactDisplay',
+  'currency',
+  'currencyDisplay',
+  'currencySign',
+  'localeMatcher',
+  'notation',
+  'numberingSystem',
+  'signDisplay',
+  'style',
+  'unit',
+  'unitDisplay',
+  'useGrouping',
+  'minimumIntegerDigits',
+  'minimumFractionDigits',
+  'maximumFractionDigits',
+  'minimumSignificantDigits',
+  'maximumSignificantDigits'
+];
+
+/**
+ * utilities
+ */
+
+function warn (msg, err) {
+  if (typeof console !== 'undefined') {
+    console.warn('[vue-i18n] ' + msg);
+    /* istanbul ignore if */
+    if (err) {
+      console.warn(err.stack);
+    }
+  }
+}
+
+function error (msg, err) {
+  if (typeof console !== 'undefined') {
+    console.error('[vue-i18n] ' + msg);
+    /* istanbul ignore if */
+    if (err) {
+      console.error(err.stack);
+    }
+  }
+}
+
+var isArray = Array.isArray;
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isBoolean (val) {
+  return typeof val === 'boolean'
+}
+
+function isString (val) {
+  return typeof val === 'string'
+}
+
+var toString = Object.prototype.toString;
+var OBJECT_STRING = '[object Object]';
+function isPlainObject (obj) {
+  return toString.call(obj) === OBJECT_STRING
+}
+
+function isNull (val) {
+  return val === null || val === undefined
+}
+
+function isFunction (val) {
+  return typeof val === 'function'
+}
+
+function parseArgs () {
+  var args = [], len = arguments.length;
+  while ( len-- ) args[ len ] = arguments[ len ];
+
+  var locale = null;
+  var params = null;
+  if (args.length === 1) {
+    if (isObject(args[0]) || isArray(args[0])) {
+      params = args[0];
+    } else if (typeof args[0] === 'string') {
+      locale = args[0];
+    }
+  } else if (args.length === 2) {
+    if (typeof args[0] === 'string') {
+      locale = args[0];
+    }
+    /* istanbul ignore if */
+    if (isObject(args[1]) || isArray(args[1])) {
+      params = args[1];
+    }
+  }
+
+  return { locale: locale, params: params }
+}
+
+function looseClone (obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+function remove (arr, item) {
+  if (arr.length) {
+    var index = arr.indexOf(item);
+    if (index > -1) {
+      return arr.splice(index, 1)
+    }
+  }
+}
+
+function includes (arr, item) {
+  return !!~arr.indexOf(item)
+}
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+function hasOwn (obj, key) {
+  return hasOwnProperty.call(obj, key)
+}
+
+function merge (target) {
+  var arguments$1 = arguments;
+
+  var output = Object(target);
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments$1[i];
+    if (source !== undefined && source !== null) {
+      var key = (void 0);
+      for (key in source) {
+        if (hasOwn(source, key)) {
+          if (isObject(source[key])) {
+            output[key] = merge(output[key], source[key]);
+          } else {
+            output[key] = source[key];
+          }
+        }
+      }
+    }
+  }
+  return output
+}
+
+function looseEqual (a, b) {
+  if (a === b) { return true }
+  var isObjectA = isObject(a);
+  var isObjectB = isObject(b);
+  if (isObjectA && isObjectB) {
+    try {
+      var isArrayA = isArray(a);
+      var isArrayB = isArray(b);
+      if (isArrayA && isArrayB) {
+        return a.length === b.length && a.every(function (e, i) {
+          return looseEqual(e, b[i])
+        })
+      } else if (!isArrayA && !isArrayB) {
+        var keysA = Object.keys(a);
+        var keysB = Object.keys(b);
+        return keysA.length === keysB.length && keysA.every(function (key) {
+          return looseEqual(a[key], b[key])
+        })
+      } else {
+        /* istanbul ignore next */
+        return false
+      }
+    } catch (e) {
+      /* istanbul ignore next */
+      return false
+    }
+  } else if (!isObjectA && !isObjectB) {
+    return String(a) === String(b)
+  } else {
+    return false
+  }
+}
+
+/**
+ * Sanitizes html special characters from input strings. For mitigating risk of XSS attacks.
+ * @param rawText The raw input from the user that should be escaped.
+ */
+function escapeHtml(rawText) {
+  return rawText
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+/**
+ * Escapes html tags and special symbols from all provided params which were returned from parseArgs().params.
+ * This method performs an in-place operation on the params object.
+ *
+ * @param {any} params Parameters as provided from `parseArgs().params`.
+ *                     May be either an array of strings or a string->any map.
+ *
+ * @returns The manipulated `params` object.
+ */
+function escapeParams(params) {
+  if(params != null) {
+    Object.keys(params).forEach(function (key) {
+      if(typeof(params[key]) == 'string') {
+        params[key] = escapeHtml(params[key]);
+      }
+    });
+  }
+  return params
+}
+
+/*  */
+
+function extend (Vue) {
+  if (!Vue.prototype.hasOwnProperty('$i18n')) {
+    // $FlowFixMe
+    Object.defineProperty(Vue.prototype, '$i18n', {
+      get: function get () { return this._i18n }
+    });
+  }
+
+  Vue.prototype.$t = function (key) {
+    var values = [], len = arguments.length - 1;
+    while ( len-- > 0 ) values[ len ] = arguments[ len + 1 ];
+
+    var i18n = this.$i18n;
+    return i18n._t.apply(i18n, [ key, i18n.locale, i18n._getMessages(), this ].concat( values ))
+  };
+
+  Vue.prototype.$tc = function (key, choice) {
+    var values = [], len = arguments.length - 2;
+    while ( len-- > 0 ) values[ len ] = arguments[ len + 2 ];
+
+    var i18n = this.$i18n;
+    return i18n._tc.apply(i18n, [ key, i18n.locale, i18n._getMessages(), this, choice ].concat( values ))
+  };
+
+  Vue.prototype.$te = function (key, locale) {
+    var i18n = this.$i18n;
+    return i18n._te(key, i18n.locale, i18n._getMessages(), locale)
+  };
+
+  Vue.prototype.$d = function (value) {
+    var ref;
+
+    var args = [], len = arguments.length - 1;
+    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
+    return (ref = this.$i18n).d.apply(ref, [ value ].concat( args ))
+  };
+
+  Vue.prototype.$n = function (value) {
+    var ref;
+
+    var args = [], len = arguments.length - 1;
+    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
+    return (ref = this.$i18n).n.apply(ref, [ value ].concat( args ))
+  };
+}
+
+/*  */
+
+var mixin = {
+  beforeCreate: function beforeCreate () {
+    var options = this.$options;
+    options.i18n = options.i18n || (options.__i18n ? {} : null);
+
+    if (options.i18n) {
+      if (options.i18n instanceof VueI18n) {
+        // init locale messages via custom blocks
+        if (options.__i18n) {
+          try {
+            var localeMessages = options.i18n && options.i18n.messages ? options.i18n.messages : {};
+            options.__i18n.forEach(function (resource) {
+              localeMessages = merge(localeMessages, JSON.parse(resource));
+            });
+            Object.keys(localeMessages).forEach(function (locale) {
+              options.i18n.mergeLocaleMessage(locale, localeMessages[locale]);
+            });
+          } catch (e) {
+            if (true) {
+              error("Cannot parse locale messages via custom blocks.", e);
+            }
+          }
+        }
+        this._i18n = options.i18n;
+        this._i18nWatcher = this._i18n.watchI18nData();
+      } else if (isPlainObject(options.i18n)) {
+        var rootI18n = this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n
+          ? this.$root.$i18n
+          : null;
+        // component local i18n
+        if (rootI18n) {
+          options.i18n.root = this.$root;
+          options.i18n.formatter = rootI18n.formatter;
+          options.i18n.fallbackLocale = rootI18n.fallbackLocale;
+          options.i18n.formatFallbackMessages = rootI18n.formatFallbackMessages;
+          options.i18n.silentTranslationWarn = rootI18n.silentTranslationWarn;
+          options.i18n.silentFallbackWarn = rootI18n.silentFallbackWarn;
+          options.i18n.pluralizationRules = rootI18n.pluralizationRules;
+          options.i18n.preserveDirectiveContent = rootI18n.preserveDirectiveContent;
+        }
+
+        // init locale messages via custom blocks
+        if (options.__i18n) {
+          try {
+            var localeMessages$1 = options.i18n && options.i18n.messages ? options.i18n.messages : {};
+            options.__i18n.forEach(function (resource) {
+              localeMessages$1 = merge(localeMessages$1, JSON.parse(resource));
+            });
+            options.i18n.messages = localeMessages$1;
+          } catch (e) {
+            if (true) {
+              warn("Cannot parse locale messages via custom blocks.", e);
+            }
+          }
+        }
+
+        var ref = options.i18n;
+        var sharedMessages = ref.sharedMessages;
+        if (sharedMessages && isPlainObject(sharedMessages)) {
+          options.i18n.messages = merge(options.i18n.messages, sharedMessages);
+        }
+
+        this._i18n = new VueI18n(options.i18n);
+        this._i18nWatcher = this._i18n.watchI18nData();
+
+        if (options.i18n.sync === undefined || !!options.i18n.sync) {
+          this._localeWatcher = this.$i18n.watchLocale();
+        }
+
+        if (rootI18n) {
+          rootI18n.onComponentInstanceCreated(this._i18n);
+        }
+      } else {
+        if (true) {
+          warn("Cannot be interpreted 'i18n' option.");
+        }
+      }
+    } else if (this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n) {
+      // root i18n
+      this._i18n = this.$root.$i18n;
+    } else if (options.parent && options.parent.$i18n && options.parent.$i18n instanceof VueI18n) {
+      // parent i18n
+      this._i18n = options.parent.$i18n;
+    }
+  },
+
+  beforeMount: function beforeMount () {
+    var options = this.$options;
+    options.i18n = options.i18n || (options.__i18n ? {} : null);
+
+    if (options.i18n) {
+      if (options.i18n instanceof VueI18n) {
+        // init locale messages via custom blocks
+        this._i18n.subscribeDataChanging(this);
+        this._subscribing = true;
+      } else if (isPlainObject(options.i18n)) {
+        this._i18n.subscribeDataChanging(this);
+        this._subscribing = true;
+      } else {
+        if (true) {
+          warn("Cannot be interpreted 'i18n' option.");
+        }
+      }
+    } else if (this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n) {
+      this._i18n.subscribeDataChanging(this);
+      this._subscribing = true;
+    } else if (options.parent && options.parent.$i18n && options.parent.$i18n instanceof VueI18n) {
+      this._i18n.subscribeDataChanging(this);
+      this._subscribing = true;
+    }
+  },
+
+  beforeDestroy: function beforeDestroy () {
+    if (!this._i18n) { return }
+
+    var self = this;
+    this.$nextTick(function () {
+      if (self._subscribing) {
+        self._i18n.unsubscribeDataChanging(self);
+        delete self._subscribing;
+      }
+
+      if (self._i18nWatcher) {
+        self._i18nWatcher();
+        self._i18n.destroyVM();
+        delete self._i18nWatcher;
+      }
+
+      if (self._localeWatcher) {
+        self._localeWatcher();
+        delete self._localeWatcher;
+      }
+    });
+  }
+};
+
+/*  */
+
+var interpolationComponent = {
+  name: 'i18n',
+  functional: true,
+  props: {
+    tag: {
+      type: [String, Boolean, Object],
+      default: 'span'
+    },
+    path: {
+      type: String,
+      required: true
+    },
+    locale: {
+      type: String
+    },
+    places: {
+      type: [Array, Object]
+    }
+  },
+  render: function render (h, ref) {
+    var data = ref.data;
+    var parent = ref.parent;
+    var props = ref.props;
+    var slots = ref.slots;
+
+    var $i18n = parent.$i18n;
+    if (!$i18n) {
+      if (true) {
+        warn('Cannot find VueI18n instance!');
+      }
+      return
+    }
+
+    var path = props.path;
+    var locale = props.locale;
+    var places = props.places;
+    var params = slots();
+    var children = $i18n.i(
+      path,
+      locale,
+      onlyHasDefaultPlace(params) || places
+        ? useLegacyPlaces(params.default, places)
+        : params
+    );
+
+    var tag = (!!props.tag && props.tag !== true) || props.tag === false ? props.tag : 'span';
+    return tag ? h(tag, data, children) : children
+  }
+};
+
+function onlyHasDefaultPlace (params) {
+  var prop;
+  for (prop in params) {
+    if (prop !== 'default') { return false }
+  }
+  return Boolean(prop)
+}
+
+function useLegacyPlaces (children, places) {
+  var params = places ? createParamsFromPlaces(places) : {};
+
+  if (!children) { return params }
+
+  // Filter empty text nodes
+  children = children.filter(function (child) {
+    return child.tag || child.text.trim() !== ''
+  });
+
+  var everyPlace = children.every(vnodeHasPlaceAttribute);
+  if ("development" !== 'production' && everyPlace) {
+    warn('`place` attribute is deprecated in next major version. Please switch to Vue slots.');
+  }
+
+  return children.reduce(
+    everyPlace ? assignChildPlace : assignChildIndex,
+    params
+  )
+}
+
+function createParamsFromPlaces (places) {
+  if (true) {
+    warn('`places` prop is deprecated in next major version. Please switch to Vue slots.');
+  }
+
+  return Array.isArray(places)
+    ? places.reduce(assignChildIndex, {})
+    : Object.assign({}, places)
+}
+
+function assignChildPlace (params, child) {
+  if (child.data && child.data.attrs && child.data.attrs.place) {
+    params[child.data.attrs.place] = child;
+  }
+  return params
+}
+
+function assignChildIndex (params, child, index) {
+  params[index] = child;
+  return params
+}
+
+function vnodeHasPlaceAttribute (vnode) {
+  return Boolean(vnode.data && vnode.data.attrs && vnode.data.attrs.place)
+}
+
+/*  */
+
+var numberComponent = {
+  name: 'i18n-n',
+  functional: true,
+  props: {
+    tag: {
+      type: [String, Boolean, Object],
+      default: 'span'
+    },
+    value: {
+      type: Number,
+      required: true
+    },
+    format: {
+      type: [String, Object]
+    },
+    locale: {
+      type: String
+    }
+  },
+  render: function render (h, ref) {
+    var props = ref.props;
+    var parent = ref.parent;
+    var data = ref.data;
+
+    var i18n = parent.$i18n;
+
+    if (!i18n) {
+      if (true) {
+        warn('Cannot find VueI18n instance!');
+      }
+      return null
+    }
+
+    var key = null;
+    var options = null;
+
+    if (isString(props.format)) {
+      key = props.format;
+    } else if (isObject(props.format)) {
+      if (props.format.key) {
+        key = props.format.key;
+      }
+
+      // Filter out number format options only
+      options = Object.keys(props.format).reduce(function (acc, prop) {
+        var obj;
+
+        if (includes(numberFormatKeys, prop)) {
+          return Object.assign({}, acc, ( obj = {}, obj[prop] = props.format[prop], obj ))
+        }
+        return acc
+      }, null);
+    }
+
+    var locale = props.locale || i18n.locale;
+    var parts = i18n._ntp(props.value, locale, key, options);
+
+    var values = parts.map(function (part, index) {
+      var obj;
+
+      var slot = data.scopedSlots && data.scopedSlots[part.type];
+      return slot ? slot(( obj = {}, obj[part.type] = part.value, obj.index = index, obj.parts = parts, obj )) : part.value
+    });
+
+    var tag = (!!props.tag && props.tag !== true) || props.tag === false ? props.tag : 'span';
+    return tag
+      ? h(tag, {
+        attrs: data.attrs,
+        'class': data['class'],
+        staticClass: data.staticClass
+      }, values)
+      : values
+  }
+};
+
+/*  */
+
+function bind (el, binding, vnode) {
+  if (!assert(el, vnode)) { return }
+
+  t(el, binding, vnode);
+}
+
+function update (el, binding, vnode, oldVNode) {
+  if (!assert(el, vnode)) { return }
+
+  var i18n = vnode.context.$i18n;
+  if (localeEqual(el, vnode) &&
+    (looseEqual(binding.value, binding.oldValue) &&
+     looseEqual(el._localeMessage, i18n.getLocaleMessage(i18n.locale)))) { return }
+
+  t(el, binding, vnode);
+}
+
+function unbind (el, binding, vnode, oldVNode) {
+  var vm = vnode.context;
+  if (!vm) {
+    warn('Vue instance does not exists in VNode context');
+    return
+  }
+
+  var i18n = vnode.context.$i18n || {};
+  if (!binding.modifiers.preserve && !i18n.preserveDirectiveContent) {
+    el.textContent = '';
+  }
+  el._vt = undefined;
+  delete el['_vt'];
+  el._locale = undefined;
+  delete el['_locale'];
+  el._localeMessage = undefined;
+  delete el['_localeMessage'];
+}
+
+function assert (el, vnode) {
+  var vm = vnode.context;
+  if (!vm) {
+    warn('Vue instance does not exists in VNode context');
+    return false
+  }
+
+  if (!vm.$i18n) {
+    warn('VueI18n instance does not exists in Vue instance');
+    return false
+  }
+
+  return true
+}
+
+function localeEqual (el, vnode) {
+  var vm = vnode.context;
+  return el._locale === vm.$i18n.locale
+}
+
+function t (el, binding, vnode) {
+  var ref$1, ref$2;
+
+  var value = binding.value;
+
+  var ref = parseValue(value);
+  var path = ref.path;
+  var locale = ref.locale;
+  var args = ref.args;
+  var choice = ref.choice;
+  if (!path && !locale && !args) {
+    warn('value type not supported');
+    return
+  }
+
+  if (!path) {
+    warn('`path` is required in v-t directive');
+    return
+  }
+
+  var vm = vnode.context;
+  if (choice != null) {
+    el._vt = el.textContent = (ref$1 = vm.$i18n).tc.apply(ref$1, [ path, choice ].concat( makeParams(locale, args) ));
+  } else {
+    el._vt = el.textContent = (ref$2 = vm.$i18n).t.apply(ref$2, [ path ].concat( makeParams(locale, args) ));
+  }
+  el._locale = vm.$i18n.locale;
+  el._localeMessage = vm.$i18n.getLocaleMessage(vm.$i18n.locale);
+}
+
+function parseValue (value) {
+  var path;
+  var locale;
+  var args;
+  var choice;
+
+  if (isString(value)) {
+    path = value;
+  } else if (isPlainObject(value)) {
+    path = value.path;
+    locale = value.locale;
+    args = value.args;
+    choice = value.choice;
+  }
+
+  return { path: path, locale: locale, args: args, choice: choice }
+}
+
+function makeParams (locale, args) {
+  var params = [];
+
+  locale && params.push(locale);
+  if (args && (Array.isArray(args) || isPlainObject(args))) {
+    params.push(args);
+  }
+
+  return params
+}
+
+var Vue;
+
+function install (_Vue) {
+  /* istanbul ignore if */
+  if ("development" !== 'production' && install.installed && _Vue === Vue) {
+    warn('already installed.');
+    return
+  }
+  install.installed = true;
+
+  Vue = _Vue;
+
+  var version = (Vue.version && Number(Vue.version.split('.')[0])) || -1;
+  /* istanbul ignore if */
+  if ("development" !== 'production' && version < 2) {
+    warn(("vue-i18n (" + (install.version) + ") need to use Vue 2.0 or later (Vue: " + (Vue.version) + ")."));
+    return
+  }
+
+  extend(Vue);
+  Vue.mixin(mixin);
+  Vue.directive('t', { bind: bind, update: update, unbind: unbind });
+  Vue.component(interpolationComponent.name, interpolationComponent);
+  Vue.component(numberComponent.name, numberComponent);
+
+  // use simple mergeStrategies to prevent i18n instance lose '__proto__'
+  var strats = Vue.config.optionMergeStrategies;
+  strats.i18n = function (parentVal, childVal) {
+    return childVal === undefined
+      ? parentVal
+      : childVal
+  };
+}
+
+/*  */
+
+var BaseFormatter = function BaseFormatter () {
+  this._caches = Object.create(null);
+};
+
+BaseFormatter.prototype.interpolate = function interpolate (message, values) {
+  if (!values) {
+    return [message]
+  }
+  var tokens = this._caches[message];
+  if (!tokens) {
+    tokens = parse(message);
+    this._caches[message] = tokens;
+  }
+  return compile(tokens, values)
+};
+
+
+
+var RE_TOKEN_LIST_VALUE = /^(?:\d)+/;
+var RE_TOKEN_NAMED_VALUE = /^(?:\w)+/;
+
+function parse (format) {
+  var tokens = [];
+  var position = 0;
+
+  var text = '';
+  while (position < format.length) {
+    var char = format[position++];
+    if (char === '{') {
+      if (text) {
+        tokens.push({ type: 'text', value: text });
+      }
+
+      text = '';
+      var sub = '';
+      char = format[position++];
+      while (char !== undefined && char !== '}') {
+        sub += char;
+        char = format[position++];
+      }
+      var isClosed = char === '}';
+
+      var type = RE_TOKEN_LIST_VALUE.test(sub)
+        ? 'list'
+        : isClosed && RE_TOKEN_NAMED_VALUE.test(sub)
+          ? 'named'
+          : 'unknown';
+      tokens.push({ value: sub, type: type });
+    } else if (char === '%') {
+      // when found rails i18n syntax, skip text capture
+      if (format[(position)] !== '{') {
+        text += char;
+      }
+    } else {
+      text += char;
+    }
+  }
+
+  text && tokens.push({ type: 'text', value: text });
+
+  return tokens
+}
+
+function compile (tokens, values) {
+  var compiled = [];
+  var index = 0;
+
+  var mode = Array.isArray(values)
+    ? 'list'
+    : isObject(values)
+      ? 'named'
+      : 'unknown';
+  if (mode === 'unknown') { return compiled }
+
+  while (index < tokens.length) {
+    var token = tokens[index];
+    switch (token.type) {
+      case 'text':
+        compiled.push(token.value);
+        break
+      case 'list':
+        compiled.push(values[parseInt(token.value, 10)]);
+        break
+      case 'named':
+        if (mode === 'named') {
+          compiled.push((values)[token.value]);
+        } else {
+          if (true) {
+            warn(("Type of token '" + (token.type) + "' and format of value '" + mode + "' don't match!"));
+          }
+        }
+        break
+      case 'unknown':
+        if (true) {
+          warn("Detect 'unknown' type of token!");
+        }
+        break
+    }
+    index++;
+  }
+
+  return compiled
+}
+
+/*  */
+
+/**
+ *  Path parser
+ *  - Inspired:
+ *    Vue.js Path parser
+ */
+
+// actions
+var APPEND = 0;
+var PUSH = 1;
+var INC_SUB_PATH_DEPTH = 2;
+var PUSH_SUB_PATH = 3;
+
+// states
+var BEFORE_PATH = 0;
+var IN_PATH = 1;
+var BEFORE_IDENT = 2;
+var IN_IDENT = 3;
+var IN_SUB_PATH = 4;
+var IN_SINGLE_QUOTE = 5;
+var IN_DOUBLE_QUOTE = 6;
+var AFTER_PATH = 7;
+var ERROR = 8;
+
+var pathStateMachine = [];
+
+pathStateMachine[BEFORE_PATH] = {
+  'ws': [BEFORE_PATH],
+  'ident': [IN_IDENT, APPEND],
+  '[': [IN_SUB_PATH],
+  'eof': [AFTER_PATH]
+};
+
+pathStateMachine[IN_PATH] = {
+  'ws': [IN_PATH],
+  '.': [BEFORE_IDENT],
+  '[': [IN_SUB_PATH],
+  'eof': [AFTER_PATH]
+};
+
+pathStateMachine[BEFORE_IDENT] = {
+  'ws': [BEFORE_IDENT],
+  'ident': [IN_IDENT, APPEND],
+  '0': [IN_IDENT, APPEND],
+  'number': [IN_IDENT, APPEND]
+};
+
+pathStateMachine[IN_IDENT] = {
+  'ident': [IN_IDENT, APPEND],
+  '0': [IN_IDENT, APPEND],
+  'number': [IN_IDENT, APPEND],
+  'ws': [IN_PATH, PUSH],
+  '.': [BEFORE_IDENT, PUSH],
+  '[': [IN_SUB_PATH, PUSH],
+  'eof': [AFTER_PATH, PUSH]
+};
+
+pathStateMachine[IN_SUB_PATH] = {
+  "'": [IN_SINGLE_QUOTE, APPEND],
+  '"': [IN_DOUBLE_QUOTE, APPEND],
+  '[': [IN_SUB_PATH, INC_SUB_PATH_DEPTH],
+  ']': [IN_PATH, PUSH_SUB_PATH],
+  'eof': ERROR,
+  'else': [IN_SUB_PATH, APPEND]
+};
+
+pathStateMachine[IN_SINGLE_QUOTE] = {
+  "'": [IN_SUB_PATH, APPEND],
+  'eof': ERROR,
+  'else': [IN_SINGLE_QUOTE, APPEND]
+};
+
+pathStateMachine[IN_DOUBLE_QUOTE] = {
+  '"': [IN_SUB_PATH, APPEND],
+  'eof': ERROR,
+  'else': [IN_DOUBLE_QUOTE, APPEND]
+};
+
+/**
+ * Check if an expression is a literal value.
+ */
+
+var literalValueRE = /^\s?(?:true|false|-?[\d.]+|'[^']*'|"[^"]*")\s?$/;
+function isLiteral (exp) {
+  return literalValueRE.test(exp)
+}
+
+/**
+ * Strip quotes from a string
+ */
+
+function stripQuotes (str) {
+  var a = str.charCodeAt(0);
+  var b = str.charCodeAt(str.length - 1);
+  return a === b && (a === 0x22 || a === 0x27)
+    ? str.slice(1, -1)
+    : str
+}
+
+/**
+ * Determine the type of a character in a keypath.
+ */
+
+function getPathCharType (ch) {
+  if (ch === undefined || ch === null) { return 'eof' }
+
+  var code = ch.charCodeAt(0);
+
+  switch (code) {
+    case 0x5B: // [
+    case 0x5D: // ]
+    case 0x2E: // .
+    case 0x22: // "
+    case 0x27: // '
+      return ch
+
+    case 0x5F: // _
+    case 0x24: // $
+    case 0x2D: // -
+      return 'ident'
+
+    case 0x09: // Tab
+    case 0x0A: // Newline
+    case 0x0D: // Return
+    case 0xA0:  // No-break space
+    case 0xFEFF:  // Byte Order Mark
+    case 0x2028:  // Line Separator
+    case 0x2029:  // Paragraph Separator
+      return 'ws'
+  }
+
+  return 'ident'
+}
+
+/**
+ * Format a subPath, return its plain form if it is
+ * a literal string or number. Otherwise prepend the
+ * dynamic indicator (*).
+ */
+
+function formatSubPath (path) {
+  var trimmed = path.trim();
+  // invalid leading 0
+  if (path.charAt(0) === '0' && isNaN(path)) { return false }
+
+  return isLiteral(trimmed) ? stripQuotes(trimmed) : '*' + trimmed
+}
+
+/**
+ * Parse a string path into an array of segments
+ */
+
+function parse$1 (path) {
+  var keys = [];
+  var index = -1;
+  var mode = BEFORE_PATH;
+  var subPathDepth = 0;
+  var c;
+  var key;
+  var newChar;
+  var type;
+  var transition;
+  var action;
+  var typeMap;
+  var actions = [];
+
+  actions[PUSH] = function () {
+    if (key !== undefined) {
+      keys.push(key);
+      key = undefined;
+    }
+  };
+
+  actions[APPEND] = function () {
+    if (key === undefined) {
+      key = newChar;
+    } else {
+      key += newChar;
+    }
+  };
+
+  actions[INC_SUB_PATH_DEPTH] = function () {
+    actions[APPEND]();
+    subPathDepth++;
+  };
+
+  actions[PUSH_SUB_PATH] = function () {
+    if (subPathDepth > 0) {
+      subPathDepth--;
+      mode = IN_SUB_PATH;
+      actions[APPEND]();
+    } else {
+      subPathDepth = 0;
+      if (key === undefined) { return false }
+      key = formatSubPath(key);
+      if (key === false) {
+        return false
+      } else {
+        actions[PUSH]();
+      }
+    }
+  };
+
+  function maybeUnescapeQuote () {
+    var nextChar = path[index + 1];
+    if ((mode === IN_SINGLE_QUOTE && nextChar === "'") ||
+      (mode === IN_DOUBLE_QUOTE && nextChar === '"')) {
+      index++;
+      newChar = '\\' + nextChar;
+      actions[APPEND]();
+      return true
+    }
+  }
+
+  while (mode !== null) {
+    index++;
+    c = path[index];
+
+    if (c === '\\' && maybeUnescapeQuote()) {
+      continue
+    }
+
+    type = getPathCharType(c);
+    typeMap = pathStateMachine[mode];
+    transition = typeMap[type] || typeMap['else'] || ERROR;
+
+    if (transition === ERROR) {
+      return // parse error
+    }
+
+    mode = transition[0];
+    action = actions[transition[1]];
+    if (action) {
+      newChar = transition[2];
+      newChar = newChar === undefined
+        ? c
+        : newChar;
+      if (action() === false) {
+        return
+      }
+    }
+
+    if (mode === AFTER_PATH) {
+      return keys
+    }
+  }
+}
+
+
+
+
+
+var I18nPath = function I18nPath () {
+  this._cache = Object.create(null);
+};
+
+/**
+ * External parse that check for a cache hit first
+ */
+I18nPath.prototype.parsePath = function parsePath (path) {
+  var hit = this._cache[path];
+  if (!hit) {
+    hit = parse$1(path);
+    if (hit) {
+      this._cache[path] = hit;
+    }
+  }
+  return hit || []
+};
+
+/**
+ * Get path value from path string
+ */
+I18nPath.prototype.getPathValue = function getPathValue (obj, path) {
+  if (!isObject(obj)) { return null }
+
+  var paths = this.parsePath(path);
+  if (paths.length === 0) {
+    return null
+  } else {
+    var length = paths.length;
+    var last = obj;
+    var i = 0;
+    while (i < length) {
+      var value = last[paths[i]];
+      if (value === undefined) {
+        return null
+      }
+      last = value;
+      i++;
+    }
+
+    return last
+  }
+};
+
+/*  */
+
+
+
+var htmlTagMatcher = /<\/?[\w\s="/.':;#-\/]+>/;
+var linkKeyMatcher = /(?:@(?:\.[a-z]+)?:(?:[\w\-_|.]+|\([\w\-_|.]+\)))/g;
+var linkKeyPrefixMatcher = /^@(?:\.([a-z]+))?:/;
+var bracketsMatcher = /[()]/g;
+var defaultModifiers = {
+  'upper': function (str) { return str.toLocaleUpperCase(); },
+  'lower': function (str) { return str.toLocaleLowerCase(); },
+  'capitalize': function (str) { return ("" + (str.charAt(0).toLocaleUpperCase()) + (str.substr(1))); }
+};
+
+var defaultFormatter = new BaseFormatter();
+
+var VueI18n = function VueI18n (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #290
+  /* istanbul ignore if */
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  var locale = options.locale || 'en-US';
+  var fallbackLocale = options.fallbackLocale === false
+    ? false
+    : options.fallbackLocale || 'en-US';
+  var messages = options.messages || {};
+  var dateTimeFormats = options.dateTimeFormats || {};
+  var numberFormats = options.numberFormats || {};
+
+  this._vm = null;
+  this._formatter = options.formatter || defaultFormatter;
+  this._modifiers = options.modifiers || {};
+  this._missing = options.missing || null;
+  this._root = options.root || null;
+  this._sync = options.sync === undefined ? true : !!options.sync;
+  this._fallbackRoot = options.fallbackRoot === undefined
+    ? true
+    : !!options.fallbackRoot;
+  this._formatFallbackMessages = options.formatFallbackMessages === undefined
+    ? false
+    : !!options.formatFallbackMessages;
+  this._silentTranslationWarn = options.silentTranslationWarn === undefined
+    ? false
+    : options.silentTranslationWarn;
+  this._silentFallbackWarn = options.silentFallbackWarn === undefined
+    ? false
+    : !!options.silentFallbackWarn;
+  this._dateTimeFormatters = {};
+  this._numberFormatters = {};
+  this._path = new I18nPath();
+  this._dataListeners = [];
+  this._componentInstanceCreatedListener = options.componentInstanceCreatedListener || null;
+  this._preserveDirectiveContent = options.preserveDirectiveContent === undefined
+    ? false
+    : !!options.preserveDirectiveContent;
+  this.pluralizationRules = options.pluralizationRules || {};
+  this._warnHtmlInMessage = options.warnHtmlInMessage || 'off';
+  this._postTranslation = options.postTranslation || null;
+  this._escapeParameterHtml = options.escapeParameterHtml || false;
+
+  /**
+   * @param choice {number} a choice index given by the input to $tc: `$tc('path.to.rule', choiceIndex)`
+   * @param choicesLength {number} an overall amount of available choices
+   * @returns a final choice index
+  */
+  this.getChoiceIndex = function (choice, choicesLength) {
+    var thisPrototype = Object.getPrototypeOf(this$1);
+    if (thisPrototype && thisPrototype.getChoiceIndex) {
+      var prototypeGetChoiceIndex = (thisPrototype.getChoiceIndex);
+      return (prototypeGetChoiceIndex).call(this$1, choice, choicesLength)
+    }
+
+    // Default (old) getChoiceIndex implementation - english-compatible
+    var defaultImpl = function (_choice, _choicesLength) {
+      _choice = Math.abs(_choice);
+
+      if (_choicesLength === 2) {
+        return _choice
+          ? _choice > 1
+            ? 1
+            : 0
+          : 1
+      }
+
+      return _choice ? Math.min(_choice, 2) : 0
+    };
+
+    if (this$1.locale in this$1.pluralizationRules) {
+      return this$1.pluralizationRules[this$1.locale].apply(this$1, [choice, choicesLength])
+    } else {
+      return defaultImpl(choice, choicesLength)
+    }
+  };
+
+
+  this._exist = function (message, key) {
+    if (!message || !key) { return false }
+    if (!isNull(this$1._path.getPathValue(message, key))) { return true }
+    // fallback for flat key
+    if (message[key]) { return true }
+    return false
+  };
+
+  if (this._warnHtmlInMessage === 'warn' || this._warnHtmlInMessage === 'error') {
+    Object.keys(messages).forEach(function (locale) {
+      this$1._checkLocaleMessage(locale, this$1._warnHtmlInMessage, messages[locale]);
+    });
+  }
+
+  this._initVM({
+    locale: locale,
+    fallbackLocale: fallbackLocale,
+    messages: messages,
+    dateTimeFormats: dateTimeFormats,
+    numberFormats: numberFormats
+  });
+};
+
+var prototypeAccessors = { vm: { configurable: true },messages: { configurable: true },dateTimeFormats: { configurable: true },numberFormats: { configurable: true },availableLocales: { configurable: true },locale: { configurable: true },fallbackLocale: { configurable: true },formatFallbackMessages: { configurable: true },missing: { configurable: true },formatter: { configurable: true },silentTranslationWarn: { configurable: true },silentFallbackWarn: { configurable: true },preserveDirectiveContent: { configurable: true },warnHtmlInMessage: { configurable: true },postTranslation: { configurable: true } };
+
+VueI18n.prototype._checkLocaleMessage = function _checkLocaleMessage (locale, level, message) {
+  var paths = [];
+
+  var fn = function (level, locale, message, paths) {
+    if (isPlainObject(message)) {
+      Object.keys(message).forEach(function (key) {
+        var val = message[key];
+        if (isPlainObject(val)) {
+          paths.push(key);
+          paths.push('.');
+          fn(level, locale, val, paths);
+          paths.pop();
+          paths.pop();
+        } else {
+          paths.push(key);
+          fn(level, locale, val, paths);
+          paths.pop();
+        }
+      });
+    } else if (isArray(message)) {
+      message.forEach(function (item, index) {
+        if (isPlainObject(item)) {
+          paths.push(("[" + index + "]"));
+          paths.push('.');
+          fn(level, locale, item, paths);
+          paths.pop();
+          paths.pop();
+        } else {
+          paths.push(("[" + index + "]"));
+          fn(level, locale, item, paths);
+          paths.pop();
+        }
+      });
+    } else if (isString(message)) {
+      var ret = htmlTagMatcher.test(message);
+      if (ret) {
+        var msg = "Detected HTML in message '" + message + "' of keypath '" + (paths.join('')) + "' at '" + locale + "'. Consider component interpolation with '<i18n>' to avoid XSS. See https://bit.ly/2ZqJzkp";
+        if (level === 'warn') {
+          warn(msg);
+        } else if (level === 'error') {
+          error(msg);
+        }
+      }
+    }
+  };
+
+  fn(level, locale, message, paths);
+};
+
+VueI18n.prototype._initVM = function _initVM (data) {
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  this._vm = new Vue({ data: data });
+  Vue.config.silent = silent;
+};
+
+VueI18n.prototype.destroyVM = function destroyVM () {
+  this._vm.$destroy();
+};
+
+VueI18n.prototype.subscribeDataChanging = function subscribeDataChanging (vm) {
+  this._dataListeners.push(vm);
+};
+
+VueI18n.prototype.unsubscribeDataChanging = function unsubscribeDataChanging (vm) {
+  remove(this._dataListeners, vm);
+};
+
+VueI18n.prototype.watchI18nData = function watchI18nData () {
+  var self = this;
+  return this._vm.$watch('$data', function () {
+    var i = self._dataListeners.length;
+    while (i--) {
+      Vue.nextTick(function () {
+        self._dataListeners[i] && self._dataListeners[i].$forceUpdate();
+      });
+    }
+  }, { deep: true })
+};
+
+VueI18n.prototype.watchLocale = function watchLocale () {
+  /* istanbul ignore if */
+  if (!this._sync || !this._root) { return null }
+  var target = this._vm;
+  return this._root.$i18n.vm.$watch('locale', function (val) {
+    target.$set(target, 'locale', val);
+    target.$forceUpdate();
+  }, { immediate: true })
+};
+
+VueI18n.prototype.onComponentInstanceCreated = function onComponentInstanceCreated (newI18n) {
+  if (this._componentInstanceCreatedListener) {
+    this._componentInstanceCreatedListener(newI18n, this);
+  }
+};
+
+prototypeAccessors.vm.get = function () { return this._vm };
+
+prototypeAccessors.messages.get = function () { return looseClone(this._getMessages()) };
+prototypeAccessors.dateTimeFormats.get = function () { return looseClone(this._getDateTimeFormats()) };
+prototypeAccessors.numberFormats.get = function () { return looseClone(this._getNumberFormats()) };
+prototypeAccessors.availableLocales.get = function () { return Object.keys(this.messages).sort() };
+
+prototypeAccessors.locale.get = function () { return this._vm.locale };
+prototypeAccessors.locale.set = function (locale) {
+  this._vm.$set(this._vm, 'locale', locale);
+};
+
+prototypeAccessors.fallbackLocale.get = function () { return this._vm.fallbackLocale };
+prototypeAccessors.fallbackLocale.set = function (locale) {
+  this._localeChainCache = {};
+  this._vm.$set(this._vm, 'fallbackLocale', locale);
+};
+
+prototypeAccessors.formatFallbackMessages.get = function () { return this._formatFallbackMessages };
+prototypeAccessors.formatFallbackMessages.set = function (fallback) { this._formatFallbackMessages = fallback; };
+
+prototypeAccessors.missing.get = function () { return this._missing };
+prototypeAccessors.missing.set = function (handler) { this._missing = handler; };
+
+prototypeAccessors.formatter.get = function () { return this._formatter };
+prototypeAccessors.formatter.set = function (formatter) { this._formatter = formatter; };
+
+prototypeAccessors.silentTranslationWarn.get = function () { return this._silentTranslationWarn };
+prototypeAccessors.silentTranslationWarn.set = function (silent) { this._silentTranslationWarn = silent; };
+
+prototypeAccessors.silentFallbackWarn.get = function () { return this._silentFallbackWarn };
+prototypeAccessors.silentFallbackWarn.set = function (silent) { this._silentFallbackWarn = silent; };
+
+prototypeAccessors.preserveDirectiveContent.get = function () { return this._preserveDirectiveContent };
+prototypeAccessors.preserveDirectiveContent.set = function (preserve) { this._preserveDirectiveContent = preserve; };
+
+prototypeAccessors.warnHtmlInMessage.get = function () { return this._warnHtmlInMessage };
+prototypeAccessors.warnHtmlInMessage.set = function (level) {
+    var this$1 = this;
+
+  var orgLevel = this._warnHtmlInMessage;
+  this._warnHtmlInMessage = level;
+  if (orgLevel !== level && (level === 'warn' || level === 'error')) {
+    var messages = this._getMessages();
+    Object.keys(messages).forEach(function (locale) {
+      this$1._checkLocaleMessage(locale, this$1._warnHtmlInMessage, messages[locale]);
+    });
+  }
+};
+
+prototypeAccessors.postTranslation.get = function () { return this._postTranslation };
+prototypeAccessors.postTranslation.set = function (handler) { this._postTranslation = handler; };
+
+VueI18n.prototype._getMessages = function _getMessages () { return this._vm.messages };
+VueI18n.prototype._getDateTimeFormats = function _getDateTimeFormats () { return this._vm.dateTimeFormats };
+VueI18n.prototype._getNumberFormats = function _getNumberFormats () { return this._vm.numberFormats };
+
+VueI18n.prototype._warnDefault = function _warnDefault (locale, key, result, vm, values, interpolateMode) {
+  if (!isNull(result)) { return result }
+  if (this._missing) {
+    var missingRet = this._missing.apply(null, [locale, key, vm, values]);
+    if (isString(missingRet)) {
+      return missingRet
+    }
+  } else {
+    if ("development" !== 'production' && !this._isSilentTranslationWarn(key)) {
+      warn(
+        "Cannot translate the value of keypath '" + key + "'. " +
+        'Use the value of keypath as default.'
+      );
+    }
+  }
+
+  if (this._formatFallbackMessages) {
+    var parsedArgs = parseArgs.apply(void 0, values);
+    return this._render(key, interpolateMode, parsedArgs.params, key)
+  } else {
+    return key
+  }
+};
+
+VueI18n.prototype._isFallbackRoot = function _isFallbackRoot (val) {
+  return !val && !isNull(this._root) && this._fallbackRoot
+};
+
+VueI18n.prototype._isSilentFallbackWarn = function _isSilentFallbackWarn (key) {
+  return this._silentFallbackWarn instanceof RegExp
+    ? this._silentFallbackWarn.test(key)
+    : this._silentFallbackWarn
+};
+
+VueI18n.prototype._isSilentFallback = function _isSilentFallback (locale, key) {
+  return this._isSilentFallbackWarn(key) && (this._isFallbackRoot() || locale !== this.fallbackLocale)
+};
+
+VueI18n.prototype._isSilentTranslationWarn = function _isSilentTranslationWarn (key) {
+  return this._silentTranslationWarn instanceof RegExp
+    ? this._silentTranslationWarn.test(key)
+    : this._silentTranslationWarn
+};
+
+VueI18n.prototype._interpolate = function _interpolate (
+  locale,
+  message,
+  key,
+  host,
+  interpolateMode,
+  values,
+  visitedLinkStack
+) {
+  if (!message) { return null }
+
+  var pathRet = this._path.getPathValue(message, key);
+  if (isArray(pathRet) || isPlainObject(pathRet)) { return pathRet }
+
+  var ret;
+  if (isNull(pathRet)) {
+    /* istanbul ignore else */
+    if (isPlainObject(message)) {
+      ret = message[key];
+      if (!(isString(ret) || isFunction(ret))) {
+        if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallback(locale, key)) {
+          warn(("Value of key '" + key + "' is not a string or function !"));
+        }
+        return null
+      }
+    } else {
+      return null
+    }
+  } else {
+    /* istanbul ignore else */
+    if (isString(pathRet) || isFunction(pathRet)) {
+      ret = pathRet;
+    } else {
+      if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallback(locale, key)) {
+        warn(("Value of key '" + key + "' is not a string or function!"));
+      }
+      return null
+    }
+  }
+
+  // Check for the existence of links within the translated string
+  if (isString(ret) && (ret.indexOf('@:') >= 0 || ret.indexOf('@.') >= 0)) {
+    ret = this._link(locale, message, ret, host, 'raw', values, visitedLinkStack);
+  }
+
+  return this._render(ret, interpolateMode, values, key)
+};
+
+VueI18n.prototype._link = function _link (
+  locale,
+  message,
+  str,
+  host,
+  interpolateMode,
+  values,
+  visitedLinkStack
+) {
+  var ret = str;
+
+  // Match all the links within the local
+  // We are going to replace each of
+  // them with its translation
+  var matches = ret.match(linkKeyMatcher);
+  for (var idx in matches) {
+    // ie compatible: filter custom array
+    // prototype method
+    if (!matches.hasOwnProperty(idx)) {
+      continue
+    }
+    var link = matches[idx];
+    var linkKeyPrefixMatches = link.match(linkKeyPrefixMatcher);
+    var linkPrefix = linkKeyPrefixMatches[0];
+      var formatterName = linkKeyPrefixMatches[1];
+
+    // Remove the leading @:, @.case: and the brackets
+    var linkPlaceholder = link.replace(linkPrefix, '').replace(bracketsMatcher, '');
+
+    if (includes(visitedLinkStack, linkPlaceholder)) {
+      if (true) {
+        warn(("Circular reference found. \"" + link + "\" is already visited in the chain of " + (visitedLinkStack.reverse().join(' <- '))));
+      }
+      return ret
+    }
+    visitedLinkStack.push(linkPlaceholder);
+
+    // Translate the link
+    var translated = this._interpolate(
+      locale, message, linkPlaceholder, host,
+      interpolateMode === 'raw' ? 'string' : interpolateMode,
+      interpolateMode === 'raw' ? undefined : values,
+      visitedLinkStack
+    );
+
+    if (this._isFallbackRoot(translated)) {
+      if ("development" !== 'production' && !this._isSilentTranslationWarn(linkPlaceholder)) {
+        warn(("Fall back to translate the link placeholder '" + linkPlaceholder + "' with root locale."));
+      }
+      /* istanbul ignore if */
+      if (!this._root) { throw Error('unexpected error') }
+      var root = this._root.$i18n;
+      translated = root._translate(
+        root._getMessages(), root.locale, root.fallbackLocale,
+        linkPlaceholder, host, interpolateMode, values
+      );
+    }
+    translated = this._warnDefault(
+      locale, linkPlaceholder, translated, host,
+      isArray(values) ? values : [values],
+      interpolateMode
+    );
+
+    if (this._modifiers.hasOwnProperty(formatterName)) {
+      translated = this._modifiers[formatterName](translated);
+    } else if (defaultModifiers.hasOwnProperty(formatterName)) {
+      translated = defaultModifiers[formatterName](translated);
+    }
+
+    visitedLinkStack.pop();
+
+    // Replace the link with the translated
+    ret = !translated ? ret : ret.replace(link, translated);
+  }
+
+  return ret
+};
+
+VueI18n.prototype._createMessageContext = function _createMessageContext (values) {
+  var _list = isArray(values) ? values : [];
+  var _named = isObject(values) ? values : {};
+  var list = function (index) { return _list[index]; };
+  var named = function (key) { return _named[key]; };
+  return {
+    list: list,
+    named: named
+  }
+};
+
+VueI18n.prototype._render = function _render (message, interpolateMode, values, path) {
+  if (isFunction(message)) {
+    return message(this._createMessageContext(values))
+  }
+
+  var ret = this._formatter.interpolate(message, values, path);
+
+  // If the custom formatter refuses to work - apply the default one
+  if (!ret) {
+    ret = defaultFormatter.interpolate(message, values, path);
+  }
+
+  // if interpolateMode is **not** 'string' ('row'),
+  // return the compiled data (e.g. ['foo', VNode, 'bar']) with formatter
+  return interpolateMode === 'string' && !isString(ret) ? ret.join('') : ret
+};
+
+VueI18n.prototype._appendItemToChain = function _appendItemToChain (chain, item, blocks) {
+  var follow = false;
+  if (!includes(chain, item)) {
+    follow = true;
+    if (item) {
+      follow = item[item.length - 1] !== '!';
+      item = item.replace(/!/g, '');
+      chain.push(item);
+      if (blocks && blocks[item]) {
+        follow = blocks[item];
+      }
+    }
+  }
+  return follow
+};
+
+VueI18n.prototype._appendLocaleToChain = function _appendLocaleToChain (chain, locale, blocks) {
+  var follow;
+  var tokens = locale.split('-');
+  do {
+    var item = tokens.join('-');
+    follow = this._appendItemToChain(chain, item, blocks);
+    tokens.splice(-1, 1);
+  } while (tokens.length && (follow === true))
+  return follow
+};
+
+VueI18n.prototype._appendBlockToChain = function _appendBlockToChain (chain, block, blocks) {
+  var follow = true;
+  for (var i = 0; (i < block.length) && (isBoolean(follow)); i++) {
+    var locale = block[i];
+    if (isString(locale)) {
+      follow = this._appendLocaleToChain(chain, locale, blocks);
+    }
+  }
+  return follow
+};
+
+VueI18n.prototype._getLocaleChain = function _getLocaleChain (start, fallbackLocale) {
+  if (start === '') { return [] }
+
+  if (!this._localeChainCache) {
+    this._localeChainCache = {};
+  }
+
+  var chain = this._localeChainCache[start];
+  if (!chain) {
+    if (!fallbackLocale) {
+      fallbackLocale = this.fallbackLocale;
+    }
+    chain = [];
+
+    // first block defined by start
+    var block = [start];
+
+    // while any intervening block found
+    while (isArray(block)) {
+      block = this._appendBlockToChain(
+        chain,
+        block,
+        fallbackLocale
+      );
+    }
+
+    // last block defined by default
+    var defaults;
+    if (isArray(fallbackLocale)) {
+      defaults = fallbackLocale;
+    } else if (isObject(fallbackLocale)) {
+      /* $FlowFixMe */
+      if (fallbackLocale['default']) {
+        defaults = fallbackLocale['default'];
+      } else {
+        defaults = null;
+      }
+    } else {
+      defaults = fallbackLocale;
+    }
+
+    // convert defaults to array
+    if (isString(defaults)) {
+      block = [defaults];
+    } else {
+      block = defaults;
+    }
+    if (block) {
+      this._appendBlockToChain(
+        chain,
+        block,
+        null
+      );
+    }
+    this._localeChainCache[start] = chain;
+  }
+  return chain
+};
+
+VueI18n.prototype._translate = function _translate (
+  messages,
+  locale,
+  fallback,
+  key,
+  host,
+  interpolateMode,
+  args
+) {
+  var chain = this._getLocaleChain(locale, fallback);
+  var res;
+  for (var i = 0; i < chain.length; i++) {
+    var step = chain[i];
+    res =
+      this._interpolate(step, messages[step], key, host, interpolateMode, args, [key]);
+    if (!isNull(res)) {
+      if (step !== locale && "development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+        warn(("Fall back to translate the keypath '" + key + "' with '" + step + "' locale."));
+      }
+      return res
+    }
+  }
+  return null
+};
+
+VueI18n.prototype._t = function _t (key, _locale, messages, host) {
+    var ref;
+
+    var values = [], len = arguments.length - 4;
+    while ( len-- > 0 ) values[ len ] = arguments[ len + 4 ];
+  if (!key) { return '' }
+
+  var parsedArgs = parseArgs.apply(void 0, values);
+  if(this._escapeParameterHtml) {
+    parsedArgs.params = escapeParams(parsedArgs.params);
+  }
+
+  var locale = parsedArgs.locale || _locale;
+
+  var ret = this._translate(
+    messages, locale, this.fallbackLocale, key,
+    host, 'string', parsedArgs.params
+  );
+  if (this._isFallbackRoot(ret)) {
+    if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+      warn(("Fall back to translate the keypath '" + key + "' with root locale."));
+    }
+    /* istanbul ignore if */
+    if (!this._root) { throw Error('unexpected error') }
+    return (ref = this._root).$t.apply(ref, [ key ].concat( values ))
+  } else {
+    ret = this._warnDefault(locale, key, ret, host, values, 'string');
+    if (this._postTranslation && ret !== null && ret !== undefined) {
+      ret = this._postTranslation(ret, key);
+    }
+    return ret
+  }
+};
+
+VueI18n.prototype.t = function t (key) {
+    var ref;
+
+    var values = [], len = arguments.length - 1;
+    while ( len-- > 0 ) values[ len ] = arguments[ len + 1 ];
+  return (ref = this)._t.apply(ref, [ key, this.locale, this._getMessages(), null ].concat( values ))
+};
+
+VueI18n.prototype._i = function _i (key, locale, messages, host, values) {
+  var ret =
+    this._translate(messages, locale, this.fallbackLocale, key, host, 'raw', values);
+  if (this._isFallbackRoot(ret)) {
+    if ("development" !== 'production' && !this._isSilentTranslationWarn(key)) {
+      warn(("Fall back to interpolate the keypath '" + key + "' with root locale."));
+    }
+    if (!this._root) { throw Error('unexpected error') }
+    return this._root.$i18n.i(key, locale, values)
+  } else {
+    return this._warnDefault(locale, key, ret, host, [values], 'raw')
+  }
+};
+
+VueI18n.prototype.i = function i (key, locale, values) {
+  /* istanbul ignore if */
+  if (!key) { return '' }
+
+  if (!isString(locale)) {
+    locale = this.locale;
+  }
+
+  return this._i(key, locale, this._getMessages(), null, values)
+};
+
+VueI18n.prototype._tc = function _tc (
+  key,
+  _locale,
+  messages,
+  host,
+  choice
+) {
+    var ref;
+
+    var values = [], len = arguments.length - 5;
+    while ( len-- > 0 ) values[ len ] = arguments[ len + 5 ];
+  if (!key) { return '' }
+  if (choice === undefined) {
+    choice = 1;
+  }
+
+  var predefined = { 'count': choice, 'n': choice };
+  var parsedArgs = parseArgs.apply(void 0, values);
+  parsedArgs.params = Object.assign(predefined, parsedArgs.params);
+  values = parsedArgs.locale === null ? [parsedArgs.params] : [parsedArgs.locale, parsedArgs.params];
+  return this.fetchChoice((ref = this)._t.apply(ref, [ key, _locale, messages, host ].concat( values )), choice)
+};
+
+VueI18n.prototype.fetchChoice = function fetchChoice (message, choice) {
+  /* istanbul ignore if */
+  if (!message || !isString(message)) { return null }
+  var choices = message.split('|');
+
+  choice = this.getChoiceIndex(choice, choices.length);
+  if (!choices[choice]) { return message }
+  return choices[choice].trim()
+};
+
+VueI18n.prototype.tc = function tc (key, choice) {
+    var ref;
+
+    var values = [], len = arguments.length - 2;
+    while ( len-- > 0 ) values[ len ] = arguments[ len + 2 ];
+  return (ref = this)._tc.apply(ref, [ key, this.locale, this._getMessages(), null, choice ].concat( values ))
+};
+
+VueI18n.prototype._te = function _te (key, locale, messages) {
+    var args = [], len = arguments.length - 3;
+    while ( len-- > 0 ) args[ len ] = arguments[ len + 3 ];
+
+  var _locale = parseArgs.apply(void 0, args).locale || locale;
+  return this._exist(messages[_locale], key)
+};
+
+VueI18n.prototype.te = function te (key, locale) {
+  return this._te(key, this.locale, this._getMessages(), locale)
+};
+
+VueI18n.prototype.getLocaleMessage = function getLocaleMessage (locale) {
+  return looseClone(this._vm.messages[locale] || {})
+};
+
+VueI18n.prototype.setLocaleMessage = function setLocaleMessage (locale, message) {
+  if (this._warnHtmlInMessage === 'warn' || this._warnHtmlInMessage === 'error') {
+    this._checkLocaleMessage(locale, this._warnHtmlInMessage, message);
+  }
+  this._vm.$set(this._vm.messages, locale, message);
+};
+
+VueI18n.prototype.mergeLocaleMessage = function mergeLocaleMessage (locale, message) {
+  if (this._warnHtmlInMessage === 'warn' || this._warnHtmlInMessage === 'error') {
+    this._checkLocaleMessage(locale, this._warnHtmlInMessage, message);
+  }
+  this._vm.$set(this._vm.messages, locale, merge({}, this._vm.messages[locale] || {}, message));
+};
+
+VueI18n.prototype.getDateTimeFormat = function getDateTimeFormat (locale) {
+  return looseClone(this._vm.dateTimeFormats[locale] || {})
+};
+
+VueI18n.prototype.setDateTimeFormat = function setDateTimeFormat (locale, format) {
+  this._vm.$set(this._vm.dateTimeFormats, locale, format);
+  this._clearDateTimeFormat(locale, format);
+};
+
+VueI18n.prototype.mergeDateTimeFormat = function mergeDateTimeFormat (locale, format) {
+  this._vm.$set(this._vm.dateTimeFormats, locale, merge(this._vm.dateTimeFormats[locale] || {}, format));
+  this._clearDateTimeFormat(locale, format);
+};
+
+VueI18n.prototype._clearDateTimeFormat = function _clearDateTimeFormat (locale, format) {
+  for (var key in format) {
+    var id = locale + "__" + key;
+
+    if (!this._dateTimeFormatters.hasOwnProperty(id)) {
+      continue
+    }
+
+    delete this._dateTimeFormatters[id];
+  }
+};
+
+VueI18n.prototype._localizeDateTime = function _localizeDateTime (
+  value,
+  locale,
+  fallback,
+  dateTimeFormats,
+  key
+) {
+  var _locale = locale;
+  var formats = dateTimeFormats[_locale];
+
+  var chain = this._getLocaleChain(locale, fallback);
+  for (var i = 0; i < chain.length; i++) {
+    var current = _locale;
+    var step = chain[i];
+    formats = dateTimeFormats[step];
+    _locale = step;
+    // fallback locale
+    if (isNull(formats) || isNull(formats[key])) {
+      if (step !== locale && "development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+        warn(("Fall back to '" + step + "' datetime formats from '" + current + "' datetime formats."));
+      }
+    } else {
+      break
+    }
+  }
+
+  if (isNull(formats) || isNull(formats[key])) {
+    return null
+  } else {
+    var format = formats[key];
+    var id = _locale + "__" + key;
+    var formatter = this._dateTimeFormatters[id];
+    if (!formatter) {
+      formatter = this._dateTimeFormatters[id] = new Intl.DateTimeFormat(_locale, format);
+    }
+    return formatter.format(value)
+  }
+};
+
+VueI18n.prototype._d = function _d (value, locale, key) {
+  /* istanbul ignore if */
+  if ("development" !== 'production' && !VueI18n.availabilities.dateTimeFormat) {
+    warn('Cannot format a Date value due to not supported Intl.DateTimeFormat.');
+    return ''
+  }
+
+  if (!key) {
+    return new Intl.DateTimeFormat(locale).format(value)
+  }
+
+  var ret =
+    this._localizeDateTime(value, locale, this.fallbackLocale, this._getDateTimeFormats(), key);
+  if (this._isFallbackRoot(ret)) {
+    if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+      warn(("Fall back to datetime localization of root: key '" + key + "'."));
+    }
+    /* istanbul ignore if */
+    if (!this._root) { throw Error('unexpected error') }
+    return this._root.$i18n.d(value, key, locale)
+  } else {
+    return ret || ''
+  }
+};
+
+VueI18n.prototype.d = function d (value) {
+    var args = [], len = arguments.length - 1;
+    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
+
+  var locale = this.locale;
+  var key = null;
+
+  if (args.length === 1) {
+    if (isString(args[0])) {
+      key = args[0];
+    } else if (isObject(args[0])) {
+      if (args[0].locale) {
+        locale = args[0].locale;
+      }
+      if (args[0].key) {
+        key = args[0].key;
+      }
+    }
+  } else if (args.length === 2) {
+    if (isString(args[0])) {
+      key = args[0];
+    }
+    if (isString(args[1])) {
+      locale = args[1];
+    }
+  }
+
+  return this._d(value, locale, key)
+};
+
+VueI18n.prototype.getNumberFormat = function getNumberFormat (locale) {
+  return looseClone(this._vm.numberFormats[locale] || {})
+};
+
+VueI18n.prototype.setNumberFormat = function setNumberFormat (locale, format) {
+  this._vm.$set(this._vm.numberFormats, locale, format);
+  this._clearNumberFormat(locale, format);
+};
+
+VueI18n.prototype.mergeNumberFormat = function mergeNumberFormat (locale, format) {
+  this._vm.$set(this._vm.numberFormats, locale, merge(this._vm.numberFormats[locale] || {}, format));
+  this._clearNumberFormat(locale, format);
+};
+
+VueI18n.prototype._clearNumberFormat = function _clearNumberFormat (locale, format) {
+  for (var key in format) {
+    var id = locale + "__" + key;
+
+    if (!this._numberFormatters.hasOwnProperty(id)) {
+      continue
+    }
+
+    delete this._numberFormatters[id];
+  }
+};
+
+VueI18n.prototype._getNumberFormatter = function _getNumberFormatter (
+  value,
+  locale,
+  fallback,
+  numberFormats,
+  key,
+  options
+) {
+  var _locale = locale;
+  var formats = numberFormats[_locale];
+
+  var chain = this._getLocaleChain(locale, fallback);
+  for (var i = 0; i < chain.length; i++) {
+    var current = _locale;
+    var step = chain[i];
+    formats = numberFormats[step];
+    _locale = step;
+    // fallback locale
+    if (isNull(formats) || isNull(formats[key])) {
+      if (step !== locale && "development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+        warn(("Fall back to '" + step + "' number formats from '" + current + "' number formats."));
+      }
+    } else {
+      break
+    }
+  }
+
+  if (isNull(formats) || isNull(formats[key])) {
+    return null
+  } else {
+    var format = formats[key];
+
+    var formatter;
+    if (options) {
+      // If options specified - create one time number formatter
+      formatter = new Intl.NumberFormat(_locale, Object.assign({}, format, options));
+    } else {
+      var id = _locale + "__" + key;
+      formatter = this._numberFormatters[id];
+      if (!formatter) {
+        formatter = this._numberFormatters[id] = new Intl.NumberFormat(_locale, format);
+      }
+    }
+    return formatter
+  }
+};
+
+VueI18n.prototype._n = function _n (value, locale, key, options) {
+  /* istanbul ignore if */
+  if (!VueI18n.availabilities.numberFormat) {
+    if (true) {
+      warn('Cannot format a Number value due to not supported Intl.NumberFormat.');
+    }
+    return ''
+  }
+
+  if (!key) {
+    var nf = !options ? new Intl.NumberFormat(locale) : new Intl.NumberFormat(locale, options);
+    return nf.format(value)
+  }
+
+  var formatter = this._getNumberFormatter(value, locale, this.fallbackLocale, this._getNumberFormats(), key, options);
+  var ret = formatter && formatter.format(value);
+  if (this._isFallbackRoot(ret)) {
+    if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+      warn(("Fall back to number localization of root: key '" + key + "'."));
+    }
+    /* istanbul ignore if */
+    if (!this._root) { throw Error('unexpected error') }
+    return this._root.$i18n.n(value, Object.assign({}, { key: key, locale: locale }, options))
+  } else {
+    return ret || ''
+  }
+};
+
+VueI18n.prototype.n = function n (value) {
+    var args = [], len = arguments.length - 1;
+    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
+
+  var locale = this.locale;
+  var key = null;
+  var options = null;
+
+  if (args.length === 1) {
+    if (isString(args[0])) {
+      key = args[0];
+    } else if (isObject(args[0])) {
+      if (args[0].locale) {
+        locale = args[0].locale;
+      }
+      if (args[0].key) {
+        key = args[0].key;
+      }
+
+      // Filter out number format options only
+      options = Object.keys(args[0]).reduce(function (acc, key) {
+          var obj;
+
+        if (includes(numberFormatKeys, key)) {
+          return Object.assign({}, acc, ( obj = {}, obj[key] = args[0][key], obj ))
+        }
+        return acc
+      }, null);
+    }
+  } else if (args.length === 2) {
+    if (isString(args[0])) {
+      key = args[0];
+    }
+    if (isString(args[1])) {
+      locale = args[1];
+    }
+  }
+
+  return this._n(value, locale, key, options)
+};
+
+VueI18n.prototype._ntp = function _ntp (value, locale, key, options) {
+  /* istanbul ignore if */
+  if (!VueI18n.availabilities.numberFormat) {
+    if (true) {
+      warn('Cannot format to parts a Number value due to not supported Intl.NumberFormat.');
+    }
+    return []
+  }
+
+  if (!key) {
+    var nf = !options ? new Intl.NumberFormat(locale) : new Intl.NumberFormat(locale, options);
+    return nf.formatToParts(value)
+  }
+
+  var formatter = this._getNumberFormatter(value, locale, this.fallbackLocale, this._getNumberFormats(), key, options);
+  var ret = formatter && formatter.formatToParts(value);
+  if (this._isFallbackRoot(ret)) {
+    if ("development" !== 'production' && !this._isSilentTranslationWarn(key)) {
+      warn(("Fall back to format number to parts of root: key '" + key + "' ."));
+    }
+    /* istanbul ignore if */
+    if (!this._root) { throw Error('unexpected error') }
+    return this._root.$i18n._ntp(value, locale, key, options)
+  } else {
+    return ret || []
+  }
+};
+
+Object.defineProperties( VueI18n.prototype, prototypeAccessors );
+
+var availabilities;
+// $FlowFixMe
+Object.defineProperty(VueI18n, 'availabilities', {
+  get: function get () {
+    if (!availabilities) {
+      var intlDefined = typeof Intl !== 'undefined';
+      availabilities = {
+        dateTimeFormat: intlDefined && typeof Intl.DateTimeFormat !== 'undefined',
+        numberFormat: intlDefined && typeof Intl.NumberFormat !== 'undefined'
+      };
+    }
+
+    return availabilities
+  }
+});
+
+VueI18n.install = install;
+VueI18n.version = '8.22.3';
+
+/* harmony default export */ __webpack_exports__["a"] = (VueI18n);
+
+
+/***/ }),
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(3)(
+
+/* styles */
+__webpack_require__(71)
+
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(30),
+  __webpack_require__(37),
   /* template */
-  __webpack_require__(44),
+  __webpack_require__(65),
   /* scopeId */
   null,
   /* cssModules */
@@ -33142,14 +37994,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 42 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(3)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(31),
+  __webpack_require__(38),
   /* template */
-  __webpack_require__(45),
+  __webpack_require__(66),
   /* scopeId */
   null,
   /* cssModules */
@@ -33176,18 +38028,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 43 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(47)
+__webpack_require__(72)
 
-var Component = __webpack_require__(3)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(32),
+  __webpack_require__(39),
   /* template */
-  __webpack_require__(46),
+  __webpack_require__(67),
   /* scopeId */
   "data-v-53ac8773",
   /* cssModules */
@@ -33214,7 +38066,136 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 44 */
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(70)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(40),
+  /* template */
+  __webpack_require__(64),
+  /* scopeId */
+  "data-v-1d3946d6",
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\frontend\\lessons\\Memorize.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Memorize.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d3946d6", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d3946d6", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(73)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(41),
+  /* template */
+  __webpack_require__(68),
+  /* scopeId */
+  "data-v-5957d677",
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\frontend\\lessons\\Show.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Show.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5957d677", Component.options)
+  } else {
+    hotAPI.reload("data-v-5957d677", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(74)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(42),
+  /* template */
+  __webpack_require__(69),
+  /* scopeId */
+  "data-v-acd81a90",
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\system\\FileManager.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] FileManager.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-acd81a90", Component.options)
+  } else {
+    hotAPI.reload("data-v-acd81a90", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h1', [_vm._v("Memorizes")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-1d3946d6", module.exports)
+  }
+}
+
+/***/ }),
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33310,9 +38291,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.dinnar = $event.target.value
       }
     }
-  }), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', [_vm._v("post_id is : " + _vm._s(_vm.post_id))])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" "), _c('hr'), _vm._v(" "), _c('p', [_vm._v("post_id is : " + _vm._s(_vm.post_id))])]), _vm._v(" "), _c('vue-dropzone', {
+    ref: "myVueDropzone",
+    attrs: {
+      "id": "dropzone",
+      "options": _vm.dropzoneOptions,
+      "useCustomSlot": true
+    },
+    on: {
+      "vdropzone-success": _vm.vsuccess
+    }
+  }, [_c('div', {
+    staticClass: "dropzone-custom-content"
+  }, [_c('h3', {
+    staticClass: "dropzone-custom-title"
+  }, [_vm._v("Drag and drop to upload content!")]), _vm._v(" "), _c('div', {
+    staticClass: "subtitle"
+  }, [_vm._v("...or click to select a file from your computer")])])]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
-  })])])])])
+  })], 1)])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -33323,7 +38320,7 @@ if (false) {
 }
 
 /***/ }),
-/* 45 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33342,7 +38339,7 @@ if (false) {
 }
 
 /***/ }),
-/* 46 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -33405,17 +38402,666 @@ if (false) {
 }
 
 /***/ }),
-/* 47 */
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small",
+    staticStyle: {
+      "overflow": "hidden"
+    }
+  }, [_c('h5', {
+    staticClass: "text-highlighted uk-text-bold"
+  }, [_vm._v("Memorize")]), _vm._v(" "), _c('p', {
+    staticClass: "_memorize dear student"
+  }, [_vm._v(_vm._s(_vm.$t('main._memorize dear student', {
+    name: 'student'
+  })))]), _vm._v(" "), _c('div', [_c('ul', {
+    staticClass: "uk-list uk-list-decimal"
+  }, _vm._l((_vm.items), function(item, key) {
+    return (item.properties.level == 1) ? _c('li', [_vm._v(_vm._s(_vm.itemCount = +1) + "- " + _vm._s(item.title))]) : _vm._e()
+  }), 0)]), _vm._v(" "), _vm._m(0)])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "uk-child-width-expand@s uk-text-center uk-margin-remove",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', [_c('a', {
+    staticClass: "uk-button uk-button-primary open-",
+    attrs: {
+      "href": "#modal-sections",
+      "uk-toggle": ""
+    }
+  }, [_vm._v("Start the memorize test")]), _vm._v(" "), _c('div', {
+    attrs: {
+      "id": "modal-sections",
+      "uk-modal": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-modal-dialog uk-margin-auto-vertical"
+  }, [_c('div', {
+    staticClass: "uk-modal-header"
+  }, [_c('h2', {
+    staticClass: "uk-modal-title"
+  }, [_vm._v("Modal Title")])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-modal-body"
+  })])])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-5957d677", module.exports)
+  }
+}
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('div', {
+    staticClass: "file-manager uk-grid-collapse uk-child-width-expand uk-padding-remove",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove"
+  }, [_c('div', {
+    staticClass: "uk-grid-small uk-grid-match",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5"
+  }, [_c('div', {
+    staticClass: "file-manager-sidebar",
+    staticStyle: {
+      "background-color": "#F9F9FB",
+      "padding": "25px",
+      "height": "100%"
+    }
+  }, [_c('p', {
+    staticClass: "uk-text-primary"
+  }, [_vm._v(_vm._s(_vm.$t('main._home')))]), _vm._v(" "), _c('ul', {
+    staticClass: "uk-list"
+  }, [_c('li', {
+    staticClass: "nav-item"
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        return _vm.goHome()
+      }
+    }
+  }, [_c('span', {
+    attrs: {
+      "uk-icon": "home"
+    }
+  }), _vm._v(" Files")])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c('br'), _vm._v(" "), _c('p', {
+    staticClass: "uk-text-primary"
+  }, [_vm._v(_vm._s(_vm.$t('main.Folders')))]), _vm._v(" "), _c('ul', {
+    staticClass: "uk-list"
+  }, _vm._l((_vm.allFolders), function(folder) {
+    return _c('li', {
+      staticClass: "nav-item"
+    }, [(folder.sub_groups_count == 0) ? _c('a', [_c('span', [_c('span', {
+      attrs: {
+        "uk-icon": "folder"
+      }
+    }), _vm._v(" "), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(folder.title)
+      }
+    })])]) : _c('ul', {
+      attrs: {
+        "uk-accordion": ""
+      }
+    }, [_c('li', {}, [_c('a', {
+      staticClass: "uk-accordion-title",
+      attrs: {
+        "href": "#"
+      }
+    }, [_c('span', {
+      attrs: {
+        "uk-icon": "folder"
+      }
+    }), _vm._v(" "), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(folder.title)
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "uk-accordion-content"
+    }, [_c('ul', {
+      staticClass: "uk-list"
+    }, [_c('li', {
+      staticClass: "nav-item"
+    }, [_c('a', {
+      on: {
+        "click": function($event) {
+          return _vm.openFolder(folder)
+        }
+      }
+    }, [_c('span', {
+      attrs: {
+        "uk-icon": "folder"
+      }
+    }), _vm._v(" "), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(folder.title)
+      }
+    })])]), _vm._v(" "), _vm._l((folder.sub_groups), function(subFolder) {
+      return _c('li', {
+        staticClass: "nav-item"
+      }, [_c('a', {
+        on: {
+          "click": function($event) {
+            return _vm.openFolder(subFolder)
+          }
+        }
+      }, [_c('span', {
+        attrs: {
+          "uk-icon": "folder"
+        }
+      }), _vm._v(" "), _c('span', {
+        domProps: {
+          "innerHTML": _vm._s(subFolder.title)
+        }
+      })])])
+    })], 2)])])])])
+  }), 0)])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expand file-manager-content"
+  }, [_c('div', {
+    staticClass: "bg-white"
+  }, [_c('div', {
+    staticClass: "file-manager-navbar"
+  }, [_c('div', {
+    staticClass: "uk-grid-small",
+    staticStyle: {
+      "padding": "16px 25px 25px 0"
+    },
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-expand",
+    staticStyle: {
+      "padding-top": "10px"
+    }
+  }, [_c('span', {
+    staticClass: "hover-primary",
+    attrs: {
+      "uk-icon": "icon: chevron-left"
+    },
+    on: {
+      "click": function($event) {
+        return _vm.goHome()
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.groupName)
+    }
+  }), _vm._v(" "), (_vm.loadingMode) ? _c('span', {
+    staticClass: "uk-text-primary"
+  }, [_c('span', {
+    staticStyle: {
+      "margin": "0 5px"
+    },
+    attrs: {
+      "uk-spinner": "ratio: 0.5"
+    }
+  }), _vm._v(" loading ...")]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto"
+  }, [_c('ul', {
+    staticClass: "uk-list navbar-list"
+  }, [_c('li', [_c('span', {
+    staticClass: "navbar-item hover-primary",
+    class: {
+      'uk-text-primary': _vm.uploadMode
+    },
+    attrs: {
+      "uk-icon": "icon: cloud-upload",
+      "uk-tooltip": _vm.$t('main.File upload')
+    },
+    on: {
+      "click": function($event) {
+        _vm.uploadMode = !_vm.uploadMode
+      }
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "navbar-item hover-primary",
+    attrs: {
+      "uk-icon": "icon: folder",
+      "uk-tooltip": _vm.$t('main.New folder')
+    },
+    on: {
+      "click": function($event) {
+        return _vm.createFolder()
+      }
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "navbar-item hover-primary",
+    attrs: {
+      "uk-icon": "icon: move",
+      "uk-tooltip": _vm.$t('main.Move')
+    },
+    on: {
+      "click": function($event) {
+        return _vm.putItemOnMove()
+      }
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "navbar-item hover-primary",
+    class: {
+      'uk-text-success bounce': _vm.onMoveItemId
+    },
+    attrs: {
+      "uk-icon": "icon: album",
+      "uk-tooltip": _vm.$t('main.Paste')
+    },
+    on: {
+      "click": function($event) {
+        return _vm.pasteItem()
+      }
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "navbar-item hover-danger",
+    attrs: {
+      "uk-icon": "icon: trash",
+      "uk-tooltip": _vm.$t('main.Delete')
+    },
+    on: {
+      "click": function($event) {
+        return _vm.destroyItem()
+      }
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "navbar-item hover-primary",
+    attrs: {
+      "uk-icon": "icon: info",
+      "uk-tooltip": _vm.$t('main.Preview')
+    },
+    on: {
+      "click": function($event) {
+        return _vm.togglePreview()
+      }
+    }
+  })])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-collapse uk-grid-match",
+    staticStyle: {
+      "padding": "20px 0px 20px 0"
+    },
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-expand",
+    staticStyle: {
+      "padding-right": "10px",
+      "padding-bottom": "10px"
+    }
+  }, [(_vm.uploadMode) ? _c('div', {
+    staticClass: "uk-margin"
+  }, [_c('vue-dropzone', {
+    ref: "myVueDropzone",
+    attrs: {
+      "id": "dropzone",
+      "options": _vm.dropzoneOptions,
+      "useCustomSlot": true
+    },
+    on: {
+      "vdropzone-success": _vm.vSuccess,
+      "vdropzone-total-upload-progress": _vm.vProgress,
+      "vdropzone-sending": _vm.vSending
+    }
+  }, [_c('div', {
+    staticClass: "dropzone-custom-content"
+  }, [_c('span', {
+    staticClass: "uk-text-primary",
+    attrs: {
+      "uk-icon": "icon: cloud-upload; ratio: 3.5"
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "uk-text-muted uk-margin-remove"
+  }, [_vm._v("Drag and drop to upload content!")]), _vm._v(" "), _c('p', {
+    staticClass: "uk-text-muted uk-margin-remove"
+  }, [_vm._v("Or click to select a file from your computer")])])])], 1) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-collapse uk-text-center",
+    attrs: {
+      "uk-grid": "masonry: true"
+    }
+  }, [_vm._l((_vm.folders), function(folder) {
+    return _c('div', {
+      staticClass: "uk-width-1-2@m",
+      class: _vm.previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '
+    }, [_c('div', {
+      staticClass: "folder",
+      class: {
+        active: _vm.activeFolderId == folder.id, onMove: _vm.onMoveItemId == folder.id
+      },
+      on: {
+        "dblclick": function($event) {
+          return _vm.openFolder(folder)
+        },
+        "click": function($event) {
+          return _vm.openFolderPreview(folder)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "image-wrapper"
+    }, [_c('span', {
+      staticClass: "uk-badge files-count",
+      domProps: {
+        "innerHTML": _vm._s(folder.items_count)
+      }
+    }), _vm._v(" "), _c('img', {
+      attrs: {
+        "data-src": "/storage/assets/file_icons/folder.png",
+        "width": "90",
+        "alt": "",
+        "uk-img": ""
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "file-info uk-margin-small-top"
+    }, [_c('p', {
+      staticClass: "uk-margin-remove",
+      domProps: {
+        "innerHTML": _vm._s(folder.title)
+      }
+    }), _vm._v(" "), _c('p', {
+      staticClass: "uk-margin-remove uk-text-muted folder-count"
+    }, [_vm._v(_vm._s(folder.sub_groups_count) + " Folders")])])])])
+  }), _vm._v(" "), _vm._l((_vm.files), function(file) {
+    return _c('div', {
+      staticClass: "uk-width-1-2@m",
+      class: _vm.previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '
+    }, [_c('div', {
+      staticClass: "file image-file",
+      class: {
+        active: _vm.activeFileId == file.id, onMove: _vm.onMoveItemId == file.id
+      },
+      on: {
+        "click": function($event) {
+          return _vm.openFilePreview(file)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "image-wrapper"
+    }, [(file.custom_properties.file_type === 'image') ? _c('img', {
+      attrs: {
+        "data-src": file.url,
+        "alt": "",
+        "uk-img": ""
+      }
+    }) : _c('div', {
+      staticStyle: {
+        "padding": "25px 10px 5px 10px"
+      }
+    }, [_c('img', {
+      staticClass: "uk-margin",
+      attrs: {
+        "data-src": '/storage/assets/file_icons/' + file.custom_properties.extension + '.png',
+        "alt": "",
+        "width": "60",
+        "uk-img": ""
+      }
+    })])]), _vm._v(" "), _c('div', {
+      staticClass: "file-info uk-margin-small-top"
+    }, [_c('p', {
+      staticClass: "uk-margin-remove",
+      domProps: {
+        "innerHTML": _vm._s(file.name)
+      }
+    }), _vm._v(" "), _c('p', {
+      staticClass: "uk-margin-remove uk-text-muted",
+      domProps: {
+        "innerHTML": _vm._s(file.custom_properties.file_size_string)
+      }
+    })])])])
+  })], 2)]), _vm._v(" "), (_vm.previewMode) ? _c('div', {
+    staticClass: "uk-width-1-3",
+    staticStyle: {
+      "background-color": "#F9F9FB",
+      "padding": "10px",
+      "min-height": "72vh",
+      "display": "block"
+    }
+  }, [(_vm.previewFile != null) ? _c('div', {
+    staticClass: "uk-grid-small uk-child-width-1-1@s",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', [_c('img', {
+    staticStyle: {
+      "border-radius": "10px"
+    },
+    attrs: {
+      "data-src": _vm.previewFile.url,
+      "alt": "",
+      "uk-img": ""
+    }
+  })]), _vm._v(" "), _c('div', [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove"
+  }, [_vm._v(_vm._s(_vm.$t('main.File name')))]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.previewFile.name),
+      expression: "previewFile.name"
+    }],
+    staticClass: "uk-input",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.previewFile.name)
+    },
+    on: {
+      "change": function($event) {
+        return _vm.updateFileTitle()
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.previewFile, "name", $event.target.value)
+      }
+    }
+  })]), _vm._v(" "), _c('div', [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove"
+  }, [_vm._v(_vm._s(_vm.$t('main.File size')))]), _vm._v(" "), _c('p', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewFile.custom_properties.file_size_string)
+    }
+  })]), _vm._v(" "), _c('div', [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove"
+  }, [_vm._v(_vm._s(_vm.$t('main.Created at')))]), _vm._v(" "), _c('p', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewFile.creation_date)
+    }
+  })]), _vm._v(" "), _c('div', [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove"
+  }, [_vm._v(_vm._s(_vm.$t('main.Url link')))]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small uk-grid-match",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-expand"
+  }, [_c('input', {
+    staticClass: "uk-input preview-file-url",
+    attrs: {
+      "type": "text",
+      "readonly": ""
+    },
+    domProps: {
+      "value": _vm.previewFile.url
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto uk-fex uk-flex-middle"
+  }, [_c('div', [_c('span', {
+    staticClass: "navbar-item hover-primary",
+    attrs: {
+      "uk-icon": "icon: link",
+      "uk-tooltip": _vm.$t('main.Copy link')
+    },
+    on: {
+      "click": function($event) {
+        return _vm.copyFileUrl()
+      }
+    }
+  })])])])])]) : (_vm.previewFolder != null) ? _c('div', [_c('div', [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Folder name'))
+    }
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.previewFolder.title),
+      expression: "previewFolder.title"
+    }],
+    staticClass: "uk-input",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.previewFolder.title)
+    },
+    on: {
+      "change": function($event) {
+        return _vm.updateFolderTitle()
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.previewFolder, "title", $event.target.value)
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small"
+  }, [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Files count'))
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewFolder.items_count + ' ' + _vm.$t('main.files'))
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small"
+  }, [_c('p', {
+    staticClass: "uk-text-primary uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Sub Folders count'))
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewFolder.sub_groups_count + ' ' + _vm.$t('main.folders'))
+    }
+  })])]) : _c('div', {
+    staticClass: "uk-text-center uk-text-muted"
+  }, [_vm._m(1)])]) : _vm._e()])])])])])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "nav-item"
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    }
+  }, [_c('span', {
+    attrs: {
+      "uk-icon": "cloud-upload"
+    }
+  }), _vm._v(" Recently uploaded")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticStyle: {
+      "padding-top": "40%"
+    }
+  }, [_c('span', {
+    attrs: {
+      "uk-icon": "icon: ban; ratio: 2"
+    }
+  }), _vm._v(" "), _c('p', [_vm._v("No preview available")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-acd81a90", module.exports)
+  }
+}
+
+/***/ }),
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(46);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(48)("4a02f646", content, false);
+var update = __webpack_require__(3)("9f5cf210", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1d3946d6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Memorize.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1d3946d6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Memorize.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(47);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("4cf12c38", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-3d91e033\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Example.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-3d91e033\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Example.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(48);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("4a02f646", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -33431,228 +39077,59 @@ if(false) {
 }
 
 /***/ }),
-/* 48 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
+// load the styles
+var content = __webpack_require__(49);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("a671d93c", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-5957d677\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Show.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-5957d677\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Show.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
 }
-
-var listToStyles = __webpack_require__(49)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
 
 /***/ }),
-/* 49 */
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(50);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("74a0e200", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-acd81a90\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FileManager.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-acd81a90\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FileManager.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 75 */
 /***/ (function(module, exports) {
 
 /**
@@ -33685,7 +39162,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 50 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45649,21 +51126,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(40).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(56).setImmediate))
 
 /***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-if (false) {
-  module.exports = require('./vue.common.prod.js')
-} else {
-  module.exports = __webpack_require__(50)
-}
-
-
-/***/ }),
-/* 52 */
+/* 77 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -45691,3738 +51157,11 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 53 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(10);
-module.exports = __webpack_require__(11);
-
-
-/***/ }),
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Memorize_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Show",
-  // props: [
-  //   'lesson_slug'
-  // ],
-  props: ['postTitle', 'lessonSlug'],
-  data: function data() {
-    return {
-      name: 'mehmet',
-      items: [],
-      itemCount: 0
-
-    };
-  },
-  created: function created() {
-    this.fetchItems();
-  },
-
-  methods: {
-    fetchItems: function fetchItems() {
-      var _this = this;
-
-      // fetch('/api/memorize')
-      // // .then(res => res.json())
-      // .then(res => {
-      //   console.log(res);
-      // });
-      axios.get('/api/product/lesson/' + this.lessonSlug + '/memorize/items', {
-        params: {
-          id: 12345
-        }
-      }).then(function (res) {
-        console.log(res.data);
-        _this.items = res.data;
-      });
-    }
-  },
-  components: {
-    memorize: __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default.a
-  }
-});
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(36)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(65)
-
-var Component = __webpack_require__(3)(
-  /* script */
-  __webpack_require__(61),
-  /* template */
-  __webpack_require__(64),
-  /* scopeId */
-  "data-v-5957d677",
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\frontend\\lessons\\Show.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Show.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5957d677", Component.options)
-  } else {
-    hotAPI.reload("data-v-5957d677", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
-    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small",
-    staticStyle: {
-      "overflow": "hidden"
-    }
-  }, [_c('h5', {
-    staticClass: "text-highlighted uk-text-bold"
-  }, [_vm._v("Memorize")]), _vm._v(" "), _c('p', {
-    staticClass: "_memorize dear student"
-  }, [_vm._v(_vm._s(_vm.$t('main._memorize dear student', {
-    name: 'student'
-  })))]), _vm._v(" "), _c('div', [_c('ul', {
-    staticClass: "uk-list uk-list-decimal"
-  }, _vm._l((_vm.items), function(item, key) {
-    return (item.properties.level == 1) ? _c('li', [_vm._v(_vm._s(_vm.itemCount = +1) + "- " + _vm._s(item.title))]) : _vm._e()
-  }), 0)]), _vm._v(" "), _vm._m(0)])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-child-width-expand@s uk-text-center uk-margin-remove",
-    attrs: {
-      "uk-grid": ""
-    }
-  }, [_c('div', [_c('a', {
-    staticClass: "uk-button uk-button-primary open-",
-    attrs: {
-      "href": "#modal-sections",
-      "uk-toggle": ""
-    }
-  }, [_vm._v("Start the memorize test")]), _vm._v(" "), _c('div', {
-    attrs: {
-      "id": "modal-sections",
-      "uk-modal": ""
-    }
-  }, [_c('div', {
-    staticClass: "uk-modal-dialog uk-margin-auto-vertical"
-  }, [_c('div', {
-    staticClass: "uk-modal-header"
-  }, [_c('h2', {
-    staticClass: "uk-modal-title"
-  }, [_vm._v("Modal Title")])]), _vm._v(" "), _c('div', {
-    staticClass: "uk-modal-body"
-  })])])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5957d677", module.exports)
-  }
-}
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(62);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(48)("a671d93c", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-5957d677\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Show.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-5957d677\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Show.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 66 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Memorize"
-});
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(36)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(70)
-
-var Component = __webpack_require__(3)(
-  /* script */
-  __webpack_require__(66),
-  /* template */
-  __webpack_require__(69),
-  /* scopeId */
-  "data-v-1d3946d6",
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\frontend\\lessons\\Memorize.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Memorize.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1d3946d6", Component.options)
-  } else {
-    hotAPI.reload("data-v-1d3946d6", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h1', [_vm._v("Memorizes")])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-1d3946d6", module.exports)
-  }
-}
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(67);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(48)("9f5cf210", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1d3946d6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Memorize.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1d3946d6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Memorize.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 71 */,
-/* 72 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-    "ar": {
-        "login": "دخول",
-        "home": "الرئيسية",
-        "blog": "المدونة",
-        "store": "المتجر",
-        "contact": "إتصل بنا",
-        "Register": "التسجيل",
-        "Full name": "اسم المستخدم",
-        "Mother name": "اسم الام كاملا",
-        "Email": "البريد الالكتروني",
-        "get started": "سجل اللان",
-        "Latest Posts": "احدث المنشورات",
-        "news": "الاخبار",
-        "READ MORE": "تابع القراءة",
-        "Password": "كلمة المرور",
-        "First name": "الاسم",
-        "Father's name": "اسم الاب",
-        "Grandpa's name": "اسم الجد",
-        "Surname": "اللقب",
-        "Password confirm": "تاكيد كلمة المرور",
-        "Birthday": "تاريخ الميلاد",
-        "Phone number": "رقم الهاتف",
-        "Directorates": "المحافظة",
-        "Gender": "الجنس",
-        "School kind": "نوع المدرسة",
-        "School level": "المرحلة الدراسية",
-        "Male": "ذكر",
-        "Female": "انثى",
-        "Or, register with..": "او التسجيل باستخدام",
-        "The email has already been taken": "هذا الايميل مسجل مسبقا",
-        "Warning": "تنبيه",
-        "country": "البلد",
-        "Tags": "اكثر ما يتم البحث عنه",
-        "Categories": "العناوين المتوفرة بالصفحة",
-        "Study kind": "الدراسة",
-        "Blog Categories": "أقسام المدونة",
-        "Blog Posts": "مقالات المدونة",
-        "Blog": "المدونة",
-        "Posts": "المقالات",
-        "please fill out this field.": "املأ هذا الجزء",
-        "avatar_group_0": "مجموعة المُدرسين",
-        "avatar_group_2": "مجموعة طلاب الثانوية",
-        "admin": {
-            "Main Menu": "القائمة الرئيسية",
-            "Dashboard": "لوحة القيادة",
-            "Pages": "الصفحات",
-            "Contact": "معلومات الإتصال",
-            "Users": "المستخدمين",
-            "Menus": "القوائم",
-            "Institutions": "المؤسسات",
-            "All Institutions": "قائمة المؤسسات",
-            "Institution Scopes": "نطاقات المؤسسات",
-            "Directorates": "المديريات",
-            "Academies": "الأكاديميات",
-            "Acceptable scopes": "النطاقات المتاحة للوصول",
-            "Scope options": "خيارات النطاق",
-            "Modules": "الإضافات",
-            "Blog": "المدونة",
-            "Posts": "المقالات",
-            "Categories": "الأقسام",
-            "Banners": "الإعلاتات",
-            "Store": "المتجر",
-            "Products": "المنتجات",
-            "Product Types": "أنواع المنتجات",
-            "Attribute sets": "مجموعات السمات",
-            "Tags": "العلامات",
-            "Settings": "إعدادات",
-            "Layouts": "التخطيطات",
-            "Roles": "الأدوار",
-            "Languages": "اللغات",
-            "Countries": "البلدان",
-            "File Manager": "مدير الملفات",
-            "forms": "Forms",
-            "all forms": "All forms",
-            "templates": "Templates"
-        },
-        "auth": {
-            "failed": "البريد الالكتروني او كلمة المرور هذه لا تتطابق مع سجلاتنا, يرجى التأكد ومعاودة المحاولة.",
-            "Password": "كلمة المرور",
-            "Confirm Password": "تأكيد كلمة المرور",
-            "Forgot Password?": "هل نسيت كلمة المرور؟",
-            "Reset Password": "إعادة تعيين كلمة المرور",
-            "E-Mail Address": "عنوان البريد الإلكتروني",
-            "Send Password Reset Link": "إرسال رابط إعادة تعيين كلمة السر",
-            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
-        },
-        "main": {
-            "welcome": "مرحبا",
-            "users": "مستخدمين",
-            "new user today": "[1] مستخدم جديد اليوم|[2,*] مستخدمين جدد اليوم",
-            "new product today": "[1] منتج جديد اليوم|[2,*] منتجات جديدة اليوم",
-            "new post today": "[1] مقال جديد اليوم|[2,*] مقالات جديدة اليوم",
-            "new order today": "[1] طلب جديد اليوم|[2,*] طلبات جديدة اليوم",
-            "latest products": "آخر المنتجات",
-            "view the recently added products": "عرض آخر المنتجات التي تم اضافتها",
-            "latest users": "أخر المستخدمين",
-            "view the recently registered products": "عرض آخر المستخدمين المسجلين",
-            "welcome back": "اهلا وسهلاً بعودتك",
-            "site settings": "إعداادات الموقع",
-            "Home page": "الصفحة الرئيسية",
-            "Profile": "الملف الشخصي",
-            "Edit Profile": "تعديل الملف الشخصي",
-            "Observers List": "قائمة المراقبين",
-            "Account info": "معلومات الحساب",
-            "Password": "كلمة المرور",
-            "Current Current password": "كلمة المرور الحالية",
-            "New password": "كلمة المرور الجديدة",
-            "Confirm new password": "تأكيد كلمة المرور",
-            "Upload new image": "أضغط لرفع صورة جديدة",
-            "Set as default": "التعيين كأفتراضي",
-            "Members": "{0} عضو|[1,10] أعضاء|[10,*] عضواً",
-            "Thank you to join us": "شكرا لك للإنضمام الينا",
-            "One more step to activate your account": "خطوة أخرى لتفعيل حسابك",
-            "To complete your registration please verify your account": "لإكمال عملية التسجيل يرجى اكمال خطوات التحقق من حسابك",
-            "An email has been sent to your email": "تم إرسال بريد إلكتروني إلى عنوانك البريدي",
-            "with the activation instruction": "مع تعليمات التفعيل",
-            "If you haven't received your activation mail! please click on the link below": "إذا لم تتلق بريد التفعيل الخاص بك! الرجاء النقر على الرابط أدناه",
-            "Your account has been disable for a reason, to clarify about this issue lease contact the support team": "تم تعطيل حسابك لسبب ما ، لتوضيح هذه المشكلة ،يرجى الاتصال بفريق الدعم",
-            "Resend verification email": "أعد ارسال بريد التفعيل",
-            "_main": "الرئيسية",
-            "_users": "المستخدمين",
-            "_dashboard": "لوحة التحكم",
-            "_admin_dashboard": "لوحة تحكم الإدارة",
-            "_avatar": "الصورة",
-            "_name": "الأسم",
-            "_email": "البريد الإلكتروني",
-            "_setting": "الاعدادات",
-            "_gender": "الجنس",
-            "_role": "المستوى",
-            "_actions": "العمليات",
-            "_male": "ذكر",
-            "_female": "أنثى",
-            "_admin": "مدير",
-            "_user": "مستخدم",
-            "_about_me": "عني",
-            "_add": "إضافة",
-            "Edit": "تعديل",
-            "Description": "الوصف",
-            "_select": "أختر",
-            "_link": "الرابط",
-            "_pages": "الصفحات",
-            "_menus": "القوائم",
-            "_success_msg": "تمت الإضافة بنجاح",
-            "_update_msg": "نم التعديل بنجاح",
-            "_delete_msg": "نم الحذف بنجاح",
-            "_save_msg": "تم الحفظ بنجاح",
-            "_quick_links": "روابط سريعة",
-            "_profile": "الملف الشخصي",
-            "_logout": "خروج",
-            "_here": "هنا",
-            "_for_more_info": "للمزيد من المعلومات إتصل بنا",
-            "_reg_not_allowed": "التسجيل مغلق حاليا.",
-            "_site_is_offline": "الموقع تحت الصيانة",
-            "Website is currently offline.": "الموقع مغلق حالياً.",
-            "_copy_right": "جميع الحقوق محفوظة لـ",
-            "manage": "لوحة تحكم الإدارة",
-            "profile": "الملف الشخصي",
-            "log out": "تسجيل الخروج",
-            "Error log": "سجل الأخطاء",
-            "Create": "جديد",
-            "Basic input": "المعلومات الأساسية",
-            "Title": "العنوان",
-            "Content": "المحتوى",
-            "Tags": "الأوسمة",
-            "Create new tag": "أدخل وسم جديد",
-            "Properties": "الخصائص",
-            "Status": "حالة النشر",
-            "Allow Comments": "السماح بالتعليقات",
-            "Approved Comment Status": "الموافقة على التعليقات مباشرة",
-            "Category": "القسم",
-            "Parent Category": "التصنيف الأب",
-            "Attachments": "المرفقات",
-            "Add attachment": "إضافة مرفق",
-            "Images": "الصور",
-            "Cover image": "صورة الغلاف",
-            "File name": "أسم الملف",
-            "File Type": "نوع الملف",
-            "Download link": "رابط التحميل",
-            "Download": "تحميل",
-            "Actions": "العمليات",
-            "submit": "إرسال",
-            "Save changes": "حفظ التغيرات",
-            "Save": "حفظ",
-            "Save as new ver.": "حفظ كإصدار جديد",
-            "Position": "الترتيب",
-            "Show on menu": "العرض في القائمة الرئيسية",
-            "Please Select Category": "قم بإختيار التصنيف",
-            "Edit Comment": "تعديل التعليق",
-            "Updating": "جارِ التحرير",
-            "Loading": "جارِ التحميل",
-            "Please login to react with this post.": "يرجى تسجيل الدخول لاضافة التفاعل.",
-            "An error appended during loading, please refresh the page.": "حدث خطأ اثناء التحميل, يرجى اعادة تحميل الصفحة.",
-            "Report": "الإبلاغ عن المحتوى",
-            "Remove": "حذف",
-            "Appearance": "المضهر",
-            "Color pattern": "نمط اللون",
-            "By": "بواسطة",
-            "Cancel": "إلغاء",
-            "Reset": "إعادة تعيين",
-            "Placeholder": "النص التوضيحي",
-            "Fill the blank": "إملأ الفراغاات",
-            "Fill the blank question": "إملاء الفراغات في النص",
-            "Close": "إغلاق",
-            "Difficulty": "الصعوبة",
-            "Items num.": "عدد العناصر",
-            "Back": "عودة",
-            "version": "الإصدار",
-            "Oops": "عُذراً",
-            "Ok": "حسناً",
-            "view": "عرض",
-            "view all": "عرض الكُل",
-            "edit": "تعديل",
-            "delete": "حذف",
-            "add": "أضِف",
-            "login": "الدخول",
-            "register": "سجِل الآن!",
-            "Search here": "إبحث هنا ..",
-            "Main menu": "القائمة الرئيسية",
-            "hi": "أهلاً, {name}",
-            "My Courses": "كورساتي",
-            "Manage your website": "ادارة فعاليات الموقع",
-            "View and modify profile": "عرض و تعديل الملف الشخصي",
-            "view all of my courses": "عرض كل الدروس التي تم شرائها",
-            "User Profile": "أدارة المستخدم",
-            "Avatar groups": "مجموعات الصور الرمزية",
-            "Apply": "تطبيق",
-            "The total archived points": "مجموع النقاط المكتسبة",
-            "Total tiptop credits": "رصيد تبتوب المتوفر",
-            "Course period": "مدة الكورس",
-            "Achievement and development": "الإنجاز والتطور",
-            "Efficiency": "الكفائة",
-            "days": "أيام",
-            "Days": "[0,2] يوم|[3,10] أيام|[11,*] يوم",
-            "Minutes": "[0,2] دقيقة|[3,10] دقائق|[11,*] دقيقة",
-            "Seconds": "[0,2] ثانية|[3,10] ثوان|[11,*] ثانية",
-            "_units": "[0,2] وحدة|[3,10] وحدات|[11,*] وحدة",
-            "Remaining": "المتبقي",
-            "Administrator": "مدير عام الموقع",
-            "Manager": "مدير",
-            "Student": "طالب",
-            "Pass": "ترك",
-            "Review": "مراجعة",
-            "Dear": "عزيزي {name}",
-            "Starting": "جارِ البدأ",
-            "Display type": "نوع العرض",
-            "Meta input": "مدخلات الميتا",
-            "Meta Title": "عنوان الميتا",
-            "Meta Keywords": "كلمات الميتا الدلالية",
-            "Meta Description": "وصف الميتا",
-            "_blog": "المدونة",
-            "_posts": "المقالات",
-            "_post_title": "عنوان المقال",
-            "_new_posts": "مقال جديد",
-            "_new_post": "إنشاء مقال",
-            "_edit_post": "تعديل المقال",
-            "_title": "العنوان",
-            "_image": "الصورة",
-            "_auther": "المحرر",
-            "_body": "النص",
-            "_slug": "الرابط المختصر",
-            "_new_category": "قسم جديد",
-            "_categories": "الأقسام",
-            "_date": "التاريخ",
-            "_status": "حالة النشر",
-            "_publish": "حالة النشر",
-            "_unpublished": "غير منشور",
-            "_published": "منشور",
-            "_draft": "مسودة",
-            "_last_posts": "آخر المقالات",
-            "_cat_delete_confirm": "هل انت متأكد انك تريد حذف هذا التصنيف ؟",
-            "_cat_delete_confirm_details": "حذف هذا التصنيف سوف يحذف جميع المقلات المدرجة ضمنه!",
-            "_latest_posts": "آخر المقالات",
-            "_tags": "الأوسمة",
-            "Search in Blog": "إبحث في المدونة",
-            "search": "إبحث",
-            "Read more": "إقرأ المزيد",
-            "View more": "عرض المزيد",
-            "Blog Posts": "مقالات المدونة",
-            "Blog": "المدونة",
-            "Posts": "المقالات",
-            "posts": "المقالات",
-            "Comments": "التعليقات",
-            "Replay": "إضافة رد",
-            "Comment": "تعليق",
-            "Comment removed successfully": "تم حذف التعليق بنجاح",
-            "Comment added successfully": "تمت إضافة التعليق بنجاح",
-            "Type your comment here ..": "أضف تعليقك في هذه الخانة ..",
-            "Login now": "قم بتسجيل الدخول الآن",
-            "To add comments you are required to login with your account.": "لإضافة التعليقات يجب عليك تسجيل الدخول الى حسابك.",
-            "Cover Image": "صورة الغلاف",
-            "Details": "التفاصيل",
-            "Reactions": "التفاعل",
-            "Allow Com.": "السماح بالتعليق",
-            "View": "عرض",
-            "Blog Categories": "تصنيفات المدونة",
-            "Post images": "صور المنشور",
-            "Select a default post image, or upload a new image": "إختر صورة المنشور الافتراضية, او قم برفع صورة جديدة",
-            "Dear student, you can add your personal picture to be used for documents and certificates issuing.": "عزيزي الطالب, يمكنك إضافة صورتك الشخصية هنا لاستخدامها في طباعة الوثائق والشهادات.",
-            "Platform members": "أعضاء المنصة",
-            "_gallery": "المعرض",
-            "_albums": "الألبومات",
-            "_album": "الألبوم",
-            "_album_select": "أختر الألبوم",
-            "_new_album": "إضافة ألبوم",
-            "_pictures": "الصور",
-            "_images": "الصور",
-            "_upload": "تحميل",
-            "_album_delete_confirm": "هل انت متأكد انك تريد حذف هذا الألبوم ؟",
-            "_album_delete_confirm_details": "حذف هذا الألبوم سوف يحذف جميع الصور المدرجة ضمنه!",
-            "_models": "الإضافات",
-            "_banners": "الإعلانات",
-            "_banner": "إعلان",
-            "_banner_size": "حجم الإعلان",
-            "_carousels": "السلايدات",
-            "_new_model": "إنشاء إعلان",
-            "_edit_model": "تعديل الإعلان",
-            "_text_pos": "موقع النص",
-            "_model_size": "حجم الإعلان",
-            "_model_font": "لون الخط",
-            "_order_id": "التسلسل",
-            "_position": "الموقع",
-            "_last_news": "آخر الأخبار",
-            "_desicription": "الوصف",
-            "_langauge": "اللغة",
-            "_theme": "القالب",
-            "_active": "حالة الموقع",
-            "_registration": "التسجيل",
-            "_update": "تعديل",
-            "_submit": "ارسال",
-            "_home": "الرئيسية",
-            "_about_us": "من نحن",
-            "_login": "دخول",
-            "_password": "كلمة المرور",
-            "_confirm": "تأكيد",
-            "_remember_me": "تذكرني",
-            "_forgot_pass": "هل نسيت كلمة المرور ؟",
-            "_register": "تسجيل",
-            "_contact_us": "إتصل بنا",
-            "_contact_info": "معلومات الإتصال",
-            "_send_your_msg": "أرسل رسالتك هنا",
-            "_message": "نص الرسالة",
-            "_contact": "جهة إتصال",
-            "_subject": "الموضوع",
-            "Store": "المتجر",
-            "Store Categories": "تصنيفات المتجر",
-            "Product": "المنتج",
-            "Products": "المنتجات",
-            "Product info": "بيانات المنتج",
-            "Product image": "صورة المنتج",
-            "Product images": "صور المنتج",
-            "Type": "النوع",
-            "Quantity": "الكمية",
-            "Price": "السعر",
-            "SKU": "SKU كود",
-            "Attributes": "السمات",
-            "Product attributes": "سمات المنتج",
-            "Lessons": "الدروس",
-            "lessons": "دروس",
-            "Show list of categories": "أضهر قائمة الأقسام",
-            "Manage Stock": "إدارة الكمية المتوفرة",
-            "Units": "الوحدات",
-            "units": "وحدات",
-            "Add to cart": "أضف الى سلة المشتريات",
-            "Buy now": "إشتري الآن",
-            "This course includes": "هذه الدورة تحتويى على:",
-            "downloadable resources": "مصادر قابلة للتحميل",
-            "Full lifetime access": "امكانية الوصول مدى الحياة",
-            "Certificate of Completion": "شهادة اكمال الدورة",
-            "Showing products": "عرض المنتجات",
-            "Default Sort": "ترتيب افتراضي",
-            "Sort by name": "ترتيب حسب الإسم",
-            "Sort by position": "ترتيب حسب الترتيب",
-            "Price low to high": "السعر من الأرخص الى الأغلى",
-            "Price high to low": "السعر من الأغلى الى الارخص",
-            "of": "من",
-            "Search in Store": "إبحث في المتجر",
-            "To complete this step, please purchase the item first": "لإكمال هذه الخطوة, يرجى شراء المنتج اولاً",
-            "Search in store": "إبحث في المتجر",
-            "Filter by Category": "فلترة التصنيفات",
-            "Sort by": "عرض النتائج حسب",
-            "Apply Filter": "فلتر التصنيفات",
-            "Products browser": "تصفح المنتجات",
-            "Store's products": " منتجات المتجر",
-            "Price range": "نطاق السعر",
-            "From": "من",
-            "To": "إلى",
-            "Filter prices": "فلترة الأسعار",
-            "Adding ...": "جارِ الإضافة ...",
-            "Added to cart": " في السلة",
-            "Item is already added to your cart.": "العنصر مضاف في سلة المشتريات.",
-            "Item has been added successfully.": "تمت اضافة العنصر بنجاح",
-            "View lesson": "عرض الدرس",
-            "_memorize dear student": "عزيزي الطالب لديك مجموعة من التعابير المهمة التي يجب التعرف عليا قبل دخولك للدرس.",
-            "Cart": "سلة المشتريات",
-            "Cart items": "عناصر سلة المشتريات",
-            "Cart summary": "ملخص سلة المشتريات",
-            "Subtotal": "المجموع الفرعي",
-            "Discount": "الخصم",
-            "Grand Total": "المبلغ الإجمالي",
-            "Put discount coupon": "ضع كوبون التخفيض",
-            "Pay by": "الدفع بواسطة",
-            "Tiptop credits": "رصيد تبتوب",
-            "Credit card": "بطاقة ائتمانية",
-            "PayPal": "بايبال",
-            "Add new Lesson": "أضف درس جديد",
-            "Add new Unit": "أضف وحدة جديدة",
-            "Store Lessons": "دروس المتجر",
-            "Presentations and Multimedia": "العروض التقديمية و الوسائط",
-            "video link": "رابط الفيديو",
-            "Lesson description": "وصف الدرس",
-            "There is no available lessons in this unit": "لا يوجد دروس متوفرة في هذه الوحدة",
-            "Add Media Item": "أضف عنصر ميديا",
-            "Media items": "عناصر الميديا",
-            "Uploading": "جارِ الرفع ...",
-            "Quizzes": "إختبارات",
-            "quizzes": "إختبارات",
-            "Add Quiz": "أضف إختبار",
-            "Quiz name": "إسم الإختبار",
-            "Quiz Type": "نوع الإختبار",
-            "Short text": "إجابة قصيرة",
-            "Long text": "إجابة طويلة",
-            "For single line text fields": "لإجابات السطر الواحد",
-            "For paragraph text fields": "لإجابات النصوص الطويلة",
-            "Drop menu": "قائمة منسدلة",
-            "To select from menu": "للإختيار من القائمة المنسدلة",
-            "Single choice": "خيار واحد",
-            "Ratio allowing one choice": "يسمح بإجابة واحدة",
-            "Multiple choice": "إجابات متعددة",
-            "Allowing multi choice": "يسمح بأختيار اجابات متعددة",
-            "Section": "قسم",
-            "The section": "القسم",
-            "Section Title": "عنوان القسم",
-            "Create new section": "إنشاء قسم جديد",
-            "There is no form items yet, please select new item from the items list": "لا يوجد عناصر متاحة, يرجى الأختيار من قائمة العناصر للإضافة ",
-            "There is no form items yet.": "لا يوجد عناصر متاحة.",
-            "Press here to edit the default question.": "إضغط هنا لتعديل السؤال الإفتراضي",
-            "You can add description and instructions, or remove it from the question settings": "تستطيع إضافة بعض الوصف و التعليمات, او يمكنك حذفها من إعدادات السؤال",
-            "First option": "الخيار الأول",
-            "Option title": "عنوان الخيار",
-            "Option": "الخيار",
-            "Default": "إفتراضي",
-            "Delete": "حذف",
-            "Add Option": "أضف خيار",
-            "Question Options": "خيارات العنصر",
-            "Question Width": "عرض العنصر",
-            "General settings": "الإعدادات العامة",
-            "Score": "التقييم",
-            "Remark": "الدرجة",
-            "Add blank": "أضف فراغ",
-            "Delete blank": "حذف الفراغ",
-            "Quiz settings": "إعدادات الإمتحان",
-            "Quiz title": "عنوان الإمتحان",
-            "Quiz description": "وصف الإمتحان",
-            "Take the exam": "إبدأ الأمتحان",
-            "Your answer": "ضع إجابتك هنا",
-            "Source": "المصدر",
-            "Internal": "من المنهج",
-            "External": "خارجي",
-            "Recommending": "الترشيحات",
-            "Recommended": "وزاري",
-            "Not recommended": "غير مرشح",
-            "Display settings": "إعدادات العرض",
-            "Please wait, items are loading.": "يرجى الإنتظار يتم تحميل العناصر.",
-            "Please create a lesson first.": "يرجى إنشاء درس أولاً.",
-            "Marks": "[0,2] درجة|[3,10] درجات|[11,*] درجة",
-            "points": "{0} نقطة |[1,*] نقاط",
-            "Upload a new video": "إرفع فيديو جديد",
-            "HTML page": "HTML صفحة",
-            "Embed": "تضمين",
-            "Media name": "إسم ملف الميديا",
-            "Video upload": "رفع ملف فيدو",
-            "Drag and drop your video file to upload, or": "قم بسحب الفيديو وإفلاتها للتحميل ، أو",
-            "Drag and drop your files to upload, or": "قم بسحب ملفاتك وإفلاتها للتحميل ، أو",
-            "selecting one": "أختر من ملفاتك",
-            "Start upload": "إبدأ الرفع",
-            "Click to attach your files": "أضغط لارفاق الملفات المراد رفعها",
-            "orders": "طلبات",
-            "Place Order": "تأكيد الشراء",
-            "purchase complete": "لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: {number}.",
-            "My Orders": "مشترياتي",
-            "Order no.": "رقم الطلب",
-            "Purchasing date": "تاريخ لاشراء",
-            "Items count": "عدد العناصر",
-            "Payment status": "حالة الدفع",
-            "Invoice": "الفاتورة",
-            "Invoice No": "رقم الفاتورة",
-            "Invoice Date": "تاريخ الفاتورة",
-            "Recipient": "المستلم",
-            "Item description": "وصف العنصر",
-            "Unit Price": "سعر الوحدة",
-            "Qty.": "الكمية",
-            "Total": "المجموع",
-            "Print invoice": "أطبع الفاتورة",
-            "View invoice": "عرض الفاتورة",
-            "Payment Completed": "المبلغ مدفوع كلياً",
-            "forms": "النماذج",
-            "choose answer": "إختر الإجابة",
-            "all forms": "جميع النماذج",
-            "templates": "القوالب",
-            "save as Template": "حفظ كقالب",
-            "categories": "المصنفات",
-            "template categories": "مصنفات القوالب",
-            "_fill blank default paragraph": "ضع النص هناو ثم قم باختيار الكلمة المراد تحويلها الى فراغ و اضغط أضف فراغ.",
-            "Quiz period": "مدة الإختبار",
-            "this quiz have limited time to answer, which is": "الوقت المحدد لاكمال الإجابة على اسئلة هذا الإختبار هو",
-            "Are you sure that you want to start the quiz?": "هل انت متأكد انك مستعد لبدأ الإختبار؟",
-            "Yes, Start the quiz": "نعم, إبدأ الإختبار",
-            "back to the lesson": "العودة الى الدرس",
-            "Quiz time finished": "إنتهى وقت الاختبار",
-            "the time to end this quiz has been finished, we hope you done well with it": "لقد انتهى الوقت المخصص للإجابة على هذا الاختبار ، نأمل أن تكون قد أديته بشكل جيد.",
-            "Lesson quizzes": "إختبارات الدرس",
-            "Previous": "السابق",
-            "Next": "التالي",
-            "only": "فقط",
-            "You should answer": "يجيب عليك الإجابة على",
-            "questions and leave": "أسئلة وترك",
-            "Please, purchase the lesson to complete": "يرجى شراء الكورس لاكمال هذه العملية",
-            "Quiz has been submitted successfully": "تم إرسال الاختبار بنجاح",
-            "Unlimited time": "وقت غير محدود",
-            "Availability": "التوفر",
-            "Available": "مُتاح",
-            "Completed": "مُكتمل",
-            "Pending": "قيد الانتظار",
-            "No results": "لا يوجد نتائج",
-            "Results": "النتائج",
-            "Passed successfully": "تم الأجتياز بنجاح",
-            "Failed": "لم يتم الاجتياز",
-            "View results": "عرض النتائج"
-        },
-        "pagination": {
-            "previous": "&laquo; Previous",
-            "next": "Next &raquo;"
-        },
-        "passwords": {
-            "password": "Passwords must be at least six characters and match the confirmation.",
-            "reset": "Your password has been reset!",
-            "sent": "We have e-mailed your password reset link!",
-            "token": "This password reset token is invalid.",
-            "user": "We can't find a user with that e-mail address."
-        },
-        "validation": {
-            "accepted": "The {attribute} must be accepted.",
-            "active_url": "The {attribute} is not a valid URL.",
-            "after": "The {attribute} must be a date after {date}.",
-            "after_or_equal": "The {attribute} must be a date after or equal to {date}.",
-            "alpha": "The {attribute} may only contain letters.",
-            "alpha_dash": "The {attribute} may only contain letters, numbers, and dashes.",
-            "alpha_num": "The {attribute} may only contain letters and numbers.",
-            "array": "The {attribute} must be an array.",
-            "before": "The {attribute} must be a date before {date}.",
-            "before_or_equal": "The {attribute} must be a date before or equal to {date}.",
-            "between": {
-                "numeric": "The {attribute} must be between {min} and {max}.",
-                "file": "The {attribute} must be between {min} and {max} kilobytes.",
-                "string": "The {attribute} must be between {min} and {max} characters.",
-                "array": "The {attribute} must have between {min} and {max} items."
-            },
-            "boolean": "The {attribute} field must be true or false.",
-            "confirmed": "The {attribute} confirmation does not match.",
-            "date": "The {attribute} is not a valid date.",
-            "date_format": "The {attribute} does not match the format {format}.",
-            "different": "The {attribute} and {other} must be different.",
-            "digits": "The {attribute} must be {digits} digits.",
-            "digits_between": "The {attribute} must be between {min} and {max} digits.",
-            "dimensions": "The {attribute} has invalid image dimensions.",
-            "distinct": "The {attribute} field has a duplicate value.",
-            "email": "The {attribute} must be a valid email address.",
-            "exists": "The selected {attribute} is invalid.",
-            "file": "The {attribute} must be a file.",
-            "filled": "The {attribute} field must have a value.",
-            "image": "The {attribute} must be an image.",
-            "in": "The selected {attribute} is invalid.",
-            "in_array": "The {attribute} field does not exist in {other}.",
-            "integer": "The {attribute} must be an integer.",
-            "ip": "The {attribute} must be a valid IP address.",
-            "ipv4": "The {attribute} must be a valid IPv4 address.",
-            "ipv6": "The {attribute} must be a valid IPv6 address.",
-            "json": "The {attribute} must be a valid JSON string.",
-            "max": {
-                "numeric": "The {attribute} may not be greater than {max}.",
-                "file": "The {attribute} may not be greater than {max} kilobytes.",
-                "string": "The {attribute} may not be greater than {max} characters.",
-                "array": "The {attribute} may not have more than {max} items."
-            },
-            "mimes": "The {attribute} must be a file of type: {values}.",
-            "mimetypes": "The {attribute} must be a file of type: {values}.",
-            "min": {
-                "numeric": "The {attribute} must be at least {min}.",
-                "file": "The {attribute} must be at least {min} kilobytes.",
-                "string": "The {attribute} must be at least {min} characters.",
-                "array": "The {attribute} must have at least {min} items."
-            },
-            "not_in": "The selected {attribute} is invalid.",
-            "numeric": "The {attribute} must be a number.",
-            "present": "The {attribute} field must be present.",
-            "regex": "The {attribute} format is invalid.",
-            "required": "The {attribute} field is required.",
-            "required_if": "The {attribute} field is required when {other} is {value}.",
-            "required_unless": "The {attribute} field is required unless {other} is in {values}.",
-            "required_with": "The {attribute} field is required when {values} is present.",
-            "required_with_all": "The {attribute} field is required when {values} is present.",
-            "required_without": "The {attribute} field is required when {values} is not present.",
-            "required_without_all": "The {attribute} field is required when none of {values} are present.",
-            "same": "The {attribute} and {other} must match.",
-            "size": {
-                "numeric": "The {attribute} must be {size}.",
-                "file": "The {attribute} must be {size} kilobytes.",
-                "string": "The {attribute} must be {size} characters.",
-                "array": "The {attribute} must contain {size} items."
-            },
-            "string": "The {attribute} must be a string.",
-            "timezone": "The {attribute} must be a valid zone.",
-            "unique": "The {attribute} has already been taken.",
-            "uploaded": "The {attribute} failed to upload.",
-            "url": "The {attribute} format is invalid.",
-            "custom": {
-                "attribute-name": {
-                    "rule-name": "custom-message"
-                }
-            },
-            "attributes": []
-        }
-    },
-    "en": {
-        "admin": {
-            "Main Menu": "Main Menu",
-            "Dashboard": "Dashboard",
-            "Pages": "Pages",
-            "Contact": "Contact",
-            "Users": "Users",
-            "Menus": "Menus",
-            "Institutions": "Institutions",
-            "All Institutions": "All Institutions",
-            "Institution Scopes": "Institution Scopes",
-            "Directorates": "Directorates",
-            "Academies": "Academies",
-            "Acceptable scopes": "Acceptable scopes",
-            "Scope options": "Scope options",
-            "Modules": "Modules",
-            "Blog": "Blog",
-            "Posts": "Posts",
-            "Categories": "Categories",
-            "Banners": "Banners",
-            "Store": "Store",
-            "Products": "Products",
-            "Product Types": "Product Types",
-            "Attribute sets": "Attribute sets",
-            "Tags": "Tags",
-            "Settings": "Settings",
-            "Layouts": "Layouts",
-            "Roles": "Roles",
-            "Languages": "Languages",
-            "Countries": "Countries",
-            "File Manager": "File Manager",
-            "forms": "Forms",
-            "all forms": "All forms",
-            "templates": "Templates"
-        },
-        "auth": {
-            "failed": "These credentials do not match our records.",
-            "Password": "Password",
-            "Confirm Password": "Confirm Password",
-            "Reset Password": "Reset Password",
-            "Forgot Password?": "Forgot Password?",
-            "E-Mail Address": "E-Mail Address",
-            "Send Password Reset Link": "Send Password Reset Link",
-            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
-        },
-        "main": {
-            "welcome": "Welcome",
-            "users": "Users",
-            "new user today": "[1] New user today|[2,*] New users today",
-            "new product today": "[1] New product today|[2,*] New products today",
-            "new post today": "[1] New post today|[2,*] New posts today",
-            "new order today": "[1] New order today|[2,*] New orders today",
-            "latest products": "Latest products",
-            "view the recently added products": "View the recently added products",
-            "latest users": "Latest users",
-            "view the recently registered products": "View the recently registered products",
-            "welcome back": "Welcome back",
-            "site settings": "Site settings",
-            "From": "From",
-            "To": "To",
-            "Search here": "Search here ..",
-            "Main menu": "Main menu",
-            "hi": "Hi, {name}",
-            "My Courses": "My Courses",
-            "Manage your website": "Manage your website",
-            "View and modify profile": "View and modify profile",
-            "view all of my courses": "view all of my courses",
-            "User Profile": "User Profile",
-            "Avatar groups": "Avatar groups",
-            "Apply": "Apply",
-            "The total archived points": "The total archived points",
-            "Total tiptop credits": "Total tiptop credits",
-            "Course period": "Course period",
-            "Achievement and development": "Achievement and development",
-            "Efficiency": "Efficiency",
-            "days": "Days",
-            "Days": "[0,1] Day|[2,10] Days|[11,*] Days",
-            "_units": "[0,1] Unit|[2,10] Units|[11,*] Units",
-            "Remaining": "Remaining",
-            "Administrator": "Administrator",
-            "Manager": "Manager",
-            "Student": "Student",
-            "Pass": "Pass",
-            "Review": "Review",
-            "Dear": "Dear, {name}",
-            "Thank you to join us": "Thank you to join us",
-            "One more step to activate your account": "One more step to activate your account",
-            "To complete your registration please verify your account": "To complete your registration please verify your account",
-            "An email has been sent to your email": "An email has been sent to your email",
-            "with the activation instruction": "with the activation instruction",
-            "If you haven't received your activation mail! please click on the link below": "If you haven't received your activation email! please click on the link below",
-            "Your account has been disable for a reason, to clarify about this issue lease contact the support team": "Your account has been disable for a reason, to clarify about this issue lease contact the support team",
-            "Resend verification email": "Resend verification email",
-            "Home page": "Home page",
-            "Profile": "Profile",
-            "Edit Profile": "Edit Profile",
-            "Observers List": "Observers List",
-            "Account info": "Account info",
-            "Password": "Password",
-            "Current Current password": "Current Current password",
-            "New password": "New password",
-            "Confirm new password": "Confirm new password",
-            "Upload new image": "Upload new image",
-            "Set as default": "Set as default",
-            "Dear student, you can add your personal picture to be used for documents and certificates issuing.": "Dear student, you can add your personal picture to be used for documents and certificates issuing.",
-            "Platform members": "Platform members",
-            "_main": "Overview",
-            "_dashboard": "Dashboard",
-            "_users": "Users",
-            "_new_posts": "New posts",
-            "_setting": "Setting",
-            "_admin_dashboard": "Admin Dashboard",
-            "_avatar": "Avatar",
-            "_name": "Name",
-            "_email": "Email Address",
-            "_gender": "Gender",
-            "_role": "Role",
-            "_actions": "Actions",
-            "_male": "Male",
-            "_female": "Female",
-            "_admin": "Admin",
-            "_user": "User",
-            "_add": "New",
-            "Edit": "Edit",
-            "Description": "Description",
-            "_select": "Select",
-            "_pages": "Pages",
-            "_menus": "Menus",
-            "_success_msg": "Added successfully",
-            "_update_msg": "Updated successfully",
-            "_delete_msg": "Deleted successfully",
-            "_save_msg": "Saved successfully",
-            "_quick_links": "Quick Links",
-            "_profile": "Profile",
-            "_logout": "Logout",
-            "_here": "here",
-            "_for_more_info": "For more information contact us",
-            "_reg_not_allowed": "Registration is not available right now.",
-            "_site_is_offline": "The site is under maintenance",
-            "Website is currently offline.": "The website is currently offline.",
-            "_copy_right": "All Rights Reserved to",
-            "manage": "manage",
-            "profile": "profile",
-            "log out": "log out",
-            "Error log": "Error log",
-            "Create": "Create",
-            "Basic input": "Basic input",
-            "Title": "Title",
-            "Content": "Content",
-            "Tags": "Tags",
-            "Create new tag": "Insert new tag",
-            "Properties": "Properties",
-            "Status": "Status",
-            "Allow Comments": "Allow Comments",
-            "Approved Comment Status": "Approved Comment Status",
-            "Category": "Category",
-            "Parent Category": "Parent Category",
-            "Attachments": "Attachments",
-            "Add attachment": "Add attachment",
-            "Images": "Images",
-            "Cover image": "Cover image",
-            "File name": "File name",
-            "File Type": "File Type",
-            "Download link": "Download link",
-            "Download": "Download",
-            "Actions": "Actions",
-            "submit": "Submit",
-            "Save changes": "Save changes",
-            "Save": "Save",
-            "Save as new ver.": "Save as new ver.",
-            "Position": "Position",
-            "Show on menu": "Show on menu",
-            "Please Select Category": "Please Select Category",
-            "Report": "Report",
-            "Remove": "Remove",
-            "Appearance": "Appearance",
-            "Color pattern": "Color pattern",
-            "By": "By",
-            "Cancel": "Cancel",
-            "Reset": "Reset",
-            "Placeholder": "Placeholder",
-            "Close": "Close",
-            "Difficulty": "Difficulty",
-            "Items num.": "Items num.",
-            "Back": "Back",
-            "version": "Version",
-            "Oops": "Oops",
-            "Ok": "Ok",
-            "view": "View",
-            "view all": "View all",
-            "edit": "Edit",
-            "delete": "Delete",
-            "add": "Add",
-            "login": "Login",
-            "register": "register",
-            "Members": "{0} Member|[1,10] Members|[10,*] Members",
-            "Meta input": "Meta input",
-            "Meta Title": "Meta Title",
-            "Meta Keywords": "Meta Keywords",
-            "Meta Description": "Meta Description",
-            "_posts": "Posts",
-            "_post_title": "Post title",
-            "_new_post": "New Post",
-            "_edit_post": "Post edit",
-            "_title": "Title",
-            "_image": "Image",
-            "_auther": "Auther",
-            "_body": "Post body",
-            "_slug": "Slug URL",
-            "_category": "Category",
-            "_new_category": "New Category",
-            "_categories": "Categories",
-            "_date": "Date",
-            "_status": "Status",
-            "_unpublished": "Unpublished",
-            "_published": "Published",
-            "_draft": "draft",
-            "_last_posts": "Last Posts",
-            "_cat_delete_confirm": "Are you sure that you want to delete this category?",
-            "_cat_delete_confirm_details": "Deleting this, will delete all posts in this category",
-            "_latest_posts": "Latest Posts",
-            "_tags": "Tags",
-            "Search in Blog": "Search in Blog",
-            "search": "Search",
-            "Read more": "Read more",
-            "View more": "View more",
-            "Blog Posts": "Blog Posts",
-            "Blog": "Blog",
-            "Posts": "Posts",
-            "posts": "Posts",
-            "Replay": "Replay",
-            "Comments": "Comments",
-            "Comment": "Comment",
-            "Comment removed successfully": "Comment removed successfully",
-            "Comment added successfully": "Comment added successfully",
-            "Type your comment here ..": "Type your comment here ..",
-            "To add comments you are required to login with your account.": "To add comments you are required to login with your account.",
-            "Cover Image": "Cover Image",
-            "Details": "Details",
-            "Reactions": "Reactions",
-            "Allow Com.": "Allow Com.",
-            "View": "View",
-            "Blog Categories": "Blog Categories",
-            "Edit Comment": "Edit Comment",
-            "Updating": "Updating",
-            "Loading": "Loading",
-            "Please login to react with this post.": "Please login to react with this post.",
-            "An error appended during loading, please refresh the page.": "An error appended during loading, please refresh the page.",
-            "Post images": "Post images",
-            "Select a default post image, or upload a new image": "Select a default post image, or upload a new image:",
-            "_gallery": "Gallery",
-            "_albums": "Albums",
-            "_album": "Album",
-            "_album_select": "Select an album",
-            "_new_album": "New Albums",
-            "_pictures": "Pictures",
-            "_upload": "Upload",
-            "_album_delete_confirm": "Are you sure that you want to delete this album?",
-            "_album_delete_confirm_details": "Deleting this, will delete all pictures in this album",
-            "_models": "Models",
-            "_banners": "Banners",
-            "_banner": "Banner",
-            "_new_model": "New model",
-            "_edit_model": "Model edit",
-            "_model_size": "Model size",
-            "_model_font": "Model font",
-            "_carousels": "Carousels",
-            "_order_id": "Order",
-            "_text_pos": "text position",
-            "_last_news": "Last News",
-            "_desicription": "Desicription",
-            "_langauge": "Langauge",
-            "_theme": "Theme",
-            "_active": "Active",
-            "_registration": "Registration",
-            "_update": "Update",
-            "_home": "Home",
-            "_about_us": "About Us",
-            "_blog": "Blog",
-            "_login": "Login",
-            "_password": "Password",
-            "_confirm": "Confirm",
-            "_remember_me": "Remember Me",
-            "_forgot_pass": "Forgot password ?",
-            "_register": "Register",
-            "_contact_us": "Contact us",
-            "_contact_info": "Contact info",
-            "_send_your_msg": "SEND YOUR MESSAGE",
-            "_message": "the messege",
-            "_contact": "contact",
-            "_subject": "Subject",
-            "Store": "Store",
-            "Store Categories": "Store Categories",
-            "Product": "Product",
-            "Products": "Products",
-            "Product info": "Product info",
-            "Product image": "Product image",
-            "Product images": "Product images",
-            "Type": "Type",
-            "Quantity": "Quantity",
-            "Price": "Price",
-            "SKU": "SKU",
-            "Attributes": "Attributes",
-            "Product attributes": "Product attributes",
-            "Lessons": "Lessons",
-            "lessons": "Lessons",
-            "Show list of categories": "Show list of categories",
-            "Manage Stock": "Manage Stock",
-            "units": "Units",
-            "Add to cart": "Add to cart",
-            "Buy now": "Buy now",
-            "This course includes": "This course includes",
-            "downloadable resources": "downloadable resources",
-            "Full lifetime access": "Full lifetime access",
-            "Certificate of Completion": "Certificate of Completion",
-            "Showing products": "Showing result",
-            "Default Sort": "Default Sort",
-            "Sort by name": "Sort by name",
-            "Sort by position": "Sort by position",
-            "Price low to high": "Price low to high",
-            "Price high to low": "Price high to low",
-            "of": "of",
-            "Search in Store": "Search in Store",
-            "To complete this step, please purchase the item first": "To complete this step, please purchase the item first",
-            "Search in store": "Search in store",
-            "Filter by Category": "Filter by Category",
-            "Sort by": "Sort by",
-            "Apply Filter": "Apply Filter",
-            "Filter prices": "Filter prices",
-            "Adding ...": "Adding ...",
-            "Added to cart": "Added to cart",
-            "Item is already added to your cart.": "Item is already added to your cart.",
-            "Item has been added successfully.": "Item has been added successfully.",
-            "View lesson": "View lesson",
-            "Upload a new video": "Upload a new video",
-            "Youtube": "Youtube",
-            "HTML page": "HTML page",
-            "Embed": "Embed",
-            "Media name": "Media name",
-            "Video upload": "Video upload",
-            "Drag and drop your files to upload, or": "Drag and drop your files to upload, or",
-            "Drag and drop your video file to upload, or": "Drag and drop your video file to upload, or",
-            "selecting one": "selecting one",
-            "Start upload": "Start upload",
-            "Click to attach your files": "Click to attach your files",
-            "_memorize dear student": "Dear student, you have a set of important memorize terms you might need to know before starting this lesson",
-            "Cart": "Cart",
-            "Card items": "Card items",
-            "Cart summary": "Cart summary",
-            "Subtotal": "Subtotal",
-            "Discount": "Discount",
-            "Grand Total": "Grand Total",
-            "Put discount coupon": "Put discount coupon",
-            "Pay by": "Pay by",
-            "Tiptop credits": "Tiptop credits",
-            "Credit card": "Credit card",
-            "PayPal": "PayPal",
-            "Add new Lesson": "Add new Lesson",
-            "Add new Unit": "Add new Unit",
-            "Store Lessons": "Store Lessons",
-            "Presentations and Multimedia": "Presentations and Multimedia",
-            "video link": "video link",
-            "Lesson description": "Lesson description",
-            "Quizzes": "Quizzes",
-            "quizzes": "Quizzes",
-            "There is no available lessons in this unit": "There is no available lessons in this unit",
-            "Add Media Item": "Add Media Item",
-            "Media items": "Media items",
-            "Products browser": "Products browser",
-            "Store's products": "Store's products",
-            "Price range": "Price range",
-            "Uploading": "Uploading ...",
-            "Add Quiz": "Add Quiz",
-            "Quiz name": "Quiz name",
-            "Quiz Type": "Quiz Type",
-            "Short text": "Short text",
-            "Long text": "Long text",
-            "For single line text fields": "For single line text fields",
-            "For paragraph text fields": "For paragraph text fields",
-            "Drop menu": "Drop menu",
-            "To select from menu": "To select from menu",
-            "Single choice": "Single choice",
-            "Ratio allowing one choice": "Ratio allowing one choice",
-            "Multiple choice": "Multiple choice",
-            "Allowing multi choice": "Allowing multi choice",
-            "Section": "Section",
-            "The section": "The section",
-            "Section Title": "Section Title",
-            "Create new section": "Create new section",
-            "There is no form items yet, please select new item from the items list": "There is no form items yet, please select new item from the items list",
-            "There is no form items yet.": "There is no form items yet.",
-            "Press here to edit the default question.": "Press here to edit the default question.",
-            "You can add description and instructions, or remove it from the question settings": "You can add description and instructions, or remove it from the question settings",
-            "First option": "First option",
-            "Option title": "Option title",
-            "Option": "Option",
-            "Default": "Default",
-            "Delete": "Delete",
-            "Add Option": "Add Option",
-            "Question Options": "Question Options",
-            "General settings": "General settings",
-            "Score": "Score",
-            "Remark": "Remark",
-            "Fill the blank": "Fill the blank",
-            "Fill the blank question": "Fill the blank question",
-            "Add blank": "Add blank",
-            "Delete blank": "Delete blank",
-            "Quiz settings": "Quiz settings",
-            "Quiz title": "Quiz title",
-            "Quiz description": "Quiz description",
-            "Take the exam": "Take the exam",
-            "Your answer": "Your answer",
-            "Source": "Source",
-            "Internal": "Internal",
-            "External": "External",
-            "Recommending": "Recommending",
-            "Recommended": "Recommended",
-            "Display settings": "Display settings",
-            "Not recommended": "Not recommended",
-            "Please wait, items are loading.": "Please wait, items are loading.",
-            "Please create a lesson first.": "Please create a lesson first.",
-            "points": "[0,1] Point|[2,*] Points",
-            "Marks": "[0,1] Mark|[2,*] Marks",
-            "Minutes": "[0,1] Minute|[2,*] Minutes",
-            "Seconds": "[0,1] Second|[2,*] Seconds",
-            "Starting": "Starting",
-            "Display type": "Display type",
-            "orders": "Orders",
-            "Place Order": "Place Order",
-            "purchase complete": "Your purchase has been completed successfully, your order number is: {number}.",
-            "My Orders": "My Orders",
-            "Order no.": "Order no.",
-            "Purchasing date": "Purchasing date",
-            "Items count": "Items count",
-            "Payment status": "Payment status",
-            "Invoice": "Invoice",
-            "Invoice No": "Invoice No",
-            "Invoice Date": "Invoice Date",
-            "Recipient": "Recipient",
-            "Item description": "Item description",
-            "Unit Price": "Unit Price",
-            "Qty.": "Qty.",
-            "Total": "Total",
-            "Print invoice": "Print invoice",
-            "View invoice": "View invoice",
-            "Payment Completed": "Payment Completed",
-            "forms": "Forms",
-            "choose answer": "choose answer",
-            "all forms": "All forms",
-            "templates": "Templates",
-            "save as Template": "Save as Template",
-            "categories": "Categories",
-            "template categories": "Template categories",
-            "_fill blank default paragraph": "Add your paragraph here, the select the word that you want to convert to blank and click on insert blank.",
-            "Quiz period": "Quiz period",
-            "this quiz have limited time to answer, which is": "this quiz have limited time to answer, which is",
-            "Are you sure that you want to start the quiz?": "Are you sure that you want to start the quiz?",
-            "Yes, Start the quiz": "Yes, Start the quiz",
-            "back to the lesson": "back to the lesson",
-            "Quiz time finished": "Quiz time finished",
-            "the time to end this quiz has been finished, we hope you done well with it": "the time to end this quiz has been finished, we hope you done well with it",
-            "Lesson quizzes": "Lesson quizzes",
-            "Previous": "Previous",
-            "Next": "Next",
-            "only": "only",
-            "You should answer": "You should answer",
-            "questions and leave": "questions and leave",
-            "Please, purchase the lesson to complete": "Please, purchase the lesson to complete",
-            "Quiz has been submitted successfully": "Quiz has been submitted successfully",
-            "Unlimited time": "Unlimited time",
-            "Availability": "Availability",
-            "Available": "Available",
-            "Completed": "Completed",
-            "Pending": "Pending",
-            "Results": "Results",
-            "Passed successfully": "Passed successfully",
-            "Failed": "Failed",
-            "No results": "No results",
-            "View results": "View results"
-        },
-        "pagination": {
-            "previous": "&laquo; Previous",
-            "next": "Next &raquo;"
-        },
-        "passwords": {
-            "password": "Passwords must be at least six characters and match the confirmation.",
-            "reset": "Your password has been reset!",
-            "sent": "We have e-mailed your password reset link!",
-            "token": "This password reset token is invalid.",
-            "user": "We can't find a user with that e-mail address."
-        },
-        "validation": {
-            "accepted": "The {attribute} must be accepted.",
-            "active_url": "The {attribute} is not a valid URL.",
-            "after": "The {attribute} must be a date after {date}.",
-            "after_or_equal": "The {attribute} must be a date after or equal to {date}.",
-            "alpha": "The {attribute} may only contain letters.",
-            "alpha_dash": "The {attribute} may only contain letters, numbers, and dashes.",
-            "alpha_num": "The {attribute} may only contain letters and numbers.",
-            "array": "The {attribute} must be an array.",
-            "before": "The {attribute} must be a date before {date}.",
-            "before_or_equal": "The {attribute} must be a date before or equal to {date}.",
-            "between": {
-                "numeric": "The {attribute} must be between {min} and {max}.",
-                "file": "The {attribute} must be between {min} and {max} kilobytes.",
-                "string": "The {attribute} must be between {min} and {max} characters.",
-                "array": "The {attribute} must have between {min} and {max} items."
-            },
-            "boolean": "The {attribute} field must be true or false.",
-            "confirmed": "The {attribute} confirmation does not match.",
-            "date": "The {attribute} is not a valid date.",
-            "date_format": "The {attribute} does not match the format {format}.",
-            "different": "The {attribute} and {other} must be different.",
-            "digits": "The {attribute} must be {digits} digits.",
-            "digits_between": "The {attribute} must be between {min} and {max} digits.",
-            "dimensions": "The {attribute} has invalid image dimensions.",
-            "distinct": "The {attribute} field has a duplicate value.",
-            "email": "The {attribute} must be a valid email address.",
-            "exists": "The selected {attribute} is invalid.",
-            "file": "The {attribute} must be a file.",
-            "filled": "The {attribute} field must have a value.",
-            "image": "The {attribute} must be an image.",
-            "in": "The selected {attribute} is invalid.",
-            "in_array": "The {attribute} field does not exist in {other}.",
-            "integer": "The {attribute} must be an integer.",
-            "ip": "The {attribute} must be a valid IP address.",
-            "ipv4": "The {attribute} must be a valid IPv4 address.",
-            "ipv6": "The {attribute} must be a valid IPv6 address.",
-            "json": "The {attribute} must be a valid JSON string.",
-            "max": {
-                "numeric": "The {attribute} may not be greater than {max}.",
-                "file": "The {attribute} may not be greater than {max} kilobytes.",
-                "string": "The {attribute} may not be greater than {max} characters.",
-                "array": "The {attribute} may not have more than {max} items."
-            },
-            "mimes": "The {attribute} must be a file of type: {values}.",
-            "mimetypes": "The {attribute} must be a file of type: {values}.",
-            "min": {
-                "numeric": "The {attribute} must be at least {min}.",
-                "file": "The {attribute} must be at least {min} kilobytes.",
-                "string": "The {attribute} must be at least {min} characters.",
-                "array": "The {attribute} must have at least {min} items."
-            },
-            "not_in": "The selected {attribute} is invalid.",
-            "numeric": "The {attribute} must be a number.",
-            "present": "The {attribute} field must be present.",
-            "regex": "The {attribute} format is invalid.",
-            "required": "The {attribute} field is required.",
-            "required_if": "The {attribute} field is required when {other} is {value}.",
-            "required_unless": "The {attribute} field is required unless {other} is in {values}.",
-            "required_with": "The {attribute} field is required when {values} is present.",
-            "required_with_all": "The {attribute} field is required when {values} is present.",
-            "required_without": "The {attribute} field is required when {values} is not present.",
-            "required_without_all": "The {attribute} field is required when none of {values} are present.",
-            "same": "The {attribute} and {other} must match.",
-            "size": {
-                "numeric": "The {attribute} must be {size}.",
-                "file": "The {attribute} must be {size} kilobytes.",
-                "string": "The {attribute} must be {size} characters.",
-                "array": "The {attribute} must contain {size} items."
-            },
-            "string": "The {attribute} must be a string.",
-            "timezone": "The {attribute} must be a valid zone.",
-            "unique": "The {attribute} has already been taken.",
-            "uploaded": "The {attribute} failed to upload.",
-            "url": "The {attribute} format is invalid.",
-            "custom": {
-                "attribute-name": {
-                    "rule-name": "custom-message"
-                }
-            },
-            "attributes": []
-        }
-    }
-});
-
-/***/ }),
-/* 73 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/*!
- * vue-i18n v8.22.3 
- * (c) 2021 kazuya kawaguchi
- * Released under the MIT License.
- */
-/*  */
-
-/**
- * constants
- */
-
-var numberFormatKeys = [
-  'compactDisplay',
-  'currency',
-  'currencyDisplay',
-  'currencySign',
-  'localeMatcher',
-  'notation',
-  'numberingSystem',
-  'signDisplay',
-  'style',
-  'unit',
-  'unitDisplay',
-  'useGrouping',
-  'minimumIntegerDigits',
-  'minimumFractionDigits',
-  'maximumFractionDigits',
-  'minimumSignificantDigits',
-  'maximumSignificantDigits'
-];
-
-/**
- * utilities
- */
-
-function warn (msg, err) {
-  if (typeof console !== 'undefined') {
-    console.warn('[vue-i18n] ' + msg);
-    /* istanbul ignore if */
-    if (err) {
-      console.warn(err.stack);
-    }
-  }
-}
-
-function error (msg, err) {
-  if (typeof console !== 'undefined') {
-    console.error('[vue-i18n] ' + msg);
-    /* istanbul ignore if */
-    if (err) {
-      console.error(err.stack);
-    }
-  }
-}
-
-var isArray = Array.isArray;
-
-function isObject (obj) {
-  return obj !== null && typeof obj === 'object'
-}
-
-function isBoolean (val) {
-  return typeof val === 'boolean'
-}
-
-function isString (val) {
-  return typeof val === 'string'
-}
-
-var toString = Object.prototype.toString;
-var OBJECT_STRING = '[object Object]';
-function isPlainObject (obj) {
-  return toString.call(obj) === OBJECT_STRING
-}
-
-function isNull (val) {
-  return val === null || val === undefined
-}
-
-function isFunction (val) {
-  return typeof val === 'function'
-}
-
-function parseArgs () {
-  var args = [], len = arguments.length;
-  while ( len-- ) args[ len ] = arguments[ len ];
-
-  var locale = null;
-  var params = null;
-  if (args.length === 1) {
-    if (isObject(args[0]) || isArray(args[0])) {
-      params = args[0];
-    } else if (typeof args[0] === 'string') {
-      locale = args[0];
-    }
-  } else if (args.length === 2) {
-    if (typeof args[0] === 'string') {
-      locale = args[0];
-    }
-    /* istanbul ignore if */
-    if (isObject(args[1]) || isArray(args[1])) {
-      params = args[1];
-    }
-  }
-
-  return { locale: locale, params: params }
-}
-
-function looseClone (obj) {
-  return JSON.parse(JSON.stringify(obj))
-}
-
-function remove (arr, item) {
-  if (arr.length) {
-    var index = arr.indexOf(item);
-    if (index > -1) {
-      return arr.splice(index, 1)
-    }
-  }
-}
-
-function includes (arr, item) {
-  return !!~arr.indexOf(item)
-}
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-function hasOwn (obj, key) {
-  return hasOwnProperty.call(obj, key)
-}
-
-function merge (target) {
-  var arguments$1 = arguments;
-
-  var output = Object(target);
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments$1[i];
-    if (source !== undefined && source !== null) {
-      var key = (void 0);
-      for (key in source) {
-        if (hasOwn(source, key)) {
-          if (isObject(source[key])) {
-            output[key] = merge(output[key], source[key]);
-          } else {
-            output[key] = source[key];
-          }
-        }
-      }
-    }
-  }
-  return output
-}
-
-function looseEqual (a, b) {
-  if (a === b) { return true }
-  var isObjectA = isObject(a);
-  var isObjectB = isObject(b);
-  if (isObjectA && isObjectB) {
-    try {
-      var isArrayA = isArray(a);
-      var isArrayB = isArray(b);
-      if (isArrayA && isArrayB) {
-        return a.length === b.length && a.every(function (e, i) {
-          return looseEqual(e, b[i])
-        })
-      } else if (!isArrayA && !isArrayB) {
-        var keysA = Object.keys(a);
-        var keysB = Object.keys(b);
-        return keysA.length === keysB.length && keysA.every(function (key) {
-          return looseEqual(a[key], b[key])
-        })
-      } else {
-        /* istanbul ignore next */
-        return false
-      }
-    } catch (e) {
-      /* istanbul ignore next */
-      return false
-    }
-  } else if (!isObjectA && !isObjectB) {
-    return String(a) === String(b)
-  } else {
-    return false
-  }
-}
-
-/**
- * Sanitizes html special characters from input strings. For mitigating risk of XSS attacks.
- * @param rawText The raw input from the user that should be escaped.
- */
-function escapeHtml(rawText) {
-  return rawText
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-}
-
-/**
- * Escapes html tags and special symbols from all provided params which were returned from parseArgs().params.
- * This method performs an in-place operation on the params object.
- *
- * @param {any} params Parameters as provided from `parseArgs().params`.
- *                     May be either an array of strings or a string->any map.
- *
- * @returns The manipulated `params` object.
- */
-function escapeParams(params) {
-  if(params != null) {
-    Object.keys(params).forEach(function (key) {
-      if(typeof(params[key]) == 'string') {
-        params[key] = escapeHtml(params[key]);
-      }
-    });
-  }
-  return params
-}
-
-/*  */
-
-function extend (Vue) {
-  if (!Vue.prototype.hasOwnProperty('$i18n')) {
-    // $FlowFixMe
-    Object.defineProperty(Vue.prototype, '$i18n', {
-      get: function get () { return this._i18n }
-    });
-  }
-
-  Vue.prototype.$t = function (key) {
-    var values = [], len = arguments.length - 1;
-    while ( len-- > 0 ) values[ len ] = arguments[ len + 1 ];
-
-    var i18n = this.$i18n;
-    return i18n._t.apply(i18n, [ key, i18n.locale, i18n._getMessages(), this ].concat( values ))
-  };
-
-  Vue.prototype.$tc = function (key, choice) {
-    var values = [], len = arguments.length - 2;
-    while ( len-- > 0 ) values[ len ] = arguments[ len + 2 ];
-
-    var i18n = this.$i18n;
-    return i18n._tc.apply(i18n, [ key, i18n.locale, i18n._getMessages(), this, choice ].concat( values ))
-  };
-
-  Vue.prototype.$te = function (key, locale) {
-    var i18n = this.$i18n;
-    return i18n._te(key, i18n.locale, i18n._getMessages(), locale)
-  };
-
-  Vue.prototype.$d = function (value) {
-    var ref;
-
-    var args = [], len = arguments.length - 1;
-    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-    return (ref = this.$i18n).d.apply(ref, [ value ].concat( args ))
-  };
-
-  Vue.prototype.$n = function (value) {
-    var ref;
-
-    var args = [], len = arguments.length - 1;
-    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-    return (ref = this.$i18n).n.apply(ref, [ value ].concat( args ))
-  };
-}
-
-/*  */
-
-var mixin = {
-  beforeCreate: function beforeCreate () {
-    var options = this.$options;
-    options.i18n = options.i18n || (options.__i18n ? {} : null);
-
-    if (options.i18n) {
-      if (options.i18n instanceof VueI18n) {
-        // init locale messages via custom blocks
-        if (options.__i18n) {
-          try {
-            var localeMessages = options.i18n && options.i18n.messages ? options.i18n.messages : {};
-            options.__i18n.forEach(function (resource) {
-              localeMessages = merge(localeMessages, JSON.parse(resource));
-            });
-            Object.keys(localeMessages).forEach(function (locale) {
-              options.i18n.mergeLocaleMessage(locale, localeMessages[locale]);
-            });
-          } catch (e) {
-            if (true) {
-              error("Cannot parse locale messages via custom blocks.", e);
-            }
-          }
-        }
-        this._i18n = options.i18n;
-        this._i18nWatcher = this._i18n.watchI18nData();
-      } else if (isPlainObject(options.i18n)) {
-        var rootI18n = this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n
-          ? this.$root.$i18n
-          : null;
-        // component local i18n
-        if (rootI18n) {
-          options.i18n.root = this.$root;
-          options.i18n.formatter = rootI18n.formatter;
-          options.i18n.fallbackLocale = rootI18n.fallbackLocale;
-          options.i18n.formatFallbackMessages = rootI18n.formatFallbackMessages;
-          options.i18n.silentTranslationWarn = rootI18n.silentTranslationWarn;
-          options.i18n.silentFallbackWarn = rootI18n.silentFallbackWarn;
-          options.i18n.pluralizationRules = rootI18n.pluralizationRules;
-          options.i18n.preserveDirectiveContent = rootI18n.preserveDirectiveContent;
-        }
-
-        // init locale messages via custom blocks
-        if (options.__i18n) {
-          try {
-            var localeMessages$1 = options.i18n && options.i18n.messages ? options.i18n.messages : {};
-            options.__i18n.forEach(function (resource) {
-              localeMessages$1 = merge(localeMessages$1, JSON.parse(resource));
-            });
-            options.i18n.messages = localeMessages$1;
-          } catch (e) {
-            if (true) {
-              warn("Cannot parse locale messages via custom blocks.", e);
-            }
-          }
-        }
-
-        var ref = options.i18n;
-        var sharedMessages = ref.sharedMessages;
-        if (sharedMessages && isPlainObject(sharedMessages)) {
-          options.i18n.messages = merge(options.i18n.messages, sharedMessages);
-        }
-
-        this._i18n = new VueI18n(options.i18n);
-        this._i18nWatcher = this._i18n.watchI18nData();
-
-        if (options.i18n.sync === undefined || !!options.i18n.sync) {
-          this._localeWatcher = this.$i18n.watchLocale();
-        }
-
-        if (rootI18n) {
-          rootI18n.onComponentInstanceCreated(this._i18n);
-        }
-      } else {
-        if (true) {
-          warn("Cannot be interpreted 'i18n' option.");
-        }
-      }
-    } else if (this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n) {
-      // root i18n
-      this._i18n = this.$root.$i18n;
-    } else if (options.parent && options.parent.$i18n && options.parent.$i18n instanceof VueI18n) {
-      // parent i18n
-      this._i18n = options.parent.$i18n;
-    }
-  },
-
-  beforeMount: function beforeMount () {
-    var options = this.$options;
-    options.i18n = options.i18n || (options.__i18n ? {} : null);
-
-    if (options.i18n) {
-      if (options.i18n instanceof VueI18n) {
-        // init locale messages via custom blocks
-        this._i18n.subscribeDataChanging(this);
-        this._subscribing = true;
-      } else if (isPlainObject(options.i18n)) {
-        this._i18n.subscribeDataChanging(this);
-        this._subscribing = true;
-      } else {
-        if (true) {
-          warn("Cannot be interpreted 'i18n' option.");
-        }
-      }
-    } else if (this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n) {
-      this._i18n.subscribeDataChanging(this);
-      this._subscribing = true;
-    } else if (options.parent && options.parent.$i18n && options.parent.$i18n instanceof VueI18n) {
-      this._i18n.subscribeDataChanging(this);
-      this._subscribing = true;
-    }
-  },
-
-  beforeDestroy: function beforeDestroy () {
-    if (!this._i18n) { return }
-
-    var self = this;
-    this.$nextTick(function () {
-      if (self._subscribing) {
-        self._i18n.unsubscribeDataChanging(self);
-        delete self._subscribing;
-      }
-
-      if (self._i18nWatcher) {
-        self._i18nWatcher();
-        self._i18n.destroyVM();
-        delete self._i18nWatcher;
-      }
-
-      if (self._localeWatcher) {
-        self._localeWatcher();
-        delete self._localeWatcher;
-      }
-    });
-  }
-};
-
-/*  */
-
-var interpolationComponent = {
-  name: 'i18n',
-  functional: true,
-  props: {
-    tag: {
-      type: [String, Boolean, Object],
-      default: 'span'
-    },
-    path: {
-      type: String,
-      required: true
-    },
-    locale: {
-      type: String
-    },
-    places: {
-      type: [Array, Object]
-    }
-  },
-  render: function render (h, ref) {
-    var data = ref.data;
-    var parent = ref.parent;
-    var props = ref.props;
-    var slots = ref.slots;
-
-    var $i18n = parent.$i18n;
-    if (!$i18n) {
-      if (true) {
-        warn('Cannot find VueI18n instance!');
-      }
-      return
-    }
-
-    var path = props.path;
-    var locale = props.locale;
-    var places = props.places;
-    var params = slots();
-    var children = $i18n.i(
-      path,
-      locale,
-      onlyHasDefaultPlace(params) || places
-        ? useLegacyPlaces(params.default, places)
-        : params
-    );
-
-    var tag = (!!props.tag && props.tag !== true) || props.tag === false ? props.tag : 'span';
-    return tag ? h(tag, data, children) : children
-  }
-};
-
-function onlyHasDefaultPlace (params) {
-  var prop;
-  for (prop in params) {
-    if (prop !== 'default') { return false }
-  }
-  return Boolean(prop)
-}
-
-function useLegacyPlaces (children, places) {
-  var params = places ? createParamsFromPlaces(places) : {};
-
-  if (!children) { return params }
-
-  // Filter empty text nodes
-  children = children.filter(function (child) {
-    return child.tag || child.text.trim() !== ''
-  });
-
-  var everyPlace = children.every(vnodeHasPlaceAttribute);
-  if ("development" !== 'production' && everyPlace) {
-    warn('`place` attribute is deprecated in next major version. Please switch to Vue slots.');
-  }
-
-  return children.reduce(
-    everyPlace ? assignChildPlace : assignChildIndex,
-    params
-  )
-}
-
-function createParamsFromPlaces (places) {
-  if (true) {
-    warn('`places` prop is deprecated in next major version. Please switch to Vue slots.');
-  }
-
-  return Array.isArray(places)
-    ? places.reduce(assignChildIndex, {})
-    : Object.assign({}, places)
-}
-
-function assignChildPlace (params, child) {
-  if (child.data && child.data.attrs && child.data.attrs.place) {
-    params[child.data.attrs.place] = child;
-  }
-  return params
-}
-
-function assignChildIndex (params, child, index) {
-  params[index] = child;
-  return params
-}
-
-function vnodeHasPlaceAttribute (vnode) {
-  return Boolean(vnode.data && vnode.data.attrs && vnode.data.attrs.place)
-}
-
-/*  */
-
-var numberComponent = {
-  name: 'i18n-n',
-  functional: true,
-  props: {
-    tag: {
-      type: [String, Boolean, Object],
-      default: 'span'
-    },
-    value: {
-      type: Number,
-      required: true
-    },
-    format: {
-      type: [String, Object]
-    },
-    locale: {
-      type: String
-    }
-  },
-  render: function render (h, ref) {
-    var props = ref.props;
-    var parent = ref.parent;
-    var data = ref.data;
-
-    var i18n = parent.$i18n;
-
-    if (!i18n) {
-      if (true) {
-        warn('Cannot find VueI18n instance!');
-      }
-      return null
-    }
-
-    var key = null;
-    var options = null;
-
-    if (isString(props.format)) {
-      key = props.format;
-    } else if (isObject(props.format)) {
-      if (props.format.key) {
-        key = props.format.key;
-      }
-
-      // Filter out number format options only
-      options = Object.keys(props.format).reduce(function (acc, prop) {
-        var obj;
-
-        if (includes(numberFormatKeys, prop)) {
-          return Object.assign({}, acc, ( obj = {}, obj[prop] = props.format[prop], obj ))
-        }
-        return acc
-      }, null);
-    }
-
-    var locale = props.locale || i18n.locale;
-    var parts = i18n._ntp(props.value, locale, key, options);
-
-    var values = parts.map(function (part, index) {
-      var obj;
-
-      var slot = data.scopedSlots && data.scopedSlots[part.type];
-      return slot ? slot(( obj = {}, obj[part.type] = part.value, obj.index = index, obj.parts = parts, obj )) : part.value
-    });
-
-    var tag = (!!props.tag && props.tag !== true) || props.tag === false ? props.tag : 'span';
-    return tag
-      ? h(tag, {
-        attrs: data.attrs,
-        'class': data['class'],
-        staticClass: data.staticClass
-      }, values)
-      : values
-  }
-};
-
-/*  */
-
-function bind (el, binding, vnode) {
-  if (!assert(el, vnode)) { return }
-
-  t(el, binding, vnode);
-}
-
-function update (el, binding, vnode, oldVNode) {
-  if (!assert(el, vnode)) { return }
-
-  var i18n = vnode.context.$i18n;
-  if (localeEqual(el, vnode) &&
-    (looseEqual(binding.value, binding.oldValue) &&
-     looseEqual(el._localeMessage, i18n.getLocaleMessage(i18n.locale)))) { return }
-
-  t(el, binding, vnode);
-}
-
-function unbind (el, binding, vnode, oldVNode) {
-  var vm = vnode.context;
-  if (!vm) {
-    warn('Vue instance does not exists in VNode context');
-    return
-  }
-
-  var i18n = vnode.context.$i18n || {};
-  if (!binding.modifiers.preserve && !i18n.preserveDirectiveContent) {
-    el.textContent = '';
-  }
-  el._vt = undefined;
-  delete el['_vt'];
-  el._locale = undefined;
-  delete el['_locale'];
-  el._localeMessage = undefined;
-  delete el['_localeMessage'];
-}
-
-function assert (el, vnode) {
-  var vm = vnode.context;
-  if (!vm) {
-    warn('Vue instance does not exists in VNode context');
-    return false
-  }
-
-  if (!vm.$i18n) {
-    warn('VueI18n instance does not exists in Vue instance');
-    return false
-  }
-
-  return true
-}
-
-function localeEqual (el, vnode) {
-  var vm = vnode.context;
-  return el._locale === vm.$i18n.locale
-}
-
-function t (el, binding, vnode) {
-  var ref$1, ref$2;
-
-  var value = binding.value;
-
-  var ref = parseValue(value);
-  var path = ref.path;
-  var locale = ref.locale;
-  var args = ref.args;
-  var choice = ref.choice;
-  if (!path && !locale && !args) {
-    warn('value type not supported');
-    return
-  }
-
-  if (!path) {
-    warn('`path` is required in v-t directive');
-    return
-  }
-
-  var vm = vnode.context;
-  if (choice != null) {
-    el._vt = el.textContent = (ref$1 = vm.$i18n).tc.apply(ref$1, [ path, choice ].concat( makeParams(locale, args) ));
-  } else {
-    el._vt = el.textContent = (ref$2 = vm.$i18n).t.apply(ref$2, [ path ].concat( makeParams(locale, args) ));
-  }
-  el._locale = vm.$i18n.locale;
-  el._localeMessage = vm.$i18n.getLocaleMessage(vm.$i18n.locale);
-}
-
-function parseValue (value) {
-  var path;
-  var locale;
-  var args;
-  var choice;
-
-  if (isString(value)) {
-    path = value;
-  } else if (isPlainObject(value)) {
-    path = value.path;
-    locale = value.locale;
-    args = value.args;
-    choice = value.choice;
-  }
-
-  return { path: path, locale: locale, args: args, choice: choice }
-}
-
-function makeParams (locale, args) {
-  var params = [];
-
-  locale && params.push(locale);
-  if (args && (Array.isArray(args) || isPlainObject(args))) {
-    params.push(args);
-  }
-
-  return params
-}
-
-var Vue;
-
-function install (_Vue) {
-  /* istanbul ignore if */
-  if ("development" !== 'production' && install.installed && _Vue === Vue) {
-    warn('already installed.');
-    return
-  }
-  install.installed = true;
-
-  Vue = _Vue;
-
-  var version = (Vue.version && Number(Vue.version.split('.')[0])) || -1;
-  /* istanbul ignore if */
-  if ("development" !== 'production' && version < 2) {
-    warn(("vue-i18n (" + (install.version) + ") need to use Vue 2.0 or later (Vue: " + (Vue.version) + ")."));
-    return
-  }
-
-  extend(Vue);
-  Vue.mixin(mixin);
-  Vue.directive('t', { bind: bind, update: update, unbind: unbind });
-  Vue.component(interpolationComponent.name, interpolationComponent);
-  Vue.component(numberComponent.name, numberComponent);
-
-  // use simple mergeStrategies to prevent i18n instance lose '__proto__'
-  var strats = Vue.config.optionMergeStrategies;
-  strats.i18n = function (parentVal, childVal) {
-    return childVal === undefined
-      ? parentVal
-      : childVal
-  };
-}
-
-/*  */
-
-var BaseFormatter = function BaseFormatter () {
-  this._caches = Object.create(null);
-};
-
-BaseFormatter.prototype.interpolate = function interpolate (message, values) {
-  if (!values) {
-    return [message]
-  }
-  var tokens = this._caches[message];
-  if (!tokens) {
-    tokens = parse(message);
-    this._caches[message] = tokens;
-  }
-  return compile(tokens, values)
-};
-
-
-
-var RE_TOKEN_LIST_VALUE = /^(?:\d)+/;
-var RE_TOKEN_NAMED_VALUE = /^(?:\w)+/;
-
-function parse (format) {
-  var tokens = [];
-  var position = 0;
-
-  var text = '';
-  while (position < format.length) {
-    var char = format[position++];
-    if (char === '{') {
-      if (text) {
-        tokens.push({ type: 'text', value: text });
-      }
-
-      text = '';
-      var sub = '';
-      char = format[position++];
-      while (char !== undefined && char !== '}') {
-        sub += char;
-        char = format[position++];
-      }
-      var isClosed = char === '}';
-
-      var type = RE_TOKEN_LIST_VALUE.test(sub)
-        ? 'list'
-        : isClosed && RE_TOKEN_NAMED_VALUE.test(sub)
-          ? 'named'
-          : 'unknown';
-      tokens.push({ value: sub, type: type });
-    } else if (char === '%') {
-      // when found rails i18n syntax, skip text capture
-      if (format[(position)] !== '{') {
-        text += char;
-      }
-    } else {
-      text += char;
-    }
-  }
-
-  text && tokens.push({ type: 'text', value: text });
-
-  return tokens
-}
-
-function compile (tokens, values) {
-  var compiled = [];
-  var index = 0;
-
-  var mode = Array.isArray(values)
-    ? 'list'
-    : isObject(values)
-      ? 'named'
-      : 'unknown';
-  if (mode === 'unknown') { return compiled }
-
-  while (index < tokens.length) {
-    var token = tokens[index];
-    switch (token.type) {
-      case 'text':
-        compiled.push(token.value);
-        break
-      case 'list':
-        compiled.push(values[parseInt(token.value, 10)]);
-        break
-      case 'named':
-        if (mode === 'named') {
-          compiled.push((values)[token.value]);
-        } else {
-          if (true) {
-            warn(("Type of token '" + (token.type) + "' and format of value '" + mode + "' don't match!"));
-          }
-        }
-        break
-      case 'unknown':
-        if (true) {
-          warn("Detect 'unknown' type of token!");
-        }
-        break
-    }
-    index++;
-  }
-
-  return compiled
-}
-
-/*  */
-
-/**
- *  Path parser
- *  - Inspired:
- *    Vue.js Path parser
- */
-
-// actions
-var APPEND = 0;
-var PUSH = 1;
-var INC_SUB_PATH_DEPTH = 2;
-var PUSH_SUB_PATH = 3;
-
-// states
-var BEFORE_PATH = 0;
-var IN_PATH = 1;
-var BEFORE_IDENT = 2;
-var IN_IDENT = 3;
-var IN_SUB_PATH = 4;
-var IN_SINGLE_QUOTE = 5;
-var IN_DOUBLE_QUOTE = 6;
-var AFTER_PATH = 7;
-var ERROR = 8;
-
-var pathStateMachine = [];
-
-pathStateMachine[BEFORE_PATH] = {
-  'ws': [BEFORE_PATH],
-  'ident': [IN_IDENT, APPEND],
-  '[': [IN_SUB_PATH],
-  'eof': [AFTER_PATH]
-};
-
-pathStateMachine[IN_PATH] = {
-  'ws': [IN_PATH],
-  '.': [BEFORE_IDENT],
-  '[': [IN_SUB_PATH],
-  'eof': [AFTER_PATH]
-};
-
-pathStateMachine[BEFORE_IDENT] = {
-  'ws': [BEFORE_IDENT],
-  'ident': [IN_IDENT, APPEND],
-  '0': [IN_IDENT, APPEND],
-  'number': [IN_IDENT, APPEND]
-};
-
-pathStateMachine[IN_IDENT] = {
-  'ident': [IN_IDENT, APPEND],
-  '0': [IN_IDENT, APPEND],
-  'number': [IN_IDENT, APPEND],
-  'ws': [IN_PATH, PUSH],
-  '.': [BEFORE_IDENT, PUSH],
-  '[': [IN_SUB_PATH, PUSH],
-  'eof': [AFTER_PATH, PUSH]
-};
-
-pathStateMachine[IN_SUB_PATH] = {
-  "'": [IN_SINGLE_QUOTE, APPEND],
-  '"': [IN_DOUBLE_QUOTE, APPEND],
-  '[': [IN_SUB_PATH, INC_SUB_PATH_DEPTH],
-  ']': [IN_PATH, PUSH_SUB_PATH],
-  'eof': ERROR,
-  'else': [IN_SUB_PATH, APPEND]
-};
-
-pathStateMachine[IN_SINGLE_QUOTE] = {
-  "'": [IN_SUB_PATH, APPEND],
-  'eof': ERROR,
-  'else': [IN_SINGLE_QUOTE, APPEND]
-};
-
-pathStateMachine[IN_DOUBLE_QUOTE] = {
-  '"': [IN_SUB_PATH, APPEND],
-  'eof': ERROR,
-  'else': [IN_DOUBLE_QUOTE, APPEND]
-};
-
-/**
- * Check if an expression is a literal value.
- */
-
-var literalValueRE = /^\s?(?:true|false|-?[\d.]+|'[^']*'|"[^"]*")\s?$/;
-function isLiteral (exp) {
-  return literalValueRE.test(exp)
-}
-
-/**
- * Strip quotes from a string
- */
-
-function stripQuotes (str) {
-  var a = str.charCodeAt(0);
-  var b = str.charCodeAt(str.length - 1);
-  return a === b && (a === 0x22 || a === 0x27)
-    ? str.slice(1, -1)
-    : str
-}
-
-/**
- * Determine the type of a character in a keypath.
- */
-
-function getPathCharType (ch) {
-  if (ch === undefined || ch === null) { return 'eof' }
-
-  var code = ch.charCodeAt(0);
-
-  switch (code) {
-    case 0x5B: // [
-    case 0x5D: // ]
-    case 0x2E: // .
-    case 0x22: // "
-    case 0x27: // '
-      return ch
-
-    case 0x5F: // _
-    case 0x24: // $
-    case 0x2D: // -
-      return 'ident'
-
-    case 0x09: // Tab
-    case 0x0A: // Newline
-    case 0x0D: // Return
-    case 0xA0:  // No-break space
-    case 0xFEFF:  // Byte Order Mark
-    case 0x2028:  // Line Separator
-    case 0x2029:  // Paragraph Separator
-      return 'ws'
-  }
-
-  return 'ident'
-}
-
-/**
- * Format a subPath, return its plain form if it is
- * a literal string or number. Otherwise prepend the
- * dynamic indicator (*).
- */
-
-function formatSubPath (path) {
-  var trimmed = path.trim();
-  // invalid leading 0
-  if (path.charAt(0) === '0' && isNaN(path)) { return false }
-
-  return isLiteral(trimmed) ? stripQuotes(trimmed) : '*' + trimmed
-}
-
-/**
- * Parse a string path into an array of segments
- */
-
-function parse$1 (path) {
-  var keys = [];
-  var index = -1;
-  var mode = BEFORE_PATH;
-  var subPathDepth = 0;
-  var c;
-  var key;
-  var newChar;
-  var type;
-  var transition;
-  var action;
-  var typeMap;
-  var actions = [];
-
-  actions[PUSH] = function () {
-    if (key !== undefined) {
-      keys.push(key);
-      key = undefined;
-    }
-  };
-
-  actions[APPEND] = function () {
-    if (key === undefined) {
-      key = newChar;
-    } else {
-      key += newChar;
-    }
-  };
-
-  actions[INC_SUB_PATH_DEPTH] = function () {
-    actions[APPEND]();
-    subPathDepth++;
-  };
-
-  actions[PUSH_SUB_PATH] = function () {
-    if (subPathDepth > 0) {
-      subPathDepth--;
-      mode = IN_SUB_PATH;
-      actions[APPEND]();
-    } else {
-      subPathDepth = 0;
-      if (key === undefined) { return false }
-      key = formatSubPath(key);
-      if (key === false) {
-        return false
-      } else {
-        actions[PUSH]();
-      }
-    }
-  };
-
-  function maybeUnescapeQuote () {
-    var nextChar = path[index + 1];
-    if ((mode === IN_SINGLE_QUOTE && nextChar === "'") ||
-      (mode === IN_DOUBLE_QUOTE && nextChar === '"')) {
-      index++;
-      newChar = '\\' + nextChar;
-      actions[APPEND]();
-      return true
-    }
-  }
-
-  while (mode !== null) {
-    index++;
-    c = path[index];
-
-    if (c === '\\' && maybeUnescapeQuote()) {
-      continue
-    }
-
-    type = getPathCharType(c);
-    typeMap = pathStateMachine[mode];
-    transition = typeMap[type] || typeMap['else'] || ERROR;
-
-    if (transition === ERROR) {
-      return // parse error
-    }
-
-    mode = transition[0];
-    action = actions[transition[1]];
-    if (action) {
-      newChar = transition[2];
-      newChar = newChar === undefined
-        ? c
-        : newChar;
-      if (action() === false) {
-        return
-      }
-    }
-
-    if (mode === AFTER_PATH) {
-      return keys
-    }
-  }
-}
-
-
-
-
-
-var I18nPath = function I18nPath () {
-  this._cache = Object.create(null);
-};
-
-/**
- * External parse that check for a cache hit first
- */
-I18nPath.prototype.parsePath = function parsePath (path) {
-  var hit = this._cache[path];
-  if (!hit) {
-    hit = parse$1(path);
-    if (hit) {
-      this._cache[path] = hit;
-    }
-  }
-  return hit || []
-};
-
-/**
- * Get path value from path string
- */
-I18nPath.prototype.getPathValue = function getPathValue (obj, path) {
-  if (!isObject(obj)) { return null }
-
-  var paths = this.parsePath(path);
-  if (paths.length === 0) {
-    return null
-  } else {
-    var length = paths.length;
-    var last = obj;
-    var i = 0;
-    while (i < length) {
-      var value = last[paths[i]];
-      if (value === undefined) {
-        return null
-      }
-      last = value;
-      i++;
-    }
-
-    return last
-  }
-};
-
-/*  */
-
-
-
-var htmlTagMatcher = /<\/?[\w\s="/.':;#-\/]+>/;
-var linkKeyMatcher = /(?:@(?:\.[a-z]+)?:(?:[\w\-_|.]+|\([\w\-_|.]+\)))/g;
-var linkKeyPrefixMatcher = /^@(?:\.([a-z]+))?:/;
-var bracketsMatcher = /[()]/g;
-var defaultModifiers = {
-  'upper': function (str) { return str.toLocaleUpperCase(); },
-  'lower': function (str) { return str.toLocaleLowerCase(); },
-  'capitalize': function (str) { return ("" + (str.charAt(0).toLocaleUpperCase()) + (str.substr(1))); }
-};
-
-var defaultFormatter = new BaseFormatter();
-
-var VueI18n = function VueI18n (options) {
-  var this$1 = this;
-  if ( options === void 0 ) options = {};
-
-  // Auto install if it is not done yet and `window` has `Vue`.
-  // To allow users to avoid auto-installation in some cases,
-  // this code should be placed here. See #290
-  /* istanbul ignore if */
-  if (!Vue && typeof window !== 'undefined' && window.Vue) {
-    install(window.Vue);
-  }
-
-  var locale = options.locale || 'en-US';
-  var fallbackLocale = options.fallbackLocale === false
-    ? false
-    : options.fallbackLocale || 'en-US';
-  var messages = options.messages || {};
-  var dateTimeFormats = options.dateTimeFormats || {};
-  var numberFormats = options.numberFormats || {};
-
-  this._vm = null;
-  this._formatter = options.formatter || defaultFormatter;
-  this._modifiers = options.modifiers || {};
-  this._missing = options.missing || null;
-  this._root = options.root || null;
-  this._sync = options.sync === undefined ? true : !!options.sync;
-  this._fallbackRoot = options.fallbackRoot === undefined
-    ? true
-    : !!options.fallbackRoot;
-  this._formatFallbackMessages = options.formatFallbackMessages === undefined
-    ? false
-    : !!options.formatFallbackMessages;
-  this._silentTranslationWarn = options.silentTranslationWarn === undefined
-    ? false
-    : options.silentTranslationWarn;
-  this._silentFallbackWarn = options.silentFallbackWarn === undefined
-    ? false
-    : !!options.silentFallbackWarn;
-  this._dateTimeFormatters = {};
-  this._numberFormatters = {};
-  this._path = new I18nPath();
-  this._dataListeners = [];
-  this._componentInstanceCreatedListener = options.componentInstanceCreatedListener || null;
-  this._preserveDirectiveContent = options.preserveDirectiveContent === undefined
-    ? false
-    : !!options.preserveDirectiveContent;
-  this.pluralizationRules = options.pluralizationRules || {};
-  this._warnHtmlInMessage = options.warnHtmlInMessage || 'off';
-  this._postTranslation = options.postTranslation || null;
-  this._escapeParameterHtml = options.escapeParameterHtml || false;
-
-  /**
-   * @param choice {number} a choice index given by the input to $tc: `$tc('path.to.rule', choiceIndex)`
-   * @param choicesLength {number} an overall amount of available choices
-   * @returns a final choice index
-  */
-  this.getChoiceIndex = function (choice, choicesLength) {
-    var thisPrototype = Object.getPrototypeOf(this$1);
-    if (thisPrototype && thisPrototype.getChoiceIndex) {
-      var prototypeGetChoiceIndex = (thisPrototype.getChoiceIndex);
-      return (prototypeGetChoiceIndex).call(this$1, choice, choicesLength)
-    }
-
-    // Default (old) getChoiceIndex implementation - english-compatible
-    var defaultImpl = function (_choice, _choicesLength) {
-      _choice = Math.abs(_choice);
-
-      if (_choicesLength === 2) {
-        return _choice
-          ? _choice > 1
-            ? 1
-            : 0
-          : 1
-      }
-
-      return _choice ? Math.min(_choice, 2) : 0
-    };
-
-    if (this$1.locale in this$1.pluralizationRules) {
-      return this$1.pluralizationRules[this$1.locale].apply(this$1, [choice, choicesLength])
-    } else {
-      return defaultImpl(choice, choicesLength)
-    }
-  };
-
-
-  this._exist = function (message, key) {
-    if (!message || !key) { return false }
-    if (!isNull(this$1._path.getPathValue(message, key))) { return true }
-    // fallback for flat key
-    if (message[key]) { return true }
-    return false
-  };
-
-  if (this._warnHtmlInMessage === 'warn' || this._warnHtmlInMessage === 'error') {
-    Object.keys(messages).forEach(function (locale) {
-      this$1._checkLocaleMessage(locale, this$1._warnHtmlInMessage, messages[locale]);
-    });
-  }
-
-  this._initVM({
-    locale: locale,
-    fallbackLocale: fallbackLocale,
-    messages: messages,
-    dateTimeFormats: dateTimeFormats,
-    numberFormats: numberFormats
-  });
-};
-
-var prototypeAccessors = { vm: { configurable: true },messages: { configurable: true },dateTimeFormats: { configurable: true },numberFormats: { configurable: true },availableLocales: { configurable: true },locale: { configurable: true },fallbackLocale: { configurable: true },formatFallbackMessages: { configurable: true },missing: { configurable: true },formatter: { configurable: true },silentTranslationWarn: { configurable: true },silentFallbackWarn: { configurable: true },preserveDirectiveContent: { configurable: true },warnHtmlInMessage: { configurable: true },postTranslation: { configurable: true } };
-
-VueI18n.prototype._checkLocaleMessage = function _checkLocaleMessage (locale, level, message) {
-  var paths = [];
-
-  var fn = function (level, locale, message, paths) {
-    if (isPlainObject(message)) {
-      Object.keys(message).forEach(function (key) {
-        var val = message[key];
-        if (isPlainObject(val)) {
-          paths.push(key);
-          paths.push('.');
-          fn(level, locale, val, paths);
-          paths.pop();
-          paths.pop();
-        } else {
-          paths.push(key);
-          fn(level, locale, val, paths);
-          paths.pop();
-        }
-      });
-    } else if (isArray(message)) {
-      message.forEach(function (item, index) {
-        if (isPlainObject(item)) {
-          paths.push(("[" + index + "]"));
-          paths.push('.');
-          fn(level, locale, item, paths);
-          paths.pop();
-          paths.pop();
-        } else {
-          paths.push(("[" + index + "]"));
-          fn(level, locale, item, paths);
-          paths.pop();
-        }
-      });
-    } else if (isString(message)) {
-      var ret = htmlTagMatcher.test(message);
-      if (ret) {
-        var msg = "Detected HTML in message '" + message + "' of keypath '" + (paths.join('')) + "' at '" + locale + "'. Consider component interpolation with '<i18n>' to avoid XSS. See https://bit.ly/2ZqJzkp";
-        if (level === 'warn') {
-          warn(msg);
-        } else if (level === 'error') {
-          error(msg);
-        }
-      }
-    }
-  };
-
-  fn(level, locale, message, paths);
-};
-
-VueI18n.prototype._initVM = function _initVM (data) {
-  var silent = Vue.config.silent;
-  Vue.config.silent = true;
-  this._vm = new Vue({ data: data });
-  Vue.config.silent = silent;
-};
-
-VueI18n.prototype.destroyVM = function destroyVM () {
-  this._vm.$destroy();
-};
-
-VueI18n.prototype.subscribeDataChanging = function subscribeDataChanging (vm) {
-  this._dataListeners.push(vm);
-};
-
-VueI18n.prototype.unsubscribeDataChanging = function unsubscribeDataChanging (vm) {
-  remove(this._dataListeners, vm);
-};
-
-VueI18n.prototype.watchI18nData = function watchI18nData () {
-  var self = this;
-  return this._vm.$watch('$data', function () {
-    var i = self._dataListeners.length;
-    while (i--) {
-      Vue.nextTick(function () {
-        self._dataListeners[i] && self._dataListeners[i].$forceUpdate();
-      });
-    }
-  }, { deep: true })
-};
-
-VueI18n.prototype.watchLocale = function watchLocale () {
-  /* istanbul ignore if */
-  if (!this._sync || !this._root) { return null }
-  var target = this._vm;
-  return this._root.$i18n.vm.$watch('locale', function (val) {
-    target.$set(target, 'locale', val);
-    target.$forceUpdate();
-  }, { immediate: true })
-};
-
-VueI18n.prototype.onComponentInstanceCreated = function onComponentInstanceCreated (newI18n) {
-  if (this._componentInstanceCreatedListener) {
-    this._componentInstanceCreatedListener(newI18n, this);
-  }
-};
-
-prototypeAccessors.vm.get = function () { return this._vm };
-
-prototypeAccessors.messages.get = function () { return looseClone(this._getMessages()) };
-prototypeAccessors.dateTimeFormats.get = function () { return looseClone(this._getDateTimeFormats()) };
-prototypeAccessors.numberFormats.get = function () { return looseClone(this._getNumberFormats()) };
-prototypeAccessors.availableLocales.get = function () { return Object.keys(this.messages).sort() };
-
-prototypeAccessors.locale.get = function () { return this._vm.locale };
-prototypeAccessors.locale.set = function (locale) {
-  this._vm.$set(this._vm, 'locale', locale);
-};
-
-prototypeAccessors.fallbackLocale.get = function () { return this._vm.fallbackLocale };
-prototypeAccessors.fallbackLocale.set = function (locale) {
-  this._localeChainCache = {};
-  this._vm.$set(this._vm, 'fallbackLocale', locale);
-};
-
-prototypeAccessors.formatFallbackMessages.get = function () { return this._formatFallbackMessages };
-prototypeAccessors.formatFallbackMessages.set = function (fallback) { this._formatFallbackMessages = fallback; };
-
-prototypeAccessors.missing.get = function () { return this._missing };
-prototypeAccessors.missing.set = function (handler) { this._missing = handler; };
-
-prototypeAccessors.formatter.get = function () { return this._formatter };
-prototypeAccessors.formatter.set = function (formatter) { this._formatter = formatter; };
-
-prototypeAccessors.silentTranslationWarn.get = function () { return this._silentTranslationWarn };
-prototypeAccessors.silentTranslationWarn.set = function (silent) { this._silentTranslationWarn = silent; };
-
-prototypeAccessors.silentFallbackWarn.get = function () { return this._silentFallbackWarn };
-prototypeAccessors.silentFallbackWarn.set = function (silent) { this._silentFallbackWarn = silent; };
-
-prototypeAccessors.preserveDirectiveContent.get = function () { return this._preserveDirectiveContent };
-prototypeAccessors.preserveDirectiveContent.set = function (preserve) { this._preserveDirectiveContent = preserve; };
-
-prototypeAccessors.warnHtmlInMessage.get = function () { return this._warnHtmlInMessage };
-prototypeAccessors.warnHtmlInMessage.set = function (level) {
-    var this$1 = this;
-
-  var orgLevel = this._warnHtmlInMessage;
-  this._warnHtmlInMessage = level;
-  if (orgLevel !== level && (level === 'warn' || level === 'error')) {
-    var messages = this._getMessages();
-    Object.keys(messages).forEach(function (locale) {
-      this$1._checkLocaleMessage(locale, this$1._warnHtmlInMessage, messages[locale]);
-    });
-  }
-};
-
-prototypeAccessors.postTranslation.get = function () { return this._postTranslation };
-prototypeAccessors.postTranslation.set = function (handler) { this._postTranslation = handler; };
-
-VueI18n.prototype._getMessages = function _getMessages () { return this._vm.messages };
-VueI18n.prototype._getDateTimeFormats = function _getDateTimeFormats () { return this._vm.dateTimeFormats };
-VueI18n.prototype._getNumberFormats = function _getNumberFormats () { return this._vm.numberFormats };
-
-VueI18n.prototype._warnDefault = function _warnDefault (locale, key, result, vm, values, interpolateMode) {
-  if (!isNull(result)) { return result }
-  if (this._missing) {
-    var missingRet = this._missing.apply(null, [locale, key, vm, values]);
-    if (isString(missingRet)) {
-      return missingRet
-    }
-  } else {
-    if ("development" !== 'production' && !this._isSilentTranslationWarn(key)) {
-      warn(
-        "Cannot translate the value of keypath '" + key + "'. " +
-        'Use the value of keypath as default.'
-      );
-    }
-  }
-
-  if (this._formatFallbackMessages) {
-    var parsedArgs = parseArgs.apply(void 0, values);
-    return this._render(key, interpolateMode, parsedArgs.params, key)
-  } else {
-    return key
-  }
-};
-
-VueI18n.prototype._isFallbackRoot = function _isFallbackRoot (val) {
-  return !val && !isNull(this._root) && this._fallbackRoot
-};
-
-VueI18n.prototype._isSilentFallbackWarn = function _isSilentFallbackWarn (key) {
-  return this._silentFallbackWarn instanceof RegExp
-    ? this._silentFallbackWarn.test(key)
-    : this._silentFallbackWarn
-};
-
-VueI18n.prototype._isSilentFallback = function _isSilentFallback (locale, key) {
-  return this._isSilentFallbackWarn(key) && (this._isFallbackRoot() || locale !== this.fallbackLocale)
-};
-
-VueI18n.prototype._isSilentTranslationWarn = function _isSilentTranslationWarn (key) {
-  return this._silentTranslationWarn instanceof RegExp
-    ? this._silentTranslationWarn.test(key)
-    : this._silentTranslationWarn
-};
-
-VueI18n.prototype._interpolate = function _interpolate (
-  locale,
-  message,
-  key,
-  host,
-  interpolateMode,
-  values,
-  visitedLinkStack
-) {
-  if (!message) { return null }
-
-  var pathRet = this._path.getPathValue(message, key);
-  if (isArray(pathRet) || isPlainObject(pathRet)) { return pathRet }
-
-  var ret;
-  if (isNull(pathRet)) {
-    /* istanbul ignore else */
-    if (isPlainObject(message)) {
-      ret = message[key];
-      if (!(isString(ret) || isFunction(ret))) {
-        if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallback(locale, key)) {
-          warn(("Value of key '" + key + "' is not a string or function !"));
-        }
-        return null
-      }
-    } else {
-      return null
-    }
-  } else {
-    /* istanbul ignore else */
-    if (isString(pathRet) || isFunction(pathRet)) {
-      ret = pathRet;
-    } else {
-      if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallback(locale, key)) {
-        warn(("Value of key '" + key + "' is not a string or function!"));
-      }
-      return null
-    }
-  }
-
-  // Check for the existence of links within the translated string
-  if (isString(ret) && (ret.indexOf('@:') >= 0 || ret.indexOf('@.') >= 0)) {
-    ret = this._link(locale, message, ret, host, 'raw', values, visitedLinkStack);
-  }
-
-  return this._render(ret, interpolateMode, values, key)
-};
-
-VueI18n.prototype._link = function _link (
-  locale,
-  message,
-  str,
-  host,
-  interpolateMode,
-  values,
-  visitedLinkStack
-) {
-  var ret = str;
-
-  // Match all the links within the local
-  // We are going to replace each of
-  // them with its translation
-  var matches = ret.match(linkKeyMatcher);
-  for (var idx in matches) {
-    // ie compatible: filter custom array
-    // prototype method
-    if (!matches.hasOwnProperty(idx)) {
-      continue
-    }
-    var link = matches[idx];
-    var linkKeyPrefixMatches = link.match(linkKeyPrefixMatcher);
-    var linkPrefix = linkKeyPrefixMatches[0];
-      var formatterName = linkKeyPrefixMatches[1];
-
-    // Remove the leading @:, @.case: and the brackets
-    var linkPlaceholder = link.replace(linkPrefix, '').replace(bracketsMatcher, '');
-
-    if (includes(visitedLinkStack, linkPlaceholder)) {
-      if (true) {
-        warn(("Circular reference found. \"" + link + "\" is already visited in the chain of " + (visitedLinkStack.reverse().join(' <- '))));
-      }
-      return ret
-    }
-    visitedLinkStack.push(linkPlaceholder);
-
-    // Translate the link
-    var translated = this._interpolate(
-      locale, message, linkPlaceholder, host,
-      interpolateMode === 'raw' ? 'string' : interpolateMode,
-      interpolateMode === 'raw' ? undefined : values,
-      visitedLinkStack
-    );
-
-    if (this._isFallbackRoot(translated)) {
-      if ("development" !== 'production' && !this._isSilentTranslationWarn(linkPlaceholder)) {
-        warn(("Fall back to translate the link placeholder '" + linkPlaceholder + "' with root locale."));
-      }
-      /* istanbul ignore if */
-      if (!this._root) { throw Error('unexpected error') }
-      var root = this._root.$i18n;
-      translated = root._translate(
-        root._getMessages(), root.locale, root.fallbackLocale,
-        linkPlaceholder, host, interpolateMode, values
-      );
-    }
-    translated = this._warnDefault(
-      locale, linkPlaceholder, translated, host,
-      isArray(values) ? values : [values],
-      interpolateMode
-    );
-
-    if (this._modifiers.hasOwnProperty(formatterName)) {
-      translated = this._modifiers[formatterName](translated);
-    } else if (defaultModifiers.hasOwnProperty(formatterName)) {
-      translated = defaultModifiers[formatterName](translated);
-    }
-
-    visitedLinkStack.pop();
-
-    // Replace the link with the translated
-    ret = !translated ? ret : ret.replace(link, translated);
-  }
-
-  return ret
-};
-
-VueI18n.prototype._createMessageContext = function _createMessageContext (values) {
-  var _list = isArray(values) ? values : [];
-  var _named = isObject(values) ? values : {};
-  var list = function (index) { return _list[index]; };
-  var named = function (key) { return _named[key]; };
-  return {
-    list: list,
-    named: named
-  }
-};
-
-VueI18n.prototype._render = function _render (message, interpolateMode, values, path) {
-  if (isFunction(message)) {
-    return message(this._createMessageContext(values))
-  }
-
-  var ret = this._formatter.interpolate(message, values, path);
-
-  // If the custom formatter refuses to work - apply the default one
-  if (!ret) {
-    ret = defaultFormatter.interpolate(message, values, path);
-  }
-
-  // if interpolateMode is **not** 'string' ('row'),
-  // return the compiled data (e.g. ['foo', VNode, 'bar']) with formatter
-  return interpolateMode === 'string' && !isString(ret) ? ret.join('') : ret
-};
-
-VueI18n.prototype._appendItemToChain = function _appendItemToChain (chain, item, blocks) {
-  var follow = false;
-  if (!includes(chain, item)) {
-    follow = true;
-    if (item) {
-      follow = item[item.length - 1] !== '!';
-      item = item.replace(/!/g, '');
-      chain.push(item);
-      if (blocks && blocks[item]) {
-        follow = blocks[item];
-      }
-    }
-  }
-  return follow
-};
-
-VueI18n.prototype._appendLocaleToChain = function _appendLocaleToChain (chain, locale, blocks) {
-  var follow;
-  var tokens = locale.split('-');
-  do {
-    var item = tokens.join('-');
-    follow = this._appendItemToChain(chain, item, blocks);
-    tokens.splice(-1, 1);
-  } while (tokens.length && (follow === true))
-  return follow
-};
-
-VueI18n.prototype._appendBlockToChain = function _appendBlockToChain (chain, block, blocks) {
-  var follow = true;
-  for (var i = 0; (i < block.length) && (isBoolean(follow)); i++) {
-    var locale = block[i];
-    if (isString(locale)) {
-      follow = this._appendLocaleToChain(chain, locale, blocks);
-    }
-  }
-  return follow
-};
-
-VueI18n.prototype._getLocaleChain = function _getLocaleChain (start, fallbackLocale) {
-  if (start === '') { return [] }
-
-  if (!this._localeChainCache) {
-    this._localeChainCache = {};
-  }
-
-  var chain = this._localeChainCache[start];
-  if (!chain) {
-    if (!fallbackLocale) {
-      fallbackLocale = this.fallbackLocale;
-    }
-    chain = [];
-
-    // first block defined by start
-    var block = [start];
-
-    // while any intervening block found
-    while (isArray(block)) {
-      block = this._appendBlockToChain(
-        chain,
-        block,
-        fallbackLocale
-      );
-    }
-
-    // last block defined by default
-    var defaults;
-    if (isArray(fallbackLocale)) {
-      defaults = fallbackLocale;
-    } else if (isObject(fallbackLocale)) {
-      /* $FlowFixMe */
-      if (fallbackLocale['default']) {
-        defaults = fallbackLocale['default'];
-      } else {
-        defaults = null;
-      }
-    } else {
-      defaults = fallbackLocale;
-    }
-
-    // convert defaults to array
-    if (isString(defaults)) {
-      block = [defaults];
-    } else {
-      block = defaults;
-    }
-    if (block) {
-      this._appendBlockToChain(
-        chain,
-        block,
-        null
-      );
-    }
-    this._localeChainCache[start] = chain;
-  }
-  return chain
-};
-
-VueI18n.prototype._translate = function _translate (
-  messages,
-  locale,
-  fallback,
-  key,
-  host,
-  interpolateMode,
-  args
-) {
-  var chain = this._getLocaleChain(locale, fallback);
-  var res;
-  for (var i = 0; i < chain.length; i++) {
-    var step = chain[i];
-    res =
-      this._interpolate(step, messages[step], key, host, interpolateMode, args, [key]);
-    if (!isNull(res)) {
-      if (step !== locale && "development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
-        warn(("Fall back to translate the keypath '" + key + "' with '" + step + "' locale."));
-      }
-      return res
-    }
-  }
-  return null
-};
-
-VueI18n.prototype._t = function _t (key, _locale, messages, host) {
-    var ref;
-
-    var values = [], len = arguments.length - 4;
-    while ( len-- > 0 ) values[ len ] = arguments[ len + 4 ];
-  if (!key) { return '' }
-
-  var parsedArgs = parseArgs.apply(void 0, values);
-  if(this._escapeParameterHtml) {
-    parsedArgs.params = escapeParams(parsedArgs.params);
-  }
-
-  var locale = parsedArgs.locale || _locale;
-
-  var ret = this._translate(
-    messages, locale, this.fallbackLocale, key,
-    host, 'string', parsedArgs.params
-  );
-  if (this._isFallbackRoot(ret)) {
-    if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
-      warn(("Fall back to translate the keypath '" + key + "' with root locale."));
-    }
-    /* istanbul ignore if */
-    if (!this._root) { throw Error('unexpected error') }
-    return (ref = this._root).$t.apply(ref, [ key ].concat( values ))
-  } else {
-    ret = this._warnDefault(locale, key, ret, host, values, 'string');
-    if (this._postTranslation && ret !== null && ret !== undefined) {
-      ret = this._postTranslation(ret, key);
-    }
-    return ret
-  }
-};
-
-VueI18n.prototype.t = function t (key) {
-    var ref;
-
-    var values = [], len = arguments.length - 1;
-    while ( len-- > 0 ) values[ len ] = arguments[ len + 1 ];
-  return (ref = this)._t.apply(ref, [ key, this.locale, this._getMessages(), null ].concat( values ))
-};
-
-VueI18n.prototype._i = function _i (key, locale, messages, host, values) {
-  var ret =
-    this._translate(messages, locale, this.fallbackLocale, key, host, 'raw', values);
-  if (this._isFallbackRoot(ret)) {
-    if ("development" !== 'production' && !this._isSilentTranslationWarn(key)) {
-      warn(("Fall back to interpolate the keypath '" + key + "' with root locale."));
-    }
-    if (!this._root) { throw Error('unexpected error') }
-    return this._root.$i18n.i(key, locale, values)
-  } else {
-    return this._warnDefault(locale, key, ret, host, [values], 'raw')
-  }
-};
-
-VueI18n.prototype.i = function i (key, locale, values) {
-  /* istanbul ignore if */
-  if (!key) { return '' }
-
-  if (!isString(locale)) {
-    locale = this.locale;
-  }
-
-  return this._i(key, locale, this._getMessages(), null, values)
-};
-
-VueI18n.prototype._tc = function _tc (
-  key,
-  _locale,
-  messages,
-  host,
-  choice
-) {
-    var ref;
-
-    var values = [], len = arguments.length - 5;
-    while ( len-- > 0 ) values[ len ] = arguments[ len + 5 ];
-  if (!key) { return '' }
-  if (choice === undefined) {
-    choice = 1;
-  }
-
-  var predefined = { 'count': choice, 'n': choice };
-  var parsedArgs = parseArgs.apply(void 0, values);
-  parsedArgs.params = Object.assign(predefined, parsedArgs.params);
-  values = parsedArgs.locale === null ? [parsedArgs.params] : [parsedArgs.locale, parsedArgs.params];
-  return this.fetchChoice((ref = this)._t.apply(ref, [ key, _locale, messages, host ].concat( values )), choice)
-};
-
-VueI18n.prototype.fetchChoice = function fetchChoice (message, choice) {
-  /* istanbul ignore if */
-  if (!message || !isString(message)) { return null }
-  var choices = message.split('|');
-
-  choice = this.getChoiceIndex(choice, choices.length);
-  if (!choices[choice]) { return message }
-  return choices[choice].trim()
-};
-
-VueI18n.prototype.tc = function tc (key, choice) {
-    var ref;
-
-    var values = [], len = arguments.length - 2;
-    while ( len-- > 0 ) values[ len ] = arguments[ len + 2 ];
-  return (ref = this)._tc.apply(ref, [ key, this.locale, this._getMessages(), null, choice ].concat( values ))
-};
-
-VueI18n.prototype._te = function _te (key, locale, messages) {
-    var args = [], len = arguments.length - 3;
-    while ( len-- > 0 ) args[ len ] = arguments[ len + 3 ];
-
-  var _locale = parseArgs.apply(void 0, args).locale || locale;
-  return this._exist(messages[_locale], key)
-};
-
-VueI18n.prototype.te = function te (key, locale) {
-  return this._te(key, this.locale, this._getMessages(), locale)
-};
-
-VueI18n.prototype.getLocaleMessage = function getLocaleMessage (locale) {
-  return looseClone(this._vm.messages[locale] || {})
-};
-
-VueI18n.prototype.setLocaleMessage = function setLocaleMessage (locale, message) {
-  if (this._warnHtmlInMessage === 'warn' || this._warnHtmlInMessage === 'error') {
-    this._checkLocaleMessage(locale, this._warnHtmlInMessage, message);
-  }
-  this._vm.$set(this._vm.messages, locale, message);
-};
-
-VueI18n.prototype.mergeLocaleMessage = function mergeLocaleMessage (locale, message) {
-  if (this._warnHtmlInMessage === 'warn' || this._warnHtmlInMessage === 'error') {
-    this._checkLocaleMessage(locale, this._warnHtmlInMessage, message);
-  }
-  this._vm.$set(this._vm.messages, locale, merge({}, this._vm.messages[locale] || {}, message));
-};
-
-VueI18n.prototype.getDateTimeFormat = function getDateTimeFormat (locale) {
-  return looseClone(this._vm.dateTimeFormats[locale] || {})
-};
-
-VueI18n.prototype.setDateTimeFormat = function setDateTimeFormat (locale, format) {
-  this._vm.$set(this._vm.dateTimeFormats, locale, format);
-  this._clearDateTimeFormat(locale, format);
-};
-
-VueI18n.prototype.mergeDateTimeFormat = function mergeDateTimeFormat (locale, format) {
-  this._vm.$set(this._vm.dateTimeFormats, locale, merge(this._vm.dateTimeFormats[locale] || {}, format));
-  this._clearDateTimeFormat(locale, format);
-};
-
-VueI18n.prototype._clearDateTimeFormat = function _clearDateTimeFormat (locale, format) {
-  for (var key in format) {
-    var id = locale + "__" + key;
-
-    if (!this._dateTimeFormatters.hasOwnProperty(id)) {
-      continue
-    }
-
-    delete this._dateTimeFormatters[id];
-  }
-};
-
-VueI18n.prototype._localizeDateTime = function _localizeDateTime (
-  value,
-  locale,
-  fallback,
-  dateTimeFormats,
-  key
-) {
-  var _locale = locale;
-  var formats = dateTimeFormats[_locale];
-
-  var chain = this._getLocaleChain(locale, fallback);
-  for (var i = 0; i < chain.length; i++) {
-    var current = _locale;
-    var step = chain[i];
-    formats = dateTimeFormats[step];
-    _locale = step;
-    // fallback locale
-    if (isNull(formats) || isNull(formats[key])) {
-      if (step !== locale && "development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
-        warn(("Fall back to '" + step + "' datetime formats from '" + current + "' datetime formats."));
-      }
-    } else {
-      break
-    }
-  }
-
-  if (isNull(formats) || isNull(formats[key])) {
-    return null
-  } else {
-    var format = formats[key];
-    var id = _locale + "__" + key;
-    var formatter = this._dateTimeFormatters[id];
-    if (!formatter) {
-      formatter = this._dateTimeFormatters[id] = new Intl.DateTimeFormat(_locale, format);
-    }
-    return formatter.format(value)
-  }
-};
-
-VueI18n.prototype._d = function _d (value, locale, key) {
-  /* istanbul ignore if */
-  if ("development" !== 'production' && !VueI18n.availabilities.dateTimeFormat) {
-    warn('Cannot format a Date value due to not supported Intl.DateTimeFormat.');
-    return ''
-  }
-
-  if (!key) {
-    return new Intl.DateTimeFormat(locale).format(value)
-  }
-
-  var ret =
-    this._localizeDateTime(value, locale, this.fallbackLocale, this._getDateTimeFormats(), key);
-  if (this._isFallbackRoot(ret)) {
-    if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
-      warn(("Fall back to datetime localization of root: key '" + key + "'."));
-    }
-    /* istanbul ignore if */
-    if (!this._root) { throw Error('unexpected error') }
-    return this._root.$i18n.d(value, key, locale)
-  } else {
-    return ret || ''
-  }
-};
-
-VueI18n.prototype.d = function d (value) {
-    var args = [], len = arguments.length - 1;
-    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-
-  var locale = this.locale;
-  var key = null;
-
-  if (args.length === 1) {
-    if (isString(args[0])) {
-      key = args[0];
-    } else if (isObject(args[0])) {
-      if (args[0].locale) {
-        locale = args[0].locale;
-      }
-      if (args[0].key) {
-        key = args[0].key;
-      }
-    }
-  } else if (args.length === 2) {
-    if (isString(args[0])) {
-      key = args[0];
-    }
-    if (isString(args[1])) {
-      locale = args[1];
-    }
-  }
-
-  return this._d(value, locale, key)
-};
-
-VueI18n.prototype.getNumberFormat = function getNumberFormat (locale) {
-  return looseClone(this._vm.numberFormats[locale] || {})
-};
-
-VueI18n.prototype.setNumberFormat = function setNumberFormat (locale, format) {
-  this._vm.$set(this._vm.numberFormats, locale, format);
-  this._clearNumberFormat(locale, format);
-};
-
-VueI18n.prototype.mergeNumberFormat = function mergeNumberFormat (locale, format) {
-  this._vm.$set(this._vm.numberFormats, locale, merge(this._vm.numberFormats[locale] || {}, format));
-  this._clearNumberFormat(locale, format);
-};
-
-VueI18n.prototype._clearNumberFormat = function _clearNumberFormat (locale, format) {
-  for (var key in format) {
-    var id = locale + "__" + key;
-
-    if (!this._numberFormatters.hasOwnProperty(id)) {
-      continue
-    }
-
-    delete this._numberFormatters[id];
-  }
-};
-
-VueI18n.prototype._getNumberFormatter = function _getNumberFormatter (
-  value,
-  locale,
-  fallback,
-  numberFormats,
-  key,
-  options
-) {
-  var _locale = locale;
-  var formats = numberFormats[_locale];
-
-  var chain = this._getLocaleChain(locale, fallback);
-  for (var i = 0; i < chain.length; i++) {
-    var current = _locale;
-    var step = chain[i];
-    formats = numberFormats[step];
-    _locale = step;
-    // fallback locale
-    if (isNull(formats) || isNull(formats[key])) {
-      if (step !== locale && "development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
-        warn(("Fall back to '" + step + "' number formats from '" + current + "' number formats."));
-      }
-    } else {
-      break
-    }
-  }
-
-  if (isNull(formats) || isNull(formats[key])) {
-    return null
-  } else {
-    var format = formats[key];
-
-    var formatter;
-    if (options) {
-      // If options specified - create one time number formatter
-      formatter = new Intl.NumberFormat(_locale, Object.assign({}, format, options));
-    } else {
-      var id = _locale + "__" + key;
-      formatter = this._numberFormatters[id];
-      if (!formatter) {
-        formatter = this._numberFormatters[id] = new Intl.NumberFormat(_locale, format);
-      }
-    }
-    return formatter
-  }
-};
-
-VueI18n.prototype._n = function _n (value, locale, key, options) {
-  /* istanbul ignore if */
-  if (!VueI18n.availabilities.numberFormat) {
-    if (true) {
-      warn('Cannot format a Number value due to not supported Intl.NumberFormat.');
-    }
-    return ''
-  }
-
-  if (!key) {
-    var nf = !options ? new Intl.NumberFormat(locale) : new Intl.NumberFormat(locale, options);
-    return nf.format(value)
-  }
-
-  var formatter = this._getNumberFormatter(value, locale, this.fallbackLocale, this._getNumberFormats(), key, options);
-  var ret = formatter && formatter.format(value);
-  if (this._isFallbackRoot(ret)) {
-    if ("development" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
-      warn(("Fall back to number localization of root: key '" + key + "'."));
-    }
-    /* istanbul ignore if */
-    if (!this._root) { throw Error('unexpected error') }
-    return this._root.$i18n.n(value, Object.assign({}, { key: key, locale: locale }, options))
-  } else {
-    return ret || ''
-  }
-};
-
-VueI18n.prototype.n = function n (value) {
-    var args = [], len = arguments.length - 1;
-    while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
-
-  var locale = this.locale;
-  var key = null;
-  var options = null;
-
-  if (args.length === 1) {
-    if (isString(args[0])) {
-      key = args[0];
-    } else if (isObject(args[0])) {
-      if (args[0].locale) {
-        locale = args[0].locale;
-      }
-      if (args[0].key) {
-        key = args[0].key;
-      }
-
-      // Filter out number format options only
-      options = Object.keys(args[0]).reduce(function (acc, key) {
-          var obj;
-
-        if (includes(numberFormatKeys, key)) {
-          return Object.assign({}, acc, ( obj = {}, obj[key] = args[0][key], obj ))
-        }
-        return acc
-      }, null);
-    }
-  } else if (args.length === 2) {
-    if (isString(args[0])) {
-      key = args[0];
-    }
-    if (isString(args[1])) {
-      locale = args[1];
-    }
-  }
-
-  return this._n(value, locale, key, options)
-};
-
-VueI18n.prototype._ntp = function _ntp (value, locale, key, options) {
-  /* istanbul ignore if */
-  if (!VueI18n.availabilities.numberFormat) {
-    if (true) {
-      warn('Cannot format to parts a Number value due to not supported Intl.NumberFormat.');
-    }
-    return []
-  }
-
-  if (!key) {
-    var nf = !options ? new Intl.NumberFormat(locale) : new Intl.NumberFormat(locale, options);
-    return nf.formatToParts(value)
-  }
-
-  var formatter = this._getNumberFormatter(value, locale, this.fallbackLocale, this._getNumberFormats(), key, options);
-  var ret = formatter && formatter.formatToParts(value);
-  if (this._isFallbackRoot(ret)) {
-    if ("development" !== 'production' && !this._isSilentTranslationWarn(key)) {
-      warn(("Fall back to format number to parts of root: key '" + key + "' ."));
-    }
-    /* istanbul ignore if */
-    if (!this._root) { throw Error('unexpected error') }
-    return this._root.$i18n._ntp(value, locale, key, options)
-  } else {
-    return ret || []
-  }
-};
-
-Object.defineProperties( VueI18n.prototype, prototypeAccessors );
-
-var availabilities;
-// $FlowFixMe
-Object.defineProperty(VueI18n, 'availabilities', {
-  get: function get () {
-    if (!availabilities) {
-      var intlDefined = typeof Intl !== 'undefined';
-      availabilities = {
-        dateTimeFormat: intlDefined && typeof Intl.DateTimeFormat !== 'undefined',
-        numberFormat: intlDefined && typeof Intl.NumberFormat !== 'undefined'
-      };
-    }
-
-    return availabilities
-  }
-});
-
-VueI18n.install = install;
-VueI18n.version = '8.22.3';
-
-/* harmony default export */ __webpack_exports__["a"] = (VueI18n);
+__webpack_require__(17);
+module.exports = __webpack_require__(18);
 
 
 /***/ })

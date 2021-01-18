@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="">
+<html lang="{{getLanguage()}}" dir="">
 {{--{{getLanguage() == 'ar'? 'rtl': ''}}--}}
 <head>
     <link rel="icon" href="{{asset_image('/assets/favicon/favicon.ico')}}" type="image/x-icon">

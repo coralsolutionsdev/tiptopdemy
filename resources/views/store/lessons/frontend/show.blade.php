@@ -139,7 +139,8 @@
                     <div class="uk-width-expand">
                         @if(true)
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
-{{--                                <lesson-show lesson-slug="{{$lesson->slug}}"></lesson-show>--}}
+                            
+                        <lesson-show lesson-slug="{{$lesson->slug}}"></lesson-show>
 
                         @if(!empty($lesson->content && !empty($lesson->content['html'])))
                             <div> {{-- Description --}}

@@ -33,6 +33,7 @@ Vue.component('example', require('./components/Example.vue'));
 Vue.component('lesson-show', require('./components/frontend/lessons/Show.vue'));
 Vue.component('memorize-create', require('./components/admin/form/memorize/create.vue'));
 Vue.component('memorize-index', require('./components/admin/form/memorize/index.vue'));
+Vue.component('file-manager', require('./components/system/FileManager.vue'));
 
 // If you want to use it in your vue components
 

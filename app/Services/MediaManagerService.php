@@ -234,7 +234,6 @@ class MediaManagerService
         if (empty($user) || empty($modal)){
             abort(500);
         }
-
         $filePlaytimeString = $filePlaytimeSeconds = $fileSize = null;
         // Group files by mime type
         $mime = str_replace('/', '-', $file->getMimeType());
@@ -252,7 +251,7 @@ class MediaManagerService
         // attach media file name
         $mediaFile = $modal->addMedia($file)
             ->withCustomProperties([
-                'group' => $groupSlug,
+                'group' => $groupSlug != 'null' ? $groupSlug : null ,
                 'extension' => !empty($fileExtension) ? $fileExtension : null,
                 'file_type' => !empty($fileType) ? $fileType : null,
                 'mime_type' => !empty($mime) ? $mime : null,
@@ -262,13 +261,14 @@ class MediaManagerService
                 'file_size_string' => getFileSize($fileSize, 1),
             ])->toMediaCollection('file_manager');
 
-        if (!is_null($groupSlug)){
-            $group = Group::where('slug', $groupSlug)->first();
-                $group->mediaItems()->sync([
-                [
-                    'model_id' => $mediaFile->id,
-                ]
-            ]);
+        if (!empty($groupSlug)){
+            if ($group = Group::where('slug', $groupSlug)->first()){
+                $group->mediaItems()->attach([
+                    [
+                        'model_id' => $mediaFile->id,
+                    ]
+                ]);
+            }
         }
 
         if (!empty($mediaFile)){

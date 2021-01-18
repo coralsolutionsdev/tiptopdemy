@@ -225,7 +225,7 @@
         copyMediaUrl();
         mediaItemActions();
     }
-
+    @if(false)
     Dropzone.options.dropzoneForm = {
         // Setup chunking
         acceptedFiles: "image/*,video/*,audio/*",
@@ -320,7 +320,7 @@
             });
         }
     }
-
+    @endif
     function fetchMedia(group = null){
         $('.loading-spinner').show();
         var data = {

@@ -278,7 +278,31 @@ ul.admin-sidebar ul li a:before{
 .user-dropdown-menu i{
     min-width: 20px;
 }
+.vue-dropzone>.dz-preview .dz-remove, .vue-dropzone>.dz-preview a:hover {
+    position: absolute;
+    z-index: 30;
+    color: #666666 !important;
+    background-color: rgba(255,255,255,0.8) !important;
+    margin-left: 15px;
+    padding: 10px;
+    top: inherit;
+    bottom: 15px;
+    border: 2px #fff solid;
+    border-radius: 5px !important;
+    width: 85%;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    font-size: .8rem;
+    font-weight: normal !important;
+    letter-spacing: 1.1px;
+    /* opacity: 0; */
+}
 
+.vue-dropzone>.dz-preview .dz-image, .vue-dropzone>.dz-preview .dz-details {
+    border-radius: 10px !important;
+    width: 100%;
+    height: 100%;
+}
 .form-panel .card{
     margin-bottom: 20px;
 }
@@ -529,7 +553,65 @@ input[type=checkbox].toogle-switch:checked::after{
 .resource-item-control, .media-item-control{
     position: absolute; padding: 5px; border-radius: 0 0 3px 0; z-index: 10; margin-top: -2px;
 }
+/*file manager*/
+
+.file-manager-navbar .navbar-item{
+    padding: 10px;
+    border-radius: 5px;
+
+}
+.file-manager-navbar .navbar-item:hover{
+    background-color: #F4F5F7;
+}
+.file-manager .file, .file-manager .folder{
+    padding: 10px;
+    border-radius: 10px;
+}
+.file-manager .file:hover, .file-manager .folder:hover, .file-manager .file.active, .file-manager .folder.active{
+    background-color: #F4F5F7;
+    cursor: pointer;
+}
+.file-manager .file.image-file img{
+    border-radius: 10px;
+}
+.file-manager .file-manager-sidebar a{
+    color: #666666;
+    text-decoration: none;
+}
+.file-manager-sidebar li .uk-list ul{
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+}
+
+.file-manager-sidebar .uk-list ul {
+    margin: 0;
+    padding: 0px !important;
+    list-style: none;
+}
+
+.file-manager-sidebar .uk-list li {
+     margin: 0 !important;
+}
+.file-manager-sidebar .nav-item{
+    padding: 10px 0;
+}
+.file-manager-sidebar .uk-accordion-content{
+    margin: 10px 0 0 0  !important;
+    padding-left: 20px;
+}
+.uk-list>li:nth-child(n+2), .uk-list>li>ul {
+     margin-top: 0;
+}
+.file-manager-sidebar .uk-accordion-title {
+    display: block;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+    overflow: hidden;
+    margin: 0px !important;
+}
 /*File upload*/
+
 .on-move{
     /*opacity: 0.5;*/
 }

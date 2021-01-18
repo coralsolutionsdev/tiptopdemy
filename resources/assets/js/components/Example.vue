@@ -37,8 +37,16 @@
                       <hr>
                       <p>post_id is : {{post_id}}</p>
                     </div>
+<!--                  <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>-->
+                  <vue-dropzone  ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" :useCustomSlot=true
+                                 @vdropzone-success="vsuccess">
+                    <div class="dropzone-custom-content">
+                      <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
+                      <div class="subtitle">...or click to select a file from your computer</div>
+                    </div>
+                  </vue-dropzone>
 
-                    <div class="panel-body" v-html="">
+                  <div class="panel-body" v-html="">
                     </div>
                 </div>
             </div>
@@ -46,14 +54,26 @@
     </div>
 </template>
 
+
 <script>
+    import vue2Dropzone from 'vue2-dropzone'
+    import 'vue2-dropzone/dist/vue2Dropzone.min.css'
     export default {
+      components: {
+        vueDropzone: vue2Dropzone
+      },
         props: [
             'post_id'
         ],
 
         data(){
           return {
+            dropzoneOptions: {
+              url: 'https://httpbin.org/post',
+              thumbnailWidth: 150,
+              maxFilesize: 0.5,
+              headers: { "My-Awesome-Header": "header value" }
+            },
             message: 'Hello Vue!',
             todos: [
               { text: 'Learn JavaScript' },
@@ -85,6 +105,12 @@
             console.log('Component mounted.')
         },
         methods:{
+          vfileAdded(file) {
+            console.log('success')
+          },
+          vsuccess(file, response) {
+            console.log('success uploaded')
+          },
           // calcAge: function (){
           //   return this.age * 2;
           // }
@@ -120,6 +146,7 @@
           }
         },
       },
+
       watch: {
         dollar: function (price){
           this.dinnar = price * 1400;
@@ -130,3 +157,9 @@
       }
     }
 </script>
+<style>
+.vue-dropzone>.dz-preview .dz-image{
+  border-radius:20px;
+}
+
+</style>

@@ -35,6 +35,10 @@ class MediaController extends Controller
     {
         $page_title =  'File Manager';
         $breadcrumb =  [];
+        $user = getAuthUser();
+//        $mediaItems = $user->getMedia('file_manager')->sortDesc('created_at');
+//        $mediaItems = \Spatie\MediaLibrary\Models\Media::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get()->sortByDesc('created_at');
+//        dd($mediaItems);
         return view('system.file-manager.index', compact('page_title','breadcrumb'));
     }
 
@@ -241,7 +245,7 @@ class MediaController extends Controller
 
     public function getMediaLibrary(Request $request)
     {
-        $input = $request->only(['group', 'type']);
+        $input = $request->all();
         $user = getAuthUser();
         $group = $input['group'];
         $mediaItems = $user->getMedia('file_manager');
@@ -258,6 +262,32 @@ class MediaController extends Controller
         })->toArray();
         return response()->json($mediaItems);
 
+    }
+
+    public function getItems(Request $request)
+    {
+        $input = $request->all(['group','type']);
+        $user = getAuthUser();
+        $items = array();
+//        $mediaItems = $user->getMedia('file_manager')->sortBy('name');
+        $mediaItems = \Spatie\MediaLibrary\Models\Media::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get();
+        $group = isset($input['group']) ? $input['group'] : null;
+        $mediaItems = $mediaItems->sortByDesc('created_at')->filter(function ($mediaItem) use($group){
+            if ($mediaItem->getCustomProperty('group') == $group){
+                return true;
+            }
+            return false;
+        });
+        foreach ($mediaItems as $item){
+            $items[] = [
+                'id'=> $item->id,
+                'name'=> $item->name,
+                'url'=> $item->getFullUrl(),
+                'creation_date'=> date_html($item->created_at),
+                'custom_properties'=> $item->custom_properties,
+            ];
+        }
+        return response()->json($items);
     }
     public function ajaxDestroy(Media $media)
     {
@@ -277,63 +307,47 @@ class MediaController extends Controller
     public function ajaxMove(Request $request)
     {
         $user = getAuthUser();
-        $input = $request->only(['id', 'group_slug']);
+        $input = $request->only(['id', 'title', 'group_slug']);
         $id = $input['id'];
-        $inputGroupSlug = $input['group_slug'];
+        $inputGroupSlug = isset($input['group_slug']) ? $input['group_slug'] : null;
         $mediaItem = $user->getMedia('file_manager')->where('id', $id)->first();
-        $status =  null;
-        $statusText = '';
-        $statusMessage = '';
-        if (!empty($mediaItem)){ // get media item to be moved
+        if ($mediaItem){
             // current group slug
             $mediaItemGroupSlug = $mediaItem->getCustomProperty('group');
-            $currentGroup = !empty($mediaItemGroupSlug) ? Group::where('slug',$mediaItemGroupSlug)->first() : null;
-            $nextGroup = !empty($inputGroupSlug) ?  Group::where('slug', $inputGroupSlug)->first() : null;
-            // check if item need to be moved
-            if ($mediaItemGroupSlug != $inputGroupSlug){
-                // from root to folder
-                // null to group
-                if (empty($currentGroup) && !empty($nextGroup)){
-                    $nextGroup->mediaItems()->attach([
-                        [
-                            'model_id' => $mediaItem->id,
-                        ]
-                    ]);
-                } elseif (!empty($currentGroup) && !empty($nextGroup)){ // from folder to folder
-                    $currentGroup->mediaItems()->detach([
-                        [
-                            'model_id' => $mediaItem->id,
-                        ]
-                    ]);
-                    $nextGroup->mediaItems()->attach([
-                        [
-                            'model_id' => $mediaItem->id,
-                        ]
-                    ]);
-                } elseif (!empty($currentGroup) && empty($nextGroup)){ // from folder to root
+            if (!empty($mediaItemGroupSlug) || $mediaItemGroupSlug != 'null' || $mediaItemGroupSlug != null){
+                // remove from current group group item
+                if ($currentGroup = Group::where('slug',$mediaItemGroupSlug)->first()){
                     $currentGroup->mediaItems()->detach([
                         [
                             'model_id' => $mediaItem->id,
                         ]
                     ]);
                 }
-                $mediaItem->setCustomProperty('group', $inputGroupSlug);
-                $mediaItem->save();
-                $statusText = 'success';
-                $statusMessage = 'Media has moved successfully';
-            }else{
-                $statusText = 'warning';
-                $statusMessage = 'Media is already in this folder';
+
             }
+            // move to the new
+            if (!empty($inputGroupSlug)){
+                if ($nextGroup = Group::where('slug', $inputGroupSlug)->first()){
+                    $nextGroup->mediaItems()->attach([
+                        [
+                            'model_id' => $mediaItem->id,
+                        ]
+                    ]);
+                    $mediaItem->setCustomProperty('group', $inputGroupSlug);
+                }
 
 
+            }else{
+                $mediaItem->setCustomProperty('group', null);
+
+            }
+            if (isset($input['title'])){
+                $mediaItem->name = $input['title'];
+            }
+            $mediaItem->save();
         }
-        $data = [
-            'status' => $status,
-            'statusText' => $statusText,
-            'statusMessage' => $statusMessage,
-        ];
-        return response($data, 200);
+
+        return response('success', 200);
 
     }
 

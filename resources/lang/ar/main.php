@@ -507,6 +507,24 @@
         'Failed' => 'لم يتم الاجتياز',
         'View results' => 'عرض النتائج',
 
+        // file manager
+        'File upload' => 'رفع الملفات',
+        'Files' => 'الملفات',
+        'Folders' => 'المجلدات',
+        'files' => 'ملفات',
+        'folders' => 'مجلدات',
+        'New folder' => 'مجلد جديد',
+        'Move' => 'نقل',
+        'Paste' => 'لصق',
+        'Copy link' => 'نسخ الرابط',
+        'Preview' => 'معاينة',
+        'File size' => 'حجم الملف',
+        'Created at' => 'أنشأ بتاريخ',
+        'Url link' => 'ؤابط الملف',
+        'Folder name' => 'إسم المجلد',
+        'Files count' => 'عدد الملفات',
+        'Sub Folders count' => 'عدد المجلدات الداخلية',
+
 
 
     ];

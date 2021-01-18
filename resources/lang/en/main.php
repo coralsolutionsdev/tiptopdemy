@@ -484,6 +484,24 @@
         'No results' => 'No results',
         'View results' => 'View results',
 
+        // file manager
+        'File upload' => 'File upload',
+        'Files' => 'Files',
+        'Folders' => 'Folders',
+        'files' => 'Files',
+        'folders' => 'Folders',
+        'New folder' => 'New folder',
+        'Move' => 'Move',
+        'Paste' => 'Paste',
+        'Copy link' => 'Copy link',
+        'Preview' => 'Preview',
+        'File size' => 'File size',
+        'Created at' => 'Created at',
+        'Url link' => 'Url link',
+        'Folder name' => 'Folder name',
+        'Files count' => 'Files count',
+        'Sub Folders count' => 'Sub Folders count',
+
 
 
     ];

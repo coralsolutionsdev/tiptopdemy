@@ -3051,9 +3051,11 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
   methods: {
     togglePreview: function togglePreview() {
+      if (this.previewMode == true) {
+        this.activeFileId = null;
+        this.previewFile = null;
+      }
       this.previewMode = !this.previewMode;
-      this.activeFileId = null;
-      this.previewFile = null;
     },
     fetchFiles: function fetchFiles() {
       var _this = this;
@@ -3105,7 +3107,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.fetchGroups();
     },
     openFilePreview: function openFilePreview(file) {
-      this.previewMode = true;
+      // this.previewMode = true;
       this.previewFolder = null;
       this.activeFolderId = null;
       this.previewFile = file;
@@ -3114,7 +3116,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.selectedItemType = this.activeItemTypeFile;
     },
     openFolderPreview: function openFolderPreview(folder) {
-      this.previewMode = true;
+      // this.previewMode = true;
       this.previewFile = null;
       this.activeFileId = null;
       this.previewFolder = folder;

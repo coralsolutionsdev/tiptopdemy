@@ -233,9 +233,11 @@ name: "FileManager",
   },
   methods: {
     togglePreview(){
+      if (this.previewMode == true){
+        this.activeFileId = null;
+        this.previewFile = null;
+      }
       this.previewMode = !this.previewMode;
-      this.activeFileId = null;
-      this.previewFile = null;
 
     },
     fetchFiles(){ // get all media files
@@ -286,7 +288,7 @@ name: "FileManager",
       this.fetchGroups();
     },
     openFilePreview(file){
-      this.previewMode = true;
+      // this.previewMode = true;
       this.previewFolder = null;
       this.activeFolderId = null;
       this.previewFile = file;
@@ -295,7 +297,7 @@ name: "FileManager",
       this.selectedItemType = this.activeItemTypeFile;
     },
     openFolderPreview(folder){
-      this.previewMode = true;
+      // this.previewMode = true;
       this.previewFile = null;
       this.activeFileId = null;
       this.previewFolder = folder;

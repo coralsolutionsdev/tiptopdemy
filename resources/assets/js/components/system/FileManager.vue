@@ -242,6 +242,7 @@ name: "FileManager",
     },
     fetchFiles(){ // get all media files
       this.loadingMode = true;
+      this.files = [];
       axios.get('/manage/media/get/items', {
         params: {
           group: this.groupSlug,
@@ -258,6 +259,7 @@ name: "FileManager",
       });
     },
     fetchGroups(){ // get all media groups
+      this.allFolders = [];
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {

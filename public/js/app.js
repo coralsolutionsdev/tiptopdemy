@@ -3062,6 +3062,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
       // get all media files
       this.loadingMode = true;
+      this.files = [];
       axios.get('/manage/media/get/items', {
         params: {
           group: this.groupSlug
@@ -3079,6 +3080,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var _this2 = this;
 
       // get all media groups
+      this.allFolders = [];
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {

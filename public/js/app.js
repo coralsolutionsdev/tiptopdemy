@@ -38850,7 +38850,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(_vm.previewFile.custom_properties.file_type == 'image') ? _c('div', [_c('img', {
     staticStyle: {
-      "border-radius": "10px"
+      "border-radius": "10px",
+      "width": "100%"
     },
     attrs: {
       "data-src": _vm.previewFile.url,

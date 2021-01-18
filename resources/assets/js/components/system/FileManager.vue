@@ -109,7 +109,7 @@
                     <!--file preview-->
                     <div v-if="previewFile != null" class="uk-grid-small uk-child-width-1-1@s" uk-grid>
                       <div v-if="previewFile.custom_properties.file_type == 'image'">
-                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px">
+                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; width: 100%">
                       </div>
                       <div v-else-if="previewFile.custom_properties.file_type == 'video'">
                         <video :src="previewFile.url" playsinline controls disablepictureinpicture controlsList="nodownload"></video>

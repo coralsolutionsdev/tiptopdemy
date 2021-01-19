@@ -3233,10 +3233,21 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var _this3 = this;
 
       this.loadingMode = true;
+      var files = this.files;
+      var removedItemId = id;
+      $.each(files, function (key, file) {
+        if (file && file.id && file.id == removedItemId) {
+          files.splice(key, 1);
+        }
+      });
+      this.files = files;
       axios.post('/manage/media/ajax/delete/' + id).then(function (res) {
+        if (res.status != 200) {
+          UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
+        }
         _this3.activeFileId = _this3.activeFile = null;
         _this3.previewMode = false;
-        _this3.fetchFiles(false);
+        // this.fetchFiles(false);
         _this3.hideLoading();
         // this.fetchGroups();
       }).catch(function (error) {
@@ -3249,6 +3260,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
       this.loadingMode = true;
       axios.post('/manage/system/group/' + id + '/ajax/destroy/type/1').then(function (res) {
+        if (res.status != 200) {
+          UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
+        }
         _this4.activeFileId = _this4.activeFile = null;
         _this4.previewMode = false;
         _this4.fetchGroups(false);
@@ -3267,6 +3281,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.loadingMode = true;
       var data = { id: id, title: title, group_slug: groupSlug };
       axios.post('/manage/media/ajax/move/item', data).then(function (res) {
+        if (res.status != 200) {
+          UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
+        }
         _this5.onMoveItemId = _this5.onMoveItemType = null;
         _this5.fetchGroups(refreshPage);
         _this5.fetchFiles(refreshPage);
@@ -3285,6 +3302,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.loadingMode = true;
       var data = { id: id, title: title, group_slug: ancestorId };
       axios.post('/manage/system/group/ajax/update', data).then(function (res) {
+        if (res.status != 200) {
+          UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
+        }
         _this6.onMoveItemId = _this6.onMoveItemType = null;
         _this6.fetchGroups(refreshPage);
         _this6.fetchFiles(refreshPage);
@@ -3309,7 +3329,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
       var data = { title: 'New folder', ancestor_slug: this.groupSlug };
       axios.post('/manage/system/group/ajax/create', data).then(function (res) {
-        // this.fetchFiles();
+        if (res.status != 200) {
+          UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
+        }
         _this7.fetchGroups(false);
         _this7.hideLoading();
       }).catch(function (error) {

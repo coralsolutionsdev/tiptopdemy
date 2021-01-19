@@ -416,11 +416,22 @@ name: "FileManager",
     },
     destroyFile(id){
       this.loadingMode = true;
+      var files = this.files;
+      var removedItemId = id;
+      $.each( files, function( key, file ) {
+        if (file && file.id && file.id == removedItemId){
+          files.splice(key, 1);
+        }
+      });
+      this.files = files;
       axios.post('/manage/media/ajax/delete/'+id)
           .then(res => {
+            if (res.status != 200){
+              UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
+            }
             this.activeFileId = this.activeFile = null;
             this.previewMode = false;
-            this.fetchFiles(false);
+            // this.fetchFiles(false);
             this.hideLoading();
             // this.fetchGroups();
           })
@@ -433,6 +444,9 @@ name: "FileManager",
       this.loadingMode = true;
       axios.post('/manage/system/group/'+id+'/ajax/destroy/type/1')
           .then(res => {
+            if (res.status != 200){
+              UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
+            }
             this.activeFileId = this.activeFile = null;
             this.previewMode = false;
             this.fetchGroups(false);
@@ -449,6 +463,9 @@ name: "FileManager",
       const data = { id:id, title:title, group_slug:groupSlug };
       axios.post('/manage/media/ajax/move/item', data)
           .then(res => {
+            if (res.status != 200){
+              UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
+            }
             this.onMoveItemId = this.onMoveItemType = null;
             this.fetchGroups(refreshPage);
             this.fetchFiles(refreshPage);
@@ -465,9 +482,12 @@ name: "FileManager",
       const data = { id:id, title:title,  group_slug:ancestorId };
       axios.post('/manage/system/group/ajax/update', data)
           .then(res => {
+            if (res.status != 200){
+              UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
+            }
             this.onMoveItemId = this.onMoveItemType = null;
-              this.fetchGroups(refreshPage);
-              this.fetchFiles(refreshPage);
+            this.fetchGroups(refreshPage);
+            this.fetchFiles(refreshPage);
             this.hideLoading();
           })
           .catch(error => {
@@ -489,7 +509,9 @@ name: "FileManager",
       const data = {  title:'New folder', ancestor_slug:this.groupSlug };
       axios.post('/manage/system/group/ajax/create', data)
           .then(res => {
-            // this.fetchFiles();
+            if (res.status != 200){
+              UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
+            }
             this.fetchGroups(false);
             this.hideLoading();
           })

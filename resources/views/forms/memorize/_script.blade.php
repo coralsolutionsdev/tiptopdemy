@@ -56,6 +56,14 @@
             // media.remove();
 
         });
+        $('.insert-selected-media-file').off('click').click(function (){
+            var selectedFileUrlInput = $('.selected-file-url');
+            var mediaSrc = selectedFileUrlInput.val();
+            $('.item-media-url-'+currentOnEditMemorizeItemId).val(mediaSrc);
+            var media = $('#memorizeMedia-'+currentOnEditMemorizeItemId);
+            media.attr('src', mediaSrc);
+            UIkit.modal('#mediaModal').hide();
+        });
 
     }
     function deleteItem(event)

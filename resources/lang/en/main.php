@@ -502,6 +502,9 @@
         'Folder name' => 'Folder name',
         'Files count' => 'Files count',
         'Sub Folders count' => 'Sub Folders count',
+        'Insert' => 'Insert',
+        'Drag and drop message' => 'Drag and drop to upload content! Or click to select a file from your computer',
+        'you are allowed to upload message' => 'you are allowed to upload only 5 files per time',
 
 
 

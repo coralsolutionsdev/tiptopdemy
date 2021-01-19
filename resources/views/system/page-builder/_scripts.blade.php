@@ -604,6 +604,22 @@
             UIkit.modal('#media-library-modal').hide();
         });
 
+        $('.insert-selected-media-file').off('click').click(function (){
+            var widgetImage = $('#'+openedWidgetSetting);
+            var selectedFileUrlInput = $('.selected-file-url');
+            var mediaSrc = selectedFileUrlInput.val();
+            if (openedWidgetType == 'video'){
+                widgetImage.html('<video src="'+mediaSrc+'" class="uk-responsive-width pb-widget-video" width="1920" height="1080" playsinline controls disablepictureinpicture controlsList="nodownload" uk-responsive></video>');
+
+            }else{
+                widgetImage.find('.pb-widget-image').attr('data-src', mediaSrc);
+                $('.image-setting-image-thump').attr('data-src', mediaSrc);
+            }
+
+            UIkit.modal('#media-library-modal').hide();
+        });
+
+
 
         function updateMarkerValues(id)
         {

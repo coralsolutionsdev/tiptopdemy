@@ -150,60 +150,14 @@
 {{--Modals--}}
 
 <!-- This is the modal -->
-<div id="media-library-modal" class="uk-modal-container" uk-modal>
-    <div class="uk-modal-dialog uk-margin-auto-vertical">
-        <button class="uk-modal-close-default" type="button" uk-close></button>
-        <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Media Library</h2>
-        </div>
-        <div class="uk-modal-body uk-padding-small">
-
-            <ul uk-tab>
-                <li><a href="#">My Media</a></li>
-                <li><a href="#" class="media-uploader-tab">Upload Files</a></li>
-            </ul>
-
-            <ul class="uk-switcher uk-margin">
-                <li>
-                    <div id="media-items" class="uk-grid-small uk-child-width-1-5@s" uk-grid="masonry: true">
-                        <div class="uk-flex uk-flex-center uk-text-center uk-width-1-1">
-                            <div>
-                                <div class="uk-margin-small">
-                                    <span class="uk-text-primary" uk-spinner="ratio: 2"></span>
-                                </div>
-                                Media items are loading ..
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-grid-small uk-flex uk-flex-middle uk-flex-center" uk-grid>
-                        <div class="uk-width-1-2@m uk-padding-small uk-margin-small">
-                            <div class="uk-placeholder">
-                                <form id="dropzoneForm" action="{{route('media.store')}}" class="dropzone uk-width-1-1 uk-flex uk-flex-center" id="myAwesomeDropzone" enctype="multipart/form-data">
-                                    @csrf
-                                </form>
-                            </div>
-                            <div class="" style="padding: 0px">
-                                <div class="uk-grid-collapse" uk-grid>
-                                    <div class="uk-width-expand">
-                                        <span class="process-icon"></span> <span class="process-status"></span>
-                                    </div>
-                                    <div class="uk-width-auto">
-                                        <button id="dropZoneCancelUpload" class="uk-button uk-button-danger" type="button" style="display: none">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <div>
+<div id="vue-app">
+    <div id="media-library-modal" class="uk-modal-container" uk-modal>
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Media Library</h2>
             </div>
-        </div>
-        <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary replace-widget-image" type="button">Insert</button>
+            <file-manager v-bind:insertmode="true"></file-manager>
         </div>
     </div>
 </div>

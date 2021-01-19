@@ -38,6 +38,7 @@
                 <div class="file-manager-navbar">
                   <div class="uk-grid-small" style="padding: 16px 25px 25px 0" uk-grid>
                     <div class="uk-width-expand" style="padding-top: 10px">
+                      <input type="hidden" class="selected-file-url" v-model="previewFile.url" v-if="insertmode && previewFile">
                       <span @click="goHome()" class="hover-primary" uk-icon="icon: chevron-left"></span> <span v-html="groupName"></span> <span v-if="loadingMode" class="uk-text-primary"><span style="margin: 0 5px" uk-spinner="ratio: 0.5"></span> loading ...</span>
                     </div>
                     <div class="uk-width-auto">
@@ -49,15 +50,18 @@
 <!--                        <li><span class="navbar-item hover-primary" uk-icon="icon: link" v-bind:uk-tooltip="$t('main.Copy link')"></span></li>-->
                         <li><span @click="destroyItem()"  class="navbar-item hover-danger" uk-icon="icon: trash" v-bind:uk-tooltip="$t('main.Delete')"></span></li>
                         <li><span @click="togglePreview()" class="navbar-item hover-primary" uk-icon="icon: info" v-bind:uk-tooltip="$t('main.Preview')"></span></li>
-<!--                        <li>s</li>-->
+                        <li v-if="insertmode">
+                          <button @click="resetSelectedPreview()" class="uk-button uk-button-primary insert-selected-media-file" v-bind:disabled="activeFileId == null ? true: false" v-html="$t('main.Insert')"></button>
+                        </li>
                       </ul>
                     </div>
 
                   </div>
                 </div>
                 <!--files section-->
-                <div class="uk-grid-collapse uk-grid-match" uk-grid style="padding: 20px 0px 20px 0 ">
+                <div class="uk-grid-collapse uk-grid-match" uk-grid style="height: 100%; padding: 20px 0px 20px 0 ">
                   <div class="uk-width-expand" style="padding-right: 10px; padding-bottom: 10px">
+                    <!-- upload-->
                     <div v-if="uploadMode" class="uk-margin">
                       <vue-dropzone id="dropzone"
                                     ref="myVueDropzone"
@@ -67,14 +71,14 @@
                                     :options="dropzoneOptions" :useCustomSlot=true>
                         <div class="dropzone-custom-content">
                           <span class="uk-text-primary" uk-icon="icon: cloud-upload; ratio: 3.5"></span>
-                          <p class="uk-text-muted uk-margin-remove">Drag and drop to upload content!</p>
-                          <p class="uk-text-muted uk-margin-remove">Or click to select a file from your computer</p>
+                          <p class="uk-text-muted uk-margin-remove" v-html="$t('main.Drag and drop message')"></p>
+                          <p class="uk-text-muted uk-margin-remove" v-html="$t('main.you are allowed to upload message')"></p>
                         </div>
                       </vue-dropzone>
                     </div>
-                    <div class="uk-grid-collapse uk-text-center" uk-grid="masonry: true">
-
-                      <div :class="previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '" v-for="folder in folders" class="uk-width-1-2@m">
+                    <div class="uk-grid-collapse uk-text-center" uk-grid="masonry: true" @drop.prevent="onDrop()" >
+                      <!-- Folder -->
+                      <div :class="previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '" v-for="folder in folders" class="uk-width-1-2@m" draggable @dragstart="startFolderDrag(folder)" @dragover.prevent="onDragHoverFolder(folder)">
                         <div :class="{active:activeFolderId == folder.id, onMove:onMoveItemId == folder.id}" class="folder" @dblclick="openFolder(folder)" @click="openFolderPreview(folder)">
                           <div class="image-wrapper">
                             <span class="uk-badge files-count" v-html="folder.items_count"></span>
@@ -86,10 +90,10 @@
                           </div>
                         </div>
                       </div>
-
-                      <div :class="previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '" v-for="file in files" class="uk-width-1-2@m">
-                        <div :class="{active:activeFileId == file.id, onMove:onMoveItemId == file.id}" class="file image-file" @click="openFilePreview(file)">
-
+                      <!-- File -->
+                      <div :class="previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '" v-for="file in files" class="uk-width-1-2@m" @click="openFilePreview(file)" draggable @dragstart="startFileDrag(file)">
+                        <div :class="{active:activeFileId == file.id, onMove:onMoveItemId == file.id}" class="file image-file">
+                          <span v-if="insertmode && activeFileId == file.id" class="uk-icon-button selected-file-badge" uk-icon="check"></span>
                           <div class="image-wrapper">
                             <img :data-src="file.url" alt="" uk-img v-if="file.custom_properties.file_type === 'image'" class="img-preview">
                             <div v-else style="padding: 25px 10px 5px 10px">
@@ -105,8 +109,9 @@
 
                     </div>
                   </div>
+
+                  <!--file preview-->
                   <div v-if="previewMode" class="uk-width-1-3" style="background-color: #F9F9FB; padding: 10px;min-height: 72vh; display: block">
-                    <!--file preview-->
                     <div v-if="previewFile != null" class="uk-grid-small uk-child-width-1-1@s" uk-grid>
                       <div class="uk-text-center" v-if="previewFile.custom_properties.file_type == 'image'">
                         <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; max-height: 300px; object-fit:cover">
@@ -167,7 +172,6 @@
                         <p>No preview available</p>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -186,6 +190,9 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 export default {
 name: "FileManager",
+  props: [
+    'insertmode'
+  ],
   data(){
     return{
       dropzoneOptions: {
@@ -225,6 +232,13 @@ name: "FileManager",
       selectedItemType: null,
       onMoveItemId: null,
       onMoveItemType:null,
+      // dragging
+      draggedFile:null,
+      draggedFileId:null,
+      draggedHoverFolderSlug:null,
+      draggedItemType:null,
+      draggedFolderId:null,
+
     }
   },
   created() {
@@ -232,6 +246,36 @@ name: "FileManager",
     this.fetchGroups();
   },
   methods: {
+
+    startFileDrag(file) {
+      this.draggedFileId = file.id;
+      this.draggedHoverFolderSlug = this.draggedFolderId = null;
+      this.draggedItemType = this.activeItemTypeFile;
+    },
+    startFolderDrag(folder) {
+      this.draggedFolderId = folder.id;
+      this.draggedHoverFolderSlug = this.draggedFileId = null;
+      this.draggedItemType = this.activeItemTypeFolder;
+    },
+    onDragHoverFolder(folder) {
+      this.draggedHoverFolderSlug = folder.slug;
+    },
+    onDrop(){
+      this.dropItem();
+    },
+    dropItem(){
+      if (this.draggedHoverFolderSlug){
+        if (this.draggedFileId && this.draggedItemType == this.activeItemTypeFile){
+          this.updateFile(this.draggedFileId, null, this.draggedHoverFolderSlug, false);
+          this.draggedFileId = null;
+          this.draggedHoverFolderSlug = null;
+          this.draggedItemType = null;
+        }
+        if (this.draggedFolderId && this.draggedItemType == this.activeItemTypeFolder){
+          this.updateFolder(this.draggedFolderId, null, this.draggedHoverFolderSlug, false);
+        }
+      }
+    },
     togglePreview(){
       if (this.previewMode == true){
         this.activeFileId = null;
@@ -350,6 +394,8 @@ name: "FileManager",
       if (this.onMoveItemId){
         if (this.onMoveItemType === this.activeItemTypeFile){
           this.updateFile(this.onMoveItemId, null, this.groupSlug, false);
+          this.previewFile = null;
+          this.activeFileId = null;
         }else{
           this.updateFolder(this.onMoveItemId, null, this.groupSlug, false);
         }
@@ -369,7 +415,7 @@ name: "FileManager",
           .then(res => {
             this.activeFileId = this.activeFile = null;
             this.previewMode = false;
-            this.fetchFiles();
+            this.fetchFiles(false);
             this.hideLoading();
             // this.fetchGroups();
           })
@@ -384,7 +430,8 @@ name: "FileManager",
       axios.post('/manage/media/ajax/move/item', data)
           .then(res => {
             this.onMoveItemId = this.onMoveItemType = null;
-              this.fetchFiles(refreshPage);
+            this.fetchGroups(refreshPage);
+            this.fetchFiles(refreshPage);
             this.hideLoading();
           })
           .catch(error => {
@@ -393,6 +440,7 @@ name: "FileManager",
           });
     },
     updateFolder(id, title ,ancestorId, refreshPage = true){
+      console.log(ancestorId)
       this.loadingMode = true;
       const data = { id:id, title:title,  group_slug:ancestorId };
       axios.post('/manage/system/group/ajax/update', data)
@@ -435,6 +483,9 @@ name: "FileManager",
         this.loadingMode = false;
       },300
       );
+    },
+    resetSelectedPreview(){
+      this.activeFileId = null;
     },
     // dropzone methods
     vSuccess(file, response) {
@@ -494,6 +545,15 @@ name: "FileManager",
     background-color: #32d296 !important;
     /*filter: drop-shadow(1px 1px 2px #969696);*/
   }
+  .selected-file-badge{
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    background-color: #32d296 !important;
+    color: white;
+    /*filter: drop-shadow(1px 1px 2px #969696);*/
+  }
+
   .onMove{
     opacity: 0.5;
   }
@@ -519,6 +579,7 @@ name: "FileManager",
   /*dropzone*/
   .dropzone-custom-content {
     text-align: center;
+    font-family: 'Cairo', 'Rubik', sans-serif !important;
   }
 
   .vue-dropzone {

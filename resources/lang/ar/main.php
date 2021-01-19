@@ -525,6 +525,9 @@
         'Folder name' => 'إسم المجلد',
         'Files count' => 'عدد الملفات',
         'Sub Folders count' => 'عدد المجلدات الداخلية',
+        'Insert' => 'إدراج',
+        'Drag and drop message' => 'قم بسحب وإفلات الملف لتحميل! أو انقر لإختيار ملف من جهاز الكمبيوتر الخاص بك',
+        'you are allowed to upload message' => '.يسمح لك بتحميل 5 ملفات فقط في آن واحد',
 
 
 

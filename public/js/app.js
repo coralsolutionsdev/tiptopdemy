@@ -2996,6 +2996,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 // .....
 var token = document.head.querySelector('meta[name="csrf-token"]').content;
@@ -3003,6 +3007,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FileManager",
+  props: ['insertmode'],
   data: function data() {
     return {
       dropzoneOptions: {
@@ -3041,7 +3046,14 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       activeItemTypeFolder: 2, // group
       selectedItemType: null,
       onMoveItemId: null,
-      onMoveItemType: null
+      onMoveItemType: null,
+      // dragging
+      draggedFile: null,
+      draggedFileId: null,
+      draggedHoverFolderSlug: null,
+      draggedItemType: null,
+      draggedFolderId: null
+
     };
   },
   created: function created() {
@@ -3050,6 +3062,35 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
   },
 
   methods: {
+    startFileDrag: function startFileDrag(file) {
+      this.draggedFileId = file.id;
+      this.draggedHoverFolderSlug = this.draggedFolderId = null;
+      this.draggedItemType = this.activeItemTypeFile;
+    },
+    startFolderDrag: function startFolderDrag(folder) {
+      this.draggedFolderId = folder.id;
+      this.draggedHoverFolderSlug = this.draggedFileId = null;
+      this.draggedItemType = this.activeItemTypeFolder;
+    },
+    onDragHoverFolder: function onDragHoverFolder(folder) {
+      this.draggedHoverFolderSlug = folder.slug;
+    },
+    onDrop: function onDrop() {
+      this.dropItem();
+    },
+    dropItem: function dropItem() {
+      if (this.draggedHoverFolderSlug) {
+        if (this.draggedFileId && this.draggedItemType == this.activeItemTypeFile) {
+          this.updateFile(this.draggedFileId, null, this.draggedHoverFolderSlug, false);
+          this.draggedFileId = null;
+          this.draggedHoverFolderSlug = null;
+          this.draggedItemType = null;
+        }
+        if (this.draggedFolderId && this.draggedItemType == this.activeItemTypeFolder) {
+          this.updateFolder(this.draggedFolderId, null, this.draggedHoverFolderSlug, false);
+        }
+      }
+    },
     togglePreview: function togglePreview() {
       if (this.previewMode == true) {
         this.activeFileId = null;
@@ -3168,6 +3209,8 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       if (this.onMoveItemId) {
         if (this.onMoveItemType === this.activeItemTypeFile) {
           this.updateFile(this.onMoveItemId, null, this.groupSlug, false);
+          this.previewFile = null;
+          this.activeFileId = null;
         } else {
           this.updateFolder(this.onMoveItemId, null, this.groupSlug, false);
         }
@@ -3188,7 +3231,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       axios.post('/manage/media/ajax/delete/' + id).then(function (res) {
         _this3.activeFileId = _this3.activeFile = null;
         _this3.previewMode = false;
-        _this3.fetchFiles();
+        _this3.fetchFiles(false);
         _this3.hideLoading();
         // this.fetchGroups();
       }).catch(function (error) {
@@ -3205,6 +3248,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var data = { id: id, title: title, group_slug: groupSlug };
       axios.post('/manage/media/ajax/move/item', data).then(function (res) {
         _this4.onMoveItemId = _this4.onMoveItemType = null;
+        _this4.fetchGroups(refreshPage);
         _this4.fetchFiles(refreshPage);
         _this4.hideLoading();
       }).catch(function (error) {
@@ -3217,6 +3261,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
       var refreshPage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
+      console.log(ancestorId);
       this.loadingMode = true;
       var data = { id: id, title: title, group_slug: ancestorId };
       axios.post('/manage/system/group/ajax/update', data).then(function (res) {
@@ -3258,6 +3303,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       setTimeout(function () {
         _this7.loadingMode = false;
       }, 300);
+    },
+    resetSelectedPreview: function resetSelectedPreview() {
+      this.activeFileId = null;
     },
 
     // dropzone methods
@@ -3904,7 +3952,10 @@ if (token) {
             "Url link": "رابط الملف",
             "Folder name": "إسم المجلد",
             "Files count": "عدد الملفات",
-            "Sub Folders count": "عدد المجلدات الداخلية"
+            "Sub Folders count": "عدد المجلدات الداخلية",
+            "Insert": "إدراج",
+            "Drag and drop message": "قم بسحب وإفلات الملف لتحميل! أو انقر لإختيار ملف من جهاز الكمبيوتر الخاص بك",
+            "you are allowed to upload message": "يسمح لك بتحميل 5 ملفات فقط في آن واحد"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -4495,7 +4546,10 @@ if (token) {
             "Url link": "Url link",
             "Folder name": "Folder name",
             "Files count": "Files count",
-            "Sub Folders count": "Sub Folders count"
+            "Sub Folders count": "Sub Folders count",
+            "Insert": "Insert",
+            "Drag and drop message": "Drag and drop to upload content! Or click to select a file from your computer",
+            "you are allowed to upload message": "you are allowed to upload only 5 files per time"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -7212,7 +7266,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+exports.push([module.i, "\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -10px;\n  top: -10px;\n  background-color: #32d296 !important;\n  color: white;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
 
 /***/ }),
 /* 51 */
@@ -38616,7 +38670,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "padding-top": "10px"
     }
-  }, [_c('span', {
+  }, [(_vm.insertmode && _vm.previewFile) ? _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.previewFile.url),
+      expression: "previewFile.url"
+    }],
+    staticClass: "selected-file-url",
+    attrs: {
+      "type": "hidden"
+    },
+    domProps: {
+      "value": (_vm.previewFile.url)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.previewFile, "url", $event.target.value)
+      }
+    }
+  }) : _vm._e(), _vm._v(" "), _c('span', {
     staticClass: "hover-primary",
     attrs: {
       "uk-icon": "icon: chevron-left"
@@ -38715,9 +38789,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return _vm.togglePreview()
       }
     }
-  })])])])])]), _vm._v(" "), _c('div', {
+  })]), _vm._v(" "), (_vm.insertmode) ? _c('li', [_c('button', {
+    staticClass: "uk-button uk-button-primary insert-selected-media-file",
+    attrs: {
+      "disabled": _vm.activeFileId == null ? true : false
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Insert'))
+    },
+    on: {
+      "click": function($event) {
+        return _vm.resetSelectedPreview()
+      }
+    }
+  })]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "uk-grid-collapse uk-grid-match",
     staticStyle: {
+      "height": "100%",
       "padding": "20px 0px 20px 0"
     },
     attrs: {
@@ -38751,18 +38839,42 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uk-icon": "icon: cloud-upload; ratio: 3.5"
     }
   }), _vm._v(" "), _c('p', {
-    staticClass: "uk-text-muted uk-margin-remove"
-  }, [_vm._v("Drag and drop to upload content!")]), _vm._v(" "), _c('p', {
-    staticClass: "uk-text-muted uk-margin-remove"
-  }, [_vm._v("Or click to select a file from your computer")])])])], 1) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "uk-text-muted uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Drag and drop message'))
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "uk-text-muted uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.you are allowed to upload message'))
+    }
+  })])])], 1) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "uk-grid-collapse uk-text-center",
     attrs: {
       "uk-grid": "masonry: true"
+    },
+    on: {
+      "drop": function($event) {
+        $event.preventDefault();
+        return _vm.onDrop()
+      }
     }
   }, [_vm._l((_vm.folders), function(folder) {
     return _c('div', {
       staticClass: "uk-width-1-2@m",
-      class: _vm.previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '
+      class: _vm.previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l ',
+      attrs: {
+        "draggable": ""
+      },
+      on: {
+        "dragstart": function($event) {
+          return _vm.startFolderDrag(folder)
+        },
+        "dragover": function($event) {
+          $event.preventDefault();
+          return _vm.onDragHoverFolder(folder)
+        }
+      }
     }, [_c('div', {
       staticClass: "folder",
       class: {
@@ -38803,18 +38915,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _vm._l((_vm.files), function(file) {
     return _c('div', {
       staticClass: "uk-width-1-2@m",
-      class: _vm.previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l '
-    }, [_c('div', {
-      staticClass: "file image-file",
-      class: {
-        active: _vm.activeFileId == file.id, onMove: _vm.onMoveItemId == file.id
+      class: _vm.previewMode ? ' uk-width-1-4@l ' : 'uk-width-1-5@l ',
+      attrs: {
+        "draggable": ""
       },
       on: {
         "click": function($event) {
           return _vm.openFilePreview(file)
+        },
+        "dragstart": function($event) {
+          return _vm.startFileDrag(file)
         }
       }
     }, [_c('div', {
+      staticClass: "file image-file",
+      class: {
+        active: _vm.activeFileId == file.id, onMove: _vm.onMoveItemId == file.id
+      }
+    }, [(_vm.insertmode && _vm.activeFileId == file.id) ? _c('span', {
+      staticClass: "uk-icon-button selected-file-badge",
+      attrs: {
+        "uk-icon": "check"
+      }
+    }) : _vm._e(), _vm._v(" "), _c('div', {
       staticClass: "image-wrapper"
     }, [(file.custom_properties.file_type === 'image') ? _c('img', {
       staticClass: "img-preview",

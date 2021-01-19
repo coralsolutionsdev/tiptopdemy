@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{getLanguage()}}" dir="">
 <head>
     <title>Page builder</title>
   <link rel="icon" href="{{asset_image('/assets/favicon/favicon.ico')}}" type="image/x-icon">
@@ -22,9 +22,10 @@
   @endif
 
   <!--site Css-->
-  <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202010241400')}}">
-  <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202010241400')}}">
-  <link rel="stylesheet" href="{{url('themes/general/modules/css/file-manager.css?v=202010241400')}}">
+
+  <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202101192040')}}">
+  <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202101192040')}}">
+  <link rel="stylesheet" href="{{url('themes/general/modules/css/file-manager.css?v=202101192040')}}">
 
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
@@ -205,6 +206,8 @@
     </div>
   </li>
 @endif
+<script src="{{asset('js/app.js?v=202101192040')}}"></script>
+
 @include('partial.scripts._tinyemc')
 @include('system.page-builder._scripts')
 {{--@include('system.file-manager._scripts')--}}

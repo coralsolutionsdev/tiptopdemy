@@ -1,21 +1,63 @@
-.media-item .selected-media-icon{
-    display: none;
-    position: absolute; right: 0; margin-right: -10px;  margin-top: -10px;
+
+/*file manager*/
+
+.file-manager-navbar .navbar-item{
+    padding: 10px;
+    border-radius: 5px;
+
 }
-.media-item img{
-    border: 5px solid white;
+.file-manager-navbar .navbar-item:hover{
+    background-color: #F4F5F7;
 }
-.selected-media-item img{
-    border: 5px solid dodgerblue;
+.file-manager .file, .file-manager .folder{
+    padding: 10px;
+    border-radius: 10px;
 }
-.media-item img:hover{
+.file-manager .file:hover, .file-manager .folder:hover, .file-manager .file.active, .file-manager .folder.active{
+    background-color: #F4F5F7;
     cursor: pointer;
 }
-.selected-media-item .selected-media-icon{
-    display: flex;
+.file-manager .file.image-file img{
+    border-radius: 10px;
 }
-#media-items{
-    max-height: 400px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.file-manager .file-manager-sidebar a{
+    color: #666666;
+    text-decoration: none;
+}
+.file-manager-sidebar li .uk-list ul{
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+}
+
+.file-manager-sidebar .uk-list ul {
+    margin: 0;
+    padding: 0px !important;
+    list-style: none;
+}
+
+.file-manager-sidebar .uk-list li {
+    margin: 0 !important;
+}
+.file-manager-sidebar .nav-item{
+    padding: 10px 0;
+}
+.file-manager-sidebar .uk-accordion-content{
+    margin: 10px 0 0 0  !important;
+    padding-left: 20px;
+}
+.uk-list>li:nth-child(n+2), .uk-list>li>ul {
+    margin-top: 0;
+}
+.file-manager-sidebar .uk-accordion-title {
+    display: block;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+    overflow: hidden;
+    margin: 0px !important;
+}
+.vue-dropzone>.dz-preview .dz-image, .vue-dropzone>.dz-preview .dz-details {
+    border-radius: 10px !important;
+    width: 100%;
+    height: 100%;
 }

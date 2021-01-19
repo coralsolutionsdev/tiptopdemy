@@ -12,7 +12,7 @@
 @endsection
 @section('content')
     <div id="vue-app">
-        <file-manager></file-manager>
+        <file-manager v-bind:insertmode="false"></file-manager>
     </div>
-    <script src="{{asset('js/app.js?v=202101190017')}}"></script>
+    <script src="{{asset('js/app.js?v=202101192040')}}"></script>
 @endsection

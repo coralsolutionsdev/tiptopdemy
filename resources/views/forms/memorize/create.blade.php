@@ -2,7 +2,6 @@
 @section('title', $page_title)
 @section('head')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
     <style>
         .select2-container--default .select2-selection--multiple{
             border-radius: 2px !important;
@@ -249,24 +248,24 @@
             </div>
 
             {!! Form::close() !!}
-
-            <div id="mediaModal" uk-modal>
-                <div class="uk-modal-dialog uk-margin-auto-vertical">
-                    <button class="uk-modal-close-default" type="button" uk-close></button>
-                    <div class="uk-modal-header">
-                        <h5 class="">Media source</h5>
-                    </div>
-                    <div class="uk-modal-body">
-                        <label class="uk-form-label">Media source:</label>
-                        <input type="text" class="uk-input media-source-input" placeholder="https://domain.com/link-xxx">
-                    </div>
-                    <div class="uk-modal-footer uk-text-right">
-                        <button class="uk-button uk-button-primary uk-modal-close" type="button">Done</button>
+            <div id="vue-app">
+                <div id="mediaModal"  class="uk-modal-container" uk-modal>
+                    <div class="uk-modal-dialog">
+                        <button class="uk-modal-close-default" type="button" uk-close></button>
+                        <div class="uk-modal-header">
+                            <h5 class="">Media libaray</h5>
+                        </div>
+                        <file-manager v-bind:insertmode="true"></file-manager>
                     </div>
                 </div>
             </div>
 
+
+
     </section>
+    <script src="{{asset('js/app.js?v=202101192040')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
+
 @endsection
 @section('script')
     @include('partial.scripts._tinyemc')

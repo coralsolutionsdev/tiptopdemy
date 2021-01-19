@@ -147,14 +147,52 @@ class GroupController extends Controller
             $currentGroup = Group::find($input['id']);
             if (!empty($currentGroup)){
                 $parentGroup = isset($input['group_slug']) ? Group::where('slug', $input['group_slug'])->first() : null;
-                $input['ancestor_id'] = !empty($parentGroup) ? $parentGroup->id : null;
+                $ancestor_id = !empty($parentGroup) ? $parentGroup->id : null;
+                if ($ancestor_id == $currentGroup->id){
+                    return response('Cannot move the folder inside itself', 400);
+                }
+                $input['ancestor_id'] = $ancestor_id;
                 $input['title'] = isset($input['title']) && !empty($input['title']) && $input['title'] != null ? $input['title'] : $currentGroup->title;
                 $currentGroup->update($input);
                 return response('success', 200);
             }
             return response('current group un available', 503);
         }
+    }
+
+    /**
+     * @param $id
+     * @param $type
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function ajaxDestroy($id, $type)
+    {
+        // TODO: check if use can remove this media item
+        $user = getAuthUser();
+        $group = Group::find($id);
+        if (!empty($user) && $group){
+            if ($type == 1){
+                $groupSlug = $group->slug;
+                $mediaItems = $user->getMedia('file_manager')->sortByDesc('created_at')->filter(function ($mediaItem) use($groupSlug){
+                    if ($mediaItem->getCustomProperty('group') == $groupSlug){
+                        return true;
+                    }
+                    return false;
+                });
+                if (!empty($mediaItems)){
+                    foreach ($mediaItems as $media){
+                        $media->delete();
+                    }
+                }
+
+                $group->delete();
+
+            }
+            return response('success', 200);
+
+        }
         return response('error', 503);
+
     }
 
 }

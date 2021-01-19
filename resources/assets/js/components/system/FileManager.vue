@@ -120,8 +120,8 @@
                         <video :src="previewFile.url" playsinline controls disablepictureinpicture controlsList="nodownload"></video>
                       </div>
                       <div v-else-if="previewFile.custom_properties.file_type == 'audio'">
-                        <audio controls controlsList="nodownload">
-                          <source :src="previewFile.url" type="audio/mpeg">
+                        <audio :src="previewFile.url" controls controlsList="nodownload">
+                          <source type="audio/mpeg">
                         </audio>
                       </div>
                       <div>
@@ -403,10 +403,15 @@ name: "FileManager",
     },
     destroyItem(){
         if (this.selectedItemType === this.activeItemTypeFile){
+          if (!confirm('Are you sure that you want to delete this file?')){
+            return false;
+          }
           this.destroyFile(this.activeFileId);
         }else if(this.selectedItemType === this.activeItemTypeFolder){
-          // this.updateFolder(this.onMoveItemId, null, this.groupSlug );
-          UIkit.notification("Group deleting is under development, please try again later.", {pos: 'top-center', status:'warning'})
+          if (!confirm('Are you sure that you want to delete this folder?')){
+            return false;
+          }
+          this.destroyFolder(this.activeFolderId);
         }
     },
     destroyFile(id){
@@ -416,6 +421,21 @@ name: "FileManager",
             this.activeFileId = this.activeFile = null;
             this.previewMode = false;
             this.fetchFiles(false);
+            this.hideLoading();
+            // this.fetchGroups();
+          })
+          .catch(error => {
+            console.log(error);
+            this.hideLoading();
+          });
+    },
+    destroyFolder(id){
+      this.loadingMode = true;
+      axios.post('/manage/system/group/'+id+'/ajax/destroy/type/1')
+          .then(res => {
+            this.activeFileId = this.activeFile = null;
+            this.previewMode = false;
+            this.fetchGroups(false);
             this.hideLoading();
             // this.fetchGroups();
           })
@@ -451,7 +471,7 @@ name: "FileManager",
             this.hideLoading();
           })
           .catch(error => {
-            console.log(error);
+            UIkit.notification("<span uk-icon='icon: ban'></span> "+error, {pos: 'top-center', status:'danger'})
             this.hideLoading();
           });
     },
@@ -525,6 +545,15 @@ name: "FileManager",
 </script>
 
 <style scoped>
+  audio, audio:focus, audio:active{
+    outline: none;
+    box-shadow: none;
+    border: none;
+    width: 100% !important;
+  }
+  audio:focus, audio:active{
+    /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/
+  }
   .img-preview{
     max-height:150px;
     object-fit:cover;

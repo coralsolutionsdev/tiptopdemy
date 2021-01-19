@@ -272,7 +272,7 @@ class MediaController extends Controller
 //        $mediaItems = $user->getMedia('file_manager')->sortBy('name');
         $mediaItems = \Spatie\MediaLibrary\Models\Media::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get();
         $group = isset($input['group']) ? $input['group'] : null;
-        $mediaItems = $mediaItems->sortByDesc('created_at')->filter(function ($mediaItem) use($group){
+        $mediaItems = $mediaItems->sortBy('name')->filter(function ($mediaItem) use($group){
             if ($mediaItem->getCustomProperty('group') == $group){
                 return true;
             }
@@ -303,6 +303,7 @@ class MediaController extends Controller
         return response('error', 503);
 
     }
+
 
     public function ajaxMove(Request $request)
     {

@@ -3218,10 +3218,15 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
     },
     destroyItem: function destroyItem() {
       if (this.selectedItemType === this.activeItemTypeFile) {
+        if (!confirm('Are you sure that you want to delete this file?')) {
+          return false;
+        }
         this.destroyFile(this.activeFileId);
       } else if (this.selectedItemType === this.activeItemTypeFolder) {
-        // this.updateFolder(this.onMoveItemId, null, this.groupSlug );
-        UIkit.notification("Group deleting is under development, please try again later.", { pos: 'top-center', status: 'warning' });
+        if (!confirm('Are you sure that you want to delete this folder?')) {
+          return false;
+        }
+        this.destroyFolder(this.activeFolderId);
       }
     },
     destroyFile: function destroyFile(id) {
@@ -3239,32 +3244,29 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
         _this3.hideLoading();
       });
     },
-    updateFile: function updateFile(id, title, groupSlug) {
+    destroyFolder: function destroyFolder(id) {
       var _this4 = this;
+
+      this.loadingMode = true;
+      axios.post('/manage/system/group/' + id + '/ajax/destroy/type/1').then(function (res) {
+        _this4.activeFileId = _this4.activeFile = null;
+        _this4.previewMode = false;
+        _this4.fetchGroups(false);
+        _this4.hideLoading();
+        // this.fetchGroups();
+      }).catch(function (error) {
+        console.log(error);
+        _this4.hideLoading();
+      });
+    },
+    updateFile: function updateFile(id, title, groupSlug) {
+      var _this5 = this;
 
       var refreshPage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
       this.loadingMode = true;
       var data = { id: id, title: title, group_slug: groupSlug };
       axios.post('/manage/media/ajax/move/item', data).then(function (res) {
-        _this4.onMoveItemId = _this4.onMoveItemType = null;
-        _this4.fetchGroups(refreshPage);
-        _this4.fetchFiles(refreshPage);
-        _this4.hideLoading();
-      }).catch(function (error) {
-        console.log(error);
-        _this4.hideLoading();
-      });
-    },
-    updateFolder: function updateFolder(id, title, ancestorId) {
-      var _this5 = this;
-
-      var refreshPage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-
-      console.log(ancestorId);
-      this.loadingMode = true;
-      var data = { id: id, title: title, group_slug: ancestorId };
-      axios.post('/manage/system/group/ajax/update', data).then(function (res) {
         _this5.onMoveItemId = _this5.onMoveItemType = null;
         _this5.fetchGroups(refreshPage);
         _this5.fetchFiles(refreshPage);
@@ -3272,6 +3274,24 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       }).catch(function (error) {
         console.log(error);
         _this5.hideLoading();
+      });
+    },
+    updateFolder: function updateFolder(id, title, ancestorId) {
+      var _this6 = this;
+
+      var refreshPage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+
+      console.log(ancestorId);
+      this.loadingMode = true;
+      var data = { id: id, title: title, group_slug: ancestorId };
+      axios.post('/manage/system/group/ajax/update', data).then(function (res) {
+        _this6.onMoveItemId = _this6.onMoveItemType = null;
+        _this6.fetchGroups(refreshPage);
+        _this6.fetchFiles(refreshPage);
+        _this6.hideLoading();
+      }).catch(function (error) {
+        UIkit.notification("<span uk-icon='icon: ban'></span> " + error, { pos: 'top-center', status: 'danger' });
+        _this6.hideLoading();
       });
     },
     updateFolderTitle: function updateFolderTitle() {
@@ -3285,23 +3305,23 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.updateFile(previewId, previewTitle, this.groupSlug, false);
     },
     createFolder: function createFolder() {
-      var _this6 = this;
+      var _this7 = this;
 
       var data = { title: 'New folder', ancestor_slug: this.groupSlug };
       axios.post('/manage/system/group/ajax/create', data).then(function (res) {
         // this.fetchFiles();
-        _this6.fetchGroups(false);
-        _this6.hideLoading();
+        _this7.fetchGroups(false);
+        _this7.hideLoading();
       }).catch(function (error) {
         console.log(error);
-        _this6.hideLoading();
+        _this7.hideLoading();
       });
     },
     hideLoading: function hideLoading() {
-      var _this7 = this;
+      var _this8 = this;
 
       setTimeout(function () {
-        _this7.loadingMode = false;
+        _this8.loadingMode = false;
       }, 300);
     },
     resetSelectedPreview: function resetSelectedPreview() {
@@ -3310,7 +3330,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
     // dropzone methods
     vSuccess: function vSuccess(file, response) {
-      var _this8 = this;
+      var _this9 = this;
 
       console.log('success');
       this.fetchFiles(false);
@@ -3318,7 +3338,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       // this.success = true
       // window.toastr.success('', 'Event : vdropzone-success')
       setTimeout(function () {
-        _this8.$refs.myVueDropzone.removeFile(file);
+        _this9.$refs.myVueDropzone.removeFile(file);
       }, 1500);
       UIkit.notification("<span uk-icon='icon: check'></span> File has uploaded successfully.", { pos: 'top-center', status: 'success' });
     },
@@ -7266,7 +7286,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -10px;\n  top: -10px;\n  background-color: #32d296 !important;\n  color: white;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -10px;\n  top: -10px;\n  background-color: #32d296 !important;\n  color: white;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
 
 /***/ }),
 /* 51 */
@@ -39010,12 +39030,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]) : (_vm.previewFile.custom_properties.file_type == 'audio') ? _c('div', [_c('audio', {
     attrs: {
+      "src": _vm.previewFile.url,
       "controls": "",
       "controlsList": "nodownload"
     }
   }, [_c('source', {
     attrs: {
-      "src": _vm.previewFile.url,
       "type": "audio/mpeg"
     }
   })])]) : _vm._e(), _vm._v(" "), _c('div', [_c('p', {

@@ -248,7 +248,7 @@
             </div>
 
             {!! Form::close() !!}
-            <div id="vue-app">
+            <div>
                 <div id="mediaModal"  class="uk-modal-container" uk-modal>
                     <div class="uk-modal-dialog">
                         <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -263,8 +263,6 @@
 
 
     </section>
-    <script src="{{asset('js/app.js?v=202101192040')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
 
 @endsection
 @section('script')

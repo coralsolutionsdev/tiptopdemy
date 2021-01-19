@@ -185,6 +185,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::post('group/ajax/create', 'GroupController@ajaxStore')->name('group.ajax.create');
             Route::get('group/ajax/get/type/{type}/groups', 'GroupController@ajaxGetIndex')->name('group.ajax.get.index');
             Route::post('group/ajax/update', 'GroupController@ajaxUpdate');
+            Route::post('group/{group}/ajax/destroy/type/{type}', 'GroupController@ajaxDestroy');
 
 //                Route::resource('errors', 'ErrorLogsController');
 //                Route::resource('server', 'ServerController');

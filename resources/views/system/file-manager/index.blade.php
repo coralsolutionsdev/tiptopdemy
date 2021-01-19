@@ -11,8 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
-    <div id="vue-app">
+    <div>
         <file-manager v-bind:insertmode="false"></file-manager>
     </div>
-    <script src="{{asset('js/app.js?v=202101192040')}}"></script>
 @endsection

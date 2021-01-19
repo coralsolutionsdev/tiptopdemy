@@ -546,7 +546,7 @@ export default {
             "Sub Folders count": "عدد المجلدات الداخلية",
             "Insert": "إدراج",
             "Drag and drop message": "قم بسحب وإفلات الملف لتحميل! أو انقر لإختيار ملف من جهاز الكمبيوتر الخاص بك",
-            "you are allowed to upload message": "يسمح لك بتحميل 5 ملفات فقط في آن واحد"
+            "you are allowed to upload message": ".يسمح لك بتحميل 10 ملفات فقط في آن واحد"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -1140,7 +1140,7 @@ export default {
             "Sub Folders count": "Sub Folders count",
             "Insert": "Insert",
             "Drag and drop message": "Drag and drop to upload content! Or click to select a file from your computer",
-            "you are allowed to upload message": "you are allowed to upload only 5 files per time"
+            "you are allowed to upload message": "you are allowed to upload only 10 files per time"
         },
         "pagination": {
             "previous": "&laquo; Previous",

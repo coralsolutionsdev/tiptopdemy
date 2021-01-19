@@ -201,7 +201,7 @@ name: "FileManager",
         addRemoveLinks: true,
         // Setup chunking
         acceptedFiles: "image/*,video/*,audio/*",
-        maxFiles: 5,
+        maxFiles: 10,
         timeout: 3600000,
         autoProcessQueue: true,
         chunking: true,

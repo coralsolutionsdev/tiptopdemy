@@ -206,7 +206,7 @@
     </div>
   </li>
 @endif
-<script src="{{asset('js/app.js?v=202101201845')}}"></script>
+<script src="{{asset('js/app.js?v=202101201910')}}"></script>
 
 @include('partial.scripts._tinyemc')
 @include('system.page-builder._scripts')

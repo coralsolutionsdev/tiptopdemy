@@ -3013,6 +3013,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 // .....
 var token = document.head.querySelector('meta[name="csrf-token"]').content;
@@ -38796,7 +38798,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-spinner": "ratio: 0.5"
     }
-  }), _vm._v(" loading ...")]) : _vm._e()]), _vm._v(" "), _c('div', {
+  }), _vm._v(" " + _vm._s(_vm.$t('main.Loading')))]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "uk-width-auto"
   }, [_c('ul', {
     staticClass: "uk-list navbar-list"
@@ -39074,7 +39076,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "innerHTML": _vm._s(_vm.$t('main.There is no media items available yet'))
     }
-  })]) : _c('div', [_vm._m(0)])]) : _vm._e()]), _vm._v(" "), (_vm.previewMode) ? _c('div', {
+  })]) : _c('div', [_c('div', {
+    staticClass: "uk-text-primary"
+  }, [_c('span', {
+    attrs: {
+      "uk-spinner": "ratio: 2.5"
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small"
+  }, [_c('p', [_vm._v(_vm._s(_vm.$t('main.Loading')))])])])])]) : _vm._e()]), _vm._v(" "), (_vm.previewMode) ? _c('div', {
     staticClass: "uk-width-1-3",
     staticStyle: {
       "background-color": "#F9F9FB",
@@ -39249,16 +39259,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])]) : _c('div', {
     staticClass: "uk-text-center uk-text-muted"
-  }, [_vm._m(1)])]) : _vm._e()])])])])])])])])
+  }, [_vm._m(0)])]) : _vm._e()])])])])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-text-primary"
-  }, [_c('span', {
-    attrs: {
-      "uk-spinner": "ratio: 2.5"
-    }
-  }), _vm._v(" "), _c('p', [_vm._v("loading ...")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticStyle: {
       "padding-top": "40%"

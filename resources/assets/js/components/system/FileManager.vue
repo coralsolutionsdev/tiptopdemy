@@ -39,7 +39,7 @@
                   <div class="uk-grid-small" style="padding: 16px 25px 25px 0" uk-grid>
                     <div class="uk-width-expand" style="padding-top: 10px">
                       <input type="hidden" class="selected-file-url" v-model="previewFile.url" v-if="insertmode && previewFile">
-                      <span @click="goPrev()" class="hover-primary" uk-icon="icon: chevron-left" v-bind:uk-tooltip="$t('main.Back')"></span> <span v-html="groupName"></span> <span v-if="loadingMode" class="uk-text-primary"><span style="margin: 0 5px" uk-spinner="ratio: 0.5"></span> loading ...</span>
+                      <span @click="goPrev()" class="hover-primary" uk-icon="icon: chevron-left" v-bind:uk-tooltip="$t('main.Back')"></span> <span v-html="groupName"></span> <span v-if="loadingMode" class="uk-text-primary"><span style="margin: 0 5px" uk-spinner="ratio: 0.5"></span> {{$t('main.Loading')}}</span>
                     </div>
                     <div class="uk-width-auto">
                       <ul class="uk-list navbar-list">
@@ -109,7 +109,7 @@
 
                     </div>
                     <!--no items-->
-                    <div class="uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center" v-if="files.length < 1 && folders.length < 1" style="height: 60vh;">
+                    <div v-if="files.length < 1 && folders.length < 1" class="uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center"  style="height: 60vh;">
                       <div v-if="!loadingMode">
                         <img class="no-media-icon" data-src="/storage/assets/file_icons/folder.png" width="90" alt="" uk-img>
                         <p v-html="$t('main.There is no media items available yet')"></p>
@@ -117,7 +117,9 @@
                       <div v-else>
                         <div class="uk-text-primary">
                           <span uk-spinner="ratio: 2.5"></span>
-                          <p>loading ...</p>
+                          <div class="uk-margin-small">
+                            <p>{{$t('main.Loading')}}</p>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -39058,7 +39058,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "innerHTML": _vm._s(file.custom_properties.file_size_string)
       }
     })])])])
-  })], 2), _vm._v(" "), (_vm.files.length < 1 && _vm.folders.length < 1) ? _c('div', {
+  })], 2), _vm._v(" "), (_vm.files.length < 1 && _vm.folders.length < 1 && !_vm.uploadMode) ? _c('div', {
     staticClass: "uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center",
     staticStyle: {
       "height": "60vh"

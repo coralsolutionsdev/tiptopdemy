@@ -109,7 +109,7 @@
 
                     </div>
                     <!--no items-->
-                    <div v-if="files.length < 1 && folders.length < 1" class="uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center"  style="height: 60vh;">
+                    <div v-if="files.length < 1 && folders.length < 1 && !uploadMode" class="uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center"  style="height: 60vh;">
                       <div v-if="!loadingMode">
                         <img class="no-media-icon" data-src="/storage/assets/file_icons/folder.png" width="90" alt="" uk-img>
                         <p v-html="$t('main.There is no media items available yet')"></p>

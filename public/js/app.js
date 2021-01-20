@@ -3000,6 +3000,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // .....
 var token = document.head.querySelector('meta[name="csrf-token"]').content;
@@ -3386,7 +3399,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       // window.toastr.success('', 'Event : vdropzone-success')
       setTimeout(function () {
         _this9.$refs.myVueDropzone.removeFile(file);
-      }, 1500);
+      }, 2000);
       UIkit.notification("<span uk-icon='icon: check'></span> File has uploaded successfully.", { pos: 'top-center', status: 'success' });
     },
     vProgress: function vProgress(totalProgress, totalBytes, totalBytesSent) {
@@ -4021,6 +4034,7 @@ if (token) {
             "Files count": "عدد الملفات",
             "Sub Folders count": "عدد المجلدات الداخلية",
             "Insert": "إدراج",
+            "There is no media items available yet": "لا توجد عناصر ميديا متوفرة حاليا",
             "Drag and drop message": "قم بسحب وإفلات الملف لتحميل! أو انقر لإختيار ملف من جهاز الكمبيوتر الخاص بك",
             "you are allowed to upload message": ".يسمح لك بتحميل 10 ملفات فقط في آن واحد"
         },
@@ -4615,6 +4629,7 @@ if (token) {
             "Files count": "Files count",
             "Sub Folders count": "Sub Folders count",
             "Insert": "Insert",
+            "There is no media items available yet": "There is no media items available yet",
             "Drag and drop message": "Drag and drop to upload content! Or click to select a file from your computer",
             "you are allowed to upload message": "you are allowed to upload only 10 files per time"
         },
@@ -7333,7 +7348,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -9px;\n  top: -9px;\n  background-color: #32d296 !important;\n  color: white;\n  z-index: 999;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -9px;\n  top: -9px;\n  background-color: #32d296 !important;\n  color: white;\n  z-index: 999;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n.no-media-icon[data-v-acd81a90]{\n  opacity: 0.3;\n  filter: grayscale(90%);\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
 
 /***/ }),
 /* 51 */
@@ -39042,7 +39057,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "innerHTML": _vm._s(file.custom_properties.file_size_string)
       }
     })])])])
-  })], 2)]), _vm._v(" "), (_vm.previewMode) ? _c('div', {
+  })], 2), _vm._v(" "), (_vm.files.length < 1 && _vm.folders.length < 1) ? _c('div', {
+    staticClass: "uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center",
+    staticStyle: {
+      "height": "60vh"
+    }
+  }, [(!_vm.loadingMode) ? _c('div', [_c('img', {
+    staticClass: "no-media-icon",
+    attrs: {
+      "data-src": "/storage/assets/file_icons/folder.png",
+      "width": "90",
+      "alt": "",
+      "uk-img": ""
+    }
+  }), _vm._v(" "), _c('p', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.There is no media items available yet'))
+    }
+  })]) : _c('div', [_vm._m(0)])]) : _vm._e()]), _vm._v(" "), (_vm.previewMode) ? _c('div', {
     staticClass: "uk-width-1-3",
     staticStyle: {
       "background-color": "#F9F9FB",
@@ -39217,8 +39249,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])]) : _c('div', {
     staticClass: "uk-text-center uk-text-muted"
-  }, [_vm._m(0)])]) : _vm._e()])])])])])])])])
+  }, [_vm._m(1)])]) : _vm._e()])])])])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "uk-text-primary"
+  }, [_c('span', {
+    attrs: {
+      "uk-spinner": "ratio: 2.5"
+    }
+  }), _vm._v(" "), _c('p', [_vm._v("loading ...")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticStyle: {
       "padding-top": "40%"

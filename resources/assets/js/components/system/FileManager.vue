@@ -108,6 +108,19 @@
                       </div>
 
                     </div>
+                    <!--no items-->
+                    <div class="uk-padding-large uk-text-center uk-text-muted uk-flex uk-flex-middle uk-flex-center" v-if="files.length < 1 && folders.length < 1" style="height: 60vh;">
+                      <div v-if="!loadingMode">
+                        <img class="no-media-icon" data-src="/storage/assets/file_icons/folder.png" width="90" alt="" uk-img>
+                        <p v-html="$t('main.There is no media items available yet')"></p>
+                      </div>
+                      <div v-else>
+                        <div class="uk-text-primary">
+                          <span uk-spinner="ratio: 2.5"></span>
+                          <p>loading ...</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <!--file preview-->
@@ -562,7 +575,7 @@ name: "FileManager",
       // window.toastr.success('', 'Event : vdropzone-success')
       setTimeout(()=>{
         this.$refs.myVueDropzone.removeFile(file);
-      },1500);
+      },2000);
       UIkit.notification("<span uk-icon='icon: check'></span> File has uploaded successfully.", {pos: 'top-center', status:'success'})
 
     },
@@ -636,7 +649,10 @@ name: "FileManager",
   .bounce {
     animation: bounce 1s infinite;
   }
-
+  .no-media-icon{
+    opacity: 0.3;
+    filter: grayscale(90%);
+  }
   @keyframes bounce {
     0%,
     25%,

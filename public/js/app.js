@@ -3299,7 +3299,6 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
         }
       });
       this.folders = folders;
-      this.allFolders = folders;
       axios.post('/manage/system/group/' + id + '/ajax/destroy/type/1').then(function (res) {
         if (res.status != 200) {
           UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });

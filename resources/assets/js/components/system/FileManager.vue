@@ -481,7 +481,6 @@ name: "FileManager",
         }
       });
       this.folders = folders;
-      this.allFolders = folders;
       axios.post('/manage/system/group/'+id+'/ajax/destroy/type/1')
           .then(res => {
             if (res.status != 200){

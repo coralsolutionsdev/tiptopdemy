@@ -3036,6 +3036,8 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       previewFolder: null,
       items: null,
       currentGroup: null,
+      prevGroup: null,
+      prevGroupName: 'Files',
       groupSlug: null,
       groupName: 'Files',
       ancestor_slug: null,
@@ -3114,6 +3116,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       }).then(function (res) {
         // console.log(res.data);
         _this.files = res.data;
+        console.log(_this.files);
         _this.hideLoading();
       }).catch(function (error) {
         console.log(error);
@@ -3131,13 +3134,13 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {
-          ancestor_slug: this.groupSlug
+          parent_slug: this.groupSlug
         }
       }).then(function (res) {
-        _this2.folders = res.data;
-        if (_this2.currentGroup == null) {
-          _this2.allFolders = res.data;
-        }
+        _this2.folders = res.data.groups;
+        _this2.allFolders = res.data.groups;
+        _this2.prevGroup = res.data.prevGroup.slug;
+        _this2.prevGroupName = res.data.prevGroup.title;
         _this2.hideLoading();
       }).catch(function (error) {
         console.log(error);
@@ -3154,6 +3157,16 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.previewFolder = null;
       this.fetchFiles();
       this.fetchGroups();
+    },
+    goPrev: function goPrev() {
+      if (this.prevGroup == null) {
+        this.goHome();
+      } else {
+        this.groupSlug = this.prevGroup;
+        this.groupName = this.prevGroupName;
+        this.fetchFiles();
+        this.fetchGroups();
+      }
     },
     openFilePreview: function openFilePreview(file) {
       // this.previewMode = true;
@@ -3179,6 +3192,8 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.previewFolder = null;
       this.previewMode = false;
       this.activeFileId = null;
+      this.prevGroup = this.groupSlug;
+      this.prevGroupName = this.groupName;
       this.currentGroup = folder;
       this.groupSlug = folder.slug;
       this.groupName = folder.title;
@@ -3259,13 +3274,21 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       var _this4 = this;
 
       this.loadingMode = true;
+      var folders = this.folders;
+      var removedItemId = id;
+      $.each(folders, function (key, folder) {
+        if (folder && folder != undefined && folder.id && folder.id == removedItemId) {
+          folders.splice(key, 1);
+        }
+      });
+      this.folders = folders;
+      this.allFolders = folders;
       axios.post('/manage/system/group/' + id + '/ajax/destroy/type/1').then(function (res) {
         if (res.status != 200) {
           UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
         }
         _this4.activeFileId = _this4.activeFile = null;
         _this4.previewMode = false;
-        _this4.fetchGroups(false);
         _this4.hideLoading();
         // this.fetchGroups();
       }).catch(function (error) {
@@ -3327,7 +3350,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
     createFolder: function createFolder() {
       var _this7 = this;
 
-      var data = { title: 'New folder', ancestor_slug: this.groupSlug };
+      var data = { title: 'New folder', parent_slug: this.groupSlug };
       axios.post('/manage/system/group/ajax/create', data).then(function (res) {
         if (res.status != 200) {
           UIkit.notification("<span uk-icon='icon: ban'></span> An error with status " + res.status + " accrued!", { pos: 'top-center', status: 'danger' });
@@ -7308,7 +7331,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -10px;\n  top: -10px;\n  background-color: #32d296 !important;\n  color: white;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -9px;\n  top: -9px;\n  background-color: #32d296 !important;\n  color: white;\n  z-index: 999;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
 
 /***/ }),
 /* 51 */
@@ -38622,7 +38645,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-icon": "home"
     }
-  }), _vm._v(" Files")])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c('br'), _vm._v(" "), _c('p', {
+  }), _vm._v(" Files")])])]), _vm._v(" "), _c('br'), _vm._v(" "), _c('p', {
     staticClass: "uk-text-primary"
   }, [_vm._v(_vm._s(_vm.$t('main.Folders')))]), _vm._v(" "), _c('ul', {
     staticClass: "uk-list"
@@ -38735,11 +38758,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }) : _vm._e(), _vm._v(" "), _c('span', {
     staticClass: "hover-primary",
     attrs: {
-      "uk-icon": "icon: chevron-left"
+      "uk-icon": "icon: chevron-left",
+      "uk-tooltip": _vm.$t('main.Back')
     },
     on: {
       "click": function($event) {
-        return _vm.goHome()
+        return _vm.goPrev()
       }
     }
   }), _vm._v(" "), _c('span', {
@@ -39191,20 +39215,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])]) : _c('div', {
     staticClass: "uk-text-center uk-text-muted"
-  }, [_vm._m(1)])]) : _vm._e()])])])])])])])])
+  }, [_vm._m(0)])]) : _vm._e()])])])])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "nav-item"
-  }, [_c('a', {
-    attrs: {
-      "href": ""
-    }
-  }, [_c('span', {
-    attrs: {
-      "uk-icon": "cloud-upload"
-    }
-  }), _vm._v(" Recently uploaded")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticStyle: {
       "padding-top": "40%"

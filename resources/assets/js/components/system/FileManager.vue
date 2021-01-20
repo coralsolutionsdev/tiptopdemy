@@ -10,7 +10,7 @@
                 <p class="uk-text-primary">{{ $t('main._home') }}</p>
                 <ul class="uk-list">
                   <li class="nav-item"><a @click="goHome()"><span uk-icon="home"></span> Files</a></li>
-                  <li class="nav-item"><a href=""><span uk-icon="cloud-upload"></span> Recently uploaded</a></li>
+<!--                  <li class="nav-item"><a href=""><span uk-icon="cloud-upload"></span> Recently uploaded</a></li>-->
                 </ul>
                 <br>
                 <p class="uk-text-primary">{{ $t('main.Folders') }}</p>
@@ -39,7 +39,7 @@
                   <div class="uk-grid-small" style="padding: 16px 25px 25px 0" uk-grid>
                     <div class="uk-width-expand" style="padding-top: 10px">
                       <input type="hidden" class="selected-file-url" v-model="previewFile.url" v-if="insertmode && previewFile">
-                      <span @click="goHome()" class="hover-primary" uk-icon="icon: chevron-left"></span> <span v-html="groupName"></span> <span v-if="loadingMode" class="uk-text-primary"><span style="margin: 0 5px" uk-spinner="ratio: 0.5"></span> loading ...</span>
+                      <span @click="goPrev()" class="hover-primary" uk-icon="icon: chevron-left" v-bind:uk-tooltip="$t('main.Back')"></span> <span v-html="groupName"></span> <span v-if="loadingMode" class="uk-text-primary"><span style="margin: 0 5px" uk-spinner="ratio: 0.5"></span> loading ...</span>
                     </div>
                     <div class="uk-width-auto">
                       <ul class="uk-list navbar-list">
@@ -221,6 +221,8 @@ name: "FileManager",
       previewFolder: null,
       items:null,
       currentGroup:null,
+      prevGroup:null,
+      prevGroupName:'Files',
       groupSlug:null,
       groupName: 'Files',
       ancestor_slug: null,
@@ -297,6 +299,7 @@ name: "FileManager",
       .then(res => {
         // console.log(res.data);
         this.files = res.data;
+        console.log( this.files)
         this.hideLoading();
       })
       .catch(error => {
@@ -311,14 +314,14 @@ name: "FileManager",
       this.loadingMode = true;
       axios.get('/manage/system/group/ajax/get/type/1/groups', {
         params: {
-          ancestor_slug: this.groupSlug,
+          parent_slug: this.groupSlug,
         }
       })
       .then(res => {
-        this.folders = res.data;
-        if (this.currentGroup == null){
-          this.allFolders = res.data;
-        }
+        this.folders = res.data.groups;
+        this.allFolders = res.data.groups;
+        this.prevGroup = res.data.prevGroup.slug;
+        this.prevGroupName = res.data.prevGroup.title;
         this.hideLoading();
       })
       .catch(error => {
@@ -336,6 +339,16 @@ name: "FileManager",
       this.previewFolder = null;
       this.fetchFiles();
       this.fetchGroups();
+    },
+    goPrev(){
+      if (this.prevGroup == null){
+        this.goHome();
+      }else{
+        this.groupSlug = this.prevGroup;
+        this.groupName = this.prevGroupName;
+        this.fetchFiles();
+        this.fetchGroups();
+      }
     },
     openFilePreview(file){
       // this.previewMode = true;
@@ -361,6 +374,8 @@ name: "FileManager",
       this.previewFolder = null;
       this.previewMode = false;
       this.activeFileId = null;
+      this.prevGroup = this.groupSlug;
+      this.prevGroupName = this.groupName;
       this.currentGroup = folder;
       this.groupSlug = folder.slug;
       this.groupName = folder.title;
@@ -377,7 +392,6 @@ name: "FileManager",
       UIkit.notification("<span uk-icon='icon: check'></span> File url copied to clipboard.", {pos: 'top-center', status:'success'})
 
     },
-
     putItemOnMove(){
       this.onMoveItemId = this.onMoveItemType = null;
       this.onMoveItemType = this.activeItemType;
@@ -442,6 +456,15 @@ name: "FileManager",
     },
     destroyFolder(id){
       this.loadingMode = true;
+      var folders = this.folders;
+      var removedItemId = id;
+      $.each( folders, function( key, folder ) {
+        if (folder && folder != undefined && folder.id && folder.id == removedItemId){
+          folders.splice(key, 1);
+        }
+      });
+      this.folders = folders;
+      this.allFolders = folders;
       axios.post('/manage/system/group/'+id+'/ajax/destroy/type/1')
           .then(res => {
             if (res.status != 200){
@@ -449,7 +472,6 @@ name: "FileManager",
             }
             this.activeFileId = this.activeFile = null;
             this.previewMode = false;
-            this.fetchGroups(false);
             this.hideLoading();
             // this.fetchGroups();
           })
@@ -506,7 +528,7 @@ name: "FileManager",
       this.updateFile(previewId, previewTitle, this.groupSlug, false);
     },
     createFolder(){
-      const data = {  title:'New folder', ancestor_slug:this.groupSlug };
+      const data = {  title:'New folder', parent_slug:this.groupSlug };
       axios.post('/manage/system/group/ajax/create', data)
           .then(res => {
             if (res.status != 200){
@@ -598,10 +620,11 @@ name: "FileManager",
   }
   .selected-file-badge{
     position: absolute;
-    right: -10px;
-    top: -10px;
+    right: -9px;
+    top: -9px;
     background-color: #32d296 !important;
     color: white;
+    z-index: 999;
     /*filter: drop-shadow(1px 1px 2px #969696);*/
   }
 

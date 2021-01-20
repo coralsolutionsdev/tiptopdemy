@@ -24,6 +24,7 @@ class Group extends Model
         'title',
         'slug',
         'description',
+        'parent_id',
         'ancestor_id',
         'position',
         'type',

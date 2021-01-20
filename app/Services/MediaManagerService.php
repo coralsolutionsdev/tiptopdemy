@@ -247,11 +247,14 @@ class MediaManagerService
             $filePlaytimeSeconds = MediaManagerService::getProperties($file, 'playtime_seconds');
         }
         $fileSize = MediaManagerService::getProperties($file, 'filesize');
-
+        $group = Group::where('slug', $groupSlug)->first();
         // attach media file name
         $mediaFile = $modal->addMedia($file)
             ->withCustomProperties([
                 'group' => $groupSlug != 'null' ? $groupSlug : null ,
+                'group_id' => !empty($group) ? $group->id : null ,
+                'group_parent_id' => !empty($group) ? $group->parent_id : null ,
+                'group_ancestor_id' => !empty($group) ? $group->ancestor_id : null ,
                 'extension' => !empty($fileExtension) ? $fileExtension : null,
                 'file_type' => !empty($fileType) ? $fileType : null,
                 'mime_type' => !empty($mime) ? $mime : null,
@@ -262,7 +265,7 @@ class MediaManagerService
             ])->toMediaCollection('file_manager');
 
         if (!empty($groupSlug)){
-            if ($group = Group::where('slug', $groupSlug)->first()){
+            if (!empty($group)){
                 $group->mediaItems()->attach([
                     [
                         'model_id' => $mediaFile->id,

@@ -319,7 +319,9 @@ name: "FileManager",
       })
       .then(res => {
         this.folders = res.data.groups;
-        this.allFolders = res.data.groups;
+        if (this.currentGroup == null){
+          this.allFolders = res.data.groups;
+        }
         this.prevGroup = res.data.prevGroup.slug;
         this.prevGroupName = res.data.prevGroup.title;
         this.hideLoading();

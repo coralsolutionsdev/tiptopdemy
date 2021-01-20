@@ -3138,7 +3138,9 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
         }
       }).then(function (res) {
         _this2.folders = res.data.groups;
-        _this2.allFolders = res.data.groups;
+        if (_this2.currentGroup == null) {
+          _this2.allFolders = res.data.groups;
+        }
         _this2.prevGroup = res.data.prevGroup.slug;
         _this2.prevGroupName = res.data.prevGroup.title;
         _this2.hideLoading();

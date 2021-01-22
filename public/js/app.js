@@ -2908,9 +2908,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     goNext: function goNext() {
       if (!this.previewItemMode) {
+        this.currentItemKey++;
         if (this.currentItemKey < this.itemCount) {
           this.buildMemorizeItem(this.currentItemKey);
-          this.currentItemKey++;
         } else {
           this.quizCompleted = true;
         }

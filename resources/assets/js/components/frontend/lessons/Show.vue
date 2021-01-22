@@ -194,9 +194,9 @@ name: "Show",
     },
     goNext(){
       if(!this.previewItemMode){
+        this.currentItemKey++;
         if (this.currentItemKey < this.itemCount){
           this.buildMemorizeItem(this.currentItemKey)
-          this.currentItemKey++;
         }else{
           this.quizCompleted = true;
         }

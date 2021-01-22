@@ -32,6 +32,19 @@ class MemorizeController extends Controller
     public function getItems(Lesson $lesson)
     {
         $items = $lesson->getFormsWithType(Form::TYPE_MEMORIZE);
+        $items->map(function ($form){
+            $answers = $form->items;
+            $answersArr = [];
+            foreach ($answers as $group => $answer){
+                $answersArr[$answer->type][] = [
+                    'id' => $answer->id,
+                    'title' => $answer->title,
+                    'status' => $answer->status,
+                    'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
+                ];
+            }
+            $form->answers = $answersArr;
+        });
         return response($items, 200);
     }
 

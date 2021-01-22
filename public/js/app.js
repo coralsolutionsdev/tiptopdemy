@@ -2760,6 +2760,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2773,7 +2834,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       name: 'mehmet',
       items: [],
-      itemCount: 0
+      itemCount: 0,
+      // memorize
+      previewItemMode: true,
+      previewItem: null,
+      previewItemImageUrl: null,
+      previewItemAudioUrl: null,
+      currentItemKey: 0,
+      quizCompleted: false,
+      quizItem: null,
+      quizItemAnswers: null,
+      quizItemKey: 0,
+      quizItemAnswerType: 0
 
     };
   },
@@ -2795,9 +2867,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           id: 12345
         }
       }).then(function (res) {
-        console.log(res.data);
         _this.items = res.data;
+        _this.itemCount = _this.items.length;
+        _this.buildMemorizeItem(_this.currentItemKey);
       });
+    },
+    buildMemorizeItem: function buildMemorizeItem(itemKey) {
+      // build preview
+      this.previewItem = this.items[itemKey];
+      var itemImages = this.previewItem.answers[30]; // 30 refer to images
+      var itemAudio = this.previewItem.answers[31]; // 30 refer to Audio
+      var selectedImage = null;
+      var selectedAudio = null;
+      $.each(itemImages, function (key, image) {
+        if (image.status === 1) {
+          if (selectedImage == null) {
+            selectedImage = image.media_url;
+          }
+        }
+      });
+      this.previewItemImageUrl = selectedImage;
+      // get audio
+      $.each(itemAudio, function (key, audio) {
+        if (audio.status === 1) {
+          if (selectedAudio == null) {
+            selectedAudio = audio.media_url;
+          }
+        }
+      });
+      this.previewItemAudioUrl = selectedAudio;
+      // build quiz
+      var quizItemKey = itemKey;
+      this.quizItem = this.items[quizItemKey];
+      var myArray = [20, 21, 30, 31, 31, 30, 21, 20];
+      this.quizItemAnswerType = myArray[Math.floor(Math.random() * myArray.length)];
+      this.quizItemAnswers = this.quizItem.answers[this.quizItemAnswerType];
+    },
+    submitAnswer: function submitAnswer(quizItemID, answerId) {
+      this.goNext();
+    },
+    goNext: function goNext() {
+      if (!this.previewItemMode) {
+        if (this.currentItemKey < this.itemCount) {
+          this.buildMemorizeItem(this.currentItemKey);
+          this.currentItemKey++;
+        } else {
+          this.quizCompleted = true;
+        }
+      }
+      this.previewItemMode = !this.previewItemMode;
     }
   },
   components: {
@@ -3882,6 +4000,9 @@ if (token) {
             "Item has been added successfully.": "تمت اضافة العنصر بنجاح",
             "View lesson": "عرض الدرس",
             "_memorize dear student": "عزيزي الطالب لديك مجموعة من التعابير المهمة التي يجب التعرف عليا قبل دخولك للدرس.",
+            "Start the memorize test": "إبدأ إختبار مفردات الحفظ",
+            "Congratulations!": "تهانينا!",
+            "You completed the quiz": "لقد اجتزت اختبار حفظ الدرس ، يمكنك الاستمرار في مشاهدة محتوى الدرس",
             "Cart": "سلة المشتريات",
             "Cart items": "عناصر سلة المشتريات",
             "Cart summary": "ملخص سلة المشتريات",
@@ -4479,6 +4600,9 @@ if (token) {
             "Start upload": "Start upload",
             "Click to attach your files": "Click to attach your files",
             "_memorize dear student": "Dear student, you have a set of important memorize terms you might need to know before starting this lesson",
+            "Start the memorize test": "Start the memorize test",
+            "Congratulations!": "Congratulations!",
+            "You completed the quiz": "You've passed the lesson's memorize test, you can continue viewing the lesson content",
             "Cart": "Cart",
             "Card items": "Card items",
             "Cart summary": "Cart summary",
@@ -7342,7 +7466,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.memorize-item[data-v-5957d677]{\n  padding: 5px 20px;\n  border: 1px solid var(--text-primary);\n  color: var(--text-primary);\n  border-radius: 5px;\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-5957d677]{\n  border-radius: 10px;\n  overflow: hidden;\n}\naudio[data-v-5957d677], audio[data-v-5957d677]:focus, audio[data-v-5957d677]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\n.answer-letter[data-v-5957d677]{\n  background-color: var(--text-primary);\n  display: block;\n  width: 40px;\n  height: 40px;\n  vertical-align: middle;\n  border-radius: 50%;\n  font-size: 22px;\n}\n.answer[data-v-5957d677]{\n  background-color: #F4F5F7;\n  border-radius: 10px;\n  min-height: 75px;\n  font-size: 18px\n}\n.answer[data-v-5957d677]:hover{\n  cursor: pointer;\n}\n.answer-input[data-v-5957d677]{\n  position: absolute;\n  opacity: 0;\n}\n", ""]);
 
 /***/ }),
 /* 50 */
@@ -38570,7 +38694,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
+  return _c('div', [(!_vm.quizCompleted) ? _c('div', {
     staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small",
     staticStyle: {
       "overflow": "hidden"
@@ -38578,41 +38702,206 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h5', {
     staticClass: "text-highlighted uk-text-bold"
   }, [_vm._v("Memorize")]), _vm._v(" "), _c('p', {
-    staticClass: "_memorize dear student"
+    staticClass: "uk-margin-small"
   }, [_vm._v(_vm._s(_vm.$t('main._memorize dear student', {
     name: 'student'
-  })))]), _vm._v(" "), _c('div', [_c('ul', {
-    staticClass: "uk-list uk-list-decimal"
-  }, _vm._l((_vm.items), function(item, key) {
-    return (item.properties.level == 1) ? _c('li', [_vm._v(_vm._s(_vm.itemCount = +1) + "- " + _vm._s(item.title))]) : _vm._e()
-  }), 0)]), _vm._v(" "), _vm._m(0)])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-child-width-expand@s uk-text-center uk-margin-remove",
-    attrs: {
-      "uk-grid": ""
+  })))]), _vm._v(" "), _c('div', {
+    staticClass: "uk-text-center",
+    staticStyle: {
+      "padding": "20px"
     }
-  }, [_c('div', [_c('a', {
+  }, _vm._l((_vm.items), function(item, key) {
+    return (item.properties.level == 1) ? _c('span', {
+      staticClass: "memorize-item uk-box-shadow-hover-medium"
+    }, [_vm._v(_vm._s(item.title))]) : _vm._e()
+  }), 0), _vm._v(" "), _c('div', {
+    staticClass: "uk-text-center uk-margin-small"
+  }, [_c('a', {
     staticClass: "uk-button uk-button-primary open-",
     attrs: {
       "href": "#modal-sections",
       "uk-toggle": ""
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Start the memorize test'))
     }
-  }, [_vm._v("Start the memorize test")]), _vm._v(" "), _c('div', {
+  })])]) : _vm._e(), _vm._v(" "), _c('div', [_c('div', {
     attrs: {
       "id": "modal-sections",
-      "uk-modal": ""
+      "uk-modal": "bg-close: false"
     }
   }, [_c('div', {
-    staticClass: "uk-modal-dialog uk-margin-auto-vertical"
+    staticClass: "uk-modal-dialog uk-width-3-5"
   }, [_c('div', {
-    staticClass: "uk-modal-header"
-  }, [_c('h2', {
-    staticClass: "uk-modal-title"
-  }, [_vm._v("Modal Title")])]), _vm._v(" "), _c('div', {
     staticClass: "uk-modal-body"
-  })])])])])
-}]}
+  }, [(_vm.quizCompleted) ? _c('div', {
+    staticClass: "uk-padding uk-text-center"
+  }, [_c('span', {
+    staticClass: "uk-icon-button",
+    staticStyle: {
+      "background-color": "#DEF7EC",
+      "color": "#4CA387"
+    },
+    attrs: {
+      "uk-icon": "check"
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-padding-small"
+  }, [_c('h3', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Congratulations!'))
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "uk-margin-remove",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.You completed the quiz'))
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expend"
+  }, [_c('button', {
+    staticClass: "uk-button uk-button-primary uk-modal-close",
+    attrs: {
+      "type": "button"
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Close'))
+    }
+  })])]) : (_vm.previewItemMode) ? _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": "",
+      "uk-height-match": "target: > div > .uk-placeholder"
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-3-5@m uk-width-1-1@s"
+  }, [(_vm.previewItem) ? _c('div', {
+    staticClass: "uk-placeholder uk-padding-small"
+  }, [_c('h1', {
+    staticClass: "uk-text-primary uk-text-bold",
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewItem.title)
+    }
+  }), _vm._v(" "), _c('p', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.previewItem.description)
+    }
+  })]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-2-5@m uk-width-1-1@s"
+  }, [_c('div', {
+    staticClass: "uk-placeholder uk-padding-small"
+  }, [_c('div', [(_vm.previewItemAudioUrl) ? _c('div', [_c('audio', {
+    staticStyle: {
+      "width": "100%"
+    },
+    attrs: {
+      "src": _vm.previewItemAudioUrl,
+      "controls": "",
+      "controlsList": "nodownload"
+    }
+  }, [_c('source', {
+    attrs: {
+      "type": "audio/mpeg"
+    }
+  })])]) : _vm._e(), _vm._v(" "), (_vm.previewItemImageUrl) ? _c('div', {
+    staticClass: "uk-margin-small"
+  }, [_c('img', {
+    staticStyle: {
+      "border-radius": "10px",
+      "object-fit": "cover"
+    },
+    attrs: {
+      "data-src": _vm.previewItemImageUrl,
+      "alt": "",
+      "uk-img": ""
+    }
+  })]) : _vm._e()])])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expend"
+  }, [_c('button', {
+    staticClass: "uk-button uk-button-primary",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Next'))
+    },
+    on: {
+      "click": function($event) {
+        return _vm.goNext()
+      }
+    }
+  })])]) : _c('div', [_c('div', {
+    staticClass: "uk-placeholder uk-padding-small"
+  }, [_c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-expand"
+  }, [_c('h1', {
+    staticClass: "uk-text-primary uk-text-bold",
+    domProps: {
+      "innerHTML": _vm._s(_vm.quizItem.title)
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-1-4"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-extend uk-flex uk-flex-center"
+  }, [_c('div', {
+    staticClass: "uk-width-2-3@m uk-width-1-1@s"
+  }, [_c('div', {
+    staticClass: "uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m ",
+    attrs: {
+      "uk-grid": "",
+      "uk-height-match": "target: > div > label > .uk-card"
+    }
+  }, _vm._l((_vm.quizItemAnswers), function(answer, key) {
+    return (key < 4) ? _c('div', {
+      staticClass: "uk-flex uk-flex-middle uk-text-center"
+    }, [_c('label', {
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          return _vm.submitAnswer(_vm.quizItem.id, answer.id)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "uk-card uk-card-body answer uk-box-shadow-hover-medium uk-padding-small"
+    }, [(_vm.quizItemAnswerType == 20 || _vm.quizItemAnswerType == 21) ? _c('div', [_c('input', {
+      staticClass: "answer-input",
+      attrs: {
+        "type": "radio",
+        "name": "answer"
+      }
+    }), _vm._v(" "), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(answer.title)
+      }
+    })]) : (_vm.quizItemAnswerType == 30) ? _c('div', [_c('img', {
+      staticStyle: {
+        "border-radius": "10px",
+        "height": "100px",
+        "object-fit": "cover"
+      },
+      attrs: {
+        "data-src": answer.media_url,
+        "alt": "",
+        "uk-img": ""
+      }
+    })]) : (_vm.quizItemAnswerType == 31) ? _c('div', [_c('audio', {
+      staticStyle: {
+        "width": "100%"
+      },
+      attrs: {
+        "src": answer.media_url,
+        "controls": "",
+        "controlsList": "nodownload"
+      }
+    }, [_c('source', {
+      attrs: {
+        "type": "audio/mpeg"
+      }
+    })])]) : _vm._e()])])]) : _vm._e()
+  }), 0)])])])])])])])])])])
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

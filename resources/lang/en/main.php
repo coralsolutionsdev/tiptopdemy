@@ -332,6 +332,10 @@
         'Click to attach your files' => 'Click to attach your files',
         '_memorize dear student' => 'Dear student, you have a set of important memorize terms you might need to know before starting this lesson',
 
+        /*memorize*/
+        'Start the memorize test' => 'Start the memorize test',
+        'Congratulations!' => 'Congratulations!',
+        'You completed the quiz' => 'You\'ve passed the lesson\'s memorize test, you can continue viewing the lesson content',
 
         /*Cart*/
         'Cart' => 'Cart',

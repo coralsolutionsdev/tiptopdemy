@@ -1,35 +1,96 @@
 <template>
   <div>
-    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small" style="overflow: hidden">
+    <div v-if="!quizCompleted" class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small" style="overflow: hidden">
       <h5 class="text-highlighted uk-text-bold">Memorize</h5>
 <!--      <p>{{ $t('main.Dear', {name: 'visitor'}) }}</p>-->
-      <p class="_memorize dear student">{{ $t('main._memorize dear student', {name: 'student'}) }}</p>
-      <div>
-        <ul class="uk-list uk-list-decimal">
-          <li v-for="(item, key) in items" v-if="item.properties.level == 1">{{itemCount=+1}}- {{item.title}}</li>
-        </ul>
+      <p class="uk-margin-small">{{ $t('main._memorize dear student', {name: 'student'}) }}</p>
+      <div class="uk-text-center" style="padding: 20px">
+        <span class="memorize-item uk-box-shadow-hover-medium" v-for="(item, key) in items" v-if="item.properties.level == 1">{{item.title}}</span>
       </div>
-      <div class="uk-child-width-expand@s uk-text-center uk-margin-remove" uk-grid>
-        <div>
-          <a class="uk-button uk-button-primary open-" href="#modal-sections" uk-toggle>Start the memorize test</a>
-          <div id="modal-sections" uk-modal>
-            <div class="uk-modal-dialog uk-margin-auto-vertical">
-              <div class="uk-modal-header">
-                <h2 class="uk-modal-title">Modal Title</h2>
-              </div>
-              <div class="uk-modal-body">
+      <div class="uk-text-center uk-margin-small">
+        <a class="uk-button uk-button-primary open-" href="#modal-sections" uk-toggle v-html="$t('main.Start the memorize test')"></a>
+      </div>
+    </div>
 
-
+    <div>
+      <div id="modal-sections" class="" uk-modal="bg-close: false">
+        <div class="uk-modal-dialog uk-width-3-5">
+          <div class="uk-modal-body">
+            <div v-if="quizCompleted" class="uk-padding uk-text-center">
+              <span class="uk-icon-button" uk-icon="check" style="background-color: #DEF7EC; color: #4CA387"></span>
+              <div class="uk-padding-small">
+                <h3 class="uk-margin-remove" v-html="$t('main.Congratulations!')"></h3>
+                <p class="uk-margin-remove" v-html="$t('main.You completed the quiz')"></p>
               </div>
-<!--              <div class="uk-modal-footer uk-text-right">-->
-<!--                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>-->
-<!--                <button class="uk-button uk-button-primary" type="button">Save</button>-->
-<!--              </div>-->
+              <div class="uk-width-expend">
+                <button class="uk-button uk-button-primary uk-modal-close" type="button" v-html="$t('main.Close')"></button>
+              </div>
             </div>
+
+            <div v-else-if="previewItemMode" class="uk-grid-small" uk-grid uk-height-match="target: > div > .uk-placeholder">
+
+              <div class="uk-width-3-5@m uk-width-1-1@s">
+                <div class="uk-placeholder uk-padding-small" v-if="previewItem">
+                  <h1 class="uk-text-primary uk-text-bold" v-html="previewItem.title"></h1>
+                  <p v-html="previewItem.description"></p>
+                </div>
+              </div>
+              <div class="uk-width-2-5@m uk-width-1-1@s">
+                <div class="uk-placeholder uk-padding-small">
+                  <div>
+                    <div v-if="previewItemAudioUrl">
+                      <audio v-bind:src="previewItemAudioUrl" controls controlsList="nodownload" style="width: 100%">
+                        <source type="audio/mpeg">
+                      </audio>
+                    </div>
+                    <div class="uk-margin-small" v-if="previewItemImageUrl">
+                      <img v-bind:data-src="previewItemImageUrl" alt="" uk-img style="border-radius: 10px; object-fit:cover">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="uk-width-expend">
+                <button @click="goNext()" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
+              </div>
+            </div>
+            <div v-else>
+              <div class="uk-placeholder uk-padding-small">
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-expand"><h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1></div>
+                  <div class="uk-width-1-4">
+                  </div>
+                  <div class="uk-width-extend uk-flex uk-flex-center">
+                    <div class="uk-width-2-3@m uk-width-1-1@s">
+                      <div class="uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m " uk-grid uk-height-match="target: > div > label > .uk-card">
+                        <div class="uk-flex uk-flex-middle uk-text-center" v-for="(answer, key) in quizItemAnswers" v-if="key < 4">
+                          <label @click.prevent="submitAnswer(quizItem.id, answer.id)">
+                            <div class="uk-card uk-card-body answer uk-box-shadow-hover-medium uk-padding-small">
+                              <div v-if="quizItemAnswerType == 20 || quizItemAnswerType ==21">
+                                <input type="radio" name="answer" class="answer-input"> <span v-html="answer.title"></span>
+                              </div>
+                              <div v-else-if="quizItemAnswerType == 30">
+                                <img v-bind:data-src="answer.media_url" alt="" uk-img style="border-radius: 10px; height:100px; object-fit:cover">
+                              </div>
+                              <div v-else-if="quizItemAnswerType == 31">
+                                <audio v-bind:src="answer.media_url" controls controlsList="nodownload" style="width: 100%">
+                                  <source type="audio/mpeg">
+                                </audio>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -50,6 +111,20 @@ name: "Show",
       name: 'mehmet',
       items: [],
       itemCount:0,
+      // memorize
+      previewItemMode:true,
+      previewItem:null,
+      previewItemImageUrl:null,
+      previewItemAudioUrl:null,
+      currentItemKey:0,
+      quizCompleted:false,
+      quizItem:null,
+      quizItemAnswers:null,
+      quizItemKey:0,
+      quizItemAnswerType:0,
+
+
+
 
     }
   },
@@ -68,10 +143,67 @@ name: "Show",
           id: 12345
         }
       }).then(res => {
-        console.log(res.data);
         this.items = res.data;
+        this.itemCount = this.items.length;
+        this.buildMemorizeItem(this.currentItemKey)
       });
-    }
+    },
+    buildMemorizeItem(itemKey){
+      // build preview
+      this.previewItem = this.items[itemKey];
+      var itemImages = this.previewItem.answers[30]; // 30 refer to images
+      var itemAudio = this.previewItem.answers[31]; // 30 refer to Audio
+      var selectedImage = null;
+      var selectedAudio = null;
+      $.each( itemImages, function( key, image ) {
+        if (image.status === 1){
+          if(selectedImage == null){
+            selectedImage = image.media_url;
+          }
+        }
+      });
+      this.previewItemImageUrl = selectedImage;
+      // get audio
+      $.each( itemAudio, function( key, audio ) {
+        if (audio.status === 1){
+          if(selectedAudio == null){
+            selectedAudio = audio.media_url;
+          }
+        }
+      });
+      this.previewItemAudioUrl = selectedAudio;
+      // build quiz
+      var quizItemKey = itemKey;
+      this.quizItem = this.items[quizItemKey];
+      var myArray = [
+        20,
+        21,
+        30,
+        31,
+        31,
+        30,
+        21,
+        20,
+      ];
+      this.quizItemAnswerType = myArray[Math.floor(Math.random()*myArray.length)];
+      this.quizItemAnswers = this.quizItem.answers[this.quizItemAnswerType];
+
+    },
+    submitAnswer(quizItemID, answerId){
+      this.goNext();
+    },
+    goNext(){
+      if(!this.previewItemMode){
+        if (this.currentItemKey < this.itemCount){
+          this.buildMemorizeItem(this.currentItemKey)
+          this.currentItemKey++;
+        }else{
+          this.quizCompleted = true;
+        }
+      }
+      this.previewItemMode = !this.previewItemMode;
+    },
+
   },
   components: {
     memorize
@@ -80,5 +212,43 @@ name: "Show",
 </script>
 
 <style scoped>
-
+  .memorize-item{
+    padding: 5px 20px;
+    border: 1px solid var(--text-primary);
+    color: var(--text-primary);
+    border-radius: 5px;
+    margin: 0 2px;
+  }
+  .uk-modal-dialog{
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  audio, audio:focus, audio:active{
+    outline: none;
+    box-shadow: none;
+    border: none;
+    width: 100% !important;
+  }
+  .answer-letter{
+    background-color: var(--text-primary);
+    display: block;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+    border-radius: 50%;
+    font-size: 22px;
+  }
+  .answer{
+    background-color: #F4F5F7;
+    border-radius: 10px;
+    min-height: 75px;
+    font-size: 18px
+  }
+  .answer:hover{
+    cursor: pointer;
+  }
+  .answer-input{
+    position: absolute;
+    opacity: 0;
+  }
 </style>

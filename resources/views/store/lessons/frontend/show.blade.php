@@ -346,7 +346,7 @@
     </div>
 
 </section>
-<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('js/app.js?v=202101222230')}}"></script>
 <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
     $('.audio-file').map(function (){

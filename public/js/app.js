@@ -2874,7 +2874,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       currentItemKey: 0,
       quizCompleted: false,
       quizItem: null,
-      quizItemAnswers: null,
+      quizItemAnswers: [],
       quizItemKey: 0,
       quizItemAnsweredId: null,
       quizItemAnswerType: 0,
@@ -2901,45 +2901,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).then(function (res) {
         _this.items = res.data;
         _this.itemCount = _this.items.length;
-        _this.buildMemorizeItem(_this.currentItemKey);
+        if (_this.itemCount > 0) {
+          _this.buildMemorizeItem(_this.currentItemKey);
+        }
         $('.screen-spinner').fadeOut();
       });
     },
     buildMemorizeItem: function buildMemorizeItem(itemKey) {
       // build preview
       this.previewItem = this.items[itemKey];
-      var itemImages = this.previewItem.answers[30]; // 30 refer to images
-      var itemAudio = this.previewItem.answers[31]; // 30 refer to Audio
-      var selectedImage = null;
-      var selectedAudio = null;
-      $.each(itemImages, function (key, image) {
-        if (image.status === 1) {
-          if (selectedImage == null) {
-            selectedImage = image.media_url;
+      if (this.previewItem) {
+        var itemImages = this.previewItem.answers[30]; // 30 refer to images
+        var itemAudio = this.previewItem.answers[31]; // 30 refer to Audio
+        var selectedImage = null;
+        var selectedAudio = null;
+        $.each(itemImages, function (key, image) {
+          if (image.status === 1) {
+            if (selectedImage == null) {
+              selectedImage = image.media_url;
+            }
           }
-        }
-      });
-      this.previewItemImageUrl = selectedImage;
-      // get audio
-      $.each(itemAudio, function (key, audio) {
-        if (audio.status === 1) {
-          if (selectedAudio == null) {
-            selectedAudio = audio.media_url;
+        });
+        this.previewItemImageUrl = selectedImage;
+        // get audio
+        $.each(itemAudio, function (key, audio) {
+          if (audio.status === 1) {
+            if (selectedAudio == null) {
+              selectedAudio = audio.media_url;
+            }
           }
+        });
+        this.previewItemAudioUrl = selectedAudio;
+        // build quiz
+        var quizItemKey = itemKey;
+        this.quizItemAnsweredId = null;
+        this.timeLineProgress = null;
+        this.quizItemAnswers = [];
+        this.timeLineProgress = 0;
+        this.quizItem = this.items[quizItemKey];
+        var myArray = this.quizItem.type_array;
+        this.quizItemAnswerType = myArray[Math.floor(Math.random() * myArray.length)];
+        // this.quizItemAnswerType = 20;
+        if (this.quizItem.answers) {
+          this.quizItemAnswers = this.randomList(this.quizItem.answers[this.quizItemAnswerType]);
         }
-      });
-      this.previewItemAudioUrl = selectedAudio;
-      // build quiz
-      var quizItemKey = itemKey;
-      this.quizItemAnsweredId = null;
-      this.timeLineProgress = null;
-      this.timeLineProgress = 0;
-      this.quizItem = this.items[quizItemKey];
-      var myArray = this.quizItem.type_array;
-      this.quizItemAnswerType = myArray[Math.floor(Math.random() * myArray.length)];
-      // this.quizItemAnswerType = 20;
-      this.quizItemAnswers = this.randomList(this.quizItem.answers[this.quizItemAnswerType]);
-      console.log(this.quizItemAnswers);
+      }
     },
 
     randomList: function randomList(array) {
@@ -38762,7 +38768,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(!_vm.quizCompleted || _vm.itemCount > 0) ? _c('div', {
+  return _c('div', [(!_vm.quizCompleted && _vm.itemCount > 0) ? _c('div', {
     staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small",
     staticStyle: {
       "overflow": "hidden"

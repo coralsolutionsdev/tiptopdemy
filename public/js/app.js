@@ -2937,7 +2937,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var myArray = this.quizItem.type_array;
       this.quizItemAnswerType = myArray[Math.floor(Math.random() * myArray.length)];
       // this.quizItemAnswerType = 20;
-      this.quizItemAnswers = this.quizItem.answers[this.quizItemAnswerType];
+      this.quizItemAnswers = this.randomList(this.quizItem.answers[this.quizItemAnswerType]);
+      console.log(this.quizItemAnswers);
+    },
+
+    randomList: function randomList(array) {
+      var currentIndex = array.length,
+          temporaryValue,
+          randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
     },
     submitAnswer: function submitAnswer(quizItemID, answerId) {
       var _this2 = this;
@@ -38850,6 +38872,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('img', {
     staticStyle: {
       "border-radius": "10px",
+      "width": "100%",
       "object-fit": "cover"
     },
     attrs: {

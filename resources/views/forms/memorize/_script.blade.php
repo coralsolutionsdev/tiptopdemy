@@ -124,7 +124,7 @@
                 <div id="memorizeItem-`+itemId+`" class="memorize-item uk-grid-small" uk-grid>
                     <div class="uk-width-1-1">
                         <input type="hidden" name="item_type[`+itemId+`]" value="`+groupType+`">
-                        <input type="text" class="uk-input" name="item_title[`+itemId+`]" placeholder="Word item (`+placeholderExtraWord+`)" value="`+title+`">
+                        <input type="text" class="uk-input" name="item_title[`+itemId+`]" placeholder="Word item (`+placeholderExtraWord+`)" value="`+title+`" required>
                     </div>
                     <div class="uk-width-expand">
                         <div class="uk-grid-small uk-child-width-1-2@xl uk-child-width-1-1@l uk-child-width-1-1@m uk-child-width-1-1@s" uk-grid>

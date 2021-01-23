@@ -32,44 +32,52 @@ class MemorizeController extends Controller
     public function getItems(Lesson $lesson)
     {
         $items = $lesson->getFormsWithType(Form::TYPE_MEMORIZE);
-        $items->map(function ($form){
-            $answers = $form->items->groupBy('type');
+        $items->map(function ($form)  {
+            $groupedAnswers = $form->items->groupBy('type');
             $answersArr = [];
             $typeArray = [];
-            foreach ($answers as $group => $answers){
-                $answersCount = 0;
+            foreach ($groupedAnswers as $group => $answers){
                 $groupCorrectAnswersCount = 0;
-                $groupCorrectAnswerId = null;
                 if ($answers->count() > 0){ // have answers
-                    foreach ($answers as $answer){
-                        // inside group answers
-                        if ($answer->status == 1 && empty($groupCorrectAnswerId)){
-                            $groupCorrectAnswerId = $answer->id;
-                            $groupCorrectAnswersCount++;
+                    // first correct answer
+                    $firstCorrectAnswer = $answers->where('status', 1)->first();
+                    if (!empty($firstCorrectAnswer)){
+                        $groupCorrectAnswersCount++;
+                        $answersArr[$group][] = [
+                            'id' => $firstCorrectAnswer->id,
+                            'title' => $firstCorrectAnswer->title,
+                            'status' => 1,
+                            'media_url' => !empty($firstCorrectAnswer->properties) && !empty($firstCorrectAnswer->properties['media_url']) ? $firstCorrectAnswer->properties['media_url'] : null,
+                        ];
+                        // two wrong answers
+                        $wrongAnswers = collect();
+                        if ($answers->where('status', 0)->count() > 1){
+                            $wrongAnswers = $answers->where('status', 0)->random(2);
+                        }elseif ($answers->where('status', 0)->count() > 1){
+                            $wrongAnswers = $answers->where('status', 0)->random(1);
                         }
-                        if ($answer->status == 0 || (!empty($groupCorrectAnswerId) && $answer->id == $groupCorrectAnswerId)){
+
+                        foreach ($wrongAnswers as $answer){
                             $answersArr[$group][] = [
                                 'id' => $answer->id,
                                 'title' => $answer->title,
-                                'status' => $answer->status,
+                                'status' => 0,
                                 'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
                             ];
-                            $answersCount++;
                         }
-
-
-                    }
-                    if ($answersCount < 4 && $groupCorrectAnswersCount > 0){
-                        $randomItemsCount = 4 - $answersCount;
-                        $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->where('status', 0)->inRandomOrder()->limit($randomItemsCount)->get();
+                        // external wrong answer
+                        $randomItemsCount = 3 - $wrongAnswers->count();
+                        $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->inRandomOrder()->limit($randomItemsCount)->get();
                         foreach ($randomAnswers as $answer){
                             $answersArr[$group][] = [
                                 'id' => $answer->id,
                                 'title' => $answer->title,
-                                'status' => $answer->status,
+                                'status' => 0,
                                 'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
                             ];
                         }
+
+
                     }
                     if ($groupCorrectAnswersCount > 0){
                         $typeArray[] = $group;

@@ -420,7 +420,6 @@ class Form extends Model
             foreach ($input['deleted_items'] as $deleted_item_id) {
                 $deletedItem = FormItem::find($deleted_item_id);
                 if ($deletedItem = FormItem::find($deleted_item_id)){
-                    dd($deletedItem);
                     $deletedItem->delete();
                 }
             }

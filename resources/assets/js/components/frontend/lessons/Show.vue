@@ -219,7 +219,7 @@ name: "Show",
       this.timeLineProgress = 100;
       setTimeout(()=>{
           this.goNext();
-          },1500
+          },1000
       );
     },
     goNext(){

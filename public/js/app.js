@@ -2946,7 +2946,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.timeLineProgress = 100;
       setTimeout(function () {
         _this2.goNext();
-      }, 1500);
+      }, 1000);
     },
     goNext: function goNext() {
       if (!this.previewItemMode) {

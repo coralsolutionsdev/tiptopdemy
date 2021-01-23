@@ -61,7 +61,7 @@ class MemorizeController extends Controller
                     }
                     if ($answersCount < 4 && $groupCorrectAnswersCount > 0){
                         $randomItemsCount = 4 - $answersCount;
-                        $randomAnswers = FormItem::where('type', $group)->where('status', 0)->inRandomOrder()->limit($randomItemsCount)->get();
+                        $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->where('status', 0)->inRandomOrder()->limit($randomItemsCount)->get();
                         foreach ($randomAnswers as $answer){
                             $answersArr[$group][] = [
                                 'id' => $answer->id,

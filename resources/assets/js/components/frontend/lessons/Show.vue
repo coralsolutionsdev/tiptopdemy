@@ -44,7 +44,7 @@
                       </audio>
                     </div>
                     <div class="uk-margin-small" v-if="previewItemImageUrl">
-                      <img v-bind:data-src="previewItemImageUrl" alt="" uk-img style="border-radius: 10px; object-fit:cover">
+                      <img v-bind:data-src="previewItemImageUrl" alt="" uk-img style="border-radius: 10px; width: 100%; object-fit:cover">
                     </div>
                   </div>
                 </div>

@@ -93,6 +93,7 @@ class MemorizeController extends Controller
             $itemsArray[] = [
                 'id' => $formItem->id,
                 'title' => $formItem->title,
+                'description' => $formItem->description,
                 'properties' => $formItem->properties,
                 'answers' => $formItem->answers,
                 'type_array' => $formItem->type_array,

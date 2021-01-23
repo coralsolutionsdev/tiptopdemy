@@ -5,7 +5,7 @@
 <!--      <p>{{ $t('main.Dear', {name: 'visitor'}) }}</p>-->
       <p class="uk-margin-small">{{ $t('main._memorize dear student', {name: 'student'}) }}</p>
       <div class="uk-text-center" style="padding: 20px">
-        <span class="memorize-item uk-box-shadow-hover-medium" v-for="(item, key) in items" v-if="item.properties.level == 1">{{item.title}}</span>
+        <span class="memorize-item uk-box-shadow-hover-medium" v-for="(item, key) in items" v-if="item && item.properties && item.properties.level && item.properties.level == 1">{{item.title}}</span>
       </div>
       <div class="uk-text-center uk-margin-small">
         <a class="uk-button uk-button-primary open-" href="#modal-sections" uk-toggle v-html="$t('main.Start the memorize test')"></a>
@@ -17,7 +17,7 @@
         <div class="uk-modal-dialog uk-width-3-5">
           <div class="uk-modal-body">
             <div v-if="quizCompleted" class="uk-padding uk-text-center">
-              <span class="uk-icon-button" uk-icon="check" style="background-color: #DEF7EC; color: #4CA387"></span>
+              <span class="uk-icon-button" uk-icon="check" style="background-color: #DEF7EC; color: #32d296"></span>
               <div class="uk-padding-small">
                 <h3 class="uk-margin-remove" v-html="$t('main.Congratulations!')"></h3>
                 <p class="uk-margin-remove" v-html="$t('main.You completed the quiz')"></p>
@@ -50,7 +50,7 @@
                 </div>
               </div>
               <div class="uk-width-expend">
-                <button @click="goNext()" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
+                <button @click="previewItemMode = !previewItemMode" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
               </div>
             </div>
             <div v-else>
@@ -60,27 +60,57 @@
                   <div class="uk-width-1-4">
                   </div>
                   <div class="uk-width-extend uk-flex uk-flex-center">
-                    <div class="uk-width-2-3@m uk-width-1-1@s">
-                      <div class="uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m " uk-grid uk-height-match="target: > div > label > .uk-card">
+                    <div class="uk-width-3-4@m uk-width-1-1@s">
+                      <div class="uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m " uk-grid uk-height-match="target: > div > div > label > .uk-card">
                         <div class="uk-flex uk-flex-middle uk-text-center" v-for="(answer, key) in quizItemAnswers" v-if="key < 4">
-                          <label @click.prevent="submitAnswer(quizItem.id, answer.id)">
-                            <div class="uk-card uk-card-body answer uk-box-shadow-hover-medium uk-padding-small">
-                              <div v-if="quizItemAnswerType == 20 || quizItemAnswerType ==21">
-                                <input type="radio" name="answer" class="answer-input"> <span v-html="answer.title"></span>
+                          <!-- if type 20 or 21(term) -->
+                          <div v-if="quizItemAnswerType == 20 || quizItemAnswerType == 21 ">
+                            <label @click.prevent="submitAnswer(quizItem.id, answer.id)">
+                              <div class="uk-card uk-card-body uk-box-shadow-hover-medium uk-padding-remove answer-item" :class="{' answered ':quizItemAnsweredId,' correct ':answer.status == 1, ' incorrect ':answer.status == 0}">
+                                <span class="uk-icon-button status-icon " :class="answer.status == 1 ? 'correct-answer-icon ' : 'incorrect-answer-icon '" :uk-icon="answer.status == 1 ? 'check' : 'close'"></span>
+                                <div class="uk-padding-small">
+                                  <input type="radio" name="answer" class="answer-input"> <span v-html="answer.title"></span>
+                                </div>
                               </div>
-                              <div v-else-if="quizItemAnswerType == 30">
-                                <img v-bind:data-src="answer.media_url" alt="" uk-img style="border-radius: 10px; height:100px; object-fit:cover">
+                            </label>
+                          </div>
+
+                          <!-- if type 30 (term) -->
+                          <div v-else-if="quizItemAnswerType == 30">
+                            <label @click.prevent="submitAnswer(quizItem.id, answer.id)">
+                              <div class="uk-card uk-card-body uk-box-shadow-hover-medium uk-padding-remove answer-item" :class="{' answered ':quizItemAnsweredId,' correct ':answer.status == 1, ' incorrect ':answer.status == 0}">
+                                <span class="uk-icon-button status-icon " :class="answer.status == 1 ? 'correct-answer-icon ' : 'incorrect-answer-icon '" :uk-icon="answer.status == 1 ? 'check' : 'close'"></span>
+                                <div style="padding: 10px">
+                                  <img v-bind:data-src="answer.media_url" alt="" uk-img style="border-radius: 10px; height:100px; object-fit:cover">
+                                </div>
                               </div>
-                              <div v-else-if="quizItemAnswerType == 31">
-                                <audio v-bind:src="answer.media_url" controls controlsList="nodownload" style="width: 100%">
-                                  <source type="audio/mpeg">
-                                </audio>
-                              </div>
+                            </label>
+                          </div>
+
+                          <!-- if type 31 (term) -->
+                          <div v-else-if="quizItemAnswerType == 31">
+                            <div style="margin-bottom: 10px">
+                              <audio v-bind:src="answer.media_url" controls controlsList="nodownload" style="width: 100%">
+                                <source type="audio/mpeg">
+                              </audio>
                             </div>
-                          </label>
+                            <label @click.prevent="submitAnswer(quizItem.id, answer.id)">
+                              <div class="uk-card uk-card-body uk-box-shadow-hover-medium uk-padding-remove answer-item" :class="{' answered ':quizItemAnsweredId,' correct ':answer.status == 1, ' incorrect ':answer.status == 0}">
+                                <span class="uk-icon-button status-icon " :class="answer.status == 1 ? 'correct-answer-icon ' : 'incorrect-answer-icon '" :uk-icon="answer.status == 1 ? 'check' : 'close'"></span>
+                                <div class="uk-padding-small">
+                                  ({{alphaBatArr[key]}}) {{$t('main._select')}}
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+
+
                         </div>
                       </div>
+                    <div class="uk-margin-small">
+                      <progress id="js-progressbar" class="uk-progress"  :value="timeLineProgress" max="100"></progress>
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -109,6 +139,7 @@ name: "Show",
   data(){
     return{
       name: 'mehmet',
+      alphaBatArr: ['A','B','C','D'],
       items: [],
       itemCount:0,
       // memorize
@@ -121,11 +152,9 @@ name: "Show",
       quizItem:null,
       quizItemAnswers:null,
       quizItemKey:0,
+      quizItemAnsweredId:null,
       quizItemAnswerType:0,
-
-
-
-
+      timeLineProgress: 0,
     }
   },
   created() {
@@ -145,7 +174,9 @@ name: "Show",
       }).then(res => {
         this.items = res.data;
         this.itemCount = this.items.length;
-        this.buildMemorizeItem(this.currentItemKey)
+        this.buildMemorizeItem(this.currentItemKey);
+        $('.screen-spinner').fadeOut();
+
       });
     },
     buildMemorizeItem(itemKey){
@@ -174,23 +205,22 @@ name: "Show",
       this.previewItemAudioUrl = selectedAudio;
       // build quiz
       var quizItemKey = itemKey;
+      this.quizItemAnsweredId = null;
+      this.timeLineProgress = 0;
       this.quizItem = this.items[quizItemKey];
-      var myArray = [
-        20,
-        21,
-        30,
-        31,
-        31,
-        30,
-        21,
-        20,
-      ];
+      var myArray = this.quizItem.type_array;
       this.quizItemAnswerType = myArray[Math.floor(Math.random()*myArray.length)];
+      // this.quizItemAnswerType = 20;
       this.quizItemAnswers = this.quizItem.answers[this.quizItemAnswerType];
 
     },
     submitAnswer(quizItemID, answerId){
-      this.goNext();
+      this.quizItemAnsweredId = answerId;
+      this.timeLineProgress = 100;
+      setTimeout(()=>{
+          this.goNext();
+          },1500
+      );
     },
     goNext(){
       if(!this.previewItemMode){
@@ -238,17 +268,52 @@ name: "Show",
     border-radius: 50%;
     font-size: 22px;
   }
-  .answer{
-    background-color: #F4F5F7;
-    border-radius: 10px;
-    min-height: 75px;
-    font-size: 18px
-  }
+
   .answer:hover{
     cursor: pointer;
   }
   .answer-input{
     position: absolute;
     opacity: 0;
+  }
+  .answer-item{
+    background-color: #F4F5F7;
+    border: 1px solid #F4F5F7;
+    border-radius: 10px;
+    font-size: 16px
+  }
+  .answer-item:hover{
+    cursor: pointer;
+  }
+  .answer-item.answered.correct{
+    background-color: #FFFFFF;
+    border: 1px solid #32d296;
+    color: #32d296;
+  }
+  .answer-item.answered.incorrect{
+    background-color: #FFFFFF;
+    border: 1px solid #f0506e;
+    color: #f0506e;
+  }
+  .answer-item.type-30{
+    background-color: #F9F9FB;
+    padding: 10px;
+  }
+  .status-icon{
+    display: none;
+    position: absolute;
+    right: -15px;
+    top: -15px;
+  }
+  .answer-item.answered .status-icon{
+   display: flex;
+  }
+  .correct-answer-icon{
+    color: #32d296;
+    background-color: #DEF7EC;
+  }
+  .incorrect-answer-icon{
+    color: #f0506e;
+    background-color: #ffe8e8;
   }
 </style>

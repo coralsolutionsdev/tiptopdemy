@@ -2821,6 +2821,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2833,6 +2863,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       name: 'mehmet',
+      alphaBatArr: ['A', 'B', 'C', 'D'],
       items: [],
       itemCount: 0,
       // memorize
@@ -2845,8 +2876,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       quizItem: null,
       quizItemAnswers: null,
       quizItemKey: 0,
-      quizItemAnswerType: 0
-
+      quizItemAnsweredId: null,
+      quizItemAnswerType: 0,
+      timeLineProgress: 0
     };
   },
   created: function created() {
@@ -2870,6 +2902,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.items = res.data;
         _this.itemCount = _this.items.length;
         _this.buildMemorizeItem(_this.currentItemKey);
+        $('.screen-spinner').fadeOut();
       });
     },
     buildMemorizeItem: function buildMemorizeItem(itemKey) {
@@ -2898,13 +2931,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.previewItemAudioUrl = selectedAudio;
       // build quiz
       var quizItemKey = itemKey;
+      this.quizItemAnsweredId = null;
+      this.timeLineProgress = 0;
       this.quizItem = this.items[quizItemKey];
-      var myArray = [20, 21, 30, 31, 31, 30, 21, 20];
+      var myArray = this.quizItem.type_array;
       this.quizItemAnswerType = myArray[Math.floor(Math.random() * myArray.length)];
+      // this.quizItemAnswerType = 20;
       this.quizItemAnswers = this.quizItem.answers[this.quizItemAnswerType];
     },
     submitAnswer: function submitAnswer(quizItemID, answerId) {
-      this.goNext();
+      var _this2 = this;
+
+      this.quizItemAnsweredId = answerId;
+      this.timeLineProgress = 100;
+      setTimeout(function () {
+        _this2.goNext();
+      }, 1500);
     },
     goNext: function goNext() {
       if (!this.previewItemMode) {
@@ -7466,7 +7508,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.memorize-item[data-v-5957d677]{\n  padding: 5px 20px;\n  border: 1px solid var(--text-primary);\n  color: var(--text-primary);\n  border-radius: 5px;\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-5957d677]{\n  border-radius: 10px;\n  overflow: hidden;\n}\naudio[data-v-5957d677], audio[data-v-5957d677]:focus, audio[data-v-5957d677]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\n.answer-letter[data-v-5957d677]{\n  background-color: var(--text-primary);\n  display: block;\n  width: 40px;\n  height: 40px;\n  vertical-align: middle;\n  border-radius: 50%;\n  font-size: 22px;\n}\n.answer[data-v-5957d677]{\n  background-color: #F4F5F7;\n  border-radius: 10px;\n  min-height: 75px;\n  font-size: 18px\n}\n.answer[data-v-5957d677]:hover{\n  cursor: pointer;\n}\n.answer-input[data-v-5957d677]{\n  position: absolute;\n  opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n.memorize-item[data-v-5957d677]{\n  padding: 5px 20px;\n  border: 1px solid var(--text-primary);\n  color: var(--text-primary);\n  border-radius: 5px;\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-5957d677]{\n  border-radius: 10px;\n  overflow: hidden;\n}\naudio[data-v-5957d677], audio[data-v-5957d677]:focus, audio[data-v-5957d677]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\n.answer-letter[data-v-5957d677]{\n  background-color: var(--text-primary);\n  display: block;\n  width: 40px;\n  height: 40px;\n  vertical-align: middle;\n  border-radius: 50%;\n  font-size: 22px;\n}\n.answer[data-v-5957d677]:hover{\n  cursor: pointer;\n}\n.answer-input[data-v-5957d677]{\n  position: absolute;\n  opacity: 0;\n}\n.answer-item[data-v-5957d677]{\n  background-color: #F4F5F7;\n  border: 1px solid #F4F5F7;\n  border-radius: 10px;\n  font-size: 16px\n}\n.answer-item[data-v-5957d677]:hover{\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-5957d677]{\n  background-color: #FFFFFF;\n  border: 1px solid #32d296;\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-5957d677]{\n  background-color: #FFFFFF;\n  border: 1px solid #f0506e;\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-5957d677]{\n  background-color: #F9F9FB;\n  padding: 10px;\n}\n.status-icon[data-v-5957d677]{\n  display: none;\n  position: absolute;\n  right: -15px;\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-5957d677]{\n display: -ms-flexbox;\n display: flex;\n}\n.correct-answer-icon[data-v-5957d677]{\n  color: #32d296;\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-5957d677]{\n  color: #f0506e;\n  background-color: #ffe8e8;\n}\n", ""]);
 
 /***/ }),
 /* 50 */
@@ -38711,7 +38753,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "padding": "20px"
     }
   }, _vm._l((_vm.items), function(item, key) {
-    return (item.properties.level == 1) ? _c('span', {
+    return (item && item.properties && item.properties.level && item.properties.level == 1) ? _c('span', {
       staticClass: "memorize-item uk-box-shadow-hover-medium"
     }, [_vm._v(_vm._s(item.title))]) : _vm._e()
   }), 0), _vm._v(" "), _c('div', {
@@ -38740,7 +38782,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "uk-icon-button",
     staticStyle: {
       "background-color": "#DEF7EC",
-      "color": "#4CA387"
+      "color": "#32d296"
     },
     attrs: {
       "uk-icon": "check"
@@ -38824,7 +38866,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     on: {
       "click": function($event) {
-        return _vm.goNext()
+        _vm.previewItemMode = !_vm.previewItemMode
       }
     }
   })])]) : _c('div', [_c('div', {
@@ -38846,17 +38888,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('div', {
     staticClass: "uk-width-extend uk-flex uk-flex-center"
   }, [_c('div', {
-    staticClass: "uk-width-2-3@m uk-width-1-1@s"
+    staticClass: "uk-width-3-4@m uk-width-1-1@s"
   }, [_c('div', {
     staticClass: "uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m ",
     attrs: {
       "uk-grid": "",
-      "uk-height-match": "target: > div > label > .uk-card"
+      "uk-height-match": "target: > div > div > label > .uk-card"
     }
   }, _vm._l((_vm.quizItemAnswers), function(answer, key) {
     return (key < 4) ? _c('div', {
       staticClass: "uk-flex uk-flex-middle uk-text-center"
-    }, [_c('label', {
+    }, [(_vm.quizItemAnswerType == 20 || _vm.quizItemAnswerType == 21) ? _c('div', [_c('label', {
       on: {
         "click": function($event) {
           $event.preventDefault();
@@ -38864,8 +38906,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_c('div', {
-      staticClass: "uk-card uk-card-body answer uk-box-shadow-hover-medium uk-padding-small"
-    }, [(_vm.quizItemAnswerType == 20 || _vm.quizItemAnswerType == 21) ? _c('div', [_c('input', {
+      staticClass: "uk-card uk-card-body uk-box-shadow-hover-medium uk-padding-remove answer-item",
+      class: {
+        ' answered ': _vm.quizItemAnsweredId, ' correct ': answer.status == 1, ' incorrect ': answer.status == 0
+      }
+    }, [_c('span', {
+      staticClass: "uk-icon-button status-icon ",
+      class: answer.status == 1 ? 'correct-answer-icon ' : 'incorrect-answer-icon ',
+      attrs: {
+        "uk-icon": answer.status == 1 ? 'check' : 'close'
+      }
+    }), _vm._v(" "), _c('div', {
+      staticClass: "uk-padding-small"
+    }, [_c('input', {
       staticClass: "answer-input",
       attrs: {
         "type": "radio",
@@ -38875,7 +38928,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       domProps: {
         "innerHTML": _vm._s(answer.title)
       }
-    })]) : (_vm.quizItemAnswerType == 30) ? _c('div', [_c('img', {
+    })])])])]) : (_vm.quizItemAnswerType == 30) ? _c('div', [_c('label', {
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          return _vm.submitAnswer(_vm.quizItem.id, answer.id)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "uk-card uk-card-body uk-box-shadow-hover-medium uk-padding-remove answer-item",
+      class: {
+        ' answered ': _vm.quizItemAnsweredId, ' correct ': answer.status == 1, ' incorrect ': answer.status == 0
+      }
+    }, [_c('span', {
+      staticClass: "uk-icon-button status-icon ",
+      class: answer.status == 1 ? 'correct-answer-icon ' : 'incorrect-answer-icon ',
+      attrs: {
+        "uk-icon": answer.status == 1 ? 'check' : 'close'
+      }
+    }), _vm._v(" "), _c('div', {
+      staticStyle: {
+        "padding": "10px"
+      }
+    }, [_c('img', {
       staticStyle: {
         "border-radius": "10px",
         "height": "100px",
@@ -38886,7 +38961,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "alt": "",
         "uk-img": ""
       }
-    })]) : (_vm.quizItemAnswerType == 31) ? _c('div', [_c('audio', {
+    })])])])]) : (_vm.quizItemAnswerType == 31) ? _c('div', [_c('div', {
+      staticStyle: {
+        "margin-bottom": "10px"
+      }
+    }, [_c('audio', {
       staticStyle: {
         "width": "100%"
       },
@@ -38899,8 +38978,39 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "type": "audio/mpeg"
       }
-    })])]) : _vm._e()])])]) : _vm._e()
-  }), 0)])])])])])])])])])])
+    })])]), _vm._v(" "), _c('label', {
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          return _vm.submitAnswer(_vm.quizItem.id, answer.id)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "uk-card uk-card-body uk-box-shadow-hover-medium uk-padding-remove answer-item",
+      class: {
+        ' answered ': _vm.quizItemAnsweredId, ' correct ': answer.status == 1, ' incorrect ': answer.status == 0
+      }
+    }, [_c('span', {
+      staticClass: "uk-icon-button status-icon ",
+      class: answer.status == 1 ? 'correct-answer-icon ' : 'incorrect-answer-icon ',
+      attrs: {
+        "uk-icon": answer.status == 1 ? 'check' : 'close'
+      }
+    }), _vm._v(" "), _c('div', {
+      staticClass: "uk-padding-small"
+    }, [_vm._v("\n                                  (" + _vm._s(_vm.alphaBatArr[key]) + ") " + _vm._s(_vm.$t('main._select')) + "\n                                ")])])])]) : _vm._e()]) : _vm._e()
+  }), 0), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small"
+  }, [_c('progress', {
+    staticClass: "uk-progress",
+    attrs: {
+      "id": "js-progressbar",
+      "max": "100"
+    },
+    domProps: {
+      "value": _vm.timeLineProgress
+    }
+  })])])])])])])])])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

@@ -561,7 +561,7 @@ name: "FileManager",
     hideLoading(){
       setTimeout(()=>{
         this.loadingMode = false;
-      },300
+        },300
       );
     },
     resetSelectedPreview(){

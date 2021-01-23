@@ -33,18 +33,54 @@ class MemorizeController extends Controller
     {
         $items = $lesson->getFormsWithType(Form::TYPE_MEMORIZE);
         $items->map(function ($form){
-            $answers = $form->items;
+            $answers = $form->items->groupBy('type');
             $answersArr = [];
-            foreach ($answers as $group => $answer){
-                $answersArr[$answer->type][] = [
-                    'id' => $answer->id,
-                    'title' => $answer->title,
-                    'status' => $answer->status,
-                    'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
-                ];
+            $typeArray = [];
+            foreach ($answers as $group => $answers){
+                $answersCount = 0;
+                $groupCorrectAnswersCount = 0;
+                $groupCorrectAnswerId = null;
+                if ($answers->count() > 0){ // have answers
+                    foreach ($answers as $answer){
+                        // inside group answers
+                        if ($answer->status == 1 && empty($groupCorrectAnswerId)){
+                            $groupCorrectAnswerId = $answer->id;
+                            $groupCorrectAnswersCount++;
+                        }
+                        if ($answer->status == 0 || (!empty($groupCorrectAnswerId) && $answer->id == $groupCorrectAnswerId)){
+                            $answersArr[$group][] = [
+                                'id' => $answer->id,
+                                'title' => $answer->title,
+                                'status' => $answer->status,
+                                'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
+                            ];
+                            $answersCount++;
+                        }
+
+
+                    }
+                    if ($answersCount < 4 && $groupCorrectAnswersCount > 0){
+                        $randomItemsCount = 4 - $answersCount;
+                        $randomAnswers = FormItem::where('type', $group)->where('status', 0)->inRandomOrder()->limit($randomItemsCount)->get();
+                        foreach ($randomAnswers as $answer){
+                            $answersArr[$group][] = [
+                                'id' => $answer->id,
+                                'title' => $answer->title,
+                                'status' => $answer->status,
+                                'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
+                            ];
+                        }
+                    }
+                    if ($groupCorrectAnswersCount > 0){
+                        $typeArray[] = $group;
+                    }
+                }
+
             }
             $form->answers = $answersArr;
+            $form->type_array = $typeArray;
         });
+//        dd($items);
         return response($items, 200);
     }
 

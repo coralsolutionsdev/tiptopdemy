@@ -346,7 +346,7 @@
     </div>
 
 </section>
-<script src="{{asset('js/app.js?v=202101222236')}}"></script>
+
 <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
     $('.audio-file').map(function (){
@@ -354,4 +354,10 @@
     });
 </script>
 @include('partial.scripts._cart')
+@include('manage.partials._loading')
+<script>
+    $('.screen-spinner').show();
+</script>
+<script src="{{asset('js/app.js?v=202101231836')}}"></script>
+
 @endsection

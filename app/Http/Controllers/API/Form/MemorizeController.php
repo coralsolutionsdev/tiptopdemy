@@ -53,7 +53,7 @@ class MemorizeController extends Controller
                         $wrongAnswers = collect();
                         if ($answers->where('status', 0)->count() > 1){
                             $wrongAnswers = $answers->where('status', 0)->random(2);
-                        }elseif ($answers->where('status', 0)->count() > 1){
+                        }elseif ($answers->where('status', 0)->count() == 1){
                             $wrongAnswers = $answers->where('status', 0)->random(1);
                         }
 

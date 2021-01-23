@@ -1,37 +1,162 @@
 @extends('themes.'.getFrontendThemeName().'.layout')
 @section('title', $page_title)
 @section('content')
+    <div id="vue-app" class="store uk-container uk-margin-medium-bottom">
+        {{--header--}}
+        @include('partial.frontend._page-header')
+        {{--body--}}
+        <div class="uk-grid-small uk-child-width-1-1" uk-grid>
+            <div>
+                <div class="uk-grid-small" uk-grid>
+                    <div class="uk-width-expand">
+                        <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
+                            <div class="uk-card uk-card-default uk-card-body uk-width-1-1@m">
+                                <div class="uk-grid-small" uk-grid>
+                                    <div class="uk-width-3-5@m uk-width-1-1@s">
+                                        <div class="tags">
+                                            @if(!empty( $product->getTags()))
+                                                <div>
+                                                    @foreach( $product->getTags() as $tag)
+                                                        <span class="uk-label">{{$tag}}</span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="product-info">
+                                            {{-- product info --}}
+                                            @if(!empty( $product->getTags()))
+                                                <div>
+                                                    @foreach( $product->getTags() as $tag)
+                                                        <span class="uk-label">{{$tag}}</span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                            <div>
+                                                <h2 style="margin: 0px">{{$product->name}}</h2>
+                                                {!! subContent($product->description,150) !!}
+                                            </div>
+                                            <div>
+                                                <span uk-icon="star" style="color: var(--theme-primary-color)"></span>
+                                                <span uk-icon="star" style="color: var(--theme-primary-color)"></span>
+                                                <span uk-icon="star" style="color: var(--theme-primary-color)"></span>
+                                                <span uk-icon="star" style="color: var(--theme-primary-color)"></span>
+                                                <span uk-icon="star" style="opacity: 0.3;"></span>
+                                                <span>(0 reviews)</span>
+                                            </div>
+                                            <div class="product-price" style="margin-top: 15px"><h3><span style="color: var(--theme-primary-color)">${{$product->price}}</span></h3></div>
+                                            <div class="uk-grid-small uk-child-width-1-1@s uk-child-width-1-2@m" uk-grid>
+                                                @foreach($product->getAllProductAttr() as $attribute)
+                                                    <div class="uk-width-1-4@m uk-text-capitalize">
+                                                        {{$attribute->name}}:
+                                                    </div>
+                                                    <div class="uk-width-3-4@m">
+                                                        @if($attribute->type == App\ProductAttribute::TYPE_RADIO)
+                                                            <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid>
+                                                                @foreach ($attribute->options as $option)
+                                                                    @if($product->getProductAttrOptionValueById($attribute->id, $option->id) == $option->value)
+                                                                        <label><input class="uk-radio" type="radio" name="radiodfd1" value="{{ $option->value }}" {{$product->getProductAttrOptionValueById($attribute->id, $option->id) == $option->value ? 'checked' : '' }}> &nbsp {{$option->name}}</label>
+                                                                    @endif
+                                                                @endforeach
+                                                            </div>
+                                                        @elseif($attribute->type == App\ProductAttribute::TYPE_CHECKBOX)
+                                                            <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid>
+                                                                @foreach ($attribute->options as $option)
+                                                                    <div>
+                                                                        <label><input class="uk-radio" type="radio" name="radio2" value="{{ $option->value }}"  {!! $product->hasAttributeValue($attribute->name, $option->value) ? '' : 'disabled'  !!}> &nbsp {{$option->name}}</label>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @elseif($attribute->type == App\ProductAttribute::TYPE_TEXT_FIELD || $attribute->type == App\ProductAttribute::TYPE_TIMESTAMP)
+                                                            <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid>
+                                                                <div>
+                                                                    <label>{{$product->getProductAttrValue($attribute->name)}}</label>
+                                                                </div>
+                                                            </div>
+                                                        @elseif($attribute->type == App\ProductAttribute::TYPE_COLOR)
+                                                            <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid>
+                                                                @foreach ($attribute->options as $option)
+                                                                    @if($product->getProductAttrOptionValueById($attribute->id, $option->id) == $option->value)
+                                                                        <div>
+                                                                            <label><input class="uk-radio" type="radio" name="radio1" value="{{ $option->value }}"> &nbsp <span class="color-option" style="background-color: {{$option->value}}"></span></label>
+                                                                        </div>
+                                                                    @endif
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <div>
+                                                <div>
+
+                                                    <div style="margin-top: 30px">
+                                                        <form>
+
+                                                            <div class="uk-margin quantity" uk-margin>
+                                                                <span class="uk-button uk-button-default quantity-button " style="background-color: #F5F5F5; width: 30px;"><</span>
+                                                                <div uk-form-custom="target: true" style="margin: -4px;">
+                                                                    <input class="uk-input quantity-input" type="number" style="height: 39px; width: 60px; text-align: center; background-color: #F5F5F5" value="1">
+                                                                </div>
+                                                                <span class="uk-button uk-button-default quantity-button add" style="background-color: #F5F5F5; width: 30px;">></span>
+                                                                <span class="uk-button uk-button-primary add-to-cart">Add to cart</span>
+                                                                <span class="uk-button uk-button-default add-to-wish-list"><span uk-icon="icon: heart"></span></span>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-2-5@m uk-width-1-1@s">
+                                        <div class="uk-placeholder uk-padding-small">
+                                            @if(!empty($product->getImages()) && $product->getImages()->count() > 0)
+                                                <div class="uk-position-relative" uk-slideshow="animation: fade">
+
+                                                    <ul class="uk-slideshow-items">
+                                                        @foreach($product->getImages() as $image)
+                                                            <li>
+                                                                <img src="{{$image->getFullUrl('card')}}" alt="" uk-cover>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+
+                                                    <div class="uk-margin-small">
+                                                        <ul class="uk-thumbnav uk-flex uk-flex-center uk-text-center">
+                                                            @foreach($product->getImages() as $key => $image)
+                                                                <li uk-slideshow-item="{{$key}}"><a href="#"><img src="{{$image->getFullUrl('card')}}" width="100" alt=""></a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                            @else
+                                                <div class="uk-text-center uk-padding uk-text-muted">
+                                                    <div>
+                                                        <span uk-icon="icon: info; ratio: 2" style="color: #faa05a ; background-color: #fff2e8; border-radius: 50%; padding: 2px"></span>
+                                                    </div>
+                                                    This products has no images yet
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if(false)
     <section>
         @include('partial.frontend._page-header')
         <div class="uk-background-default pt-25">
             <div class="uk-container">
                 <div uk-grid>
-                    <div class="uk-width-1-2@m ">
-                        {{-- Posts cards --}}
-                        <div class="uk-child-width-1-1@m" uk-grid>
-                            {{-- Image slider --}}
-                            <div class="uk-position-relative product-images" uk-slideshow="animation: fade">
 
-                                <ul class="uk-slideshow-items" style="height: 500px">
-                                    @foreach($product->getImages() as $image)
-                                    <li>
-                                        <img class="product-image" src="{{asset($image->url)}}" alt="" uk-cover>
-                                    </li>
-                                    @endforeach
-                                </ul>
-
-                                <div class="uk-position-small uk-flex uk-flex-center">
-                                    <ul class="uk-thumbnav">
-                                        @foreach($product->getImages() as $key => $image)
-                                            <li uk-slideshow-item="{{$key}}"><a href="#" class="product-image-thumb"><img src="{{asset($image->url)}}" width="100" alt=""></a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-
-                            </div>
-                            {{-- / Image slider --}}
-                        </div>
-                    </div>
                     <div class="uk-width-1-2@m blog-sidebar">
                         {{-- product info --}}
                         @if(!empty( $product->getTags()))
@@ -141,6 +266,7 @@
             </div>
         </div>
     </section>
+    @endif
     {{--Purshase module--}}
     <section>
         <!-- This is the modal -->

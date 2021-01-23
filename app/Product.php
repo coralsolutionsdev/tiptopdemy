@@ -210,7 +210,7 @@ class Product extends Model implements ReactableContract, HasMedia
      */
     public function getImages()
     {
-        return $this->attachments()->where('group', 'product_image')->orderBy('position')->get();
+        return $this->getMedia(Media::getGroup(Media::TYPE_PRODUCT_IMAGE));
 
     }
 

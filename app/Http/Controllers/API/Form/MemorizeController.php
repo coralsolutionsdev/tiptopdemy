@@ -88,8 +88,18 @@ class MemorizeController extends Controller
             $form->answers = $answersArr;
             $form->type_array = $typeArray;
         });
-//        dd($items);
-        return response($items, 200);
+        $itemsArray = [];
+        foreach ($items as $formItem){
+            $itemsArray[] = [
+                'id' => $formItem->id,
+                'title' => $formItem->title,
+                'properties' => $formItem->properties,
+                'answers' => $formItem->answers,
+                'type_array' => $formItem->type_array,
+            ];
+        }
+
+        return response($itemsArray, 200);
     }
 
     /**

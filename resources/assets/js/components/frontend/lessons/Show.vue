@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!quizCompleted" class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small" style="overflow: hidden">
+    <div v-if="!quizCompleted || itemCount > 0" class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small" style="overflow: hidden">
       <h5 class="text-highlighted uk-text-bold">Memorize</h5>
 <!--      <p>{{ $t('main.Dear', {name: 'visitor'}) }}</p>-->
       <p class="uk-margin-small">{{ $t('main._memorize dear student', {name: 'student'}) }}</p>
@@ -50,7 +50,7 @@
                 </div>
               </div>
               <div class="uk-width-expend">
-                <button @click="previewItemMode = !previewItemMode" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
+                <button @click.prevent="startQuiz()" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
               </div>
             </div>
             <div v-else>
@@ -176,7 +176,6 @@ name: "Show",
         this.itemCount = this.items.length;
         this.buildMemorizeItem(this.currentItemKey);
         $('.screen-spinner').fadeOut();
-
       });
     },
     buildMemorizeItem(itemKey){
@@ -206,6 +205,7 @@ name: "Show",
       // build quiz
       var quizItemKey = itemKey;
       this.quizItemAnsweredId = null;
+      this.timeLineProgress = null;
       this.timeLineProgress = 0;
       this.quizItem = this.items[quizItemKey];
       var myArray = this.quizItem.type_array;
@@ -240,6 +240,9 @@ name: "Show",
           this.goNext();
           },1000
       );
+    },
+    startQuiz(){
+      this.previewItemMode = !this.previewItemMode;
     },
     goNext(){
       if(!this.previewItemMode){

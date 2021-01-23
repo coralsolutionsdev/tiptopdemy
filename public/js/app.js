@@ -2932,6 +2932,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // build quiz
       var quizItemKey = itemKey;
       this.quizItemAnsweredId = null;
+      this.timeLineProgress = null;
       this.timeLineProgress = 0;
       this.quizItem = this.items[quizItemKey];
       var myArray = this.quizItem.type_array;
@@ -2969,6 +2970,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       setTimeout(function () {
         _this2.goNext();
       }, 1000);
+    },
+    startQuiz: function startQuiz() {
+      this.previewItemMode = !this.previewItemMode;
     },
     goNext: function goNext() {
       if (!this.previewItemMode) {
@@ -38758,7 +38762,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(!_vm.quizCompleted) ? _c('div', {
+  return _c('div', [(!_vm.quizCompleted || _vm.itemCount > 0) ? _c('div', {
     staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small",
     staticStyle: {
       "overflow": "hidden"
@@ -38889,7 +38893,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     on: {
       "click": function($event) {
-        _vm.previewItemMode = !_vm.previewItemMode
+        $event.preventDefault();
+        return _vm.startQuiz()
       }
     }
   })])]) : _c('div', [_c('div', {

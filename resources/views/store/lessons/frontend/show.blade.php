@@ -358,6 +358,6 @@
 <script>
     $('.screen-spinner').show();
 </script>
-<script src="{{asset('js/app.js?v=202101232000')}}"></script>
+<script src="{{asset('js/app.js?v=202101232100')}}"></script>
 
 @endsection

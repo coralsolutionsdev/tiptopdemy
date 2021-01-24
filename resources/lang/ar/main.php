@@ -346,7 +346,7 @@
         'Start the memorize test' => 'إبدأ إختبار مفردات الحفظ',
         'Congratulations!' => 'تهانينا!',
         'You completed the quiz' => 'لقد اجتزت اختبار حفظ الدرس ، يمكنك الاستمرار في مشاهدة محتوى الدرس',
-
+        'Quiz me' => 'أختبرني',
 
 
         /*Cart*/

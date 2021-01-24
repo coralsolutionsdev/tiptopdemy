@@ -2876,7 +2876,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       quizItemAnswerType: 0,
       timeLineProgress: 0,
       quizItemAnswerTotalTime: null,
-      quizItemAnswerTime: null
+      quizItemAnswerTime: null,
+      isAllowToAnswer: false
     };
   },
   created: function created() {
@@ -2907,6 +2908,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
     },
     buildMemorizeItem: function buildMemorizeItem(itemKey) {
       // build preview
+      this.isAllowToAnswer = true;
       this.previewItem = this.items[itemKey];
       if (this.previewItem) {
         var itemImages = this.previewItem.answers[30]; // 30 refer to images
@@ -2974,9 +2976,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       var _this2 = this;
 
       this.quizItemAnsweredId = answerId;
-      this.quizItemAnswerTime = 0;
+      this.$refs.countdown.abort();
       this.quizItemAnswerTotalTime = 0;
       this.timeLineProgress = 100;
+      this.isAllowToAnswer = false;
       setTimeout(function () {
         _this2.openNextPreview();
       }, 2000);
@@ -2996,17 +2999,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
           this.quizCompleted = true;
         }
       }
-    },
-    goNext: function goNext() {
-      if (!this.previewItemMode) {
-        this.currentItemKey++;
-        if (this.currentItemKey < this.itemCount) {
-          this.buildMemorizeItem(this.currentItemKey);
-        } else {
-          this.quizCompleted = true;
-        }
-      }
-      this.previewItemMode = !this.previewItemMode;
     },
     handleCountdownProgress: function handleCountdownProgress(data) {
       var _this3 = this;
@@ -4150,6 +4142,7 @@ if (token) {
             "Start the memorize test": "إبدأ إختبار مفردات الحفظ",
             "Congratulations!": "تهانينا!",
             "You completed the quiz": "لقد اجتزت اختبار حفظ الدرس ، يمكنك الاستمرار في مشاهدة محتوى الدرس",
+            "Quiz me": "أختبرني",
             "Cart": "سلة المشتريات",
             "Cart items": "عناصر سلة المشتريات",
             "Cart summary": "ملخص سلة المشتريات",
@@ -4750,6 +4743,7 @@ if (token) {
             "Start the memorize test": "Start the memorize test",
             "Congratulations!": "Congratulations!",
             "You completed the quiz": "You've passed the lesson's memorize test, you can continue viewing the lesson content",
+            "Quiz me": "Quiz me",
             "Cart": "Cart",
             "Card items": "Card items",
             "Cart summary": "Cart summary",
@@ -7592,7 +7586,7 @@ if (typeof jQuery === 'undefined') {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)();
-exports.push([module.i, "\n.memorize-item[data-v-1d3946d6]{\r\n  padding: 5px 20px;\r\n  border: 1px solid var(--text-primary);\r\n  color: var(--text-primary);\r\n  border-radius: 5px;\r\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-1d3946d6]{\r\n  border-radius: 10px;\r\n  overflow: hidden;\n}\naudio[data-v-1d3946d6], audio[data-v-1d3946d6]:focus, audio[data-v-1d3946d6]:active{\r\n  outline: none;\r\n  box-shadow: none;\r\n  border: none;\r\n  width: 100% !important;\n}\n.answer-letter[data-v-1d3946d6]{\r\n  background-color: var(--text-primary);\r\n  display: block;\r\n  width: 40px;\r\n  height: 40px;\r\n  vertical-align: middle;\r\n  border-radius: 50%;\r\n  font-size: 22px;\n}\n.answer[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-input[data-v-1d3946d6]{\r\n  position: absolute;\r\n  opacity: 0;\n}\n.answer-item[data-v-1d3946d6]{\r\n  background-color: #F4F5F7;\r\n  border: 1px solid #F4F5F7;\r\n  border-radius: 10px;\r\n  font-size: 16px\n}\n.answer-item[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #32d296;\r\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #f0506e;\r\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-1d3946d6]{\r\n  background-color: #F9F9FB;\r\n  padding: 10px;\n}\n.status-icon[data-v-1d3946d6]{\r\n  display: none;\r\n  position: absolute;\r\n  right: -15px;\r\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-1d3946d6]{\r\n  display: -ms-flexbox;\r\n  display: flex;\n}\n.correct-answer-icon[data-v-1d3946d6]{\r\n  color: #32d296;\r\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-1d3946d6]{\r\n  color: #f0506e;\r\n  background-color: #ffe8e8;\n}\r\n", ""]);
+exports.push([module.i, "\n.memorize-item[data-v-1d3946d6]{\r\n  padding: 5px 20px;\r\n  border: 1px solid var(--text-primary);\r\n  color: var(--text-primary);\r\n  border-radius: 5px;\r\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-1d3946d6]{\r\n  border-radius: 10px;\r\n  overflow: hidden;\n}\naudio[data-v-1d3946d6], audio[data-v-1d3946d6]:focus, audio[data-v-1d3946d6]:active{\r\n  outline: none;\r\n  box-shadow: none;\r\n  border: none;\r\n  width: 100% !important;\n}\n.answer-letter[data-v-1d3946d6]{\r\n  background-color: var(--text-primary);\r\n  display: block;\r\n  width: 40px;\r\n  height: 40px;\r\n  vertical-align: middle;\r\n  border-radius: 50%;\r\n  font-size: 22px;\n}\n.answer[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-input[data-v-1d3946d6]{\r\n  position: absolute;\r\n  opacity: 0;\n}\n.answer-item[data-v-1d3946d6]{\r\n  background-color: #F4F5F7;\r\n  border: 1px solid #F4F5F7;\r\n  border-radius: 10px;\r\n  font-size: 16px\n}\n.answer-item[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #32d296;\r\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #f0506e;\r\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-1d3946d6]{\r\n  background-color: #F9F9FB;\r\n  padding: 10px;\n}\n.status-icon[data-v-1d3946d6]{\r\n  display: none;\r\n  position: absolute;\r\n  right: -15px;\r\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-1d3946d6]{\r\n  display: -ms-flexbox;\r\n  display: flex;\n}\n.correct-answer-icon[data-v-1d3946d6]{\r\n  color: #32d296;\r\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-1d3946d6]{\r\n  color: #f0506e;\r\n  background-color: #ffe8e8;\n}\n.disabled[data-v-1d3946d6]{\r\n  pointer-events: none;\r\n  cursor: not-allowed !important;\n}\r\n", ""]);
 
 /***/ }),
 /* 47 */
@@ -38735,7 +38729,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('button', {
     staticClass: "uk-button uk-button-primary",
     domProps: {
-      "innerHTML": _vm._s(_vm.$t('main.Next'))
+      "innerHTML": _vm._s(_vm.$t('main.Quiz me'))
     },
     on: {
       "click": function($event) {
@@ -38760,6 +38754,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })]), _vm._v(" "), _c('div', {
     staticClass: "uk-width-auto"
   }, [_c('countdown', {
+    ref: "countdown",
     attrs: {
       "time": _vm.quizItemAnswerTime * 1000
     },
@@ -38786,7 +38781,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })], 1), _vm._v(" "), _c('div', {
     staticClass: "uk-width-extend uk-flex uk-flex-center"
   }, [_c('div', {
-    staticClass: "uk-width-3-4@m uk-width-1-1@s"
+    staticClass: "uk-width-3-4@m uk-width-1-1@s ",
+    class: {
+      ' disabled ': !_vm.isAllowToAnswer
+    }
   }, [_c('div', {
     staticClass: "uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m ",
     attrs: {

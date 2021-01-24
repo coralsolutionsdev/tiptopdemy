@@ -49,7 +49,7 @@
                 </div>
               </div>
               <div class="uk-width-expend">
-                <button @click.prevent="startQuiz()" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
+                <button @click.prevent="startQuiz()" class="uk-button uk-button-primary" v-html="$t('main.Quiz me')"></button>
               </div>
             </div>
             <div v-else-if="examItemMode">
@@ -58,7 +58,7 @@
                   <div class="uk-width-expand"><h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1></div>
                   <div class="uk-width-auto">
                     <!--timer-->
-                    <countdown @progress="handleCountdownProgress" :time="quizItemAnswerTime * 1000">
+                    <countdown ref="countdown" @progress="handleCountdownProgress" :time="quizItemAnswerTime * 1000">
                       <!--        <template slot-scope="props">Time Remaining：{{ props.days }} days, {{ props.hours }} hours, {{ props.minutes }} minutes, {{ props.seconds }} seconds.</template>-->
                       <template slot-scope="props">
                         <div class="uk-text-center" style="background-color: #F4F5F7; border-radius: 5px; padding: 5px 10px">
@@ -70,7 +70,7 @@
                     </countdown>
                   </div>
                   <div class="uk-width-extend uk-flex uk-flex-center">
-                    <div class="uk-width-3-4@m uk-width-1-1@s">
+                    <div class="uk-width-3-4@m uk-width-1-1@s " :class="{' disabled ':!isAllowToAnswer}">
                       <div class="uk-grid-small uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m " uk-grid uk-height-match="target: > div > div > label > .uk-card">
                         <div class="uk-flex uk-flex-middle uk-text-center"  v-for="(answer, key) in quizItemAnswers" v-if="key < 4">
                           <!-- if type 20 or 21(term) -->
@@ -166,6 +166,7 @@ export default {
       timeLineProgress: 0,
       quizItemAnswerTotalTime: null,
       quizItemAnswerTime: null,
+      isAllowToAnswer:false,
     }
   },
   created() {
@@ -194,6 +195,7 @@ export default {
     },
     buildMemorizeItem(itemKey){
       // build preview
+      this.isAllowToAnswer = true;
       this.previewItem = this.items[itemKey];
       if (this.previewItem){
         var itemImages = this.previewItem.answers[30]; // 30 refer to images
@@ -256,11 +258,12 @@ export default {
     },
     submitAnswer(quizItemID, answerId){
       this.quizItemAnsweredId = answerId;
-      this.quizItemAnswerTime =  0;
+      this.$refs.countdown.abort();
       this.quizItemAnswerTotalTime =  0;
       this.timeLineProgress = 100;
+      this.isAllowToAnswer = false;
       setTimeout(()=>{
-            this.openNextPreview();
+        this.openNextPreview();
           },2000
       );
     },
@@ -279,17 +282,6 @@ export default {
           this.quizCompleted = true;
         }
       }
-    },
-    goNext(){
-      if(!this.previewItemMode){
-        this.currentItemKey++;
-        if (this.currentItemKey < this.itemCount){
-          this.buildMemorizeItem(this.currentItemKey)
-        }else{
-          this.quizCompleted = true;
-        }
-      }
-      this.previewItemMode = !this.previewItemMode;
     },
     handleCountdownProgress(data) {
       // console.log(data.days);
@@ -395,5 +387,9 @@ audio, audio:focus, audio:active{
 .incorrect-answer-icon{
   color: #f0506e;
   background-color: #ffe8e8;
+}
+.disabled{
+  pointer-events: none;
+  cursor: not-allowed !important;
 }
 </style>

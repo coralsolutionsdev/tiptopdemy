@@ -336,6 +336,7 @@
         'Start the memorize test' => 'Start the memorize test',
         'Congratulations!' => 'Congratulations!',
         'You completed the quiz' => 'You\'ve passed the lesson\'s memorize test, you can continue viewing the lesson content',
+        'Quiz me' => 'Quiz me',
 
         /*Cart*/
         'Cart' => 'Cart',

@@ -4142,7 +4142,7 @@ if (token) {
             "Start the memorize test": "إبدأ إختبار مفردات الحفظ",
             "Congratulations!": "تهانينا!",
             "You completed the quiz": "لقد اجتزت اختبار حفظ الدرس ، يمكنك الاستمرار في مشاهدة محتوى الدرس",
-            "Quiz me": "أختبرني",
+            "Quiz me": "إختبرني",
             "Cart": "سلة المشتريات",
             "Cart items": "عناصر سلة المشتريات",
             "Cart summary": "ملخص سلة المشتريات",

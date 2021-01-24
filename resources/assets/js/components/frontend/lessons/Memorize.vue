@@ -298,7 +298,8 @@ export default {
         this.timeLineProgress = ((this.quizItemAnswerTotalTime - data.totalSeconds)/this.quizItemAnswerTotalTime) * 100;
         if (data.totalSeconds == 1){
           setTimeout(()=>{
-                this.timeLineProgress = 90;
+            this.quizItemAnswerTime = 0;
+            this.timeLineProgress = 90;
                 this.submitAnswer(this.quizItem.id, 0);
               },1000
           );

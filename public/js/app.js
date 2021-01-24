@@ -3017,6 +3017,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         this.timeLineProgress = (this.quizItemAnswerTotalTime - data.totalSeconds) / this.quizItemAnswerTotalTime * 100;
         if (data.totalSeconds == 1) {
           setTimeout(function () {
+            _this3.quizItemAnswerTime = 0;
             _this3.timeLineProgress = 90;
             _this3.submitAnswer(_this3.quizItem.id, 0);
           }, 1000);

@@ -2877,7 +2877,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       timeLineProgress: 0,
       quizItemAnswerTotalTime: null,
       quizItemAnswerTime: null,
-      isAllowToAnswer: false
+      isAllowToAnswer: false,
+      wrongAnsweredIdArray: []
     };
   },
   created: function created() {
@@ -2980,9 +2981,30 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       this.quizItemAnswerTotalTime = 0;
       this.timeLineProgress = 100;
       this.isAllowToAnswer = false;
+      // check if correct or not
+      var status = 0;
+      $.each(this.quizItemAnswers, function (key, answer) {
+        if (answer.id == answerId) {
+          if (answer.status == 1) {
+            status = 1;
+          }
+        }
+      });
+      if (status == 0) {
+        // wrong
+        this.wrongAnsweredIdArray.push(quizItemID);
+      } else {
+        // correct
+        this.wrongAnsweredIdArray = this.removeFromArray(this.wrongAnsweredIdArray, quizItemID);
+      }
       setTimeout(function () {
         _this2.openNextPreview();
       }, 2000);
+    },
+    removeFromArray: function removeFromArray(arr, value) {
+      return arr.filter(function (ele) {
+        return ele != value;
+      });
     },
     startQuiz: function startQuiz() {
       this.quizItemAnswerTime = this.quizItem.properties.time_to_answer;
@@ -2996,7 +3018,23 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         if (this.currentItemKey < this.itemCount) {
           this.buildMemorizeItem(this.currentItemKey);
         } else {
-          this.quizCompleted = true;
+
+          if (this.wrongAnsweredIdArray.length > 0) {
+            console.log('cannot pass');
+            var myArray = this.wrongAnsweredIdArray;
+            var selectedIdToReQuiz = myArray[Math.floor(Math.random() * myArray.length)];
+            var reQuizKey = null;
+            $.each(this.items, function (key, item) {
+              if (item.id == selectedIdToReQuiz) {
+                reQuizKey = key;
+              }
+            });
+            this.buildMemorizeItem(reQuizKey);
+          } else {
+            this.quizCompleted = true;
+            // view content
+            this.$emit('updateViewContent', true);
+          }
         }
       }
     },
@@ -3043,6 +3081,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3051,13 +3097,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   // props: [
   //   'lesson_slug'
   // ],
-  props: ['postTitle', 'lessonSlug'],
+  props: ['postTitle', 'lessonSlug', 'content'],
   data: function data() {
     return {
-      name: 'mehmet'
+      name: 'mehmet',
+      viewContentStatus: false
     };
   },
 
+  methods: {
+    updateViewContentStatus: function updateViewContentStatus(status) {
+      this.viewContentStatus = status;
+    }
+  },
   components: {
     memorize: __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default.a
   }
@@ -39129,11 +39181,32 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('memorize', {
+  return _c('div', [_c('div', {
+    staticClass: "uk-grid-small uk-child-width-1-1",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', [_c('memorize', {
     attrs: {
       "lesson-slug": _vm.lessonSlug
+    },
+    on: {
+      "updateViewContent": function($event) {
+        return _vm.updateViewContentStatus($event)
+      }
     }
-  })], 1)
+  })], 1), _vm._v(" "), (_vm.viewContentStatus) ? _c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove"
+  }, [_c('ul', {
+    staticClass: "pb-content-list-items uk-grid-collapse uk-child-width-1-1",
+    attrs: {
+      "id": "pb-content",
+      "uk-grid": ""
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.content)
+    }
+  })])]) : _vm._e()])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

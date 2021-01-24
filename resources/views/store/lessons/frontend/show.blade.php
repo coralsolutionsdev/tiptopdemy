@@ -139,19 +139,9 @@
                         @if(true)
                         <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
 
-                        <lesson-show lesson-slug="{{$lesson->slug}}"></lesson-show>
+                        <lesson-show lesson-slug="{{$lesson->slug}}" content="{{$content}}"></lesson-show>
 
-                        @if(!empty($lesson->content && !empty($lesson->content['html'])))
-                            <div> {{-- Description --}}
-                                <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
-{{--                                    <h5 class="text-highlighted uk-text-bold">{{__('main.Lesson description')}}</h5>--}}
-{{--                                    {!! $lesson->description !!}--}}
-                                    <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-grid>
-                                        {!! $lesson->content['html'] !!}
-                                    </ul>
-                                </div>
-                            </div>
-                            @endif
+
 
                         @if($resources = $lesson->resources)
                                         @foreach($resources as $resource)
@@ -358,6 +348,6 @@
 <script>
     $('.screen-spinner').show();
 </script>
-<script src="{{asset('js/app.js?v=202101241822')}}"></script>
+<script src="{{asset('js/app.js?v=202101242232')}}"></script>
 
 @endsection

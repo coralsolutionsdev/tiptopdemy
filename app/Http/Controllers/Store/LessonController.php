@@ -123,7 +123,8 @@ class LessonController extends Controller
             }
         }
         $attachments = $lesson->attachments()->get();
-        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'attachments'));
+        $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
+        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'attachments', 'content'));
 
     }
 

@@ -86,14 +86,13 @@
                 </div>
 
             </nav>
-            <div id="vue-app" class="container-fluid">
+            <div class="container-fluid">
                 @include('layouts.partials._messages')
                 @yield('content')
             </div>
         </div>
     </div>
 </div>
-<script src="{{asset('js/app.js?v=202101201920')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
 <script>
 

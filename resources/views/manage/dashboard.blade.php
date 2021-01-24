@@ -57,6 +57,5 @@
 				@widget('admin.dashboard.recent_users')
 			</div>
 		</div>
-	<script src="{{asset('js/app.js')}}"></script>
 </section>
 @endsection

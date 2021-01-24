@@ -167,6 +167,7 @@ export default {
       quizItemAnswerTotalTime: null,
       quizItemAnswerTime: null,
       isAllowToAnswer:false,
+      wrongAnsweredIdArray:[],
     }
   },
   created() {
@@ -262,10 +263,29 @@ export default {
       this.quizItemAnswerTotalTime =  0;
       this.timeLineProgress = 100;
       this.isAllowToAnswer = false;
+      // check if correct or not
+      var status = 0;
+      $.each(this.quizItemAnswers,  function (key , answer){
+        if (answer.id == answerId){
+          if (answer.status == 1){
+            status = 1;
+          }
+        }
+      });
+      if (status == 0){ // wrong
+        this.wrongAnsweredIdArray.push(quizItemID);
+      }else{ // correct
+        this.wrongAnsweredIdArray = this.removeFromArray(this.wrongAnsweredIdArray, quizItemID);
+      }
       setTimeout(()=>{
         this.openNextPreview();
           },2000
       );
+    },
+    removeFromArray(arr, value){
+      return arr.filter(function(ele){
+        return ele != value;
+      });
     },
     startQuiz(){
       this.quizItemAnswerTime =  this.quizItem.properties.time_to_answer;
@@ -279,7 +299,23 @@ export default {
         if (this.currentItemKey < this.itemCount){
           this.buildMemorizeItem(this.currentItemKey)
         }else{
-          this.quizCompleted = true;
+
+          if (this.wrongAnsweredIdArray.length > 0){
+            console.log('cannot pass');
+            var myArray = this.wrongAnsweredIdArray;
+            var selectedIdToReQuiz = myArray[Math.floor(Math.random()*myArray.length)];
+            var reQuizKey = null;
+            $.each(this.items,  function (key , item){
+              if (item.id == selectedIdToReQuiz){
+                reQuizKey = key;
+              }
+            });
+            this.buildMemorizeItem(reQuizKey);
+          }else{
+            this.quizCompleted = true;
+            // view content
+            this.$emit('updateViewContent', true);
+          }
         }
       }
     },

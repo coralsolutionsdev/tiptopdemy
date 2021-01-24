@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 78);
+/******/ 	return __webpack_require__(__webpack_require__.s = 76);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -428,62 +428,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 // this module is a runtime utility for cleaner component module output and will
 // be included in the final webpack user bundle
 
@@ -538,6 +482,62 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -557,7 +557,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(75)
+var listToStyles = __webpack_require__(73)
 
 /*
 type StyleObject = {
@@ -1526,10 +1526,10 @@ process.umask = function() { return 0; };
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(51);
+var content = __webpack_require__(50);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(55)(content, {});
+var update = __webpack_require__(54)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1560,7 +1560,7 @@ if(false) {
 if (false) {
   module.exports = require('./vue.common.prod.js')
 } else {
-  module.exports = __webpack_require__(76)
+  module.exports = __webpack_require__(74)
 }
 
 
@@ -1572,7 +1572,7 @@ if (false) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_vue_i18n_locales_generated__ = __webpack_require__(44);
 
 /**
@@ -1605,11 +1605,11 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_1_vue_i18n__["a" /* default */]({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('example', __webpack_require__(58));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('lesson-show', __webpack_require__(62));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-create', __webpack_require__(59));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-index', __webpack_require__(60));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('file-manager', __webpack_require__(63));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('example', __webpack_require__(57));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('lesson-show', __webpack_require__(61));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-create', __webpack_require__(58));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-index', __webpack_require__(59));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('file-manager', __webpack_require__(62));
 
 // If you want to use it in your vue components
 
@@ -2708,6 +2708,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2833,6 +2848,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown___default.a.name, __WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Memorize",
   props: ['postTitle', 'lessonSlug'],
@@ -2843,7 +2862,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       items: [],
       itemCount: 0,
       // memorize
-      previewItemMode: true,
+      previewItemMode: false,
+      examItemMode: false,
       previewItem: null,
       previewItemImageUrl: null,
       previewItemAudioUrl: null,
@@ -2854,7 +2874,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       quizItemKey: 0,
       quizItemAnsweredId: null,
       quizItemAnswerType: 0,
-      timeLineProgress: 0
+      timeLineProgress: 0,
+      quizItemAnswerTotalTime: null,
+      quizItemAnswerTime: null
     };
   },
   created: function created() {
@@ -2910,10 +2932,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.previewItemAudioUrl = selectedAudio;
         // build quiz
         var quizItemKey = itemKey;
+        this.previewItemMode = true;
+        this.examItemMode = false;
         this.quizItemAnsweredId = null;
         this.timeLineProgress = null;
         this.quizItemAnswers = [];
         this.timeLineProgress = 0;
+        this.quizItemAnswerTime = null;
+        this.quizItemAnswerTotalTime = null;
         this.quizItem = this.items[quizItemKey];
         var myArray = this.quizItem.type_array;
         this.quizItemAnswerType = myArray[Math.floor(Math.random() * myArray.length)];
@@ -2948,13 +2974,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       this.quizItemAnsweredId = answerId;
+      this.quizItemAnswerTime = 0;
+      this.quizItemAnswerTotalTime = 0;
       this.timeLineProgress = 100;
       setTimeout(function () {
-        _this2.goNext();
-      }, 1000);
+        _this2.openNextPreview();
+      }, 2000);
     },
     startQuiz: function startQuiz() {
-      this.previewItemMode = !this.previewItemMode;
+      this.quizItemAnswerTime = this.quizItem.properties.time_to_answer;
+      this.quizItemAnswerTotalTime = this.quizItem.properties.time_to_answer;
+      this.previewItemMode = false;
+      this.examItemMode = true;
+    },
+    openNextPreview: function openNextPreview() {
+      if (!this.previewItemMode) {
+        this.currentItemKey++;
+        if (this.currentItemKey < this.itemCount) {
+          this.buildMemorizeItem(this.currentItemKey);
+        } else {
+          this.quizCompleted = true;
+        }
+      }
     },
     goNext: function goNext() {
       if (!this.previewItemMode) {
@@ -2966,6 +3007,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }
       this.previewItemMode = !this.previewItemMode;
+    },
+    handleCountdownProgress: function handleCountdownProgress(data) {
+      var _this3 = this;
+
+      // console.log(data.days);
+      // console.log(data.hours);
+      // console.log(data.minutes);
+      // console.log(data.seconds);
+      // console.log(data.milliseconds);
+      // console.log(data.totalDays);
+      // console.log(data.totalHours);
+      // console.log(data.totalMinutes);
+      // console.log(data.totalSeconds);
+      // console.log(data.totalMilliseconds);
+      if (this.quizItemAnsweredId == null) {
+        this.timeLineProgress = (this.quizItemAnswerTotalTime - data.totalSeconds) / this.quizItemAnswerTotalTime * 100;
+        if (data.totalSeconds == 1) {
+          setTimeout(function () {
+            _this3.timeLineProgress = 90;
+            _this3.submitAnswer(_this3.quizItem.id, 0);
+          }, 1000);
+        }
+      }
     }
   }
 });
@@ -2976,7 +3040,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Memorize_vue__);
 //
 //
@@ -3631,7 +3695,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(53);
+window._ = __webpack_require__(52);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -3640,7 +3704,7 @@ window._ = __webpack_require__(53);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(52);
+  window.$ = window.jQuery = __webpack_require__(51);
 
   __webpack_require__(45);
 } catch (e) {}
@@ -7527,40 +7591,39 @@ if (typeof jQuery === 'undefined') {
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)();
+exports = module.exports = __webpack_require__(2)();
 exports.push([module.i, "\n.memorize-item[data-v-1d3946d6]{\r\n  padding: 5px 20px;\r\n  border: 1px solid var(--text-primary);\r\n  color: var(--text-primary);\r\n  border-radius: 5px;\r\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-1d3946d6]{\r\n  border-radius: 10px;\r\n  overflow: hidden;\n}\naudio[data-v-1d3946d6], audio[data-v-1d3946d6]:focus, audio[data-v-1d3946d6]:active{\r\n  outline: none;\r\n  box-shadow: none;\r\n  border: none;\r\n  width: 100% !important;\n}\n.answer-letter[data-v-1d3946d6]{\r\n  background-color: var(--text-primary);\r\n  display: block;\r\n  width: 40px;\r\n  height: 40px;\r\n  vertical-align: middle;\r\n  border-radius: 50%;\r\n  font-size: 22px;\n}\n.answer[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-input[data-v-1d3946d6]{\r\n  position: absolute;\r\n  opacity: 0;\n}\n.answer-item[data-v-1d3946d6]{\r\n  background-color: #F4F5F7;\r\n  border: 1px solid #F4F5F7;\r\n  border-radius: 10px;\r\n  font-size: 16px\n}\n.answer-item[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #32d296;\r\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #f0506e;\r\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-1d3946d6]{\r\n  background-color: #F9F9FB;\r\n  padding: 10px;\n}\n.status-icon[data-v-1d3946d6]{\r\n  display: none;\r\n  position: absolute;\r\n  right: -15px;\r\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-1d3946d6]{\r\n  display: -ms-flexbox;\r\n  display: flex;\n}\n.correct-answer-icon[data-v-1d3946d6]{\r\n  color: #32d296;\r\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-1d3946d6]{\r\n  color: #f0506e;\r\n  background-color: #ffe8e8;\n}\r\n", ""]);
 
 /***/ }),
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)();
+exports = module.exports = __webpack_require__(2)();
 exports.push([module.i, "\n.vue-dropzone>.dz-preview .dz-image{\r\n  border-radius:20px;\n}\r\n\r\n", ""]);
 
 /***/ }),
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)();
+exports = module.exports = __webpack_require__(2)();
 exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
-/* 49 */,
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)();
+exports = module.exports = __webpack_require__(2)();
 exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -9px;\n  top: -9px;\n  background-color: #32d296 !important;\n  color: white;\n  z-index: 999;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n.no-media-icon[data-v-acd81a90]{\n  opacity: 0.3;\n  filter: grayscale(90%);\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(1)();
+exports = module.exports = __webpack_require__(2)();
 exports.push([module.i, "/*\n * The MIT License\n * Copyright (c) 2012 Matias Meno <m@tias.me>\n */\n@-webkit-keyframes passing-through {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30%, 70% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); }\n  100% {\n    opacity: 0;\n    -webkit-transform: translateY(-40px);\n    -moz-transform: translateY(-40px);\n    -ms-transform: translateY(-40px);\n    -o-transform: translateY(-40px);\n    transform: translateY(-40px); } }\n@-moz-keyframes passing-through {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30%, 70% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); }\n  100% {\n    opacity: 0;\n    -webkit-transform: translateY(-40px);\n    -moz-transform: translateY(-40px);\n    -ms-transform: translateY(-40px);\n    -o-transform: translateY(-40px);\n    transform: translateY(-40px); } }\n@keyframes passing-through {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30%, 70% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); }\n  100% {\n    opacity: 0;\n    -webkit-transform: translateY(-40px);\n    -moz-transform: translateY(-40px);\n    -ms-transform: translateY(-40px);\n    -o-transform: translateY(-40px);\n    transform: translateY(-40px); } }\n@-webkit-keyframes slide-in {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); } }\n@-moz-keyframes slide-in {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); } }\n@keyframes slide-in {\n  0% {\n    opacity: 0;\n    -webkit-transform: translateY(40px);\n    -moz-transform: translateY(40px);\n    -ms-transform: translateY(40px);\n    -o-transform: translateY(40px);\n    transform: translateY(40px); }\n  30% {\n    opacity: 1;\n    -webkit-transform: translateY(0px);\n    -moz-transform: translateY(0px);\n    -ms-transform: translateY(0px);\n    -o-transform: translateY(0px);\n    transform: translateY(0px); } }\n@-webkit-keyframes pulse {\n  0% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); }\n  10% {\n    -webkit-transform: scale(1.1);\n    -moz-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    -o-transform: scale(1.1);\n    transform: scale(1.1); }\n  20% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n@-moz-keyframes pulse {\n  0% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); }\n  10% {\n    -webkit-transform: scale(1.1);\n    -moz-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    -o-transform: scale(1.1);\n    transform: scale(1.1); }\n  20% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n@keyframes pulse {\n  0% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); }\n  10% {\n    -webkit-transform: scale(1.1);\n    -moz-transform: scale(1.1);\n    -ms-transform: scale(1.1);\n    -o-transform: scale(1.1);\n    transform: scale(1.1); }\n  20% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n.dropzone, .dropzone * {\n  box-sizing: border-box; }\n\n.dropzone {\n  min-height: 150px;\n  border: 2px solid rgba(0, 0, 0, 0.3);\n  background: white;\n  padding: 20px 20px; }\n  .dropzone.dz-clickable {\n    cursor: pointer; }\n    .dropzone.dz-clickable * {\n      cursor: default; }\n    .dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {\n      cursor: pointer; }\n  .dropzone.dz-started .dz-message {\n    display: none; }\n  .dropzone.dz-drag-hover {\n    border-style: solid; }\n    .dropzone.dz-drag-hover .dz-message {\n      opacity: 0.5; }\n  .dropzone .dz-message {\n    text-align: center;\n    margin: 2em 0; }\n  .dropzone .dz-preview {\n    position: relative;\n    display: inline-block;\n    vertical-align: top;\n    margin: 16px;\n    min-height: 100px; }\n    .dropzone .dz-preview:hover {\n      z-index: 1000; }\n      .dropzone .dz-preview:hover .dz-details {\n        opacity: 1; }\n    .dropzone .dz-preview.dz-file-preview .dz-image {\n      border-radius: 20px;\n      background: #999;\n      background: linear-gradient(to bottom, #eee, #ddd); }\n    .dropzone .dz-preview.dz-file-preview .dz-details {\n      opacity: 1; }\n    .dropzone .dz-preview.dz-image-preview {\n      background: white; }\n      .dropzone .dz-preview.dz-image-preview .dz-details {\n        -webkit-transition: opacity 0.2s linear;\n        -moz-transition: opacity 0.2s linear;\n        -ms-transition: opacity 0.2s linear;\n        -o-transition: opacity 0.2s linear;\n        transition: opacity 0.2s linear; }\n    .dropzone .dz-preview .dz-remove {\n      font-size: 14px;\n      text-align: center;\n      display: block;\n      cursor: pointer;\n      border: none; }\n      .dropzone .dz-preview .dz-remove:hover {\n        text-decoration: underline; }\n    .dropzone .dz-preview:hover .dz-details {\n      opacity: 1; }\n    .dropzone .dz-preview .dz-details {\n      z-index: 20;\n      position: absolute;\n      top: 0;\n      left: 0;\n      opacity: 0;\n      font-size: 13px;\n      min-width: 100%;\n      max-width: 100%;\n      padding: 2em 1em;\n      text-align: center;\n      color: rgba(0, 0, 0, 0.9);\n      line-height: 150%; }\n      .dropzone .dz-preview .dz-details .dz-size {\n        margin-bottom: 1em;\n        font-size: 16px; }\n      .dropzone .dz-preview .dz-details .dz-filename {\n        white-space: nowrap; }\n        .dropzone .dz-preview .dz-details .dz-filename:hover span {\n          border: 1px solid rgba(200, 200, 200, 0.8);\n          background-color: rgba(255, 255, 255, 0.8); }\n        .dropzone .dz-preview .dz-details .dz-filename:not(:hover) {\n          overflow: hidden;\n          text-overflow: ellipsis; }\n          .dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {\n            border: 1px solid transparent; }\n      .dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {\n        background-color: rgba(255, 255, 255, 0.4);\n        padding: 0 0.4em;\n        border-radius: 3px; }\n    .dropzone .dz-preview:hover .dz-image img {\n      -webkit-transform: scale(1.05, 1.05);\n      -moz-transform: scale(1.05, 1.05);\n      -ms-transform: scale(1.05, 1.05);\n      -o-transform: scale(1.05, 1.05);\n      transform: scale(1.05, 1.05);\n      -webkit-filter: blur(8px);\n      filter: blur(8px); }\n    .dropzone .dz-preview .dz-image {\n      border-radius: 20px;\n      overflow: hidden;\n      width: 120px;\n      height: 120px;\n      position: relative;\n      display: block;\n      z-index: 10; }\n      .dropzone .dz-preview .dz-image img {\n        display: block; }\n    .dropzone .dz-preview.dz-success .dz-success-mark {\n      -webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -moz-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -ms-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -o-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);\n      animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1); }\n    .dropzone .dz-preview.dz-error .dz-error-mark {\n      opacity: 1;\n      -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -moz-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -ms-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      -o-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);\n      animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1); }\n    .dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark {\n      pointer-events: none;\n      opacity: 0;\n      z-index: 500;\n      position: absolute;\n      display: block;\n      top: 50%;\n      left: 50%;\n      margin-left: -27px;\n      margin-top: -27px; }\n      .dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {\n        display: block;\n        width: 54px;\n        height: 54px; }\n    .dropzone .dz-preview.dz-processing .dz-progress {\n      opacity: 1;\n      -webkit-transition: all 0.2s linear;\n      -moz-transition: all 0.2s linear;\n      -ms-transition: all 0.2s linear;\n      -o-transition: all 0.2s linear;\n      transition: all 0.2s linear; }\n    .dropzone .dz-preview.dz-complete .dz-progress {\n      opacity: 0;\n      -webkit-transition: opacity 0.4s ease-in;\n      -moz-transition: opacity 0.4s ease-in;\n      -ms-transition: opacity 0.4s ease-in;\n      -o-transition: opacity 0.4s ease-in;\n      transition: opacity 0.4s ease-in; }\n    .dropzone .dz-preview:not(.dz-processing) .dz-progress {\n      -webkit-animation: pulse 6s ease infinite;\n      -moz-animation: pulse 6s ease infinite;\n      -ms-animation: pulse 6s ease infinite;\n      -o-animation: pulse 6s ease infinite;\n      animation: pulse 6s ease infinite; }\n    .dropzone .dz-preview .dz-progress {\n      opacity: 1;\n      z-index: 1000;\n      pointer-events: none;\n      position: absolute;\n      height: 16px;\n      left: 50%;\n      top: 50%;\n      margin-top: -8px;\n      width: 80px;\n      margin-left: -40px;\n      background: rgba(255, 255, 255, 0.9);\n      -webkit-transform: scale(1);\n      border-radius: 8px;\n      overflow: hidden; }\n      .dropzone .dz-preview .dz-progress .dz-upload {\n        background: #333;\n        background: linear-gradient(to bottom, #666, #444);\n        position: absolute;\n        top: 0;\n        left: 0;\n        bottom: 0;\n        width: 0;\n        -webkit-transition: width 300ms ease-in-out;\n        -moz-transition: width 300ms ease-in-out;\n        -ms-transition: width 300ms ease-in-out;\n        -o-transition: width 300ms ease-in-out;\n        transition: width 300ms ease-in-out; }\n    .dropzone .dz-preview.dz-error .dz-error-message {\n      display: block; }\n    .dropzone .dz-preview.dz-error:hover .dz-error-message {\n      opacity: 1;\n      pointer-events: auto; }\n    .dropzone .dz-preview .dz-error-message {\n      pointer-events: none;\n      z-index: 1000;\n      position: absolute;\n      display: block;\n      display: none;\n      opacity: 0;\n      -webkit-transition: opacity 0.3s ease;\n      -moz-transition: opacity 0.3s ease;\n      -ms-transition: opacity 0.3s ease;\n      -o-transition: opacity 0.3s ease;\n      transition: opacity 0.3s ease;\n      border-radius: 8px;\n      font-size: 13px;\n      top: 130px;\n      left: -10px;\n      width: 140px;\n      background: #be2626;\n      background: linear-gradient(to bottom, #be2626, #a92222);\n      padding: 0.5em 1.2em;\n      color: white; }\n      .dropzone .dz-preview .dz-error-message:after {\n        content: '';\n        position: absolute;\n        top: -6px;\n        left: 64px;\n        width: 0;\n        height: 0;\n        border-left: 6px solid transparent;\n        border-right: 6px solid transparent;\n        border-bottom: 6px solid #be2626; }\n.vue-dropzone{border:2px solid #e5e5e5;font-family:Arial,sans-serif;letter-spacing:.2px;color:#777;transition:.2s linear}.vue-dropzone:hover{background-color:#f6f6f6}.vue-dropzone>i{color:#ccc}.vue-dropzone>.dz-preview .dz-image{border-radius:0;width:100%;height:100%}.vue-dropzone>.dz-preview .dz-image img:not([src]){width:200px;height:200px}.vue-dropzone>.dz-preview .dz-image:hover img{transform:none;-webkit-filter:none}.vue-dropzone>.dz-preview .dz-details{bottom:0;top:0;color:#fff;background-color:rgba(33,150,243,.8);transition:opacity .2s linear;text-align:left}.vue-dropzone>.dz-preview .dz-details .dz-filename{overflow:hidden}.vue-dropzone>.dz-preview .dz-details .dz-filename span,.vue-dropzone>.dz-preview .dz-details .dz-size span{background-color:transparent}.vue-dropzone>.dz-preview .dz-details .dz-filename:not(:hover) span{border:none}.vue-dropzone>.dz-preview .dz-details .dz-filename:hover span{background-color:transparent;border:none}.vue-dropzone>.dz-preview .dz-progress .dz-upload{background:#ccc}.vue-dropzone>.dz-preview .dz-remove{position:absolute;z-index:30;color:#fff;margin-left:15px;padding:10px;top:inherit;bottom:15px;border:2px #fff solid;text-decoration:none;text-transform:uppercase;font-size:.8rem;font-weight:800;letter-spacing:1.1px;opacity:0}.vue-dropzone>.dz-preview:hover .dz-remove{opacity:1}.vue-dropzone>.dz-preview .dz-error-mark,.vue-dropzone>.dz-preview .dz-success-mark{margin-left:auto;margin-top:auto;width:100%;top:35%;left:0}.vue-dropzone>.dz-preview .dz-error-mark svg,.vue-dropzone>.dz-preview .dz-success-mark svg{margin-left:auto;margin-right:auto}.vue-dropzone>.dz-preview .dz-error-message{margin-left:auto;margin-right:auto;left:0;width:100%;text-align:center}.vue-dropzone>.dz-preview .dz-error-message:after{display:none}", ""]);
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -18439,7 +18502,7 @@ return jQuery;
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -35605,10 +35668,10 @@ return jQuery;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(77)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(75)(module)))
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -35801,7 +35864,7 @@ return jQuery;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(13)))
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports) {
 
 /*
@@ -36053,7 +36116,7 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -36109,7 +36172,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(54);
+__webpack_require__(53);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -36123,7 +36186,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38321,18 +38384,18 @@ VueI18n.version = '8.22.3';
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(71)
+__webpack_require__(70)
 
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(37),
   /* template */
-  __webpack_require__(65),
+  __webpack_require__(64),
   /* scopeId */
   null,
   /* cssModules */
@@ -38359,14 +38422,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(38),
   /* template */
-  __webpack_require__(66),
+  __webpack_require__(65),
   /* scopeId */
   null,
   /* cssModules */
@@ -38393,18 +38456,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(72)
+__webpack_require__(71)
 
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(39),
   /* template */
-  __webpack_require__(67),
+  __webpack_require__(66),
   /* scopeId */
   "data-v-53ac8773",
   /* cssModules */
@@ -38431,18 +38494,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(70)
+__webpack_require__(69)
 
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(40),
   /* template */
-  __webpack_require__(64),
+  __webpack_require__(63),
   /* scopeId */
   "data-v-1d3946d6",
   /* cssModules */
@@ -38469,14 +38532,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(41),
   /* template */
-  __webpack_require__(68),
+  __webpack_require__(67),
   /* scopeId */
   null,
   /* cssModules */
@@ -38503,18 +38566,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(74)
+__webpack_require__(72)
 
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(42),
   /* template */
-  __webpack_require__(69),
+  __webpack_require__(68),
   /* scopeId */
   "data-v-acd81a90",
   /* cssModules */
@@ -38541,7 +38604,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38680,7 +38743,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return _vm.startQuiz()
       }
     }
-  })])]) : _c('div', [_c('div', {
+  })])]) : (_vm.examItemMode) ? _c('div', [_c('div', {
     staticClass: "uk-placeholder uk-padding-small"
   }, [_c('div', {
     staticClass: "uk-grid-small",
@@ -38695,8 +38758,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.quizItem.title)
     }
   })]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-1-4"
-  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto"
+  }, [_c('countdown', {
+    attrs: {
+      "time": _vm.quizItemAnswerTime * 1000
+    },
+    on: {
+      "progress": _vm.handleCountdownProgress
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(props) {
+        return [_c('div', {
+          staticClass: "uk-text-center",
+          staticStyle: {
+            "background-color": "#F4F5F7",
+            "border-radius": "5px",
+            "padding": "5px 10px"
+          }
+        }, [_c('h2', {
+          staticClass: "uk-margin-remove uk-text-bold uk-text-danger"
+        }, [_vm._v(_vm._s(props.seconds))]), _vm._v(" "), _c('p', {
+          staticClass: "uk-margin-remove uk-text-muted"
+        }, [_c('small', [_vm._v("Seconds")])])])]
+      }
+    }])
+  })], 1), _vm._v(" "), _c('div', {
     staticClass: "uk-width-extend uk-flex uk-flex-center"
   }, [_c('div', {
     staticClass: "uk-width-3-4@m uk-width-1-1@s"
@@ -38821,7 +38908,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "value": _vm.timeLineProgress
     }
-  })])])])])])])])])])])])
+  })])])])])])]) : _vm._e()])])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -38832,7 +38919,7 @@ if (false) {
 }
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38957,7 +39044,7 @@ if (false) {
 }
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38976,7 +39063,7 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39039,7 +39126,7 @@ if (false) {
 }
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39058,7 +39145,7 @@ if (false) {
 }
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39715,7 +39802,7 @@ if (false) {
 }
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -39741,7 +39828,7 @@ if(false) {
 }
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -39767,7 +39854,7 @@ if(false) {
 }
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -39793,14 +39880,13 @@ if(false) {
 }
 
 /***/ }),
-/* 73 */,
-/* 74 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(50);
+var content = __webpack_require__(49);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -39820,7 +39906,7 @@ if(false) {
 }
 
 /***/ }),
-/* 75 */
+/* 73 */
 /***/ (function(module, exports) {
 
 /**
@@ -39853,13 +39939,13 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 76 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.6.11
- * (c) 2014-2019 Evan You
+ * Vue.js v2.6.12
+ * (c) 2014-2020 Evan You
  * Released under the MIT License.
  */
 
@@ -45298,7 +45384,7 @@ Object.defineProperty(Vue, 'FunctionalRenderContext', {
   value: FunctionalRenderContext
 });
 
-Vue.version = '2.6.11';
+Vue.version = '2.6.12';
 
 /*  */
 
@@ -47504,7 +47590,7 @@ function updateDOMProps (oldVnode, vnode) {
       // skip the update if old and new VDOM state is the same.
       // `value` is handled separately because the DOM value may be temporarily
       // out of sync with VDOM state due to focus, composition and modifiers.
-      // This  #4521 by skipping the unnecesarry `checked` update.
+      // This  #4521 by skipping the unnecessary `checked` update.
       cur !== oldProps[key]
     ) {
       // some property updates can throw
@@ -49749,7 +49835,7 @@ function parse (
       }
     },
     comment: function comment (text, start, end) {
-      // adding anyting as a sibling to the root node is forbidden
+      // adding anything as a sibling to the root node is forbidden
       // comments should still be allowed, but ignored
       if (currentParent) {
         var child = {
@@ -51817,10 +51903,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(56).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(55).setImmediate))
 
 /***/ }),
-/* 77 */
+/* 75 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -51848,11 +51934,445 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 78 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
 module.exports = __webpack_require__(18);
+
+
+/***/ }),
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+ * vue-countdown v1.1.5
+ * https://fengyuanchen.github.io/vue-countdown
+ *
+ * Copyright 2018-present Chen Fengyuan
+ * Released under the MIT license
+ *
+ * Date: 2020-02-25T01:19:32.769Z
+ */
+
+(function (global, factory) {
+   true ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global.VueCountdown = factory());
+}(this, (function () { 'use strict';
+
+  var MILLISECONDS_SECOND = 1000;
+  var MILLISECONDS_MINUTE = 60 * MILLISECONDS_SECOND;
+  var MILLISECONDS_HOUR = 60 * MILLISECONDS_MINUTE;
+  var MILLISECONDS_DAY = 24 * MILLISECONDS_HOUR;
+  var EVENT_VISIBILITY_CHANGE = 'visibilitychange';
+  var index = {
+    name: 'countdown',
+    data: function data() {
+      return {
+        /**
+         * It is counting down.
+         * @type {boolean}
+         */
+        counting: false,
+
+        /**
+         * The absolute end time.
+         * @type {number}
+         */
+        endTime: 0,
+
+        /**
+         * The remaining milliseconds.
+         * @type {number}
+         */
+        totalMilliseconds: 0
+      };
+    },
+    props: {
+      /**
+       * Starts the countdown automatically when initialized.
+       */
+      autoStart: {
+        type: Boolean,
+        default: true
+      },
+
+      /**
+       * Emits the countdown events.
+       */
+      emitEvents: {
+        type: Boolean,
+        default: true
+      },
+
+      /**
+       * The interval time (in milliseconds) of the countdown progress.
+       */
+      interval: {
+        type: Number,
+        default: 1000,
+        validator: function validator(value) {
+          return value >= 0;
+        }
+      },
+
+      /**
+       * Generate the current time of a specific time zone.
+       */
+      now: {
+        type: Function,
+        default: function _default() {
+          return Date.now();
+        }
+      },
+
+      /**
+       * The tag name of the component's root element.
+       */
+      tag: {
+        type: String,
+        default: 'span'
+      },
+
+      /**
+       * The time (in milliseconds) to count down from.
+       */
+      time: {
+        type: Number,
+        default: 0,
+        validator: function validator(value) {
+          return value >= 0;
+        }
+      },
+
+      /**
+       * Transforms the output props before render.
+       */
+      transform: {
+        type: Function,
+        default: function _default(props) {
+          return props;
+        }
+      }
+    },
+    computed: {
+      /**
+       * Remaining days.
+       * @returns {number} The computed value.
+       */
+      days: function days() {
+        return Math.floor(this.totalMilliseconds / MILLISECONDS_DAY);
+      },
+
+      /**
+       * Remaining hours.
+       * @returns {number} The computed value.
+       */
+      hours: function hours() {
+        return Math.floor(this.totalMilliseconds % MILLISECONDS_DAY / MILLISECONDS_HOUR);
+      },
+
+      /**
+       * Remaining minutes.
+       * @returns {number} The computed value.
+       */
+      minutes: function minutes() {
+        return Math.floor(this.totalMilliseconds % MILLISECONDS_HOUR / MILLISECONDS_MINUTE);
+      },
+
+      /**
+       * Remaining seconds.
+       * @returns {number} The computed value.
+       */
+      seconds: function seconds() {
+        return Math.floor(this.totalMilliseconds % MILLISECONDS_MINUTE / MILLISECONDS_SECOND);
+      },
+
+      /**
+       * Remaining milliseconds.
+       * @returns {number} The computed value.
+       */
+      milliseconds: function milliseconds() {
+        return Math.floor(this.totalMilliseconds % MILLISECONDS_SECOND);
+      },
+
+      /**
+       * Total remaining days.
+       * @returns {number} The computed value.
+       */
+      totalDays: function totalDays() {
+        return this.days;
+      },
+
+      /**
+       * Total remaining hours.
+       * @returns {number} The computed value.
+       */
+      totalHours: function totalHours() {
+        return Math.floor(this.totalMilliseconds / MILLISECONDS_HOUR);
+      },
+
+      /**
+       * Total remaining minutes.
+       * @returns {number} The computed value.
+       */
+      totalMinutes: function totalMinutes() {
+        return Math.floor(this.totalMilliseconds / MILLISECONDS_MINUTE);
+      },
+
+      /**
+       * Total remaining seconds.
+       * @returns {number} The computed value.
+       */
+      totalSeconds: function totalSeconds() {
+        return Math.floor(this.totalMilliseconds / MILLISECONDS_SECOND);
+      }
+    },
+    render: function render(createElement) {
+      return createElement(this.tag, this.$scopedSlots.default ? [this.$scopedSlots.default(this.transform({
+        days: this.days,
+        hours: this.hours,
+        minutes: this.minutes,
+        seconds: this.seconds,
+        milliseconds: this.milliseconds,
+        totalDays: this.totalDays,
+        totalHours: this.totalHours,
+        totalMinutes: this.totalMinutes,
+        totalSeconds: this.totalSeconds,
+        totalMilliseconds: this.totalMilliseconds
+      }))] : this.$slots.default);
+    },
+    watch: {
+      $props: {
+        deep: true,
+        immediate: true,
+
+        /**
+         * Update the countdown when props changed.
+         */
+        handler: function handler() {
+          this.totalMilliseconds = this.time;
+          this.endTime = this.now() + this.time;
+
+          if (this.autoStart) {
+            this.start();
+          }
+        }
+      }
+    },
+    methods: {
+      /**
+       * Starts to countdown.
+       * @public
+       * @emits Countdown#start
+       */
+      start: function start() {
+        if (this.counting) {
+          return;
+        }
+
+        this.counting = true;
+
+        if (this.emitEvents) {
+          /**
+           * Countdown start event.
+           * @event Countdown#start
+           */
+          this.$emit('start');
+        }
+
+        if (document.visibilityState === 'visible') {
+          this.continue();
+        }
+      },
+
+      /**
+       * Continues the countdown.
+       * @private
+       */
+      continue: function _continue() {
+        var _this = this;
+
+        if (!this.counting) {
+          return;
+        }
+
+        var delay = Math.min(this.totalMilliseconds, this.interval);
+
+        if (delay > 0) {
+          if (window.requestAnimationFrame) {
+            var init;
+            var prev;
+
+            var step = function step(now) {
+              if (!init) {
+                init = now;
+              }
+
+              if (!prev) {
+                prev = now;
+              }
+
+              var range = now - init;
+
+              if (range >= delay // Avoid losing time about one second per minute (now - prev ≈ 16ms) (#43)
+              || range + (now - prev) / 2 >= delay) {
+                _this.progress();
+              } else {
+                _this.requestId = requestAnimationFrame(step);
+              }
+
+              prev = now;
+            };
+
+            this.requestId = requestAnimationFrame(step);
+          } else {
+            this.timeoutId = setTimeout(function () {
+              _this.progress();
+            }, delay);
+          }
+        } else {
+          this.end();
+        }
+      },
+
+      /**
+       * Pauses the countdown.
+       * @private
+       */
+      pause: function pause() {
+        if (window.requestAnimationFrame) {
+          cancelAnimationFrame(this.requestId);
+        } else {
+          clearTimeout(this.timeoutId);
+        }
+      },
+
+      /**
+       * Progresses to countdown.
+       * @private
+       * @emits Countdown#progress
+       */
+      progress: function progress() {
+        if (!this.counting) {
+          return;
+        }
+
+        this.totalMilliseconds -= this.interval;
+
+        if (this.emitEvents && this.totalMilliseconds > 0) {
+          /**
+           * Countdown progress event.
+           * @event Countdown#progress
+           */
+          this.$emit('progress', {
+            days: this.days,
+            hours: this.hours,
+            minutes: this.minutes,
+            seconds: this.seconds,
+            milliseconds: this.milliseconds,
+            totalDays: this.totalDays,
+            totalHours: this.totalHours,
+            totalMinutes: this.totalMinutes,
+            totalSeconds: this.totalSeconds,
+            totalMilliseconds: this.totalMilliseconds
+          });
+        }
+
+        this.continue();
+      },
+
+      /**
+       * Aborts the countdown.
+       * @public
+       * @emits Countdown#abort
+       */
+      abort: function abort() {
+        if (!this.counting) {
+          return;
+        }
+
+        this.pause();
+        this.counting = false;
+
+        if (this.emitEvents) {
+          /**
+           * Countdown abort event.
+           * @event Countdown#abort
+           */
+          this.$emit('abort');
+        }
+      },
+
+      /**
+       * Ends the countdown.
+       * @public
+       * @emits Countdown#end
+       */
+      end: function end() {
+        if (!this.counting) {
+          return;
+        }
+
+        this.pause();
+        this.totalMilliseconds = 0;
+        this.counting = false;
+
+        if (this.emitEvents) {
+          /**
+           * Countdown end event.
+           * @event Countdown#end
+           */
+          this.$emit('end');
+        }
+      },
+
+      /**
+       * Updates the count.
+       * @private
+       */
+      update: function update() {
+        if (this.counting) {
+          this.totalMilliseconds = Math.max(0, this.endTime - this.now());
+        }
+      },
+
+      /**
+       * visibility change event handler.
+       * @private
+       */
+      handleVisibilityChange: function handleVisibilityChange() {
+        switch (document.visibilityState) {
+          case 'visible':
+            this.update();
+            this.continue();
+            break;
+
+          case 'hidden':
+            this.pause();
+            break;
+        }
+      }
+    },
+    mounted: function mounted() {
+      document.addEventListener(EVENT_VISIBILITY_CHANGE, this.handleVisibilityChange);
+    },
+    beforeDestroy: function beforeDestroy() {
+      document.removeEventListener(EVENT_VISIBILITY_CHANGE, this.handleVisibilityChange);
+      this.pause();
+    }
+  };
+
+  return index;
+
+})));
 
 
 /***/ })

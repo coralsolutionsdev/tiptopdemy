@@ -52,11 +52,22 @@
                 <button @click.prevent="startQuiz()" class="uk-button uk-button-primary" v-html="$t('main.Next')"></button>
               </div>
             </div>
-            <div v-else>
+            <div v-else-if="examItemMode">
               <div class="uk-placeholder uk-padding-small">
                 <div class="uk-grid-small" uk-grid>
                   <div class="uk-width-expand"><h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1></div>
-                  <div class="uk-width-1-4">
+                  <div class="uk-width-auto">
+                    <!--timer-->
+                    <countdown @progress="handleCountdownProgress" :time="quizItemAnswerTime * 1000">
+                      <!--        <template slot-scope="props">Time Remaining：{{ props.days }} days, {{ props.hours }} hours, {{ props.minutes }} minutes, {{ props.seconds }} seconds.</template>-->
+                      <template slot-scope="props">
+                        <div class="uk-text-center" style="background-color: #F4F5F7; border-radius: 5px; padding: 5px 10px">
+                          <h2 class="uk-margin-remove uk-text-bold uk-text-danger">{{ props.seconds }}</h2>
+                          <p class="uk-margin-remove uk-text-muted"><small >Seconds</small></p>
+                        </div>
+
+                      </template>
+                    </countdown>
                   </div>
                   <div class="uk-width-extend uk-flex uk-flex-center">
                     <div class="uk-width-3-4@m uk-width-1-1@s">
@@ -123,6 +134,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import VueCountdown from '@chenfengyuan/vue-countdown';
+
+Vue.component(VueCountdown.name, VueCountdown);
 export default {
   name: "Memorize",
   props: [
@@ -136,7 +151,8 @@ export default {
       items: [],
       itemCount:0,
       // memorize
-      previewItemMode:true,
+      previewItemMode:false,
+      examItemMode:false,
       previewItem:null,
       previewItemImageUrl:null,
       previewItemAudioUrl:null,
@@ -148,6 +164,8 @@ export default {
       quizItemAnsweredId:null,
       quizItemAnswerType:0,
       timeLineProgress: 0,
+      quizItemAnswerTotalTime: null,
+      quizItemAnswerTime: null,
     }
   },
   created() {
@@ -201,10 +219,14 @@ export default {
         this.previewItemAudioUrl = selectedAudio;
         // build quiz
         var quizItemKey = itemKey;
+        this.previewItemMode = true;
+        this.examItemMode = false;
         this.quizItemAnsweredId = null;
         this.timeLineProgress = null;
         this.quizItemAnswers = [];
         this.timeLineProgress = 0;
+        this.quizItemAnswerTime = null;
+        this.quizItemAnswerTotalTime = null;
         this.quizItem = this.items[quizItemKey];
         var myArray = this.quizItem.type_array;
         this.quizItemAnswerType = myArray[Math.floor(Math.random()*myArray.length)];
@@ -234,14 +256,29 @@ export default {
     },
     submitAnswer(quizItemID, answerId){
       this.quizItemAnsweredId = answerId;
+      this.quizItemAnswerTime =  0;
+      this.quizItemAnswerTotalTime =  0;
       this.timeLineProgress = 100;
       setTimeout(()=>{
-            this.goNext();
-          },1000
+            this.openNextPreview();
+          },2000
       );
     },
     startQuiz(){
-      this.previewItemMode = !this.previewItemMode;
+      this.quizItemAnswerTime =  this.quizItem.properties.time_to_answer;
+      this.quizItemAnswerTotalTime =  this.quizItem.properties.time_to_answer;
+      this.previewItemMode = false;
+      this.examItemMode = true;
+    },
+    openNextPreview(){
+      if (!this.previewItemMode){
+        this.currentItemKey++;
+        if (this.currentItemKey < this.itemCount){
+          this.buildMemorizeItem(this.currentItemKey)
+        }else{
+          this.quizCompleted = true;
+        }
+      }
     },
     goNext(){
       if(!this.previewItemMode){
@@ -254,6 +291,31 @@ export default {
       }
       this.previewItemMode = !this.previewItemMode;
     },
+    handleCountdownProgress(data) {
+      // console.log(data.days);
+      // console.log(data.hours);
+      // console.log(data.minutes);
+      // console.log(data.seconds);
+      // console.log(data.milliseconds);
+      // console.log(data.totalDays);
+      // console.log(data.totalHours);
+      // console.log(data.totalMinutes);
+      // console.log(data.totalSeconds);
+      // console.log(data.totalMilliseconds);
+      if (this.quizItemAnsweredId == null){
+        this.timeLineProgress = ((this.quizItemAnswerTotalTime - data.totalSeconds)/this.quizItemAnswerTotalTime) * 100;
+        if (data.totalSeconds == 1){
+          setTimeout(()=>{
+                this.timeLineProgress = 90;
+                this.submitAnswer(this.quizItem.id, 0);
+              },1000
+          );
+
+        }
+
+      }
+    },
+
 
   },
 }

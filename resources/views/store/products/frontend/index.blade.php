@@ -47,7 +47,7 @@
 												</a>
 												<div class="" style="padding:20px 15px">
 													<a href="{{route('store.product.show', $product->slug)}}">
-														<div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -40px;" uk-grid>
+														<div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -50px;" uk-grid>
 															<div class="uk-width-expand">
 																<input type="hidden" class="product-id-input" value="{{$product->id}}">
 																<input type="hidden" class="product-name-input" value="{{$product->name}}">
@@ -56,7 +56,7 @@
 																<input type="hidden" class="product-sku-input" value="{{$product->sku}}">
 															</div>
 															<div class="uk-width-auto">
-																<div class="uk-card uk-card-default uk-card-body" style="padding:3px 10px; color: black; font-weight: 700; font-size: 18px">
+																<div class="uk-card uk-card-body bg-white" style="padding:3px 10px; color: black; font-weight: 700; font-size: 24px; border-radius: 10px 10px 0 0">
 																	<span class="uk-text-primary">$</span> <span class="product-price">{{$product->price}}</span>
 																</div>
 															</div>

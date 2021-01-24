@@ -13,7 +13,7 @@
     </div>
     <div>
       <div id="modal-sections" class="" uk-modal="bg-close: false">
-        <div class="uk-modal-dialog uk-width-3-5">
+        <div class="uk-modal-dialog uk-width-3-5@m uk-width-1-1@s">
           <div class="uk-modal-body">
             <div v-if="quizCompleted" class="uk-padding uk-text-center">
               <span class="uk-icon-button" uk-icon="check" style="background-color: #DEF7EC; color: #32d296"></span>
@@ -55,8 +55,8 @@
             <div v-else-if="examItemMode">
               <div class="uk-placeholder uk-padding-small">
                 <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-expand"><h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1></div>
-                  <div class="uk-width-auto">
+                  <div class="uk-width-expand@m uk-width-1-1@s"><h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1></div>
+                  <div class="uk-width-auto@m uk-width-1-1@s">
                     <!--timer-->
                     <countdown ref="countdown" @progress="handleCountdownProgress" :time="quizItemAnswerTime * 1000">
                       <!--        <template slot-scope="props">Time Remaining：{{ props.days }} days, {{ props.hours }} hours, {{ props.minutes }} minutes, {{ props.seconds }} seconds.</template>-->
@@ -301,7 +301,6 @@ export default {
         }else{
 
           if (this.wrongAnsweredIdArray.length > 0){
-            console.log('cannot pass');
             var myArray = this.wrongAnsweredIdArray;
             var selectedIdToReQuiz = myArray[Math.floor(Math.random()*myArray.length)];
             var reQuizKey = null;

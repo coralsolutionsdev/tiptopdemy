@@ -3020,7 +3020,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         } else {
 
           if (this.wrongAnsweredIdArray.length > 0) {
-            console.log('cannot pass');
             var myArray = this.wrongAnsweredIdArray;
             var selectedIdToReQuiz = myArray[Math.floor(Math.random() * myArray.length)];
             var reQuizKey = null;
@@ -38692,7 +38691,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uk-modal": "bg-close: false"
     }
   }, [_c('div', {
-    staticClass: "uk-modal-dialog uk-width-3-5"
+    staticClass: "uk-modal-dialog uk-width-3-5@m uk-width-1-1@s"
   }, [_c('div', {
     staticClass: "uk-modal-body"
   }, [(_vm.quizCompleted) ? _c('div', {
@@ -38798,14 +38797,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uk-grid": ""
     }
   }, [_c('div', {
-    staticClass: "uk-width-expand"
+    staticClass: "uk-width-expand@m uk-width-1-1@s"
   }, [_c('h1', {
     staticClass: "uk-text-primary uk-text-bold",
     domProps: {
       "innerHTML": _vm._s(_vm.quizItem.title)
     }
   })]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-auto"
+    staticClass: "uk-width-auto@m uk-width-1-1@s"
   }, [_c('countdown', {
     ref: "countdown",
     attrs: {

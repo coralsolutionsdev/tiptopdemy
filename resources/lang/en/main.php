@@ -145,6 +145,7 @@
         'Close' => 'Close',
         'Difficulty' => 'Difficulty',
         'Items num.' => 'Items num.',
+        'Items num' => 'Items num.',
         'Back' => 'Back',
         'version' => 'Version',
         'Oops' => 'Oops',

@@ -190,6 +190,8 @@ export default {
         if(this.itemCount > 0){
           this.buildMemorizeItem(this.currentItemKey);
 
+        }else{
+          this.$emit('updateViewContent', true);
         }
         $('.screen-spinner').fadeOut();
       });

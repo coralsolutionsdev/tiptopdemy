@@ -2903,6 +2903,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         _this.itemCount = _this.items.length;
         if (_this.itemCount > 0) {
           _this.buildMemorizeItem(_this.currentItemKey);
+        } else {
+          _this.$emit('updateViewContent', true);
         }
         $('.screen-spinner').fadeOut();
       });
@@ -3088,6 +3090,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3096,15 +3157,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   // props: [
   //   'lesson_slug'
   // ],
-  props: ['postTitle', 'lessonSlug', 'content'],
+  props: {
+    lessonSlug: { type: String }
+  },
   data: function data() {
     return {
       name: 'mehmet',
-      viewContentStatus: false
+      viewContentStatus: false,
+      item: null,
+      content: null,
+      description: null,
+      resources: null,
+      forms: null
     };
+  },
+  created: function created() {
+    this.fetchItem();
   },
 
   methods: {
+    fetchItem: function fetchItem() {
+      var _this = this;
+
+      axios.get('/api/product/lesson/' + this.lessonSlug + '/items', {
+        params: {
+          // id: 12345
+        }
+      }).then(function (res) {
+        _this.item = res.data;
+        _this.content = _this.item.content;
+        _this.description = _this.item.description;
+        _this.resources = _this.item.resources;
+        _this.forms = _this.item.forms;
+        console.log(_this.item);
+      });
+    },
     updateViewContentStatus: function updateViewContentStatus(status) {
       this.viewContentStatus = status;
     }
@@ -4003,6 +4090,7 @@ if (token) {
             "Close": "إغلاق",
             "Difficulty": "الصعوبة",
             "Items num.": "عدد العناصر",
+            "Items num": "عدد العناصر",
             "Back": "عودة",
             "version": "الإصدار",
             "Oops": "عُذراً",
@@ -4630,6 +4718,7 @@ if (token) {
             "Close": "Close",
             "Difficulty": "Difficulty",
             "Items num.": "Items num.",
+            "Items num": "Items num.",
             "Back": "Back",
             "version": "Version",
             "Oops": "Oops",
@@ -39194,7 +39283,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return _vm.updateViewContentStatus($event)
       }
     }
-  })], 1), _vm._v(" "), (_vm.viewContentStatus) ? _c('div', [_c('div', {
+  })], 1), _vm._v(" "), (_vm.description) ? _c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small"
+  }, [_c('h5', {
+    staticClass: "text-highlighted uk-text-bold",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Lesson description'))
+    }
+  }), _vm._v(" "), _c('div', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.description)
+    }
+  })])]) : _vm._e(), _vm._v(" "), (_vm.viewContentStatus) ? _c('div', [_c('div', {
     staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove"
   }, [_c('ul', {
     staticClass: "pb-content-list-items uk-grid-collapse uk-child-width-1-1",
@@ -39205,7 +39305,125 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "innerHTML": _vm._s(_vm.content)
     }
-  })])]) : _vm._e()])])
+  })])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.resources), function(resource) {
+    return (_vm.viewContentStatus) ? _c('div', [_c('div', {
+      staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove",
+      staticStyle: {
+        "overflow": "hidden"
+      }
+    }, [(resource.type == 10) ? _c('div', [_c('video', {
+      attrs: {
+        "src": resource.url,
+        "playsinline": "",
+        "controls": "",
+        "disablepictureinpicture": "",
+        "controlsList": "nodownload"
+      }
+    })]) : (resource.type == 20) ? _c('div', [_c('iframe', {
+      staticClass: "uk-responsive-width",
+      attrs: {
+        "src": resource.url,
+        "width": "1920",
+        "height": "1080",
+        "controls": "",
+        "controlsList": "nodownload",
+        "frameborder": "0",
+        "uk-responsive": ""
+      }
+    })]) : _vm._e()])]) : _vm._e()
+  }), _vm._v(" "), (_vm.forms && _vm.forms.length > 0) ? _c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small"
+  }, [_c('h5', {
+    staticClass: "text-highlighted uk-text-bold",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Lesson quizzes'))
+    }
+  }), _vm._v(" "), _c('table', {
+    staticClass: "uk-table uk-table-divider"
+  }, [_c('thead', [_c('tr', [_c('th', {
+    staticClass: "uk-text-center",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Quiz name'))
+    }
+  }), _vm._v(" "), _c('th', {
+    staticClass: "uk-text-center",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Items num'))
+    }
+  }), _vm._v(" "), _c('th', {
+    staticClass: "uk-text-center",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Quiz period'))
+    }
+  }), _vm._v(" "), _c('th', {
+    staticClass: "uk-text-center",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Availability'))
+    }
+  }), _vm._v(" "), (_vm.viewContentStatus) ? _c('th', {
+    staticClass: "uk-text-center",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Results'))
+    }
+  }) : _vm._e()])]), _vm._v(" "), _c('tbody', _vm._l((_vm.forms), function(form) {
+    return _c('tr', [_c('td', [_c('p', {
+      staticClass: "uk-margin-remove text-highlighted",
+      domProps: {
+        "innerHTML": _vm._s(form.title)
+      }
+    }), _vm._v(" "), _c('p', {
+      staticClass: "uk-margin-remove",
+      domProps: {
+        "innerHTML": _vm._s(form.description)
+      }
+    })]), _vm._v(" "), _c('td', {
+      staticClass: "uk-text-center",
+      domProps: {
+        "innerHTML": _vm._s(form.items_count)
+      }
+    }), _vm._v(" "), _c('td', {
+      staticClass: "uk-text-center"
+    }, [(form.has_time_limit == 1) ? _c('span', {
+      staticClass: "uk-text-warning"
+    }, [_vm._v(_vm._s(form.has_time_limit) + " " + _vm._s(form.time_limit) + " ")]) : _c('span', {
+      staticClass: "uk-text-primary",
+      domProps: {
+        "innerHTML": _vm._s(_vm.$t('main.Unlimited time'))
+      }
+    })]), _vm._v(" "), _c('td', {
+      staticClass: "uk-text-center"
+    }, [(form.evaluation_status == 1) ? _c('div', [_c('p', {
+      staticClass: "uk-margin-remove"
+    }, [_c('i', {
+      staticClass: "far fa-check-circle uk-text-success"
+    }), _vm._v(" "), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(form.evaluation_mark)
+      }
+    })]), _vm._v(" "), _c('a', {
+      attrs: {
+        "href": form.response_link
+      },
+      domProps: {
+        "innerHTML": _vm._s(_vm.$t('main.View results'))
+      }
+    })]) : _c('div', [_c('p', {
+      staticClass: "uk-text-muted",
+      domProps: {
+        "innerHTML": _vm._s(_vm.$t('main.No results'))
+      }
+    })])]), _vm._v(" "), (_vm.viewContentStatus) ? _c('td', {
+      staticClass: "uk-text-center"
+    }, [_c('a', {
+      staticClass: "uk-button uk-button-primary",
+      attrs: {
+        "href": form.form_url
+      },
+      domProps: {
+        "innerHTML": _vm._s(_vm.$t('main.Take the exam'))
+      }
+    })]) : _vm._e()])
+  }), 0)])])]) : _vm._e()], 2)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

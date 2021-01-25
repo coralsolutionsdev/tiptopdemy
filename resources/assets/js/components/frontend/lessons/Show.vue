@@ -89,7 +89,7 @@ name: "Show",
   data(){
     return{
       name: 'mehmet',
-      viewContentStatus: true,
+      viewContentStatus: false,
       item: null,
       content: null,
       description: null,

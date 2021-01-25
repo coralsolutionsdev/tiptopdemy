@@ -3165,7 +3165,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       name: 'mehmet',
-      viewContentStatus: true,
+      viewContentStatus: false,
       item: null,
       content: null,
       description: null,

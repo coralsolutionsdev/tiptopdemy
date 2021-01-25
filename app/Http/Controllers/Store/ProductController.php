@@ -199,15 +199,18 @@ class ProductController extends Controller
         // check if product available for user
         $products = $products->filter(function ($product) use($user){
             $result = false;
-            if ($product->status == Product::STATUS_AVAILABLE){
+            if ($user->hasRole('superadministrator') || $user->hasRole('administrator')){
                 $result = true;
-            } elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
-                if ($product->scope_id == $user->scope_id && $product->field_id == $user->field_id && $product->field_option_id == $user->field_option_id && $product->level == $user->level){
+            }else{
+                if ($product->status == Product::STATUS_AVAILABLE){
                     $result = true;
+                } elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
+                    if ($product->scope_id == $user->scope_id && $product->field_id == $user->field_id && $product->field_option_id == $user->field_option_id && $product->level == $user->level){
+                        $result = true;
+                    }
                 }
-            }elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE && ($user->hasRole('superadministrator') || $user->hasRole('administrator'))){
-                $result = true;
             }
+
             return $result;
         });
         if (!empty($search_in_category != 0)){ // 0 is searching in all categories

@@ -199,7 +199,7 @@ class ProductController extends Controller
         // check if product available for user
         $products = $products->filter(function ($product) use($user){
             $result = false;
-            if ($user->hasRole('superadministrator') || $user->hasRole('administrator')){
+            if (!empty($user) && ($user->hasRole('superadministrator') || $user->hasRole('administrator'))){
                 $result = true;
             }else{
                 if ($product->status == Product::STATUS_AVAILABLE){

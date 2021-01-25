@@ -3149,6 +3149,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -3163,7 +3165,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       name: 'mehmet',
-      viewContentStatus: false,
+      viewContentStatus: true,
       item: null,
       content: null,
       description: null,
@@ -38670,13 +38672,17 @@ module.exports = Component.exports
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
+
+/* styles */
+__webpack_require__(85)
+
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(41),
   /* template */
   __webpack_require__(67),
   /* scopeId */
-  null,
+  "data-v-5957d677",
   /* cssModules */
   null
 )
@@ -39338,7 +39344,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "innerHTML": _vm._s(_vm.$t('main.Lesson quizzes'))
     }
-  }), _vm._v(" "), _c('table', {
+  }), _vm._v(" "), _c('div', {
+    staticStyle: {
+      "overflow-y": "hidden",
+      "overflow-x": "scroll"
+    }
+  }, [_c('table', {
     staticClass: "uk-table uk-table-divider"
   }, [_c('thead', [_c('tr', [_c('th', {
     staticClass: "uk-text-center",
@@ -39423,7 +39434,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "innerHTML": _vm._s(_vm.$t('main.Take the exam'))
       }
     })]) : _vm._e()])
-  }), 0)])])]) : _vm._e()], 2)])
+  }), 0)])])])]) : _vm._e()], 2)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -52663,6 +52674,39 @@ module.exports = __webpack_require__(18);
 
 })));
 
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* width */\n[data-v-5957d677]::-webkit-scrollbar {\n  width: 5px;\n  height: 5px;\n}\n\n/* Track */\n[data-v-5957d677]::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n\n/* Handle */\n[data-v-5957d677]::-webkit-scrollbar-thumb {\n  background: #a8a8a8;\n  border-radius: 10px;\n}\n\n/* Handle on hover */\n[data-v-5957d677]::-webkit-scrollbar-thumb:hover {\n  background: #888;\n}\n", ""]);
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(84);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("a671d93c", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-5957d677\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Show.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-5957d677\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Show.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

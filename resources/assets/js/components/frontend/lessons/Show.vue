@@ -27,45 +27,47 @@
         </div>
       </div>
       <div v-if="forms && forms.length > 0">
-        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
+        <div  class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
           <h5 class="text-highlighted uk-text-bold" v-html="$t('main.Lesson quizzes')"></h5>
-          <table class="uk-table uk-table-divider">
-            <thead>
-            <tr>
-              <th class="uk-text-center" v-html="$t('main.Quiz name')"></th>
-              <th class="uk-text-center" v-html="$t('main.Items num')"></th>
-              <th class="uk-text-center" v-html="$t('main.Quiz period')"></th>
-              <th class="uk-text-center" v-html="$t('main.Availability')"></th>
-              <th class="uk-text-center" v-html="$t('main.Results')" v-if="viewContentStatus"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="form in forms">
-              <td>
-                <p class="uk-margin-remove text-highlighted" v-html="form.title"></p>
-                <p class="uk-margin-remove" v-html="form.description"></p>
-              </td>
-              <td class="uk-text-center" v-html="form.items_count"></td>
-              <td class="uk-text-center">
-                <span v-if="form.has_time_limit == 1" class="uk-text-warning">{{form.has_time_limit}} {{form.time_limit}} </span>
-                <span v-else class="uk-text-primary" v-html="$t('main.Unlimited time')"></span>
-              </td>
-              <td class="uk-text-center">
-                <div v-if="form.evaluation_status == 1">
+          <div class="" style="overflow-y: hidden; overflow-x: scroll">
+            <table class="uk-table uk-table-divider">
+              <thead>
+              <tr>
+                <th class="uk-text-center" v-html="$t('main.Quiz name')"></th>
+                <th class="uk-text-center" v-html="$t('main.Items num')"></th>
+                <th class="uk-text-center" v-html="$t('main.Quiz period')"></th>
+                <th class="uk-text-center" v-html="$t('main.Availability')"></th>
+                <th class="uk-text-center" v-html="$t('main.Results')" v-if="viewContentStatus"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="form in forms">
+                <td>
+                  <p class="uk-margin-remove text-highlighted" v-html="form.title"></p>
+                  <p class="uk-margin-remove" v-html="form.description"></p>
+                </td>
+                <td class="uk-text-center" v-html="form.items_count"></td>
+                <td class="uk-text-center">
+                  <span v-if="form.has_time_limit == 1" class="uk-text-warning">{{form.has_time_limit}} {{form.time_limit}} </span>
+                  <span v-else class="uk-text-primary" v-html="$t('main.Unlimited time')"></span>
+                </td>
+                <td class="uk-text-center">
+                  <div v-if="form.evaluation_status == 1">
                     <p class="uk-margin-remove"><i class="far fa-check-circle uk-text-success"></i> <span v-html="form.evaluation_mark"></span></p>
                     <a :href="form.response_link" v-html="$t('main.View results')"></a>
-                </div>
-                <div v-else>
-                  <p class="uk-text-muted" v-html="$t('main.No results')"></p>
-                </div>
-              </td>
-              <td class="uk-text-center" v-if="viewContentStatus">
-                <a class="uk-button uk-button-primary" :href="form.form_url" v-html="$t('main.Take the exam')"></a>
-              </td>
+                  </div>
+                  <div v-else>
+                    <p class="uk-text-muted" v-html="$t('main.No results')"></p>
+                  </div>
+                </td>
+                <td class="uk-text-center" v-if="viewContentStatus">
+                  <a class="uk-button uk-button-primary" :href="form.form_url" v-html="$t('main.Take the exam')"></a>
+                </td>
 
-            </tr>
-            </tbody>
-          </table>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -87,7 +89,7 @@ name: "Show",
   data(){
     return{
       name: 'mehmet',
-      viewContentStatus: false,
+      viewContentStatus: true,
       item: null,
       content: null,
       description: null,
@@ -122,4 +124,28 @@ name: "Show",
   },
 }
 </script>
+
+<style scoped>
+  /* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a8a8a8;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+</style>
 

@@ -29,7 +29,7 @@
       <div v-if="forms && forms.length > 0">
         <div  class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
           <h5 class="text-highlighted uk-text-bold" v-html="$t('main.Lesson quizzes')"></h5>
-          <div class="" style="overflow-y: hidden; overflow-x: scroll">
+          <div class="overflow-auto">
             <table class="uk-table uk-table-divider">
               <thead>
               <tr>
@@ -63,7 +63,6 @@
                 <td class="uk-text-center" v-if="viewContentStatus">
                   <a class="uk-button uk-button-primary" :href="form.form_url" v-html="$t('main.Take the exam')"></a>
                 </td>
-
               </tr>
               </tbody>
             </table>
@@ -126,26 +125,33 @@ name: "Show",
 </script>
 
 <style scoped>
+
+@media (max-width: 960px){
+  .overflow-auto{
+    overflow-y: hidden; overflow-x: scroll
+  }
   /* width */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #a8a8a8;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #a8a8a8;
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #888;
-}
 </style>
 

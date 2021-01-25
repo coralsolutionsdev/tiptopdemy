@@ -3150,7 +3150,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -39345,10 +39344,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.$t('main.Lesson quizzes'))
     }
   }), _vm._v(" "), _c('div', {
-    staticStyle: {
-      "overflow-y": "hidden",
-      "overflow-x": "scroll"
-    }
+    staticClass: "overflow-auto"
   }, [_c('table', {
     staticClass: "uk-table uk-table-divider"
   }, [_c('thead', [_c('tr', [_c('th', {
@@ -52680,7 +52676,7 @@ module.exports = __webpack_require__(18);
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  /* width */\n[data-v-5957d677]::-webkit-scrollbar {\n  width: 5px;\n  height: 5px;\n}\n\n/* Track */\n[data-v-5957d677]::-webkit-scrollbar-track {\n  background: #f1f1f1;\n}\n\n/* Handle */\n[data-v-5957d677]::-webkit-scrollbar-thumb {\n  background: #a8a8a8;\n  border-radius: 10px;\n}\n\n/* Handle on hover */\n[data-v-5957d677]::-webkit-scrollbar-thumb:hover {\n  background: #888;\n}\n", ""]);
+exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-5957d677]{\r\n    overflow-y: hidden; overflow-x: scroll\n}\r\n  /* width */\n[data-v-5957d677]::-webkit-scrollbar {\r\n    width: 5px;\r\n    height: 5px;\n}\r\n\r\n  /* Track */\n[data-v-5957d677]::-webkit-scrollbar-track {\r\n    background: #f1f1f1;\n}\r\n\r\n  /* Handle */\n[data-v-5957d677]::-webkit-scrollbar-thumb {\r\n    background: #a8a8a8;\r\n    border-radius: 10px;\n}\r\n\r\n  /* Handle on hover */\n[data-v-5957d677]::-webkit-scrollbar-thumb:hover {\r\n    background: #888;\n}\n}\r\n\r\n", ""]);
 
 /***/ }),
 /* 85 */

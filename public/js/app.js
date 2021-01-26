@@ -3410,7 +3410,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       this.$refs.countdown.abort();
       this.quizItemAnswerTotalTime = 0;
       this.timeLineProgress = 100;
-      this.isAllowToAnswer = false;
       // check if correct or not
       var status = 0;
       $.each(this.quizItemAnswers, function (key, answer) {
@@ -3443,6 +3442,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       this.examItemMode = true;
     },
     openNextPreview: function openNextPreview() {
+      this.isAllowToAnswer = false;
       if (!this.previewItemMode) {
         this.currentItemKey++;
         if (this.currentItemKey < this.itemCount) {
@@ -3484,9 +3484,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         this.timeLineProgress = (this.quizItemAnswerTotalTime - data.totalSeconds) / this.quizItemAnswerTotalTime * 100;
         if (data.totalSeconds == 1) {
           setTimeout(function () {
-            _this3.quizItemAnswerTime = 0;
             _this3.timeLineProgress = 90;
-            _this3.submitAnswer(_this3.quizItem.id, 0);
+            if (_this3.quizItemAnsweredId == null) {
+              _this3.quizItemAnswerTime = 0;
+              _this3.submitAnswer(_this3.quizItem.id, 0);
+            } else {
+              _this3.timeLineProgress = 100;
+            }
           }, 1000);
         }
       }
@@ -3618,7 +3622,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.description = _this.item.description;
         _this.resources = _this.item.resources;
         _this.forms = _this.item.forms;
-        console.log(_this.item);
       });
     },
     updateViewContentStatus: function updateViewContentStatus(status) {

@@ -255,12 +255,15 @@
                         <div class="uk-modal-header">
                             <h5 class="">Media libaray</h5>
                         </div>
-                        <file-manager v-bind:insertmode="true"></file-manager>
+                        <div id="vue-app">
+                            <file-manager v-bind:insertmode="true"></file-manager>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
+    <script src="{{asset('js/app.js?v=202101261830')}}"></script>
 
     </section>
 

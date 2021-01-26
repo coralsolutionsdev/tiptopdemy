@@ -111,7 +111,6 @@ name: "Show",
         this.description = this.item.description;
         this.resources = this.item.resources;
         this.forms = this.item.forms;
-        console.log(this.item);
       });
     },
     updateViewContentStatus(status){

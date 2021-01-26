@@ -264,7 +264,6 @@ export default {
       this.$refs.countdown.abort();
       this.quizItemAnswerTotalTime =  0;
       this.timeLineProgress = 100;
-      this.isAllowToAnswer = false;
       // check if correct or not
       var status = 0;
       $.each(this.quizItemAnswers,  function (key , answer){
@@ -296,6 +295,7 @@ export default {
       this.examItemMode = true;
     },
     openNextPreview(){
+      this.isAllowToAnswer = false;
       if (!this.previewItemMode){
         this.currentItemKey++;
         if (this.currentItemKey < this.itemCount){
@@ -335,12 +335,15 @@ export default {
         this.timeLineProgress = ((this.quizItemAnswerTotalTime - data.totalSeconds)/this.quizItemAnswerTotalTime) * 100;
         if (data.totalSeconds == 1){
           setTimeout(()=>{
-            this.quizItemAnswerTime = 0;
             this.timeLineProgress = 90;
-                this.submitAnswer(this.quizItem.id, 0);
+            if (this.quizItemAnsweredId == null){
+              this.quizItemAnswerTime = 0;
+              this.submitAnswer(this.quizItem.id, 0);
+            }else{
+              this.timeLineProgress = 100;
+            }
               },1000
           );
-
         }
 
       }

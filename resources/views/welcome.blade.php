@@ -1,4 +1,4 @@
-@extends('themes.'.getFrontendThemeName().'.layout')
+@extends('themes.'.getFrontendThemeName().'.v2.layout')
 @section('title', 'Home')
 @section('content')
     @if(!empty($layout))

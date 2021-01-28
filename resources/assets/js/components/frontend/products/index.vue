@@ -260,12 +260,11 @@ name: "index",
     },
     addToCart(product){
       this.$Notify({
-        title: 'Successfully Added',
-        message: 'Your item has been successfully added to the cart',
-        type: 'success',
+        title: 'Function under development',
+        message: 'Dear user adding items to shopping cart is still under developments please try again later.',
+        type: 'warning',
         duration: 2000
       });
-      UIkit.notification('suucess', 'success');
 
     }
   },

@@ -17,7 +17,7 @@
 			{{--header--}}
 			@include('partial.frontend._page-header')
 			{{--body--}}
-			<product-index></product-index>
+			<product-index category-id="{{ !empty($category) ? strval($category->id) : '0' }}"></product-index>
 
 		</div>
 {{--		@include('partial.scripts._cart')--}}

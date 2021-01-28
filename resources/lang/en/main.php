@@ -316,6 +316,7 @@
         'Apply Filter' => 'Apply Filter',
         'Filter prices' => 'Filter prices',
         'Adding ...' => 'Adding ...',
+        'Adding' => 'Adding ...',
         'Added to cart' => 'Added to cart',
         'Item is already added to your cart.' => 'Item is already added to your cart.',
         'Item has been added successfully.' => 'Item has been added successfully.',

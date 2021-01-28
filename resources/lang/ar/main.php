@@ -337,6 +337,7 @@
         'To' => 'إلى',
         'Filter prices' => 'فلترة الأسعار',
         'Adding ...' => 'جارِ الإضافة ...',
+        'Adding' => 'جارِ الإضافة ...',
         'Added to cart' => ' في السلة',
         'Item is already added to your cart.' => 'العنصر مضاف في سلة المشتريات.',
         'Item has been added successfully.' => 'تمت اضافة العنصر بنجاح',

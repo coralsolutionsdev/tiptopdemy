@@ -32,7 +32,7 @@
                 @if(Auth::check())
                     <li class="uk-visible@m"><a href="{{route('cart.index')}}">
                             <span uk-icon="cart"></span>
-                            <span class="uk-badge uk-badge-mini icon-notify-badge uk-badge-success cart-count">{{Cart::content()->count()}}</span>
+                            <span class="uk-badge uk-badge-mini icon-notify-badge uk-badge-success cart-count navbar-cart-count">{{Cart::content()->count()}}</span>
                         </a></li>
                     <li class="uk-visible@m"><a href="">
                             <span uk-icon="bell"></span>

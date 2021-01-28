@@ -59,7 +59,7 @@
         </div>
       </div>
       <div>
-        <div class="uk-grid-small" uk-grid uk-height-match="target: > div > .grid-side">
+        <div class="uk-grid-small" uk-grid>
           <div class="uk-width-1-4 uk-visible@m">
             <div class="grid-side uk-card uk-card-default uk-card-body" style="padding: 10px">
 
@@ -101,79 +101,24 @@
                 <div class="uk-margin-small">
                   <div class="blog-tags">
 <!--                    @foreach($tags as $tag)-->
-                    <a v-for="tag in tags" class="uk-button uk-button-default uk-background-default" href="#" v-html="printTagName(tag.name)"></a>
+                    <a v-for="tag in tags" class="tag-item uk-button uk-button-default uk-background-default" href="#" v-html="printTagName(tag.name)"></a>
 <!--                    @endforeach-->
                   </div>
                 </div>
               </div>
 
-
-
             </div>
           </div>
           <div class="uk-width-expand">
-            <div v-if="products.length > 0" class="grid-side uk-grid-small uk-child-width-1-3@m" uk-grid="masonry: true">
-              <div v-for="product in products">
-                <div :id="product.id" class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
-                  <a :href="product.link">
-                    <div style="max-height: 200px; overflow: hidden">
-                      <div class="uk-text-center">
-                        <div class="uk-inline-clip uk-transition-toggle" tabindex="0">
-                          <img class="product-primary-image" :data-src="product.primary_image" sizes="(min-width: 500px) 500px, 100vw" width="500" alt="" uk-img>
-                          <img class="uk-transition-scale-up uk-position-cover" :src="product.alternative_image" alt="">
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <div style="padding:20px 15px">
-                    <a :href="product.link">
-                      <div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -50px;" uk-grid>
-                        <div class="uk-width-expand">
-                        </div>
-                        <div class="uk-width-auto">
-                          <div class="uk-card uk-card-body bg-white" style="padding:3px 10px; color: black; font-weight: 700; font-size: 24px; border-radius: 10px 10px 0 0">
-                            <span class="uk-text-primary">$</span> <span class="product-price" v-html="product.price"></span>
-                          </div>
-                        </div>
-                      </div>
-                      <div style="font-weight: 700; color: black" class="product-name" v-html="product.name"></div>
-                      <div style="" class="product-sku" v-html="product.sku"></div>
-                      <div style="height: 50px" v-html="product.sub_description"></div>
-                      <div style="margin-bottom: 10px">
-                        <span><img class="uk-border-circle" :src="product.user_profile_pic" style="width: 20px; height: 20px; object-fit: cover"></span> <span v-html="$t('main.By')+': '+product.user_name"></span>
-                      </div>
-                    </a>
-                    <div>
-                      <a v-if="product.has_purchased" class="uk-button uk-button-primary uk-width-1-1" :href="product.link"><span uk-icon="icon:  play-circle" style="margin: 0 3px"></span> <span v-html="$t('main.View lesson')"></span></a>
-                      <button v-else class="uk-button uk-button-primary uk-width-1-1 cart-action" :class="{'in_cart':product.in_cart}">
-                        <span @click="addToCart(product)" v-if="!product.in_cart"><span uk-icon="icon: cart" style="margin: 0 3px"></span> <span v-html="$t('main.Add to cart')"></span></span>
-                        <span v-else><span uk-icon="icon: check" style="margin: 0 3px"></span> <span v-html="$t('main.Added to cart')"></span></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-else class="uk-text-center" >
-              <div>
-                <div class="uk-card uk-card-default uk-card-body">
-                  <div v-if="!loadingMode">
-                    <div>
-                      <img class="no-products-box" data-src="/storage/assets/box.png" width="80" alt="" uk-img>
-                    </div>
-                    <p class="uk-margin-small" v-html="$t('main.There is no products yet')"></p>
-                  </div>
-                  <div v-else>
-                    <div class="uk-text-primary">
-                      <span uk-spinner="ratio: 2.5"></span>
-                      <div class="uk-margin-small">
-                        <p>{{$t('main.Loading')}}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <product-items
+                ref="productItems"
+                :search="search"
+                :categoryId="categoryId"
+                :minPrice="minPrice"
+                :maxPrice="maxPrice"
+                :perPage="perPage"
+                @updateMiniLoadingMode="updateLoadingMode($event)"
+            ></product-items>
           </div>
         </div>
       </div>
@@ -185,6 +130,9 @@
 <script>
 export default {
 name: "index",
+  props: [
+    'categoryId',
+  ],
   data(){
     return{
       products: [],
@@ -196,37 +144,23 @@ name: "index",
       tags:[],
       lang:null,
       search:null,
-      categoryId:0,
       minPrice:null,
       maxPrice:null,
       floatEnd:null,
       perPage:10,
       active:0,
+      productToCart:null,
+      inAddingProductId:null,
     }
+  },
+  beforeCreate() {
+    $('.screen-spinner').show();
   },
   created() {
     this.lang = document.documentElement.lang.substr(0, 2);
-    this.fetchItems();
     this.fetchStoreInfo();
   },
   methods:{
-    fetchItems(){
-      axios.get('/store/products/items', {
-        params: {
-          search: this.search,
-          category: this.categoryId,
-          min: this.minPrice,
-          max: this.maxPrice,
-          per_page: this.perPage,
-        }
-      }).then(res => {
-        this.loadingMode = false,
-        this.minLoadingMode = false,
-        this.products = res.data.data;
-        this.links = res.data.links;
-        this.meta = res.data.meta;
-      });
-    },
     fetchStoreInfo(){
       axios.get('/store/sidebar/info', {
         params: {
@@ -255,16 +189,11 @@ name: "index",
 
     },
     filterItem(){
-      this.minLoadingMode = true,
-      this.fetchItems();
+      this.minLoadingMode = true;
+      this.$refs.productItems.fetchItems();
     },
-    addToCart(product){
-      this.$Notify({
-        title: 'Function under development',
-        message: 'Dear user adding items to shopping cart is still under developments please try again later.',
-        type: 'warning',
-        duration: 0
-      });
+    updateLoadingMode(status){
+      this.minLoadingMode = status;
 
     }
   },
@@ -274,5 +203,14 @@ name: "index",
 <style scoped>
   .no-products-box{
     opacity: 0.2;
+  }
+  a:hover{
+    color: var(--theme-primary-color);
+  }
+  a.uk-button, a.uk-button:hover{
+    color: white;
+  }
+  a, a.tag-item, a.tag-item:hover{
+    color: #3F536E;
   }
 </style>

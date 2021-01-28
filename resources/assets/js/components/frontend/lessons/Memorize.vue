@@ -193,7 +193,6 @@ export default {
         }else{
           this.$emit('updateViewContent', true);
         }
-        $('.screen-spinner').fadeOut();
       });
     },
     buildMemorizeItem(itemKey){

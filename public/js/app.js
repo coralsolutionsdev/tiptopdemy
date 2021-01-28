@@ -53021,7 +53021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         title: 'Function under development',
         message: 'Dear user adding items to shopping cart is still under developments please try again later.',
         type: 'warning',
-        duration: 2000
+        duration: 0
       });
     }
   }

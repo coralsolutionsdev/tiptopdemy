@@ -44,7 +44,7 @@
     <!-- scripts -->
     <script src="{{asset('libraries/uikit/js/uikit.min.js')}}"></script>
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
-    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202101281800')}}"></script>
+    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202101281825')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('head')
 </head>
@@ -70,6 +70,6 @@
     </div>
 </div>
 @include('partial.frontend._loading')
-<script src="{{asset('js/app.js?v=202101281800')}}"></script>
+<script src="{{asset('js/app.js?v=202101281825')}}"></script>
 </body>
 </html>

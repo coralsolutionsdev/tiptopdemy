@@ -17,9 +17,8 @@
                             <img class="uk-visible@m" src="{{asset_image('/assets/slides/01.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
                                 <div class="uk-width-1-2@m uk-width-1-1@s">
-                                    <h1 class="uk-text-bold text-highlighted" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
+                                    <h1 class="uk-text-bold text-highlighted uk-margin-small" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
                                         إمكانية استخدام المنصة على مختلف أنواع <span style="color: #17e5b4">الأجهزة</span> الرقمية
-
                                     </h1>
                                     <p class="uk-margin-remove" uk-slideshow-parallax="y: 50,0,0; opacity: 1,1,0">
 تدعم  تصفحها على مختلف أنواع الأجهزة الرقمية باختلاف أنظمة تشغيلها وأحجام شاشاتها، بما في ذلك الهواتف الذكية والأجهزة اللوحيّة. لعرض المحتوى الرقمي بأشكال مختلفة (نصوص ومواد سمعيّة، ومواد مرئية) أي بطرق سمعية وبصرية متعددة لدعم احتياجات وخيارات المتعلم المتنوعة.
@@ -32,7 +31,7 @@
                             <img class="uk-visible@m" src="{{asset_image('/assets/slides/02.png')}}" alt="" uk-cover>
                             <div class="uk-position-center uk-position-small uk-padding">
                                 <div class="uk-width-1-2@m uk-width-1-1@s">
-                                    <h1 class="uk-text-bold text-highlighted" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
+                                    <h1 class="uk-text-bold text-highlighted uk-margin-small" uk-slideshow-parallax="y: -50,0,0; opacity: 1,1,0">
                                         تهتم <span style="color: #17e5b4">بتفاعل</span>  أصحاب المصلحة
                                     </h1>
                                     <p class="uk-margin-remove" uk-slideshow-parallax="y: 50,0,0; opacity: 1,1,0">
@@ -96,12 +95,12 @@
                         </div>
                         <div class="uk-flex uk-flex-middle uk-width-expand">
                            <div>
-                               <h3 class="uk-text-primary uk-margin-remove uk-text-bold">خدماتنا</h3>
-                               <h4 class="text-highlighted uk-margin-remove uk-text-bold">التحسين المستمر من خلال قياس إنجاز المتدربين ورضاهم باستخدام تقنيات موثوقة للتقييم.</h4>
+                               <h3 class="uk-text-primary uk-margin-remove uk-text-bold uk-margin-small">خدماتنا</h3>
+                               <h4 class="text-highlighted uk-margin-remove uk-text-bold uk-margin-small">التحسين المستمر من خلال قياس إنجاز المتدربين ورضاهم باستخدام تقنيات موثوقة للتقييم.</h4>
                                <p>
                                    توفير إمكانية تقييم المتعلم للمحتوى الرقمي، وإضافته تعليقات على المحتوى مع توفير نظام دخول موحّد وآمن للتحقق من هوية المستفيد وضمان عدم تشتت فكره واضاعة وقته بما لاحاجة له في مرحلة التعليمية, توفير تطبيقات على الهواتف الذكية لأنظمة التعليم والتدريب الإلكتروني.
                                </p>
-                               <a class="uk-button uk-button-primary" href="">تعرف على المزيد</a>
+                               <a class="uk-button uk-button-primary uk-margin-small" href="">تعرف على المزيد</a>
                            </div>
                         </div>
                     </div>
@@ -109,56 +108,14 @@
             </div>
             <div class="uk-container uk-padding">
                 <div class="uk-text-center">
-                    <h3 class="uk-text-primary uk-margin-remove uk-text-bold">آخر الدروس</h3>
-                    <p class="uk-margin-remove">
+                    <h3 class="uk-text-primary uk-margin-remove uk-text-bold uk-margin-small">آخر الدروس</h3>
+                    <p class="uk-margin-small">
                         آخر الدروس المضافة
                     </p>
                 </div>
-                <div class=" uk-child-width-1-1 uk-margin uk-flex uk-flex-center" uk-grid>
-                    <div class="uk-width-3-4@m uk-width-1-1@s">
-                        @php
-                            $products = \App\Product::latest()->get()->take(3);
-                        @endphp
-                        <div class="uk-grid-small uk-child-width-1-3@m" uk-grid>
-                            @foreach($products as $product)
-                                <div>
-                                    <div class="product uk-card uk-card-default uk-card-body uk-padding-remove uk-box-shadow-hover-large" style="overflow: hidden">
-                                        <a href="{{route('store.product.show', $product->slug)}}">
-                                            <div style="height: 200px; overflow: hidden">
-                                                <div class="uk-text-center">
-                                                    <div class="uk-inline-clip uk-transition-toggle" tabindex="0">
-                                                        <img src="{{$product->getProductPrimaryImage()}}" alt="">
-                                                        <img class="uk-transition-scale-up uk-position-cover" src="{{$product->getProductAlternativeImage()}}" alt="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div class="" style="padding:20px 15px">
-                                            <a href="{{route('store.product.show', $product->slug)}}">
-                                                <div class="uk-grid-collapse uk-text-center" style="position: absolute; width: 90%; margin-top: -40px;" uk-grid>
-                                                    <div class="uk-width-expand"></div>
-                                                    <div class="uk-width-auto">
-                                                        <div class="uk-card uk-card-default uk-card-body" style="padding:3px 10px; color: black; font-weight: 700; font-size: 18px">
-                                                            <span class="uk-text-primary">$</span> {{$product->price}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div style="font-weight: 700; color: black">{{$product->name}}</div>
-                                                <div style="height: 50px">
-                                                    {!! subContent($product->description, 130) !!}
-                                                </div>
-                                                <div style="margin-bottom: 10px">
-                                                    <span><img class="uk-border-circle" src="{{$product->user->getProfilePicURL()}}" style="width: 20px; height: 20px; object-fit: cover"></span> <span>{{__('main.By')}}: </span> <span> {{$product->user->name}}</span>
-                                                </div>
-                                            </a>
-                                            <div style="">
-                                                <button class="uk-button uk-button-primary uk-width-1-1"><span uk-icon="icon: cart"></span> {{__('main.Add to cart')}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                <div class="uk-margin uk-flex uk-flex-center" uk-grid>
+                    <div class="uk-width-4-5@m uk-width-1-1@s">
+                        <product-items per-page="3" ></product-items>
                     </div>
                 </div>
             </div>

@@ -11,6 +11,12 @@ window.Vue = require('vue');
 import Vue from 'vue';
 import VueInternationalization from 'vue-i18n';
 import Locale from '../../js/vue-i18n-locales.generated';
+// ui frameworks
+import AtComponents from 'at-ui'
+import 'at-ui-style'    // Import CSS
+import Vuesax from 'vuesax'
+// import 'vuesax/dist/vuesax.css' //Vuesax styles
+
 
 Vue.use(VueInternationalization);
 
@@ -37,6 +43,8 @@ Vue.component('file-manager', require('./components/system/FileManager.vue'));
 Vue.component('product-index', require('./components/frontend/products/index.vue'));
 
 // If you want to use it in your vue components
+Vue.use(AtComponents)
+Vue.use(Vuesax)
 
 
 

@@ -30,6 +30,12 @@
             --text-regular: #666666;
             --text-highlighted: #263655;
             --bg-secondary: #F9F8FD;
+            <!---->
+            /*--vs-primary: 91, 60, 196;*/
+            /*--vs-success: 23, 201, 100*/
+            /*--vs-danger: 242, 19, 93*/
+            /*--vs-warn: 254, 130, 0*/
+            /*--vs-dark: 36, 33, 69*/
         }
     </style>
 
@@ -40,7 +46,6 @@
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
     <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202012190900')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     @yield('head')
 </head>
 <body>

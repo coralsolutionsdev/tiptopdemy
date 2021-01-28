@@ -3,6 +3,7 @@
 @import "navbar.css?v=202012190900";
 @import "store.css?v=202012190900";
 @import "../models/form.css?v=202012190900";
+@import "vuesax.css";
 html, body{
     padding: 0px;
     margin: 0px;

@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="uk-grid-small uk-child-width-1-1" uk-grid>
       <div class="uk-visible@m">
         <div class="filter-section uk-card uk-card-default uk-card-body" style="padding: 25px">
@@ -147,7 +146,7 @@
                     <div>
                       <a v-if="product.has_purchased" class="uk-button uk-button-primary uk-width-1-1" :href="product.link"><span uk-icon="icon:  play-circle" style="margin: 0 3px"></span> <span v-html="$t('main.View lesson')"></span></a>
                       <button v-else class="uk-button uk-button-primary uk-width-1-1 cart-action" :class="{'in_cart':product.in_cart}">
-                        <span v-if="!product.in_cart"><span uk-icon="icon: cart" style="margin: 0 3px"></span> <span v-html="$t('main.Add to cart')"></span></span>
+                        <span @click="addToCart(product)" v-if="!product.in_cart"><span uk-icon="icon: cart" style="margin: 0 3px"></span> <span v-html="$t('main.Add to cart')"></span></span>
                         <span v-else><span uk-icon="icon: check" style="margin: 0 3px"></span> <span v-html="$t('main.Added to cart')"></span></span>
                       </button>
                     </div>
@@ -202,6 +201,7 @@ name: "index",
       maxPrice:null,
       floatEnd:null,
       perPage:10,
+      active:0,
     }
   },
   created() {
@@ -257,6 +257,16 @@ name: "index",
     filterItem(){
       this.minLoadingMode = true,
       this.fetchItems();
+    },
+    addToCart(product){
+      this.$Notify({
+        title: 'Successfully Added',
+        message: 'Your item has been successfully added to the cart',
+        type: 'success',
+        duration: 2000
+      });
+      UIkit.notification('suucess', 'success');
+
     }
   },
 }

@@ -39592,7 +39592,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             "border-radius": "5px",
             "padding": "5px 10px"
           }
-        }, [_c('h2', {
+        }, [_c('h1', {
           staticClass: "uk-margin-remove uk-text-bold uk-text-danger"
         }, [_vm._v(_vm._s(props.seconds))]), _vm._v(" "), _c('p', {
           staticClass: "uk-margin-remove uk-text-muted"

@@ -67,7 +67,7 @@
                       <!--        <template slot-scope="props">Time Remaining：{{ props.days }} days, {{ props.hours }} hours, {{ props.minutes }} minutes, {{ props.seconds }} seconds.</template>-->
                       <template slot-scope="props">
                         <div class="uk-text-center" style="background-color: #F4F5F7; border-radius: 5px; padding: 5px 10px">
-                          <h2 class="uk-margin-remove uk-text-bold uk-text-danger">{{ props.seconds }}</h2>
+                          <h1 class="uk-margin-remove uk-text-bold uk-text-danger">{{ props.seconds }}</h1>
                           <p class="uk-margin-remove uk-text-muted"><small >Seconds</small></p>
                         </div>
 

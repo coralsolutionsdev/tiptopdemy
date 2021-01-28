@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Store;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Modules\Course\Lesson;
+use App\Modules\Form\FormItem;
+use App\Modules\Form\FormResponse;
 use App\Modules\Media\Media;
 use App\Product;
 use App\Services\MediaManagerService;
+use Carbon\Carbon;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -332,6 +335,103 @@ class LessonController extends Controller
             $attachment->delete();
         }
         return response($key, 200);
+    }
+
+    public function getItems(Lesson $lesson)
+    {
+        $product = $lesson->product;
+        $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
+        $description = !empty($lesson->description) ? $lesson->description : '';
+        $resources = !empty($lesson->resources) ? $lesson->resources : array();
+        $forms = $lesson->getAvailableForms();
+        $formsArray = [];
+        if (!empty($forms)){
+            foreach ($forms as $form){
+                $evaluationStatus = 0;
+                $evaluationMark = 0;
+                $responseLink = '';
+                if (!empty($form->getLastResponse()) && $form->getLastResponse()->status == FormResponse::STATUS_FULLY_EVALUATED){
+                    $evaluationStatus = 1;
+                    $evaluationMark = $form->getLastResponse()->score_info['achieved_score'].'/'.$form->getLastResponse()->score_info['total_score'];
+                    $responseLink = route('form.response.show', $form->getLastResponse()->hash_id);
+                }
+                $formsArray[] = [
+                    'title' => $form->title,
+                    'description' => $form->description,
+                    'items_count' => $form->items->where('type', '!=', FormItem::TYPE_SECTION)->count(),
+                    'has_time_limit' => !empty($form->properties['has_time_limit']) && $form->properties['has_time_limit'] == 1 ? 1 : 0,
+                    'time_limit' => $form->properties['time_limit'].' '.trans_choice('main.Minutes', $form->properties['time_limit']),
+                    'evaluation_status' => $evaluationStatus,
+                    'evaluation_mark' => $evaluationMark,
+                    'response_link' => $responseLink,
+                    'form_url' => route('store.form.show',[$lesson->slug, $form->hash_id]),
+                ];
+            }
+        }
+
+        // attachments
+        $attachments = $lesson->attachments()->get();
+        $attachmentsArray = array();
+        foreach ($attachments as $attachment){
+            $attachmentsArray[] = [
+                'filename' => $attachment->filename,
+                'filetype' => $attachment->filetype,
+                'link' => $attachment->getTemporaryUrl(Carbon::parse(date('y-m-d'))->addDay()),
+            ];
+        }
+
+        // groups
+        $groups = $product->groups;
+        $groupsArray = [];
+        foreach ($groups as $key => $group){
+            $groupNumber = sprintf('%02d',  $key + 1);
+            // lessons
+            $groupLessonsArray = [];
+            foreach ($group->getLessons as $itemKey => $lessonItem){
+                $lessonNumber = sprintf('%02d',  $itemKey + 1);
+                $link = null;
+                if ($groupNumber == 1){
+                    $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);
+                }else{
+                    if ($product->hasPurchased()){
+                        $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);
+                    }
+                }
+                $groupLessonsArray[$lessonNumber] = [
+                    'id' => $lessonItem->id,
+                    'title' => $lessonItem->title,
+                    'link' => $link,
+                ];
+            }
+
+            $groupsArray[$groupNumber] = [
+                'id' => $group->id,
+                'title' => $group->title,
+                'items' => $groupLessonsArray,
+            ];
+        }
+        $lessonGroupId = $lesson->groups() && $lesson->groups()->first() ? $lesson->groups()->first()->id : null;
+
+        $productArray = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'sku' => $product->sku,
+            'price' => $product->price,
+            'has_purchased' => $product->hasPurchased(),
+            'in_cart' => $product->isInCart(),
+            'primary_image' => $product->getProductPrimaryImage(),
+        ];
+        return response([
+            'lesson_id' => $lesson->id,
+            'product' => $productArray,
+            'content' => $content,
+            'description' => $description,
+            'resources' => $resources,
+            'forms' => $formsArray,
+            'attachments' => $attachmentsArray,
+            'groups' => $groupsArray,
+            'lesson_group_id' => $lessonGroupId
+        ], 200);
     }
 
 }

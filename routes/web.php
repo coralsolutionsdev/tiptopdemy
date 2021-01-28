@@ -260,6 +260,7 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::resource('/lesson/{lesson}/form','FormController', ['only' => ['show']]);
                 Route::get('/products/items' , 'ProductController@GetItems'); // change to index
                 Route::get('/sidebar/info' , 'ProductController@getSidebarInfo'); // change to index
+                Route::get('/product/lesson/{lesson}/items','LessonController@getItems');
 
 
             });

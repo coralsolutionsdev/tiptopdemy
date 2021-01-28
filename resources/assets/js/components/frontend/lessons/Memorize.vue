@@ -185,14 +185,15 @@ export default {
           // id: 12345
         }
       }).then(res => {
+        $('.full-screen-spinner').fadeOut();
         this.items = res.data;
         this.itemCount = this.items.length;
         if(this.itemCount > 0){
           this.buildMemorizeItem(this.currentItemKey);
-
         }else{
           this.$emit('updateViewContent', true);
         }
+        $()
       });
     },
     buildMemorizeItem(itemKey){

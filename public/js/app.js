@@ -3342,6 +3342,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
           // id: 12345
         }
       }).then(function (res) {
+        $('.full-screen-spinner').fadeOut();
         _this.items = res.data;
         _this.itemCount = _this.items.length;
         if (_this.itemCount > 0) {
@@ -3349,6 +3350,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         } else {
           _this.$emit('updateViewContent', true);
         }
+        $();
       });
     },
     buildMemorizeItem: function buildMemorizeItem(itemKey) {
@@ -3596,7 +3598,139 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var messages = {
+  en: {
+    message: {
+      added_successfully: 'Added successfully',
+      the_product_added: 'The product has been added to your shopping cart successfully.',
+      already_in_cart: 'Am error accrued!',
+      product_already_in_cart: 'This product was already added to your shopping cart',
+      please_purchase: 'Please purchase the product first',
+      please_purchase_message: 'To view this lesson you need to purchase the product first.'
+    }
+  },
+  ar: {
+    message: {
+      added_successfully: 'تمت الإضافة بنجاح',
+      the_product_added: 'لقد تمت إضافة المنتج الى سلة التسوق الخاصة بك بنجاح.',
+      already_in_cart: 'لقد تم اضافة المنتج سابقاً',
+      product_already_in_cart: 'هذا المنتج قد تمت اضافته مسبقاً لسلة التسوق الخاصة بك.',
+      please_purchase: 'يرجى شراء الدورة',
+      please_purchase_message: 'لعرض هذا الدرس يجب عليك شراء الدورة أولا.'
+    }
+  }
+};
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3612,13 +3746,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       name: 'mehmet',
       viewContentStatus: false,
       item: null,
+      product: null,
+      lessonId: null,
       content: null,
       description: null,
       resources: null,
-      forms: null
+      forms: null,
+      attachments: [],
+      groups: [],
+      lessonGroupId: null,
+      productColor: null,
+      loadingMode: true,
+      lang: null,
+      productToCart: null,
+      inAddingProductId: null
     };
   },
   created: function created() {
+    this.lang = document.documentElement.lang.substr(0, 2);
     this.fetchItem();
   },
 
@@ -3626,7 +3771,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     fetchItem: function fetchItem() {
       var _this = this;
 
-      axios.get('/api/product/lesson/' + this.lessonSlug + '/items', {
+      axios.get('/store/product/lesson/' + this.lessonSlug + '/items', {
         params: {
           // id: 12345
         }
@@ -3636,10 +3781,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.description = _this.item.description;
         _this.resources = _this.item.resources;
         _this.forms = _this.item.forms;
+        _this.attachments = _this.item.attachments;
+        _this.groups = _this.item.groups;
+        _this.lessonGroupId = _this.item.lesson_group_id;
+        _this.lessonId = _this.item.lesson_id;
+        _this.product = _this.item.product;
+        console.log(_this.product);
       });
     },
     updateViewContentStatus: function updateViewContentStatus(status) {
       this.viewContentStatus = status;
+    },
+    addToCart: function addToCart(product) {
+      var _this2 = this;
+
+      if (this.inAddingProductId == null && product.in_cart == false) {
+        this.inAddingProductId = product.id;
+        var data = {
+          id: product.id,
+          name: product.name,
+          qty: 1,
+          price: product.price,
+          image: product.primary_image,
+          sku: product.sku
+        };
+        axios.post('/cart/add', data).then(function (res) {
+          product.in_cart = true;
+          _this2.$Notify({
+            title: messages[_this2.lang].message.added_successfully,
+            message: messages[_this2.lang].message.the_product_added,
+            type: 'success',
+            duration: 4000
+          });
+          _this2.inAddingProductId = null;
+          $('.navbar-cart-count').html(res.data.item_count);
+        }).catch(function (error) {
+          console.log(error);
+          // this.hideLoading();
+          _this2.$Notify({
+            title: 'Oops! something going wrong',
+            message: 'Please contact us for more information',
+            type: 'error',
+            duration: 4000
+          });
+        });
+      } else {
+        this.$Notify({
+          title: messages[this.lang].message.already_in_cart,
+          message: messages[this.lang].message.product_already_in_cart,
+          type: 'warning',
+          duration: 4000
+        });
+      }
+    },
+    pleasePurchase: function pleasePurchase() {
+      this.$Notify({
+        title: messages[this.lang].message.please_purchase,
+        message: messages[this.lang].message.please_purchase_message,
+        type: 'warning',
+        duration: 5000
+      });
     }
   },
   components: {
@@ -8404,7 +8605,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-5957d677]{\r\n    overflow-y: hidden; overflow-x: scroll\n}\r\n  /* width */\n[data-v-5957d677]::-webkit-scrollbar {\r\n    width: 5px;\r\n    height: 5px;\n}\r\n\r\n  /* Track */\n[data-v-5957d677]::-webkit-scrollbar-track {\r\n    background: #f1f1f1;\n}\r\n\r\n  /* Handle */\n[data-v-5957d677]::-webkit-scrollbar-thumb {\r\n    background: #a8a8a8;\r\n    border-radius: 10px;\n}\r\n\r\n  /* Handle on hover */\n[data-v-5957d677]::-webkit-scrollbar-thumb:hover {\r\n    background: #888;\n}\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-5957d677]{\r\n    overflow-y: hidden; overflow-x: scroll\n}\r\n  /* width */\n[data-v-5957d677]::-webkit-scrollbar {\r\n    width: 5px;\r\n    height: 5px;\n}\r\n\r\n  /* Track */\n[data-v-5957d677]::-webkit-scrollbar-track {\r\n    background: #f1f1f1;\n}\r\n\r\n  /* Handle */\n[data-v-5957d677]::-webkit-scrollbar-thumb {\r\n    background: #a8a8a8;\r\n    border-radius: 10px;\n}\r\n\r\n  /* Handle on hover */\n[data-v-5957d677]::-webkit-scrollbar-thumb:hover {\r\n    background: #888;\n}\n.please-purchase[data-v-5957d677]{\r\n    opacity: 0.5;\n}\n.please-purchase[data-v-5957d677]:hover{\r\n    cursor: pointer !important;\n}\n}\r\n\r\n", ""]);
 
 /***/ }),
 /* 52 */
@@ -39998,6 +40199,218 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-4 uk-visible@m"
+  }, [((_vm.groups && _vm.groups.length != 0) || !_vm.product.has_purchased) ? _c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove"
+  }, [(_vm.product && !_vm.product.has_purchased) ? _c('div', [_c('div', {
+    staticClass: "uk-padding-small"
+  }, [_c('div', {
+    staticClass: "price uk-heading-small uk-margin-remove"
+  }, [_c('span', {
+    staticClass: "uk-text-primary"
+  }, [_vm._v("$")]), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.product.price)
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small"
+  }, [_c('h5', {
+    staticClass: "uk-text-primary uk-margin-small",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.This course includes'))
+    }
+  }), _vm._v(" "), _c('ul', {
+    staticClass: "uk-list"
+  }, [_c('li', [_c('span', {
+    attrs: {
+      "uk-icon": "icon: unlock"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Full lifetime access'))
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    attrs: {
+      "uk-icon": "icon: bookmark"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Certificate of Completion'))
+    }
+  })])])]), _vm._v(" "), _c('div', [_c('button', {
+    staticClass: "uk-button uk-button-primary uk-width-1-1",
+    on: {
+      "click": function($event) {
+        return _vm.addToCart(_vm.product)
+      }
+    }
+  }, [(_vm.inAddingProductId == _vm.product.id) ? _c('span', [_c('span', {
+    attrs: {
+      "uk-spinner": "ratio: 0.5"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Adding'))
+    }
+  })]) : _c('span', [(!_vm.product.in_cart) ? _c('span', [_c('span', {
+    staticStyle: {
+      "margin": "0 3px"
+    },
+    attrs: {
+      "uk-icon": "icon: cart"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Add to cart'))
+    }
+  })]) : _c('span', [_c('span', {
+    staticStyle: {
+      "margin": "0 3px"
+    },
+    attrs: {
+      "uk-icon": "icon: check"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Added to cart'))
+    }
+  })])])])])])]) : _vm._e(), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', {
+    staticClass: "uk-padding-small"
+  }, [_c('ul', {
+    attrs: {
+      "uk-accordion": "multiple: true"
+    }
+  }, _vm._l((_vm.groups), function(group, key) {
+    return _c('li', {
+      class: {
+        'uk-open': _vm.lessonGroupId == group.id
+      },
+      staticStyle: {
+        "margin": "0px 0px 10px 0px"
+      }
+    }, [_c('a', {
+      staticClass: "uk-accordion-title text-highlighted uk-secondary-bg",
+      staticStyle: {
+        "padding": "10px 20px"
+      },
+      attrs: {
+        "href": "#"
+      }
+    }, [_vm._v(_vm._s(key) + " | " + _vm._s(group.title))]), _vm._v(" "), _c('div', {
+      staticClass: "uk-accordion-content"
+    }, _vm._l((group.items), function(lesson, lessonKey) {
+      return (lesson.link) ? _c('a', {
+        attrs: {
+          "href": lesson.link
+        }
+      }, [_c('div', {
+        staticClass: "uk-secondary-bg-hover"
+      }, [_c('div', {
+        staticStyle: {
+          "padding": "5px"
+        }
+      }, [_c('div', {
+        staticClass: "uk-grid-small",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_c('div', {
+        staticClass: "uk-width-auto@s uk-text-center uk-flex uk-flex-middle"
+      }, [(lesson.id == _vm.lessonId) ? _c('span', {
+        staticClass: "uk-icon-box uk-text-primary",
+        staticStyle: {
+          "height": "40px",
+          "width": "40px"
+        },
+        attrs: {
+          "uk-icon": "icon: play-circle"
+        }
+      }) : _c('span', {
+        staticClass: "uk-icon-box",
+        staticStyle: {
+          "height": "40px",
+          "width": "40px"
+        },
+        domProps: {
+          "innerHTML": _vm._s(lessonKey)
+        }
+      })]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand@s uk-flex uk-flex-middle"
+      }, [_c('div', [_c('p', {
+        class: {
+          'uk-text-primary': lesson.id == _vm.lessonId
+        },
+        staticStyle: {
+          "padding": "0px",
+          "margin": "0px"
+        },
+        domProps: {
+          "innerHTML": _vm._s(lesson.title)
+        }
+      })])])])])])]) : _c('div', {
+        staticClass: "uk-secondary-bg-hover please-purchase",
+        on: {
+          "click": function($event) {
+            return _vm.pleasePurchase()
+          }
+        }
+      }, [_c('div', {
+        staticStyle: {
+          "padding": "5px"
+        }
+      }, [_c('div', {
+        staticClass: "uk-grid-small",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_c('div', {
+        staticClass: "uk-width-auto@s uk-text-center uk-flex uk-flex-middle"
+      }, [(lesson.id == _vm.lessonId) ? _c('span', {
+        staticClass: "uk-icon-box uk-text-primary",
+        staticStyle: {
+          "height": "40px",
+          "width": "40px"
+        },
+        attrs: {
+          "uk-icon": "icon: play-circle"
+        }
+      }) : _c('span', {
+        staticClass: "uk-icon-box",
+        staticStyle: {
+          "height": "40px",
+          "width": "40px"
+        },
+        domProps: {
+          "innerHTML": _vm._s(lessonKey)
+        }
+      })]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand@s uk-flex uk-flex-middle"
+      }, [_c('div', [_c('p', {
+        class: {
+          'uk-text-primary': lesson.id == _vm.lessonId
+        },
+        staticStyle: {
+          "padding": "0px",
+          "margin": "0px"
+        },
+        domProps: {
+          "innerHTML": _vm._s(lesson.title)
+        }
+      })])])])])])
+    }), 0)])
+  }), 0)])]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expand"
+  }, [_c('div', {
+    staticClass: "uk-grid-small uk-child-width-1-1@m",
+    attrs: {
+      "uk-grid": "masonry: true"
+    }
+  }, [_c('div', {
     staticClass: "uk-grid-small uk-child-width-1-1",
     attrs: {
       "uk-grid": ""
@@ -40161,7 +40574,62 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "innerHTML": _vm._s(_vm.$t('main.Take the exam'))
       }
     })]) : _vm._e()])
-  }), 0)])])])]) : _vm._e()], 2)])
+  }), 0)])])])]) : _vm._e(), _vm._v(" "), (_vm.attachments && _vm.attachments.length > 0) ? _c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small"
+  }, [_c('h5', {
+    staticClass: "text-highlighted uk-text-bold",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Attachments'))
+    }
+  }, [_vm._v(" ("), _c('span', {
+    staticClass: "comment-count",
+    domProps: {
+      "innerHTML": _vm._s(_vm.attachments.length)
+    }
+  }), _vm._v(")")]), _vm._v(" "), _c('table', {
+    staticClass: "uk-table uk-table-divider"
+  }, [_c('thead', [_c('tr', [_c('th', {
+    staticClass: "uk-text-center ",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.File name'))
+    }
+  }), _vm._v(" "), _c('th', {
+    staticClass: "uk-text-center uk-table-expand",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.File Type'))
+    }
+  }), _vm._v(" "), _c('th', {
+    staticClass: "uk-text-center uk-width-small",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Download link'))
+    }
+  })])]), _vm._v(" "), _c('tbody', _vm._l((_vm.attachments), function(attachment) {
+    return _c('tr', [_c('td', {
+      staticClass: "uk-width-auto",
+      domProps: {
+        "innerHTML": _vm._s(attachment.filename)
+      }
+    }), _vm._v(" "), _c('td', {
+      staticClass: "uk-text-center",
+      domProps: {
+        "innerHTML": _vm._s(attachment.filetype)
+      }
+    }), _vm._v(" "), _c('td', [_c('a', {
+      staticClass: "uk-button uk-button-primary",
+      attrs: {
+        "target": "_blank",
+        "href": attachment.link
+      }
+    }, [_c('span', {
+      attrs: {
+        "uk-icon": "icon: cloud-download"
+      }
+    }), _vm._v(" "), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(_vm.$t('main.Download'))
+      }
+    })])])])
+  }), 0)])])]) : _vm._e()], 2)])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -93467,8 +93935,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
 //
 //
 //

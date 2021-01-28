@@ -34,19 +34,17 @@
               <div>
                 <a v-if="product.has_purchased" class="uk-button uk-button-primary uk-width-1-1" :href="product.link"><span uk-icon="icon:  play-circle" style="margin: 0 3px"></span> <span v-html="$t('main.View lesson')"></span></a>
                 <button @click="addToCart(product)" v-else class="uk-button uk-button-primary uk-width-1-1 cart-action" :class="{'in_cart':product.in_cart}">
-                        <span v-if="inAddingProductId == product.id">
-                          <span uk-spinner="ratio: 0.5"></span> <span v-html="$t('main.Adding')"></span>
-                        </span>
+                  <span v-if="inAddingProductId == product.id">
+                    <span uk-spinner="ratio: 0.5"></span> <span v-html="$t('main.Adding')"></span>
+                  </span>
                   <span v-else>
-
-                          <span v-if="!product.in_cart">
-                            <span uk-icon="icon: cart" style="margin: 0 3px"></span> <span v-html="$t('main.Add to cart')"></span>
-                          </span>
-                          <span v-else>
-                            <span uk-icon="icon: check" style="margin: 0 3px"></span> <span v-html="$t('main.Added to cart')"></span>
-                          </span>
-
-                        </span>
+                    <span v-if="!product.in_cart">
+                      <span uk-icon="icon: cart" style="margin: 0 3px"></span> <span v-html="$t('main.Add to cart')"></span>
+                    </span>
+                    <span v-else>
+                      <span uk-icon="icon: check" style="margin: 0 3px"></span> <span v-html="$t('main.Added to cart')"></span>
+                    </span>
+                  </span>
                 </button>
               </div>
             </div>

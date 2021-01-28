@@ -11,6 +11,7 @@ use App\ProductImage;
 use App\ProductType;
 use App\Services\FileAssetManagerService;
 use App\Services\MediaManagerService;
+use Blueprint\Builder;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Exception;
@@ -20,9 +21,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Spatie\Tags\Tag;
+use App\Http\Resources\Store\Products as ProductsResource;
 
 //use Spatie\Tags\Tag;
 
@@ -252,6 +255,111 @@ class ProductController extends Controller
         }
 
         return view('store.products.frontend.index', compact('products','page_title', 'modelName','breadcrumb', 'searchKey'));
+    }
+
+    public function getItems(Request $request)
+    {
+        // TODO: improve this
+        $input = $request->input();
+        $user = getAuthUser();
+        // get collection by search
+        $searchKey = ltrim(rtrim($request->input('search'), ' '), ' ');
+        $search_in_category = $request->input('category') ? : 0;
+        //get collection
+        if (!empty($searchKey)){
+            $products = Product::where('name', 'LIKE', '%' . $searchKey . '%')->orWhere('sku', 'LIKE', '%' . $searchKey . '%')->latest()->get();
+        }else{
+            $products = Product::latest()->get();
+        }
+        $products->map(function ($product){
+            $product->link = route('store.product.show', $product->slug);
+            $product->primary_image = $product->getProductPrimaryImage();
+            $product->alternative_image = $product->getProductAlternativeImage();
+            $product->sub_description = subContent($product->description, 130);
+            $product->user_name = $product->user->name;
+            $product->user_profile_pic = $product->user->getProfilePicURL();
+            $product->has_purchased = $product->hasPurchased();
+            $product->in_cart = $product->isInCart();
+        });
+        // check if product available for user
+        $products = $products->filter(function ($product) use($user){
+            $result = false;
+            if (!empty($user) && ($user->hasRole('superadministrator') || $user->hasRole('administrator'))){
+                $result = true;
+            }else{
+                if ($product->status == Product::STATUS_AVAILABLE){
+                    $result = true;
+                } elseif (!empty($user) && $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
+                    if ($product->scope_id == $user->scope_id && $product->field_id == $user->field_id && $product->field_option_id == $user->field_option_id && $product->level == $user->level){
+                        $result = true;
+                    }
+                }
+            }
+
+            return $result;
+        });
+        if (!empty($search_in_category != 0)){ // 0 is searching in all categories
+            $products = $products->filter(function ($product) use($search_in_category){
+                if ($product->status == Product::STATUS_AVAILABLE || $product->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
+                    $categories =  $product->categories->where('id',$search_in_category);
+                    if (!empty($categories) && $categories->count() > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                return false;
+            });
+        }
+        // is between prices filter
+        if (!empty($input['min']) || !empty($input['max'])) {
+            $minPrice =  $input['min'];
+            $maxPrice =  $input['max'];
+            $products = $products->filter(function ($product) use($minPrice, $maxPrice){
+                $isBetween = true;
+                if (!empty($minPrice)){
+//                  $product->getNumericPrice();
+                    if ($product->price >= $minPrice){
+                        $isBetween =  true;
+                    }else{
+                        $isBetween = false;
+                    }
+                }
+                if ($isBetween == true && !empty($maxPrice)){
+                    if ($product->price <= $maxPrice){
+                        $isBetween =  true;
+                    }else{
+                        $isBetween = false;
+                    }
+                }
+                return $isBetween;
+            });
+        }
+
+        // Pagination work
+        $page = Paginator::resolveCurrentPage() ?: 1;
+        $perPage = isset($input['per_page']) && !empty($input['per_page']) ? $input['per_page'] : 10;
+        $products = new LengthAwarePaginator(
+            $products->forPage($page, $perPage), $products->count(), $perPage, $page, ['path' => Paginator::resolveCurrentPath()]
+        );
+
+        return ProductsResource::collection($products);
+
+    }
+    public function getSidebarInfo()
+    {
+        $categories = Category::where('type', Category::TYPE_PRODUCT)->where('parent_id', 0)->where('status',Category::STATUS_ENABLED)->get();
+
+        $categories->map(function ($category){
+            $category->link = route('store.category.show', $category->slug);
+            $category->items_count = $category->getAvailableItems()->count();
+            return $category->only(['id', 'name', 'link','items_count']);
+        });
+        $tags = Tag::where('type', 'product')->get();
+        return response([
+            'categories' => $categories,
+            'tags' => $tags,
+        ],200);
     }
 
     /**

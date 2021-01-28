@@ -27,6 +27,7 @@ class MemorizeController extends Controller
         });
         return response('mehmet', 200);
 //        return FormItemResource::collection($items);
+//        return ProductsResource::collection($items);
 
     }
     public function getItems(Lesson $lesson)

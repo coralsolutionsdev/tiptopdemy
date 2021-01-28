@@ -258,6 +258,9 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']]);
                 Route::get('/lesson/{lesson}/form/{form}/get/items/','FormController@getItems')->name('form.get.items');
                 Route::resource('/lesson/{lesson}/form','FormController', ['only' => ['show']]);
+                Route::get('/products/items' , 'ProductController@GetItems'); // change to index
+                Route::get('/sidebar/info' , 'ProductController@getSidebarInfo'); // change to index
+
 
             });
             /* Cart */

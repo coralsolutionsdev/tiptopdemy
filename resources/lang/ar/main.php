@@ -342,6 +342,9 @@
         'Item has been added successfully.' => 'تمت اضافة العنصر بنجاح',
         'View lesson' => 'عرض الدرس',
         '_memorize dear student' => 'عزيزي الطالب لديك مجموعة من التعابير المهمة التي يجب التعرف عليا قبل دخولك للدرس.',
+        'There is no products yet' => 'لا يوجد منتجات متاحة حالياً',
+        'Number of displayed products' => 'عدد المنتجات المعروضة',
+
 
         /*memorize*/
         'Start the memorize test' => 'إبدأ إختبار مفردات الحفظ',

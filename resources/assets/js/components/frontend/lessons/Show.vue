@@ -5,13 +5,13 @@
         <memorize v-bind:lesson-slug="lessonSlug" @updateViewContent="updateViewContentStatus($event)"></memorize>
       </div>
       <div v-if="description">
-        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
+        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small" style="overflow: hidden">
           <h5 class="text-highlighted uk-text-bold" v-html="$t('main.Lesson description')"></h5>
           <div v-html="description"></div>
         </div>
       </div>
       <div v-if="viewContentStatus">
-        <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
+        <div class="uk-card uk-card-default uk-card-body uk-padding-remove" style="overflow: hidden">
           <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-grid v-html="content">
           </ul>
         </div>
@@ -33,7 +33,7 @@
             <table class="uk-table uk-table-divider">
               <thead>
               <tr>
-                <th class="uk-text-center" v-html="$t('main.Quiz name')"></th>
+                <th class="uk-text-center uk-width-2-5" v-html="$t('main.Quiz name')"></th>
                 <th class="uk-text-center" v-html="$t('main.Items num')"></th>
                 <th class="uk-text-center" v-html="$t('main.Quiz period')"></th>
                 <th class="uk-text-center" v-html="$t('main.Availability')"></th>
@@ -42,7 +42,7 @@
               </thead>
               <tbody>
               <tr v-for="form in forms">
-                <td>
+                <td class="uk-width-2-5">
                   <p class="uk-margin-remove text-highlighted" v-html="form.title"></p>
                   <p class="uk-margin-remove" v-html="form.description"></p>
                 </td>

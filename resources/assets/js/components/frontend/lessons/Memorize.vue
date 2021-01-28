@@ -1,11 +1,16 @@
 <template>
   <div>
-    <div v-if="!quizCompleted && itemCount > 0" class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small" style="overflow: hidden">
+    <div v-if="itemCount > 0" class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small" style="overflow: hidden">
       <h5 class="text-highlighted uk-text-bold">Memorize</h5>
       <!--      <p>{{ $t('main.Dear', {name: 'visitor'}) }}</p>-->
       <p class="uk-margin-small">{{ $t('main._memorize dear student', {name: 'student'}) }}</p>
-      <div class="uk-text-center" style="padding: 20px">
-        <span class="memorize-item uk-box-shadow-hover-medium" v-for="(item, key) in items" v-if="item && item.properties && item.properties.level && item.properties.level == 1">{{item.title}}</span>
+      <div class="uk-text-center" style="padding: 20px 40px">
+        <div class="uk-grid-small uk-child-width-1-6@xl uk-child-width-1-5@l uk-child-width-1-4@m uk-child-width-1-3@s uk-child-width-1-2 uk-flex uk-flex-center uk-text-center" uk-grid>
+          <div v-for="(item, key) in items" v-if="item && item.properties && item.properties.level && item.properties.level == 1">
+            <div class="uk-card uk-card-body memorize-item uk-box-shadow-hover-medium" v-html="item.title" style="padding:10px 20px">
+            </div>
+          </div>
+        </div>
       </div>
       <div class="uk-text-center uk-margin-small">
         <a class="uk-button uk-button-primary open-" href="#modal-sections" uk-toggle v-html="$t('main.Start the memorize test')"></a>
@@ -175,14 +180,9 @@ export default {
   },
   methods:{
     fetchItems(){
-      // fetch('/api/memorize')
-      // // .then(res => res.json())
-      // .then(res => {
-      //   console.log(res);
-      // });
       axios.get('/api/product/lesson/'+this.lessonSlug+'/memorize/items', {
         params: {
-          id: 12345
+          // id: 12345
         }
       }).then(res => {
         this.items = res.data;

@@ -154,7 +154,6 @@ name: "index",
     }
   },
   beforeCreate() {
-    $('.screen-spinner').show();
   },
   created() {
     this.lang = document.documentElement.lang.substr(0, 2);

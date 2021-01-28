@@ -127,7 +127,7 @@ export default {
           per_page: this.perPage,
         }
       }).then(res => {
-        $('.screen-spinner').fadeOut();
+        $('.full-screen-spinner').fadeOut();
         this.loadingMode = false,
         this.products = res.data.data;
         this.links = res.data.links;

@@ -20,6 +20,6 @@
 			<product-index category-id="{{ !empty($category) ? strval($category->id) : '0' }}"></product-index>
 
 		</div>
-{{--		@include('partial.scripts._cart')--}}
 	</section>
+	@include('partial.frontend._full_loading')
 @endsection

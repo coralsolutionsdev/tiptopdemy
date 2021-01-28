@@ -3806,9 +3806,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       inAddingProductId: null
     };
   },
-  beforeCreate: function beforeCreate() {
-    $('.screen-spinner').show();
-  },
+  beforeCreate: function beforeCreate() {},
   created: function created() {
     this.lang = document.documentElement.lang.substr(0, 2);
     this.fetchStoreInfo();
@@ -93595,7 +93593,7 @@ var messages = {
           per_page: this.perPage
         }
       }).then(function (res) {
-        $('.screen-spinner').fadeOut();
+        $('.full-screen-spinner').fadeOut();
         _this.loadingMode = false, _this.products = res.data.data;
         _this.links = res.data.links;
         _this.meta = res.data.meta;

@@ -1624,7 +1624,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('product-index', __webpack
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('product-items', __webpack_require__(103));
 
 // If you want to use it in your vue components
-// Vue.use(AtComponents)
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_at_ui___default.a);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vuesax___default.a);
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
@@ -3833,34 +3833,31 @@ var messages = {
         };
         axios.post('/cart/add', data).then(function (res) {
           product.in_cart = true;
-          // this.$Notify({
-          //   title: messages[this.lang].message.added_successfully,
-          //   message: messages[this.lang].message.the_product_added,
-          //   type: 'success',
-          //   duration: 4000
-          // });
-          UIkit.notification("<span uk-icon='icon: check'></span> " + messages[_this2.lang].message.added_successfully, { pos: 'top-center', status: 'success' });
+          _this2.$Notify({
+            title: messages[_this2.lang].message.added_successfully,
+            message: messages[_this2.lang].message.the_product_added,
+            type: 'success',
+            duration: 4000
+          });
           _this2.inAddingProductId = null;
           $('.navbar-cart-count').html(res.data.item_count);
         }).catch(function (error) {
           console.log(error);
-          // this.hideLoading();
-          // this.$Notify({
-          //   title: 'Oops! something going wrong',
-          //   message: 'Please contact us for more information',
-          //   type: 'error',
-          //   duration: 4000
-          // });
-          UIkit.notification("<span uk-icon='icon: ban'></span> Oops! something going wrong", { pos: 'top-center', status: 'danger' });
+          _this2.hideLoading();
+          _this2.$Notify({
+            title: 'Oops! something going wrong',
+            message: 'Please contact us for more information',
+            type: 'error',
+            duration: 4000
+          });
         });
       } else {
-        // this.$Notify({
-        //   title: messages[this.lang].message.already_in_cart,
-        //   message: messages[this.lang].message.product_already_in_cart,
-        //   type: 'warning',
-        //   duration: 4000
-        // });
-        UIkit.notification("<span uk-icon='icon: warning'></span> " + messages[this.lang].message.already_in_cart, { pos: 'top-center', status: 'warning' });
+        this.$Notify({
+          title: messages[this.lang].message.already_in_cart,
+          message: messages[this.lang].message.product_already_in_cart,
+          type: 'warning',
+          duration: 4000
+        });
       }
     },
     pleasePurchase: function pleasePurchase() {
@@ -94069,35 +94066,32 @@ var messages = {
         };
         axios.post('/cart/add', data).then(function (res) {
           product.in_cart = true;
-          // this.$Notify({
-          //   title: messages[this.lang].message.added_successfully,
-          //   message: messages[this.lang].message.the_product_added,
-          //   type: 'success',
-          //   duration: 4000
-          // });
-          UIkit.notification("<span uk-icon='icon: check'></span> " + messages[_this2.lang].message.added_successfully, { pos: 'top-center', status: 'success' });
+          _this2.$Notify({
+            title: messages[_this2.lang].message.added_successfully,
+            message: messages[_this2.lang].message.the_product_added,
+            type: 'success',
+            duration: 4000
+          });
 
           _this2.inAddingProductId = null;
           $('.navbar-cart-count').html(res.data.item_count);
         }).catch(function (error) {
-          // console.log(error);
-          // this.hideLoading();
-          // this.$Notify({
-          //   title: 'Oops! something going wrong',
-          //   message: 'Please contact us for more information',
-          //   type: 'error',
-          //   duration: 4000
-          // });
-          UIkit.notification("<span uk-icon='icon: ban'></span> Oops! something going wrong", { pos: 'top-center', status: 'danger' });
+          console.log(error);
+          _this2.hideLoading();
+          _this2.$Notify({
+            title: 'Oops! something going wrong',
+            message: 'Please contact us for more information',
+            type: 'error',
+            duration: 4000
+          });
         });
       } else {
-        // this.$Notify({
-        //   title: messages[this.lang].message.already_in_cart,
-        //   message: messages[this.lang].message.product_already_in_cart,
-        //   type: 'warning',
-        //   duration: 4000
-        // });
-        UIkit.notification("<span uk-icon='icon: warning'></span> " + messages[this.lang].message.already_in_cart, { pos: 'top-center', status: 'warning' });
+        this.$Notify({
+          title: messages[this.lang].message.already_in_cart,
+          message: messages[this.lang].message.product_already_in_cart,
+          type: 'warning',
+          duration: 4000
+        });
       }
     }
   }

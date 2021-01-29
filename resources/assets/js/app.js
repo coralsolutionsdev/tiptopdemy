@@ -44,7 +44,7 @@ Vue.component('product-index', require('./components/frontend/products/index.vue
 Vue.component('product-items', require('./components/frontend/products/items.vue'));
 
 // If you want to use it in your vue components
-// Vue.use(AtComponents)
+Vue.use(AtComponents)
 Vue.use(Vuesax)
 
 

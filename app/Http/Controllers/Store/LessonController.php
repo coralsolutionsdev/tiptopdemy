@@ -417,7 +417,7 @@ class LessonController extends Controller
             'name' => $product->name,
             'sku' => $product->sku,
             'price' => $product->price,
-            'has_purchased' => $product->hasPurchased(),
+            'has_purchased' => $product->hasPurchased() ? true : false,
             'in_cart' => $product->isInCart(),
             'primary_image' => $product->getProductPrimaryImage(),
         ];

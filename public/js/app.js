@@ -3510,18 +3510,31 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       }
     },
     closeMemorizeQuiz: function closeMemorizeQuiz() {
-      this.currentItemKey = 0;
-      this.wrongAnsweredIdArray = [];
-      this.quizCompleted = false;
-      this.previewItemMode = true;
+      var _this4 = this;
+
+      items: [],
+      // memorize
+      this.previewItemMode = false;
       this.examItemMode = false;
-      this.quizItemAnsweredId = null;
-      this.timeLineProgress = null;
+      this.previewItem = null;
+      this.previewItemImageUrl = null;
+      this.previewItemAudioUrl = null;
+      this.currentItemKey = 0;
+      this.quizCompleted = false;
+      this.quizItem = null;
       this.quizItemAnswers = [];
+      this.quizItemKey = 0;
+      this.quizItemAnsweredId = null;
+      this.quizItemAnswerType = 0;
       this.timeLineProgress = 0;
-      this.quizItemAnswerTime = null;
       this.quizItemAnswerTotalTime = null;
-      this.isAllowToAnswer = true;
+      this.quizItemAnswerTime = null;
+      this.isAllowToAnswer = false;
+      this.wrongAnsweredIdArray = [];
+      UIkit.modal('#memorizeQuizModal').hide();
+      setTimeout(function () {
+        _this4.buildMemorizeItem(_this4.currentItemKey);
+      }, 300);
     }
   }
 });
@@ -3534,6 +3547,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Memorize_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Memorize_vue__);
+//
 //
 //
 //
@@ -8395,7 +8409,7 @@ if (typeof jQuery === 'undefined') {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.memorize-item[data-v-1d3946d6]{\r\n  padding: 5px 20px;\r\n  border: 1px solid var(--text-primary);\r\n  color: var(--text-primary);\r\n  border-radius: 5px;\r\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-1d3946d6]{\r\n  border-radius: 10px;\r\n  overflow: hidden;\n}\naudio[data-v-1d3946d6], audio[data-v-1d3946d6]:focus, audio[data-v-1d3946d6]:active{\r\n  outline: none;\r\n  box-shadow: none;\r\n  border: none;\r\n  width: 100% !important;\n}\n.answer-letter[data-v-1d3946d6]{\r\n  background-color: var(--text-primary);\r\n  display: block;\r\n  width: 40px;\r\n  height: 40px;\r\n  vertical-align: middle;\r\n  border-radius: 50%;\r\n  font-size: 22px;\n}\n.answer[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-input[data-v-1d3946d6]{\r\n  position: absolute;\r\n  opacity: 0;\n}\n.answer-item[data-v-1d3946d6]{\r\n  background-color: #F4F5F7;\r\n  border: 1px solid #F4F5F7;\r\n  border-radius: 10px;\r\n  font-size: 16px\n}\n.answer-item[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #32d296;\r\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #f0506e;\r\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-1d3946d6]{\r\n  background-color: #F9F9FB;\r\n  padding: 10px;\n}\n.status-icon[data-v-1d3946d6]{\r\n  display: none;\r\n  position: absolute;\r\n  right: -15px;\r\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-1d3946d6]{\r\n  display: -ms-flexbox;\r\n  display: flex;\n}\n.correct-answer-icon[data-v-1d3946d6]{\r\n  color: #32d296;\r\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-1d3946d6]{\r\n  color: #f0506e;\r\n  background-color: #ffe8e8;\n}\n.disabled[data-v-1d3946d6]{\r\n  pointer-events: none;\r\n  cursor: not-allowed !important;\n}\r\n", ""]);
+exports.push([module.i, "\n.memorize-item[data-v-1d3946d6]{\r\n  padding: 5px 20px;\r\n  border: 1px solid var(--text-primary);\r\n  color: var(--text-primary);\r\n  border-radius: 5px;\r\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-1d3946d6]{\r\n  border-radius: 10px;\r\n  overflow: hidden;\n}\naudio[data-v-1d3946d6], audio[data-v-1d3946d6]:focus, audio[data-v-1d3946d6]:active{\r\n  outline: none;\r\n  box-shadow: none;\r\n  border: none;\r\n  width: 100% !important;\r\n  height: 30px !important;\n}\n.answer-letter[data-v-1d3946d6]{\r\n  background-color: var(--text-primary);\r\n  display: block;\r\n  width: 40px;\r\n  height: 40px;\r\n  vertical-align: middle;\r\n  border-radius: 50%;\r\n  font-size: 22px;\n}\n.answer[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-input[data-v-1d3946d6]{\r\n  position: absolute;\r\n  opacity: 0;\n}\n.answer-item[data-v-1d3946d6]{\r\n  background-color: #F4F5F7;\r\n  border: 1px solid #F4F5F7;\r\n  border-radius: 10px;\r\n  font-size: 16px\n}\n.answer-item[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #32d296;\r\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #f0506e;\r\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-1d3946d6]{\r\n  background-color: #F9F9FB;\r\n  padding: 10px;\n}\n.status-icon[data-v-1d3946d6]{\r\n  display: none;\r\n  position: absolute;\r\n  right: -15px;\r\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-1d3946d6]{\r\n  display: -ms-flexbox;\r\n  display: flex;\n}\n.correct-answer-icon[data-v-1d3946d6]{\r\n  color: #32d296;\r\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-1d3946d6]{\r\n  color: #f0506e;\r\n  background-color: #ffe8e8;\n}\n.disabled[data-v-1d3946d6]{\r\n  pointer-events: none;\r\n  cursor: not-allowed !important;\n}\r\n", ""]);
 
 /***/ }),
 /* 48 */
@@ -39463,7 +39477,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('a', {
     staticClass: "uk-button uk-button-primary open-",
     attrs: {
-      "href": "#modal-sections",
+      "href": "#memorizeQuizModal",
       "uk-toggle": ""
     },
     domProps: {
@@ -39471,7 +39485,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])]) : _vm._e(), _vm._v(" "), _c('div', [_c('div', {
     attrs: {
-      "id": "modal-sections",
+      "id": "memorizeQuizModal",
       "uk-modal": "bg-close: false"
     }
   }, [_c('div', {
@@ -39504,7 +39518,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })]), _vm._v(" "), _c('div', {
     staticClass: "uk-width-expend"
   }, [_c('button', {
-    staticClass: "uk-button uk-button-primary uk-modal-close",
+    staticClass: "uk-button uk-button-primary",
     attrs: {
       "type": "button"
     },
@@ -39976,7 +39990,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "uk-width-1-4 uk-visible@m"
-  }, [((_vm.groups && _vm.groups.length != 0) || !_vm.product.has_purchased) ? _c('div', {
+  }, [((_vm.groups && _vm.groups.length != 0) || (_vm.product && _vm.product.has_purchased)) ? _c('div', {
     staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove"
   }, [(_vm.product && !_vm.product.has_purchased) ? _c('div', [_c('div', {
     staticClass: "uk-padding-small"

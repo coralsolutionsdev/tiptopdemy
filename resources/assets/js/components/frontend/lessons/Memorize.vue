@@ -13,11 +13,11 @@
         </div>
       </div>
       <div class="uk-text-center uk-margin-small">
-        <a class="uk-button uk-button-primary open-" href="#modal-sections" uk-toggle v-html="$t('main.Start the memorize test')"></a>
+        <a class="uk-button uk-button-primary open-" href="#memorizeQuizModal" uk-toggle v-html="$t('main.Start the memorize test')"></a>
       </div>
     </div>
     <div>
-      <div id="modal-sections" class="" uk-modal="bg-close: false">
+      <div id="memorizeQuizModal" class="" uk-modal="bg-close: false">
         <div class="uk-modal-dialog uk-width-3-5@m uk-width-1-1@s">
           <div class="uk-modal-body">
             <div v-if="quizCompleted" class="uk-padding uk-text-center">
@@ -27,7 +27,7 @@
                 <p class="uk-margin-remove" v-html="$t('main.You completed the quiz')"></p>
               </div>
               <div class="uk-width-expend">
-                <button class="uk-button uk-button-primary uk-modal-close" @click="closeMemorizeQuiz()" type="button" v-html="$t('main.Close')"></button>
+                <button class="uk-button uk-button-primary" @click="closeMemorizeQuiz()" type="button" v-html="$t('main.Close')"></button>
               </div>
             </div>
 
@@ -349,18 +349,33 @@ export default {
       }
     },
     closeMemorizeQuiz(){
-      this.currentItemKey = 0;
-      this.wrongAnsweredIdArray = [];
-      this.quizCompleted = false;
-      this.previewItemMode = true;
-      this.examItemMode = false;
-      this.quizItemAnsweredId = null;
-      this.timeLineProgress = null;
-      this.quizItemAnswers = [];
-      this.timeLineProgress = 0;
-      this.quizItemAnswerTime = null;
-      this.quizItemAnswerTotalTime = null;
-      this.isAllowToAnswer = true;
+      items: [],
+          // memorize
+          this.previewItemMode = false;
+          this.examItemMode = false;
+          this.previewItem = null;
+          this.previewItemImageUrl = null;
+          this.previewItemAudioUrl = null;
+          this.currentItemKey = 0;
+          this.quizCompleted = false;
+          this.quizItem = null;
+          this.quizItemAnswers = [];
+          this.quizItemKey = 0;
+          this.quizItemAnsweredId = null;
+          this.quizItemAnswerType = 0;
+          this.timeLineProgress =  0;
+          this.quizItemAnswerTotalTime =  null;
+          this.quizItemAnswerTime =  null;
+          this.isAllowToAnswer = false;
+          this.wrongAnsweredIdArray = [];
+          UIkit.modal('#memorizeQuizModal').hide();
+            setTimeout(()=>{
+                  this.buildMemorizeItem(this.currentItemKey);
+                },300
+            );
+
+
+
     }
 
   },
@@ -384,6 +399,7 @@ audio, audio:focus, audio:active{
   box-shadow: none;
   border: none;
   width: 100% !important;
+  height: 30px !important;
 }
 .answer-letter{
   background-color: var(--text-primary);

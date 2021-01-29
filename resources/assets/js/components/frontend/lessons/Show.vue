@@ -1,10 +1,11 @@
 <template>
   <div>
-
+<!--    {{product.has_purchased}}-->
     <div class="uk-grid-small" uk-grid>
       <div class="uk-width-1-4 uk-visible@m">
-        <div v-if="(groups && groups.length != 0) || !product.has_purchased" class="uk-card uk-card-default uk-card-body uk-padding-remove">
+        <div v-if="(groups && groups.length != 0) || (product && product.has_purchased)" class="uk-card uk-card-default uk-card-body uk-padding-remove">
           <div v-if="product && !product.has_purchased">
+<!--            && -->
             <div class="uk-padding-small">
               <div class="price uk-heading-small uk-margin-remove"><span class="uk-text-primary">$</span><span v-html="product.price"></span></div>
 

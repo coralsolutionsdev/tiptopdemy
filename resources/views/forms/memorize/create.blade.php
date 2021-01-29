@@ -72,6 +72,12 @@
                                 {!! Form::select('level', \App\Modules\Form\FormItem::MEMORIZE_LEVELS, !empty($form) && !empty($form['properties']) ? $form['properties']['level'] : null, ['class' => 'uk-select uk-width-1-3']) !!}
                             </div>
                         </div>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-2 d-flex align-items-center">{{__('Status')}}</div>
+                            <div class="col-lg-10 padding-0 margin-0">
+                                <input type="checkbox" name="status" class="toogle-switch" value="1" {{ empty($form) || $form->status == 1 ? 'checked' : ''}}>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card border-light">

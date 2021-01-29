@@ -3812,7 +3812,6 @@ var messages = {
         _this.lessonGroupId = _this.item.lesson_group_id;
         _this.lessonId = _this.item.lesson_id;
         _this.product = _this.item.product;
-        console.log(_this.product);
       });
     },
     updateViewContentStatus: function updateViewContentStatus(status) {
@@ -40456,10 +40455,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })], 1), _vm._v(" "), (_vm.description) ? _c('div', [_c('div', {
-    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small",
-    staticStyle: {
-      "overflow": "hidden"
-    }
+    staticClass: "uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small"
   }, [_c('h5', {
     staticClass: "text-highlighted uk-text-bold",
     domProps: {

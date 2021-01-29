@@ -23,9 +23,9 @@
 
   <!--site Css-->
 
-  <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202101290300')}}">
-  <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202101290300')}}">
-  <link rel="stylesheet" href="{{url('themes/general/modules/css/file-manager.css?v=202101290300')}}">
+  <link rel="stylesheet" href="{{url('themes/'.getFrontendThemeName().'/css/general.css?v=202101292120')}}">
+  <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202101292120')}}">
+  <link rel="stylesheet" href="{{url('themes/general/modules/css/file-manager.css?v=202101292120')}}">
 
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>

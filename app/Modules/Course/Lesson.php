@@ -106,7 +106,7 @@ class Lesson extends Model implements ReactableContract, HasMedia
     {
         $forms = collect();
         if (!empty($this->getFormsWithType(Form::TYPE_FORM))){
-            $forms = $this->getFormsWithType(Form::TYPE_FORM)->filter(function ($form) {
+            $forms = $this->getFormsWithType(Form::TYPE_FORM)->where('status', Form::STATUS_PUBLISHED)->filter(function ($form) {
                 if ($form->children->count() == 0){
                     return true;
                 }

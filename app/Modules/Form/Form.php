@@ -81,6 +81,16 @@ class Form extends Model
         4 => 'Master',
     ];
 
+    const STATUS_PUBLISHED = 1;
+    const STATUS_UNPUBLISHED = 2;
+    const STATUS_DISABLED = 3;
+
+    const STATUS_ARRAY = [
+        self::STATUS_PUBLISHED => 'Published',
+        self::STATUS_UNPUBLISHED => 'Unpublished',
+        self::STATUS_DISABLED => 'Disabled',
+    ];
+
     /**
      * Get the route key for the model.
      *
@@ -127,7 +137,7 @@ class Form extends Model
         $currentSectionScore = 0;
         $input['version'] = !empty($existingForm) ? $existingForm->version : 0;
         $input['master_id'] = null;
-        $input['status'] = 1;
+        $input['status'] = isset($input['status']) ? $input['status'] : 1;
         $input['creator_id'] = getAuthUser()->id;
         $input['editor_id'] = getAuthUser()->id;
         $ownerId = !empty($owner) ? $owner->id : 0;
@@ -394,6 +404,7 @@ class Form extends Model
                 FormItem::TYPE_MEMORIZE_TERM => isset($input['form_item_type_title']) && isset($input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM]) ? $input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM] : 'Terms group',
                 FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A => isset($input['form_item_type_title']) && isset($input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A]) ? $input['form_item_type_title'][FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A] : 'Translations group',
             ],
+            'type_statuses' => isset($input['form_item_type_status']) ? $input['form_item_type_status'] : null
         ];
         $ownerId = !empty($owner) ? $owner->id : 0;
         $typesArray = isset($input['item_type']) ? $input['item_type'] : null;
@@ -491,6 +502,21 @@ class Form extends Model
             $tags[$tag->name] = $tag->name;
         }
         return $tags;
+    }
+    public function isGroupTypeEnabled($type)
+    {
+        $formProperties = $this->properties;
+        if (!empty($formProperties)){
+            if (empty($formProperties['type_statuses'])){
+                return true;
+            }elseif (!empty($formProperties['type_statuses'][$type])){
+                return true;
+            }
+        }
+        return false;
+
+
+
     }
 
     /*

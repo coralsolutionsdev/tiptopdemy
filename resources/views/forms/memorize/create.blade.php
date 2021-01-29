@@ -84,7 +84,17 @@
                                 <div class="uk-placeholder uk-margin-small">
 
                                     <div class="uk-margin-small">
-                                        <input name="form_item_type_title[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}]" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}-title" value="English" style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}})"><span uk-icon="icon: plus-circle"></span></span>
+                                        <div class="uk-grid-small" uk-grid>
+                                            <div class="uk-width-auto">
+                                                <input name="form_item_type_title[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}]" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}-title" value="English" style="margin-right: 5px">
+                                            </div>
+                                            <div class="uk-width-auto">
+                                                <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}})"><span uk-icon="icon: plus-circle"></span></span>
+                                            </div>
+                                            <div class="uk-flex uk-flex-middle uk-flex-right uk-width-expand">
+                                                <span style="margin: 10px"><input type="checkbox" name="form_item_type_status[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}]" class="toogle-switch" value="1" {{ empty($form) || $form->isGroupTypeEnabled(\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM) ? 'checked' : ''}}></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
                                         @if(false)
@@ -119,7 +129,17 @@
                                 <div class="uk-placeholder uk-margin-small">
 
                                     <div class="uk-margin-small">
-                                        <input name="form_item_type_title[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}]" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}-title" value="عربي" style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}})"><span uk-icon="icon: plus-circle"></span></span>
+                                        <div class="uk-grid-small" uk-grid>
+                                            <div class="uk-width-auto">
+                                                <input name="form_item_type_title[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}]" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}-title" value="عربي" style="margin-right: 5px">
+                                            </div>
+                                            <div class="uk-width-auto">
+                                                <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}})"><span uk-icon="icon: plus-circle"></span></span>
+                                            </div>
+                                            <div class="uk-flex uk-flex-middle uk-flex-right uk-width-expand">
+                                                <span style="margin: 10px"><input type="checkbox" name="form_item_type_status[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}]" class="toogle-switch" value="1" {{ empty($form) || $form->isGroupTypeEnabled(\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A) ? 'checked' : ''}}></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_TERM_TRANSLATE_A}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
                                         @if(false)
@@ -154,7 +174,17 @@
                                 <div class="uk-placeholder uk-margin-small">
 
                                     <div class="uk-margin-small">
-                                        <input name="form_item_type_title" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}}-title" value="Image" disabled style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}})"><span uk-icon="icon: plus-circle"></span></span>
+                                        <div class="uk-grid-small" uk-grid>
+                                            <div class="uk-width-auto">
+                                                <input name="form_item_type_title" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}}-title" value="Image" disabled style="margin-right: 5px">
+                                            </div>
+                                            <div class="uk-width-auto">
+                                                <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}})"><span uk-icon="icon: plus-circle"></span></span>
+                                            </div>
+                                            <div class="uk-flex uk-flex-middle uk-flex-right uk-width-expand">
+                                                <span style="margin: 10px"><input type="checkbox" name="form_item_type_status[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}}]" class="toogle-switch" value="1" {{ empty($form) || $form->isGroupTypeEnabled(\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE) ? 'checked' : ''}}></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_IMAGE}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid="masonry: true">
                                         @if(false)
@@ -194,9 +224,18 @@
 
                                 </div>
                                 <div class="uk-placeholder uk-margin-small">
-
                                     <div class="uk-margin-small">
-                                        <input name="form_item_type_title" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}}-title" value="Audio" disabled style="margin-right: 5px"> <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}})"><span uk-icon="icon: plus-circle"></span></span>
+                                        <div class="uk-grid-small" uk-grid>
+                                            <div class="uk-width-auto">
+                                                <input name="form_item_type_title" type="text" class="uk-input uk-form-width-medium memorize-group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}}-title" value="Audio" disabled style="margin-right: 5px">
+                                            </div>
+                                            <div class="uk-width-auto">
+                                                <span class="uk-button uk-button-default add-memorize-item add-item hover-primary" onclick="addFormItem({{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}})"><span uk-icon="icon: plus-circle"></span></span>
+                                            </div>
+                                            <div class="uk-flex uk-flex-middle uk-flex-right uk-width-expand">
+                                                <span style="margin: 10px"><input type="checkbox" name="form_item_type_status[{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}}]" class="toogle-switch" value="1" {{ empty($form) || $form->isGroupTypeEnabled(\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO) ? 'checked' : ''}}></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <ul class="uk-grid-small uk-child-width-1-3 uk-text-center group-{{\App\Modules\Form\FormItem::TYPE_MEMORIZE_MEDIA_AUDIO}}-items-list" uk-sortable="handle: .uk-sortable-handle" uk-grid>
                                         @if(false)

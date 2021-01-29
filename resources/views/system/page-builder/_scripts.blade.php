@@ -60,6 +60,14 @@
                     '  </div>\n' +
                     '</div>',
             },
+            {
+                id: 'customButton', // id is mandatory
+                label: '<b>customButton</b>', // You can use HTML/SVG inside labels
+                attributes: { class:'' },
+                content: '<div class="pb-widget-wrapper pb-widget-text-editor" style="margin-left: 5px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px">\n' +
+                    '<a class="uk-button uk-button-primary pb-button" href="" target="_blank">Click Me</a>' +
+                    '</div>',
+            },
 
         ];
         function getWidget(id){
@@ -108,6 +116,20 @@
                     var activeWidgetImageUrl = activeWidget.find('.pb-widget-image').attr('data-src');
                     $('.image-setting-image-thump').attr('data-src', activeWidgetImageUrl);
                 }
+                if (activeWidgetType == 'customButton'){
+                    var customBtn = activeWidget.find('.uk-button');
+                    $('.custom-button-link-input').val(customBtn.attr('href'));
+                    $('.custom-button-title-input').val(customBtn.html());
+                    var colorClass = 'uk-button-default';
+                    if (customBtn.hasClass('uk-button-primary')){
+                        colorClass = 'uk-button-primary';
+                    }else if(customBtn.hasClass('uk-button-danger')){
+                        colorClass = 'uk-button-danger';
+                    }
+                    $('.custom-button-color-input').val(colorClass);
+
+
+                }
                 openedWidgetSetting = activeWidget.attr('id');
                 openedWidgetType = activeWidgetType;
                 var marginTop = activeWidget.css('margin-top').replace('px','');
@@ -135,6 +157,27 @@
                 $(this).hide();
             });
             $('.video-source-setting-'+videoSource).show();
+        });
+        // customButton change
+        $('.custom-button-link-input').change(function (){
+            var inputVal = $(this).val();
+            var activeWidget = $('#'+openedWidgetSetting);
+            activeWidget.find('.pb-button').attr('href', inputVal);
+                    });
+
+        $('.custom-button-title-input').change(function (){
+            var inputVal = $(this).val();
+            var activeWidget = $('#'+openedWidgetSetting);
+            activeWidget.find('.pb-button').html(inputVal);
+
+        });
+        $('.custom-button-color-input').change(function (){
+            var inputVal = $(this).val();
+            var activeWidget = $('#'+openedWidgetSetting);
+            activeWidget.find('.pb-button').removeClass('uk-button-default');
+            activeWidget.find('.pb-button').removeClass('uk-button-primary');
+            activeWidget.find('.pb-button').removeClass('uk-button-danger');
+            activeWidget.find('.pb-button').addClass(inputVal);
         });
 
         $('.pb-view-widgets-list').click(function (){
@@ -426,7 +469,7 @@
             var markersDiv = widgetItem.find('.pb-hotspot-marker-items');
             markersDiv.append('' +
                 '<div id="pbMarker-'+markerId+'" class="pb-hotspot-marker uk-dark" color-class-value="uk-dark">\n' +
-                '  <a class="uk-position-absolute uk-transform-center pb-marker-pin pin" top-value="'+topPercentage+'" left-value="'+leftPercentage+'" style="left: '+leftPercentage+'%; top: '+topPercentage+'%; opacity: 0.8" href="#" uk-marker></a>\n' +
+                '  <a onclick="playMarkerFirstMedia(this)" class="uk-position-absolute uk-transform-center pb-marker-pin pin" top-value="'+topPercentage+'" left-value="'+leftPercentage+'" style="left: '+leftPercentage+'%; top: '+topPercentage+'%; opacity: 0.8" href="#" uk-marker></a>\n' +
                 '  <div uk-dropdown="mode: click;pos: top-center" class="uk-padding-small pb-hotspot-marker-description">This is my Marker description</div>\n' +
                 '</div>');
             updateWidgetSettings();
@@ -680,6 +723,17 @@
 
         var activeMarkerId = null;
 
+        function deleteMarkerItem(){
+            $('.delete-hotspot-marker').off('click').click(function (){
+                $('#pbMarker-'+activeMarkerId).remove();
+                $('#pbMarkerEditable-'+activeMarkerId).remove();
+                $('.marker-message').show();
+                $('.marker-adding-mode').hide();
+                $('.marker-editor').hide();
+
+            });
+        }
+
         function openMarkerEditorSetting(itemId){
             tinymce.remove('.pb-marker-description-content-editor');
             var widgetItem = $('#pbMarker-'+itemId);
@@ -706,6 +760,7 @@
             $('.input-left-value').val(widgetItemLeft);
             $('.marker-message').hide();
             updateMarkerValues(itemId);
+            deleteMarkerItem();
         }
 
         function openMarkerEditor()

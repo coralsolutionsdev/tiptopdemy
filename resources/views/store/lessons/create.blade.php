@@ -263,7 +263,8 @@
                                     <th scope="col" class="uk-text-center">{{__('main.Display type')}}</th>
                                     <th scope="col" class="uk-text-center">{{__('main.version')}}</th>
                                     <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
-                                    <th scope="col" width="150">{{__('main.Actions')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Status')}}</th>
+                                    <th scope="col" width="200">{{__('main.Actions')}}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -274,9 +275,13 @@
                                             <td class="uk-text-center">{{!empty($form->properties) && $form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
                                             <td class="uk-text-success uk-text-center">{{$form->version}}.0</td>
                                             <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                            <td class="uk-text-center">{{\App\Modules\Form\Form::STATUS_ARRAY[$form->status]}}</td>
                                             <td>
                                                 <div class="action_btn">
                                                     <ul>
+                                                        <li class="">
+                                                            <span onclick="copyLink(this)" date-link="{{route('store.form.show', [$lesson->slug, $form->hash_id])}}" class="btn btn-light hover-primary" uk-tooltip="Copy link"><i class="fas fa-link"></i></span>
+                                                        </li>
                                                         <li class="">
                                                             <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}" class="btn btn-light"><i class="far fa-edit"></i></a>
                                                         </li>
@@ -464,6 +469,16 @@
     @include('store.lessons._scripts')
     @if(!empty($lesson))
     <script>
+        function copyLink(event) {
+            var text = $(event).attr('date-link');
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(text).select();
+            document.execCommand("copy");
+            $temp.remove();
+            UIkit.notification("<span uk-icon='icon: check'></span> File url copied to clipboard.", {pos: 'top-center', status:'success'})
+        }
+
         var itemName = '{{$lesson->name}}';
         $('.btn-cat-delete').click(function () {
             if (!confirm('Are you sure you want to delete '+itemName+ '?')){
@@ -484,6 +499,7 @@
             });
         }
         deleteAttachment();
+
     </script>
     @endif
 @endsection

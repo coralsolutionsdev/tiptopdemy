@@ -275,10 +275,7 @@
             tags:true, // change to false to disable add new tags
         });
 
-
-
     </script>
     @include('forms.memorize._script')
-{{--    <script src="{{asset('js/app.js')}}"></script>--}}
 
 @endsection

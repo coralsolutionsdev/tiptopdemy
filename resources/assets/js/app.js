@@ -13,7 +13,7 @@ import VueInternationalization from 'vue-i18n';
 import Locale from '../../js/vue-i18n-locales.generated';
 // ui frameworks
 import AtComponents from 'at-ui'
-import 'at-ui-style'    // Import CSS
+// import 'at-ui-style'    // Import CSS
 import Vuesax from 'vuesax'
 // import 'vuesax/dist/vuesax.css' //Vuesax styles
 
@@ -44,7 +44,7 @@ Vue.component('product-index', require('./components/frontend/products/index.vue
 Vue.component('product-items', require('./components/frontend/products/items.vue'));
 
 // If you want to use it in your vue components
-Vue.use(AtComponents)
+// Vue.use(AtComponents)
 Vue.use(Vuesax)
 
 

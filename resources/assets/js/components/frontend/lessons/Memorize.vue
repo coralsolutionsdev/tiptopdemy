@@ -27,7 +27,7 @@
                 <p class="uk-margin-remove" v-html="$t('main.You completed the quiz')"></p>
               </div>
               <div class="uk-width-expend">
-                <button class="uk-button uk-button-primary uk-modal-close" type="button" v-html="$t('main.Close')"></button>
+                <button class="uk-button uk-button-primary uk-modal-close" @click="closeMemorizeQuiz()" type="button" v-html="$t('main.Close')"></button>
               </div>
             </div>
 
@@ -348,7 +348,20 @@ export default {
 
       }
     },
-
+    closeMemorizeQuiz(){
+      this.currentItemKey = 0;
+      this.wrongAnsweredIdArray = [];
+      this.quizCompleted = false;
+      this.previewItemMode = true;
+      this.examItemMode = false;
+      this.quizItemAnsweredId = null;
+      this.timeLineProgress = null;
+      this.quizItemAnswers = [];
+      this.timeLineProgress = 0;
+      this.quizItemAnswerTime = null;
+      this.quizItemAnswerTotalTime = null;
+      this.isAllowToAnswer = true;
+    }
 
   },
 }

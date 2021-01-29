@@ -32,8 +32,8 @@
                 </button>
               </div>
             </div>
+            <hr>
           </div>
-          <hr>
           <div class="uk-padding-small">
             <ul uk-accordion="multiple: true">
               <li v-for="(group, key) in groups" :class=" { 'uk-open':lessonGroupId == group.id}" style="margin:0px 0px 10px 0px">
@@ -279,32 +279,36 @@ name: "Show",
         axios.post('/cart/add', data)
             .then(res => {
               product.in_cart = true;
-              this.$Notify({
-                title: messages[this.lang].message.added_successfully,
-                message: messages[this.lang].message.the_product_added,
-                type: 'success',
-                duration: 4000
-              });
+              // this.$Notify({
+              //   title: messages[this.lang].message.added_successfully,
+              //   message: messages[this.lang].message.the_product_added,
+              //   type: 'success',
+              //   duration: 4000
+              // });
+              UIkit.notification("<span uk-icon='icon: check'></span> "+messages[this.lang].message.added_successfully, {pos: 'top-center', status:'success'})
               this.inAddingProductId = null;
               $('.navbar-cart-count').html(res.data.item_count);
             })
             .catch(error => {
               console.log(error);
               // this.hideLoading();
-              this.$Notify({
-                title: 'Oops! something going wrong',
-                message: 'Please contact us for more information',
-                type: 'error',
-                duration: 4000
-              });
+              // this.$Notify({
+              //   title: 'Oops! something going wrong',
+              //   message: 'Please contact us for more information',
+              //   type: 'error',
+              //   duration: 4000
+              // });
+              UIkit.notification("<span uk-icon='icon: ban'></span> Oops! something going wrong", {pos: 'top-center', status:'danger'})
+
             });
       }else {
-        this.$Notify({
-          title: messages[this.lang].message.already_in_cart,
-          message: messages[this.lang].message.product_already_in_cart,
-          type: 'warning',
-          duration: 4000
-        });
+        // this.$Notify({
+        //   title: messages[this.lang].message.already_in_cart,
+        //   message: messages[this.lang].message.product_already_in_cart,
+        //   type: 'warning',
+        //   duration: 4000
+        // });
+        UIkit.notification("<span uk-icon='icon: warning'></span> "+messages[this.lang].message.already_in_cart, {pos: 'top-center', status:'warning'})
       }
 
     },

@@ -343,6 +343,7 @@
                                 <tr>
                                     <th scope="col">{{__('main.Quiz name')}}</th>
                                     <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Status')}}</th>
                                     <th scope="col" width="150">{{__('main.Actions')}}</th>
                                 </tr>
                                 </thead>
@@ -352,6 +353,7 @@
                                         <tr>
                                             <td>{{$form->title}}</td>
                                             <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                            <td class="uk-text-center">{!! getStatusIcon($form->status) !!}</td>
                                             <td>
                                                 <div class="action_btn">
                                                     <ul>

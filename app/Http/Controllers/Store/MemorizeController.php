@@ -61,7 +61,7 @@ class MemorizeController extends Controller
      */
     public function store(Request $request, Lesson $lesson)
     {
-        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'item_type', 'item_title', 'item_status', 'item_media_url', 'form_item_type_title', 'item_question', 'deleted_items', 'form_item_type_status']);
+        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'status', 'item_type', 'item_title', 'item_status', 'item_media_url', 'form_item_type_title', 'item_question', 'deleted_items', 'form_item_type_status']);
         $input['type'] = Form::TYPE_MEMORIZE;
         $form =  Form::createOrUpdateWithType($input,$lesson);
         $product = $lesson->product;
@@ -107,7 +107,7 @@ class MemorizeController extends Controller
      */
     public function update(Request $request, Lesson $lesson, $formHashId)
     {
-        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'item_type', 'item_title', 'item_status', 'item_media_url', 'form_item_type_title', 'item_question', 'deleted_items', 'form_item_type_status']);
+        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'status', 'item_type', 'item_title', 'item_status', 'item_media_url', 'form_item_type_title', 'item_question', 'deleted_items', 'form_item_type_status']);
         $form = Form::where('hash_id', $formHashId)->first();
         if (empty($form)){
             abort(500);

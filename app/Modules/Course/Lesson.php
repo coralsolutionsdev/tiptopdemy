@@ -213,11 +213,11 @@ class Lesson extends Model implements ReactableContract, HasMedia
     public function getFormsWithType($type = null){
         if (!empty($type)){
             if (!empty($this->forms)){
-                return $this->forms->where('type', $type);
+                return $this->forms->where('type', $type)->where('status', 1);
             }
             return collect();
         }
-        return $this->forms;
+        return $this->forms->where('status', 1);
     }
     /*
      |--------------------------------------------------------------------------

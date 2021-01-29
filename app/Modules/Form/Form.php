@@ -394,7 +394,7 @@ class Form extends Model
         $existingForm = !empty($form) ? $form : null;
         $input['version'] = !empty($existingForm) ? $existingForm->version : 0;
         $input['master_id'] = null;
-        $input['status'] = 1;
+        $input['status'] = isset($input['status']) ? $input['status'] : 0;
         $input['editor_id'] = $user->id;
         $input['properties'] = [
             'item_question' => isset($input['item_question']) ? $input['item_question'] : '',

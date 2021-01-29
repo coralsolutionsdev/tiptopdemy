@@ -735,6 +735,7 @@
         }
 
         function openMarkerEditorSetting(itemId){
+            activeMarkerId = itemId;
             tinymce.remove('.pb-marker-description-content-editor');
             var widgetItem = $('#pbMarker-'+itemId);
             var markerEditor = $('.marker-editor');
@@ -884,6 +885,21 @@
             $('#contentForm').submit();
         });
 
+
+        function playMarkerFirstMedia(type){
+            return true;
+        }
+
+
+        // $('.save-changes-hotspot-marker').click(function (){
+        //     var text = $('.hidden-textarea-input').val();
+        //     var marker = $('#pbMarker-'+activeMarkerId);
+        //     // marker.find('.pb-hotspot-marker-description').html(text);
+        //     console.log(activeMarkerId, marker.find('.pb-hotspot-marker-description').html())
+        //     // $('.marker-message').hide();
+        //     // $('.marker-editor').hide();
+        //     // $('.marker-adding-mode').show();
+        // });
 
 </script>
 

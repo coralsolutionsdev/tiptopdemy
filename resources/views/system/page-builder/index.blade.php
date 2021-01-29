@@ -66,7 +66,7 @@
         <button class="uk-button uk-margin-small-right pb-control-toggle"><span class="" uk-icon="icon: chevron-left"></span></button>
       </div>
       <div class="">
-        <div style="padding-top: 25px">
+        <div class="builder-container" style="padding-top: 25px">
           <ul id="pb-content" class="pb-editable-content pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-sortable="handle: .uk-sortable-handle" uk-grid>
             {!! $htmlContent !!}
           </ul>
@@ -80,10 +80,10 @@
     <div class="pb-row uk-card bg-white uk-padding-remove uk-container">
       <!--row control bar-->
       <span class="pb-row-control-bar uk-background-primary uk-light uk-position-top-center" style="margin-top: -24px; padding:2px 5px; border-radius: 5px 5px 0 0">
-                <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
-                <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
-                <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
-              </span>
+        <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
+        <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
+        <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
+      </span>
       <div class="pb-row-components">
         <div class="pb-grid uk-grid-small"  uk-grid>
           <div class="pb-grid-column uk-width-1-1 uk-width-1-2@m"><span class="pb-column-control-bar uk-light">
@@ -196,10 +196,10 @@
     <div class="pb-row uk-card bg-white uk-padding-remove">
       <!--row control bar-->
       <span class="pb-row-control-bar uk-background-primary uk-light uk-position-top-center" style="margin-top: -24px; padding:2px 5px; border-radius: 5px 5px 0 0">
-                <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
-                <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
-                <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
-              </span>
+        <span class=""><span uk-icon="icon: copy; ratio: 0.8"></span></span>
+        <span class="uk-margin-small-right uk-margin-small-left"><span class="uk-sortable-handle" uk-icon="icon: table;  ratio: 0.8"></span></span>
+        <span class=""><span uk-icon="icon: close; ratio: 0.8"></span></span>
+      </span>
       <div class="pb-row-components">
 
       </div>

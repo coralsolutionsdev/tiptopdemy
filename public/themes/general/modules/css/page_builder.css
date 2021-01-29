@@ -118,6 +118,9 @@ a.uk-marker > svg {
     /*background-image: url(*!set path to your icon here*!);*/
 
 }
+.pb-editable-content .pb-button{
+    pointer-events: none;
+}
 /*a.uk-marker{*/
 /*}*/
 .pin {
@@ -220,7 +223,12 @@ input[type="color"]::-webkit-color-swatch {
 
 
 
-
+audio.audio-file{
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    height: 30px !important;
+}
 
 
 

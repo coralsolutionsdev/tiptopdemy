@@ -59,7 +59,7 @@ class MemorizeController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'item_id', 'item_description', 'item_default_title', 'item_lang', 'item_status']);
+        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'item_id', 'item_description', 'item_default_title', 'item_lang', 'item_status', 'form_item_type_status']);
         FormItem::createOrUpdateMemorize($input);
         session()->flash('success', trans('main._success_msg'));
         return redirect()->route('form.memorize.index');
@@ -101,7 +101,7 @@ class MemorizeController extends Controller
      */
     public function update(Request $request, FormItem $memorize)
     {
-        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'item_id', 'item_description', 'item_default_title', 'item_lang', 'item_status']);
+        $input = $request->only(['title', 'description', 'tags', 'time_to_answer', 'level', 'item_id', 'item_description', 'item_default_title', 'item_lang', 'item_status', 'form_item_type_status']);
         FormItem::createOrUpdateMemorize($input, $memorize);
         session()->flash('success', trans('main._update_msg'));
         return redirect()->route('form.memorize.index');

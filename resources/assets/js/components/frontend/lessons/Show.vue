@@ -88,7 +88,7 @@
             </div>
             <!-- Descriptions-->
             <div v-if="description">
-              <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small" style="overflow: hidden">
+              <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
                 <h5 class="text-highlighted uk-text-bold" v-html="$t('main.Lesson description')"></h5>
                 <div v-html="description"></div>
               </div>
@@ -260,7 +260,6 @@ name: "Show",
         this.lessonGroupId = this.item.lesson_group_id;
         this.lessonId = this.item.lesson_id;
         this.product = this.item.product;
-        console.log(this.product);
       });
     },
     updateViewContentStatus(status){
@@ -323,6 +322,8 @@ name: "Show",
     memorize
   },
 }
+
+
 </script>
 
 <style scoped>

@@ -39,7 +39,7 @@
                                         {{__('main.Description')}}:
                                     </div>
                                     <div class="col-11">
-                                        <textarea class="uk-textarea content-editor" name="description" rows="10" placeholder="Add quiz description here">{!! !empty($form->description) ? $form->description : '' !!}</textarea>
+                                        <textarea class="uk-textarea tiny-content-editor" name="description" rows="10" placeholder="Add quiz description here">{!! !empty($form->description) ? $form->description : '' !!}</textarea>
                                     </div>
                                 </div>
                                 @if(!empty($categories))
@@ -55,6 +55,14 @@
                                     </div>
                                 </div>
                                 @endif
+                                <div class="row uk-margin-small" uk-grid>
+                                    <div class="col-1 uk-flex uk-flex-middle">
+                                        {{__('main.Category')}}:
+                                    </div>
+                                    <div class="col-3">
+                                        {{ Form::select('status', \App\Modules\Form\Form::STATUS_ARRAY, !empty($form) ? $form->status : 1, [ 'class' => 'form-control']) }}
+                                    </div>
+                                </div>
                                 <div class="row uk-margin-small" uk-grid>
                                     <div class="col-1 uk-flex uk-flex-middle">
                                         {{__('main.Position')}}:

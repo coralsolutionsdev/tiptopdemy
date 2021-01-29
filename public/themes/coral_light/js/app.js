@@ -18,3 +18,10 @@ function enableLoadingSpinner($status = true) {
         $('.loading-screen-spinner').fadeOut();
     }
 }
+
+// play marker audio auto
+function playMarkerFirstMedia(event){
+    var marker = $(event).closest('.pb-hotspot-marker');
+    var audio = marker.find('.audio-file')[0];
+    audio.play();
+}

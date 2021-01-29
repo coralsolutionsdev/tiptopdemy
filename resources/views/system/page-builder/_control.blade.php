@@ -43,6 +43,12 @@
                                     <div class="pb-element-title-wrapper">Hotspot</div>
                                 </div>
                             </div>
+                            <div class="pb-draggable-item pb-element" pb-draggableType="element" pb-elementType="customButton" draggable="true">
+                                <div class="uk-card uk-card-body uk-padding-small uk-box-shadow-hover-medium draggableItem">
+                                    <div class="pb-element-icon-wrapper uk-flex uk-flex-middle uk-flex-center"><i class="fas fa-mouse-pointer fa-2x"></i></div>
+                                    <div class="pb-element-title-wrapper">Custom Button</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -99,6 +105,26 @@
                     <label class="uk-form-label" for="form-stacked-text">Border margin (<span class="current-margin-value"></span>px)</label>
                     <div class="slidecontainer">
                         <input type="range" class="left-position uk-width-1-1 input-margin-value" min="0" max="50" value="5">
+                    </div>
+                </div>
+            </div>
+            <div class="pb-widget-setting customButton-setting uk-padding-small pb-settings">
+                <div>
+                    <div class="uk-margin-small pb-dark">
+                        <label class="uk-form-label">Link</label>
+                        <input class="uk-input uk-form-small custom-button-link-input" type="text">
+                    </div>
+                    <div class="uk-margin-small pb-dark">
+                        <label class="uk-form-label">Title</label>
+                        <input class="uk-input uk-form-small custom-button-title-input" type="text">
+                    </div>
+                    <div class="uk-margin-small pb-dark">
+                        <label class="uk-form-label">Color</label>
+                        <select class="uk-select uk-form-small custom-button-color-input">
+                            <option value="uk-button-default">Default</option>
+                            <option value="uk-button-primary">Primary</option>
+                            <option value="uk-button-danger">Danger</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -224,11 +250,14 @@
                                 <label><input class="uk-radio hotspot-color hotspot-color-light" type="radio" name="hotspot-color" value="uk-light"> light</label>
                             </div>
                         </div>
+                        <div class="uk-margin-small uk-text-right">
+                            <span class="uk-button uk-button-danger delete-hotspot-marker uk-button-small" style="padding: 5px 15px"><span uk-icon="icon: trash"></span></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="uk-modal-footer uk-text-right">
+        <div class="uk-modal-footer uk-text-right" style="padding: 10px">
 {{--            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>--}}
             <button class="uk-button uk-button-default pb-add-hotspot">Add hotspot</button>
             <button class="uk-button uk-button-primary save-hotspot-changes" type="button">Done</button>

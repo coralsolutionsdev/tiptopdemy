@@ -39,7 +39,8 @@ class MemorizeController extends Controller
             $typeArray = [];
             foreach ($groupedAnswers as $group => $answers){
                 $groupCorrectAnswersCount = 0;
-                if ($answers->count() > 0){ // have answers
+
+                if ($answers->count() > 0 && $form->isGroupTypeEnabled($group)){ // have answers
                     // first correct answer
                     $firstCorrectAnswer = $answers->where('status', 1)->first();
                     if (!empty($firstCorrectAnswer)){

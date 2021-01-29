@@ -1,7 +1,7 @@
 @extends('themes.'.getFrontendThemeName().'.v2.layout')
 @section('title', $page_title)
 @section('head')
-    <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202101290200')}}">
+    <link rel="stylesheet" href="{{url('themes/general/modules/css/page_builder.css?v=202101290300')}}">
 @endsection
 @section('content')
 <section >

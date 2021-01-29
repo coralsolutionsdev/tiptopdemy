@@ -123,10 +123,10 @@ a.uk-marker > svg {
 .pin {
     content: '';
     position: absolute;
-    top: 6px;
-    left: 6px;
-    height: 20px;
-    width: 20px;
+    top: 0;
+    left: 0;
+    height: 10px;
+    width: 10px;
     border-radius: 50%;
     z-index: 20;
 
@@ -135,16 +135,15 @@ a.uk-marker > svg {
 .pin::after{
     content: '';
     position: absolute;
-    top: -5px;
-    left: -5px;
-    height: 30px;
-    width: 30px;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
     background: #222222;
     border-radius: 50%;
     z-index: 1;
     animation: plus-effect 1s ease-in-out infinite;
 }
-
 .uk-dark .pin::after{
     background: #222222;
 }

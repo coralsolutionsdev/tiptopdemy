@@ -228,7 +228,7 @@
                             <label class="uk-form-label" for="form-stacked-text">Description</label>
                             <div class="uk-form-controls">
                                 <textarea class="uk-textarea pb-marker-description-content-editor" rows="10"></textarea>
-                                <input type="hidden" class="hidden-textarea-input">
+                                <input type="hidden" class="uk-input hidden-textarea-input">
                             </div>
                         </div>
                         <div class="uk-margin-small">
@@ -251,6 +251,7 @@
                             </div>
                         </div>
                         <div class="uk-margin-small uk-text-right">
+{{--                            <span class="uk-button uk-button-primary save-changes-hotspot-marker uk-button-small" style="padding: 5px 15px">Save changes</span>--}}
                             <span class="uk-button uk-button-danger delete-hotspot-marker uk-button-small" style="padding: 5px 15px"><span uk-icon="icon: trash"></span></span>
                         </div>
                     </div>

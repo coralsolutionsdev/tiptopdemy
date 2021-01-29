@@ -39,6 +39,8 @@ class MemorizeController extends Controller
             $typeArray = [];
             foreach ($groupedAnswers as $group => $answers){
                 $groupCorrectAnswersCount = 0;
+                $titlesArray = [];
+                $propertiesArrays = [];
 
                 if ($answers->count() > 0 && $form->isGroupTypeEnabled($group)){ // have answers
                     // first correct answer
@@ -51,6 +53,8 @@ class MemorizeController extends Controller
                             'status' => 1,
                             'media_url' => !empty($firstCorrectAnswer->properties) && !empty($firstCorrectAnswer->properties['media_url']) ? $firstCorrectAnswer->properties['media_url'] : null,
                         ];
+                        array_push($titlesArray, $firstCorrectAnswer->title);
+                        array_push($propertiesArrays, $firstCorrectAnswer->properties);
                         // two wrong answers
                         $wrongAnswers = collect();
                         if ($answers->where('status', 0)->count() > 1){
@@ -66,10 +70,16 @@ class MemorizeController extends Controller
                                 'status' => 0,
                                 'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
                             ];
+                            array_push($titlesArray, $answer->title);
+                            array_push($propertiesArrays, $answer->properties);
                         }
                         // external wrong answer
                         $randomItemsCount = 3 - $wrongAnswers->count();
-                        $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->inRandomOrder()->limit($randomItemsCount)->get();
+                        if ($group == 20 || $group == 21){
+                            $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->whereNotIn('title', $titlesArray)->inRandomOrder()->limit($randomItemsCount)->get();
+                        }else{
+                            $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->whereNotIn('properties', $propertiesArrays)->inRandomOrder()->limit($randomItemsCount)->get();
+                        }
                         foreach ($randomAnswers as $answer){
                             $answersArr[$group][] = [
                                 'id' => $answer->id,

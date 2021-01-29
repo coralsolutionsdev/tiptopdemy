@@ -80,14 +80,17 @@ class MemorizeController extends Controller
                         }else{
                             $randomAnswers = FormItem::where('type', $group)->where('form_id', '!=', $form->id )->whereNotIn('properties', $propertiesArrays)->inRandomOrder()->limit($randomItemsCount)->get();
                         }
-                        foreach ($randomAnswers as $answer){
-                            $answersArr[$group][] = [
-                                'id' => $answer->id,
-                                'title' => $answer->title,
-                                'status' => 0,
-                                'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
-                            ];
+                        if (!empty($randomAnswers)){
+                            foreach ($randomAnswers as $answer){
+                                $answersArr[$group][] = [
+                                    'id' => $answer->id,
+                                    'title' => $answer->title,
+                                    'status' => 0,
+                                    'media_url' => !empty($answer->properties) && !empty($answer->properties['media_url']) ? $answer->properties['media_url'] : null,
+                                ];
+                            }
                         }
+
 
 
                     }

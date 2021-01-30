@@ -25,6 +25,10 @@ function playMarkerFirstMedia(event){
         this.pause(); // Stop playing
         this.currentTime = 0; // Reset time
     });
+    $('video').each(function(){
+        this.pause(); // Stop playing
+        this.currentTime = 0; // Reset time
+    });
     var marker = $(event).closest('.pb-hotspot-marker');
     var audio = marker.find('.audio-file')[0];
     audio.play();

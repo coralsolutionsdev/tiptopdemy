@@ -3424,6 +3424,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       this.$refs.countdown.abort();
       this.quizItemAnswerTotalTime = 0;
       this.timeLineProgress = 100;
+      this.isAllowToAnswer = false;
       // check if correct or not
       var status = 0;
       $.each(this.quizItemAnswers, function (key, answer) {
@@ -3441,6 +3442,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         this.wrongAnsweredIdArray = this.removeFromArray(this.wrongAnsweredIdArray, quizItemID);
       }
       setTimeout(function () {
+        _this2.isAllowToAnswer = true;
         _this2.openNextPreview();
       }, 2000);
     },
@@ -3456,7 +3458,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       this.examItemMode = true;
     },
     openNextPreview: function openNextPreview() {
-      this.isAllowToAnswer = false;
       if (!this.previewItemMode) {
         this.currentItemKey++;
         if (this.currentItemKey < this.itemCount) {

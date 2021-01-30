@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Modules\Course\Lesson;
+use App\Modules\Form\Form;
 use App\Modules\Form\FormItem;
 use App\Modules\Form\FormResponse;
 use App\Modules\Media\Media;
@@ -343,7 +344,7 @@ class LessonController extends Controller
         $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
         $description = !empty($lesson->description) ? $lesson->description : '';
         $resources = !empty($lesson->resources) ? $lesson->resources : array();
-        $forms = $lesson->getAvailableForms();
+        $forms = $lesson->getAvailableForms(Form::STATUS_PUBLISHED);
         $formsArray = [];
         if (!empty($forms)){
             foreach ($forms as $form){

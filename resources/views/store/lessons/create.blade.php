@@ -298,7 +298,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="uk-text-center">
+                                            <td colspan="6" class="uk-text-center">
                                                 {{__('main.There is no form items yet.')}}
                                             </td>
                                         </tr>
@@ -373,7 +373,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="uk-text-center">
+                                            <td colspan="4" class="uk-text-center">
                                                 {{__('main.There is no form items yet.')}}
                                             </td>
                                         </tr>

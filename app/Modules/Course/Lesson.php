@@ -100,13 +100,14 @@ class Lesson extends Model implements ReactableContract, HasMedia
 
     /**
      * return latest version of each form item
+     * @param null $status
      * @return mixed
      */
-    public function getAvailableForms()
+    public function getAvailableForms($status = null)
     {
         $forms = collect();
-        if (!empty($this->getFormsWithType(Form::TYPE_FORM))){
-            $forms = $this->getFormsWithType(Form::TYPE_FORM)->where('status', Form::STATUS_PUBLISHED)->filter(function ($form) {
+        if (!empty($this->getFormsWithType(Form::TYPE_FORM, $status))){
+            $forms = $this->getFormsWithType(Form::TYPE_FORM, $status)->filter(function ($form) {
                 if ($form->children->count() == 0){
                     return true;
                 }
@@ -210,14 +211,22 @@ class Lesson extends Model implements ReactableContract, HasMedia
 
         return $lesson;
     }
-    public function getFormsWithType($type = null){
+    public function getFormsWithType($type = null, $status = null){
         if (!empty($type)){
             if (!empty($this->forms)){
-                return $this->forms->where('type', $type)->where('status', 1);
+                if (!empty($status)){
+                    return $this->forms->where('type', $type)->where('status', $status);
+                }else{
+                    return $this->forms->where('type', $type);
+                }
             }
             return collect();
         }
-        return $this->forms->where('status', 1);
+        if (!empty($status)){
+            return $this->forms->where('status', $status);
+        }else{
+            return $this->forms ;
+        }
     }
     /*
      |--------------------------------------------------------------------------

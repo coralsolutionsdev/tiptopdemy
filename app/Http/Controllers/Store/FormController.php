@@ -51,9 +51,10 @@ class FormController extends Controller
     {
         $page_title =  'Forms Templates';
         $breadcrumb =  $this->breadcrumb;
+        $product =  $lesson->product;
         $ownerId = $lesson->id;
         $ownerType = Form::OWNER_TYPE_LESSON;
-        return view('store.forms.create', compact('page_title', 'breadcrumb', 'lesson', 'ownerId', 'ownerId', 'ownerType'));
+        return view('store.forms.create', compact('page_title', 'breadcrumb', 'product', 'lesson', 'ownerId', 'ownerId', 'ownerType'));
     }
 
     /**
@@ -111,9 +112,10 @@ class FormController extends Controller
     public function edit(Lesson $lesson, Form $form)
     {
         $page_title = $form->title;
+        $product =  $lesson->product;
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         $formProperties = $form->properties;
-        return view('store.forms.create', compact('page_title', 'lesson', 'form', 'categories', 'formProperties'));
+        return view('store.forms.create', compact('page_title', 'product', 'lesson', 'form', 'categories', 'formProperties'));
     }
 
     /**
@@ -127,10 +129,11 @@ class FormController extends Controller
     public function update(Request $request, Lesson $lesson, Form $form)
     {
         $input =  $request->all();
+        $product =  $lesson->product;
         $input['type'] = Form::TYPE_FORM;
         $form = Form::createOrUpdate($input,$lesson, $form);
         session()->flash('success', trans('main._update_msg'));
-        return redirect()->route('store.form.edit', [$lesson->slug, $form->slug]);
+        return redirect()->route('store.lessons.edit', [$product->slug, $lesson->slug]);
 
     }
 

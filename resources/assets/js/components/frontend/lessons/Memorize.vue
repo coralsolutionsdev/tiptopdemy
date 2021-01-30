@@ -264,6 +264,7 @@ export default {
       this.$refs.countdown.abort();
       this.quizItemAnswerTotalTime =  0;
       this.timeLineProgress = 100;
+      this.isAllowToAnswer = false;
       // check if correct or not
       var status = 0;
       $.each(this.quizItemAnswers,  function (key , answer){
@@ -279,6 +280,7 @@ export default {
         this.wrongAnsweredIdArray = this.removeFromArray(this.wrongAnsweredIdArray, quizItemID);
       }
       setTimeout(()=>{
+        this.isAllowToAnswer = true;
         this.openNextPreview();
           },2000
       );
@@ -295,7 +297,6 @@ export default {
       this.examItemMode = true;
     },
     openNextPreview(){
-      this.isAllowToAnswer = false;
       if (!this.previewItemMode){
         this.currentItemKey++;
         if (this.currentItemKey < this.itemCount){

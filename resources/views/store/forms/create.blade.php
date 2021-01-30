@@ -17,8 +17,8 @@
             <div class="uk-card uk-card-default uk-card-body uk-padding-small uk-margin-remove">
                 <div class="uk-child-width-1-2" uk-grid>
                     <div>
-                        @if(!empty($lesson))
-                            <a href="{{redirect()->back()}}"><span class="uk-button uk-button-default" style="padding: 0 20px" uk-tooltip="{{__('main.Back')}}"><span uk-icon="icon: arrow-left"></span></span></a>
+                        @if(!empty($lesson) && !empty($product))
+                            <a href="{{route('store.lessons.edit', [$product->slug, $lesson->slug])}}"><span class="uk-button uk-button-default" style="padding: 0 20px" uk-tooltip="{{__('main.Back')}}"><span uk-icon="icon: arrow-left"></span></span></a>
                         @else
                             <a href="{{route('form.templates.index')}}"><span class="uk-button uk-button-default" style="padding: 0 20px" uk-tooltip="{{__('main.Back')}}"><span uk-icon="icon: arrow-left"></span></span></a>
                         @endif

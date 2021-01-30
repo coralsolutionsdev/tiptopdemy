@@ -21,6 +21,10 @@ function enableLoadingSpinner($status = true) {
 
 // play marker audio auto
 function playMarkerFirstMedia(event){
+    $('.audio-file').each(function(){
+        this.pause(); // Stop playing
+        this.currentTime = 0; // Reset time
+    });
     var marker = $(event).closest('.pb-hotspot-marker');
     var audio = marker.find('.audio-file')[0];
     audio.play();

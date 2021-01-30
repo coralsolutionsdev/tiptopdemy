@@ -185,6 +185,9 @@ class Category extends Model
             case self::TYPE_PRODUCT:
                 return $this->belongsToMany('App\Product');
                 break;
+            case self::TYPE_FORM_TEMPLATE:
+                return $this->belongsToMany('App\Modules\Form\Form');
+                break;
         }
     }
 

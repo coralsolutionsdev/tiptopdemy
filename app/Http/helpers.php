@@ -262,6 +262,7 @@ function drawCategoryTreeList($items, $type, $class = '')
         }else{
             $routePath = 'store';
         }
+
         foreach ($items as $item){
             // Temporary solution for routing paths
             $showRoute = '';
@@ -288,8 +289,12 @@ function drawCategoryTreeList($items, $type, $class = '')
                     $editRoute = route('category.edit',$item->slug);
             }
             echo '<li class="cat-li uk-clearfix">';
-//            .$item->items->count().
-            echo '<a href="#" class="uk-button uk-button-default uk-button-small uk-text-capitalize uk-float-left">'.$item->name.' ('.$item->items()->count().')</a>   <span class="uk-button uk-button-default uk-button-small uk-float-left" style="margin: 0px 0px 0px 6px !important;">'.getStatusIcon($item->status).'</span><a href="'.$showRoute.'" class="uk-button uk-button-default uk-button-small ck-button-success" uk-tooltip="'.__('main.view').'" style="margin: 0px 3px 0px 6px !important;"><i class="far fa-eye"></i></a> <a href="'.$editRoute.'" class="uk-button uk-button-default uk-button-small ck-button-primary" uk-tooltip="'.__('main.edit').'"><i class="far fa-edit"></i></a>';
+            $count = 0;
+            if (!empty($item->items())){
+                $count = $item->items()->count();
+
+            }
+            echo '<a href="#" class="uk-button uk-button-default uk-button-small uk-text-capitalize uk-float-left">'.$item->name.' ('.$count.')</a>   <span class="uk-button uk-button-default uk-button-small uk-float-left" style="margin: 0px 0px 0px 6px !important;">'.getStatusIcon($item->status).'</span><a href="'.$showRoute.'" class="uk-button uk-button-default uk-button-small ck-button-success" uk-tooltip="'.__('main.view').'" style="margin: 0px 3px 0px 6px !important;"><i class="far fa-eye"></i></a> <a href="'.$editRoute.'" class="uk-button uk-button-default uk-button-small ck-button-primary" uk-tooltip="'.__('main.edit').'"><i class="far fa-edit"></i></a>';
             $sub_menu =  Category::where('type', $type)->where('parent_id',$item->id)->get();
             $sub_menu =  $item->children;
             if (!empty($sub_menu)){

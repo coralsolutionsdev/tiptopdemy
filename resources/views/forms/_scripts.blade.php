@@ -154,6 +154,7 @@
                 '<span class="question-text">'+question+'</span>\n' +
                 '</div>';
             item.find('.item-review').html(review);
+            pasteAsPlainText();
         }else if(itemType == typeSection){
             var sectionText = item.find('.input-title').val();
 
@@ -164,6 +165,18 @@
             item.find('.item-review').html(review);
         }
 
+    }
+    function pasteAsPlainText(){
+        $('.fill-the-blank-div').on('paste', function(e) {
+            // cancel paste
+            e.preventDefault();
+
+            // get text representation of clipboard
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+            // insert text manually
+            document.execCommand("insertHTML", false, text);
+        });
     }
     function closeCurrentlyOpenedConfig() {
         var openedItem = $('#form_item-'+currentlyOpenedId);

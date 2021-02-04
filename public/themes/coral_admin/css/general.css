@@ -312,6 +312,9 @@ input.form-control:focus, textarea.form-control:focus, select.form-control:focus
 ::-ms-input-placeholder { /* Microsoft Edge */
     font-size: 14px !important;
 }
+.fill-the-blank-div p{
+    line-height: 20px
+}
 
 /*Form builder*/
 .question-type{

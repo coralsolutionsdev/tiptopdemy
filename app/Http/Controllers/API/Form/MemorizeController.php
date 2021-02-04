@@ -32,7 +32,7 @@ class MemorizeController extends Controller
     }
     public function getItems(Lesson $lesson)
     {
-        $items = $lesson->getFormsWithType(Form::TYPE_MEMORIZE);
+        $items = $lesson->getFormsWithType(Form::TYPE_MEMORIZE, Form::STATUS_PUBLISHED);
         $items->map(function ($form)  {
             $groupedAnswers = $form->items->groupBy('type');
             $answersArr = [];

@@ -167,7 +167,7 @@
 
     }
     function pasteAsPlainText(){
-        $('.fill-the-blank-div').on('paste', function(e) {
+        $('.fill-the-blank-div').off('paste').on('paste', function(e) {
             // cancel paste
             e.preventDefault();
 

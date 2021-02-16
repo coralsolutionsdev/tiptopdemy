@@ -33,3 +33,10 @@ function playMarkerFirstMedia(event){
     var audio = marker.find('.audio-file')[0];
     audio.play();
 }
+// form
+var hoveredItem = null;
+function getHoveredId(event){
+    // event.preventDefault()
+    hoveredItem = event;
+    // console.log($(event).attr('id'));
+}

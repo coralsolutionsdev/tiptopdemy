@@ -10,7 +10,6 @@
     url("./fonts/feather.woff?t=1501829003743") format("woff"),
     url("./fonts/feather.svg?t=1501829003743#feather") format("svg");
     font-weight: normal;
-    font-size: normal;
 }
 /* Title */
 
@@ -1122,9 +1121,6 @@ h6 {
     content: "\e90c";
 }
 
-/**
- * Animations
- */
 @-webkit-keyframes slideUpIn {
     0% {
         opacity: 0;

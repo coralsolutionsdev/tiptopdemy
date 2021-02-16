@@ -4,6 +4,7 @@ namespace App\Modules\Form;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\Type;
 use Spatie\Tags\HasTags;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -57,6 +58,7 @@ class FormItem extends Model
     const TYPE_MULTI_CHOICE = 4;
     const TYPE_DROP_DOWN = 5;
     const TYPE_FILL_THE_BLANK = 6;
+    const TYPE_FILL_THE_BLANK_DRAG_AND_DROP = 7;
     const TYPE_MEMORIZE_TERM = 20;
     const TYPE_MEMORIZE_TERM_TRANSLATE_A = 21;
     const TYPE_MEMORIZE_MEDIA_IMAGE = 30;
@@ -94,12 +96,19 @@ class FormItem extends Model
             $id = $this->id;
         }
         $paragraph = $this->options['paragraph'];
-        $search = '#\<tag\>(.+?)\<\/tag\>#s';
-        $replace = ' <span class="item-'.$id.'-paragraph-blank"><input class="input-blank" name="item_answer['.$id.'][]" type="text"></span> ';
-        $string = "<tag>i dont know what is here</tag>";
-        $fillable  = preg_replace($search,$replace,$paragraph);
+        $search = $replace = '';
+        if ($this->type == self::TYPE_FILL_THE_BLANK){
+            $search = '#\<tag\>(.+?)\<\/tag\>#s';
+            $replace = ' <span class="item-'.$id.'-paragraph-blank"><input class="input-blank" name="item_answer['.$id.'][]" type="text"></span> ';
+            return preg_replace($search,$replace,$paragraph);
+        } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+            $search = '#\<tagdraggableblank\>(.+?)\<\/tagdraggableblank\>#s';
+            $replace = ' <div class="item-'.$id.'-paragraph-blank droppable-blank" ondragover="getHoveredId(this)"></div> ';
+            return preg_replace($search,$replace,$paragraph);
 
-        return $fillable;
+        }
+//        <input class="input-blank" name="item_answer['.$id.'][]" type="text">
+//        $string = "<tag>i dont know what is here</tag>";
     }
 
     public function getWidth()
@@ -139,12 +148,18 @@ class FormItem extends Model
     {
         // get section
         $section = self::getGroupSection($items);
-        $questionsShuffle = isset($section['shuffle_questions']) ?  $section['shuffle_questions'] : 0;
+        $sectionProps =  $section->properties;
+        $questionsShuffle = isset($sectionProps['shuffle_questions']) ?  $sectionProps['shuffle_questions'] : 0;
         if ($questionsShuffle == 1){ // 1 is shuffled.
             return $items->shuffle();
         }
         return $items;
     }
+
+    /**
+     * @param null $type
+     * @return array|mixed
+     */
     public function getDefaultAnswers($type = null)
     {
         $answers = array();

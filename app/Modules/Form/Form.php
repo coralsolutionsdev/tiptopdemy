@@ -284,10 +284,11 @@ class Form extends Model
                 }
                 $newFormItem->options = $newItemOptions;
                 $newFormItem->save();
-            }elseif ($itemType == FormItem::TYPE_FILL_THE_BLANK){
+            }elseif ($itemType == FormItem::TYPE_FILL_THE_BLANK || $itemType == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
                 $blank = isset($input['item_blanks']) ? $input['item_blanks'][$id] : null;
                 $blankOptions = isset($input['item_blank_option']) && isset($input['item_blank_option'][$id]) ? $input['item_blank_option'][$id] : null;
                 $blankOptionsMarks = isset($input['item_blank_option_mark']) && isset($input['item_blank_option_mark'][$id]) ? $input['item_blank_option_mark'][$id] : null;
+//                $blankTypes = isset($input['item_blank_type']) && isset($input['item_blank_type'][$id]) ? $input['item_blank_type'][$id] : null;
                 $blankAlignments = isset($input['item_blank_alignment']) && $input['item_blank_alignment'][$id] ? $input['item_blank_alignment'][$id] : 'auto';
                 $optionsArray = array();
                 if (!is_null($blankOptions)){
@@ -297,6 +298,7 @@ class Form extends Model
                             $itemsArray[$itemKey] = [
                                 'value' => $itemValue,
                                 'score' => $blankOptionsMarks[$key][$itemKey],
+//                                'type' => $blankTypes[$key] ? $blankTypes[$key][$itemKey] : 1,
                             ];
                         }
                         $optionsArray[] = [
@@ -463,6 +465,195 @@ class Form extends Model
         return $form;
     }
 
+
+
+    public function createResponse($answers)
+    {
+        $items = $this->items;
+        $inputLeaveQuestions = array();
+        // default values
+        $user = getAuthUser();
+        $section = 0;
+        $newItemInput['status'] = FormResponse::STATUS_FULLY_EVALUATED;
+        $sectionEvaluationTypeArray[0] = FormResponse::EVALUATION_TYPE_AUTO;
+        $responseTotalScore = 0;
+        $responseAchievedTotalScore = 0;
+        $data =  array();
+
+        if (!empty($items)){
+            foreach ($items as $formItem){
+                $item = null;
+                // get item answers
+                foreach ($answers as $answerArray){
+                    if ($answerArray['id'] == $formItem->id){
+                        $item = $answerArray;
+                    }
+                }
+                $itemInputAnswer = !empty($item) && !empty($item['answers']) ? $item['answers'] : null;
+                $answeringStatus = !empty($item) && !empty($item['answer_status']) && $item['answer_status'] == 1;
+                $itemAnswersArray = array(); // default as empty
+                $ItemTotalAnswerScore = 0;
+                $itemDefaultAnswers = $formItem->getDefaultAnswers();
+
+
+                $itemType = $formItem->type;
+                if ($itemType == FormItem::TYPE_SECTION){ // section
+                    $section++;
+                    $sectionEvaluationTypeArray[$section] = FormResponse::EVALUATION_TYPE_AUTO; // default auto evaluation
+                    if (!empty($formItem->properties['evaluation']) && $formItem->properties['evaluation'] == FormResponse::EVALUATION_TYPE_MANUAL){
+                        $newItemInput['status'] = FormResponse::STATUS_PARTIALLY_EVALUATED;
+                        // answers array is empty
+                        $sectionEvaluationTypeArray[$section] = FormResponse::EVALUATION_TYPE_MANUAL;
+                    }
+                } else { // not section
+
+                    if ($answeringStatus){ // answered
+
+                        $responseTotalScore = $responseTotalScore + $formItem->score;
+                        if ($itemType ==  FormItem::TYPE_PARAGRAPH){
+                            $newItemInput['status'] = FormResponse::STATUS_PARTIALLY_EVALUATED;
+                        } elseif (in_array($itemType, [FormItem::TYPE_SHORT_ANSWER, FormItem::TYPE_SINGLE_CHOICE, FormItem::TYPE_DROP_DOWN, FormItem::TYPE_MULTI_CHOICE])) {
+
+                            if (!empty($itemInputAnswer)){ // check if item have answers
+                                // evaluation
+                                if (!is_array($itemInputAnswer)){
+                                    $itemInputAnswerArray = [$itemInputAnswer];
+                                }else{
+                                    $itemInputAnswerArray = $itemInputAnswer;
+                                }
+                                foreach ($itemInputAnswerArray as $itemInputAnswerValue){
+                                    $ItemAnswerScore = 0;
+                                    $itemAnswerStatus = FormResponse::EVALUATION_STATUS_PENDING; // evaluation status correct
+                                    if ($sectionEvaluationTypeArray[$section] == FormResponse::EVALUATION_TYPE_AUTO){ // check if evaluation is auto
+                                        $itemAnswerStatus = FormResponse::EVALUATION_STATUS_WRONG; // default evaluation status
+                                        if (!empty($itemDefaultAnswers)){ // have default answers
+                                            foreach ($itemDefaultAnswers as $defaultAnswer){
+                                                $valueToLower = strtolower($defaultAnswer['value']);
+                                                $defaultAnswerToLower = strtolower($itemInputAnswerValue);
+                                                if ($valueToLower == $defaultAnswerToLower){
+                                                    $itemAnswerStatus = FormResponse::EVALUATION_STATUS_CORRECT; // evaluation status correct
+                                                    $ItemAnswerScore = $defaultAnswer['score']; // evaluation score
+                                                    $ItemTotalAnswerScore = $ItemTotalAnswerScore + $ItemAnswerScore; // evaluation score
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // answers array (add to answer array)
+                                    $itemAnswersArray[] = [
+                                        'value' => $itemInputAnswerValue,
+                                        'status' => $itemAnswerStatus,
+                                        'score' => $ItemAnswerScore,
+                                    ];
+
+                                }
+
+
+                            }
+
+                        } elseif (in_array($itemType, [FormItem::TYPE_FILL_THE_BLANK, FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP])){
+
+                            if (!empty($itemInputAnswer)){ // check if item have answers
+                                $itemScore = $formItem->score; // default evaluation score
+                                $defaultAnswers = $formItem->getDefaultAnswers(FormItem::TYPE_FILL_THE_BLANK);
+                                // item answers
+                                // evaluation
+                                if (!is_array($itemInputAnswer)){
+                                    $itemInputAnswerArray = [$itemInputAnswer];
+                                }else{
+                                    $itemInputAnswerArray = $itemInputAnswer;
+                                }
+                                foreach ($itemInputAnswerArray as $answerKey => $itemInputAnswerValue){
+                                    $ItemAnswerScore = 0;
+                                    $itemAnswerStatus = FormResponse::EVALUATION_STATUS_PENDING; // evaluation status correct
+                                    if ($sectionEvaluationTypeArray[$section] == FormResponse::EVALUATION_TYPE_AUTO){ // check if evaluation is auto
+                                        $itemAnswerStatus = FormResponse::EVALUATION_STATUS_WRONG; // evaluation status correct
+                                        if (!empty($defaultAnswers)){ // have default answers
+                                            if (!empty($defaultAnswers[$answerKey])){
+                                                $blankItems = $defaultAnswers[$answerKey]['items'];
+                                                foreach ($blankItems as $blankItem){
+                                                    $itemInputAnswerValueToLower = strtolower($itemInputAnswerValue);
+                                                    $blankItemValueToLower = strtolower($blankItem['value']);
+                                                    if ($itemInputAnswerValueToLower == $blankItemValueToLower){
+                                                        $itemAnswerStatus = FormResponse::EVALUATION_STATUS_CORRECT; // evaluation status correct
+                                                        $ItemAnswerScore = $blankItem['score']; // evaluation score
+                                                        $ItemTotalAnswerScore = $ItemTotalAnswerScore + $ItemAnswerScore; // evaluation score
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // answers array (add to answer array)
+                                    $itemAnswersArray[] = [
+                                        'value' => $itemInputAnswerValue,
+                                        'status' => $itemAnswerStatus,
+                                        'score' => $ItemAnswerScore,
+                                    ];
+
+                                }
+                            }
+                        }
+
+                    }
+
+
+                }
+                //
+                // update total achieved score
+                $responseAchievedTotalScore = $responseAchievedTotalScore + $ItemTotalAnswerScore;
+                // add to data array
+                $data[$section][] = [
+                    'id' => $formItem->id,
+                    'title' => $formItem->title,
+                    'description' => $formItem->description,
+                    'answers' => $itemAnswersArray,
+                    'type' => $formItem->type,
+                    'score' => $formItem->score,
+                    'evaluation_score' => $ItemTotalAnswerScore,
+                    'properties' => $formItem->properties,
+                ];
+
+            }
+        }
+
+        // response score info
+        $scorePercentage = ($responseAchievedTotalScore/$responseTotalScore) * 100;
+        $scoringType = !empty($form->properties['score_type']) ? $form->properties['score_type'] : 1;
+        $passingScore = !empty($form->properties['passing_score']) ? $form->properties['passing_score'] : 50;
+        $scoreStatus = FormResponse::PASSING_STATUS_FAILED; // failed
+        if ($scoringType == 1){ //percentage
+            if ($scorePercentage >= $passingScore){
+                $scoreStatus = FormResponse::PASSING_STATUS_PASSED;
+            }
+        } elseif ($scoringType == 2) { //score
+            if ($responseAchievedTotalScore >= $passingScore){
+                $scoreStatus = FormResponse::PASSING_STATUS_PASSED;
+            }
+        }
+        $scoreInfo = [
+            'total_score' => $responseTotalScore,
+            'achieved_score' => $responseAchievedTotalScore,
+            'score_percentage' => round($scorePercentage,1),
+            'passing_score_status' => $scoreStatus,
+            'passing_score_type' => $scoringType,
+            'passing_score_score' => $passingScore,
+        ];
+        //
+        $newItemInput['title'] = $this->title;
+        $newItemInput['description'] = $this->description;
+        $newItemInput['form_id'] = $this->id;
+        $newItemInput['ancestor_id'] = $this->ancestor_id;
+        $newItemInput['data'] = $data;
+        $newItemInput['type'] = 1; // default Unknown
+        $newItemInput['properties'] = $this->properties;
+        $newItemInput['score_info'] = $scoreInfo;
+        $newItemInput['creator_id'] = getAuthUser() ? getAuthUser()->id : null;
+        $response = FormResponse::create($newItemInput);
+        $response->hash_id = Hashids::encode(1,$user->id,$response->id);
+        $response->save();
+        return $response;
+    }
     /**
      * @return string
      */

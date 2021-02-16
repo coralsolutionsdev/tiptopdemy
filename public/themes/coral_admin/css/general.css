@@ -180,8 +180,11 @@ h1, h2, h3, h4, h5{
     padding: 0px;
     margin: 0px;
 }
-.hidden-div{
+.hidden-div, .hidden{
     display: none;
+}
+.delete-item-blank{
+    font-weight: normal !important;
 }
 /*admin-sidebar*/
 ul.admin-sidebar{
@@ -315,6 +318,12 @@ input.form-control:focus, textarea.form-control:focus, select.form-control:focus
 .fill-the-blank-div p{
     line-height: 20px
 }
+.item-review, .item-pre-review{
+    pointer-events: none;
+}
+.item-review:hover, .item-pre-review:hover{
+    cursor: not-allowed !important;
+}
 
 /*Form builder*/
 .question-type{
@@ -390,10 +399,10 @@ button
     border-color: #F3F5F9;
 }
 
-.insert-blank{
+.insert-blank, .insert-drag-and-drop-blank{
     border: 1px solid #e2e2e2;
 }
-.insert-blank:hover{
+.insert-blank:hover, .insert-advanced-blank:hover{
     cursor: pointer;
 }
 .btn-blank-dropdown{

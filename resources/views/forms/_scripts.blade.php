@@ -10,6 +10,7 @@
     var typeMultiChoice = '{{\App\Modules\Form\FormItem::TYPE_MULTI_CHOICE}}';
     var typeDropDown = '{{\App\Modules\Form\FormItem::TYPE_DROP_DOWN}}';
     var typeFillTheBlank = '{{\App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK}}';
+    var typeFillTheBlankDragAndDrop = '{{\App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP}}';
 
     var multiOptionsArray = [parseInt(typeSingleChoice), parseInt(typeMultiChoice), parseInt(typeDropDown),  parseInt(typeShortAnswer)]
 
@@ -22,6 +23,7 @@
         '{{__('main.Multiple choice')}}',
         '{{__('main.Drop menu')}}',
         '{{__('main.Fill the blank')}}',
+        '{{__('main.Fill the blank (drag and drop)')}}',
 
     ];
 
@@ -107,19 +109,19 @@
                 '<span class="question-text">'+question+'</span>\n' +
                 '<input type="text" class="uk-input uk-form-small" disabled >\n' +
                 '</div>';
-            item.find('.item-review').html(review);
+            item.find('.item-review-content').html(review);
         }else if(itemType == typeParagraph){
             review = '<div class="pt-2">\n' +
                 '<span class="question-text">'+question+'</span>\n' +
                 '<textarea class="uk-textarea" rows="3" placeholder="" disabled></textarea>\n' +
                 '</div>';
-            item.find('.item-review').html(review);
+            item.find('.item-review-content').html(review);
         }else if(itemType == typeSingleChoice){
             review = '<div class="pt-2">\n' +
                 '<span class="question-text">'+question+'</span>\n' +
                 '<div class="preview-options-section uk-margin-small"></div>\n' +
                 '</div>';
-            item.find('.item-review').html(review);
+            item.find('.item-review-content').html(review);
             var options = item.find('.item_option');
             options.each(function () {
                 item.find('.preview-options-section').append('<label><input type="radio" name="prev-option-item-'+itemId+'"> '+$(this).val()+'</label></br>');
@@ -129,7 +131,7 @@
                 '<span class="question-text">'+question+'</span>\n' +
                 '<div class="preview-options-section uk-margin-small"></div>\n' +
                 '</div>';
-            item.find('.item-review').html(review);
+            item.find('.item-review-content').html(review);
             var options = item.find('.item_option');
             options.each(function () {
                 item.find('.preview-options-section').append('<label><input type="checkbox" name="prev-option-item-'+itemId+'"> '+$(this).val()+'</label></br>');
@@ -139,21 +141,43 @@
                 '<span class="question-text">'+question+'</span>\n' +
                 '<select class="preview-options-section uk-select uk-margin-small" disabled></select>\n' +
                 '</div>';
-            item.find('.item-review').html(review);
+            item.find('.item-review-content').html(review);
             var options = item.find('.item_option');
             options.each(function () {
                 item.find('.preview-options-section').append('<option>'+$(this).val()+'</option>');
             });
         }else if(itemType == typeFillTheBlank){
             var blankParagraph = item.find('.fill-the-blank-div').html();
+            var blanks = item.find('.blank_item');
             question = blankParagraph.replace(/<tag>[\s\S]*?<\/tag>/g, ' <input class="input-blank" type="text" disabled>');
             // question = blankParagraph.replace(new RegExp(/<tag>[\s\S]*?<\/tag>/, "g"), ' <input class="input-blank" type="text" disabled>');
             // date.replace(new RegExp("/", "g"), '')
             // date.replace(/\//g, '')
+
             review = '<div class="pt-2">\n' +
                 '<span class="question-text">'+question+'</span>\n' +
                 '</div>';
-            item.find('.item-review').html(review);
+            item.find('.item-review-content').html(review);
+            pasteAsPlainText();
+        }else if(itemType == typeFillTheBlankDragAndDrop){
+            var blankParagraph = item.find('.fill-the-blank-div').html();
+            // console.log(item.find('.blank_item').length);
+            var blanks = item.find('.editable-div').find('.blank-item-value');
+
+            question = blankParagraph.replace(/<tagdraggableblank>[\s\S]*?<\/tagdraggableblank>/g, ' <input class="input-blank" type="text" disabled>');
+            // question = blankParagraph.replace(new RegExp(/<tag>[\s\S]*?<\/tag>/, "g"), ' <input class="input-blank" type="text" disabled>');
+            // date.replace(new RegExp("/", "g"), '')
+            // date.replace(/\//g, '')
+            review = `<div class="pt-2">
+                <div><span class="question-text">`+question+`</span></div>
+                </div>`;
+            item.find('.item-review-content').html(review);
+            item.find('.item-pre-review').html('');
+            $.each( blanks, function( key, value ) {
+                item.find('.item-pre-review').append(
+                    `<span class="uk-badge" style="margin: 2px; padding: 15px">`+$(value).val()+`</span>`
+                );
+            });
             pasteAsPlainText();
         }else if(itemType == typeSection){
             var sectionText = item.find('.input-title').val();
@@ -389,7 +413,7 @@
                     }
                 }
             });
-        } else if(formItemType == typeFillTheBlank){
+        } else if(formItemType == typeFillTheBlank || formItemType == typeFillTheBlankDragAndDrop){
             blankMenus.each(function () {
                 var menuMaxScore = 0;
                 var menuId = $(this).attr('id').split('-')[1];
@@ -465,7 +489,14 @@
             if(!confirm('Are you sure that you want to remove this blank?')){
                 return false;
             }
-            $(this).closest('tag').remove();
+            var formItem = $(this).closest('.form-item');
+            var blankType = $(this).attr('data-blank-type');
+            if (blankType == 1){
+                $(this).closest('tag').remove();
+            }else if (blankType == 2){
+                $(this).closest('tagdraggableblank').remove();
+            }
+            recalculateItemScore(formItem);
         });
     }
     function insertParagraphBlank(itemId = null) {
@@ -489,6 +520,7 @@
                             '        <div class="blank-options">\n' +
                             '            <div class="uk-grid-collapse p-1" uk-grid>\n' +
                             '                <div class="uk-width-3-5">\n' +
+                            '                    <input type="hidden" name="item_blank_type['+formItemId+']['+blankId+'][]" class="" value="1">\n' +
                             '                    <input type="text" name="item_blank_option['+formItemId+']['+blankId+'][]" class="blank_item blank-item-value" value="'+range+'">\n' +
                             '                </div>\n' +
                             '                <div class="uk-width-1-5">\n' +
@@ -504,11 +536,72 @@
                             '                <span class="hover-primary add-blank-option" uk-icon="icon: plus-circle"></span>\n' +
                             '            </div>\n' +
                             '            <div class="uk-width-1-1 uk-text-right pt-2">\n' +
-                            '                <span class="uk-button uk-button-default uk-button-small uk-width-1-1 hover-danger delete-item-blank">{{__('main.Delete blank')}}</span>\n' +
+                            '                <span class="uk-button uk-button-default uk-button-small uk-width-1-1 hover-danger delete-item-blank" data-blank-type="1">{{__('main.Delete blank')}}</span>\n' +
                             '            </div>\n' +
                             '        </div>\n' +
                             '    </div>\n' +
                             '</div></tag>';
+                        range.deleteContents();
+                        var el = document.createElement("div");
+                        el.innerHTML = html;
+                        var frag = document.createDocumentFragment(), node, lastNode;
+                        while ( (node = el.firstChild) ) {
+                            lastNode = frag.appendChild(node);
+                        }
+                        range.insertNode(frag);
+                        addParagraphBlankItem();
+                        removeParagraphBlankItem();
+                        updateBlankItemValue();
+                        deleteItemBlank();
+                        updateQuestionTotalScore();
+                        document.getSelection().removeAllRanges();
+                    }
+                }
+
+            }
+        });
+
+        $('.insert-drag-and-drop-blank').click(function () {
+            var item = $(this);
+            var formItem = item.closest('.form-item');
+            var formItemId = formItem.attr('id').split('-')[1];
+            var blankId = generateRandomString(6);
+            var sel, range;
+            if (window.getSelection) {
+                sel = window.getSelection();
+                var itemBaseNode = $(window.getSelection().baseNode);
+                var itemBaseNodeID = itemBaseNode.closest('.form-item').attr('id');
+
+                if(itemBaseNodeID == formItem.attr('id') && itemBaseNode.closest('.fill-the-blank-div').hasClass('editable-div')){
+                    if (sel.getRangeAt && sel.rangeCount && sel) {
+                        range = window.getSelection().getRangeAt(0); // get selected text
+                        var html = '<tagdraggableblank><div contenteditable="false" id="item_blank-'+blankId+'" class="uk-inline blank-menu">\n' +
+                            '    <button class="bg-white btn-blank-dropdown uk-text-primary" type="button">'+range+' <span uk-icon="icon: triangle-down"></span></button>\n' +
+                            '    <div class="p-2 m-0" uk-dropdown="mode: click">\n' +
+                            '        <div class="blank-options">\n' +
+                            '            <div class="uk-grid-collapse p-1" uk-grid>\n' +
+                            '                <div class="uk-width-expand">\n' +
+                            '                    <input type="hidden" name="item_blank_type['+formItemId+']['+blankId+'][]" class="" value="1">\n' +
+                            '                    <input type="text" name="item_blank_option['+formItemId+']['+blankId+'][]" class="blank_item blank-item-value" style="width:95%" value="'+range+'">\n' +
+                            '                </div>\n' +
+                            '                <div class="uk-width-1-5">\n' +
+                            '                    <input type="text" name="item_blank_option_mark['+formItemId+']['+blankId+'][]" class="blank_item blank-item-mark item-score blank-'+blankId+'-score" value="0">\n' +
+                            '                </div>\n' +
+                            // '                <div class="uk-width-1-5 uk-text-right pt-1">\n' +
+                            // '                    <span class="hover-danger remove-blank-option" uk-icon="icon: trash"></span>\n' +
+                            // '                </div>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="uk-grid-collapse p-1" uk-grid>\n' +
+                            // '            <div class="uk-width-1-1 uk-text-right">\n' +
+                            // '                <span class="hover-primary add-blank-option" uk-icon="icon: plus-circle"></span>\n' +
+                            // '            </div>\n' +
+                            '            <div class="uk-width-1-1 uk-text-right pt-2">\n' +
+                            '                <span class="uk-button uk-button-default uk-button-small uk-width-1-1 hover-danger delete-item-blank" data-blank-type="2">{{__('main.Delete blank')}}</span>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '</div></tagdraggableblank>';
                         range.deleteContents();
                         var el = document.createElement("div");
                         el.innerHTML = html;
@@ -650,8 +743,16 @@
             item.find('.fill-the-blank-div').attr('id', 'fillTheBlank-'+itemId);
             item.find('.input-blanks').attr('name', 'item_blanks['+itemId+']');
             item.find('.input-blanks-alignment').attr('name', 'item_blank_alignment['+itemId+']');
-            item.find('.fill-the-blank-section').removeClass('hidden-div')
-        }else if(type == typeParagraph) {
+            item.find('.fill-the-blank-section').removeClass('hidden-div');
+            item.find('.insert-blank').removeClass('hidden');
+        } else if (type == typeFillTheBlankDragAndDrop){
+            item.find('.fill-the-blank-div').attr('id', 'fillTheBlank-'+itemId);
+            item.find('.input-blanks').attr('name', 'item_blanks['+itemId+']');
+            item.find('.input-blanks-alignment').attr('name', 'item_blank_alignment['+itemId+']');
+            item.find('.fill-the-blank-section').removeClass('hidden-div');
+            item.find('.insert-drag-and-drop-blank').removeClass('hidden');
+        }
+        else if(type == typeParagraph) {
             item.find('.title-section').removeClass('hidden-div');
             item.find('.score-section').removeClass('disabled-div');
         } else {
@@ -754,7 +855,7 @@
                     });
                 }
 
-            }else if(type == typeFillTheBlank){
+            }else if(type == typeFillTheBlank || type == typeFillTheBlankDragAndDrop){
                 var formItemOptions = formItem.options;
                 if(formItemOptions != null){
                     item.find('.fill-the-blank-div').html(formItemOptions.paragraph);

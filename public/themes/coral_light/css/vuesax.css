@@ -7682,7 +7682,7 @@
 
 :root {
     --vs-shadow-opacity: .05;
-    --vs-radius: 20px;
+    --vs-radius: 10px;
     --vs-zindex-1: 100000;
     --vs-zindex-2: 99000;
     --vs-zindex-3: 98000;

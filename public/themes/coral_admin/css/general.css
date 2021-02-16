@@ -402,7 +402,7 @@ button
 .insert-blank, .insert-drag-and-drop-blank{
     border: 1px solid #e2e2e2;
 }
-.insert-blank:hover, .insert-advanced-blank:hover{
+.insert-blank:hover, .insert-drag-and-drop-blank:hover{
     cursor: pointer;
 }
 .btn-blank-dropdown{

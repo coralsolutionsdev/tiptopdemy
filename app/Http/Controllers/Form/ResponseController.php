@@ -52,6 +52,7 @@ class ResponseController extends Controller
     public function store(Request $request, Form $form)
     {
         $input = $request->only(['item_id', 'item_answer', 'item_leave', 'lesson_id']);
+        dd($input);
         $lesson = Lesson::find($input['lesson_id']);
         if (empty($lesson)){
             // message
@@ -99,6 +100,7 @@ class ResponseController extends Controller
                             // $itemEvaluatedStatus = FormResponse::EVALUATION_STATUS_PENDING;
                             // TODO: build answers array
                         } elseif (in_array($itemType, [FormItem::TYPE_SHORT_ANSWER, FormItem::TYPE_SINGLE_CHOICE, FormItem::TYPE_DROP_DOWN, FormItem::TYPE_MULTI_CHOICE])){
+
                             if (!empty($itemInputAnswer)){ // check if item have answers
                                 $itemAnswerStatus = FormResponse::EVALUATION_STATUS_PENDING; // default evaluation status correct
                                 $itemScore = $formItem->score; // default evaluation score
@@ -235,6 +237,32 @@ class ResponseController extends Controller
         session()->flash('success', trans('main.Quiz has been submitted successfully'));
         return redirect()->route('store.lesson.show',[$lesson->product->slug, $lesson->slug]);
 
+    }
+
+    /**
+     * @param Request $request
+     * @param Form $form
+     */
+    public function ajaxStore(Request $request, Form $form){
+        $input = $request->only(['answers']);
+        $response = $form->createResponse($input['answers']);
+
+        $response->score_info['passing_score_status'];
+        $passingScoreType = $response->score_info['passing_score_type'];
+        if ($passingScoreType == 1){
+            $score = $response->score_info['score_percentage'].' / 100 %';
+        }else{
+            $score = $response->score_info['achieved_score'].' / '.$response->score_info['total_score'];
+
+        }
+        $responseArray = [
+            'status' => $response->status,
+            'passing_score_status' => $response->score_info['passing_score_status'],
+            'passing_type' => $passingScoreType,
+            'score' => $score,
+            'link' => route('form.response.show',  $form->getLastResponse()->hash_id),
+        ];
+        return response($responseArray, 200);
     }
 
     /**

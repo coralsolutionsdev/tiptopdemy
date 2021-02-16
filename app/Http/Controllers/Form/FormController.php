@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Form;
 use App\Http\Controllers\Controller;
 use App\Modules\Course\Lesson;
 use App\Modules\Form\Form;
+use App\Modules\Form\FormItem;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -91,6 +92,60 @@ class FormController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getItem(Form $form){
+        $groups = array();
+        if ($form){
+            $displayType = !is_null($form->properties['display_type']) ? $form->properties['display_type'] : 1;
+            $formItems = $form->getGroupedItems();
+            foreach ($formItems as $section => $items){
+                $group = FormItem::getGroupSection($items);
+                $questionsToAnswer = isset($group->properties['allowed_number']) ?  $group->properties['allowed_number'] : null;
+                $items = FormItem::getItemsWithShuffleStatus($items);
+                $itemsArray = array();
+                $count = 0;
+                foreach ($items as $key => $item){
+                    $blanksArray = array();
+                    if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                        $item->blank_paragraph = $item->getFillableBlank($item->id);
+                    }
+                    if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                        $blanks = !empty($item->options) && !empty($item->options['paragraph_blanks']) ? $item->options['paragraph_blanks'] : array();
+                        foreach ($blanks as $blank){
+                            foreach ($blank['items'] as $blankItem){
+                                array_push($blanksArray, $blankItem['value']);
+                            }
+                        }
+                        $array2 = $blanksArray;
+                        shuffle($array2);
+                        $blanksArray = $array2;
+                    }
+                    $item->blanks = $blanksArray;
+                    $item->dropped_blanks = array();
+                    $item->auto_leave = !empty($questionsToAnswer) && $questionsToAnswer < $key;
+                    $item->review = false;
+                    // add to items array
+                    if ($item->type != FormItem::TYPE_SECTION){
+                        $count++;
+                        $itemsArray[$count] = $item;
+                    }
+                }
+                $groups[] = [
+                    'title' => !empty($group) ? $group->title : null,
+                    'description' => !empty($group) ? $group->description : null,
+                    'score' => !empty($group) ? $group->score : null,
+                    'items' => $itemsArray,
+                ];
+            }
+            $form->grouped_questions = $groups;
+            $form->display_type = $displayType;
+            $form->direction = $form->getDirection();
+            $form->has_time_limit = !empty($form->properties['has_time_limit']);
+            $form->time_limit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
+            return response($form, 200);
+        }
+
     }
     /**
      * @param Form $form

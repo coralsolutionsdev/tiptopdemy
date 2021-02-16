@@ -48,6 +48,7 @@
                                                     </div>
                                                     <div class="uk-width-auto@m">
                                                         <span class="btn btn-default insert-blank"><span class="" uk-icon="icon: plus-circle"></span> {{__('main.Add blank')}}</span>
+                                                        <span class="btn btn-default insert-drag-and-drop-blank"><span class="" uk-icon="icon: plus-circle"></span> {{__('main.Add Drag and drop blank')}}</span>
                                                     </div>
                                                 </div>
                                                 <!-- User interaction is required by the browser -->
@@ -180,8 +181,13 @@
                 </span>
             </div>
             <div class="uk-margin-remove">
-                <div class="uk-margin-small item-review">
 
+                <div class="uk-margin-small item-review">
+                    <div class="uk-margin-small item-pre-review" style="padding: 10px 0">
+                    </div>
+                    <div class="item-review-content">
+
+                    </div>
                 </div>
                 <div class="uk-margin-small pb-0 item-config" style="display: none">
                     <ul class="uk-subnav uk-subnav-pill" uk-switcher>
@@ -245,7 +251,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="uk-width-auto@m">
-                                                        <span class="btn btn-default insert-blank"><span class="" uk-icon="icon: plus-circle"></span> {{__('main.Add blank')}}</span>
+                                                        <span class="btn btn-default insert-blank hidden"><span class="" uk-icon="icon: plus-circle"></span> {{__('main.Add blank')}}</span>
+                                                        <span class="btn btn-default insert-drag-and-drop-blank hidden"><span class="" uk-icon="icon: plus-circle"></span> {{__('main.Add Drag and drop blank')}}</span>
                                                     </div>
                                                 </div>
                                                 <!-- User interaction is required by the browser -->

@@ -456,20 +456,20 @@ name: "FileManager",
       });
       this.files = files;
       axios.post('/manage/media/ajax/delete/'+id)
-          .then(res => {
-            if (res.status != 200){
-              UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
-            }
-            this.activeFileId = this.activeFile = null;
-            this.previewMode = false;
-            // this.fetchFiles(false);
-            this.hideLoading();
-            // this.fetchGroups();
-          })
-          .catch(error => {
-            console.log(error);
-            this.hideLoading();
-          });
+        .then(res => {
+          if (res.status != 200){
+            UIkit.notification("<span uk-icon='icon: ban'></span> An error with status "+res.status+" accrued!", {pos: 'top-center', status:'danger'})
+          }
+          this.activeFileId = this.activeFile = null;
+          this.previewMode = false;
+          // this.fetchFiles(false);
+          this.hideLoading();
+          // this.fetchGroups();
+        })
+        .catch(error => {
+          console.log(error);
+          this.hideLoading();
+        });
     },
     destroyFolder(id){
       this.loadingMode = true;

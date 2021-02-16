@@ -7,12 +7,11 @@
                     $key = 0;
                     @endphp
                     @foreach($sectionItems as $item)
-                        <div id="{{$item['id']}}" class="quiz-item uk-width-{{$item['properties']['width']}}@m uk-width-1-1@s uk-margin-remove" style="padding: 2px 0px">
+                        <div id="{{$item['id']}}" class="quiz-item uk-width-{{$item['properties']['width']}}@m uk-width-1-1@s uk-margin-remove"  style="padding: 2px 0px">
                             @if($item['type'] == \App\Modules\Form\FormItem::TYPE_SECTION)
                                 @if(!empty($item['title']))
                                 <div class="uk-grid-small uk-text-center" uk-grid style="position: absolute; margin-top: -49px;">
                                     <div class="uk-width-auto@m">
-
                                         <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 20px">
                                             <p class="uk-h5">{{$item['title']}}</p>
                                         </div>
@@ -34,7 +33,7 @@
                                         {{$key}}:
                                     </div>
                                     <div class="uk-width-expand@m question" style="padding: 0 5px">
-                                        @if($item['type'] == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK)
+                                        @if($item['type'] == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK || $item['type'] == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP)
                                             <div class="item-fill-the-blank-paragraph">
                                                 @if(!empty($item['answers']))
                                                     @foreach($item['answers'] as $answerKey => $answer)
@@ -46,7 +45,7 @@
                                                 {!! \App\Modules\Form\FormItem::getFormItemFillableBlank($item['id']) !!}
                                             </div>
                                         @else
-                                        {!! $item['title']!!}
+                                            {!! $item['title']!!}
                                             @if($item['properties']['display'] == 1)<br>@endif
                                             @if(!empty($item['answers']))
                                                 @foreach($item['answers'] as $answer)

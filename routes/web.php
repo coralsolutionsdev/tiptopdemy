@@ -281,6 +281,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::group(['prefix' => 'form', 'namespace' => 'Form', 'as' => 'form.'], function (){
                 Route::resource('/{form}/response','ResponseController', ['only' => ['store']]);
                 Route::resource('/response','ResponseController', ['only' => ['show']]);
+                Route::get('/{form}/get/item','FormController@getItem');
+                Route::post('/{form}/send/response','ResponseController@ajaxStore');
             });
 
             /*pages*/

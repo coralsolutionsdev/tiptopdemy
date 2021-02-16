@@ -116,7 +116,7 @@
               <div  class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
                 <h5 class="text-highlighted uk-text-bold" v-html="$t('main.Lesson quizzes')"></h5>
                 <div class="overflow-auto">
-                  <table class="uk-table uk-table-divider">
+                  <table class="uk-table uk-table-divider uk-table-middle">
                     <thead>
                     <tr>
                       <th class="uk-text-center uk-width-2-5" v-html="$t('main.Quiz name')"></th>
@@ -127,20 +127,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="form in forms">
+                    <tr class="" v-for="form in forms">
                       <td class="uk-width-2-5">
                         <p class="uk-margin-remove text-highlighted" v-html="form.title"></p>
                         <p class="uk-margin-remove" v-html="form.description"></p>
                       </td>
                       <td class="uk-text-center" v-html="form.items_count"></td>
                       <td class="uk-text-center">
-                        <span v-if="form.has_time_limit == 1" class="uk-text-warning">{{form.has_time_limit}} {{form.time_limit}} </span>
+                        <span v-if="form.has_time_limit == 1" class="uk-text-warning" v-html="form.time_limit"></span>
                         <span v-else class="uk-text-primary" v-html="$t('main.Unlimited time')"></span>
                       </td>
                       <td class="uk-text-center">
                         <div v-if="form.evaluation_status == 1">
-                          <p class="uk-margin-remove"><i class="far fa-check-circle uk-text-success"></i> <span v-html="form.evaluation_mark"></span></p>
-                          <a :href="form.response_link" v-html="$t('main.View results')"></a>
+                          <p class="uk-margin-remove"><i class="far fa-check-circle uk-text-success uk-margin-small-left uk-margin-small-right"></i> <span v-html="form.evaluation_mark"></span></p>
+<!--                          <a :href="form.response_link" v-html="$t('main.View results')"></a>-->
                         </div>
                         <div v-else>
                           <p class="uk-text-muted" v-html="$t('main.No results')"></p>

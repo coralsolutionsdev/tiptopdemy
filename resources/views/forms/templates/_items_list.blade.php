@@ -118,4 +118,22 @@
             </div>
         </div>
     </div>
+    {{--question item--}}
+    <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
+        <div class=" uk-grid-medium" uk-grid>
+            <div class="uk-width-auto@m uk-text-center uk-flex uk-flex-middle">
+                <i class="fas fa-grip-lines"></i>
+            </div>
+            <div class="uk-width-expand@m uk-flex uk-flex-middle">
+                <div>
+                    <p class="font-weight-bold m-0">{{__('main.Fill the blank (drag and drop)')}}</p>
+                    <p class="font-weight-light m-0">{{__('main.Fill the blank question')}}.</p>
+                </div>
+            </div>
+            <div class="uk-width-auto@m uk-text-center uk-flex uk-flex-middle">
+                <span class="count">0</span>
+            </div>
+        </div>
+    </div>
+
 </div>

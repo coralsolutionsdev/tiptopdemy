@@ -42,6 +42,7 @@ Vue.component('memorize-index', require('./components/admin/form/memorize/index.
 Vue.component('file-manager', require('./components/system/FileManager.vue'));
 Vue.component('product-index', require('./components/frontend/products/index.vue'));
 Vue.component('product-items', require('./components/frontend/products/items.vue'));
+Vue.component('form-show', require('./components/frontend/forms/Show.vue'));
 
 // If you want to use it in your vue components
 Vue.use(AtComponents)

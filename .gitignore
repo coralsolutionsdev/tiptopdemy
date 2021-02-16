@@ -5,6 +5,7 @@
 /storage/app/attachments
 /storage/app/public/media
 /storage/app/public/chunks
+/storage/app/public/attachments
 /public/storage/*
 Homestead.json
 Homestead.yaml

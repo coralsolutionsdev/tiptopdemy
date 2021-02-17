@@ -5,7 +5,7 @@
       <div class="uk-width-1-4 uk-visible@m">
         <div v-if="(groups && groups.length != 0) || (product && product.has_purchased)" class="uk-card uk-card-default uk-card-body uk-padding-remove">
           <div v-if="product && !product.has_purchased">
-<!--            && -->
+
             <div class="uk-padding-small">
               <div class="price uk-heading-small uk-margin-remove"><span class="uk-text-primary">$</span><span v-html="product.price"></span></div>
 
@@ -38,7 +38,7 @@
           <div class="uk-padding-small">
             <ul uk-accordion="multiple: true">
               <li v-for="(group, key) in groups" :class=" { 'uk-open':lessonGroupId == group.id}" style="margin:0px 0px 10px 0px">
-                <a class="uk-accordion-title text-highlighted uk-secondary-bg" style="padding: 10px 20px" href="#">{{key}} | {{group.title}}</a>
+                <a class="uk-accordion-title text-highlighted uk-secondary-bg" style="padding: 10px 20px" href="#">{{key < 10 ? '0'+key: key}} | {{group.title}}</a>
                 <div class="uk-accordion-content">
                   <a v-if="lesson.link" v-for="(lesson, lessonKey) in group.items" :href="lesson.link">
                     <div class="uk-secondary-bg-hover">
@@ -46,7 +46,7 @@
                         <div class="uk-grid-small" uk-grid>
                           <div  class="uk-width-auto@s uk-text-center uk-flex uk-flex-middle">
                             <span v-if="lesson.id == lessonId" class="uk-icon-box uk-text-primary" style="height: 40px; width:40px;" uk-icon="icon: play-circle"></span>
-                            <span v-else class="uk-icon-box" style="height: 40px; width:40px;" v-html="lessonKey"></span>
+                            <span v-else class="uk-icon-box" style="height: 40px; width:40px;" v-html="lessonKey < 10 ? '0'+lessonKey: lessonKey"></span>
                           </div>
                           <div class="uk-width-expand@s uk-flex uk-flex-middle">
                             <div>
@@ -260,6 +260,7 @@ name: "Show",
         this.lessonGroupId = this.item.lesson_group_id;
         this.lessonId = this.item.lesson_id;
         this.product = this.item.product;
+        console.log(this.groups);
       });
     },
     updateViewContentStatus(status){

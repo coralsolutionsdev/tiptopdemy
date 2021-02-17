@@ -385,11 +385,11 @@ class LessonController extends Controller
         $groups = $product->groups;
         $groupsArray = [];
         foreach ($groups as $key => $group){
-            $groupNumber = sprintf('%02d',  $key + 1);
+            $groupNumber = $key + 1;
             // lessons
             $groupLessonsArray = [];
             foreach ($group->getLessons as $itemKey => $lessonItem){
-                $lessonNumber = sprintf('%02d',  $itemKey + 1);
+                $lessonNumber = $itemKey + 1;
                 $link = null;
                 if ($groupNumber == 1){
                     $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);

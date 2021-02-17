@@ -139,7 +139,12 @@ class Category extends Model
                 return collect();
                 break;
             case self::TYPE_PRODUCT:
-                return  $this->items()->where('status', Product::STATUS_AVAILABLE)->orWhere('status', Product::STATUS_AVAILABLE_FOR_INSTITUTIONS)->get();
+                return  $this->items->filter(function ($item){
+                if ($item->status == Product::STATUS_AVAILABLE || $item->status == Product::STATUS_AVAILABLE_FOR_INSTITUTIONS){
+                    return true;
+                }
+                return false;
+            });
                 break;
         }
 

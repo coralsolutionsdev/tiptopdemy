@@ -2,10 +2,16 @@
 #/storage/*.key
 /.idea
 /.vagrant
+# storage
 /storage/app/attachments
 /storage/app/public/media
 /storage/app/public/chunks
+/storage/app/public/attachments
+# public
 /public/storage/*
+# resources
+/lang/ar.json
+# root
 Homestead.json
 Homestead.yaml
 npm-debug.log

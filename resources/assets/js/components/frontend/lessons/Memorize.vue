@@ -60,19 +60,23 @@
             <div v-else-if="examItemMode">
               <div class="uk-placeholder uk-padding-small">
                 <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-expand@m uk-width-1-1@s"><h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1></div>
-                  <div class="uk-width-auto@m uk-width-1-1@s">
-                    <!--timer-->
-                    <countdown ref="countdown" @progress="handleCountdownProgress" :time="quizItemAnswerTime * 1000">
-                      <!--        <template slot-scope="props">Time Remaining：{{ props.days }} days, {{ props.hours }} hours, {{ props.minutes }} minutes, {{ props.seconds }} seconds.</template>-->
-                      <template slot-scope="props">
-                        <div class="uk-text-center" style="background-color: #F4F5F7; border-radius: 5px; padding: 5px 10px">
-                          <h1 class="uk-margin-remove uk-text-bold uk-text-danger">{{ props.seconds }}</h1>
-                          <p class="uk-margin-remove uk-text-muted"><small >Seconds</small></p>
-                        </div>
+                  <div class="uk-width-expand@m uk-width-1-1@s uk-text-center" style="direction: ltr">
+                    <div class="uk-width-auto@m uk-width-1-1@s" style="position: absolute">
+                      <!--timer-->
+                      <countdown ref="countdown" @progress="handleCountdownProgress" :time="quizItemAnswerTime * 1000">
+                        <!--        <template slot-scope="props">Time Remaining：{{ props.days }} days, {{ props.hours }} hours, {{ props.minutes }} minutes, {{ props.seconds }} seconds.</template>-->
+                        <template slot-scope="props">
+                          <div class="uk-text-center" style="background-color: #F4F5F7; border-radius: 5px; padding: 5px 10px">
+                            <h1 class="uk-margin-remove uk-text-bold uk-text-danger">{{ props.seconds }}</h1>
+                            <p class="uk-margin-remove uk-text-muted"><small >Seconds</small></p>
+                          </div>
 
-                      </template>
-                    </countdown>
+                        </template>
+                      </countdown>
+                    </div>
+                    <div class="uk-margin">
+                      <h1 class="uk-text-primary uk-text-bold" v-html="quizItem.title"></h1>
+                    </div>
                   </div>
                   <div class="uk-width-extend uk-flex uk-flex-center">
                     <div class="uk-width-3-4@m uk-width-1-1@s " :class="{' disabled ':!isAllowToAnswer}">

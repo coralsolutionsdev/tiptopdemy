@@ -29,7 +29,7 @@ class ProductTypeController extends Controller
     {
         $page_title = $this->page_title;
         $breadcrumb = $this->breadcrumb;
-        $types = ProductType::latest()->paginate(15);
+        $types = ProductType::paginate(15);
         $attribute_Sets =  ProductAttributeSet::all()->pluck('name','id')->toArray();
         return view('store.types.index', compact('page_title', 'breadcrumb', 'types', 'attribute_Sets'));
 
@@ -85,23 +85,31 @@ class ProductTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param ProductType $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ProductType $type)
     {
-        //
+        $input = $request->only(['name', 'description', 'product_attribute_set_id']);
+        $type->update($input);
+        session()->flash('success','Updated successfully');
+        return redirect()->route('store.types.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param ProductType $productType
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(ProductType $type)
     {
-        //
+        //TODO: dont delete system types
+        $type->delete();
+        session()->flash('success','Deleted successfully');
+        return redirect()->route('store.types.index');
+
     }
 }

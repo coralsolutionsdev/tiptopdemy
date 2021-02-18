@@ -16837,6 +16837,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -16938,7 +16947,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
 
       this.showDialog = false;
       this.itemsAnswers = this.buildAnswersArray();
-      console.log(this.itemsAnswers);
       this.examMode = false;
       var data = {
         answers: this.itemsAnswers
@@ -16949,7 +16957,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         }.bind(this)
       };
       axios.post('/form/' + this.slug + '/send/response', data, config).then(function (res) {
-        console.log(res.data);
         _this3.responseArray = res.data;
         _this3.evaluationStatus = 1;
         // this.updateProgressPercentage(100);
@@ -17013,41 +17020,69 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
     getLeaveClass: function getLeaveClass(group, item, key) {
       return '';
     },
-    startDrag: function startDrag(blank, draggedBlankKey, questionId) {
+    startDrag: function startDrag(questionID, blank, blankKey) {
       hoveredItem = null;
       this.draggedBlank = blank;
-      this.draggedBlankKey = draggedBlankKey;
-      this.draggedBlankQuestionId = questionId;
+      this.draggedBlankKey = blankKey;
+      this.draggedBlankQuestionId = questionID;
     },
-    onDrop: function onDrop(question) {
-      if (question.id == this.draggedBlankQuestionId) {
-        var html = '<input class="droppable-blank-input" name="item_answer[\'' + question.id + '\'][]" type="hidden" value="' + this.draggedBlank + '">\n        <span class="dropped-blank" data-key="' + this.draggedBlankKey + '">' + this.draggedBlank + '</span>\n        ';
-        if (hoveredItem != null) {
-          $(hoveredItem).html(html);
-        }
-        this.refreshDroppedBlanksArray(question);
-      } else {
-        this.$Notify({
-          title: 'Alert!',
-          message: 'You cannot drop a question answer in different question\'s blank',
-          type: 'warning',
-          duration: 4000
-        });
+    onDrop: function onDrop(group, question) {
+      if (hoveredItem != null) {
+        var blank = this.draggedBlank;
+        var item = $(hoveredItem);
+        this.insertBlank(group, question.id, item, blank);
       }
     },
-    isDropped: function isDropped(question, blankKey) {
-      return question.dropped_blanks.includes(blankKey.toString());
+    insertBlank: function insertBlank(group, questionId, item, blank) {
+      var blankDataKey = group.id + '-' + blank;
+      var html = '<input class="droppable-blank-input" name="item_answer[\'' + questionId + '\'][]" type="hidden" value="' + blank + '">\n        <div class="blank-word dropped-blank-item" data-key="' + blankDataKey + '" data-group-id="' + group.id + '" data-question-id="' + questionId + '">' + blank + ' <span class="remove-blank" uk-icon="icon: close; ratio: 0.7"></span></div>\n        ';
+      item.html(html);
+      this.removeBlank();
+      this.refreshDroppedBlanksArray(group, blankDataKey);
     },
-    refreshDroppedBlanksArray: function refreshDroppedBlanksArray(question) {
-      var droppableBlanks = $('#question-' + question.id).find('.droppable-blank');
-      var newArray = [];
-      $.each(droppableBlanks, function (key, item) {
-        var innerHtml = $(this).find('.dropped-blank').attr('data-key');
-        if (innerHtml != undefined) {
-          newArray.push(innerHtml);
+    insertInNextBlank: function insertInNextBlank(group, questionId, blank) {
+      var droppableBlanks = $('#group-' + group.id).find('.droppable-blank');
+      var nextDroppableBlank = null;
+      $.each(droppableBlanks, function (key, droppableBlankItem) {
+        if ($(droppableBlankItem).html() == '') {
+          // blank item
+          if (!nextDroppableBlank) {
+            nextDroppableBlank = droppableBlankItem;
+          }
         }
       });
-      question.dropped_blanks = newArray;
+      this.insertBlank(group, questionId, $(nextDroppableBlank), blank);
+    },
+    removeBlank: function removeBlank() {
+      var appVue = this;
+      var currentGroup = null;
+
+      $('.dropped-blank-item').off('click').click(function () {
+        var blank = $(this);
+        var blankGroup = $(this).attr('data-group-id');
+        blank.parent().html('');
+        $.each(appVue.groups, function (index, group) {
+          if (group.id == blankGroup) {
+            currentGroup = group;
+          }
+        });
+        appVue.refreshDroppedBlanksArray(currentGroup);
+      });
+    },
+    isDropped: function isDropped(group, blank) {
+      var blankDataKey = group.id + '-' + blank;
+      return group.dropped_blanks.includes(blankDataKey);
+    },
+    refreshDroppedBlanksArray: function refreshDroppedBlanksArray(group) {
+      var droppableBlanks = $('#group-' + group.id).find('.droppable-blank');
+      var newArray = [];
+      $.each(droppableBlanks, function (key, item) {
+        var questionBlankDataKey = $(this).find('.dropped-blank-item').attr('data-key');
+        if (questionBlankDataKey !== undefined) {
+          newArray.push(questionBlankDataKey);
+        }
+      });
+      group.dropped_blanks = newArray;
     },
     handleCountdownProgress: function handleCountdownProgress(data) {
 
@@ -17081,6 +17116,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown__);
+//
+//
+//
+//
 //
 //
 //
@@ -17741,7 +17780,6 @@ var messages = {
         _this.lessonGroupId = _this.item.lesson_group_id;
         _this.lessonId = _this.item.lesson_id;
         _this.product = _this.item.product;
-        console.log(_this.groups);
       });
     },
     updateViewContentStatus: function updateViewContentStatus(status) {
@@ -22780,7 +22818,7 @@ exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-595
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  margin: 5px 0px;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.uk-badge[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 10px 14px 12px 14px;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: move;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
 
 /***/ }),
 /* 57 */
@@ -54071,14 +54109,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uk-grid": ""
     }
   }, [_c('div', {
-    staticClass: "uk-width-expand@m uk-width-1-1@s"
-  }, [_c('h1', {
-    staticClass: "uk-text-primary uk-text-bold",
-    domProps: {
-      "innerHTML": _vm._s(_vm.quizItem.title)
+    staticClass: "uk-width-expand@m uk-width-1-1@s uk-text-center",
+    staticStyle: {
+      "direction": "ltr"
     }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-auto@m uk-width-1-1@s"
+  }, [_c('div', {
+    staticClass: "uk-width-auto@m uk-width-1-1@s",
+    staticStyle: {
+      "position": "absolute"
+    }
   }, [_c('countdown', {
     ref: "countdown",
     attrs: {
@@ -54105,6 +54144,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }])
   })], 1), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin"
+  }, [_c('h1', {
+    staticClass: "uk-text-primary uk-text-bold",
+    domProps: {
+      "innerHTML": _vm._s(_vm.quizItem.title)
+    }
+  })])]), _vm._v(" "), _c('div', {
     staticClass: "uk-width-extend uk-flex uk-flex-center"
   }, [_c('div', {
     staticClass: "uk-width-3-4@m uk-width-1-1@s ",
@@ -55053,7 +55099,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.attachments.length)
     }
   }), _vm._v(")")]), _vm._v(" "), _c('table', {
-    staticClass: "uk-table uk-table-divider"
+    staticClass: "uk-table uk-table-divider uk-table-middle"
   }, [_c('thead', [_c('tr', [_c('th', {
     staticClass: "uk-text-center ",
     domProps: {
@@ -55167,6 +55213,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('div', {
       class: {
         'hidden-div': _vm.currentGroupKey != groupKey
+      },
+      attrs: {
+        "id": 'group-' + group.id
       }
     }, [_c('div', [_c('div', {
       staticClass: "uk-grid-collapse uk-text-center",
@@ -55217,7 +55266,30 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "uk-grid": ""
       }
-    }, _vm._l((group.items), function(question, key) {
+    }, [_c('div', {
+      staticClass: "blanks-row uk-margin-small"
+    }, _vm._l((group.draggable_blanks), function(draggableBlank, draggableBlankKey) {
+      return _c('div', {
+        staticClass: "blank-word uk-box-shadow-hover-medium",
+        class: {
+          'dropped-blank': _vm.isDropped(group, draggableBlank.value)
+        },
+        attrs: {
+          "draggable": ""
+        },
+        domProps: {
+          "innerHTML": _vm._s(draggableBlank.value)
+        },
+        on: {
+          "dragstart": function($event) {
+            return _vm.startDrag(draggableBlank.question_id, draggableBlank.value, draggableBlankKey)
+          },
+          "click": function($event) {
+            return _vm.insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)
+          }
+        }
+      })
+    }), 0), _vm._v(" "), _vm._l((group.items), function(question, key) {
       return (question.type != 0) ? _c('div', {
         staticClass: "uk-width-1-1@m uk-width-1-1@s",
         class: {
@@ -55334,31 +55406,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           "innerHTML": _vm._s(question.blank_paragraph)
         }
       }) : (question.type == 7) ? _c('div', [_c('div', {
-        staticClass: "blanks-row"
-      }, _vm._l((question.blanks), function(blank, blankKey) {
-        return _c('span', {
-          staticClass: "blank-word uk-badge",
-          class: {
-            'dropped-blank': _vm.isDropped(question, blankKey)
-          },
-          attrs: {
-            "draggable": ""
-          },
-          domProps: {
-            "innerHTML": _vm._s(blank)
-          },
-          on: {
-            "dragstart": function($event) {
-              return _vm.startDrag(blank, blankKey, question.id)
-            }
-          }
-        })
-      }), 0), _vm._v(" "), _c('div', {
         staticClass: "drop-zone",
         on: {
           "drop": function($event) {
             $event.preventDefault();
-            return _vm.onDrop(question)
+            return _vm.onDrop(group, question)
           },
           "dragover": function($event) {
             $event.preventDefault();
@@ -55403,7 +55455,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         }
       })])])])])]) : _vm._e()
-    }), 0)]), _vm._v(" "), _c('div', {
+    })], 2)]), _vm._v(" "), _c('div', {
       staticClass: "uk-grid-collapse uk-margin-small",
       attrs: {
         "uk-grid": ""
@@ -55550,7 +55602,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })])]), _vm._v(" "), _c('div', [(_vm.responseArray.status != 2) ? _c('a', {
     staticClass: "uk-button uk-button-primary uk-width-1-3",
     attrs: {
-      "href": _vm.responseArray.link
+      "href": _vm.responseArray.link + '/?back=' + _vm.backUrl
     },
     domProps: {
       "innerHTML": _vm._s(_vm.$t('main.View results'))

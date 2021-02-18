@@ -35,6 +35,7 @@
                                         <li class="">
                                             <span id="{{$item->id}}" class="btn btn-light edit-product-type" data-toggle="modal" data-target="#productTypeModal"><i class="far fa-edit"></i></span>
                                         </li>
+                                        @if($item->id != 1)
                                         <li class="">
                                             <span id="{{$item->id}}" class="btn btn-light btn-delete"><i class="far fa-trash-alt"></i></span>
                                             <form id="delete-form" method="post" action="{{route('store.types.destroy', $item->id)}}">
@@ -42,6 +43,7 @@
                                                 {{method_field('DELETE')}}
                                             </form>
                                         </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </td>

@@ -159,7 +159,7 @@
             <div v-if="attachments && attachments.length > 0">
               <div class="uk-card uk-card-default uk-card-body uk-box-shadow-hover-small uk-padding-small uk-margin-small">
                 <h5 class="text-highlighted uk-text-bold" v-html="$t('main.Attachments')"> (<span class="comment-count" v-html="attachments.length"></span>)</h5>
-                <table class="uk-table uk-table-divider">
+                <table class="uk-table uk-table-divider uk-table-middle">
                   <thead>
                   <tr>
                     <th class="uk-text-center " v-html="$t('main.File name')"></th>
@@ -260,7 +260,7 @@ name: "Show",
         this.lessonGroupId = this.item.lesson_group_id;
         this.lessonId = this.item.lesson_id;
         this.product = this.item.product;
-        console.log(this.groups);
+
       });
     },
     updateViewContentStatus(status){

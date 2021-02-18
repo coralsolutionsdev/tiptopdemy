@@ -105,6 +105,7 @@ class FormController extends Controller
                 $items = FormItem::getItemsWithShuffleStatus($items);
                 $itemsArray = array();
                 $count = 0;
+                $groupDraggableBlanks = [];
                 foreach ($items as $key => $item){
                     $blanksArray = array();
                     if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
@@ -120,7 +121,18 @@ class FormController extends Controller
                         $array2 = $blanksArray;
                         shuffle($array2);
                         $blanksArray = $array2;
+
+                        // group draggable blanks
+                        foreach ($blanksArray as $draggableBlankItem) {
+                            $groupDraggableBlanks[] = [
+                                'id' => rand(0,999),
+                                'value' => $draggableBlankItem,
+                                'question_id' => $item->id,
+                            ];
+                        }
+
                     }
+
                     $item->blanks = $blanksArray;
                     $item->dropped_blanks = array();
                     $item->auto_leave = !empty($questionsToAnswer) && $questionsToAnswer < $key;
@@ -131,11 +143,19 @@ class FormController extends Controller
                         $itemsArray[$count] = $item;
                     }
                 }
+
+                $array3 = $groupDraggableBlanks;
+                shuffle($array3);
+                $groupDraggableBlanks = $array3;
+
                 $groups[] = [
+                    'id' => !empty($group) ? $group->id : null,
                     'title' => !empty($group) ? $group->title : null,
                     'description' => !empty($group) ? $group->description : null,
+                    'dropped_blanks' => array(),
                     'score' => !empty($group) ? $group->score : null,
                     'items' => $itemsArray,
+                    'draggable_blanks' => $groupDraggableBlanks,
                 ];
             }
             $form->grouped_questions = $groups;

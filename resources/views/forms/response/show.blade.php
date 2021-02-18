@@ -17,6 +17,7 @@
                             <div class="uk-width-expand">
                                 <h3 class="text-highlighted">{{$response->title}}</h3>
                                 <p>{!! $response->description !!}</p>
+                                <a href="" id="backURl" class="uk-button uk-button-default">{{__('main.Back')}}</a>
                             </div>
                             <div class="uk-width-1-5 uk-text-center">
                                 <div>
@@ -69,6 +70,12 @@
         </div>
     </section>
     <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const url = urlParams.get('back')
+        console.log(url);
+        $('#backURl').attr('href',url)
+
         var blankItemsParagraphs = $('.item-fill-the-blank-paragraph');
         $.each(blankItemsParagraphs, function (){
             var paragraph = $(this);
@@ -83,11 +90,14 @@
                 var blankScoreText = blankScore + " {{trans_choice('main.Marks', 1)}}";
                 var blankStatusColorClass = 'success';
                 var blankStatusIcon = 'check';
-                if (blankStatus == 3){
+                if (blankStatus == 3 || blankStatus == undefined){
                     blankStatusColorClass = 'danger';
                     blankStatusIcon = 'times';
                 }
-                var html = '<span uk-tooltip="'+blankScoreText+'" class="uk-text-'+blankStatusColorClass+'" style="padding: 0 5px">'+blankValue+' <i class="far fa-'+blankStatusIcon+'-circle"></i></span>';
+                var html = `<span class="uk-text-`+blankStatusColorClass+`"><i class="far fa-`+blankStatusIcon+`-circle"></i></span>`;
+                if (blankValue != undefined){
+                    var html = '<span uk-tooltip="'+blankScoreText+'" class="uk-text-'+blankStatusColorClass+'" style="padding: 0 5px">'+blankValue+' <i class="far fa-'+blankStatusIcon+'-circle"></i></span>';
+                }
                 blank.html(html);
             });
         });

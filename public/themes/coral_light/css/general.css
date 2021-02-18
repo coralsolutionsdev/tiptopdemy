@@ -476,16 +476,27 @@ banners
 Form
  */
 .droppable-blank{
-    min-height: 20px;
+    min-height: 25px;
     min-width: 80px;
     background-color: #FFFFFF;
     display: inline-block;
-    border: none;
-    border-bottom: 1px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
     margin: 5px 5px -5px 5px;
     outline: none;
     box-shadow: none;
     text-align: center;
+}
+.droppable-blank .blank-word{
+    margin: 0 2px;
+    padding: 3px 15px;
+    display: inline-block;
+    background-color: var(--text-primary);
+    border-radius: 5px;
+    color: white;
+}
+.droppable-blank .blank-word:hover{
+    cursor: pointer;
 }
 .input-blank, .input-classic, .input-blank:focus, .input-classic:focus{
     border: none;

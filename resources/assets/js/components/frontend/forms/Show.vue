@@ -29,7 +29,7 @@
             <!--Form info-->
             <div class="uk-grid-small uk-child-width-1-1" uk-grid>
               <!--            v-if="currentGroupKey == groupKey"-->
-              <div v-for="(group, groupKey) in groups" :class="{'hidden-div': currentGroupKey != groupKey}">
+              <div :id="'group-'+group.id" v-for="(group, groupKey) in groups" :class="{'hidden-div': currentGroupKey != groupKey}">
                 <div>
                   <!--section info-->
                   <div class="uk-grid-collapse uk-text-center" uk-grid  style="padding: 0 10px">
@@ -51,6 +51,19 @@
                     </div>
                     <!---->
                     <div :class="form.display_type == 0 ? 'uk-grid-collapse' : 'uk-grid-small'" uk-grid>
+                      <div class="blanks-row uk-margin-small">
+                        <!--draggable blanks-->
+                        <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in group.draggable_blanks"
+                             v-html="draggableBlank.value"
+                             :class="{'dropped-blank':isDropped(group, draggableBlank.value)}"
+                             draggable @dragstart='startDrag(draggableBlank.question_id, draggableBlank.value, draggableBlankKey)'
+                             @click="insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)"
+                        >
+                        </div>
+<!--                        <div class="blank-word uk-box-shadow-hover-medium" :class="{'dropped-blank':isDropped(group, groupQuestions, blank)}" v-for="(blank, blankKey) in groupQuestions.blanks" v-html="blank"-->
+<!--                             @click="insertInNextBlank(group, groupQuestions, blank)" draggable @dragstart='startDrag(groupQuestions, blank, blankKey)'>-->
+<!--                        </div>-->
+                      </div>
                       <!--questions-->
                       <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave }" style="padding: 4px">
                         <div :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
@@ -83,12 +96,8 @@
                               <div v-else-if="question.type == 6" v-html="question.blank_paragraph">
                               </div>
                               <div v-else-if="question.type == 7">
-                                <div class="blanks-row">
-                              <span class="blank-word uk-badge" :class="{'dropped-blank':isDropped(question, blankKey)}" v-for="(blank, blankKey) in question.blanks" v-html="blank"
-                                    draggable @dragstart='startDrag(blank, blankKey, question.id)'> </span>
-                                </div>
                                 <div class="drop-zone"
-                                     @drop.prevent="onDrop(question)"
+                                     @drop.prevent="onDrop(group, question)"
                                      @dragover.prevent>
                                   <div v-html="question.blank_paragraph"></div>
 
@@ -160,7 +169,7 @@
                         </div>
                       </div>
                       <div>
-                        <a v-if="responseArray.status != 2" class="uk-button uk-button-primary uk-width-1-3" :href="responseArray.link" v-html="$t('main.View results')"></a>
+                        <a v-if="responseArray.status != 2" class="uk-button uk-button-primary uk-width-1-3" :href="responseArray.link+'/?back='+backUrl" v-html="$t('main.View results')"></a>
                         <a class="uk-button uk-button-default uk-width-1-3" :href="backUrl" v-html="$t('main.Back')"></a>
                       </div>
                     </div>
@@ -275,6 +284,7 @@ name: "Show",
   },
   created() {
     this.fetchItem();
+
   },
   mounted() {
 
@@ -331,7 +341,6 @@ name: "Show",
     postResponse(){
       this.showDialog = false;
       this.itemsAnswers =  this.buildAnswersArray();
-      console.log(this.itemsAnswers);
       this.examMode = false;
       var data = {
         answers: this.itemsAnswers,
@@ -343,7 +352,6 @@ name: "Show",
       }
       axios.post('/form/'+this.slug+'/send/response', data, config)
           .then(res => {
-              console.log(res.data);
               this.responseArray = res.data;
               this.evaluationStatus = 1;
             // this.updateProgressPercentage(100);
@@ -414,45 +422,71 @@ name: "Show",
     getLeaveClass(group, item, key){
       return '';
     },
-    startDrag(blank, draggedBlankKey, questionId){
+    startDrag(questionID, blank, blankKey){
       hoveredItem = null;
       this.draggedBlank = blank;
-      this.draggedBlankKey = draggedBlankKey;
-      this.draggedBlankQuestionId = questionId;
+      this.draggedBlankKey = blankKey;
+      this.draggedBlankQuestionId = questionID;
 
     },
-    onDrop (question) {
-      if (question.id == this.draggedBlankQuestionId){
-        var html = `<input class="droppable-blank-input" name="item_answer['`+question.id+`'][]" type="hidden" value="`+this.draggedBlank+`">
-        <span class="dropped-blank" data-key="`+this.draggedBlankKey+`">`+this.draggedBlank+`</span>
-        `;
-        if(hoveredItem != null){
-          $(hoveredItem).html(html);
-        }
-        this.refreshDroppedBlanksArray(question);
-      } else {
-        this.$Notify({
-          title: 'Alert!',
-          message: 'You cannot drop a question answer in different question\'s blank',
-          type: 'warning',
-          duration: 4000
-        });
+    onDrop (group, question) {
+      if(hoveredItem != null){
+        var blank = this.draggedBlank;
+        var item = $(hoveredItem);
+        this.insertBlank(group, question.id, item, blank);
       }
-
     },
-    isDropped(question, blankKey){
-      return question.dropped_blanks.includes(blankKey.toString());
+    insertBlank(group, questionId, item, blank){
+      var blankDataKey = group.id+'-'+blank;
+      var html = `<input class="droppable-blank-input" name="item_answer['`+questionId+`'][]" type="hidden" value="`+blank+`">
+        <div class="blank-word dropped-blank-item" data-key="`+blankDataKey+`" data-group-id="`+group.id+`" data-question-id="`+questionId+`">`+blank+` <span class="remove-blank" uk-icon="icon: close; ratio: 0.7"></span></div>
+        `;
+        item.html(html);
+      this.removeBlank();
+      this.refreshDroppedBlanksArray(group, blankDataKey);
     },
-    refreshDroppedBlanksArray(question){
-      var droppableBlanks = $('#question-'+question.id).find('.droppable-blank');
-      var newArray = [];
-      $.each( droppableBlanks, function( key, item ) {
-        var innerHtml = $(this).find('.dropped-blank').attr('data-key');
-        if(innerHtml != undefined){
-          newArray.push(innerHtml);
+    insertInNextBlank(group, questionId, blank){
+      var droppableBlanks = $('#group-'+group.id).find('.droppable-blank');
+      var nextDroppableBlank = null;
+      $.each( droppableBlanks, function( key, droppableBlankItem ) {
+        if ($(droppableBlankItem).html() == ''){ // blank item
+          if (!nextDroppableBlank){
+            nextDroppableBlank = droppableBlankItem;
+          }
         }
       });
-      question.dropped_blanks = newArray;
+      this.insertBlank(group, questionId, $(nextDroppableBlank), blank);
+    },
+    removeBlank(){
+      var appVue = this;
+      var currentGroup = null;
+
+      $('.dropped-blank-item').off('click').click(function (){
+        var blank = $(this);
+        var blankGroup = $(this).attr('data-group-id');
+        blank.parent().html('');
+        $.each(appVue.groups, function (index, group){
+          if (group.id == blankGroup){
+            currentGroup = group;
+          }
+        });
+        appVue.refreshDroppedBlanksArray(currentGroup)
+      });
+    },
+    isDropped(group, blank){
+      var blankDataKey = group.id+'-'+blank;
+      return group.dropped_blanks.includes(blankDataKey);
+    },
+    refreshDroppedBlanksArray(group){
+      var droppableBlanks = $('#group-'+group.id).find('.droppable-blank');
+      var newArray = [];
+      $.each( droppableBlanks, function( key, item ) {
+        var questionBlankDataKey = $(this).find('.dropped-blank-item').attr('data-key');
+        if(questionBlankDataKey !== undefined){
+          newArray.push(questionBlankDataKey);
+        }
+      });
+      group.dropped_blanks = newArray;
     },
     handleCountdownProgress(data) {
 
@@ -474,8 +508,6 @@ name: "Show",
       // console.log(data.totalMilliseconds);
 
     },
-
-
   },
 }
 </script>
@@ -488,17 +520,21 @@ name: "Show",
   pointer-events: none;
 }
 .blanks-row{
-  margin: 5px 0px;
+  padding: 10px 0;
   display: inline-block;
   min-width: 150px;
   min-height: 25px;
 }
-.uk-badge{
+.blank-word{
   margin: 0 2px;
-  padding: 10px 14px 12px 14px;
+  padding: 5px 15px;
+  display: inline-block;
+  background-color: var(--text-primary);
+  border-radius: 5px;
+  color: white;
 }
 .blank-word:hover{
-  cursor: move;
+  cursor: pointer;
 }
 
 .drag-el {

@@ -99,7 +99,7 @@
                                 <div class="drop-zone"
                                      @drop.prevent="onDrop(group, question)"
                                      @dragover.prevent>
-                                  <div v-html="question.blank_paragraph"></div>
+                                  <div  class="drop-zone-content" v-html="question.blank_paragraph"></div>
 
                                 </div>
                               </div>

@@ -439,6 +439,7 @@ a:hover{
 .disabled-div{
     pointer-events: none;
     opacity: 0.5;
+}.disabled-div:hover{
     cursor: not-allowed;
 }
 

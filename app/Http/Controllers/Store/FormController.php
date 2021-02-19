@@ -85,21 +85,27 @@ class FormController extends Controller
         $product = $lesson->product;
         $modelName = $this->modelName;
         $breadcrumb =  Breadcrumbs::render('store.product.lesson.quiz', $lesson, $form);
-        $prevLesson = null;
-        $nextLesson = null;
-        $productLessons =  $product->lessons->sortBy('position');
-        foreach ($productLessons as $key => $item) {
-            if ($item->id == $lesson->id) {
-                $prevLesson = $productLessons->get($key - 1);
-                $nextLesson = $productLessons->get($key + 1);
-                break;
+        $prevLessonLink = null;
+        $nextLessonLink = null;
+        $group = $lesson->groups->first();
+        foreach ($group->getLessons as $itemKey => $lessonItem){
+            if ($lessonItem->id == $lesson->id){
+                $preItem = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
+                $nextItem = !empty($group->getLessons[$itemKey+1]) ? $group->getLessons[$itemKey+1] : null;
+
             }
+        }
+        if (!empty($preItem)){
+            $prevLessonLink = route('store.lesson.show', [$product->slug, $preItem->slug]);
+        }
+        if (!empty($nextItem)){
+            $nextLessonLink = route('store.lesson.show', [$product->slug, $nextItem->slug]);
         }
         $displayType = !is_null($form->properties['display_type']) ? $form->properties['display_type'] : 1;
         $hasTimeLimit = !empty($form->properties['has_time_limit']) ? $form->properties['has_time_limit'] : 0;
         $timeLimit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
         $backUrl = route('store.lesson.show', [$product->slug, $lesson->slug]);
-        return view('store.forms.frontend.v2.show', compact('modelName', 'product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'form', 'displayType', 'hasTimeLimit', 'timeLimit', 'backUrl'));
+        return view('store.forms.frontend.v2.show', compact('modelName', 'product','page_title','breadcrumb', 'lesson', 'prevLessonLink', 'nextLessonLink', 'form', 'displayType', 'hasTimeLimit', 'timeLimit', 'backUrl'));
 
     }
 

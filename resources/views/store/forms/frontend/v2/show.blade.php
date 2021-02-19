@@ -10,11 +10,13 @@
                 <div>
                     {{--Header--}}
                     <div class="product-header uk-visible@m">
-                        <div class="uk-grid-small" uk-height-match="target: > div > .uk-card; row: false" uk-grid>
-                            <div class="nav-col" style="width: 5%" uk-tooltip="Previous">
-                                <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; color: {{$product->getMainColorPattern()}}" onclick="$('#prev-form').submit()">
-                                    <span uk-icon="icon: chevron-{{getFloatKey('end')}}"></span>
-                                </div>
+                        <div class="uk-grid-small" uk-grid>
+                            <div class="nav-col {{empty($prevLessonLink) ? 'disabled-div' : ''}}" style="width: 5%;" uk-tooltip="{{__('main.Previous')}}">
+                                <a class="nav-link" href="{{$prevLessonLink}}">
+                                    <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; height: 100%; color: {{$product->getMainColorPattern()}}">
+                                        <span uk-icon="icon: chevron-{{getFloatKey('end')}}"></span>
+                                    </div>
+                                </a>
                             </div>
                             <div class="uk-width-expand@m">
                                 <div class="uk-card uk-card-body uk-padding-small" style="background: linear-gradient(45deg,{{str_replace(['"', '[', ']'], '', json_encode($product->getColorPattern()->gradient))}}); color: #FFFFFF">
@@ -50,13 +52,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="nav-col" style="width: 5%" uk-tooltip="Next">
-                                <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; color: {{$product->getMainColorPattern()}}" onclick="$('#next-form').submit()">
-                                    <span uk-icon="icon: chevron-{{getFloatKey('start')}}"></span>
-                                </div>
-                                <form id="next-form" method="GET" action="{{!empty($nextLesson) ? route('store.lesson.show', [$product->slug, $nextLesson->slug]) : route('store.lesson.show', [$product->slug, $lesson->slug])}}">
-                                </form>
+                            <div class="nav-col {{empty($nextLessonLink) ? 'disabled-div' : ''}}" style="width: 5%;" uk-tooltip="{{__('main.Next')}}">
+                                <a class="nav-link" href="{{$nextLessonLink}}">
+                                    <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; height: 100%; color: {{$product->getMainColorPattern()}}">
+                                        <span uk-icon="icon: chevron-{{getFloatKey('start')}}"></span>
+                                    </div>
+                                </a>
                             </div>
+                            {{--                        <div class="nav-col" style="width: 5%" uk-tooltip="Next">--}}
+                            {{--                            <a class="nav-link" href="{{$nextLessonLink}}">--}}
+                            {{--                                <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; height: 100% color: {{$product->getMainColorPattern()}}" onclick="$('#next-form').submit()">--}}
+                            {{--                                    <span uk-icon="icon: chevron-{{getFloatKey('start')}}"></span>--}}
+                            {{--                                </div>--}}
+                            {{--                            </a>--}}
+                            {{--                        </div>--}}
                         </div>
 
                     </div>

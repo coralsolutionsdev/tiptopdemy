@@ -116,19 +116,25 @@ class LessonController extends Controller
         $page_title =  $lesson->title;
         $modelName = $this->modelName;
         $breadcrumb =  Breadcrumbs::render('store.product.lesson', $lesson);
-        $prevLesson = null;
-        $nextLesson = null;
-        $productLessons =  $product->lessons->sortBy('position');
-        foreach ($productLessons as $key => $item){
-            if ($item->id == $lesson->id){
-                $prevLesson = $productLessons->get($key-1);
-                $nextLesson = $productLessons->get($key+1);
-                break;
+        $prevLessonLink = null;
+        $nextLessonLink = null;
+        $group = $lesson->groups->first();
+        foreach ($group->getLessons as $itemKey => $lessonItem){
+            if ($lessonItem->id == $lesson->id){
+                $preItem = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
+                $nextItem = !empty($group->getLessons[$itemKey+1]) ? $group->getLessons[$itemKey+1] : null;
+
             }
+        }
+        if (!empty($preItem)){
+            $prevLessonLink = route('store.lesson.show', [$product->slug, $preItem->slug]);
+        }
+        if (!empty($nextItem)){
+            $nextLessonLink = route('store.lesson.show', [$product->slug, $nextItem->slug]);
         }
         $attachments = $lesson->attachments()->get();
         $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
-        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLesson', 'nextLesson', 'attachments', 'content'));
+        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLessonLink', 'nextLessonLink', 'attachments', 'content'));
 
     }
 

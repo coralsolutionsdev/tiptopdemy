@@ -299,6 +299,16 @@ export default {
       this.quizItemAnswerTotalTime =  this.quizItem.properties.time_to_answer;
       this.previewItemMode = false;
       this.examItemMode = true;
+      setTimeout(()=>{
+            this.timeLineProgress = 90;
+            if (this.quizItemAnsweredId == null){
+              this.quizItemAnswerTime = 0;
+              this.submitAnswer(this.quizItem.id, 0);
+            }else{
+              this.timeLineProgress = 100;
+            }
+          },this.quizItemAnswerTotalTime * 1000
+      );
     },
     openNextPreview(){
       if (!this.previewItemMode){
@@ -338,19 +348,6 @@ export default {
       // console.log(data.totalMilliseconds);
       if (this.quizItemAnsweredId == null){
         this.timeLineProgress = ((this.quizItemAnswerTotalTime - data.totalSeconds)/this.quizItemAnswerTotalTime) * 100;
-        if (data.totalSeconds == 1){
-          setTimeout(()=>{
-            this.timeLineProgress = 90;
-            if (this.quizItemAnsweredId == null){
-              this.quizItemAnswerTime = 0;
-              this.submitAnswer(this.quizItem.id, 0);
-            }else{
-              this.timeLineProgress = 100;
-            }
-              },1000
-          );
-        }
-
       }
     },
     closeMemorizeQuiz(){

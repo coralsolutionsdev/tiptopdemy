@@ -17419,10 +17419,21 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       });
     },
     startQuiz: function startQuiz() {
+      var _this3 = this;
+
       this.quizItemAnswerTime = this.quizItem.properties.time_to_answer;
       this.quizItemAnswerTotalTime = this.quizItem.properties.time_to_answer;
       this.previewItemMode = false;
       this.examItemMode = true;
+      setTimeout(function () {
+        _this3.timeLineProgress = 90;
+        if (_this3.quizItemAnsweredId == null) {
+          _this3.quizItemAnswerTime = 0;
+          _this3.submitAnswer(_this3.quizItem.id, 0);
+        } else {
+          _this3.timeLineProgress = 100;
+        }
+      }, this.quizItemAnswerTotalTime * 1000);
     },
     openNextPreview: function openNextPreview() {
       if (!this.previewItemMode) {
@@ -17450,8 +17461,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       }
     },
     handleCountdownProgress: function handleCountdownProgress(data) {
-      var _this3 = this;
-
       // console.log(data.days);
       // console.log(data.hours);
       // console.log(data.minutes);
@@ -17464,17 +17473,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       // console.log(data.totalMilliseconds);
       if (this.quizItemAnsweredId == null) {
         this.timeLineProgress = (this.quizItemAnswerTotalTime - data.totalSeconds) / this.quizItemAnswerTotalTime * 100;
-        if (data.totalSeconds == 1) {
-          setTimeout(function () {
-            _this3.timeLineProgress = 90;
-            if (_this3.quizItemAnsweredId == null) {
-              _this3.quizItemAnswerTime = 0;
-              _this3.submitAnswer(_this3.quizItem.id, 0);
-            } else {
-              _this3.timeLineProgress = 100;
-            }
-          }, 1000);
-        }
       }
     },
     closeMemorizeQuiz: function closeMemorizeQuiz() {

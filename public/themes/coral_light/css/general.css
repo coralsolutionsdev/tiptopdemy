@@ -476,8 +476,8 @@ banners
 Form
  */
 .droppable-blank{
-    min-height: 25px;
-    min-width: 80px;
+    min-height: 24px;
+    min-width: 70px;
     background-color: #FFFFFF;
     display: inline-block;
     border: 1px solid #CCCCCC;

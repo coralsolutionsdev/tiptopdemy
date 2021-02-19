@@ -17700,8 +17700,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 var messages = {
   en: {
@@ -54925,11 +54923,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), 0)])]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "uk-width-expand"
   }, [_c('div', {
-    staticClass: "uk-grid-small uk-child-width-1-1@m",
-    attrs: {
-      "uk-grid": "masonry: true"
-    }
-  }, [_c('div', {
     staticClass: "uk-grid-small uk-child-width-1-1",
     attrs: {
       "uk-grid": ""
@@ -55141,7 +55134,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "innerHTML": _vm._s(_vm.$t('main.Download'))
       }
     })])])])
-  }), 0)])])]) : _vm._e()], 2)])])])])
+  }), 0)])])]) : _vm._e()], 2)])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

@@ -477,18 +477,19 @@ Form
  */
 .droppable-blank{
     min-height: 24px;
-    min-width: 70px;
+    min-width: 80px;
     background-color: #FFFFFF;
     display: inline-block;
     border: 1px solid #CCCCCC;
     border-radius: 5px;
-    margin: 5px 5px -5px 5px;
+    margin-top: -5px;
+    margin-left: 2px;
+    margin-right: 2px;
     outline: none;
     box-shadow: none;
     text-align: center;
 }
 .droppable-blank .blank-word{
-    margin: 0 2px;
     padding: 3px 15px;
     display: inline-block;
     background-color: var(--text-primary);
@@ -497,6 +498,10 @@ Form
 }
 .droppable-blank .blank-word:hover{
     cursor: pointer;
+}
+.drop-zone-content{
+    /* align-content: revert; */
+    display: flex;
 }
 .input-blank, .input-classic, .input-blank:focus, .input-classic:focus{
     border: none;

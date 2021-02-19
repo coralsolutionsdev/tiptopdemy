@@ -55417,6 +55417,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         }
       }, [_c('div', {
+        staticClass: "drop-zone-content",
         domProps: {
           "innerHTML": _vm._s(question.blank_paragraph)
         }

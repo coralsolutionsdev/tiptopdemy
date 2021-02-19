@@ -80,8 +80,7 @@
         </div>
       </div>
       <div class="uk-width-expand">
-        <div class="uk-grid-small uk-child-width-1-1@m" uk-grid="masonry: true">
-          <div class="uk-grid-small uk-child-width-1-1" uk-grid>
+        <div class="uk-grid-small uk-child-width-1-1" uk-grid>
             <!-- Memorizes-->
             <div>
               <memorize v-bind:lesson-slug="lessonSlug" @updateViewContent="updateViewContentStatus($event)"></memorize>
@@ -179,7 +178,6 @@
             </div>
 
           </div>
-        </div>
       </div>
     </div>
   </div>

@@ -14,7 +14,7 @@
 {{--    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">--}}
     <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     <!--site Css-->
-    <link rel="stylesheet" href="{{asset('themes/'.getFrontendThemeName().'/css/general.css?v=202102190951')}}">
+    <link rel="stylesheet" href="{{asset('themes/'.getFrontendThemeName().'/css/general.css?v=202102190952')}}">
 
     <!-- THEME CSS -->
     <style>
@@ -45,7 +45,7 @@
     <!-- scripts -->
     <script src="{{asset('libraries/uikit/js/uikit.min.js')}}"></script>
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
-    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202102190951')}}"></script>
+    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202102190952')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('head')
 </head>
@@ -71,6 +71,6 @@
     </div>
 </div>
 @include('partial.frontend._loading')
-<script src="{{asset('js/app.js?v=202102190951')}}"></script>
+<script src="{{asset('js/app.js?v=202102190952')}}"></script>
 </body>
 </html>

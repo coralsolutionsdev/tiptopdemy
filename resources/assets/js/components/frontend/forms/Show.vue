@@ -316,7 +316,7 @@ name: "Show",
         }
         this.loadingMode = false;
         if (this.form.has_time_limit){
-          this.quizItemAnswerTime = this.form.has_time_limit;
+          this.quizItemAnswerTime = this.form.time_limit;
         }else{
           this.examStarted =  true;
         }

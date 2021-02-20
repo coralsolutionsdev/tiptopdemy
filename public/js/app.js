@@ -16920,7 +16920,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         }
         _this2.loadingMode = false;
         if (_this2.form.has_time_limit) {
-          _this2.quizItemAnswerTime = _this2.form.has_time_limit;
+          _this2.quizItemAnswerTime = _this2.form.time_limit;
         } else {
           _this2.examStarted = true;
         }

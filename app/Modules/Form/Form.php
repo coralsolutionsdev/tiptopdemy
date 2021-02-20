@@ -359,7 +359,7 @@ class Form extends Model
                 $newFormItem = $item->replicate();
                 $newFormItem->push();
                 $newFormItem->form_id = $newForm->id;
-                if ($newFormItem->type == FormItem::TYPE_FILL_THE_BLANK){
+                if ($newFormItem->type == FormItem::TYPE_FILL_THE_BLANK || $newFormItem->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
                     $blank = $item->options['paragraph'];
                     $newBlank = str_replace("item_blank_option[".$item->id."]", "item_blank_option[".$newFormItem->id."]", $blank);
                     $newBlank2 = str_replace("item_blank_option_mark[".$item->id."]", "item_blank_option_mark[".$newFormItem->id."]", $newBlank);

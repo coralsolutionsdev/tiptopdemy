@@ -284,8 +284,8 @@ export default {
         this.wrongAnsweredIdArray = this.removeFromArray(this.wrongAnsweredIdArray, quizItemID);
       }
       setTimeout(()=>{
-        this.isAllowToAnswer = true;
-        this.openNextPreview();
+            this.isAllowToAnswer = true;
+            this.openNextPreview();
           },2000
       );
     },
@@ -299,16 +299,6 @@ export default {
       this.quizItemAnswerTotalTime =  this.quizItem.properties.time_to_answer;
       this.previewItemMode = false;
       this.examItemMode = true;
-      setTimeout(()=>{
-            this.timeLineProgress = 90;
-            if (this.quizItemAnsweredId == null){
-              this.quizItemAnswerTime = 0;
-              this.submitAnswer(this.quizItem.id, 0);
-            }else{
-              this.timeLineProgress = 100;
-            }
-          },this.quizItemAnswerTotalTime * 1000
-      );
     },
     openNextPreview(){
       if (!this.previewItemMode){
@@ -348,33 +338,46 @@ export default {
       // console.log(data.totalMilliseconds);
       if (this.quizItemAnsweredId == null){
         this.timeLineProgress = ((this.quizItemAnswerTotalTime - data.totalSeconds)/this.quizItemAnswerTotalTime) * 100;
+        if (data.totalSeconds == 1){
+          setTimeout(()=>{
+                this.timeLineProgress = 90;
+                if (this.quizItemAnsweredId == null){
+                  this.quizItemAnswerTime = 0;
+                  this.submitAnswer(this.quizItem.id, 0);
+                }else{
+                  this.timeLineProgress = 100;
+                }
+              },1000
+          );
+        }
+
       }
     },
     closeMemorizeQuiz(){
-      items: [],
-          // memorize
-          this.previewItemMode = false;
-          this.examItemMode = false;
-          this.previewItem = null;
-          this.previewItemImageUrl = null;
-          this.previewItemAudioUrl = null;
-          this.currentItemKey = 0;
-          this.quizCompleted = false;
-          this.quizItem = null;
-          this.quizItemAnswers = [];
-          this.quizItemKey = 0;
-          this.quizItemAnsweredId = null;
-          this.quizItemAnswerType = 0;
-          this.timeLineProgress =  0;
-          this.quizItemAnswerTotalTime =  null;
-          this.quizItemAnswerTime =  null;
-          this.isAllowToAnswer = false;
-          this.wrongAnsweredIdArray = [];
-          UIkit.modal('#memorizeQuizModal').hide();
-            setTimeout(()=>{
-                  this.buildMemorizeItem(this.currentItemKey);
-                },300
-            );
+      // items: [],
+      // memorize
+      this.previewItemMode = false;
+      this.examItemMode = false;
+      this.previewItem = null;
+      this.previewItemImageUrl = null;
+      this.previewItemAudioUrl = null;
+      this.currentItemKey = 0;
+      this.quizCompleted = false;
+      this.quizItem = null;
+      this.quizItemAnswers = [];
+      this.quizItemKey = 0;
+      this.quizItemAnsweredId = null;
+      this.quizItemAnswerType = 0;
+      this.timeLineProgress =  0;
+      this.quizItemAnswerTotalTime =  null;
+      this.quizItemAnswerTime =  null;
+      this.isAllowToAnswer = false;
+      this.wrongAnsweredIdArray = [];
+      UIkit.modal('#memorizeQuizModal').hide();
+      setTimeout(()=>{
+            this.buildMemorizeItem(this.currentItemKey);
+          },300
+      );
 
 
 

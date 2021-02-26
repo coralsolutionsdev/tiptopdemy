@@ -1,6 +1,5 @@
 <template>
   <div>
-<!--    {{product.has_purchased}}-->
     <div class="uk-grid-small" uk-grid>
       <div class="uk-width-1-4 uk-visible@m">
         <div v-if="(groups && groups.length != 0) || (product && product.has_purchased)" class="uk-card uk-card-default uk-card-body uk-padding-remove">
@@ -94,7 +93,7 @@
             </div>
             <!-- Content-->
             <div v-if="viewContentStatus">
-              <div class="uk-card uk-card-default uk-card-body uk-padding-remove" style="overflow: hidden">
+              <div class="uk-card uk-card-default uk-card-body uk-padding-remove">
                 <ul id="pb-content" class="pb-content-list-items uk-grid-collapse uk-child-width-1-1" uk-grid v-html="content">
                 </ul>
               </div>

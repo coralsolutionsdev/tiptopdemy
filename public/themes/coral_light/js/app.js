@@ -31,7 +31,9 @@ function playMarkerFirstMedia(event){
     });
     var marker = $(event).closest('.pb-hotspot-marker');
     var audio = marker.find('.audio-file')[0];
-    audio.play();
+    if (audio !== undefined){
+        audio.play();
+    }
 }
 // form
 var hoveredItem = null;

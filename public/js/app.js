@@ -17699,7 +17699,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 var messages = {
   en: {
@@ -54948,10 +54947,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.description)
     }
   })])]) : _vm._e(), _vm._v(" "), (_vm.viewContentStatus) ? _c('div', [_c('div', {
-    staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove",
-    staticStyle: {
-      "overflow": "hidden"
-    }
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-remove"
   }, [_c('ul', {
     staticClass: "pb-content-list-items uk-grid-collapse uk-child-width-1-1",
     attrs: {

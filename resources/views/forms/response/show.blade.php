@@ -96,7 +96,7 @@
                 }
                 var html = `<span class="uk-text-`+blankStatusColorClass+`"><i class="far fa-`+blankStatusIcon+`-circle"></i></span>`;
                 if (blankValue != undefined){
-                    var html = '<span uk-tooltip="'+blankScoreText+'" class="uk-text-'+blankStatusColorClass+'" style="padding: 0 5px">'+blankValue+' <i class="far fa-'+blankStatusIcon+'-circle"></i></span>';
+                    var html = '<span class="uk-text-'+blankStatusColorClass+'" style="padding: 0 5px">'+blankValue+' <i class="far fa-'+blankStatusIcon+'-circle"></i></span>';
                 }
                 blank.html(html);
             });

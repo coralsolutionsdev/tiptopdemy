@@ -32,7 +32,11 @@
                                     <div class="uk-width-auto@m">
                                         {{$key}}:
                                     </div>
-                                    <div class="uk-width-expand@m question" style="padding: 0 5px">
+                                    @if(!empty($item['description']))
+                                        <div class="uk-width-expand@m question" uk-tooltip="title: {{$item['description']}}; pos: {{$tooltipPosition}}"  style="padding: 0 5px">
+                                        @else
+                                        <div class="uk-width-expand@m question"  style="padding: 0 5px">
+                                    @endif
                                         @if($item['type'] == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK || $item['type'] == \App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP)
                                             <div class="item-fill-the-blank-paragraph">
                                                 @if(!empty($item['answers']))
@@ -49,7 +53,7 @@
                                             @if($item['properties']['display'] == 1)<br>@endif
                                             @if(!empty($item['answers']))
                                                 @foreach($item['answers'] as $answer)
-                                                    <span uk-tooltip="{{$answer['score']}} {{trans_choice('main.Marks', $answer['score'])}}" class="uk-text-{{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'success' : 'danger' }}">{{$answer['value']}} </span> <i class="far {{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'fa-check-circle uk-text-success' : 'fa-times-circle uk-text-danger' }}"></i> @if($item['properties']['display'] == 1)<br>@endif
+                                                    <span {{trans_choice('main.Marks', $answer['score'])}}" class="uk-text-{{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'success' : 'danger' }}">{{$answer['value']}} </span> <i class="far {{$answer['status'] == \App\Modules\Form\FormResponse::EVALUATION_STATUS_CORRECT ? 'fa-check-circle uk-text-success' : 'fa-times-circle uk-text-danger' }}"></i> @if($item['properties']['display'] == 1)<br>@endif
                                                 @endforeach
                                             @else
                                                 <i class="far fa-times-circle uk-text-danger"></i>

@@ -14,7 +14,7 @@
 
     var multiOptionsArray = [parseInt(typeSingleChoice), parseInt(typeMultiChoice), parseInt(typeDropDown),  parseInt(typeShortAnswer)]
 
-
+    var settingMode = false;
     var typesArray = [
         '{{__('main.Section')}}',
         '{{__('main.Short text')}}',
@@ -26,6 +26,22 @@
         '{{__('main.Fill the blank (drag and drop)')}}',
 
     ];
+
+    function refreshSettingMode(){
+        if (settingMode){
+            $('.setting-panel').show();
+            $('.form-panel').hide();
+        }else {
+            $('.form-panel').show();
+            $('.setting-panel').hide();
+        }
+    }
+    refreshSettingMode();
+
+    function toggleSetting(){
+        settingMode = !settingMode;
+        refreshSettingMode();
+    }
 
     function editorActions(){
         $('.editor-align').off('click');
@@ -730,6 +746,12 @@
         item.find('.input-evaluation-auto').attr('name', 'item_evaluation['+itemId+']');
         item.find('.input-evaluation-manual').attr('name', 'item_evaluation['+itemId+']');
 
+        // input-taxonomy
+        var taxonomies = item.find('.input-taxonomy');
+        $.each(taxonomies, function (key, index){
+            $(index).attr('name', 'item_taxonomy['+itemId+'][]');
+        });
+
         // addMinyTinyEditor('.item-content-editor-'+itemId);
 
         // item tags
@@ -841,6 +863,14 @@
                     item.removeClass('uk-width-1-1');
                     item.addClass('uk-width-'+properties.width);
                 }
+
+                //
+                console.log(properties.taxonomies_a)
+                $.each(taxonomies, function (key, index){
+                    if (properties.taxonomies_a != undefined && properties.taxonomies_a.includes($(index).val().toString())){
+                        $(index).prop('checked', true);
+                    }
+                });
 
             }
 
@@ -1034,8 +1064,9 @@
 
     @if(empty($form))
         /*Add section by default*/
-         drawFormItem(typeSection);
-        $('#formSettingModal').modal('show');
+        drawFormItem(typeSection);
+        settingMode = true;
+        refreshSettingMode();
     @else
         var formId = '{{$form->hash_id}}';
         $('.items-message').html(

@@ -90,6 +90,22 @@ class Form extends Model
         self::STATUS_UNPUBLISHED => 'Unpublished',
         self::STATUS_DISABLED => 'Disabled',
     ];
+    /*tiptop taxonomy types*/
+    const TAXONOMY_TYPE_CREATE = 1;
+    const TAXONOMY_TYPE_EVALUATE = 2;
+    const TAXONOMY_TYPE_ANALYZE = 3;
+    const TAXONOMY_TYPE_APPLY = 4;
+    const TAXONOMY_TYPE_UNDERSTAND = 5;
+    const TAXONOMY_TYPE_REMEMBER = 6;
+
+    const TAXONOMY_TYPES_ARRAY = [
+        self::TAXONOMY_TYPE_CREATE => 'Create',
+        self::TAXONOMY_TYPE_EVALUATE => 'Evaluate',
+        self::TAXONOMY_TYPE_ANALYZE => 'Analyze',
+        self::TAXONOMY_TYPE_APPLY => 'Apply',
+        self::TAXONOMY_TYPE_UNDERSTAND => 'Understand',
+        self::TAXONOMY_TYPE_REMEMBER => 'Remember',
+    ];
 
     /**
      * Get the route key for the model.
@@ -231,6 +247,7 @@ class Form extends Model
                 'tags' => null,
                 'allowed_number' => isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null,
                 'evaluation' => isset($input['item_evaluation'][$id]) ? $input['item_evaluation'][$id] : 1,
+                'taxonomies_a' => isset($input['item_taxonomy'][$id]) ? $input['item_taxonomy'][$id] : array(),
 
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;

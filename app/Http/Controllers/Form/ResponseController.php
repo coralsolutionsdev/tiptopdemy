@@ -276,7 +276,9 @@ class ResponseController extends Controller
         $modelName = $this->modelName;
         $page_title = $response->title;
         $displayType = !is_null($response->properties['display_type']) ? $response->properties['display_type'] : 1;
-        return view('forms.response.show', compact('modelName', 'page_title', 'response', 'displayType'));
+        $direction = !empty($response->form) ? $response->form->getDirection()  : '';
+        $tooltipPosition = $direction =='ltr' ? 'top-left' : 'top-right';
+        return view('forms.response.show', compact('modelName', 'page_title', 'response', 'displayType', 'tooltipPosition'));
 
     }
 

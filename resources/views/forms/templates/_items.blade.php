@@ -355,7 +355,13 @@
                                     <label>Taxonomy 1</label>
                                 </div>
                                 <div class="uk-width-expand@m">
-                                    {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
+
+                                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                        @foreach(\App\Modules\Form\Form::TAXONOMY_TYPES_ARRAY as $key => $taxonomy)
+                                        <label><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
+                                        @endforeach
+                                    </div>
+{{--                                    {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}--}}
                                 </div>
                             </div>
                             <div class="uk-margin uk-grid-small" uk-grid>

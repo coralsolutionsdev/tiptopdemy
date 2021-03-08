@@ -22,7 +22,7 @@
           <div v-if="examMode" v-bind:style="{ direction: direction }">
             <!--Form info-->
             <div class="uk-margin-medium">
-              <div style="margin-bottom: 10px">
+              <div style="margin-bottom: 10px" v-if="form.description">
                 <div class="uk-card uk-card-default uk-card-body uk-padding-small" v-html="form.description">
                 </div>
               </div>
@@ -163,6 +163,7 @@
                           <span uk-icon="icon: info; ratio: 2" style="color: #faa05a ; background-color: #fff2e8; border-radius: 50%; padding: 8px"></span>
                           <h4 class="uk-text-warning uk-margin-remove" v-html="$t('main.Your answers has been submitted')"></h4>
                           <p class="uk-margin-small" v-html="$t('main.Dear student, your answers have been submitted and will be evaluated soon')"></p>
+                          <a class="uk-button uk-button-default uk-width-1-3" :href="backUrl" v-html="$t('main.Back')"></a>
                         </div>
                       </div>
                     </div>

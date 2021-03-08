@@ -16850,6 +16850,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -22819,7 +22820,7 @@ exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-595
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
 
 /***/ }),
 /* 57 */
@@ -55177,7 +55178,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }, [_c('div', {
     staticClass: "uk-margin-medium"
-  }, [_c('div', {
+  }, [(_vm.form.description) ? _c('div', {
     staticStyle: {
       "margin-bottom": "10px"
     }
@@ -55186,7 +55187,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "innerHTML": _vm._s(_vm.form.description)
     }
-  })]), _vm._v(" "), _c('span', {
+  })]) : _vm._e(), _vm._v(" "), _c('span', {
     staticClass: "disabled"
   }, [_c('label', {
     staticClass: "uk-text-danger"
@@ -55587,6 +55588,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "uk-margin-small",
     domProps: {
       "innerHTML": _vm._s(_vm.$t('main.Dear student, your answers have been submitted and will be evaluated soon'))
+    }
+  }), _vm._v(" "), _c('a', {
+    staticClass: "uk-button uk-button-default uk-width-1-3",
+    attrs: {
+      "href": _vm.backUrl
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Back'))
     }
   })])]) : _vm._e()]), _vm._v(" "), (_vm.evaluationStatus == 1 && _vm.responseArray.status == 1) ? _c('div', {}, [_c('div', {
     staticClass: "uk-flex uk-flex-center"

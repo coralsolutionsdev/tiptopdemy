@@ -40,12 +40,12 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
-        @include('forms.templates._settings')
+    <div class="row setting-panel">
+        <div class="col-lg-12" style="padding: 0px 20px 10px 5px">
+            @include('forms.templates._settings')
+        </div>
     </div>
-
-    <div class="row">
+    <div class="row form-panel">
         <div class="col-lg-3" style="padding: 0px 5px">
             @include('forms.templates._items_list')
         </div>

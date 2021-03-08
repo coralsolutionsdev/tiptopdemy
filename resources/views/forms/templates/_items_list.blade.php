@@ -7,8 +7,8 @@
             </div>
             <div class="uk-width-expand@m uk-flex uk-flex-middle">
                 <div>
-                    <p class="font-weight-bold m-0">{{__('main.Section')}}</p>
-                    <p class="font-weight-light m-0">{{__('main.Create new section')}}.</p>
+                    <p class="font-weight-bold m-0">{{__('main._form_section')}}</p>
+                    <p class="font-weight-light m-0">{{__('main.Create new questions group')}}.</p>
                 </div>
             </div>
             <div class="uk-width-auto@m uk-text-center uk-flex uk-flex-middle">
@@ -24,7 +24,7 @@
             </div>
             <div class="uk-width-expand@m uk-flex uk-flex-middle">
                 <div>
-                    <p class="font-weight-bold m-0">{{__('main.Short text')}}</p>
+                    <p class="font-weight-bold m-0">{{__('main.Short answer')}}</p>
                     <p class="font-weight-light m-0">{{__('main.For single line text fields')}}.</p>
                 </div>
             </div>
@@ -41,7 +41,7 @@
             </div>
             <div class="uk-width-expand@m uk-flex uk-flex-middle">
                 <div>
-                    <p class="font-weight-bold m-0">{{__('main.Long text')}}</p>
+                    <p class="font-weight-bold m-0">{{__('main.Open end Answer')}}</p>
                     <p class="font-weight-light m-0">{{__('main.For paragraph text fields')}}.</p>
                 </div>
             </div>

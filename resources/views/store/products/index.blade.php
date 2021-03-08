@@ -22,7 +22,7 @@
                             <th scope="col" class="text-center">{{__('main.Price')}}</th>
                             <th scope="col" class="text-center">{{__('main.SKU')}}</th>
                             <th scope="col" class="text-center">{{__('main.Status')}}</th>
-                            <th scope="col" class="text-center" width="240">{{__('main.Actions')}}</th>
+                            <th scope="col" class="text-center" width="350">{{__('main.Actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -32,7 +32,7 @@
                                     <img src="{{$product->getProductPrimaryImage()}}" style="width: 100%">
                                 </td>
                                 <td  class="align-middle">
-                                    <p><a target="_blank" href="{{route('store.product.show', $product->slug)}}">{{ucfirst($product->name)}}</a></p>
+                                    <p><a href="{{route('store.products.edit', $product->slug)}}#lessons">{{ucfirst($product->name)}}</a></p>
                                     <p class="text-muted"><small>{{ucfirst($product->user->name)}} | {{$product->created_at->toFormattedDateString()}}</small></p>
                                     <p>{{substr(strip_tags($product->description),0,50)}} {{strlen($product->description) > 50 ? "...": "" }}</p>
                                 </td>
@@ -44,6 +44,11 @@
                                 <td class="text-right align-middle">
                                     <div class="action_btn" style="padding-top: 25px">
                                         <ul>
+                                            @if($product->type->id == 1)
+                                            <li class="">
+                                                <a href="{{route('store.products.edit', $product->slug)}}#lessons" class="btn btn-light">{{__('main.Lessons')}}</a>
+                                            </li>
+                                            @endif
                                             <li class="">
                                                 <a target="_blank" href="{{route('store.product.show', $product->slug)}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>
                                             </li>

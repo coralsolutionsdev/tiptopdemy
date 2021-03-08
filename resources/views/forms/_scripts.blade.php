@@ -197,7 +197,6 @@
             pasteAsPlainText();
         }else if(itemType == typeSection){
             var sectionText = item.find('.input-title').val();
-
             review = '<div class="pt-2">\n' +
                 '<span class="uk-text-bold">'+sectionText+'</span></br>\n' +
                 '<span class="question-text">'+question+'</span>\n' +
@@ -865,7 +864,6 @@
                 }
 
                 //
-                console.log(properties.taxonomies_a)
                 $.each(taxonomies, function (key, index){
                     if (properties.taxonomies_a != undefined && properties.taxonomies_a.includes($(index).val().toString())){
                         $(index).prop('checked', true);
@@ -937,6 +935,9 @@
         replicateFormItem();
 
     }
+    function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
     function replicateFormItem() {
         $('.replicate-form-item').off('click');
         $('.replicate-form-item').click(function () {
@@ -947,6 +948,7 @@
             var formItem = [];
             var properties = [];
             var options = [];
+            var newItemId = generateRandomString(6);
             // build item properties
             if(item.find('.input-shuffle-questions').is(":checked")){
                 properties.shuffle_questions = 1;
@@ -974,8 +976,14 @@
             properties.width = item.find('.input-width').val();
 
             // update options
-            if(itemType == typeFillTheBlank){
-                options.paragraph = item.find('.fill-the-blank-div').html();
+            if(itemType == typeFillTheBlank || itemType == typeFillTheBlankDragAndDrop){
+                var blankParagraph = item.find('.fill-the-blank-div').html();
+                const searchRegExp = 'item_blank_option['+itemId+']';
+                const replaceWith = 'item_blank_option['+newItemId+']';
+                var result = replaceAll(blankParagraph, searchRegExp, replaceWith)
+                const searchRegExp2 = 'item_blank_option_mark['+itemId+']';
+                const replaceWith2 = 'item_blank_option_mark['+newItemId+']';
+                options.paragraph = replaceAll(result, searchRegExp2, replaceWith2);
                 options.align = item.find('.input-blanks-alignment').val();
             } else if (multiOptionsArray.includes(parseInt(itemType))){
                 var itemOptions = item.find('.item_option');
@@ -992,7 +1000,7 @@
             }
 
             // build item values
-            formItem.id = generateRandomString(6);
+            formItem.id = newItemId;
             formItem.title = item.find('.input-title').val();
             formItem.description = item.find('.input-description').val();
             formItem.score = 0;

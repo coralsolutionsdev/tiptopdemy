@@ -22,7 +22,7 @@
                         @else
                             <a href="{{route('form.templates.index')}}"><span class="uk-button uk-button-default" style="padding: 0 20px" uk-tooltip="{{__('main.Back')}}"><span uk-icon="icon: arrow-left"></span></span></a>
                         @endif
-                        <span class="uk-button uk-button-default" style="padding: 0 20px" data-toggle="modal" data-target="#formSettingModal" uk-tooltip="{{__('main.General settings')}}"><span uk-icon="icon: settings"></span></span>
+                        <span class="uk-button uk-button-default" style="padding: 0 20px" onclick="toggleSetting()" uk-tooltip="{{__('main.General settings')}}"><span uk-icon="icon: settings"></span></span>
                         <span class="uk-button uk-button-default reset-form">{{__('main.Reset')}}</span>
                         <span class="uk-button uk-button-default save-as-template" data-toggle="modal" data-target="#saveAsTemplate">{{__('main.save as Template')}}</span>
                     </div>
@@ -39,13 +39,16 @@
                         @endif
                     </div>
                 </div>
-                <div>
-                    @include('forms.templates._settings')
-                </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row setting-panel">
+        <div class="col-lg-12" style="padding: 0px 20px 10px 5px">
+            @include('forms.templates._settings')
+        </div>
+    </div>
+
+    <div class="row form-panel">
         <div class="col-lg-3" style="padding: 0px 5px">
             @include('forms.templates._items_list')
         </div>

@@ -22,6 +22,10 @@
           <div v-if="examMode" v-bind:style="{ direction: direction }">
             <!--Form info-->
             <div class="uk-margin-medium">
+              <div style="margin-bottom: 10px">
+                <div class="uk-card uk-card-default uk-card-body uk-padding-small" v-html="form.description">
+                </div>
+              </div>
               <span class="disabled"><label class="uk-text-danger"><input class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded" type="checkbox" checked> {{$t('main.Pass')}}</label></span>
               <br>
               <span class="disabled"><label class="uk-text-warning"><input class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded" type="checkbox" checked> {{$t('main.Review')}}</label></span>

@@ -47,7 +47,6 @@
             @include('forms.templates._settings')
         </div>
     </div>
-
     <div class="row form-panel">
         <div class="col-lg-3" style="padding: 0px 5px">
             @include('forms.templates._items_list')

@@ -340,13 +340,13 @@
                             <br>
                             <label class="uk-form-label h-header" for="">References</label>
                             <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                <label>Question Source:</label>
-                                <label><input class="uk-radio input-source-internal" type="radio" name="radio1" value="0"> من الكتاب نصا </label>
-                                <label><input class="uk-radio input-source-internal-modified" type="radio" name="radio1" value="1">  من الكتاب بتصرف</label>
-                                <label><input class="uk-radio input-source-external" type="radio" name="radio1" value="2"> فكرة من خارج الكتاب </label>
+                                <label>Got from:</label>
+                                <label><input class="uk-radio input-source-internal" type="radio" name="radio1" value="0"> Quoted </label>
+                                <label><input class="uk-radio input-source-internal-modified" type="radio" name="radio1" value="1"> Modified</label>
+                                <label><input class="uk-radio input-source-external" type="radio" name="radio1" value="2"> Out the box </label>
                             </div>
                             <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                <label><input class="uk-checkbox input-uniform" type="checkbox" name=""> <span style="margin: 0 0.5em"> Uniform examination</span></label>
+                                <label><input class="uk-checkbox input-uniform" type="checkbox" name=""> <span style="margin: 0 0.5em"> Matriculation Examination</span></label>
                             </div>
                             <br>
                             <label class="uk-form-label h-header" for="">Taxonomies</label>

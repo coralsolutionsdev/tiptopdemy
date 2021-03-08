@@ -399,7 +399,9 @@
         'Quiz name' => 'إسم الإختبار',
         'Quiz Type' => 'نوع الإختبار',
         'Short text' => 'إجابة قصيرة',
+        'Short answer' => 'إجابة قصيرة',
         'Long text' => 'إجابة طويلة',
+        'Open end Answer' => 'إجابة طويلة',
         'For single line text fields' => 'لإجابات السطر الواحد',
         'For paragraph text fields' => 'لإجابات النصوص الطويلة',
         'Drop menu' => 'قائمة منسدلة',
@@ -412,6 +414,7 @@
         'The section' => 'القسم',
         'Section Title' => 'عنوان القسم',
         'Create new section' => 'إنشاء قسم جديد',
+        'Create new questions group' => 'إنشاء مجموعة أسئلة',
         'There is no form items yet, please select new item from the items list' => 'لا يوجد عناصر متاحة, يرجى الأختيار من قائمة العناصر للإضافة ',
         'There is no form items yet.' => 'لا يوجد عناصر متاحة.',
         'Press here to edit the default question.' => 'إضغط هنا لتعديل السؤال الإفتراضي',
@@ -428,7 +431,7 @@
         'Score' => 'التقييم',
         'Remark' => 'الدرجة',
         'Add blank' => 'أضف فراغ',
-        'Add Drag and drop blank' => 'أضف فراغ (سحب و افلات)',
+        'Add Drag and drop blank' => 'سحب و افلات',
         'Delete blank' => 'حذف الفراغ',
         'Quiz settings' => 'إعدادات الإمتحان',
         'Quiz title' => 'عنوان الإمتحان',
@@ -456,6 +459,7 @@
         'selecting one' => 'أختر من ملفاتك',
         'Start upload' => 'إبدأ الرفع',
         'Click to attach your files' => 'أضغط لارفاق الملفات المراد رفعها',
+        '_form_section' => 'قسم',
 
 
 

@@ -13,6 +13,8 @@ class CreateTodoItemsTable extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('todo_items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
@@ -25,6 +27,9 @@ class CreateTodoItemsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        
+        Schema::enableForeignKeyConstraints();
+
     }
 
     /**

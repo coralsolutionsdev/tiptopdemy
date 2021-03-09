@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Form;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Form\FormDraft;
+use App\Modules\Group\GroupItem;
 use Illuminate\Http\Request;
 
 class FormDraftController extends Controller
@@ -40,7 +41,8 @@ class FormDraftController extends Controller
         $user = getAuthUser();
         $input['status'] = 0;
         $input['creator_id'] = $user->id;
-        $formDraft =  FormDraft::create($input);
+        $input['editor_id'] = $user->id;
+        $formDraft =  GroupItem::create($input);
 
         dd($formDraft);
     }

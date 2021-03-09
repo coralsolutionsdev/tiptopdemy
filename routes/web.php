@@ -289,7 +289,7 @@ Route::group(['middleware'=>'installed'], function(){
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
 
             /*System*/
-            Route::resource('/system/todo','System\ToDoController');
+            Route::resource('/system/todo','System\TodoItemController');
 
         });
     });

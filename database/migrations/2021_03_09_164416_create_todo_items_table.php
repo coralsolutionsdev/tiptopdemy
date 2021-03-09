@@ -13,7 +13,7 @@ class CreateTodoItemsTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
+//        Schema::disableForeignKeyConstraints();
 
         Schema::create('todo_items', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -30,7 +30,7 @@ class CreateTodoItemsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::enableForeignKeyConstraints();
+//        Schema::enableForeignKeyConstraints();
     }
 
     /**

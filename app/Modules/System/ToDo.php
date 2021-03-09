@@ -40,11 +40,11 @@ class ToDo extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
     public function editor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'editor_id');
     }
 }

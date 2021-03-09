@@ -1,6 +1,6 @@
 created:
     - database/factories/Modules/System/TodoItemFactory.php
-    - database/migrations/2021_03_09_164416_create_todo_items_table.php
+    - database/migrations/2021_03_09_180439_create_todo_items_table.php
     - app/Modules/System/TodoItem.php
 models:
     Appointment: { appointment_time_slot_id: integer, user_id: 'integer unsigned nullable', company_id: 'integer unsigned nullable', candidate_id: integer, type: integer, status: integer, remarks: text }

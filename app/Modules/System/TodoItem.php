@@ -2,7 +2,6 @@
 
 namespace App\Modules\System;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -21,7 +20,8 @@ class TodoItem extends Model
         'status',
         'type',
         'priority',
-        'user_id',
+        'creator_id',
+        'editor_id',
     ];
 
     /**
@@ -32,19 +32,23 @@ class TodoItem extends Model
     protected $casts = [
         'id' => 'integer',
         'status' => 'integer',
-//        'creator_id' => 'integer',
-//        'editor_id' => 'integer',
+        'creator_id' => 'integer',
+        'editor_id' => 'integer',
     ];
 
 
+    public function user()
+    {
+        return $this->belongsTo(\App\Modules\System\User::class);
+    }
 
     public function creator()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\Modules\System\User::class);
     }
 
     public function editor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\Modules\System\User::class);
     }
 }

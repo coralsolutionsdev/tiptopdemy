@@ -21,8 +21,7 @@ class TodoItem extends Model
         'status',
         'type',
         'priority',
-        'creator_id',
-        'editor_id',
+        'user_id',
     ];
 
     /**

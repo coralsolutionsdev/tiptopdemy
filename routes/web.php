@@ -287,6 +287,10 @@ Route::group(['middleware'=>'installed'], function(){
 
             /*pages*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
+
+            /*System*/
+            Route::resource('/system/todo','System\ToDoController');
+
         });
     });
     /* End of User Routes */

@@ -40,6 +40,7 @@ Vue.component('lesson-show', require('./components/frontend/lessons/Show.vue'));
 Vue.component('memorize-create', require('./components/admin/form/memorize/create.vue'));
 Vue.component('memorize-index', require('./components/admin/form/memorize/index.vue'));
 Vue.component('file-manager', require('./components/system/FileManager.vue'));
+Vue.component('to-do', require('./components/system/ToDo.vue'));
 Vue.component('product-index', require('./components/frontend/products/index.vue'));
 Vue.component('product-items', require('./components/frontend/products/items.vue'));
 Vue.component('form-show', require('./components/frontend/forms/Show.vue'));

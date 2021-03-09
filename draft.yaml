@@ -1,14 +1,9 @@
 models:
-  Modules\Form\FormResponse:
+  Modules\System\ToDo:
     title: string:400
-    hash_id: string:400
-    form_id: id foreign:forms.id
-    ancestor_id: nullable id foreign:forms.id
-    responer_info: nullable text
-    data: nullable mediumText
+    description: nullable text
     status: tinyInteger
     type: nullable integer
-    notes: nullable text
     creator_id: nullable id foreign:users.id
     editor_id: nullable id foreign:users.id
     softDeletes

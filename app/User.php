@@ -6,6 +6,7 @@ use App\Modules\Comment\Commenter;
 use App\Modules\Group\HasGroup;
 use App\Modules\modelTrail;
 use App\Modules\Store\Order;
+use App\Modules\System\ToDo;
 use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
@@ -233,6 +234,9 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     public function orders()
     {
         return $this->hasMany(Order::class, 'creator_id')->latest();
+    }
+    public function todos(){
+        return $this->hasMany(ToDo::class, 'creator_id')->latest();
     }
 
 

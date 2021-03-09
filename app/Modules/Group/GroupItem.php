@@ -2,6 +2,7 @@
 
 namespace App\Modules\Group;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -42,16 +43,16 @@ class GroupItem extends Model
 
     public function group()
     {
-        return $this->belongsTo(\App\Modules\Group\Group::class);
+        return $this->belongsTo(Group::class);
     }
 
     public function creator()
     {
-        return $this->belongsTo(\App\Modules\Group\User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function editor()
     {
-        return $this->belongsTo(\App\Modules\Group\User::class);
+        return $this->belongsTo(User::class);
     }
 }

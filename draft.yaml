@@ -1,14 +1,20 @@
 models:
-  Modules\Form\FormDraft:
+  Modules\Group\GroupItem:
     title: string:400
-    status: tinyInteger
+    description: nullable string:400
+    hash_id: nullable string:400
+    status: nullable tinyInteger
+    type: nullable integer
+    properties: nullable text
+    group_id: nullable id foreign:groups.id
     creator_id: nullable id foreign:users.id
     editor_id: nullable id foreign:users.id
     softDeletes
     timestamps
 
-    relationships:
-      belongsTo: User, Form
+
+#    relationships:
+#      belongsTo: User
 
 #    customer_name: nullable string:400
 #    customer_phone_number: nullable string:400

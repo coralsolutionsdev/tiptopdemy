@@ -37,7 +37,10 @@ class FormDraftController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        $user = getAuthUser();
         $input['status'] = 0;
+        $input['creator_id'] = $user->id;
+        $input['editor_id'] = $user->id;
         $formDraft = FormDraft::create($input);
         dd($formDraft);
     }

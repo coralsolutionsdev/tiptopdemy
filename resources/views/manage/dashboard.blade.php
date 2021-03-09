@@ -51,10 +51,10 @@
 {{--					@endphp--}}
 {{--					<example v-bind:post_id="{{$postId}}"></example>--}}
 {{--				</div>--}}
+				@widget('admin.dashboard.changes_log')
 				<div id="vue-app">
 					<to-do></to-do>
 				</div>
-{{--				@widget('admin.dashboard.changes_log')--}}
 			</div>
 			<div class="uk-width-1-3@m">
 				@widget('admin.dashboard.recent_users')

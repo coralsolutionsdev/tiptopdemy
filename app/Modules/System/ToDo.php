@@ -37,7 +37,6 @@ class ToDo extends Model
         'editor_id' => 'integer',
     ];
 
-
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_id');

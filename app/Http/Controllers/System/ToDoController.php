@@ -5,6 +5,7 @@ namespace App\Http\Controllers\System;
 use App\Http\Controllers\Controller;
 use App\Modules\System\ToDo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function GuzzleHttp\Promise\all;
 use App\Http\Resources\System\ToDo as ToDoResource;
 
@@ -49,10 +50,7 @@ class ToDoController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $user = getAuthUser();
-        if (empty($user)){
-            return response('', 500);
-        }
+        $user = Auth::user();
         $input['status'] = 0;
         $input['creator_id'] = $user->id;
         $input['editor_id'] = $user->id;

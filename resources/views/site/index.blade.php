@@ -103,6 +103,13 @@
         </div>
     </div>
     {!! Form::close() !!}
+    <div>
+        {!! Form::open(['url' => route('form.draft.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+        <input type="text" name="title">
+        <button>submit</button>
+        {!! Form::close() !!}
+
+    </div>
 </section>
 <script>
     $('.color_picker').minicolors({

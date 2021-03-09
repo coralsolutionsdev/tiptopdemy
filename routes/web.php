@@ -283,6 +283,8 @@ Route::group(['middleware'=>'installed'], function(){
                 Route::resource('/response','ResponseController', ['only' => ['show']]);
                 Route::get('/{form}/get/item','FormController@getItem');
                 Route::post('/{form}/send/response','ResponseController@ajaxStore');
+                Route::resource('/draft','FormDraftController');
+
             });
 
             /*pages*/

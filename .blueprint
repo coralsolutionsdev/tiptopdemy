@@ -1,7 +1,7 @@
 created:
-    - database/factories/Modules/System/TodoItemFactory.php
-    - database/migrations/2021_03_09_180439_create_todo_items_table.php
-    - app/Modules/System/TodoItem.php
+    - database/factories/Modules/Form/FormDraftFactory.php
+    - database/migrations/2021_03_09_213720_create_form_drafts_table.php
+    - app/Modules/Form/FormDraft.php
 models:
     Appointment: { appointment_time_slot_id: integer, user_id: 'integer unsigned nullable', company_id: 'integer unsigned nullable', candidate_id: integer, type: integer, status: integer, remarks: text }
     AppointmentTimeSlot: { started_at: date, ended_at: date }
@@ -31,3 +31,4 @@ models:
     Modules\Form\FormResponse: { title: 'string:400', hash_id: 'string:400', form_id: 'id foreign:forms.id', ancestor_id: 'nullable id foreign:forms.id', responer_info: 'nullable text', data: 'nullable mediumText', status: tinyInteger, type: 'nullable integer', notes: 'nullable text', creator_id: 'nullable id foreign:users.id', editor_id: 'nullable id foreign:users.id', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: 'User, Form' } }
     Modules\System\ToDo: { title: 'string:400', description: 'nullable text', status: tinyInteger, type: 'nullable integer', creator_id: 'nullable id foreign:users.id', editor_id: 'nullable id foreign:users.id', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: 'User, Form' } }
     Modules\System\TodoItem: { title: 'string:400', description: 'nullable text', status: 'nullable tinyInteger', type: 'nullable integer', priority: 'nullable integer', creator_id: 'nullable id foreign:users.id', editor_id: 'nullable id foreign:users.id', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: User } }
+    Modules\Form\FormDraft: { title: 'string:400', status: tinyInteger, creator_id: 'nullable id foreign:users.id', editor_id: 'nullable id foreign:users.id', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: 'User, Form' } }

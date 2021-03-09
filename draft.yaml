@@ -1,17 +1,14 @@
 models:
-  Modules\System\TodoItem:
+  Modules\Form\FormDraft:
     title: string:400
-    description: nullable text
-    status: nullable tinyInteger
-    type: nullable integer
-    priority: nullable integer
+    status: tinyInteger
     creator_id: nullable id foreign:users.id
     editor_id: nullable id foreign:users.id
     softDeletes
     timestamps
 
     relationships:
-      belongsTo: User
+      belongsTo: User, Form
 
 #    customer_name: nullable string:400
 #    customer_phone_number: nullable string:400

@@ -21,8 +21,8 @@ class TodoItem extends Model
         'status',
         'type',
         'priority',
-        'creator_id',
-        'editor_id',
+//        'creator_id',
+//        'editor_id',
     ];
 
     /**
@@ -33,8 +33,8 @@ class TodoItem extends Model
     protected $casts = [
         'id' => 'integer',
         'status' => 'integer',
-        'creator_id' => 'integer',
-        'editor_id' => 'integer',
+//        'creator_id' => 'integer',
+//        'editor_id' => 'integer',
     ];
 
 

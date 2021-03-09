@@ -42,8 +42,8 @@ class TodoItemController extends Controller
             return response('', 500);
         }
         $input['status'] = 0;
-        $input['creator_id'] = $user->id;
-        $input['editor_id'] = $user->id;
+//        $input['creator_id'] = $user->id;
+//        $input['editor_id'] = $user->id;
         $todo = TodoItem::create($input);
         return response($todo,200);
     }

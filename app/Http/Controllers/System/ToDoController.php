@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Modules\System\ToDo;
+use App\Modules\System\TodoItem;
 use Illuminate\Http\Request;
 use function GuzzleHttp\Promise\all;
 use App\Http\Resources\System\ToDo as ToDoResource;
@@ -57,7 +58,7 @@ class ToDoController extends Controller
         $input['status'] = 0;
         $input['creator_id'] = $user->id;
         $input['editor_id'] = $user->id;
-        $todo = ToDo::create($input);
+        $todo = TodoItem::create($input);
         return response($todo,200);
     }
 

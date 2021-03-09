@@ -51,15 +51,15 @@
 {{--					@endphp--}}
 {{--					<example v-bind:post_id="{{$postId}}"></example>--}}
 {{--				</div>--}}
+				@widget('admin.dashboard.changes_log')
 				<div id="vue-app">
-					<to-do></to-do>
+{{--					<to-do></to-do>--}}
 				</div>
-{{--				@widget('admin.dashboard.changes_log')--}}
 			</div>
 			<div class="uk-width-1-3@m">
 				@widget('admin.dashboard.recent_users')
 			</div>
 		</div>
 </section>
-<script src="{{asset('js/app.js?v=202103091800')}}"></script>
+<script src="{{asset('js/app.js?v=202103091830')}}"></script>
 @endsection

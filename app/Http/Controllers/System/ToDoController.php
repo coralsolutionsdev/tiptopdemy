@@ -27,6 +27,7 @@ class ToDoController extends Controller
             $item->completed = $item->status == 1;
         });
         return ToDoResource::collection($items);
+        return response(array(), 200);
 
     }
 

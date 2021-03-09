@@ -103,13 +103,12 @@
         </div>
     </div>
     {!! Form::close() !!}
-    <div class="uk-card uk-card-body uk-card-default uk-padding-small">
+    <div>
+        {!! Form::open(['url' => route('todo.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+        <input type="text" name="title">
+        <button>submit</button>
+        {!! Form::close() !!}
 
-        <div class="col">upload_max_filesize: {{ini_get('upload_max_filesize')}}</div>
-        <div class="col">max_execution_time: {{ini_get('max_execution_time')}}</div>
-        <div class="col">post_max_size: {{ini_get('post_max_size')}}</div>
-        <div class="col">upload_max_filesize: {{ini_get('upload_max_filesize')}}</div>
-        <div class="col">memory_limit: {{ini_get('memory_limit')}}</div>
     </div>
 </section>
 <script>

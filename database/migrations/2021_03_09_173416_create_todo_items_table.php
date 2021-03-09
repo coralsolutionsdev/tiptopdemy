@@ -20,8 +20,8 @@ class CreateTodoItemsTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('type')->nullable();
             $table->integer('priority')->nullable();
-            $table->unsignedInteger('user_id')->index()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

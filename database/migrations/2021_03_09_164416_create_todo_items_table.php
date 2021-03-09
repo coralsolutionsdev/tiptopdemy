@@ -23,9 +23,9 @@ class CreateTodoItemsTable extends Migration
             $table->integer('type')->nullable();
             $table->integer('priority')->nullable();
             $table->unsignedBigInteger('creator_id')->nullable();
-            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('creator_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('editor_id')->nullable();
-            $table->foreign('editor_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('editor_id')->references('id')->on('users')->onDelete('set null');
             $table->softDeletes();
             $table->timestamps();
         });

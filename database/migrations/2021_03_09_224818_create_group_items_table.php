@@ -23,11 +23,11 @@ class CreateGroupItemsTable extends Migration
             $table->tinyInteger('status')->nullable();
             $table->integer('type')->nullable();
             $table->text('properties')->nullable();
-            $table->unsignedInteger('group_id')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
-            $table->unsignedInteger('creator_id')->nullable();
+            $table->unsignedBigInteger('creator_id')->nullable();
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedInteger('editor_id')->nullable();
+            $table->unsignedBigInteger('editor_id')->nullable();
             $table->foreign('editor_id')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

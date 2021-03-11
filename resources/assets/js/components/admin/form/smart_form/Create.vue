@@ -86,7 +86,7 @@
                     </select>
                   </div>
                   <div class="uk-width-1-4">
-                    <div class="uk-grid-small" uk-grid>
+                    <div class="uk-grid-small  uk-flex uk-flex-middle" uk-grid>
                       <div class="uk-width-expand">
                         Me.
                       </div>
@@ -96,8 +96,8 @@
                       <div class="uk-width-auto">
                         Qs. count (2)
                       </div>
-                      <div class="uk-width-expand uk-text-center">
-                        <span @click="deleteItem()" style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                      <div class="uk-width-expand uk-text-right">
+                        <span @click="deleteItem()" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                       </div>
                     </div>
                   </div>
@@ -164,7 +164,7 @@
                       <div class="uk-width-auto">
                         <button class="uk-button uk-button-primary uk-button-small" @click="runQuestionFilters(question)">Run</button>
                       </div>
-                      <div class="uk-width-expand uk-text-center">
+                      <div class="uk-width-expand uk-text-right">
                         <span @click="addNewGroupQuestion(group)" class="hover-primary" uk-tooltip="title: Add new question"><span uk-icon="plus-circle"></span></span>
                       </div>
                     </div>

@@ -16,7 +16,7 @@
             </div>
             <div class="uk-width-auto">
               <span @click="openGroupSettings(key, group)" style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
-              <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+              <span @click="deleteItem()" style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
             </div>
           </div>
           <div class="uk-margin">
@@ -207,7 +207,6 @@ export default {
     },
     addNewGroupQuestion(group){
       group.items.push({ id:1});
-
     },
     addNewGroup(){
       var newGroupItem = {
@@ -220,10 +219,24 @@ export default {
       };
       console.log(this.groups);
       this.groups.push(newGroupItem);
+      this.scrollToEndOfPage();
     },
     runQuestionFilters(question){
       alert('هذا بروتوتايب فقط, ميجيب نتائج 😆 ')
     },
+    deleteItem(){
+      alert('تحت التطوير دادة 😆 ')
+
+    },
+    deleteQuestionItem(){
+      alert('تحت التطوير دادة 😆 ')
+
+    },
+    scrollToEndOfPage(){
+      $('body, html').animate({
+        scrollTop: $('.add-group-wrapper').offset().top
+      }, 300);
+    }
   }
 }
 </script>

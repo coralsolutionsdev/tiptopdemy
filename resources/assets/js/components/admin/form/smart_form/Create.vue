@@ -15,7 +15,7 @@
             <div class="uk-width-expand">
             </div>
             <div class="uk-width-auto">
-              <span @click="group.editMode = !group.editMode" style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+              <span @click="openGroupSettings(key, group)" style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
               <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
             </div>
           </div>
@@ -40,7 +40,7 @@
                     <div class="uk-width-expand@m">
                       <div class="title-section">
                         <input type="hidden" class="hidden-input-title">
-                        <textarea class="uk-textarea input-description content-editor" rows="12" placeholder="type your description here" v-model="group.description"></textarea>
+                        <textarea class="uk-textarea input-description" :class="'content-editor-'+key" rows="12" placeholder="type your description here" v-model="group.description"></textarea>
                       </div>
                     </div>
                   </div>
@@ -197,7 +197,14 @@ export default {
       ],
     }
   },
+  created() {
+  },
   methods:{
+    openGroupSettings(key, group){
+      group.editMode = !group.editMode;
+      addMinyTinyEditor('.content-editor-'+key);
+
+    },
     addNewGroupQuestion(group){
       group.items.push({ id:1});
 
@@ -216,7 +223,7 @@ export default {
     },
     runQuestionFilters(question){
       alert('هذا بروتوتايب فقط, ميجيب نتائج 😆 ')
-    }
+    },
   }
 }
 </script>

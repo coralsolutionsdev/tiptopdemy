@@ -17035,6 +17035,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Create",
@@ -55910,38 +55913,69 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.$set(group, "description", $event.target.value)
         }
       }
-    })])])])]), _vm._v(" "), _vm._m(0, true)])])]), _vm._v(" "), _c('div', [_vm._l((group.items), function(question, questionKey) {
+    })])])])]), _vm._v(" "), _vm._m(0, true)])])]), _vm._v(" "), _c('div', _vm._l((group.items), function(question, questionKey) {
       return _c('div', {
         staticClass: "group-question"
       }, [_c('div', {
         staticClass: "uk-padding-small bg-white"
       }, [_c('div', {
-        staticClass: "uk-grid-collapse uk-text-center",
+        staticClass: "uk-grid-small uk-flex uk-flex-middle",
         attrs: {
           "uk-grid": ""
         }
       }, [_c('div', {
-        staticClass: "uk-width-auto"
+        staticClass: "uk-width-1-4"
       }, [_c('span', {
-        staticClass: "uk-sortable-handle",
         attrs: {
           "uk-icon": "icon: table"
         }
       }), _vm._v(" "), _c('span', {
-        staticClass: "form-item-title uk-margin-small-left"
-      }, [_c('span', {
         domProps: {
           "innerHTML": _vm._s(questionKey + 1)
         }
-      }), _vm._v(" | Question Item")])]), _vm._v(" "), _c('div', {
-        staticClass: "uk-width-expand"
-      }), _vm._v(" "), _vm._m(1, true)]), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _c('div', {
-        staticClass: "uk-grid-small uk-grid-match uk-child-width-expand@s question-filter",
+      }), _vm._v(" | Question Item\n                ")]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-1-4"
+      }, [_c('div', {
+        staticClass: "uk-grid-small",
         attrs: {
           "uk-grid": ""
         }
-      }, [_vm._m(3, true), _vm._v(" "), _vm._m(4, true), _vm._v(" "), _vm._m(5, true), _vm._v(" "), _vm._m(6, true), _vm._v(" "), _vm._m(7, true), _vm._v(" "), _vm._m(8, true), _vm._v(" "), _vm._m(9, true), _vm._v(" "), _vm._m(10, true), _vm._v(" "), _c('div', {
-        staticClass: "uk-width-auto uk-flex uk-flex-bottom"
+      }, [_c('div', {
+        staticClass: "uk-width-expand"
+      }, [_vm._v("\n                      Me.\n                    ")]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand"
+      }, [_vm._v("\n                      Fixed\n                    ")]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-auto"
+      }, [_vm._v("\n                      Qs. count (2)\n                    ")]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand"
+      }, [_c('span', {
+        staticClass: "hover-danger remove-form-item",
+        staticStyle: {
+          "margin": "0 10px"
+        },
+        attrs: {
+          "uk-icon": "icon: trash",
+          "uk-tooltip": "Delete"
+        },
+        on: {
+          "click": function($event) {
+            return _vm.deleteItem()
+          }
+        }
+      })])])])]), _vm._v(" "), _c('div', {
+        staticClass: "uk-grid-small uk-flex uk-flex-middle",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _vm._m(4, true), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand"
+      }, [_c('div', {
+        staticClass: "uk-grid-small uk-flex uk-flex-middle",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_vm._m(5, true), _vm._v(" "), _vm._m(6, true), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-auto"
       }, [_c('button', {
         staticClass: "uk-button uk-button-primary uk-button-small",
         on: {
@@ -55949,17 +55983,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             return _vm.runQuestionFilters(question)
           }
         }
-      }, [_vm._v("Run")])])])])])
-    }), _vm._v(" "), _c('div', {
-      staticClass: "uk-text-center"
-    }, [_c('button', {
-      staticClass: "uk-button uk-button-primary",
-      on: {
-        "click": function($event) {
-          return _vm.addNewGroupQuestion(group)
+      }, [_vm._v("Run")])]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand uk-text-center"
+      }, [_c('span', {
+        staticClass: "hover-primary",
+        attrs: {
+          "uk-tooltip": "title: Add new question"
+        },
+        on: {
+          "click": function($event) {
+            return _vm.addNewGroupQuestion(group)
+          }
         }
-      }
-    }, [_vm._v("Add new question")])])], 2)])])
+      }, [_c('span', {
+        attrs: {
+          "uk-icon": "plus-circle"
+        }
+      })])])])])])])])
+    }), 0)])])
   }), 0)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
@@ -56017,84 +56058,78 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v("  Manual  ")])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "uk-width-auto"
-  }, [_c('span', {
-    staticClass: "hover-danger remove-form-item",
-    staticStyle: {
-      "margin": "0 10px"
-    },
-    attrs: {
-      "uk-icon": "icon: trash",
-      "uk-tooltip": "Delete"
-    }
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('table', {
-    staticClass: "uk-table question-items"
-  }, [_c('thead', [_c('tr', [_c('th', {
-    staticClass: "uk-table-expand"
-  }, [_vm._v("Available Questions")]), _vm._v(" "), _c('th', {
-    staticClass: "uk-width-small uk-text-center"
-  }, [_vm._v("Qs. Count")])])]), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [_c('div', {}, [_c('select', {
+    staticClass: "uk-width-expand"
+  }, [_c('select', {
     staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Question title 01")]), _vm._v(" "), _c('option', [_vm._v("Question title 02")])])])]), _vm._v(" "), _c('td', {
-    staticClass: "uk-text-center"
-  }, [_vm._v("0")])])])])
+  }, [_c('option', [_vm._v("Available questions")]), _vm._v(" "), _c('option', [_vm._v("Question title 01")]), _vm._v(" "), _c('option', [_vm._v("Question title 02")])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Unit")]), _vm._v(" "), _c('input', {
+  return _c('div', {
+    staticClass: "uk-width-1-4"
+  }, [_c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-2"
+  }, [_c('input', {
     staticClass: "uk-input uk-form-small",
     attrs: {
       "type": "text",
       "placeholder": "Unit no."
     }
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Lesson")]), _vm._v(" "), _c('input', {
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-1-2"
+  }, [_c('input', {
     staticClass: "uk-input uk-form-small",
     attrs: {
       "type": "text",
       "placeholder": "Lesson no."
     }
-  })])
+  })])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Got from")]), _vm._v(" "), _c('select', {
+  return _c('div', {
+    staticClass: "uk-width-1-4"
+  }, [_c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-2"
+  }, [_c('select', {
     staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Please select")]), _vm._v(" "), _c('option', [_vm._v("Quoted")]), _vm._v(" "), _c('option', [_vm._v("Modified")]), _vm._v(" "), _c('option', [_vm._v("Out of Box")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Bloom Tax")]), _vm._v(" "), _c('select', {
+  }, [_c('option', [_vm._v("Got from")]), _vm._v(" "), _c('option', [_vm._v("Quoted")]), _vm._v(" "), _c('option', [_vm._v("Modified")]), _vm._v(" "), _c('option', [_vm._v("Out of Box")])])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-1-2"
+  }, [_c('select', {
     staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Please select")]), _vm._v(" "), _c('option', [_vm._v("Remember")]), _vm._v(" "), _c('option', [_vm._v("Understanding")]), _vm._v(" "), _c('option', [_vm._v("Applying")]), _vm._v(" "), _c('option', [_vm._v("Analyzing")]), _vm._v(" "), _c('option', [_vm._v("Evaluating")]), _vm._v(" "), _c('option', [_vm._v("Creating")])])])
+  }, [_c('option', [_vm._v("Bloom TAX")]), _vm._v(" "), _c('option', [_vm._v("Remember")]), _vm._v(" "), _c('option', [_vm._v("Understanding")]), _vm._v(" "), _c('option', [_vm._v("Applying")]), _vm._v(" "), _c('option', [_vm._v("Analyzing")]), _vm._v(" "), _c('option', [_vm._v("Evaluating")]), _vm._v(" "), _c('option', [_vm._v("Creating")])])])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Tax-2")]), _vm._v(" "), _c('input', {
+  return _c('div', {
+    staticClass: "uk-width-1-4"
+  }, [_c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-2"
+  }, [_c('input', {
     staticClass: "uk-input uk-form-small",
     attrs: {
       "type": "text",
-      "placeholder": "",
+      "placeholder": "Tax-2",
       "disabled": ""
     }
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Difficulty")]), _vm._v(" "), _c('select', {
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-1-2"
+  }, [_c('select', {
     staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Please select")]), _vm._v(" "), _c('option', [_vm._v("Very easy")]), _vm._v(" "), _c('option', [_vm._v("Easy")]), _vm._v(" "), _c('option', [_vm._v("Moderate")]), _vm._v(" "), _c('option', [_vm._v("Hard")]), _vm._v(" "), _c('option', [_vm._v("Very hard")])])])
+  }, [_c('option', [_vm._v("Difficulty")]), _vm._v(" "), _c('option', [_vm._v("Very easy")]), _vm._v(" "), _c('option', [_vm._v("Easy")]), _vm._v(" "), _c('option', [_vm._v("Moderate")]), _vm._v(" "), _c('option', [_vm._v("Hard")]), _vm._v(" "), _c('option', [_vm._v("Very hard")])])])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "uk-width-auto"
-  }, [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("Me.")]), _vm._v(" "), _c('br'), _vm._v(" "), _c('label', [_c('input', {
+    staticClass: "uk-width-expand"
+  }, [_c('label', [_c('input', {
     staticClass: "uk-checkbox",
     attrs: {
       "type": "checkbox"
@@ -56102,10 +56137,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "uk-width-auto"
-  }, [_c('label', {
-    staticClass: "uk-form-label"
-  }, [_vm._v("fixed")]), _vm._v(" "), _c('br'), _vm._v(" "), _c('label', [_c('input', {
+    staticClass: "uk-width-expand"
+  }, [_c('label', [_c('input', {
     staticClass: "uk-radio",
     attrs: {
       "type": "radio",

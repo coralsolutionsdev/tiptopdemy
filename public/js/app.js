@@ -17068,9 +17068,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
       console.log(this.groups);
       this.groups.push(newGroupItem);
+      this.scrollToEndOfPage();
     },
     runQuestionFilters: function runQuestionFilters(question) {
       alert('هذا بروتوتايب فقط, ميجيب نتائج 😆 ');
+    },
+    deleteItem: function deleteItem() {
+      alert('تحت التطوير دادة 😆 ');
+    },
+    deleteQuestionItem: function deleteQuestionItem() {
+      alert('تحت التطوير دادة 😆 ');
+    },
+    scrollToEndOfPage: function scrollToEndOfPage() {
+      $('body, html').animate({
+        scrollTop: $('.add-group-wrapper').offset().top
+      }, 300);
     }
   }
 });
@@ -55803,6 +55815,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "uk-icon": "icon: trash",
         "uk-tooltip": "Delete"
+      },
+      on: {
+        "click": function($event) {
+          return _vm.deleteItem()
+        }
       }
     })])]), _vm._v(" "), _c('div', {
       staticClass: "uk-margin"

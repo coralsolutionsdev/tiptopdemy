@@ -65,7 +65,12 @@
                 </div>
             </div>
         </div>
-        <div class="uk-margin">
+        <div class="setting-panel">
+            <div class="uk-margin-small" style="padding-top: 15px">
+                @include('forms.templates._settings')
+            </div>
+        </div>
+        <div class="uk-margin form-panel">
             <smart-form-create></smart-form-create>
         </div>
     </div>
@@ -90,6 +95,6 @@
 
 {{--    {!! Form::close() !!}--}}
     @include('partial.scripts._tinyemc')
-    <script src="{{asset('js/app.js?v=202103112140')}}"></script>
+    <script src="{{asset('js/app.js?v=202103112146')}}"></script>
 
 @endsection

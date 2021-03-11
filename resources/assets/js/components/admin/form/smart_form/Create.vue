@@ -96,7 +96,7 @@
                       <div class="uk-width-auto">
                         Qs. count (2)
                       </div>
-                      <div class="uk-width-expand">
+                      <div class="uk-width-expand uk-text-center">
                         <span @click="deleteItem()" style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                       </div>
                     </div>

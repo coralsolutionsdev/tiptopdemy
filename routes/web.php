@@ -135,9 +135,12 @@ Route::group(['middleware'=>'installed'], function(){
             Route::post('media/attach','LessonController@attachMedia')->name('media.attach');
             Route::post('lesson/{lesson}/add/resources/item','LessonController@addResourcesItem')->name('add.resources.item');
             Route::post('lesson/{lesson}/attachment/{key}/delete','LessonController@attachmentDelete')->name('attachment.delete');
+            Route::post('lesson/{lesson}/attachment/{key}/delete','LessonController@attachmentDelete')->name('attachment.delete');
             // temp
             Route::get('/product/{product}/lessons/{lesson}/edit/content','LessonController@editContent')->name('lesson.edit.content');
             Route::put('/product/{product}/lessons/{lesson}/edit/content','LessonController@updateContent')->name('lesson.update.content');
+            // d
+            Route::get('/lesson/{lesson}/form/smart/create','FormController@smartCreate')->name('form.smart.create');
 
 
         });

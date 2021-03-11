@@ -40,6 +40,16 @@
                                 </div>
                             </a>
                         </div>
+                        <div>
+                            <a href="{{route('store.form.smart.create', $lesson->slug)}}">
+                                <div class=" uk-card uk-card-default uk-card-body uk-text-primary border-hover-primary uk-box-shadow-hover-large uk-flex uk-flex-middle uk-flex-center" style="min-height: 18em; width: 100%">
+                                    <div class="uk-margin">
+                                        <div class="uk-padding-small"><span uk-icon="icon: star; ratio: 4"></span></div>
+                                        <label>Smart Quiz</label>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                         @forelse($templates as $template)
                             <div>
                                 <div class=" uk-card uk-card-default uk-card-body border-hover-primary uk-box-shadow-hover-large p-0" style="min-height: 18em; width: 100%">

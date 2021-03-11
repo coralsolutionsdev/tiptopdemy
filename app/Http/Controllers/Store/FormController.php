@@ -198,4 +198,9 @@ class FormController extends Controller
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         return view('store.lessons.templates.index', compact('page_title', 'breadcrumb', 'lesson', 'categories', 'selectedCategories', 'templates'));
     }
+
+    function smartCreate(Lesson $lesson){
+        $page_title =  'Smart form';
+        return view('forms.smart.create', compact('page_title', 'breadcrumb', 'lesson'));
+    }
 }

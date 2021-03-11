@@ -17049,8 +17049,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }]
     };
   },
+  created: function created() {},
 
   methods: {
+    openGroupSettings: function openGroupSettings(key, group) {
+      group.editMode = !group.editMode;
+      addMinyTinyEditor('.content-editor-' + key);
+    },
     addNewGroupQuestion: function addNewGroupQuestion(group) {
       group.items.push({ id: 1 });
     },
@@ -55787,7 +55792,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       on: {
         "click": function($event) {
-          group.editMode = !group.editMode
+          return _vm.openGroupSettings(key, group)
         }
       }
     }), _vm._v(" "), _c('span', {
@@ -55873,7 +55878,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         value: (group.description),
         expression: "group.description"
       }],
-      staticClass: "uk-textarea input-description content-editor",
+      staticClass: "uk-textarea input-description",
+      class: 'content-editor-' + key,
       attrs: {
         "rows": "12",
         "placeholder": "type your description here"

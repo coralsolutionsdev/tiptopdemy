@@ -87,8 +87,9 @@
             refreshSettingMode();
         }
     </script>
+
 {{--    {!! Form::close() !!}--}}
     @include('partial.scripts._tinyemc')
-    <script src="{{asset('js/app.js?v=202103112130')}}"></script>
+    <script src="{{asset('js/app.js?v=202103112140')}}"></script>
 
 @endsection

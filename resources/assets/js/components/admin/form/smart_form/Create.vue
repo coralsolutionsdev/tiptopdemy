@@ -74,101 +74,104 @@
           <div>
             <div class="group-question" v-for="(question, questionKey) in group.items">
               <div class="uk-padding-small bg-white">
-                <div class="uk-grid-collapse uk-text-center" uk-grid>
-                  <div class="uk-width-auto">
-                    <span class="uk-sortable-handle" uk-icon="icon: table"></span> <span class="form-item-title uk-margin-small-left"><span v-html="questionKey+1"></span> | Question Item</span>
+                <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
+                  <div class="uk-width-1-4">
+                    <span uk-icon="icon: table"></span> <span v-html="questionKey+1"></span> | Question Item
                   </div>
                   <div class="uk-width-expand">
+                    <select class="uk-select uk-form-small">
+                      <option>Available questions</option>
+                      <option>Question title 01</option>
+                      <option>Question title 02</option>
+                    </select>
                   </div>
-                  <div class="uk-width-auto">
-                    <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                  <div class="uk-width-1-4">
+                    <div class="uk-grid-small" uk-grid>
+                      <div class="uk-width-expand">
+                        Me.
+                      </div>
+                      <div class="uk-width-expand">
+                        Fixed
+                      </div>
+                      <div class="uk-width-auto">
+                        Qs. count (2)
+                      </div>
+                      <div class="uk-width-expand">
+                        <span @click="deleteItem()" style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <table class="uk-table question-items">
-<!--                  <caption>Table Caption</caption>-->
-                  <thead>
-                  <tr>
-                    <th class="uk-table-expand">Available Questions</th>
-                    <th class="uk-width-small uk-text-center">Qs. Count</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>
-                      <div class="">
+                <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
+                  <div class="uk-width-1-4">
+                    <div class="uk-grid-small" uk-grid>
+                      <div class="uk-width-1-2">
+                        <input class="uk-input uk-form-small" type="text" placeholder="Unit no.">
+                      </div>
+                      <div class="uk-width-1-2">
+                        <input class="uk-input uk-form-small" type="text" placeholder="Lesson no.">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="uk-width-1-4">
+                    <div class="uk-grid-small" uk-grid>
+                      <div class="uk-width-1-2">
                         <select class="uk-select uk-form-small">
-                          <option>Question title 01</option>
-                          <option>Question title 02</option>
+                          <option>Got from</option>
+                          <option>Quoted</option>
+                          <option>Modified</option>
+                          <option>Out of Box</option>
                         </select>
                       </div>
-                    </td>
-                    <td class="uk-text-center">0</td>
-                  </tr>
-                  </tbody>
-                </table>
-
-                <div class="uk-grid-small uk-grid-match uk-child-width-expand@s question-filter" uk-grid>
-                  <div>
-                    <label class="uk-form-label">Unit</label>
-                    <input class="uk-input uk-form-small" type="text" placeholder="Unit no.">
+                      <div class="uk-width-1-2">
+                        <select class="uk-select uk-form-small">
+                          <option>Bloom TAX</option>
+                          <option>Remember</option>
+                          <option>Understanding</option>
+                          <option>Applying</option>
+                          <option>Analyzing</option>
+                          <option>Evaluating</option>
+                          <option>Creating</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label class="uk-form-label">Lesson</label>
-                    <input class="uk-input uk-form-small" type="text" placeholder="Lesson no.">
+                  <div class="uk-width-1-4">
+                    <div class="uk-grid-small" uk-grid>
+                      <div class="uk-width-1-2">
+                        <input class="uk-input uk-form-small" type="text" placeholder="Tax-2" disabled >
+                      </div>
+                      <div class="uk-width-1-2">
+                        <select class="uk-select uk-form-small">
+                          <option>Difficulty</option>
+                          <option>Very easy</option>
+                          <option>Easy</option>
+                          <option>Moderate</option>
+                          <option>Hard</option>
+                          <option>Very hard</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label class="uk-form-label">Got from</label>
-                    <select class="uk-select uk-form-small">
-                      <option>Please select</option>
-                      <option>Quoted</option>
-                      <option>Modified</option>
-                      <option>Out of Box</option>
-                    </select>
+                  <div class="uk-width-expand">
+                    <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
+                      <div class="uk-width-expand">
+                        <label><input class="uk-checkbox" type="checkbox"></label>
+                      </div>
+                      <div class="uk-width-expand">
+                        <label><input class="uk-radio" type="radio" name="radio2"></label>
+                      </div>
+                      <div class="uk-width-auto">
+                        <button class="uk-button uk-button-primary uk-button-small" @click="runQuestionFilters(question)">Run</button>
+                      </div>
+                      <div class="uk-width-expand uk-text-center">
+                        <span @click="addNewGroupQuestion(group)" class="hover-primary" uk-tooltip="title: Add new question"><span uk-icon="plus-circle"></span></span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label class="uk-form-label">Bloom Tax</label>
-                    <select class="uk-select uk-form-small">
-                      <option>Please select</option>
-                      <option>Remember</option>
-                      <option>Understanding</option>
-                      <option>Applying</option>
-                      <option>Analyzing</option>
-                      <option>Evaluating</option>
-                      <option>Creating</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="uk-form-label">Tax-2</label>
-                    <input class="uk-input uk-form-small" type="text" placeholder="" disabled >
-                  </div>
-                  <div>
-                    <label class="uk-form-label">Difficulty</label>
-                    <select class="uk-select uk-form-small">
-                      <option>Please select</option>
-                      <option>Very easy</option>
-                      <option>Easy</option>
-                      <option>Moderate</option>
-                      <option>Hard</option>
-                      <option>Very hard</option>
-                    </select>
-                  </div>
-                  <div class="uk-width-auto">
-                    <label class="uk-form-label">Me.</label> <br>
-                    <label><input class="uk-checkbox" type="checkbox"></label>
-                  </div>
-                  <div class="uk-width-auto">
-                    <label class="uk-form-label">fixed</label> <br>
-                    <label><input class="uk-radio" type="radio" name="radio2"></label>
-                  </div>
-                  <div class="uk-width-auto uk-flex uk-flex-bottom"><button class="uk-button uk-button-primary uk-button-small" @click="runQuestionFilters(question)">Run</button></div>
-
-
                 </div>
+
               </div>
-            </div>
-            <div class="uk-text-center">
-              <button @click="addNewGroupQuestion(group)" class="uk-button uk-button-primary">Add new question</button>
             </div>
 
           </div>

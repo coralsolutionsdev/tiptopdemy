@@ -55936,7 +55936,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }), _vm._v(" | Question Item\n                ")]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _c('div', {
         staticClass: "uk-width-1-4"
       }, [_c('div', {
-        staticClass: "uk-grid-small",
+        staticClass: "uk-grid-small  uk-flex uk-flex-middle",
         attrs: {
           "uk-grid": ""
         }
@@ -55947,12 +55947,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }, [_vm._v("\n                      Fixed\n                    ")]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-auto"
       }, [_vm._v("\n                      Qs. count (2)\n                    ")]), _vm._v(" "), _c('div', {
-        staticClass: "uk-width-expand"
+        staticClass: "uk-width-expand uk-text-right"
       }, [_c('span', {
         staticClass: "hover-danger remove-form-item",
-        staticStyle: {
-          "margin": "0 10px"
-        },
         attrs: {
           "uk-icon": "icon: trash",
           "uk-tooltip": "Delete"
@@ -55984,7 +55981,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         }
       }, [_vm._v("Run")])]), _vm._v(" "), _c('div', {
-        staticClass: "uk-width-expand uk-text-center"
+        staticClass: "uk-width-expand uk-text-right"
       }, [_c('span', {
         staticClass: "hover-primary",
         attrs: {

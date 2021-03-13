@@ -9,6 +9,8 @@
             height: 100%;
         }
     </style>
+    <link rel="stylesheet" href="{{asset('themes/general/modules/css/at.css?v=202103131910')}}">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 @endsection
@@ -95,6 +97,6 @@
 
 {{--    {!! Form::close() !!}--}}
     @include('partial.scripts._tinyemc')
-    <script src="{{asset('js/app.js?v=202103120152')}}"></script>
+    <script src="{{asset('js/app.js?v=202103131910')}}"></script>
 
 @endsection

@@ -17038,18 +17038,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Create",
   data: function data() {
     return {
+      currentUnitNum: 1,
+      currentLessonNum: 4,
       groups: [{
         title: 'Group A',
         description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s',
         editMode: false,
-        items: [{ id: 1 }]
+        items: [{
+          id: 1,
+          unit_num: null,
+          unit_status: true,
+          lesson_num: null,
+          lesson_status: true,
+          source: 0
+        }]
 
       }]
+
     };
   },
   created: function created() {},
@@ -17060,32 +17074,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       addMinyTinyEditor('.content-editor-' + key);
     },
     addNewGroupQuestion: function addNewGroupQuestion(group) {
-      group.items.push({ id: 1 });
+      group.items.push({
+        id: 1,
+        unit_num: null,
+        unit_status: true,
+        lesson_num: null,
+        lesson_status: true,
+        source: 0
+      });
     },
     addNewGroup: function addNewGroup() {
       var newGroupItem = {
         title: 'Group A',
         description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s',
         editMode: false,
-        items: [{ id: 1 }]
+        items: [{
+          id: 1,
+          unit_num: null,
+          unit_status: true,
+          lesson_num: null,
+          lesson_status: true,
+          source: 0
+        }]
       };
       console.log(this.groups);
       this.groups.push(newGroupItem);
       this.scrollToEndOfPage();
+      console.log(this.groups);
     },
     runQuestionFilters: function runQuestionFilters(question) {
       alert('هذا بروتوتايب فقط, ميجيب نتائج 😆 ');
     },
-    deleteItem: function deleteItem() {
-      alert('تحت التطوير دادة 😆 ');
+    deleteGroup: function deleteGroup(group) {
+      var groupKey = this.groups.indexOf(group);
+      this.groups.splice(groupKey, 1);
     },
-    deleteQuestionItem: function deleteQuestionItem() {
-      alert('تحت التطوير دادة 😆 ');
+    deleteGroupItem: function deleteGroupItem(group, questionKey) {
+      var itemsCount = group.items.length;
+      if (itemsCount === 1) {
+        this.$Notify({
+          title: 'Oops! something going wrong',
+          message: 'Group should have at least one question item',
+          type: 'error',
+          duration: 4000
+        });
+      } else {
+        group.items.splice(questionKey, 1);
+      }
     },
     scrollToEndOfPage: function scrollToEndOfPage() {
       $('body, html').animate({
         scrollTop: $('.add-group-wrapper').offset().top
       }, 300);
+    },
+    onlyNumber: function onlyNumber($event) {
+      //console.log($event.keyCode); //keyCodes value
+      var keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        // 46 is dot
+        $event.preventDefault();
+      }
     }
   }
 });
@@ -23455,7 +23503,7 @@ exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-595
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.group-title[data-v-670a0726]{\r\n  display: -ms-inline-flexbox;\r\n  display: inline-flex;\r\n  padding: 5px 15px;\r\n  border-radius: 5px 5px 0 0;\n}\n.height-0[data-v-670a0726]{\r\n  height: 0px !important;\r\n  overflow: hidden;\n}\n.question-items td[data-v-670a0726] {\r\n   padding: 0px 12px !important;\r\n  /*vertical-align: top;*/\n}\n.question-items th[data-v-670a0726] {\r\n  padding: 10px 12px;\n}\n.group-question[data-v-670a0726]{\r\n  margin-bottom: 10px;\n}\n.question-filter[data-v-670a0726]{\r\n  padding: 0px 15px;\n}\n.question-filter .uk-form-label[data-v-670a0726] {\r\n   color: #999999;\r\n   font-size: 14px;\n}\n.add-group-wrapper[data-v-670a0726]{\r\n  position:fixed;\r\n  bottom: 35px;\r\n  right: 35px;\r\n  z-index: 20 !important;\n}\n.add-group-wrapper button[data-v-670a0726]{\r\n  border-radius: 50%;\r\n  padding: 5px 10px;\n}\r\n", ""]);
+exports.push([module.i, "\n.group-title[data-v-670a0726]{\r\n  display: -ms-inline-flexbox;\r\n  display: inline-flex;\r\n  padding: 5px 15px;\r\n  border-radius: 5px 5px 0 0;\n}\n.height-0[data-v-670a0726]{\r\n  height: 0px !important;\r\n  overflow: hidden;\n}\n.question-items td[data-v-670a0726] {\r\n   padding: 0px 12px !important;\r\n  /*vertical-align: top;*/\n}\n.question-items th[data-v-670a0726] {\r\n  padding: 10px 12px;\n}\n.group-question[data-v-670a0726]{\r\n  margin-bottom: 10px;\n}\n.question-filter[data-v-670a0726]{\r\n  padding: 0px 15px;\n}\n.question-filter .uk-form-label[data-v-670a0726] {\r\n   color: #999999;\r\n   font-size: 14px;\n}\n.add-group-wrapper[data-v-670a0726]{\r\n  position:fixed;\r\n  bottom: 35px;\r\n  right: 35px;\r\n  z-index: 20 !important;\n}\n.add-group-wrapper button[data-v-670a0726]{\r\n  border-radius: 50%;\r\n  padding: 5px 10px;\n}\n.gray-folder[data-v-670a0726]{\r\n  opacity: 0.3;\r\n  filter: grayscale(90%);\n}\r\n", ""]);
 
 /***/ }),
 /* 61 */
@@ -55770,7 +55818,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-grid": ""
     }
-  }, _vm._l((_vm.groups), function(group, key) {
+  }, [_vm._l((_vm.groups), function(group, key) {
     return _c('div', [_c('div', {
       staticClass: "uk-card uk-card-default uk-card-body uk-padding-small uk-secondary-bg"
     }, [_c('div', {
@@ -55821,7 +55869,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       on: {
         "click": function($event) {
-          return _vm.deleteItem()
+          return _vm.deleteGroup(group)
         }
       }
     })])]), _vm._v(" "), _c('div', {
@@ -55956,7 +56004,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         },
         on: {
           "click": function($event) {
-            return _vm.deleteItem()
+            return _vm.deleteGroupItem(group, questionKey)
           }
         }
       })])])])]), _vm._v(" "), _c('div', {
@@ -55964,14 +56012,75 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         attrs: {
           "uk-grid": ""
         }
-      }, [_vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _vm._m(4, true), _vm._v(" "), _c('div', {
+      }, [_c('div', {
+        staticClass: "uk-width-1-4"
+      }, [_c('div', {
+        staticClass: "uk-grid-small",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_c('div', {
+        staticClass: "uk-width-1-2"
+      }, [_c('input', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.unit_num),
+          expression: "question.unit_num"
+        }],
+        staticClass: "uk-input uk-form-small",
+        class: {
+          'uk-form-success': question.unit_num && question.unit_num <= _vm.currentUnitNum, 'uk-form-danger': question.unit_num && question.unit_num > _vm.currentUnitNum
+        },
+        attrs: {
+          "type": "text",
+          "placeholder": "Unit no."
+        },
+        domProps: {
+          "value": (question.unit_num)
+        },
+        on: {
+          "keypress": _vm.onlyNumber,
+          "input": function($event) {
+            if ($event.target.composing) { return; }
+            _vm.$set(question, "unit_num", $event.target.value)
+          }
+        }
+      })]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-1-2"
+      }, [_c('input', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.lesson_num),
+          expression: "question.lesson_num"
+        }],
+        staticClass: "uk-input uk-form-small",
+        class: {
+          'uk-form-success': question.lesson_num && question.lesson_num <= _vm.currentLessonNum, 'uk-form-danger': question.lesson_num && question.lesson_num > _vm.currentLessonNum
+        },
+        attrs: {
+          "type": "text",
+          "placeholder": "Lesson no."
+        },
+        domProps: {
+          "value": (question.lesson_num)
+        },
+        on: {
+          "keypress": _vm.onlyNumber,
+          "input": function($event) {
+            if ($event.target.composing) { return; }
+            _vm.$set(question, "lesson_num", $event.target.value)
+          }
+        }
+      })])])]), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _c('div', {
         staticClass: "uk-width-expand"
       }, [_c('div', {
         staticClass: "uk-grid-small uk-flex uk-flex-middle",
         attrs: {
           "uk-grid": ""
         }
-      }, [_vm._m(5, true), _vm._v(" "), _vm._m(6, true), _vm._v(" "), _c('div', {
+      }, [_vm._m(4, true), _vm._v(" "), _vm._m(5, true), _vm._v(" "), _c('div', {
         staticClass: "uk-width-auto"
       }, [_c('button', {
         staticClass: "uk-button uk-button-primary uk-button-small",
@@ -55998,7 +56107,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       })])])])])])])])
     }), 0)])])
-  }), 0)])
+  }), _vm._v(" "), (_vm.groups.length == 0) ? _c('div', {
+    staticClass: "uk-text-center uk-padding"
+  }, [_c('img', {
+    staticClass: "gray-folder",
+    attrs: {
+      "data-src": "/storage/assets/file_icons/folder.png",
+      "width": "90",
+      "alt": "",
+      "uk-img": ""
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "uk-text-muted",
+    domProps: {
+      "innerHTML": _vm._s('There is no available groups yet, click on the + icon to add new group')
+    }
+  })]) : _vm._e()], 2)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "uk-margin-small"
@@ -56059,31 +56183,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('select', {
     staticClass: "uk-select uk-form-small"
   }, [_c('option', [_vm._v("Available questions")]), _vm._v(" "), _c('option', [_vm._v("Question title 01")]), _vm._v(" "), _c('option', [_vm._v("Question title 02")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-width-1-4"
-  }, [_c('div', {
-    staticClass: "uk-grid-small",
-    attrs: {
-      "uk-grid": ""
-    }
-  }, [_c('div', {
-    staticClass: "uk-width-1-2"
-  }, [_c('input', {
-    staticClass: "uk-input uk-form-small",
-    attrs: {
-      "type": "text",
-      "placeholder": "Unit no."
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-1-2"
-  }, [_c('input', {
-    staticClass: "uk-input uk-form-small",
-    attrs: {
-      "type": "text",
-      "placeholder": "Lesson no."
-    }
-  })])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "uk-width-1-4"

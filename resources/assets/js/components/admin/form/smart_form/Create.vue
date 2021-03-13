@@ -16,7 +16,7 @@
             </div>
             <div class="uk-width-auto">
               <span @click="openGroupSettings(key, group)" style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
-              <span @click="deleteItem()" style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+              <span @click="deleteGroup(group)" style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
             </div>
           </div>
           <div class="uk-margin">
@@ -97,7 +97,7 @@
                         Qs. count (2)
                       </div>
                       <div class="uk-width-expand uk-text-right">
-                        <span @click="deleteItem()" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                        <span @click="deleteGroupItem(group, questionKey)" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                       </div>
                     </div>
                   </div>
@@ -106,10 +106,10 @@
                   <div class="uk-width-1-4">
                     <div class="uk-grid-small" uk-grid>
                       <div class="uk-width-1-2">
-                        <input class="uk-input uk-form-small" type="text" placeholder="Unit no.">
+                        <input class="uk-input uk-form-small" type="text" @keypress="onlyNumber" placeholder="Unit no." v-model="question.unit_num" :class="{'uk-form-success': question.unit_num && question.unit_num <=  currentUnitNum, 'uk-form-danger': question.unit_num && question.unit_num > currentUnitNum}">
                       </div>
                       <div class="uk-width-1-2">
-                        <input class="uk-input uk-form-small" type="text" placeholder="Lesson no.">
+                        <input class="uk-input uk-form-small" type="text" @keypress="onlyNumber" placeholder="Lesson no." v-model="question.lesson_num" :class="{'uk-form-success': question.lesson_num && question.lesson_num <=  currentLessonNum, 'uk-form-danger': question.lesson_num && question.lesson_num > currentLessonNum}">
                       </div>
                     </div>
                   </div>
@@ -178,6 +178,10 @@
 
         </div>
       </div>
+      <div v-if="groups.length == 0" class="uk-text-center uk-padding">
+        <img class="gray-folder" data-src="/storage/assets/file_icons/folder.png" width="90" alt="" uk-img>
+        <p class="uk-text-muted" v-html="'There is no available groups yet, click on the + icon to add new group'"></p>
+      </div>
     </div>
   </div>
 </template>
@@ -187,17 +191,27 @@ export default {
   name: "Create",
   data(){
     return{
+      currentUnitNum:1,
+      currentLessonNum:4,
       groups: [
         {
           title: 'Group A',
           description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s',
           editMode:false,
           items:[
-              { id:1},
-              ],
+            {
+              id:1,
+              unit_num:null,
+              unit_status:true,
+              lesson_num:null,
+              lesson_status:true,
+              source:0,
+            },
+          ],
 
         },
       ],
+
     }
   },
   created() {
@@ -209,7 +223,16 @@ export default {
 
     },
     addNewGroupQuestion(group){
-      group.items.push({ id:1});
+      group.items.push(
+          {
+            id:1,
+            unit_num:null,
+            unit_status:true,
+            lesson_num:null,
+            lesson_status:true,
+            source:0,
+          }
+      );
     },
     addNewGroup(){
       var newGroupItem = {
@@ -217,29 +240,57 @@ export default {
         description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s',
         editMode:false,
         items:[
-          { id:1},
+          {
+            id:1,
+            unit_num:null,
+            unit_status:true,
+            lesson_num:null,
+            lesson_status:true,
+            source:0,
+          },
         ],
       };
       console.log(this.groups);
       this.groups.push(newGroupItem);
       this.scrollToEndOfPage();
+      console.log(this.groups);
+
     },
     runQuestionFilters(question){
       alert('هذا بروتوتايب فقط, ميجيب نتائج 😆 ')
     },
-    deleteItem(){
-      alert('تحت التطوير دادة 😆 ')
+    deleteGroup(group){
+      var groupKey = this.groups.indexOf(group);
+      this.groups.splice(groupKey, 1);
 
     },
-    deleteQuestionItem(){
-      alert('تحت التطوير دادة 😆 ')
+    deleteGroupItem(group, questionKey){
+      var itemsCount = group.items.length;
+      if (itemsCount === 1){
+        this.$Notify({
+          title: 'Oops! something going wrong',
+          message: 'Group should have at least one question item',
+          type: 'error',
+          duration: 4000
+        });
+
+      } else {
+        group.items.splice(questionKey, 1);
+      }
 
     },
     scrollToEndOfPage(){
       $('body, html').animate({
         scrollTop: $('.add-group-wrapper').offset().top
       }, 300);
-    }
+    },
+    onlyNumber ($event) {
+      //console.log($event.keyCode); //keyCodes value
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 is dot
+        $event.preventDefault();
+      }
+    },
   }
 }
 </script>
@@ -281,5 +332,9 @@ export default {
 .add-group-wrapper button{
   border-radius: 50%;
   padding: 5px 10px;
+}
+.gray-folder{
+  opacity: 0.3;
+  filter: grayscale(90%);
 }
 </style>

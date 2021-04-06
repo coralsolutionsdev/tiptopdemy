@@ -17349,7 +17349,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         loadingMode: false,
         questionItems: [],
         selectedQuestionItemId: null,
-        type: 6
+        type: this.defaultQuestion ? this.defaultQuestion.type : 6
       });
     },
     addNewGroup: function addNewGroup() {

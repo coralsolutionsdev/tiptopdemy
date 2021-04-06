@@ -256,11 +256,10 @@ class FormController extends Controller
                             foreach ($lessonForms as $lessonForm){
                                 if ($lessonForm){
                                     foreach ($lessonForm->items as $formItem){
-                                        if ($formItem->type != FormItem::TYPE_SECTION){
+                                        if ($formItem->type == $input['type']){
                                             $sourceFilterStatus = false;
                                             $taxAFilterStatus =  false;
                                             $uniformFilterStatus =  false;
-
 
                                             if (!is_null($input['source'])){
                                                 // Source filter

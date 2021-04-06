@@ -333,17 +333,6 @@ class FormController extends Controller
             }
 
         }
-
-//        array:8 [
-//            "id" => 1
-//  "unit_num" => "1"
-//  "unit_status" => true
-//  "lesson_num" => "2"
-//  "lesson_status" => true
-//  "source" => "0"
-//  "taxonomies_a" => null
-//  "uniform" => false
-//]
         return response($questionsArray, 200);
 //        return response($ddArray, 200);
     }
@@ -361,6 +350,7 @@ class FormController extends Controller
         $user = getAuthUser();
         // create new form
         $input['title'] = $settings['title'];
+        $input['type'] = Form::TYPE_FORM;
         $input['description'] = $settings['description'];
         $input['position'] = $settings['position'];
         $input['version'] = 0;

@@ -460,6 +460,7 @@
         'Start upload' => 'إبدأ الرفع',
         'Click to attach your files' => 'أضغط لارفاق الملفات المراد رفعها',
         '_form_section' => 'قسم',
+        'Generate' => 'Generate',
 
 
 

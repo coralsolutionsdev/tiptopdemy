@@ -856,6 +856,12 @@
                     }
                 }
 
+                if(properties.uniform != null){
+                    if(properties.uniform == 1){
+                        item.find('.input-uniform').prop('checked', true);
+                    }
+                }
+
                 // update width
                 if(properties.width != null){
                     item.find('.input-width').val(properties.width);

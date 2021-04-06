@@ -248,7 +248,6 @@ class Form extends Model
                 'allowed_number' => isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null,
                 'evaluation' => isset($input['item_evaluation'][$id]) ? $input['item_evaluation'][$id] : 1,
                 'taxonomies_a' => isset($input['item_taxonomy'][$id]) ? $input['item_taxonomy'][$id] : array(),
-
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;
             $newItem['properties'] = $properties;
@@ -722,9 +721,22 @@ class Form extends Model
             }
         }
         return false;
+    }
 
 
+    /**
+     * @return mixed|null
+     */
+    public function getLesson(){
+        return $this->lesson();
+    }
 
+    /**
+     * @return mixed|null
+     */
+    public function getUnit(){
+        $lesson = $this->getLesson();
+        return !empty($lesson) ? $lesson->groups->first() : null;
     }
 
     /*
@@ -771,5 +783,9 @@ class Form extends Model
     public function editor()
     {
         return $this->belongsTo(User::class, 'editor_id');
+    }
+    public function lesson()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_form', 'lesson_id', 'form_id')->first();
     }
 }

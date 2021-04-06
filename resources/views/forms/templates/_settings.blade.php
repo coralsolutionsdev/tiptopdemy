@@ -9,7 +9,6 @@
                 <li><a href="#">General info</a></li>
                 <li><a href="#">Scoping</a></li>
                 <li><a href="#">Properties</a></li>
-                {{--                                                        <li><a href="#">Question list</a></li>--}}
                 <li><a href="#">Others</a></li>
             </ul>
         </div>

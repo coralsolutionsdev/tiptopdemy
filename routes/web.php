@@ -141,6 +141,8 @@ Route::group(['middleware'=>'installed'], function(){
             Route::put('/product/{product}/lessons/{lesson}/edit/content','LessonController@updateContent')->name('lesson.update.content');
             // d
             Route::get('/lesson/{lesson}/form/smart/create','FormController@smartCreate')->name('form.smart.create');
+            Route::post('/lesson/{lesson}/form/smart/get/items','FormController@smartGetItems')->name('form.smart.get.items');
+            Route::post('/lesson/{lesson}/form/smart/store','FormController@smartStore')->name('form.smart.store');
 
 
         });

@@ -443,6 +443,7 @@
         'Starting' => 'Starting',
         'Display type' => 'Display type',
         '_form_section' => 'Group',
+        'Generate' => 'Generate',
 
         //orders
         'orders' => 'Orders',

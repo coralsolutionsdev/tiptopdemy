@@ -494,7 +494,7 @@ export default {
             loadingMode:false,
             questionItems:[],
             selectedQuestionItemId:null,
-            type:6,
+            type: this.defaultQuestion ? this.defaultQuestion.type : 6,
           }
       );
     },

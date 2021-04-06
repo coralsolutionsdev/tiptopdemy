@@ -16,6 +16,7 @@
 .ui.accordion,
 .ui.accordion .accordion {
   max-width: 100%;
+  opacity: 0.1;
 }
 .ui.accordion .accordion {
   margin: 1em 0em 0em;

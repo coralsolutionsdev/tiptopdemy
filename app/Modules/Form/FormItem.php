@@ -71,6 +71,16 @@ class FormItem extends Model
         4 => 'Master',
     ];
 
+    const QUIZ_TYPES_ARRAY = [
+        self::TYPE_SHORT_ANSWER,
+        self::TYPE_PARAGRAPH,
+        self::TYPE_SINGLE_CHOICE,
+        self::TYPE_MULTI_CHOICE,
+        self::TYPE_DROP_DOWN,
+        self::TYPE_FILL_THE_BLANK,
+        self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP,
+    ];
+
     /**
      * Get the route key for the model.
      *
@@ -89,24 +99,37 @@ class FormItem extends Model
         }
         return null;
     }
-    public function getFillableBlank($id = null)
+    public function getFillableBlank($id = null, $fillableStatus = true)
     {
         if (is_null($id))
         {
             $id = $this->id;
         }
         $paragraph = $this->options['paragraph'];
-        $search = $replace = '';
-        if ($this->type == self::TYPE_FILL_THE_BLANK){
-            $search = '#\<tag\>(.+?)\<\/tag\>#s';
-            $replace = ' <span class="item-'.$id.'-paragraph-blank"><input class="input-blank" name="item_answer['.$id.'][]" type="text"></span> ';
-            return preg_replace($search,$replace,$paragraph);
-        } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
-            $search = '#\<tagdraggableblank\>(.+?)\<\/tagdraggableblank\>#s';
-            $replace = ' <div class="item-'.$id.'-paragraph-blank droppable-blank" ondragover="getHoveredId(this)"></div> ';
-            return preg_replace($search,$replace,$paragraph);
-
+        if ($fillableStatus){
+            if ($this->type == self::TYPE_FILL_THE_BLANK){
+                $search = '#\<tag\>(.+?)\<\/tag\>#s';
+                $replace = ' <span class="item-'.$id.'-paragraph-blank"><input class="input-blank" name="item_answer['.$id.'][]" type="text"></span> ';
+                return preg_replace($search,$replace,$paragraph);
+            } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                $search = '#\<tagdraggableblank\>(.+?)\<\/tagdraggableblank\>#s';
+                $replace = ' <div class="item-'.$id.'-paragraph-blank droppable-blank" ondragover="getHoveredId(this)"></div> ';
+                return preg_replace($search,$replace,$paragraph);
+            }
+        } else {
+            if ($this->type == self::TYPE_FILL_THE_BLANK){
+                $search = '#\<tag\>(.+?)\<\/tag\>#s';
+                $replace = ' _____ ';
+                return preg_replace($search,$replace,$paragraph);
+            } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                $search = '#\<tagdraggableblank\>(.+?)\<\/tagdraggableblank\>#s';
+                $replace = ' _____ ';
+                return preg_replace($search,$replace,$paragraph);
+            }
         }
+
+
+
 //        <input class="input-blank" name="item_answer['.$id.'][]" type="text">
 //        $string = "<tag>i dont know what is here</tag>";
     }

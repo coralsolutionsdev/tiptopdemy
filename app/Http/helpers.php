@@ -489,3 +489,13 @@ function recaptchaValidate($captcha)
     $response = json_decode($response->getBody()->getContents(), true);
     return  $response;
 }
+
+function getCollectionIndexOfId($collection, $item){
+    $index = null;
+    foreach ($collection as $key => $collectionItem){
+        if ($collectionItem->id === $item->id){
+            $index = $key;
+        }
+    }
+    return $index;
+}

@@ -88,6 +88,10 @@
     {
         addTinyEditor(item, miniToolBar, false);
     }
+    function addMinyFullEditor(item)
+    {
+        addTinyEditor(item, fullToolBar, true);
+    }
     addTinyEditor('.content-editor', fullToolBar, true);
     addTinyEditor('.tiny-content-editor', miniToolBar, false);
 </script>

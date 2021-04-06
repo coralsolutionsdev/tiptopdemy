@@ -17042,31 +17042,260 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Create",
+  props: {
+    currentUnitNum: { type: String },
+    currentLessonNum: { type: String },
+    lessonSlug: { type: String }
+  },
   data: function data() {
     return {
-      currentUnitNum: 1,
-      currentLessonNum: 4,
-      groups: [{
-        title: 'Group A',
-        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s',
-        editMode: false,
-        items: [{
-          id: 1,
-          unit_num: null,
-          unit_status: true,
-          lesson_num: null,
-          lesson_status: true,
-          source: 0
-        }]
-
-      }]
-
+      groups: [],
+      settings: {
+        title: 'Untitled Quiz',
+        description: '',
+        position: 0,
+        score_type: 1,
+        passing_score: 50,
+        has_time_limit: false,
+        time_limit: 0,
+        attempts_number: null,
+        shuffle_questions: false,
+        shuffle_groups: false,
+        display_type: 0,
+        direction: 0,
+        feedback_correct: 'Put your correct message',
+        feedback_incorrect: 'Put your incorrect message',
+        feedback_retry: 'Put your try again message',
+        submission_title: 'Submit'
+      },
+      settingTab: true,
+      generatingMode: false,
+      forms: [],
+      showForms: false
     };
   },
   created: function created() {},
+  mounted: function mounted() {
+    this.newGroup();
+  },
 
   methods: {
     openGroupSettings: function openGroupSettings(key, group) {
@@ -17074,36 +17303,82 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       addMinyTinyEditor('.content-editor-' + key);
     },
     addNewGroupQuestion: function addNewGroupQuestion(group) {
+      var newId = this.generateRandomString(4);
       group.items.push({
-        id: 1,
+        id: newId,
         unit_num: null,
         unit_status: true,
         lesson_num: null,
         lesson_status: true,
-        source: 0
+        source: 'all',
+        taxonomies_a: 'all',
+        uniform: false,
+        loadingMode: false,
+        questionItems: [],
+        selectedQuestionItemId: null
       });
     },
     addNewGroup: function addNewGroup() {
+      if (this.settingTab) {
+        this.settingTab = !this.settingTab;
+      }
+      this.newGroup();
+    },
+    newGroup: function newGroup() {
       var newGroupItem = {
-        title: 'Group A',
+        title: 'Group title',
         description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s',
         editMode: false,
-        items: [{
-          id: 1,
-          unit_num: null,
-          unit_status: true,
-          lesson_num: null,
-          lesson_status: true,
-          source: 0
-        }]
+        allowedNumber: null,
+        shuffleQuestions: false,
+        items: []
+
       };
-      console.log(this.groups);
       this.groups.push(newGroupItem);
       this.scrollToEndOfPage();
-      console.log(this.groups);
+      this.addNewGroupQuestion(newGroupItem);
+      return newGroupItem;
     },
     runQuestionFilters: function runQuestionFilters(question) {
-      alert('هذا بروتوتايب فقط, ميجيب نتائج 😆 ');
+      question.loadingMode = true;
+      var data = {
+        id: question.id,
+        unit_num: question.unit_num,
+        unit_status: question.unit_status,
+        lesson_num: question.lesson_num,
+        lesson_status: question.lesson_status,
+        source: question.source,
+        taxonomies_a: question.taxonomies_a,
+        uniform: question.uniform
+      };
+      axios.post('/manage/store/lesson/' + this.lessonSlug + '/form/smart/get/items', data).then(function (res) {
+        question.loadingMode = false;
+        question.questionItems = res.data;
+        // selectedQuestionItemId:null,
+        var randomQuestion = question.questionItems[Math.floor(Math.random() * question.questionItems.length)];
+        if (question.questionItems.length > 0) {
+          question.selectedQuestionItemId = randomQuestion.id;
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    generateForm: function generateForm() {
+      var _this = this;
+
+      this.generatingMode = true;
+      var data = {
+        settings: this.settings,
+        groups: this.groups
+      };
+      axios.post('/manage/store/lesson/' + this.lessonSlug + '/form/smart/store', data).then(function (res) {
+        console.log(res.data);
+        _this.generatingMode = false;
+        _this.forms.push(res.data);
+        _this.showForms = true;
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     deleteGroup: function deleteGroup(group) {
       var groupKey = this.groups.indexOf(group);
@@ -17134,6 +17409,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // 46 is dot
         $event.preventDefault();
       }
+    },
+    generateRandomString: function generateRandomString(length) {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for (var i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }return text;
     }
   }
 });
@@ -20026,7 +20308,9 @@ if (token) {
             "Quiz name": "إسم الإختبار",
             "Quiz Type": "نوع الإختبار",
             "Short text": "إجابة قصيرة",
+            "Short answer": "إجابة قصيرة",
             "Long text": "إجابة طويلة",
+            "Open end Answer": "إجابة طويلة",
             "For single line text fields": "لإجابات السطر الواحد",
             "For paragraph text fields": "لإجابات النصوص الطويلة",
             "Drop menu": "قائمة منسدلة",
@@ -20039,6 +20323,7 @@ if (token) {
             "The section": "القسم",
             "Section Title": "عنوان القسم",
             "Create new section": "إنشاء قسم جديد",
+            "Create new questions group": "إنشاء مجموعة أسئلة",
             "There is no form items yet, please select new item from the items list": "لا يوجد عناصر متاحة, يرجى الأختيار من قائمة العناصر للإضافة ",
             "There is no form items yet.": "لا يوجد عناصر متاحة.",
             "Press here to edit the default question.": "إضغط هنا لتعديل السؤال الإفتراضي",
@@ -20055,7 +20340,7 @@ if (token) {
             "Score": "التقييم",
             "Remark": "الدرجة",
             "Add blank": "أضف فراغ",
-            "Add Drag and drop blank": "أضف فراغ (سحب و افلات)",
+            "Add Drag and drop blank": "سحب و افلات",
             "Delete blank": "حذف الفراغ",
             "Quiz settings": "إعدادات الإمتحان",
             "Quiz title": "عنوان الإمتحان",
@@ -20083,6 +20368,8 @@ if (token) {
             "selecting one": "أختر من ملفاتك",
             "Start upload": "إبدأ الرفع",
             "Click to attach your files": "أضغط لارفاق الملفات المراد رفعها",
+            "_form_section": "قسم",
+            "Generate": "Generate",
             "orders": "طلبات",
             "Place Order": "تأكيد الشراء",
             "purchase complete": "لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: {number}.",
@@ -20640,7 +20927,9 @@ if (token) {
             "Quiz name": "Quiz name",
             "Quiz Type": "Quiz Type",
             "Short text": "Short text",
+            "Short answer": "Short answer",
             "Long text": "Long text",
+            "Open end Answer": "Open end answer",
             "For single line text fields": "For single line text fields",
             "For paragraph text fields": "For paragraph text fields",
             "Drop menu": "Drop menu",
@@ -20653,6 +20942,7 @@ if (token) {
             "The section": "The section",
             "Section Title": "Section Title",
             "Create new section": "Create new section",
+            "Create new questions group": "Create new questions group",
             "There is no form items yet, please select new item from the items list": "There is no form items yet, please select new item from the items list",
             "There is no form items yet.": "There is no form items yet.",
             "Press here to edit the default question.": "Press here to edit the default question.",
@@ -20668,7 +20958,7 @@ if (token) {
             "Score": "Score",
             "Remark": "Remark",
             "Fill the blank": "Fill the blank",
-            "Fill the blank (drag and drop)": "Fill the blank (drag and drop)",
+            "Fill the blank (drag and drop)": "Drag and drop",
             "Fill the blank question": "Fill the blank question",
             "Advanced fill the blank": "Advanced fill the blank",
             "Add blank": "Add blank",
@@ -20695,6 +20985,8 @@ if (token) {
             "_Minutes": "Minutes",
             "Starting": "Starting",
             "Display type": "Display type",
+            "_form_section": "Group",
+            "Generate": "Generate",
             "orders": "Orders",
             "Place Order": "Place Order",
             "purchase complete": "Your purchase has been completed successfully, your order number is: {number}.",
@@ -23503,7 +23795,7 @@ exports.push([module.i, "\n@media (max-width: 960px){\n.overflow-auto[data-v-595
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n.group-title[data-v-670a0726]{\r\n  display: -ms-inline-flexbox;\r\n  display: inline-flex;\r\n  padding: 5px 15px;\r\n  border-radius: 5px 5px 0 0;\n}\n.height-0[data-v-670a0726]{\r\n  height: 0px !important;\r\n  overflow: hidden;\n}\n.question-items td[data-v-670a0726] {\r\n   padding: 0px 12px !important;\r\n  /*vertical-align: top;*/\n}\n.question-items th[data-v-670a0726] {\r\n  padding: 10px 12px;\n}\n.group-question[data-v-670a0726]{\r\n  margin-bottom: 10px;\n}\n.question-filter[data-v-670a0726]{\r\n  padding: 0px 15px;\n}\n.question-filter .uk-form-label[data-v-670a0726] {\r\n   color: #999999;\r\n   font-size: 14px;\n}\n.add-group-wrapper[data-v-670a0726]{\r\n  position:fixed;\r\n  bottom: 35px;\r\n  right: 35px;\r\n  z-index: 20 !important;\n}\n.add-group-wrapper button[data-v-670a0726]{\r\n  border-radius: 50%;\r\n  padding: 5px 10px;\n}\n.gray-folder[data-v-670a0726]{\r\n  opacity: 0.3;\r\n  filter: grayscale(90%);\n}\r\n", ""]);
+exports.push([module.i, "\n.group-title[data-v-670a0726]{\r\n  display: -ms-inline-flexbox;\r\n  display: inline-flex;\r\n  padding: 5px 15px;\r\n  border-radius: 5px 5px 0 0;\n}\n.height-0[data-v-670a0726]{\r\n  height: 0px !important;\r\n  overflow: hidden;\n}\n.question-items td[data-v-670a0726] {\r\n   padding: 0px 12px !important;\r\n  /*vertical-align: top;*/\n}\n.question-items th[data-v-670a0726] {\r\n  padding: 10px 12px;\r\n  background-color: rgba(255,255,255,0.5);\n}\n.group-question[data-v-670a0726]{\r\n  margin-bottom: 10px;\n}\n.question-filter[data-v-670a0726]{\r\n  padding: 0px 15px;\n}\n.question-filter .uk-form-label[data-v-670a0726] {\r\n   color: #999999;\r\n   font-size: 14px;\n}\n.add-group-wrapper[data-v-670a0726]{\r\n  position:fixed;\r\n  bottom: 35px;\r\n  right: 35px;\r\n  z-index: 20 !important;\n}\n.add-group-wrapper button[data-v-670a0726]{\r\n  border-radius: 50%;\r\n  padding: 5px 10px;\n}\n.gray-folder[data-v-670a0726]{\r\n  opacity: 0.3;\r\n  filter: grayscale(90%);\n}\n.h-0[data-v-670a0726]{\r\n  height: 0px;\r\n  overflow: hidden;\n}\n.submit-form[data-v-670a0726]{\r\n  min-width: 150px;\n}\r\n", ""]);
 
 /***/ }),
 /* 61 */
@@ -55818,8 +56110,650 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-grid": ""
     }
-  }, [_vm._l((_vm.groups), function(group, key) {
-    return _c('div', [_c('div', {
+  }, [_c('div', [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-small"
+  }, [_c('div', {
+    staticClass: "uk-grid-small uk-text-center",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-auto"
+  }, [_c('span', {
+    staticClass: "uk-button uk-button-default",
+    staticStyle: {
+      "padding": "0 20px"
+    },
+    attrs: {
+      "uk-tooltip": _vm.$t('main.General settings')
+    },
+    on: {
+      "click": function($event) {
+        _vm.settingTab = !_vm.settingTab
+      }
+    }
+  }, [_c('span', {
+    attrs: {
+      "uk-icon": "icon: settings"
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expand"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto"
+  }, [_c('span', {
+    staticClass: "uk-button uk-button-primary uk-align-right submit-form",
+    on: {
+      "click": function($event) {
+        return _vm.generateForm()
+      }
+    }
+  }, [(!_vm.generatingMode) ? _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Generate'))
+    }
+  }) : _c('span', [_c('span', {
+    attrs: {
+      "uk-spinner": "ratio: 0.8"
+    }
+  })])])])])])]), _vm._v(" "), _c('div', {
+    class: {
+      'h-0': !_vm.showForms
+    }
+  }, [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-small"
+  }, [_c('div', [_c('table', {
+    staticClass: "uk-table uk-table-divider"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', [_vm._l((_vm.forms), function(form) {
+    return (_vm.forms.length > 0) ? _c('tr', [_c('td', {
+      domProps: {
+        "innerHTML": _vm._s(form.title)
+      }
+    }), _vm._v(" "), _c('td', {
+      staticClass: "uk-text-center",
+      domProps: {
+        "innerHTML": _vm._s(form.count)
+      }
+    }), _vm._v(" "), _c('td', {
+      staticClass: "uk-text-right"
+    }, [_c('a', {
+      staticClass: "uk-button uk-button-primary uk-button-small",
+      attrs: {
+        "href": form.edit_url,
+        "target": "_blank"
+      }
+    }, [_c('span', {
+      staticClass: "uk-margin-small-right",
+      attrs: {
+        "uk-icon": "icon: pencil"
+      }
+    }), _vm._v(" Edit")])])]) : _vm._e()
+  }), _vm._v(" "), (_vm.forms.length === 0) ? _c('tr', [_c('td', {
+    staticClass: "uk-text-center",
+    attrs: {
+      "colspan": "2"
+    }
+  }, [_vm._v("No items available yet.")])]) : _vm._e()], 2)])])])]), _vm._v(" "), _c('div', {
+    class: {
+      'h-0': !_vm.settingTab
+    }
+  }, [_c('div', {
+    staticClass: "uk-card uk-card-default uk-card-body uk-padding-small"
+  }, [_c('div', {
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_vm._m(1), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expand@m"
+  }, [_c('ul', {
+    staticClass: "uk-switcher",
+    attrs: {
+      "id": "settingTabs"
+    }
+  }, [_c('li', [_c('div', {
+    staticClass: "h-header"
+  }, [_vm._v("Quiz information")]), _vm._v(" "), _c('div', {
+    staticClass: "row uk-margin-small"
+  }, [_c('div', {
+    staticClass: "col-1 uk-flex uk-flex-middle"
+  }, [_c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Title'))
+    }
+  }), _vm._v(":\n                  ")]), _vm._v(" "), _c('div', {
+    staticClass: "col-11"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.title),
+      expression: "settings.title"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.settings.title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "title", $event.target.value)
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "row uk-margin-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "col-1 uk-flex uk-flex-middle"
+  }, [_c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Description'))
+    }
+  }), _vm._v(":\n                  ")]), _vm._v(" "), _c('div', {
+    staticClass: "col-11"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.description),
+      expression: "settings.description"
+    }],
+    staticClass: "uk-textarea content-editor",
+    attrs: {
+      "rows": "25",
+      "placeholder": "Add quiz description here"
+    },
+    domProps: {
+      "value": (_vm.settings.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "description", $event.target.value)
+      }
+    }
+  })])]), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
+    staticClass: "row uk-margin-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "col-1 uk-flex uk-flex-middle"
+  }, [_c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Position'))
+    }
+  }), _vm._v(":\n                  ")]), _vm._v(" "), _c('div', {
+    staticClass: "col-3"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.position),
+      expression: "settings.position"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "number",
+      "value": ""
+    },
+    domProps: {
+      "value": (_vm.settings.position)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "position", $event.target.value)
+      }
+    }
+  })])])]), _vm._v(" "), _c('li', [_c('div', [_c('div', {
+    staticClass: "h-header"
+  }, [_vm._v("Passing requirements")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                      Scoping:\n                    ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.score_type),
+      expression: "settings.score_type"
+    }],
+    staticClass: "uk-select uk-form-small",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.$set(_vm.settings, "score_type", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Percentage")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "2"
+    }
+  }, [_vm._v("Score")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("None")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                      Passing score:\n                    ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-1-5@s"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.passing_score),
+      expression: "settings.passing_score"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "number",
+      "placeholder": "",
+      "value": ""
+    },
+    domProps: {
+      "value": (_vm.settings.passing_score)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "passing_score", $event.target.value)
+      }
+    }
+  })])]), _vm._v(" "), _c('br'), _vm._v(" "), _c('div', {
+    staticClass: "h-header"
+  }, [_vm._v("Time limit")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-5-5@s uk-flex uk-flex-middle"
+  }, [_c('label', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.has_time_limit),
+      expression: "settings.has_time_limit"
+    }],
+    staticClass: "uk-checkbox",
+    attrs: {
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": Array.isArray(_vm.settings.has_time_limit) ? _vm._i(_vm.settings.has_time_limit, null) > -1 : (_vm.settings.has_time_limit)
+    },
+    on: {
+      "change": function($event) {
+        var $$a = _vm.settings.has_time_limit,
+          $$el = $event.target,
+          $$c = $$el.checked ? (true) : (false);
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.$set(_vm.settings, "has_time_limit", $$a.concat([$$v])))
+          } else {
+            $$i > -1 && (_vm.$set(_vm.settings, "has_time_limit", $$a.slice(0, $$i).concat($$a.slice($$i + 1))))
+          }
+        } else {
+          _vm.$set(_vm.settings, "has_time_limit", $$c)
+        }
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticStyle: {
+      "margin": "0 0.5em"
+    }
+  }, [_vm._v("Time to complete the quiz ")])]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.time_limit),
+      expression: "settings.time_limit"
+    }],
+    staticClass: "uk-input uk-form-small uk-form-width-small",
+    staticStyle: {
+      "margin": "0 0.5em"
+    },
+    attrs: {
+      "type": "number",
+      "placeholder": "",
+      "step": "1",
+      "value": ""
+    },
+    domProps: {
+      "value": (_vm.settings.time_limit)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "time_limit", $event.target.value)
+      }
+    }
+  }), _c('span', {
+    staticClass: "uk-text-meta"
+  }, [_vm._v("In minutes")])])])])]), _vm._v(" "), _c('li', [_c('div', [_c('div', {
+    staticClass: "h-header"
+  }, [_vm._v("Restriction")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                      Number of attempts\n                    ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-2-5@s"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.attempts_number),
+      expression: "settings.attempts_number"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "number",
+      "placeholder": "Example: 10",
+      "value": ""
+    },
+    domProps: {
+      "value": (_vm.settings.attempts_number)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "attempts_number", $event.target.value)
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-5-5@s"
+  }, [_c('label', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.shuffle_questions),
+      expression: "settings.shuffle_questions"
+    }],
+    staticClass: "uk-checkbox",
+    attrs: {
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": Array.isArray(_vm.settings.shuffle_questions) ? _vm._i(_vm.settings.shuffle_questions, null) > -1 : (_vm.settings.shuffle_questions)
+    },
+    on: {
+      "change": function($event) {
+        var $$a = _vm.settings.shuffle_questions,
+          $$el = $event.target,
+          $$c = $$el.checked ? (true) : (false);
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.$set(_vm.settings, "shuffle_questions", $$a.concat([$$v])))
+          } else {
+            $$i > -1 && (_vm.$set(_vm.settings, "shuffle_questions", $$a.slice(0, $$i).concat($$a.slice($$i + 1))))
+          }
+        } else {
+          _vm.$set(_vm.settings, "shuffle_questions", $$c)
+        }
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticStyle: {
+      "margin": "0 0.5em"
+    }
+  }, [_vm._v("Shuffle questions")])])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-5-5@s"
+  }, [_c('label', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.shuffle_groups),
+      expression: "settings.shuffle_groups"
+    }],
+    staticClass: "uk-checkbox",
+    attrs: {
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": Array.isArray(_vm.settings.shuffle_groups) ? _vm._i(_vm.settings.shuffle_groups, null) > -1 : (_vm.settings.shuffle_groups)
+    },
+    on: {
+      "change": function($event) {
+        var $$a = _vm.settings.shuffle_groups,
+          $$el = $event.target,
+          $$c = $$el.checked ? (true) : (false);
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.$set(_vm.settings, "shuffle_groups", $$a.concat([$$v])))
+          } else {
+            $$i > -1 && (_vm.$set(_vm.settings, "shuffle_groups", $$a.slice(0, $$i).concat($$a.slice($$i + 1))))
+          }
+        } else {
+          _vm.$set(_vm.settings, "shuffle_groups", $$c)
+        }
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticStyle: {
+      "margin": "0 0.5em"
+    }
+  }, [_vm._v("Shuffle groups")])])])]), _vm._v(" "), _c('br'), _vm._v(" "), _c('label', {
+    staticClass: "uk-form-label h-header"
+  }, [_vm._v("Display type")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.display_type),
+      expression: "settings.display_type"
+    }],
+    staticClass: "uk-select uk-form-small",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.$set(_vm.settings, "display_type", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Modern")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("Classic")])])]), _vm._v(" "), _c('br'), _vm._v(" "), _c('label', {
+    staticClass: "uk-form-label h-header"
+  }, [_vm._v("Quiz text direction")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.direction),
+      expression: "settings.direction"
+    }],
+    staticClass: "uk-select uk-form-small",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.$set(_vm.settings, "direction", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("Auto")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("LTR")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("RTL")])])]), _vm._v(" "), _c('br'), _vm._v(" "), _c('div', {
+    staticClass: "h-header"
+  }, [_vm._v("Feedback")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                      Correct\n                    ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-4-5@s"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.feedback_correct),
+      expression: "settings.feedback_correct"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "text",
+      "name": "feedback_correct",
+      "value": ""
+    },
+    domProps: {
+      "value": (_vm.settings.feedback_correct)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "feedback_correct", $event.target.value)
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                      Incorrect\n                    ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-4-5@s"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.feedback_incorrect),
+      expression: "settings.feedback_incorrect"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.settings.feedback_incorrect)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "feedback_incorrect", $event.target.value)
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                      Try again\n                    ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-4-5@s"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.feedback_retry),
+      expression: "settings.feedback_retry"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.settings.feedback_retry)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "feedback_retry", $event.target.value)
+      }
+    }
+  })])])])]), _vm._v(" "), _c('li', [_c('div', {
+    staticClass: "h-header"
+  }, [_vm._v("Quiz submission")]), _vm._v(" "), _vm._m(3), _vm._v(" "), _c('div', {
+    staticClass: "uk-grid-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
+  }, [_vm._v("\n                    Submission button title\n                  ")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-2-5@s"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.settings.submission_title),
+      expression: "settings.submission_title"
+    }],
+    staticClass: "uk-input uk-form-small",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.settings.submission_title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.settings, "submission_title", $event.target.value)
+      }
+    }
+  })])])])])])])])]), _vm._v(" "), _vm._l((_vm.groups), function(group, key) {
+    return (!_vm.settingTab) ? _c('div', [_c('div', {
       staticClass: "uk-card uk-card-default uk-card-body uk-padding-small uk-secondary-bg"
     }, [_c('div', {
       staticClass: "uk-grid-collapse uk-text-center",
@@ -55961,7 +56895,82 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.$set(group, "description", $event.target.value)
         }
       }
-    })])])])]), _vm._v(" "), _vm._m(0, true)])])]), _vm._v(" "), _c('div', _vm._l((group.items), function(question, questionKey) {
+    })])])])]), _vm._v(" "), _c('div', {
+      staticClass: "uk-margin-small"
+    }, [_c('label', {
+      staticClass: "uk-form-label h-header"
+    }, [_vm._v("Questions settings")]), _vm._v(" "), _c('div', {
+      staticClass: "uk-grid-small",
+      attrs: {
+        "uk-grid": ""
+      }
+    }, [_c('div', {
+      staticClass: "uk-width-5-5@s uk-flex uk-flex-middle"
+    }, [_c('label', [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (group.shuffleQuestions),
+        expression: "group.shuffleQuestions"
+      }],
+      staticClass: "uk-checkbox input-shuffle-questions",
+      attrs: {
+        "type": "checkbox"
+      },
+      domProps: {
+        "checked": Array.isArray(group.shuffleQuestions) ? _vm._i(group.shuffleQuestions, null) > -1 : (group.shuffleQuestions)
+      },
+      on: {
+        "change": function($event) {
+          var $$a = group.shuffleQuestions,
+            $$el = $event.target,
+            $$c = $$el.checked ? (true) : (false);
+          if (Array.isArray($$a)) {
+            var $$v = null,
+              $$i = _vm._i($$a, $$v);
+            if ($$el.checked) {
+              $$i < 0 && (_vm.$set(group, "shuffleQuestions", $$a.concat([$$v])))
+            } else {
+              $$i > -1 && (_vm.$set(group, "shuffleQuestions", $$a.slice(0, $$i).concat($$a.slice($$i + 1))))
+            }
+          } else {
+            _vm.$set(group, "shuffleQuestions", $$c)
+          }
+        }
+      }
+    }), _vm._v(" "), _c('span', {
+      staticStyle: {
+        "margin": "0 0.5em"
+      }
+    }, [_vm._v("Shuffle Questions")])])])]), _vm._v(" "), _c('div', {
+      staticClass: "uk-margin uk-grid-small score-section",
+      attrs: {
+        "uk-grid": ""
+      }
+    }, [_vm._m(4, true), _vm._v(" "), _c('div', {
+      staticClass: "uk-width-expand@m "
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (group.allowedNumber),
+        expression: "group.allowedNumber"
+      }],
+      staticClass: "uk-input uk-form-small input-section-allowed-number",
+      attrs: {
+        "type": "number",
+        "placeholder": "5"
+      },
+      domProps: {
+        "value": (group.allowedNumber)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.$set(group, "allowedNumber", $event.target.value)
+        }
+      }
+    })])]), _vm._v(" "), _vm._m(5, true)])])])]), _vm._v(" "), _c('div', _vm._l((group.items), function(question, questionKey) {
       return _c('div', {
         staticClass: "group-question"
       }, [_c('div', {
@@ -55981,7 +56990,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         domProps: {
           "innerHTML": _vm._s(questionKey + 1)
         }
-      }), _vm._v(" | Question Item\n                ")]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _c('div', {
+      }), _vm._v(" | Question Item\n                ")]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand"
+      }, [_c('select', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.selectedQuestionItemId),
+          expression: "question.selectedQuestionItemId"
+        }],
+        staticClass: "uk-select uk-form-small",
+        on: {
+          "change": function($event) {
+            var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+              return o.selected
+            }).map(function(o) {
+              var val = "_value" in o ? o._value : o.value;
+              return val
+            });
+            _vm.$set(question, "selectedQuestionItemId", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+          }
+        }
+      }, [_c('option', {
+        staticClass: "uk-text-muted",
+        domProps: {
+          "value": null
+        }
+      }, [_vm._v("Available questions")]), _vm._v(" "), _vm._l((question.questionItems), function(questionItem) {
+        return _c('option', {
+          domProps: {
+            "value": questionItem.id,
+            "innerHTML": _vm._s(questionItem.title)
+          }
+        })
+      })], 2)]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-1-4"
       }, [_c('div', {
         staticClass: "uk-grid-small  uk-flex uk-flex-middle",
@@ -55994,7 +57036,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         staticClass: "uk-width-expand"
       }, [_vm._v("\n                      Fixed\n                    ")]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-auto"
-      }, [_vm._v("\n                      Qs. count (2)\n                    ")]), _vm._v(" "), _c('div', {
+      }, [_vm._v("\n                      Qs. count "), _c('span', {
+        class: {
+          'uk-text-success': question.questionItems.length > 0
+        }
+      }, [_vm._v("("), _c('span', {
+        domProps: {
+          "innerHTML": _vm._s(question.questionItems.length)
+        }
+      }), _vm._v(")")])]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-expand uk-text-right"
       }, [_c('span', {
         staticClass: "hover-danger remove-form-item",
@@ -56073,23 +57123,160 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             _vm.$set(question, "lesson_num", $event.target.value)
           }
         }
-      })])])]), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _c('div', {
+      })])])]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-1-4"
+      }, [_c('div', {
+        staticClass: "uk-grid-small",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_c('div', {
+        staticClass: "uk-width-1-2"
+      }, [_c('select', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.source),
+          expression: "question.source"
+        }],
+        staticClass: "uk-select uk-form-small",
+        on: {
+          "change": function($event) {
+            var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+              return o.selected
+            }).map(function(o) {
+              var val = "_value" in o ? o._value : o.value;
+              return val
+            });
+            _vm.$set(question, "source", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+          }
+        }
+      }, [_c('option', {
+        attrs: {
+          "value": "all"
+        }
+      }, [_vm._v("Got from")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "0"
+        }
+      }, [_vm._v("Quoted")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "1"
+        }
+      }, [_vm._v("Modified")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "2"
+        }
+      }, [_vm._v("Out of Box")])])]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-1-2"
+      }, [_c('select', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.taxonomies_a),
+          expression: "question.taxonomies_a"
+        }],
+        staticClass: "uk-select uk-form-small",
+        on: {
+          "change": function($event) {
+            var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+              return o.selected
+            }).map(function(o) {
+              var val = "_value" in o ? o._value : o.value;
+              return val
+            });
+            _vm.$set(question, "taxonomies_a", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+          }
+        }
+      }, [_c('option', {
+        attrs: {
+          "value": "all"
+        }
+      }, [_vm._v("Bloom TAX")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "1"
+        }
+      }, [_vm._v("Create")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "2"
+        }
+      }, [_vm._v("Evaluate")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "3"
+        }
+      }, [_vm._v("Analyze")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "4"
+        }
+      }, [_vm._v("Apply")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "5"
+        }
+      }, [_vm._v("Understand")]), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "6"
+        }
+      }, [_vm._v("Remember")])])])])]), _vm._v(" "), _vm._m(6, true), _vm._v(" "), _c('div', {
         staticClass: "uk-width-expand"
       }, [_c('div', {
         staticClass: "uk-grid-small uk-flex uk-flex-middle",
         attrs: {
           "uk-grid": ""
         }
-      }, [_vm._m(4, true), _vm._v(" "), _vm._m(5, true), _vm._v(" "), _c('div', {
+      }, [_c('div', {
+        staticClass: "uk-width-expand"
+      }, [_c('label', [_c('input', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.uniform),
+          expression: "question.uniform"
+        }],
+        staticClass: "uk-checkbox",
+        attrs: {
+          "type": "checkbox"
+        },
+        domProps: {
+          "checked": Array.isArray(question.uniform) ? _vm._i(question.uniform, null) > -1 : (question.uniform)
+        },
+        on: {
+          "change": function($event) {
+            var $$a = question.uniform,
+              $$el = $event.target,
+              $$c = $$el.checked ? (true) : (false);
+            if (Array.isArray($$a)) {
+              var $$v = null,
+                $$i = _vm._i($$a, $$v);
+              if ($$el.checked) {
+                $$i < 0 && (_vm.$set(question, "uniform", $$a.concat([$$v])))
+              } else {
+                $$i > -1 && (_vm.$set(question, "uniform", $$a.slice(0, $$i).concat($$a.slice($$i + 1))))
+              }
+            } else {
+              _vm.$set(question, "uniform", $$c)
+            }
+          }
+        }
+      })])]), _vm._v(" "), _vm._m(7, true), _vm._v(" "), _c('div', {
         staticClass: "uk-width-auto"
       }, [_c('button', {
         staticClass: "uk-button uk-button-primary uk-button-small",
+        staticStyle: {
+          "min-width": "75px"
+        },
+        attrs: {
+          "disabled": question.loadingMode
+        },
         on: {
           "click": function($event) {
             return _vm.runQuestionFilters(question)
           }
         }
-      }, [_vm._v("Run")])]), _vm._v(" "), _c('div', {
+      }, [(question.loadingMode) ? _c('span', {
+        attrs: {
+          "uk-spinner": "ratio: 0.5"
+        }
+      }) : _c('span', [_vm._v("Run")])])]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-expand uk-text-right"
       }, [_c('span', {
         staticClass: "hover-primary",
@@ -56106,8 +57293,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           "uk-icon": "plus-circle"
         }
       })])])])])])])])
-    }), 0)])])
-  }), _vm._v(" "), (_vm.groups.length == 0) ? _c('div', {
+    }), 0)])]) : _vm._e()
+  }), _vm._v(" "), (_vm.groups.length == 0 && !_vm.settingTab) ? _c('div', {
     staticClass: "uk-text-center uk-padding"
   }, [_c('img', {
     staticClass: "gray-folder",
@@ -56124,19 +57311,57 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]) : _vm._e()], 2)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th', {
+    staticClass: "uk-table-expand"
+  }, [_vm._v("Quiz info")]), _vm._v(" "), _c('th', {
+    staticClass: "uk-width-small uk-text-center"
+  }, [_vm._v("Items count")]), _vm._v(" "), _c('th', {
+    staticClass: "uk-width-small"
+  }, [_vm._v("Edit form")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "uk-margin-small"
-  }, [_c('label', {
-    staticClass: "uk-form-label h-header"
-  }, [_vm._v("Questions settings")]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto@m"
+  }, [_c('ul', {
+    staticClass: "uk-tab-left",
+    attrs: {
+      "uk-tab": "connect: #settingTabs; animation: uk-animation-fade"
+    }
+  }, [_c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("General info")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("Scoping")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("Properties")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    }
+  }, [_vm._v("Others")])])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row uk-margin-small",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "col-3"
+  }, [_vm._v("\n                    status\n                  ")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "uk-grid-small",
     attrs: {
       "uk-grid": ""
     }
   }, [_c('div', {
-    staticClass: "uk-width-5-5@s uk-flex uk-flex-middle"
+    staticClass: "uk-width-1-5@s uk-flex uk-flex-middle"
   }, [_c('label', [_c('input', {
-    staticClass: "uk-checkbox input-shuffle-questions",
+    staticClass: "uk-checkbox",
     attrs: {
       "type": "checkbox"
     }
@@ -56144,22 +57369,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "margin": "0 0.5em"
     }
-  }, [_vm._v("Shuffle Questions")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "uk-margin uk-grid-small score-section",
-    attrs: {
-      "uk-grid": ""
-    }
-  }, [_c('div', {
-    staticClass: "uk-width-1-5@m uk-flex uk-flex-middle"
-  }, [_c('label', [_vm._v("Questions number allowed to answer:")])]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-expand@m "
+  }, [_vm._v("Send quiz results to")])])]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-2-5@s"
   }, [_c('input', {
-    staticClass: "uk-input uk-form-small input-section-allowed-number",
+    staticClass: "uk-input uk-form-small",
     attrs: {
-      "type": "number",
-      "placeholder": "5"
+      "type": "text",
+      "placeholder": "email@example.com"
     }
-  })])]), _vm._v(" "), _c('div', {
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "uk-width-1-5@m uk-flex uk-flex-middle"
+  }, [_c('label', [_vm._v("Questions number allowed to answer:")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "uk-margin uk-grid-small uk-child-width-auto uk-grid"
   }, [_c('label', [_vm._v("Evaluation:")]), _vm._v(" "), _c('label', [_c('input', {
     staticClass: "uk-radio input-evaluation-auto",
@@ -56176,30 +57400,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "radio1",
       "value": ""
     }
-  }), _vm._v("  Manual  ")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-width-expand"
-  }, [_c('select', {
-    staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Available questions")]), _vm._v(" "), _c('option', [_vm._v("Question title 01")]), _vm._v(" "), _c('option', [_vm._v("Question title 02")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-width-1-4"
-  }, [_c('div', {
-    staticClass: "uk-grid-small",
-    attrs: {
-      "uk-grid": ""
-    }
-  }, [_c('div', {
-    staticClass: "uk-width-1-2"
-  }, [_c('select', {
-    staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Got from")]), _vm._v(" "), _c('option', [_vm._v("Quoted")]), _vm._v(" "), _c('option', [_vm._v("Modified")]), _vm._v(" "), _c('option', [_vm._v("Out of Box")])])]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-1-2"
-  }, [_c('select', {
-    staticClass: "uk-select uk-form-small"
-  }, [_c('option', [_vm._v("Bloom TAX")]), _vm._v(" "), _c('option', [_vm._v("Remember")]), _vm._v(" "), _c('option', [_vm._v("Understanding")]), _vm._v(" "), _c('option', [_vm._v("Applying")]), _vm._v(" "), _c('option', [_vm._v("Analyzing")]), _vm._v(" "), _c('option', [_vm._v("Evaluating")]), _vm._v(" "), _c('option', [_vm._v("Creating")])])])])])
+  }), _vm._v("  Manual  ")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "uk-width-1-4"
@@ -56222,15 +57423,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('select', {
     staticClass: "uk-select uk-form-small"
   }, [_c('option', [_vm._v("Difficulty")]), _vm._v(" "), _c('option', [_vm._v("Very easy")]), _vm._v(" "), _c('option', [_vm._v("Easy")]), _vm._v(" "), _c('option', [_vm._v("Moderate")]), _vm._v(" "), _c('option', [_vm._v("Hard")]), _vm._v(" "), _c('option', [_vm._v("Very hard")])])])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "uk-width-expand"
-  }, [_c('label', [_c('input', {
-    staticClass: "uk-checkbox",
-    attrs: {
-      "type": "checkbox"
-    }
-  })])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "uk-width-expand"

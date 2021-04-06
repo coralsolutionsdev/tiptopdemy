@@ -354,7 +354,7 @@
                                         <ul uk-accordion>
 
                                             @foreach($product->groups as $id => $group)
-                                                <li class="unit">
+                                                <li class="unit {{$id == 0 ? 'uk-open' : ''}}">
                                                     <a class="uk-accordion-title" href="#">
                                                         <span class="text-primary">{{sprintf('%02d', $id+1)}} <span style="margin: 0 2px">|</span></span> <span style="padding: 0 5px">{{$group->title}}</span>
                                                     </a>

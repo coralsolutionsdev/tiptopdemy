@@ -351,7 +351,7 @@
                                         </div>
                                     </div>
                                     <div class="unites" style="padding-top: 10px">
-                                        <ul uk-accordion="collapsible: false">
+                                        <ul uk-accordion>
 
                                             @foreach($product->groups as $id => $group)
                                                 <li class="unit">

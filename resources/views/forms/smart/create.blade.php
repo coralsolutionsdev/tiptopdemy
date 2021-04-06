@@ -9,7 +9,7 @@
             height: 100%;
         }
     </style>
-    <link rel="stylesheet" href="{{asset('themes/general/modules/css/at.css?v=20210406900')}}">
+    <link rel="stylesheet" href="{{asset('themes/general/modules/css/at.css?v=202104071226')}}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -19,6 +19,6 @@
         <smart-form-create current-unit-num="{{$unitNumber}}" current-lesson-num="{{$lessonNumber}}" lesson-slug="{{$lesson->slug}}"></smart-form-create>
     </div>
     @include('partial.scripts._tinyemc')
-    <script src="{{asset('js/app.js?v=20210406900')}}"></script>
+    <script src="{{asset('js/app.js?v=202104071226')}}"></script>
 
 @endsection

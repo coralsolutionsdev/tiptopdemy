@@ -298,7 +298,22 @@
               <div class="uk-padding-small bg-white">
                 <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
                   <div class="uk-width-1-4">
-                    <span class="uk-sortable-handle" uk-icon="icon: table"></span> <span v-html="questionKey+1"></span> | Question Item
+                    <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
+                      <div class="uk-width-auto">
+                        <span class="uk-sortable-handle" uk-icon="icon: table"></span> <span v-html="questionKey+1"></span> |
+                      </div>
+                      <div class="uk-width-expand">
+                        <select class="uk-select uk-form-small" v-model="question.type">
+                          <option value="1" v-html="$t('main.Short answer')"></option>
+                          <option value="2" v-html="$t('main.Open end Answer')"></option>
+                          <option value="3" v-html="$t('main.Single choice')"></option>
+                          <option value="4" v-html="$t('main.Multiple choice')"></option>
+                          <option value="5" v-html="$t('main.Drop menu')"></option>
+                          <option value="6" v-html="$t('main.Fill the blank')"></option>
+                          <option value="7" v-html="$t('main.Fill the blank (drag and drop)')"></option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <div class="uk-width-expand">
                     <select class="uk-select uk-form-small" v-model="question.selectedQuestionItemId">
@@ -307,7 +322,7 @@
                     </select>
                   </div>
                   <div class="uk-width-1-4">
-                    <div class="uk-grid-small  uk-flex uk-flex-middle" uk-grid>
+                    <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
                       <div class="uk-width-expand">
                         Me.
                       </div>
@@ -479,6 +494,7 @@ export default {
             loadingMode:false,
             questionItems:[],
             selectedQuestionItemId:null,
+            type:6,
           }
       );
     },
@@ -514,6 +530,7 @@ export default {
         source:question.source,
         taxonomies_a:question.taxonomies_a,
         uniform:question.uniform,
+        type:question.type,
       };
       axios.post('/manage/store/lesson/'+this.lessonSlug+'/form/smart/get/items', data)
           .then(res => {

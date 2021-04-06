@@ -17270,6 +17270,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -17333,7 +17348,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         uniform: this.defaultQuestion ? this.defaultQuestion.uniform : false,
         loadingMode: false,
         questionItems: [],
-        selectedQuestionItemId: null
+        selectedQuestionItemId: null,
+        type: 6
       });
     },
     addNewGroup: function addNewGroup() {
@@ -17367,7 +17383,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         lesson_status: question.lesson_status,
         source: question.source,
         taxonomies_a: question.taxonomies_a,
-        uniform: question.uniform
+        uniform: question.uniform,
+        type: question.type
       };
       axios.post('/manage/store/lesson/' + this.lessonSlug + '/form/smart/get/items', data).then(function (res) {
         question.loadingMode = false;
@@ -57047,6 +57064,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }, [_c('div', {
         staticClass: "uk-width-1-4"
+      }, [_c('div', {
+        staticClass: "uk-grid-small uk-flex uk-flex-middle",
+        attrs: {
+          "uk-grid": ""
+        }
+      }, [_c('div', {
+        staticClass: "uk-width-auto"
       }, [_c('span', {
         staticClass: "uk-sortable-handle",
         attrs: {
@@ -57056,7 +57080,77 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         domProps: {
           "innerHTML": _vm._s(questionKey + 1)
         }
-      }), _vm._v(" | Question Item\n                ")]), _vm._v(" "), _c('div', {
+      }), _vm._v(" |\n                    ")]), _vm._v(" "), _c('div', {
+        staticClass: "uk-width-expand"
+      }, [_c('select', {
+        directives: [{
+          name: "model",
+          rawName: "v-model",
+          value: (question.type),
+          expression: "question.type"
+        }],
+        staticClass: "uk-select uk-form-small",
+        on: {
+          "change": function($event) {
+            var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+              return o.selected
+            }).map(function(o) {
+              var val = "_value" in o ? o._value : o.value;
+              return val
+            });
+            _vm.$set(question, "type", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+          }
+        }
+      }, [_c('option', {
+        attrs: {
+          "value": "1"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Short answer'))
+        }
+      }), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "2"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Open end Answer'))
+        }
+      }), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "3"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Single choice'))
+        }
+      }), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "4"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Multiple choice'))
+        }
+      }), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "5"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Drop menu'))
+        }
+      }), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "6"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Fill the blank'))
+        }
+      }), _vm._v(" "), _c('option', {
+        attrs: {
+          "value": "7"
+        },
+        domProps: {
+          "innerHTML": _vm._s(_vm.$t('main.Fill the blank (drag and drop)'))
+        }
+      })])])])]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-expand"
       }, [_c('select', {
         directives: [{
@@ -57092,7 +57186,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       })], 2)]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-1-4"
       }, [_c('div', {
-        staticClass: "uk-grid-small  uk-flex uk-flex-middle",
+        staticClass: "uk-grid-small uk-flex uk-flex-middle",
         attrs: {
           "uk-grid": ""
         }

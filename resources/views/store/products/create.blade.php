@@ -345,8 +345,8 @@
                                         <div class="uk-inline">
                                             <button class="uk-button uk-button-primary" type="button" style="border-radius: 50%; padding: 11px 20px"><span uk-icon="icon: plus"></span></button>
                                             <div uk-dropdown style="padding: 10px 10px 0px 10px">
-                                                <div><a href="{{route('store.lessons.create', $product->slug)}}" class="uk-button uk-button-default uk-button-small uk-width-1-1 uk-margin-small">{{__('main.Add new Lesson')}}</a></div>
                                                 <div><a href="{{route('store.groups.create', $product->slug)}}" class="uk-button uk-button-default uk-button-small uk-width-1-1 uk-margin-small">{{__('main.Add new Unit')}}</a></div>
+                                                <div><a href="{{route('store.lessons.create', $product->slug)}}" class="uk-button uk-button-default uk-button-small uk-width-1-1 uk-margin-small">{{__('main.Add new Lesson')}}</a></div>
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <div class="add-group-wrapper">
       <button @click="addNewGroup()" class="uk-button uk-button-secondary" uk-tooltip="Add new group"><span uk-icon="icon: plus; ratio: 1.5"></span>
       </button>
@@ -342,10 +343,10 @@
                   <div class="uk-width-1-4">
                     <div class="uk-grid-small" uk-grid>
                       <div class="uk-width-1-2">
-                        <input class="uk-input uk-form-small" type="text" @keypress="onlyNumber" placeholder="Unit no." v-model="question.unit_num" :class="{'uk-form-success': question.unit_num && question.unit_num <=  currentUnitNum, 'uk-form-danger': question.unit_num && question.unit_num > currentUnitNum}">
+                        <input class="uk-input uk-form-small" type="text" @keypress="onlyNumber" placeholder="Unit no." v-model="question.unit_num" :class="{'uk-form-success': question.unit_num && question.unit_num <=  parseInt(currentUnitNum), 'uk-form-danger': question.unit_num && question.unit_num > parseInt(currentUnitNum)}">
                       </div>
                       <div class="uk-width-1-2">
-                        <input class="uk-input uk-form-small" type="text" @keypress="onlyNumber" placeholder="Lesson no." v-model="question.lesson_num" :class="{'uk-form-success': question.lesson_num && question.lesson_num <=  currentLessonNum, 'uk-form-danger': question.lesson_num && question.lesson_num > currentLessonNum}">
+                        <input class="uk-input uk-form-small" type="text" @keypress="onlyNumber" placeholder="Lesson no." v-model="question.lesson_num" :class="{'uk-form-success': question.lesson_num && question.lesson_num <= parseInt(currentLessonNum), 'uk-form-danger': question.lesson_num && question.lesson_num > parseInt(currentLessonNum)}">
                       </div>
                     </div>
                   </div>
@@ -443,7 +444,7 @@ export default {
     return{
       groups: [],
       settings: {
-        title:'Untitled Quiz',
+        title: 'Unit: '+this.currentUnitNum+' - Lesson: '+this.currentLessonNum+' Quiz',
         description:'',
         position:0,
         score_type:1,

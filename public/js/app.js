@@ -17285,6 +17285,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -17301,7 +17302,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       groups: [],
       settings: {
-        title: 'Untitled Quiz',
+        title: 'Unit: ' + this.currentUnitNum + ' - Lesson: ' + this.currentLessonNum + ' Quiz',
         description: '',
         position: 0,
         score_type: 1,
@@ -57240,7 +57241,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }],
         staticClass: "uk-input uk-form-small",
         class: {
-          'uk-form-success': question.unit_num && question.unit_num <= _vm.currentUnitNum, 'uk-form-danger': question.unit_num && question.unit_num > _vm.currentUnitNum
+          'uk-form-success': question.unit_num && question.unit_num <= parseInt(_vm.currentUnitNum), 'uk-form-danger': question.unit_num && question.unit_num > parseInt(_vm.currentUnitNum)
         },
         attrs: {
           "type": "text",
@@ -57267,7 +57268,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }],
         staticClass: "uk-input uk-form-small",
         class: {
-          'uk-form-success': question.lesson_num && question.lesson_num <= _vm.currentLessonNum, 'uk-form-danger': question.lesson_num && question.lesson_num > _vm.currentLessonNum
+          'uk-form-success': question.lesson_num && question.lesson_num <= parseInt(_vm.currentLessonNum), 'uk-form-danger': question.lesson_num && question.lesson_num > parseInt(_vm.currentLessonNum)
         },
         attrs: {
           "type": "text",

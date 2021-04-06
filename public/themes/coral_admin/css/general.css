@@ -541,6 +541,16 @@ input[type=checkbox].toogle-switch:checked::after{
 .resource-item-control, .media-item-control{
     position: absolute; padding: 5px; border-radius: 0 0 3px 0; z-index: 10; margin-top: -2px;
 }
+.unites .uk-accordion-title{
+    background-color: #F3F5F9;
+    padding: 15px;
+    font-size: 14px;
+}
+.unites .unit{
+    border-radius: 5px;
+    overflow: hidden;
+;
+}
 /*File upload*/
 
 .on-move{

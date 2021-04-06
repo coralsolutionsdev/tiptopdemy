@@ -216,8 +216,13 @@
           </div>
         </div>
       </div>
-
-      <div v-if="!settingTab" v-for="(group, key) in groups">
+      <!--Groups-->
+      <draggable
+          :list="groups"
+          handle=".uk-sortable-handle"
+          @start="handleDragStart()"
+      >
+      <div class="uk-margin-small" v-if="!settingTab" v-for="(group, key) in groups">
         <div class="uk-card uk-card-default uk-card-body uk-padding-small uk-secondary-bg">
 
           <div class="uk-grid-collapse uk-text-center" uk-grid>
@@ -284,11 +289,16 @@
 
           <!--Questions-->
           <div>
-            <div class="group-question" v-for="(question, questionKey) in group.items">
+            <draggable
+                :list="group.items"
+                handle=".uk-sortable-handle"
+                class="list-group" group="people"
+            >
+              <div class="group-question" v-for="(question, questionKey) in group.items">
               <div class="uk-padding-small bg-white">
                 <div class="uk-grid-small uk-flex uk-flex-middle" uk-grid>
                   <div class="uk-width-1-4">
-                    <span uk-icon="icon: table"></span> <span v-html="questionKey+1"></span> | Question Item
+                    <span class="uk-sortable-handle" uk-icon="icon: table"></span> <span v-html="questionKey+1"></span> | Question Item
                   </div>
                   <div class="uk-width-expand">
                     <select class="uk-select uk-form-small" v-model="question.selectedQuestionItemId">
@@ -370,7 +380,7 @@
                         <label><input class="uk-checkbox" type="checkbox" v-model="question.uniform"></label>
                       </div>
                       <div class="uk-width-expand">
-                        <label><input class="uk-radio" type="radio" name="radio2"></label>
+                        <label><input class="uk-radio" type="radio" name="setAsDefault" @change="setQuestionAsDefault(question)"></label>
                       </div>
                       <div class="uk-width-auto">
                         <button class="uk-button uk-button-primary uk-button-small" style="min-width: 75px" @click="runQuestionFilters(question)" :disabled="question.loadingMode">
@@ -387,12 +397,13 @@
 
               </div>
             </div>
-
+            </draggable>
           </div>
 
         </div>
       </div>
-
+      </draggable>
+      <!--End of Groups-->
       <div v-if="groups.length == 0 && !settingTab" class="uk-text-center uk-padding">
         <img class="gray-folder" data-src="/storage/assets/file_icons/folder.png" width="90" alt="" uk-img>
         <p class="uk-text-muted" v-html="'There is no available groups yet, click on the + icon to add new group'"></p>
@@ -402,8 +413,12 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 export default {
   name: "Create",
+  components: {
+    draggable,
+  },
   props: {
     currentUnitNum: {type:String},
     currentLessonNum: {type:String},
@@ -434,6 +449,7 @@ export default {
       generatingMode:false,
       forms:[],
       showForms:false,
+      defaultQuestion:null,
     }
   },
   created() {
@@ -453,13 +469,13 @@ export default {
       group.items.push(
           {
             id:newId,
-            unit_num:null,
-            unit_status:true,
-            lesson_num:null,
+            unit_num: this.defaultQuestion ? this.defaultQuestion.unit_num : null,
+            unit_status: true,
+            lesson_num: this.defaultQuestion ? this.defaultQuestion.lesson_num : null,
             lesson_status:true,
-            source:'all',
-            taxonomies_a:'all',
-            uniform:false,
+            source: this.defaultQuestion ? this.defaultQuestion.source : 'all',
+            taxonomies_a: this.defaultQuestion ? this.defaultQuestion.taxonomies_a : 'all',
+            uniform: this.defaultQuestion ? this.defaultQuestion.uniform : false,
             loadingMode:false,
             questionItems:[],
             selectedQuestionItemId:null,
@@ -522,7 +538,6 @@ export default {
       };
       axios.post('/manage/store/lesson/'+this.lessonSlug+'/form/smart/store', data)
           .then(res => {
-            console.log(res.data)
             this.generatingMode = false;
             this.forms.push(res.data);
             this.showForms = true;
@@ -551,6 +566,9 @@ export default {
       }
 
     },
+    setQuestionAsDefault(question){
+      this.defaultQuestion = question;
+    },
     scrollToEndOfPage(){
       $('body, html').animate({
         scrollTop: $('.add-group-wrapper').offset().top
@@ -570,6 +588,12 @@ export default {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
       return text;
     },
+    // dragging methods
+    handleDragStart(){
+      this.groups.forEach((group, key) =>{
+        group.editMode = false;
+      });
+    }
   }
 }
 </script>

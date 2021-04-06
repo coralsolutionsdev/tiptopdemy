@@ -176,7 +176,3 @@
         </div>
     </div>
 </div>
-
-
-shuffle_questions
-shuffle_groups

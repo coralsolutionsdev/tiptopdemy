@@ -302,7 +302,7 @@ class Form extends Model
                 }
                 $newFormItem->options = $newItemOptions;
                 $newFormItem->save();
-            }elseif ($itemType == FormItem::TYPE_FILL_THE_BLANK || $itemType == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+            }elseif ($itemType == FormItem::TYPE_FILL_THE_BLANK || $itemType == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $itemType == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                 $blank = isset($input['item_blanks']) ? $input['item_blanks'][$id] : null;
                 $blankOptions = isset($input['item_blank_option']) && isset($input['item_blank_option'][$id]) ? $input['item_blank_option'][$id] : null;
                 $blankOptionsMarks = isset($input['item_blank_option_mark']) && isset($input['item_blank_option_mark'][$id]) ? $input['item_blank_option_mark'][$id] : null;
@@ -379,7 +379,7 @@ class Form extends Model
                 $newFormItem = $item->replicate();
                 $newFormItem->push();
                 $newFormItem->form_id = $newForm->id;
-                if ($newFormItem->type == FormItem::TYPE_FILL_THE_BLANK || $newFormItem->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                if ($newFormItem->type == FormItem::TYPE_FILL_THE_BLANK || $newFormItem->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $newFormItem->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                     $blank = $item->options['paragraph'];
                     $newBlank = str_replace("item_blank_option[".$item->id."]", "item_blank_option[".$newFormItem->id."]", $blank);
                     $newBlank2 = str_replace("item_blank_option_mark[".$item->id."]", "item_blank_option_mark[".$newFormItem->id."]", $newBlank);
@@ -574,7 +574,7 @@ class Form extends Model
 
                             }
 
-                        } elseif (in_array($itemType, [FormItem::TYPE_FILL_THE_BLANK, FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP])){
+                        } elseif (in_array($itemType, [FormItem::TYPE_FILL_THE_BLANK, FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP, FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE])){
 
                             if (!empty($itemInputAnswer)){ // check if item have answers
                                 $itemScore = $formItem->score; // default evaluation score

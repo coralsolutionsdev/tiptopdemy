@@ -312,6 +312,7 @@
                           <option value="5" v-html="$t('main.Drop menu')"></option>
                           <option value="6" v-html="$t('main.Fill the blank')"></option>
                           <option value="7" v-html="$t('main.Fill the blank (drag and drop)')"></option>
+                          <option value="8" v-html="$t('main.Fill the blank (re arrange)')"></option>
                         </select>
                       </div>
                     </div>

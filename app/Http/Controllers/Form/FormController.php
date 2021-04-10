@@ -108,10 +108,11 @@ class FormController extends Controller
                 $groupDraggableBlanks = [];
                 foreach ($items as $key => $item){
                     $blanksArray = array();
-                    if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                    if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                         $item->blank_paragraph = $item->getFillableBlank($item->id);
                     }
-                    if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+
+                    if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                         $blanks = !empty($item->options) && !empty($item->options['paragraph_blanks']) ? $item->options['paragraph_blanks'] : array();
                         foreach ($blanks as $blank){
                             foreach ($blank['items'] as $blankItem){
@@ -123,12 +124,14 @@ class FormController extends Controller
                         $blanksArray = $array2;
 
                         // group draggable blanks
-                        foreach ($blanksArray as $draggableBlankItem) {
-                            $groupDraggableBlanks[] = [
-                                'id' => rand(0,999),
-                                'value' => $draggableBlankItem,
-                                'question_id' => $item->id,
-                            ];
+                        if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                            foreach ($blanksArray as $draggableBlankItem) {
+                                $groupDraggableBlanks[] = [
+                                    'id' => rand(0,999),
+                                    'value' => $draggableBlankItem,
+                                    'question_id' => $item->id,
+                                ];
+                            }
                         }
 
                     }

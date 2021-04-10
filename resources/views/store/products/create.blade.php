@@ -388,8 +388,13 @@
                                                                             <td class="uk-table-expand align-middle">{{$item->title}}</td>
                                                                             <td class="uk-width-small align-middle">{{$item->getType()}}</td>
                                                                             <td class="uk-width-small">
-                                                                                <div class="action_btn text-right" style="width: 200px">
+                                                                                <div class="action_btn text-right" style="width: 400px">
                                                                                     <ul>
+                                                                                        <li>
+                                                                                            <a href="{{route('store.get.form.templates', $item->slug)}}" class="btn btn-light">
+                                                                                               {{__('main.Add Quiz')}}
+                                                                                            </a>
+                                                                                        </li>
                                                                                         <li class="">
                                                                                             <a target="_blank" href="{{route('store.lesson.show', [$product->slug, $item->slug])}}" class="btn btn-light"><i class="fas fa-eye" aria-hidden="true"></i></a>
                                                                                         </li>

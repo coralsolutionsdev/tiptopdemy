@@ -376,7 +376,7 @@
                   <div class="uk-width-1-4">
                     <div class="uk-grid-small" uk-grid>
                       <div class="uk-width-1-2">
-                        <input class="uk-input uk-form-small" type="text" placeholder="Tax-2" disabled >
+                        <Select2 v-model="question.taxonomies_b" :options="tags" :settings="{ placeholder: 'Tax-2' }" @change="myChangeEvent($event)" @select="mySelectEvent($event)" />
                       </div>
                       <div class="uk-width-1-2">
                         <select class="uk-select uk-form-small">
@@ -428,12 +428,15 @@
   </div>
 </template>
 
+
 <script>
 import draggable from 'vuedraggable'
+import Select2 from 'v-select2-component';
 export default {
   name: "Create",
   components: {
     draggable,
+    Select2,
   },
   props: {
     currentUnitNum: {type:String},
@@ -466,15 +469,32 @@ export default {
       forms:[],
       showForms:false,
       defaultQuestion:null,
+      tags:[],
+      myOptions: [] // or [{id: key, text: value}, {id: key, text: value}]
+
     }
   },
   created() {
-
+    this.fetchItem();
   },
   mounted() {
     this.newGroup();
   },
   methods:{
+    fetchItem(){
+      axios.get('/manage/store/lesson/'+this.lessonSlug+'/form/smart/get/info', {
+        params: {
+          // id: 12345
+        }
+      }).then(res => {
+        var array = [];
+        $.each(res.data.tags, function (index, value){
+          array.push(value)
+        });
+        this.tags = array;
+      });
+
+    },
     openGroupSettings(key, group){
       group.editMode = !group.editMode;
       addMinyTinyEditor('.content-editor-'+key);
@@ -491,6 +511,7 @@ export default {
             lesson_status:true,
             source: this.defaultQuestion ? this.defaultQuestion.source : 'all',
             taxonomies_a: this.defaultQuestion ? this.defaultQuestion.taxonomies_a : 'all',
+            taxonomies_b: this.defaultQuestion ? this.defaultQuestion.taxonomies_b : [],
             uniform: this.defaultQuestion ? this.defaultQuestion.uniform : false,
             loadingMode:false,
             questionItems:[],
@@ -530,6 +551,7 @@ export default {
         lesson_status:question.lesson_status,
         source:question.source,
         taxonomies_a:question.taxonomies_a,
+        taxonomies_b:question.taxonomies_b,
         uniform:question.uniform,
         type:question.type,
       };
@@ -541,6 +563,13 @@ export default {
             var randomQuestion =  question.questionItems[Math.floor(Math.random()*question.questionItems.length)]
             if (question.questionItems.length > 0){
               question.selectedQuestionItemId = randomQuestion.id;
+            } else {
+              this.$Notify({
+                title: 'No questions',
+                message: 'seems that there are no questions matching your search, try with another filter options.',
+                type: 'warning',
+                duration: 4000
+              });
             }
           })
           .catch(error => {
@@ -611,7 +640,14 @@ export default {
       this.groups.forEach((group, key) =>{
         group.editMode = false;
       });
-    }
+    },
+    // select 2
+    myChangeEvent(val){
+      // console.log(val);
+    },
+    mySelectEvent({id, text}){
+      // console.log({id, text})
+    },
   }
 }
 </script>
@@ -666,4 +702,5 @@ export default {
 .submit-form{
   min-width: 150px;
 }
+
 </style>

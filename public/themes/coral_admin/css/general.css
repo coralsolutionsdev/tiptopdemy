@@ -324,7 +324,13 @@ input.form-control:focus, textarea.form-control:focus, select.form-control:focus
 .item-review:hover, .item-pre-review:hover{
     cursor: not-allowed !important;
 }
-
+/*select2*/
+.select2-container--default .select2-selection--single {
+    width: 100% !important;
+    border: 1px solid #E5E5E5 !important;
+    border-radius: 0 !important;
+    min-height: 30px !important;
+}
 /*Form builder*/
 .question-type{
     color: #666666;

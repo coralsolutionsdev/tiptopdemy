@@ -753,9 +753,9 @@
 
         // addMinyTinyEditor('.item-content-editor-'+itemId);
 
-        // item tags
         var itemTags = item.find('.input-tags');
-        itemTags.attr('name', 'item_placeholder['+itemId+'][]');
+        item.find('.input-taxonomy-b').attr('name', 'item_taxonomy_b['+itemId+'][]');
+        // itemTags.attr('name', 'item_placeholder['+itemId+'][]');
         itemTags.select2({
             tags:true, // change to false to disable add new tags
         });
@@ -877,6 +877,35 @@
                 });
 
             }
+            // update tag_taxonomies
+            var tagTaxonomies = formItem.tag_taxonomies;
+            if (tagTaxonomies != null){
+                var newDataArray = [];
+                var dataEntry = null;
+                var selected = false;
+                var itemOptions = item.find('.input-taxonomy-b').find('option');
+                item.find('.input-taxonomy-b').html('');
+                $.each(itemOptions, function (key, option){
+                    selected = false;
+                    $.each(tagTaxonomies, function (tagKey, tagIndex){
+                        if ($(option).val() == tagIndex){
+                            selected = true;
+                        }
+                    });
+                    dataEntry = {
+                        id: $(option).val(),
+                        text: $(option).val(),
+                        "selected": selected
+                    }
+                    newDataArray.push(dataEntry);
+                });
+
+                item.find('.input-taxonomy-b').select2({
+                    data: newDataArray,
+                    tags:true,
+                });
+            }
+
 
             item.find('#itemOptionList-'+itemId).html('');
             item.find('.item-review-options').html('');

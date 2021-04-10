@@ -29177,8 +29177,8 @@ var messages = {
       // do something here...
       e.preventDefault();
       app.$Notify({
-        title: 'Not allowed!',
-        message: 'seems that there are no questions matching your search, try with another filter options.',
+        title: 'Action is not allowed!',
+        message: 'Oops! seems that right click is not allowed in this page.',
         type: 'warning',
         duration: 4000
       });

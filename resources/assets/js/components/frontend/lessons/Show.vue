@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="uk-grid-small" uk-grid @contextmenu="contextmenuHandler($event)">
+    <div class="uk-grid-small" uk-grid>
       <div class="uk-width-1-4 uk-visible@m">
         <div v-if="(groups && groups.length != 0) || (product && product.has_purchased)" class="uk-card uk-card-default uk-card-body uk-padding-remove">
           <div v-if="product && !product.has_purchased">
@@ -237,6 +237,19 @@ name: "Show",
     }
   },
   created() {
+    const app = this;
+    window.addEventListener('contextmenu', function (e) {
+      // do something here...
+      e.preventDefault();
+      app.$Notify({
+        title: 'Not allowed!',
+        message: 'seems that there are no questions matching your search, try with another filter options.',
+        type: 'warning',
+        duration: 4000
+      });
+    }, false);
+
+
     this.lang = document.documentElement.lang.substr(0, 2);
     this.fetchItem();
   },
@@ -310,19 +323,9 @@ name: "Show",
     pleasePurchase(){
       this.$Notify({
         title: messages[this.lang].message.please_purchase,
-        message: messages[this.lang].message.please_purchase_message,gew
+        message: messages[this.lang].message.please_purchase_message,
         type: 'warning',
         duration: 5000
-      });
-    },
-    contextmenuHandler(e) {
-      //do stuff
-      e.preventDefault();
-      this.$Notify({
-        title: 'Action not allowed!',
-        message: 'Right click is not allowed in this page.',
-        type: 'warning',
-        duration: 4000
       });
     },
   },

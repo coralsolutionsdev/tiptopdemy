@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="uk-grid-small" uk-grid>
+    <div class="uk-grid-small" uk-grid @contextmenu="contextmenuHandler($event)">
       <div class="uk-width-1-4 uk-visible@m">
         <div v-if="(groups && groups.length != 0) || (product && product.has_purchased)" class="uk-card uk-card-default uk-card-body uk-padding-remove">
           <div v-if="product && !product.has_purchased">
@@ -314,7 +314,17 @@ name: "Show",
         type: 'warning',
         duration: 5000
       });
-    }
+    },
+    contextmenuHandler(e) {
+      //do stuff
+      e.preventDefault();
+      this.$Notify({
+        title: 'Action not allowed!',
+        message: 'Right click is not allowed in this page.',
+        type: 'warning',
+        duration: 4000
+      });
+    },
   },
   components: {
     memorize

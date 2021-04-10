@@ -13,6 +13,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Spatie\Tags\Tag;
 use Vinkla\Hashids\Facades\Hashids;
 
 class FormController extends Controller
@@ -122,7 +123,8 @@ class FormController extends Controller
         $product =  $lesson->product;
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         $formProperties = $form->properties;
-        return view('store.forms.create', compact('page_title', 'product', 'lesson', 'form', 'categories', 'formProperties'));
+        $tags = Tag::getWithType('form_taxonomy')->pluck('name', 'name');
+        return view('store.forms.create', compact('page_title', 'product', 'lesson', 'form', 'categories', 'formProperties', 'tags'));
     }
 
     /**
@@ -212,6 +214,7 @@ class FormController extends Controller
 
     function smartGetItems(Request $request, Lesson $lesson){
         $input = $request->all();
+        $message = 'no message';
         $product = $lesson->product;
         $productGroups = $product->groups;
         $lessonUnit = $lesson->groups->first();
@@ -254,13 +257,14 @@ class FormController extends Controller
 //                            ];
                             $lessonForms = $groupLesson->getAvailableForms();
                             foreach ($lessonForms as $lessonForm){
+
                                 if ($lessonForm){
                                     foreach ($lessonForm->items as $formItem){
                                         if ($formItem->type == $input['type']){
                                             $sourceFilterStatus = false;
                                             $taxAFilterStatus =  false;
+                                            $taxBFilterStatus =  false;
                                             $uniformFilterStatus =  false;
-
                                             if (!is_null($input['source'])){
                                                 // Source filter
                                                 if ($input['source'] == 'all'){
@@ -288,6 +292,17 @@ class FormController extends Controller
                                             }
                                             // Taxonomies_a filter end
 
+                                            // Taxonomies_b filter end
+                                            if (!empty($input['taxonomies_b'])){
+                                                $message = ' not empty';
+                                                if ($formItem->isTaggedWith($input['taxonomies_b'])){
+                                                    $taxBFilterStatus =  true;
+                                                }
+                                            }else{
+                                                $taxBFilterStatus =  true;
+                                            }
+                                            // Taxonomies_b filter end
+
                                             // Uniform filter
                                             if (!is_null($input['uniform'])){
                                                 if ($input['uniform'] == false){
@@ -302,11 +317,7 @@ class FormController extends Controller
                                             }
                                             // Uniform filter end
 
-
-
-
-
-                                            if ($sourceFilterStatus && $taxAFilterStatus && $uniformFilterStatus){
+                                            if ($sourceFilterStatus && $taxAFilterStatus && $uniformFilterStatus && $taxBFilterStatus){
 
                                                 $title = $formItem->title;
                                                 if ($formItem->type == FormItem::TYPE_FILL_THE_BLANK || $formItem->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
@@ -334,7 +345,6 @@ class FormController extends Controller
 
         }
         return response($questionsArray, 200);
-//        return response($ddArray, 200);
     }
 
     /**
@@ -458,6 +468,10 @@ class FormController extends Controller
                             $newFormItem->position = $position;
                             $newFormItem->save();
 
+                            // update tags
+                            $tags = !empty($newFormItem['properties']['properties']) ? $newFormItem['properties']['properties'] : array();
+                            $newFormItem->syncTagsWithType($tags, 'form_taxonomy');
+
                             // update section score
                             if (empty($sectionAllowedQuestionsToAnswer) || $sectionAllowedQuestionsToAnswer >= $sectionItemCount){
                                 $newFormSection->score = $newFormSection->score + $newFormItem->score;
@@ -481,5 +495,14 @@ class FormController extends Controller
 
 
         return response($formArray, 200);
+    }
+
+    function smartGetInfo(Request $request, Lesson $lesson){
+        $tags = Tag::getWithType('form_taxonomy')->pluck('name', 'name');
+
+        $array = [
+            'tags' => $tags,
+        ];
+        return response($array, 200);
     }
 }

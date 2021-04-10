@@ -245,6 +245,24 @@ class FormItem extends Model
         return $item;
     }
 
+    public function getTags()
+    {
+        $spatie_tags = $this->tagsWithType('form_taxonomy');
+        $tags = array();
+        foreach($spatie_tags as $tag) {
+            $tags[$tag->name] = $tag->translate('name');
+        }
+        return $tags;
+    }
+    public function isTaggedWith($isTagged){
+        $tags = $this->getTags();
+        foreach ($tags as $tag){
+            if ($tag == $isTagged){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public function users()

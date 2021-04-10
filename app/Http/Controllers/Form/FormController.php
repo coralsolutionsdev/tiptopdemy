@@ -173,6 +173,10 @@ class FormController extends Controller
      */
     function getItems(Form $form){
         $items = $form->items;
+        $items->map(function ($item){
+            $tagArray = $item->getTags();
+            $item->tag_taxonomies = $tagArray;
+        });
         return response($items, 200);
     }
 }

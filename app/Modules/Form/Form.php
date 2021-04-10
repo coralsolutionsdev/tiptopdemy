@@ -231,6 +231,7 @@ class Form extends Model
             $newItem['status'] = 1;
             $newItem['creator_id'] = getAuthUser()->id;
             $newItem['editor_id'] = getAuthUser()->id;
+            $tags = isset($input['item_taxonomy_b'][$id]) ? $input['item_taxonomy_b'][$id] : array();
             // properties
             $properties = [ // TODO: update these
                 'width' => isset($input['item_width'][$id]) ? $input['item_width'][$id] : null,
@@ -244,13 +245,14 @@ class Form extends Model
                 'shuffle_options' => isset($input['item_shuffle_options'][$id]) ? 1 : 0,
                 'shuffle_questions' => isset($input['item_shuffle_questions'][$id]) ? 1 : 0,
                 'uniform' => isset($input['item_uniform'][$id]) ? 1 : 0,
-                'tags' => null,
+                'tags' => $tags,
                 'allowed_number' => isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null,
                 'evaluation' => isset($input['item_evaluation'][$id]) ? $input['item_evaluation'][$id] : 1,
                 'taxonomies_a' => isset($input['item_taxonomy'][$id]) ? $input['item_taxonomy'][$id] : array(),
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;
             $newItem['properties'] = $properties;
+
 
             // create new or update  form item
             if ($updateType == self::UPDATE_EXISTING_VERSION){
@@ -343,6 +345,8 @@ class Form extends Model
                 $currentSectionScore = $currentSectionScore  + $newFormItem->score;
                 $lastSectionItem->save();
             }
+            // update tags
+            $newFormItem->syncTagsWithType($tags, 'form_taxonomy');
         } // end of foreach
         return $form;
     }
@@ -388,6 +392,9 @@ class Form extends Model
                     $newFormItem->options = $newItemBlanks;
                 }
                 $newFormItem->save();
+                // update tags
+                $tags = !empty($newFormItem['properties']['properties']) ? $newFormItem['properties']['properties'] : array();
+                $newFormItem->syncTagsWithType($tags, 'form_taxonomy');
             }
         }
         // update Category

@@ -116,9 +116,9 @@
                                     <label><input class="uk-radio input-evaluation-auto" type="radio" name="radio1" value="{{\App\Modules\Form\FormResponse::EVALUATION_TYPE_AUTO}}" checked>  تلقائي  </label>
                                     <label><input class="uk-radio input-evaluation-manual" type="radio" name="radio1" value="{{\App\Modules\Form\FormResponse::EVALUATION_TYPE_MANUAL}}">  يدوي  </label>
                                 </div>
-                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                    <label for="">Topic:</label> {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
-                                </div>
+{{--                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">--}}
+{{--                                    <label for="">Topic:</label> {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}--}}
+{{--                                </div>--}}
                             </div>
                         </li>
                         <li class="uk-placeholder item-config-section">
@@ -369,7 +369,11 @@
                                     <label>Taxonomy 2</label>
                                 </div>
                                 <div class="uk-width-expand@m">
-                                    {!! Form::select('tags[]', [], null, ['class' => 'form-control select2 input-tags', 'multiple' => 'multiple', 'data-placeholder' => 'Create any tag', 'style' => 'width:100%;']) !!}
+                                    <select class="input-tags uk-select select2 input-taxonomy-b" name="" multiple="multiple" style="width: 100%">
+                                        @foreach($tags as $tag)
+                                        <option value="{{$tag}}">{{$tag}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </li>

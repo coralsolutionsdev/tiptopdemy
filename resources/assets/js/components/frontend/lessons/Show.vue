@@ -310,7 +310,7 @@ name: "Show",
     pleasePurchase(){
       this.$Notify({
         title: messages[this.lang].message.please_purchase,
-        message: messages[this.lang].message.please_purchase_message,
+        message: messages[this.lang].message.please_purchase_message,gew
         type: 'warning',
         duration: 5000
       });

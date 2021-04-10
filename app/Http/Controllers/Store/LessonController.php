@@ -318,8 +318,11 @@ class LessonController extends Controller
     public function updateContent(Request $request, Product $product, Lesson $lesson): RedirectResponse
     {
         $input = $request->only(['content']);
+        $search = 'controls="controls"';
+        $replace = 'controls controlsList="nodownload"';
+        $html = str_replace($search, $replace, $input['content']);
         $contentArr = [
-            'html' => $input['content'],
+            'html' => $html,
             'editor_version' => 1.00,
         ];
         $lesson->content = $contentArr;

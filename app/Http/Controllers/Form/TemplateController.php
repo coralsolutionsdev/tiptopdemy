@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Form\Form;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Tags\Tag;
 
 class TemplateController extends Controller
 {
@@ -46,7 +47,8 @@ class TemplateController extends Controller
         $page_title =  'Forms Templates';
         $breadcrumb =  $this->breadcrumb;
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
-        return view('forms.templates.create', compact('page_title', 'breadcrumb', 'categories'));
+        $tags = Tag::getWithType('form_taxonomy')->pluck('name', 'name');
+        return view('forms.templates.create', compact('page_title', 'breadcrumb', 'categories', 'tags'));
 
     }
 
@@ -90,7 +92,8 @@ class TemplateController extends Controller
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         $selectedCategories = $form->categories()->pluck('id')->toArray();
         $formProperties = $form->properties;
-        return view('forms.templates.create', compact('page_title', 'breadcrumb', 'categories', 'selectedCategories', 'form', 'formProperties'));
+        $tags = Tag::getWithType('form_taxonomy')->pluck('name', 'name');
+        return view('forms.templates.create', compact('page_title', 'breadcrumb', 'categories', 'selectedCategories', 'form', 'formProperties', 'tags'));
     }
 
     /**

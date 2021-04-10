@@ -55,7 +55,8 @@ class FormController extends Controller
         $product =  $lesson->product;
         $ownerId = $lesson->id;
         $ownerType = Form::OWNER_TYPE_LESSON;
-        return view('store.forms.create', compact('page_title', 'breadcrumb', 'product', 'lesson', 'ownerId', 'ownerId', 'ownerType'));
+        $tags = Tag::getWithType('form_taxonomy')->pluck('name', 'name');
+        return view('store.forms.create', compact('page_title', 'breadcrumb', 'product', 'lesson', 'ownerId', 'ownerId', 'ownerType', 'tags'));
     }
 
     /**

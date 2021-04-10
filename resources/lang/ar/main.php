@@ -124,6 +124,8 @@
         'Placeholder' => 'النص التوضيحي',
         'Fill the blank' => 'إملأ الفراغاات',
         'Fill the blank (drag and drop)' => 'إملأ الفراغاات (سحب و افلات)',
+        'Fill the blank (re arrange)' => 'أعد ترتيب الفراغات',
+        'Re-Arrange the question\'s blanks' => 'أعد ترتيب فراغات السؤال',
         'Advanced fill the blank' => 'إملأ الفراغاات المتقدم',
         'Fill the blank question' => 'إملاء الفراغات في النص',
         'Close' => 'إغلاق',

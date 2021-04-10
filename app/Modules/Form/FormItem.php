@@ -59,6 +59,7 @@ class FormItem extends Model
     const TYPE_DROP_DOWN = 5;
     const TYPE_FILL_THE_BLANK = 6;
     const TYPE_FILL_THE_BLANK_DRAG_AND_DROP = 7;
+    const TYPE_FILL_THE_BLANK_RE_ARRANGE = 8;
     const TYPE_MEMORIZE_TERM = 20;
     const TYPE_MEMORIZE_TERM_TRANSLATE_A = 21;
     const TYPE_MEMORIZE_MEDIA_IMAGE = 30;
@@ -111,7 +112,7 @@ class FormItem extends Model
                 $search = '#\<tag\>(.+?)\<\/tag\>#s';
                 $replace = ' <span class="item-'.$id.'-paragraph-blank"><input class="input-blank" name="item_answer['.$id.'][]" type="text"></span> ';
                 return preg_replace($search,$replace,$paragraph);
-            } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+            } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $this->type == self::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                 $search = '#\<tagdraggableblank\>(.+?)\<\/tagdraggableblank\>#s';
                 $replace = ' <div class="item-'.$id.'-paragraph-blank droppable-blank" ondragover="getHoveredId(this)"></div> ';
                 return preg_replace($search,$replace,$paragraph);
@@ -121,7 +122,7 @@ class FormItem extends Model
                 $search = '#\<tag\>(.+?)\<\/tag\>#s';
                 $replace = ' _____ ';
                 return preg_replace($search,$replace,$paragraph);
-            } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+            } elseif ($this->type == self::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $this->type == self::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                 $search = '#\<tagdraggableblank\>(.+?)\<\/tagdraggableblank\>#s';
                 $replace = ' _____ ';
                 return preg_replace($search,$replace,$paragraph);

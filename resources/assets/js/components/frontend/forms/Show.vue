@@ -55,7 +55,7 @@
                     </div>
                     <!---->
                     <div :class="form.display_type == 0 ? 'uk-grid-collapse' : 'uk-grid-small'" uk-grid>
-                      <div class="blanks-row uk-margin-small">
+                      <div class="blanks-row uk-margin-small" v-if="group.draggable_blanks.length > 0">
                         <!--draggable blanks-->
                         <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in group.draggable_blanks"
                              v-html="draggableBlank.value"
@@ -64,9 +64,6 @@
                              @click="insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)"
                         >
                         </div>
-<!--                        <div class="blank-word uk-box-shadow-hover-medium" :class="{'dropped-blank':isDropped(group, groupQuestions, blank)}" v-for="(blank, blankKey) in groupQuestions.blanks" v-html="blank"-->
-<!--                             @click="insertInNextBlank(group, groupQuestions, blank)" draggable @dragstart='startDrag(groupQuestions, blank, blankKey)'>-->
-<!--                        </div>-->
                       </div>
                       <!--questions-->
                       <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave }" style="padding: 4px">
@@ -103,8 +100,22 @@
                                 <div class="drop-zone"
                                      @drop.prevent="onDrop(group, question)"
                                      @dragover.prevent>
-                                  <div  class="drop-zone-content" v-html="question.blank_paragraph"></div>
-
+                                  <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
+                                </div>
+                              </div>
+                              <div v-else-if="question.type == 8">
+                                <!--draggable blanks-->
+                                <div style="display: inline-block" class="drop-zone"
+                                     @drop.prevent="onDrop(group, question)"
+                                     @dragover.prevent>
+                                  <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
+                                </div>
+                                <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in question.blanks"
+                                     v-html="draggableBlank"
+                                     :class="{'dropped-blank':isDropped(group, draggableBlank)}"
+                                     draggable @dragstart='startDrag(question.id, draggableBlank, draggableBlankKey)'
+                                     @click="insertInNextBlank(group, question.id, draggableBlank, false)"
+                                >
                                 </div>
                               </div>
                             </div>
@@ -314,7 +325,7 @@ name: "Show",
         this.form = res.data;
         this.direction = this.form.direction;
         this.groups = this.form.grouped_questions;
-        // console.log(this.groups);
+        console.log(this.groups);
         this.groupsCount = this.groups.length;
         if(this.groupsCount > 0){
           this.groupsCount = this.groupsCount - 1;
@@ -450,8 +461,12 @@ name: "Show",
       this.removeBlank();
       this.refreshDroppedBlanksArray(group, blankDataKey);
     },
-    insertInNextBlank(group, questionId, blank){
+    insertInNextBlank(group, questionId, blank, inGroup = true){
       var droppableBlanks = $('#group-'+group.id).find('.droppable-blank');
+      if (!inGroup){
+        droppableBlanks = $('#question-'+questionId).find('.droppable-blank');
+      }
+      console.log(questionId);
       var nextDroppableBlank = null;
       $.each( droppableBlanks, function( key, droppableBlankItem ) {
         if ($(droppableBlankItem).html() == ''){ // blank item

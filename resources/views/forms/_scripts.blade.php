@@ -11,6 +11,7 @@
     var typeDropDown = '{{\App\Modules\Form\FormItem::TYPE_DROP_DOWN}}';
     var typeFillTheBlank = '{{\App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK}}';
     var typeFillTheBlankDragAndDrop = '{{\App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP}}';
+    var typeFillTheBlankReArrange = '{{\App\Modules\Form\FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE}}';
 
     var multiOptionsArray = [parseInt(typeSingleChoice), parseInt(typeMultiChoice), parseInt(typeDropDown),  parseInt(typeShortAnswer)]
 
@@ -24,6 +25,7 @@
         '{{__('main.Drop menu')}}',
         '{{__('main.Fill the blank')}}',
         '{{__('main.Fill the blank (drag and drop)')}}',
+        '{{__('main.Fill the blank (re arrange)')}}',
 
     ];
 
@@ -175,7 +177,7 @@
                 '</div>';
             item.find('.item-review-content').html(review);
             pasteAsPlainText();
-        }else if(itemType == typeFillTheBlankDragAndDrop){
+        }else if(itemType == typeFillTheBlankDragAndDrop || itemType == typeFillTheBlankReArrange){
             var blankParagraph = item.find('.fill-the-blank-div').html();
             // console.log(item.find('.blank_item').length);
             var blanks = item.find('.editable-div').find('.blank-item-value');
@@ -428,7 +430,7 @@
                     }
                 }
             });
-        } else if(formItemType == typeFillTheBlank || formItemType == typeFillTheBlankDragAndDrop){
+        } else if(formItemType == typeFillTheBlank || formItemType == typeFillTheBlankDragAndDrop || formItemType == typeFillTheBlankReArrange){
             blankMenus.each(function () {
                 var menuMaxScore = 0;
                 var menuId = $(this).attr('id').split('-')[1];
@@ -766,7 +768,7 @@
             item.find('.input-blanks-alignment').attr('name', 'item_blank_alignment['+itemId+']');
             item.find('.fill-the-blank-section').removeClass('hidden-div');
             item.find('.insert-blank').removeClass('hidden');
-        } else if (type == typeFillTheBlankDragAndDrop){
+        } else if (type == typeFillTheBlankDragAndDrop || type == typeFillTheBlankReArrange){
             item.find('.fill-the-blank-div').attr('id', 'fillTheBlank-'+itemId);
             item.find('.input-blanks').attr('name', 'item_blanks['+itemId+']');
             item.find('.input-blanks-alignment').attr('name', 'item_blank_alignment['+itemId+']');
@@ -918,7 +920,7 @@
                     });
                 }
 
-            }else if(type == typeFillTheBlank || type == typeFillTheBlankDragAndDrop){
+            }else if(type == typeFillTheBlank || type == typeFillTheBlankDragAndDrop || type == typeFillTheBlankReArrange){
                 var formItemOptions = formItem.options;
                 if(formItemOptions != null){
                     item.find('.fill-the-blank-div').html(formItemOptions.paragraph);
@@ -1011,7 +1013,7 @@
             properties.width = item.find('.input-width').val();
 
             // update options
-            if(itemType == typeFillTheBlank || itemType == typeFillTheBlankDragAndDrop){
+            if(itemType == typeFillTheBlank || itemType == typeFillTheBlankDragAndDrop || itemType == typeFillTheBlankReArrange){
                 var blankParagraph = item.find('.fill-the-blank-div').html();
                 const searchRegExp = 'item_blank_option['+itemId+']';
                 const replaceWith = 'item_blank_option['+newItemId+']';

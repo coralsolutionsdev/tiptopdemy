@@ -4,6 +4,7 @@ namespace Blueprint;
 
 use Blueprint\Contracts\Generator;
 use Blueprint\Contracts\Lexer;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
 
@@ -14,7 +15,7 @@ class Blueprint
 
     public static function relativeNamespace(string $fullyQualifiedClassName)
     {
-        $namespace = config('blueprint.namespace').'\\';
+        $namespace = config('blueprint.namespace') . '\\';
         $reference = ltrim($fullyQualifiedClassName, '\\');
 
         if (Str::startsWith($reference, $namespace)) {
@@ -29,6 +30,21 @@ class Blueprint
         return str_replace('\\', '/', config('blueprint.app_path'));
     }
 
+    public static function supportsReturnTypeHits()
+    {
+        return boolval(config('blueprint.use_return_types')) && self::isPHP7OrHigher();
+    }
+
+    public static function isPHP7OrHigher()
+    {
+        return version_compare(PHP_VERSION, '7.0.0', '>=');
+    }
+
+    public static function isLaravel8OrHigher()
+    {
+        return version_compare(App::version(), '8.0.0', '>=');
+    }
+
     public function parse($content, $strip_dashes = true)
     {
         $content = str_replace(["\r\n", "\r"], "\n", $content);
@@ -38,19 +54,23 @@ class Blueprint
         }
 
         $content = preg_replace_callback('/^(\s+)(id|timestamps(Tz)?|softDeletes(Tz)?)$/mi', function ($matches) {
-            return $matches[1].strtolower($matches[2]).': '.$matches[2];
+            return $matches[1] . strtolower($matches[2]) . ': ' . $matches[2];
         }, $content);
 
         $content = preg_replace_callback('/^(\s+)(id|timestamps(Tz)?|softDeletes(Tz)?): true$/mi', function ($matches) {
-            return $matches[1].strtolower($matches[2]).': '.$matches[2];
+            return $matches[1] . strtolower($matches[2]) . ': ' . $matches[2];
         }, $content);
 
         $content = preg_replace_callback('/^(\s+)resource?$/mi', function ($matches) {
-            return $matches[1].'resource: web';
+            return $matches[1] . 'resource: web';
+        }, $content);
+
+        $content = preg_replace_callback('/^(\s+)invokable?$/mi', function ($matches) {
+            return $matches[1].'invokable: true';
         }, $content);
 
         $content = preg_replace_callback('/^(\s+)uuid(: true)?$/mi', function ($matches) {
-            return $matches[1].'id: uuid primary';
+            return $matches[1] . 'id: uuid primary';
         }, $content);
 
         return Yaml::parse($content);

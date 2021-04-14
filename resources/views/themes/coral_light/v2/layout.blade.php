@@ -46,6 +46,7 @@
     <script src="{{asset('libraries/uikit/js/uikit.min.js')}}"></script>
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
     <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=20210410951')}}"></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('head')
 </head>
@@ -70,6 +71,20 @@
         </div>
     </div>
 </div>
+<script>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('6e0c4a037bdbc70bb1ee', {
+        cluster: 'ap2'
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+        alert(JSON.stringify(data));
+    });
+
+</script>
 @include('partial.frontend._loading')
 <script src="{{asset('js/app.js?v=20210410951')}}"></script>
 </body>

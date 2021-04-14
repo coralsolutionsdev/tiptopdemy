@@ -3,8 +3,6 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-translatable.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-translatable)
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-translatable/run-tests?label=tests)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-translatable.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-translatable)
-[![StyleCI](https://styleci.io/repos/55690447/shield?branch=master)](https://styleci.io/repos/55690447)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-translatable.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-translatable)
 
 This package contains a trait to make Eloquent models translatable. Translations are stored as json. There is no extra table needed to hold them.
@@ -28,9 +26,7 @@ $newsItem->name; // Returns 'Naam in het Nederlands'
 
 ## Support us
 
-Learn how to create a package like this one, by watching our premium video course:
-
-[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-translatable.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-translatable)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -178,6 +174,49 @@ $translations = [
 $newsItem->setTranslations('name', $translations);
 ```
 
+#### Replace translations in one go
+
+You can replace all the translations for a single key using this method:
+
+```php
+public function replaceTranslations(string $key, array $translations)
+```
+
+Here's an example:
+
+```php
+$translations = ['en' => 'hello', 'es' => 'hola'];
+
+$newsItem->setTranslations('hello', $translations);
+$newsItem->getTranslations(); // ['en' => 'hello', 'es' => 'hola']
+
+$newTranslations = ['en' => 'hello'];
+
+$newsItem->replaceTranslations('hello', $newTranslations);
+$newsItem->getTranslations(); // ['en' => 'hello']
+```
+
+#### Setting the model locale
+The default locale used to translate models is the application locale,
+however it can sometimes be handy to use a custom locale.  
+
+To do so, you can use `setLocale` on a model instance.
+``` php
+$newsItem = NewsItem::firstOrFail()->setLocale('fr');
+
+// Any properties on this model will automaticly be translated in French
+$newsItem->name; // Will return `fr` translation
+$newsItem->name = 'Actualité'; // Will set the `fr` translation
+```
+
+Alternatively, you can use `usingLocale` static method:
+``` php
+// Will automatically set the `fr` translation
+$newsItem = NewsItem::usingLocale('fr')->create([
+    'name' => 'Actualité',
+]);
+```
+
 ### Events
 
 #### TranslationHasBeenSet
@@ -224,6 +263,34 @@ Or if you're using MariaDB 10.2.3 or above :
 NewsItem::whereRaw("JSON_EXTRACT(name, '$.en') = 'Name in English'")->get();
 ```
 
+### Automatically display the right translation when displaying model
+
+Many times models using `HasTranslation` trait may be directly returned as response content.
+In this scenario, and similar ones, the `toArray()` method on `Model` class is called under the hood to serialize your model; it accesses directly the $attributes field to perform the serialization, bypassing the translatable feature (which is based on accessors and mutators) and returning the text representation of the stored JSON instead of the translated value.
+
+The best way to make your model automatically return translated fields is to wrap `Spatie\Translatable\HasTranslations` trait into a custom trait which overrides the `toArray()` method to automatically replace all translatable fields content with their translated value, like in the following example, and use it instead of the default one.
+
+``` php
+namespace App\Traits;
+use Spatie\Translatable\HasTranslations as BaseHasTranslations;
+trait HasTranslations
+{
+    use BaseHasTranslations;
+    /**
+     * Convert the model instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $attributes = parent::toArray();
+        foreach ($this->getTranslatableAttributes() as $field) {
+            $attributes[$field] = $this->getTranslation($field, \App::getLocale());
+        }
+        return $attributes;
+    }
+}
+```
 
 ## Changelog
 
@@ -243,7 +310,7 @@ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security
 

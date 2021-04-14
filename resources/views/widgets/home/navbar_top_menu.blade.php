@@ -34,9 +34,46 @@
                             <span uk-icon="cart"></span>
                             <span class="uk-badge uk-badge-mini icon-notify-badge uk-badge-success cart-count navbar-cart-count">{{Cart::content()->count()}}</span>
                         </a></li>
-                    <li class="uk-visible@m"><a href="">
+                    <li class="uk-visible@m">
+                        <a>
                             <span uk-icon="bell"></span>
-                        </a></li>
+                            <span class="uk-badge uk-badge-mini icon-notify-badge uk-badge-success notifications-count {{!empty($unreadCount) && $unreadCount == 0 ? 'hidden-div' : ''}}" type="button">{{$unreadCount}}</span>
+                        </a>
+                        <div class="notification-dropdown" uk-dropdown="pos: bottom-justify; mode: click" style="width: 500px !important;">
+                            <div>
+                                <div class="" style="padding: 10px 15px 0px 15px">
+                                    <h4 class="text-highlighted uk-text-bold">Notifications</h4>
+                                </div>
+                                <div class="notifications">
+                                    <ul class="uk-list uk-margin-remove">
+                                        @foreach($notifications as $notification)
+                                        <li class="uk-margin-remove">
+                                            <div class="notification-item read">
+                                                <a href="">
+                                                    <div class="uk-grid-small" uk-grid>
+                                                        <div class="uk-width-auto">
+                                                            <img class="uk-border-circle" src="{{$notification->data['notifier_image']}}" width="60" height="60" alt="Border circle">
+                                                        </div>
+                                                        <div class="uk-width-expand">
+                                                            <b>{{$notification->data['notifier_name']}}</b> <span>{{$notification->data['message']}}</span>
+                                                            <br>
+                                                            <span class="uk-text-muted" style="font-size: 10px">{{$notification->created_at->diffForHumans()}}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+
+                                <div class="uk-padding-small uk-text-center">
+                                    <a href="">See more</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </li>
                     <li class="uk-visible@m">
                         <a class="uk-float-right">
                             <span uk-icon="world"></span>

@@ -169,6 +169,13 @@ function date_html($datetime)
     }
     return $datetime->format('jS M Y');
 }
+function date_humans_readable($datetime)
+{
+    if (is_string($datetime)) {
+        $datetime = Carbon::createFromTimeStamp(strtotime($datetime))->diffForHumans();
+    }
+    return $datetime;
+}
 function subContent($content,$length)
 {
         $dot = strlen($content) > $length ? "...": "";

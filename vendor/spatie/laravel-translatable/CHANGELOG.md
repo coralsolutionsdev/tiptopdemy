@@ -2,6 +2,31 @@
 
 All notable changes to `laravel-translatable` will be documented in this file
 
+## 4.6.0 - 2020-11-19
+
+- add support for PHP 8.0 (#241)
+- drop support for Laravel 5.8 (#241)
+
+## 4.5.2 - 2020-10-22
+
+- revert #235
+
+## 4.5.1 - 2020-10-22
+
+- use string casting for translatable columns (#235)
+
+## 4.5.0 2020-10-03
+
+- add replaceTranslations method (#231)
+
+## 4.4.3 - 2020-10-2
+
+- rename `withLocale` to `usingLocale`
+
+## 4.4.2 - 2020-10-02
+
+- elegant syntax update (#229)
+
 ## 4.4.1 - 2020-09-06
 
 - add support for Laravel 8 (#226)

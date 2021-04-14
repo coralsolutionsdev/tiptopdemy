@@ -72,14 +72,18 @@ class FormRequestGenerator implements Generator
 
     protected function getPath(Controller $controller, string $name)
     {
-        return Blueprint::appPath().'/Http/Requests/'.($controller->namespace() ? $controller->namespace().'/' : '').$name.'.php';
+        return Blueprint::appPath() . '/Http/Requests/' . ($controller->namespace() ? $controller->namespace() . '/' : '') . $name . '.php';
     }
 
     protected function populateStub(string $stub, string $name, $context, ValidateStatement $validateStatement, Controller $controller)
     {
-        $stub = str_replace('{{ namespace }}', config('blueprint.namespace').'\\Http\\Requests'.($controller->namespace() ? '\\'.$controller->namespace() : ''), $stub);
+        $stub = str_replace('{{ namespace }}', config('blueprint.namespace') . '\\Http\\Requests' . ($controller->namespace() ? '\\' . $controller->namespace() : ''), $stub);
         $stub = str_replace('{{ class }}', $name, $stub);
         $stub = str_replace('{{ rules }}', $this->buildRules($context, $validateStatement), $stub);
+
+        if (Blueprint::supportsReturnTypeHits()) {
+            $stub = str_replace(['authorize()','rules()'], ['authorize(): bool','rules(): array'], $stub);
+        }
 
         return $stub;
     }
@@ -98,7 +102,7 @@ class FormRequestGenerator implements Generator
             foreach ($validationRules as $name => $rule) {
                 $formattedRule = implode("', '", $rule);
 
-                $output .= self::INDENT."'{$name}' => ['{$formattedRule}'],".PHP_EOL;
+                $output .= self::INDENT . "'{$name}' => ['{$formattedRule}']," . PHP_EOL;
             }
 
             return $output;
@@ -107,7 +111,7 @@ class FormRequestGenerator implements Generator
 
     private function getName(string $context, string $method)
     {
-        return $context.Str::studly($method).'Request';
+        return $context . Str::studly($method) . 'Request';
     }
 
     private function splitField($field)

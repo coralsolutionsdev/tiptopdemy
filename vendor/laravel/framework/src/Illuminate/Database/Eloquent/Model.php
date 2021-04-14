@@ -2,7 +2,6 @@
 
 namespace Illuminate\Database\Eloquent;
 
-use App\Services\MediaManagerService;
 use ArrayAccess;
 use Exception;
 use Illuminate\Contracts\Queue\QueueableCollection;
@@ -15,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use JsonSerializable;
@@ -146,14 +144,14 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
     /**
      * The name of the "created at" column.
      *
-     * @var string
+     * @var string|null
      */
     const CREATED_AT = 'created_at';
 
     /**
      * The name of the "updated at" column.
      *
-     * @var string
+     * @var string|null
      */
     const UPDATED_AT = 'updated_at';
 
@@ -935,7 +933,6 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
      */
     protected function performDeleteOnModel()
     {
-        MediaManagerService::deleteMedia($this);
         $this->setKeysForSaveQuery($this->newModelQuery())->delete();
 
         $this->exists = false;

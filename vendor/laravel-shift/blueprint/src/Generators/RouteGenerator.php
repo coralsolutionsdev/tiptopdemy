@@ -28,14 +28,14 @@ class RouteGenerator implements Generator
         /** @var \Blueprint\Models\Controller $controller */
         foreach ($tree->controllers() as $controller) {
             $type = $controller->isApiResource() ? 'api' : 'web';
-            $routes[$type] .= PHP_EOL.PHP_EOL.$this->buildRoutes($controller);
+            $routes[$type] .= PHP_EOL . PHP_EOL . $this->buildRoutes($controller);
         }
 
         $paths = [];
 
         foreach (array_filter($routes) as $type => $definitions) {
-            $path = 'routes/'.$type.'.php';
-            $this->files->append($path, $definitions.PHP_EOL);
+            $path = 'routes/' . $type . '.php';
+            $this->files->append($path, $definitions . PHP_EOL);
             $paths[] = $path;
         }
 
@@ -51,14 +51,13 @@ class RouteGenerator implements Generator
     {
         $routes = '';
         $methods = array_keys($controller->methods());
-
-        $useTuples = config('blueprint.generate_fqcn_route');
-
-        $className = $useTuples
-            ? $controller->fullyQualifiedClassName() . '::class'
-            : '\'' . str_replace('App\Http\Controllers\\', '', $controller->fullyQualifiedClassName()) . '\'';
-
+        $className = $this->getClassName($controller);
         $slug = Str::kebab($controller->prefix());
+
+        foreach (array_diff($methods, Controller::$resourceMethods) as $method) {
+            $routes .= $this->buildRouteLine($className, $slug, $method);
+            $routes .= PHP_EOL;
+        }
 
         $resource_methods = array_intersect($methods, Controller::$resourceMethods);
         if (count($resource_methods)) {
@@ -78,22 +77,37 @@ class RouteGenerator implements Generator
                 }
             }
 
-            $routes .= ';'.PHP_EOL;
-        }
-
-        $methods = array_diff($methods, Controller::$resourceMethods);
-        foreach ($methods as $method) {
-            if ($useTuples) {
-                $action = "[{$className}, '{$method}']";
-            } else {
-                $classNameNoQuotes = trim($className, '\'');
-                $action = "'{$classNameNoQuotes}@{$method}'";
-            }
-
-            $routes .= sprintf("Route::get('%s/%s', %s);", $slug, Str::kebab($method), $action);
-            $routes .= PHP_EOL;
+            $routes .= ';' . PHP_EOL;
         }
 
         return trim($routes);
+    }
+
+    protected function useTuples()
+    {
+        return config('blueprint.generate_fqcn_route');
+    }
+
+    protected function getClassName(Controller $controller)
+    {
+        return $this->useTuples()
+            ? $controller->fullyQualifiedClassName() . '::class'
+            : '\'' . str_replace('App\Http\Controllers\\', '', $controller->fullyQualifiedClassName()) . '\'';
+    }
+
+    protected function buildRouteLine($className, $slug, $method)
+    {
+        if ($method === '__invoke') {
+            return sprintf("Route::get('%s', %s);", $slug, $className);
+        }
+
+        if ($this->useTuples()) {
+            $action = "[{$className}, '{$method}']";
+        } else {
+            $classNameNoQuotes = trim($className, '\'');
+            $action = "'{$classNameNoQuotes}@{$method}'";
+        }
+
+        return sprintf("Route::get('%s/%s', %s);", $slug, Str::kebab($method), $action);
     }
 }

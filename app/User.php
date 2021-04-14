@@ -31,7 +31,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     use HasMediaTrait;
     use HasGroup;
     use modelTrail;
-
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

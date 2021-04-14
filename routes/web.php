@@ -86,11 +86,14 @@ Route::group(['middleware'=>'installed'], function(){
         Route::resource('/banners','Model\BannerController', ['except' => ['show']]);
         Route::get('/carousels','Model\BannerController@GetCarousel')->name('carousels.index');
         Route::get('/carousels/create','Model\BannerController@CreateCarousel')->name('carousels.create');
+
         /*Pages*/
         Route::resource('/pages','Site\PageController', ['except' => ['show']]);
+
         /*Menu*/
         Route::resource('/menus','Site\MenuController', ['except' => ['show']]);
         Route::get('/menus/get/structure/{layout}','Site\MenuController@getMenuItemsStructure')->name('menu.get.structure');
+
         /*Contacts*/
         Route::resource('/contacts','Site\ContactController', ['except' => ['show']]);
         Route::get('/contacts/{contact}/get/structure/','Site\ContactController@getItemsStructure')->name('contacts.get.items');
@@ -293,51 +296,15 @@ Route::group(['middleware'=>'installed'], function(){
 
             });
 
-            /*pages*/
+            Route::get('/notifications','HomeController@notifications')->name('get.notifications');
+
+            /*pages - Should be last route always*/
             Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
+
 
         });
     });
     /* End of User Routes */
 
 
-
-
-
-
-
 });
-//
-//Route::resource('post', 'PostController')->only('index', 'create', 'store');
-//
-//
-//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
-//
-//
-//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create');
-//
-//
-//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
-//
-//
-//Route::resource('course.-unit', 'Course.UnitController')->only('index', 'create', 'store');
-//
-//
-//Route::resource('course.-unit', 'Course.UnitController');
-//
-//
-//Route::resource('post', 'Admin\PostController')->only('index', 'store');
-//
-//
-//Route::resource('post', 'Course\PostController')->only('index', 'store');
-//
-//
-//Route::resource('post', 'Course\PostController')->only('index', 'store');
-//
-//
-//Route::resource('mma', 'Course\MmaController')->only('index', 'store');
-//
-//
-//Route::resource('post', 'Course\PostController')->only('index');
-
-// update

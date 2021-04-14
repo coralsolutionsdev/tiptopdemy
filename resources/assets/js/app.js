@@ -45,6 +45,8 @@ Vue.component('product-index', require('./components/frontend/products/index.vue
 Vue.component('product-items', require('./components/frontend/products/items.vue'));
 Vue.component('form-show', require('./components/frontend/forms/Show.vue'));
 Vue.component('smart-form-create', require('./components/admin/form/smart_form/Create.vue'));
+Vue.component('notifications', require('./components/system/notifications.vue'));
+Vue.component('notifications-menu', require('./components/system/NotificationsMenu.vue'));
 
 // If you want to use it in your vue components
 Vue.use(AtComponents)

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Comment;
 
+use App\Events\MyEvent;
 use App\Http\Controllers\Controller;
 use App\Modules\Comment\Comment;
+use App\Notifications\Blog\PostComment;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -40,7 +42,8 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $input = $request->only(['commentable_id', 'commentable_type', 'comment', 'parent_id', 'status']);
-        if ($user = getAuthUser()){
+        $user = getAuthUser();
+        if ($user){
             // logged users comments
             $input['commenter_id'] = $user->id;
             $input['commenter_type'] = $user->getClassName();
@@ -49,6 +52,22 @@ class CommentController extends Controller
         }
         $comment = Comment::create($input);
         $comment = $comment->addDetails();
+        // send notification // TODO: improve this
+        if ($user){ // commenter
+            $model = $comment['commentable_type'];
+            $commentableModel = $model::find($comment['commentable_id']); //  get model eloquent
+            if ($commentableModel){
+                if ($comment['commentable_type'] == 'App\BlogPost'){ // PostComment notification
+                    $notifiableUser = $commentableModel->user;
+                    if ($notifiableUser){
+                        $notifiableUser->notify(new PostComment($user, $commentableModel));
+                        event(new MyEvent('hello world'));
+
+                    }
+                }
+            }
+        }
+
         return response($comment, 200);
     }
 

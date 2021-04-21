@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in question.blanks"
                                      v-html="draggableBlank"
-                                     :class="{'dropped-blank':isDropped(group, draggableBlank)}"
+                                     v-if="!isQuestionDropped(group, question, draggableBlank)"
                                      draggable @dragstart='startDrag(question.id, draggableBlank, draggableBlankKey)'
                                      @click="insertInNextBlank(group, question.id, draggableBlank, false)"
                                 >
@@ -458,8 +458,9 @@ name: "Show",
         <div class="blank-word dropped-blank-item" data-key="`+blankDataKey+`" data-group-id="`+group.id+`" data-question-id="`+questionId+`">`+blank+` <span class="remove-blank" uk-icon="icon: close; ratio: 0.7"></span></div>
         `;
         item.html(html);
-      this.removeBlank();
-      this.refreshDroppedBlanksArray(group, blankDataKey);
+      this.removeBlank(group, questionId);
+      this.refreshDroppedBlanksArray(group, questionId, blankDataKey);
+      this.refreshQuestionDroppedBlanksArray(group, questionId, blankDataKey);
     },
     insertInNextBlank(group, questionId, blank, inGroup = true){
       var droppableBlanks = $('#group-'+group.id).find('.droppable-blank');
@@ -477,7 +478,7 @@ name: "Show",
       });
       this.insertBlank(group, questionId, $(nextDroppableBlank), blank);
     },
-    removeBlank(){
+    removeBlank(group, questionId){
       var appVue = this;
       var currentGroup = null;
 
@@ -491,13 +492,19 @@ name: "Show",
           }
         });
         appVue.refreshDroppedBlanksArray(currentGroup)
+        appVue.refreshQuestionDroppedBlanksArray(group, questionId);
+
       });
     },
     isDropped(group, blank){
       var blankDataKey = group.id+'-'+blank;
       return group.dropped_blanks.includes(blankDataKey);
     },
-    refreshDroppedBlanksArray(group){
+    isQuestionDropped(group, question, blank){
+      var blankDataKey = group.id+'-'+blank;
+      return question.dropped_blanks.includes(blankDataKey);
+    },
+    refreshDroppedBlanksArray(group, questionId = null){
       var droppableBlanks = $('#group-'+group.id).find('.droppable-blank');
       var newArray = [];
       $.each( droppableBlanks, function( key, item ) {
@@ -507,6 +514,23 @@ name: "Show",
         }
       });
       group.dropped_blanks = newArray;
+
+    },
+    refreshQuestionDroppedBlanksArray(group, questionId = null){
+      var droppableBlanks = $('#question-'+questionId).find('.droppable-blank');
+      var newArray = [];
+      $.each( droppableBlanks, function( key, item ) {
+        var questionBlankDataKey = $(this).find('.dropped-blank-item').attr('data-key');
+        if(questionBlankDataKey !== undefined){
+          newArray.push(questionBlankDataKey);
+        }
+      });
+      Object.keys(group.items).forEach(key => {
+        var question = group.items[key];
+        if (question.id == questionId){
+          question.dropped_blanks = newArray;
+        }
+      });
     },
     handleCountdownProgress(data) {
 

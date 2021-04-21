@@ -249,6 +249,7 @@ class Form extends Model
                 'allowed_number' => isset($input['item_section_allowed_number'][$id]) ? intval($input['item_section_allowed_number'][$id]) : null,
                 'evaluation' => isset($input['item_evaluation'][$id]) ? $input['item_evaluation'][$id] : 1,
                 'taxonomies_a' => isset($input['item_taxonomy'][$id]) ? $input['item_taxonomy'][$id] : array(),
+                'extra_blanks' => isset($input['item_extra_blanks'][$id]) ? $input['item_extra_blanks'][$id] : array(),
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;
             $newItem['properties'] = $properties;

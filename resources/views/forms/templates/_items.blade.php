@@ -259,6 +259,10 @@
                                                 <div class="editable-div fill-the-blank-div cu-border-light p-2 mt-1" contenteditable="true" >
                                                     {{__('main._fill blank default paragraph')}}
                                                 </div>
+                                                <div class="uk-margin-small">
+                                                    <label class="uk-form-label h-header" for="">Extra word</label>
+                                                    <input type="text" class="uk-input uk-form-small input-extra-blanks" placeholder="Ex: welcome">
+                                                </div>
                                                 <input type="hidden" name="" class="input-blanks" value="">
                                                 <input type="hidden" name="" class="input-blanks-alignment" value="auto">
                                             </div>

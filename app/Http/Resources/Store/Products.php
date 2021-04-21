@@ -28,7 +28,6 @@ class Products extends JsonResource
             'user_profile_pic' => $this->user_profile_pic,
             'has_purchased' => $this->has_purchased,
             'in_cart' => $this->in_cart,
-
         ];
     }
 }

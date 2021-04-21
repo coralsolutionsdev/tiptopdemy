@@ -197,7 +197,6 @@ export default {
         }else{
           this.$emit('updateViewContent', true);
         }
-        $()
       });
     },
     buildMemorizeItem(itemKey){

@@ -104,6 +104,7 @@ final class Versions
   'ramsey/uuid' => '3.9.3@7e1633a6964b48589b142d60542f9ed31bd37a92',
   'rap2hpoutre/laravel-log-viewer' => 'v1.4.0@3506baaddbe5661fc4482b048db2ec5cfc5f9025',
   'santigarcor/laratrust' => '5.2.9@454a338500ea5ab2807da5ee0a799c9c3d01cc05',
+  'shivella/laravel-bitly' => '1.1.10@c7a81df3e87a3ca5b81e19c558ab5d774d637251',
   'spatie/eloquent-sortable' => '3.8.2@18451ecf44b28a14ac0ed8803d0f5195a78a48a2',
   'spatie/image' => '1.10.5@63a963d0200fb26f2564bf7201fc7272d9b22933',
   'spatie/image-optimizer' => '1.3.2@6aa170eb292758553d332efee5e0c3977341080c',
@@ -181,7 +182,7 @@ final class Versions
   'symfony/yaml' => 'v5.2.5@298a08ddda623485208506fcee08817807a251dd',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
   'webmozart/assert' => '1.10.0@6964c76c7804814a842473e0c8fd15bab0f18e25',
-  'laravel/laravel' => 'dev-210411-dev-notifications@77319fbfd2b2a638b5e3260f6564949808b0f4ba',
+  'laravel/laravel' => 'dev-210411-dev-notifications@135483239cd2e2a66c61eaf2f7b8caac4619a225',
 );
 
     private function __construct()

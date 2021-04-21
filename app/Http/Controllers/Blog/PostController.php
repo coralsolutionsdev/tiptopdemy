@@ -8,6 +8,7 @@ use App\Institution\InstitutionScope;
 use App\Page;
 use App\Services\FileAssetManagerService;
 use App\UniqueId;
+use Carbon\Carbon;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
@@ -22,6 +23,7 @@ use auth;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Image;
+use Shivella\Bitly\Facade\Bitly;
 use Spatie\Tags\Tag;
 use Storage;
 
@@ -33,7 +35,12 @@ class PostController extends Controller
 
     public function __construct()
     {
-    $this->middleware('auth', ['except' => ['GetIndex','show', 'getComments']]);
+    $this->middleware('auth', ['except' => [
+        'GetIndex',
+        'show',
+        'getComments',
+        'getPost'
+    ]]);
     $this->modelName = 'Blog';
     $this->page_title = 'Blog Posts';
     $this->breadcrumb = [
@@ -117,16 +124,50 @@ class PostController extends Controller
      */
     public function show(BlogPost $post)
     {
-
         $categories = Category::getRootCategories(Category::TYPE_POST);
         $posts = BlogPost::latest()->paginate(5);
         $search_key =  null;
         $modelName = $this->modelName;
         $page_title =  $post->title;
         $breadcrumb =  Breadcrumbs::render('blog.post.show', $post);
-
         $attachments = $post->attachments()->get();
-        return view('blog.frontend.show', compact('page_title', 'modelName', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key', 'attachments'));
+        $className = $post->getClassName();
+        $userId = getAuthUser() ? getAuthUser()->id : null;
+        $userName = getAuthUser() ? getAuthUser()->getUserName() : null;
+        $userProfilePic = getAuthUser() ? getAuthUser()->getProfilePicURL() : null;
+        $postImage = $post->getMainImage();
+        return view('blog.frontend.show', compact('page_title', 'modelName', 'breadcrumb', 'post' , 'categories', 'posts', 'search_key', 'attachments', 'className', 'userId','userName', 'userProfilePic', 'postImage'));
+    }
+    public function getPost(BlogPost $post)
+    {
+        $userId = getAuthUser() ? getAuthUser()->id : null;
+        $attachments = $post->attachments()->get();
+        $attachmentsArray = [];
+        if ($attachments){
+            foreach ($attachments as $attachment){
+                $attachmentsArray[] = [
+                    'title' => $attachment->filename,
+                    'type' => $attachment->filetype,
+                    'download_url' => $attachment->getTemporaryUrl(Carbon::parse(date('y-m-d'))->addDay()),
+                ];
+            }
+        }
+        $url = Bitly::getUrl(route('blog.posts.show',$post->slug)); // http://bit.ly/nHcn3
+
+        $postArray = [
+            'title' => $post->title,
+            'content' => $post->content,
+            'image' => $post->getMainImage(),
+            'categories' => $post->categories()->select('name', 'id', 'slug')->get(),
+            'is_liked' => $post->hasReaction('like'),
+            'likes' => $post->getReactionCount('like'),
+            'post_url' => route('blog.posts.show',$post->slug),
+            'user_name' => ucfirst($post->user->name),
+            'created_at' => $post->created_at->diffForHumans(),
+            'login_user_id' => $userId,
+            'attachments' => $attachmentsArray,
+        ];
+        return response($postArray, 200);
     }
 
     /**

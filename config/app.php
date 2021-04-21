@@ -199,6 +199,7 @@ return [
         Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
+        Shivella\Bitly\BitlyServiceProvider::class,
 
     ],
 
@@ -259,6 +260,8 @@ return [
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         "Breadcrumbs" => DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        'Bitly' => Shivella\Bitly\Facade\Bitly::class,
+
 
 
     ],

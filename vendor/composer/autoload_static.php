@@ -123,6 +123,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
             'Spatie\\Image\\' => 13,
             'Spatie\\ImageOptimizer\\' => 22,
             'Spatie\\EloquentSortable\\' => 24,
+            'Shivella\\Bitly\\' => 15,
             'Shift\\Faker\\' => 12,
         ),
         'R' => 
@@ -426,6 +427,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Spatie\\EloquentSortable\\' => 
         array (
             0 => __DIR__ . '/..' . '/spatie/eloquent-sortable/src',
+        ),
+        'Shivella\\Bitly\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/shivella/laravel-bitly/src',
         ),
         'Shift\\Faker\\' => 
         array (
@@ -765,8 +770,6 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Contact' => __DIR__ . '/../..' . '/app/Contact.php',
         'App\\Events\\MyEvent' => __DIR__ . '/../..' . '/app/Events/MyEvent.php',
-        'App\\Events\\StatusLiked' => __DIR__ . '/../..' . '/app/Events/StatusLiked.php',
-        'App\\Events\\generalNotify' => __DIR__ . '/../..' . '/app/Events/generalNotify.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\GalleryAlbum' => __DIR__ . '/../..' . '/app/GalleryAlbum.php',
         'App\\GalleryImage' => __DIR__ . '/../..' . '/app/GalleryImage.php',
@@ -855,6 +858,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\CreateStoreItem' => __DIR__ . '/../..' . '/app/Http/Requests/CreateStoreItem.php',
+        'App\\Http\\Resources\\Comments' => __DIR__ . '/../..' . '/app/Http/Resources/Comments.php',
         'App\\Http\\Resources\\Form\\FormItem' => __DIR__ . '/../..' . '/app/Http/Resources/Form/FormItem.php',
         'App\\Http\\Resources\\Store\\Products' => __DIR__ . '/../..' . '/app/Http/Resources/Store/Products.php',
         'App\\Institution\\Directorate' => __DIR__ . '/../..' . '/app/Institution/Directorate.php',
@@ -892,6 +896,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'App\\Modules\\System\\PageBuilder' => __DIR__ . '/../..' . '/app/Modules/System/PageBuilder.php',
         'App\\Modules\\System\\TodoItem' => __DIR__ . '/../..' . '/app/Modules/System/TodoItem.php',
         'App\\Modules\\modelTrail' => __DIR__ . '/../..' . '/app/Modules/modelTrail.php',
+        'App\\Notifications\\Blog\\PostComment' => __DIR__ . '/../..' . '/app/Notifications/Blog/PostComment.php',
         'App\\Notifications\\InvoicePaid' => __DIR__ . '/../..' . '/app/Notifications/InvoicePaid.php',
         'App\\Page' => __DIR__ . '/../..' . '/app/Page.php',
         'App\\Permission' => __DIR__ . '/../..' . '/app/Permission.php',
@@ -5213,6 +5218,12 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'SetupCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_05_224212_setup_countries_table.php',
         'Shift\\Faker\\Registry' => __DIR__ . '/..' . '/laravel-shift/faker-registry/src/Registry.php',
+        'Shivella\\Bitly\\BitlyServiceProvider' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/BitlyServiceProvider.php',
+        'Shivella\\Bitly\\Client\\BitlyClient' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Client/BitlyClient.php',
+        'Shivella\\Bitly\\Exceptions\\AccessDeniedException' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Exceptions/AccessDeniedException.php',
+        'Shivella\\Bitly\\Exceptions\\InvalidResponseException' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Exceptions/InvalidResponseException.php',
+        'Shivella\\Bitly\\Facade\\Bitly' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Facade/Bitly.php',
+        'Shivella\\Bitly\\Testing\\BitlyClientFake' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Testing/BitlyClientFake.php',
         'SiteTableSeeder' => __DIR__ . '/../..' . '/database/seeds/SiteTableSeeder.php',
         'Spatie\\EloquentSortable\\Sortable' => __DIR__ . '/..' . '/spatie/eloquent-sortable/src/Sortable.php',
         'Spatie\\EloquentSortable\\SortableTrait' => __DIR__ . '/..' . '/spatie/eloquent-sortable/src/SortableTrait.php',

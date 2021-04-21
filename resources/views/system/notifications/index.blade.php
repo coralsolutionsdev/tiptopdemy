@@ -7,6 +7,8 @@
 @section('content')
     <section>
         <div class="uk-container">
+            <notifications></notifications>
+            <example></example>
         </div>
     </section>
 @endsection

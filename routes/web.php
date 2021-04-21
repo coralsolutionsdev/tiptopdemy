@@ -227,6 +227,7 @@ Route::group(['middleware'=>'installed'], function(){
                     Route::resource('/category','CategoryController', ['only' => ['show']]);
 //                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
                     Route::resource('/posts','PostController', ['only' => ['show']]);
+                    Route::get('/post/{post}/get/post', 'PostController@getPost');
                     Route::get('/post/{post}/get/comments', 'PostController@getComments');
 //                    Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
                     Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
@@ -236,6 +237,7 @@ Route::group(['middleware'=>'installed'], function(){
             /* Comment */
             Route::group(['namespace' => 'Comment'], function (){
                 Route::resource('/comment','CommentController');
+                Route::get('/comments/get/items', 'CommentController@getItems');
                 Route::post('/comment/{comment}/ajax/delete','CommentController@ajaxDestroy');
                 Route::post('/comment/{comment}/ajax/update','CommentController@ajaxUpdate');
                 Route::post('/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact');

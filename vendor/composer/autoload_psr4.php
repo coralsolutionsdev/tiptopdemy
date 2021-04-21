@@ -51,6 +51,7 @@ return array(
     'Spatie\\Image\\' => array($vendorDir . '/spatie/image/src'),
     'Spatie\\ImageOptimizer\\' => array($vendorDir . '/spatie/image-optimizer/src'),
     'Spatie\\EloquentSortable\\' => array($vendorDir . '/spatie/eloquent-sortable/src'),
+    'Shivella\\Bitly\\' => array($vendorDir . '/shivella/laravel-bitly/src'),
     'Shift\\Faker\\' => array($vendorDir . '/laravel-shift/faker-registry/src'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
     'Raju\\Streamer\\' => array($vendorDir . '/rajurayhan/larastreamer/src'),

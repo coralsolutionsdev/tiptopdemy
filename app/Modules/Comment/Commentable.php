@@ -19,8 +19,44 @@ trait Commentable
     {
         return $this->comments->map(function ($comment){
             $comment = $comment->addDetails();
-            return $comment;
+            $comment->sub_comments = $comment->getSubComments();
+            return $comment->only([
+                'id',
+                'comment',
+                'likes',
+                'commenter_user_id',
+                'commenter_name',
+                'commenter_profile_pic',
+                'commenter_gender',
+                'creation_date',
+                'is_liked',
+                'parent_id',
+                'sub_comments',
+            ]);
         });
+    }
+    public function getSubComments(){
+        return $this->children->map(function ($comment){
+            $comment = $comment->addDetails();
+            $comment->replayMode = false;
+            return $comment->only([
+                'id',
+                'comment',
+                'comment',
+                'likes',
+                'commenter_user_id',
+                'commenter_name',
+                'commenter_profile_pic',
+                'commenter_gender',
+                'creation_date',
+                'is_liked',
+                'parent_id',
+                'replayMode',
+            ]);
+        });
+    }
+    public function getCommentsTree(){
+        return $this->getCommentsWithDetails()->where('parent_id', 0);
     }
     /*
      |--------------------------------------------------------------------------

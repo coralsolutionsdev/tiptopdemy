@@ -26,7 +26,6 @@
         '{{__('main.Fill the blank')}}',
         '{{__('main.Fill the blank (drag and drop)')}}',
         '{{__('main.Fill the blank (re arrange)')}}',
-
     ];
 
     function refreshSettingMode(){
@@ -191,11 +190,16 @@
                 </div>`;
             item.find('.item-review-content').html(review);
             item.find('.item-pre-review').html('');
+            var myArray = [];
             $.each( blanks, function( key, value ) {
-                item.find('.item-pre-review').append(
-                    `<span class="uk-badge" style="margin: 2px; padding: 15px">`+$(value).val()+`</span>`
-                );
+                if (!myArray.includes($(value).val())){
+                    item.find('.item-pre-review').append(
+                        `<span class="uk-badge" style="margin: 2px; padding: 15px">`+$(value).val()+`</span>`
+                    );
+                }
+                myArray.push($(value).val());
             });
+            console.log(myArray)
             pasteAsPlainText();
         }else if(itemType == typeSection){
             var sectionText = item.find('.input-title').val();
@@ -604,15 +608,15 @@
                             '                <div class="uk-width-1-5">\n' +
                             '                    <input type="text" name="item_blank_option_mark['+formItemId+']['+blankId+'][]" class="blank_item blank-item-mark item-score blank-'+blankId+'-score" value="0">\n' +
                             '                </div>\n' +
-                            // '                <div class="uk-width-1-5 uk-text-right pt-1">\n' +
-                            // '                    <span class="hover-danger remove-blank-option" uk-icon="icon: trash"></span>\n' +
-                            // '                </div>\n' +
+                            '                <div class="uk-width-1-5 uk-text-right pt-1">\n' +
+                            '                    <span class="hover-danger remove-blank-option" uk-icon="icon: trash"></span>\n' +
+                            '                </div>\n' +
                             '            </div>\n' +
                             '        </div>\n' +
                             '        <div class="uk-grid-collapse p-1" uk-grid>\n' +
-                            // '            <div class="uk-width-1-1 uk-text-right">\n' +
-                            // '                <span class="hover-primary add-blank-option" uk-icon="icon: plus-circle"></span>\n' +
-                            // '            </div>\n' +
+                            '            <div class="uk-width-1-1 uk-text-right">\n' +
+                            '                <span class="hover-primary add-blank-option" uk-icon="icon: plus-circle"></span>\n' +
+                            '            </div>\n' +
                             '            <div class="uk-width-1-1 uk-text-right pt-2">\n' +
                             '                <span class="uk-button uk-button-default uk-button-small uk-width-1-1 hover-danger delete-item-blank" data-blank-type="2">{{__('main.Delete blank')}}</span>\n' +
                             '            </div>\n' +
@@ -762,6 +766,9 @@
             tags:true, // change to false to disable add new tags
         });
 
+        item.find('.input-extra-blanks').attr('name', 'item_extra_blanks['+itemId+'][]');
+
+
         if(type == typeFillTheBlank){
             item.find('.fill-the-blank-div').attr('id', 'fillTheBlank-'+itemId);
             item.find('.input-blanks').attr('name', 'item_blanks['+itemId+']');
@@ -877,6 +884,9 @@
                         $(index).prop('checked', true);
                     }
                 });
+                // TODO:
+                item.find('.input-extra-blanks').val(properties.extra_blanks[0] && properties.extra_blanks[0] != null ? properties.extra_blanks[0] : '');
+
 
             }
             // update tag_taxonomies

@@ -120,6 +120,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
             'Spatie\\Image\\' => 13,
             'Spatie\\ImageOptimizer\\' => 22,
             'Spatie\\EloquentSortable\\' => 24,
+            'Shivella\\Bitly\\' => 15,
             'Shift\\Faker\\' => 12,
         ),
         'R' => 
@@ -424,6 +425,10 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'Spatie\\EloquentSortable\\' => 
         array (
             0 => __DIR__ . '/..' . '/spatie/eloquent-sortable/src',
+        ),
+        'Shivella\\Bitly\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/shivella/laravel-bitly/src',
         ),
         'Shift\\Faker\\' => 
         array (
@@ -5121,6 +5126,12 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
         'SetupCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_05_224212_setup_countries_table.php',
         'Shift\\Faker\\Registry' => __DIR__ . '/..' . '/laravel-shift/faker-registry/src/Registry.php',
+        'Shivella\\Bitly\\BitlyServiceProvider' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/BitlyServiceProvider.php',
+        'Shivella\\Bitly\\Client\\BitlyClient' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Client/BitlyClient.php',
+        'Shivella\\Bitly\\Exceptions\\AccessDeniedException' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Exceptions/AccessDeniedException.php',
+        'Shivella\\Bitly\\Exceptions\\InvalidResponseException' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Exceptions/InvalidResponseException.php',
+        'Shivella\\Bitly\\Facade\\Bitly' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Facade/Bitly.php',
+        'Shivella\\Bitly\\Testing\\BitlyClientFake' => __DIR__ . '/..' . '/shivella/laravel-bitly/src/Testing/BitlyClientFake.php',
         'SiteTableSeeder' => __DIR__ . '/../..' . '/database/seeds/SiteTableSeeder.php',
         'Spatie\\EloquentSortable\\Sortable' => __DIR__ . '/..' . '/spatie/eloquent-sortable/src/Sortable.php',
         'Spatie\\EloquentSortable\\SortableTrait' => __DIR__ . '/..' . '/spatie/eloquent-sortable/src/SortableTrait.php',

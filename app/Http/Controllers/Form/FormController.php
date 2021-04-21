@@ -128,7 +128,7 @@ class FormController extends Controller
                             }
                         }
                         // add extra word to blanks array
-                        $extraBlanks = $item->properties['extra_blanks'] ?  $item->properties['extra_blanks'] : null;
+                        $extraBlanks = isset($item->properties['extra_blanks']) ?  $item->properties['extra_blanks'] : null;
                         if ($extraBlanks){
                             foreach ($extraBlanks as $extraBlank){
                                 if ($extraBlank && $extraBlank != null && strlen($extraBlank) > 0){

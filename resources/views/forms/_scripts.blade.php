@@ -891,8 +891,11 @@
                     }
                 });
                 // TODO:
-                item.find('.input-extra-blanks').val(properties.extra_blanks[0] && properties.extra_blanks[0] != null ? properties.extra_blanks[0] : '');
-
+                if (properties.extra_blanks != null){
+                    if (properties.extra_blanks.length > 0 && properties.extra_blanks[0]){
+                        item.find('.input-extra-blanks').val(properties.extra_blanks[0] && properties.extra_blanks[0] != null ? properties.extra_blanks[0] : '');
+                    }
+                }
 
             }
             // update tag_taxonomies

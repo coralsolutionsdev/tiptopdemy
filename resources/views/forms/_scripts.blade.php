@@ -199,7 +199,13 @@
                 }
                 myArray.push($(value).val());
             });
-            console.log(myArray)
+            var extraWord = item.find('.input-extra-blanks').val();
+            if (extraWord && extraWord != null && extraWord != ''){
+                item.find('.item-pre-review').append(
+                    `<span class="uk-badge" style="margin: 2px; padding: 15px">`+extraWord+`</span>`
+                );
+            }
+            // console.log(myArray)
             pasteAsPlainText();
         }else if(itemType == typeSection){
             var sectionText = item.find('.input-title').val();

@@ -114,8 +114,8 @@ class FormController extends Controller
 
                     if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
                         $blanks = !empty($item->options) && !empty($item->options['paragraph_blanks']) ? $item->options['paragraph_blanks'] : array();
-                        $isInArray = false;
                         foreach ($blanks as $blank){
+                            $isInArray = false;
                             foreach ($blank['items'] as $blankItem){
                                 foreach ($blanksArray as $blanksArrayItem){
                                     if ($blanksArrayItem == $blankItem['value']){

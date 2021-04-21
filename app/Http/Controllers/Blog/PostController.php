@@ -152,7 +152,7 @@ class PostController extends Controller
                 ];
             }
         }
-        $url = Bitly::getUrl(route('blog.posts.show',$post->slug)); // http://bit.ly/nHcn3
+//        $url = Bitly::getUrl(route('blog.posts.show',$post->slug)); // http://bit.ly/nHcn3
 
         $postArray = [
             'title' => $post->title,

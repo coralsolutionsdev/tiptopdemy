@@ -28726,7 +28726,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
         _this2.form = res.data;
         _this2.direction = _this2.form.direction;
         _this2.groups = _this2.form.grouped_questions;
-        console.log(_this2.groups);
+        // console.log(this.groups);
         _this2.groupsCount = _this2.groups.length;
         if (_this2.groupsCount > 0) {
           _this2.groupsCount = _this2.groupsCount - 1;
@@ -28861,7 +28861,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       if (!inGroup) {
         droppableBlanks = $('#question-' + questionId).find('.droppable-blank');
       }
-      console.log(questionId);
       var nextDroppableBlank = null;
       $.each(droppableBlanks, function (key, droppableBlankItem) {
         if ($(droppableBlankItem).html() == '') {
@@ -34838,7 +34837,7 @@ exports.push([module.i, "\n.group-title[data-v-670a0726]{\r\n  display: -ms-inli
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
 
 /***/ }),
 /* 64 */
@@ -68423,11 +68422,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [(group.draggable_blanks.length > 0) ? _c('div', {
       staticClass: "blanks-row uk-margin-small"
     }, _vm._l((group.draggable_blanks), function(draggableBlank, draggableBlankKey) {
-      return _c('div', {
+      return (!_vm.isDropped(group, draggableBlank.value)) ? _c('div', {
         staticClass: "blank-word uk-box-shadow-hover-medium",
-        class: {
-          'dropped-blank': _vm.isDropped(group, draggableBlank.value)
-        },
         attrs: {
           "draggable": ""
         },
@@ -68442,7 +68438,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             return _vm.insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)
           }
         }
-      })
+      }) : _vm._e()
     }), 0) : _vm._e(), _vm._v(" "), _vm._l((group.items), function(question, key) {
       return (question.type != 0) ? _c('div', {
         staticClass: "uk-width-1-1@m uk-width-1-1@s",

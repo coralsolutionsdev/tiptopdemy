@@ -6355,6 +6355,70 @@
         "homepage": "https://github.com/sebastianbergmann/version"
     },
     {
+        "name": "shivella/laravel-bitly",
+        "version": "1.1.10",
+        "version_normalized": "1.1.10.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Shivella/laravel-bitly.git",
+            "reference": "c7a81df3e87a3ca5b81e19c558ab5d774d637251"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Shivella/laravel-bitly/zipball/c7a81df3e87a3ca5b81e19c558ab5d774d637251",
+            "reference": "c7a81df3e87a3ca5b81e19c558ab5d774d637251",
+            "shasum": ""
+        },
+        "require": {
+            "ext-json": "*",
+            "guzzlehttp/guzzle": "~6.0 || ^7.0.1 || ^7.1 || ^7.2 || ^7.3",
+            "illuminate/support": "^5.8 || ^6.0 || ^7.0 || ^8.0",
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^8.1",
+            "symfony/http-foundation": "^5.0"
+        },
+        "time": "2021-03-27T17:30:32+00:00",
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Shivella\\Bitly\\BitlyServiceProvider"
+                ],
+                "aliases": {
+                    "Bitly": "Shivella\\Bitly\\Facade\\Bitly"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Shivella\\Bitly\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Wessel Strengholt",
+                "email": "wessel.strengholt@gmail.com"
+            }
+        ],
+        "description": "Laravel package for generating bitly url",
+        "homepage": "https://github.com/Shivella/laravel-bitly",
+        "keywords": [
+            "bitly",
+            "laravel",
+            "link",
+            "package",
+            "short",
+            "url"
+        ]
+    },
+    {
         "name": "spatie/eloquent-sortable",
         "version": "3.8.2",
         "version_normalized": "3.8.2.0",
@@ -8961,12 +9025,12 @@
         "version_normalized": "1.9.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/webmozart/assert.git",
+            "url": "https://github.com/webmozarts/assert.git",
             "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+            "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
             "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
             "shasum": ""
         },

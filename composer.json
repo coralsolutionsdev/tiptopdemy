@@ -30,6 +30,7 @@
         "rajurayhan/larastreamer": "^1.0",
         "rap2hpoutre/laravel-log-viewer": "1.4.*",
         "santigarcor/laratrust": "5.*.*",
+        "shivella/laravel-bitly": "^1.1",
         "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-tags": "2.7.2",
         "vinkla/hashids": "7.0.*",

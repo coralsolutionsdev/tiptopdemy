@@ -59,7 +59,7 @@
                         <!--draggable blanks-->
                         <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in group.draggable_blanks"
                              v-html="draggableBlank.value"
-                             :class="{'dropped-blank':isDropped(group, draggableBlank.value)}"
+                             v-if="!isDropped(group, draggableBlank.value)"
                              draggable @dragstart='startDrag(draggableBlank.question_id, draggableBlank.value, draggableBlankKey)'
                              @click="insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)"
                         >
@@ -325,7 +325,7 @@ name: "Show",
         this.form = res.data;
         this.direction = this.form.direction;
         this.groups = this.form.grouped_questions;
-        console.log(this.groups);
+        // console.log(this.groups);
         this.groupsCount = this.groups.length;
         if(this.groupsCount > 0){
           this.groupsCount = this.groupsCount - 1;
@@ -467,7 +467,6 @@ name: "Show",
       if (!inGroup){
         droppableBlanks = $('#question-'+questionId).find('.droppable-blank');
       }
-      console.log(questionId);
       var nextDroppableBlank = null;
       $.each( droppableBlanks, function( key, droppableBlankItem ) {
         if ($(droppableBlankItem).html() == ''){ // blank item

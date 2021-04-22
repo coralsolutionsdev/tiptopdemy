@@ -394,7 +394,7 @@ name: "Show",
         // each item
         $.each( group.items, function( key, item ) {
           if (item.type != 0){
-            answer = 'mamama';
+            answer = '';
             if(item.type == 1 || item.type == 2 || item.type == 5){
               answer = $("[name='item_answer["+item.id+"]']").val();
             } else if ( item.type == 3){
@@ -414,7 +414,7 @@ name: "Show",
                 selectedAnswersArray[key] = $(selectedAnswer).val();
               });
               answer = selectedAnswersArray;
-            }else if (item.type == 7){
+            }else if (item.type == 7 ||  item.type == 8){
               selectedAnswersArray = [];
               selectedAnswers = $('#question-'+item.id).find('.droppable-blank-input');
               $.each( selectedAnswers, function( key, selectedAnswer ) {

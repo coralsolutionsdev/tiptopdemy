@@ -71,8 +71,11 @@
 </template>
 
 <script>
+import helperMixin from '../../../mixins/helpers';
+
 export default {
   name: "Show",
+  mixins: [helperMixin],
   props: [
     'slug',
     'commentableId',
@@ -109,7 +112,7 @@ export default {
         }
       }
       this.post.is_liked = !this.post.is_liked ;
-      axios.post('/blog/post/'+this.commentableId+'/react/like/toggle', {})
+      axios.post('/blog/post/'+this.slug+'/react/like/toggle', {})
           .then(res => {
           })
           .catch(error => {

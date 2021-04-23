@@ -10,7 +10,7 @@
           <div class="uk-width-expand">
             <textarea class="uk-textarea comment-textarea" rows="4" :placeholder="'Type your comment here'" v-model="newComment"></textarea>
             <div class="uk-margin-small">
-              <button class="uk-button uk-button-primary add-comment" @click="addComment({newCommentText:newComment, id:null , parentId:0  })"><span v-html="$t('main.Comment')"></span></button>
+                <button class="uk-button uk-button-primary add-comment" @click="addComment({newCommentText:newComment, id:null , parentId:0  })"><span v-html="$t('main.Comment')"></span></button>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default {
   name: "Comments",
   mixins: [helperMixin],
   components: {
-    comment
+    comment,
   },
   props: [
     'slug',
@@ -101,6 +101,7 @@ export default {
       var parentId = data.parentId;
       var newCommentText =  data.newCommentText;
       var newId = this.generateRandomString(4);
+      var recaptchaToken = $("[name='g-recaptcha-response']").val();
       this.newComment = '';
       // if (false){
         if (newCommentText && newCommentText.length > 0){
@@ -121,6 +122,7 @@ export default {
             commentable_type: this.className,
             sub_comments: [],
             status: 1,
+            recaptcha_token: recaptchaToken,
           };
           // post a main comment
           if (id == null){
@@ -147,6 +149,7 @@ export default {
             axios.post('/comment', newComment)
                 .then(res => {
                   var postedComment = res.data;
+                  console.log(postedComment)
                   var postedCommentParentId = parseInt(postedComment.parent_id);
                   this.comments.forEach((mainComment, index) => {
                     if(postedComment.posted_id == mainComment.id){

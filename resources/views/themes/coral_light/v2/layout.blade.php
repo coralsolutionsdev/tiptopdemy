@@ -48,6 +48,11 @@
     <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=20210410951')}}"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- recaptcha -->
+    <script src="https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.js"></script>
+    <script src="https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer>
+    </script>
     @yield('head')
 </head>
 <body>
@@ -79,10 +84,23 @@
         cluster: 'ap2'
     });
 
-    var channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', function(data) {
-        alert(JSON.stringify(data));
+    var channel = pusher.subscribe('send-notification-channel');
+    channel.bind('send-notification-event', function(data) {
+        // alert(data);
+        console.log(data)
     });
+
+    // // Enable pusher logging - don't include this in production
+    // Pusher.logToConsole = true;
+    //
+    // var pusher = new Pusher('6e0c4a037bdbc70bb1ee', {
+    //     cluster: 'ap2'
+    // });
+    //
+    // var channel = pusher.subscribe('my-channel');
+    // channel.bind('my-event', function(data) {
+    //     alert(JSON.stringify(data));
+    // });
 
 </script>
 @include('partial.frontend._loading')

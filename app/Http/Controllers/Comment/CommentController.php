@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Comment;
 
 use App\BlogPost;
 use App\Events\MyEvent;
+use App\Events\SendNotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Store\Products as ProductsResource;
 use App\Modules\Comment\Comment;
 use App\Notifications\Blog\PostComment;
 use App\Product;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -49,8 +51,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->only(['id', 'commentable_id', 'commentable_type', 'comment', 'parent_id', 'status']);
-        //
+        $input = $request->only(['id', 'commentable_id', 'commentable_type', 'comment', 'parent_id', 'status', 'recaptcha_token']);
         $user = getAuthUser();
         if ($user){
             // logged users comments
@@ -72,6 +73,7 @@ class CommentController extends Controller
                     if ($notifiableUser){
                         $notifiableUser->notify(new PostComment($user, $commentableModel));
 //                        event(new MyEvent('hello world'));
+                        event(new SendNotificationEvent('Comment added'));
                     }
                 }
             }

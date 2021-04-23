@@ -2,6 +2,7 @@ export default {
     data(){
       return{
         lang: 'en',
+          recaptchaSiteKey:'6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOGe'
       }
     },
     created() {

@@ -57,8 +57,9 @@ class Tag extends Model implements Sortable
             if ($value instanceof self) {
                 return $value;
             }
-
-            return static::findOrCreateFromString($value, $type, $locale);
+            if (!is_null($value)){
+                return static::findOrCreateFromString($value, $type, $locale);
+            }
         });
 
         return is_string($values) ? $tags->first() : $tags;

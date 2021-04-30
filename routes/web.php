@@ -27,9 +27,11 @@ Route::group(['middleware'=>'installed'], function(){
 
 	Route::group(['middleware'=>'lang'], function(){
 		Route::get('/offline','PagesController@Offline')->name('offline');
-	/* Auth Routes */
+	    /* Auth Routes */
 		Auth::routes();
-		Route::get('/get/country/{countryId}/directorates', 'Auth\RegisterController@getCountryDirectorates');
+        Route::get('/get/registration/info', 'PagesController@getInfo');
+
+        Route::get('/get/country/{countryId}/directorates', 'Auth\RegisterController@getCountryDirectorates');
 		Route::get('/get/institution/scope/{scopeId}/fields', 'Auth\RegisterController@getInstitutionScopeFields');
 		Route::get('/get/institution/scope/field/{fieldId}/options', 'Auth\RegisterController@getInstitutionScopeFieldOptions');
 		Route::get('/get/institution/scope/field/{fieldId}/levels', 'Auth\RegisterController@getInstitutionScopeFieldLevels');

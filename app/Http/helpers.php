@@ -499,3 +499,7 @@ function getCollectionIndexOfId($collection, $item){
     }
     return $index;
 }
+
+function getReCaptchaSiteKey(){
+    return config('baseapp.google_recaptcha_key');
+}

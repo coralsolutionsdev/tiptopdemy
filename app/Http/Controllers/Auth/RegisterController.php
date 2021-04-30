@@ -68,6 +68,7 @@ class RegisterController extends Controller
             'gender' => 'required|bool',
             'phone_number' => 'string',
             'password' => 'required|string|min:6|confirmed',
+            'recaptcha' => 'required',
         ]);
     }
 
@@ -81,7 +82,7 @@ class RegisterController extends Controller
     {
         $username = UniqueId::generate(['table' => 'users', 'length' => 8, 'prefix' =>'STU']);
         // recaptcha validation
-        $captcha = $data['g-recaptcha-response'];
+        $captcha = $data['recaptcha'];
         $client = new Client([
             'base_uri' => 'https://google.com/recaptcha/api/',
             'timeout' => 5.0

@@ -17,6 +17,7 @@ use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\Models\Media;
+use Vinkla\Hashids\Facades\Hashids;
 use Webpatser\Countries\Countries;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -217,6 +218,15 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         $this->addMediaConversion('card')
             ->width(500)
             ->sharpen(10);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function generateUsername(){
+        $username =  UniqueId::generate(['table' => 'users', 'length' => 8, 'prefix' =>'STU']);
+        $this->username = $username;
+        $this->save();
     }
     /*
      |--------------------------------------------------------------------------

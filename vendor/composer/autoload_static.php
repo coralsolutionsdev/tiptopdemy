@@ -749,6 +749,7 @@ class ComposerStaticInitbafe6b373d0b5cc8746500236f8c3d12
         'AddCategoryPostTable' => __DIR__ . '/../..' . '/database/migrations/2020_03_31_211430_add_category_post_table.php',
         'AddCompanyIdAndCreatorIdColumnsToCategoryTable' => __DIR__ . '/../..' . '/database/migrations/2020_07_11_172823_add_company_id_and_creator_id_columns_to_category_table.php',
         'AddContentColumnToLessonsTable' => __DIR__ . '/../..' . '/database/migrations/2020_12_18_130846_add_content_column_to_lessons_table.php',
+        'AddHashIdAndSubDirectorateIdToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2021_04_27_154714_add_hash_id_and_sub_directorate_id_to_users_table.php',
         'AddLoveReactantIdToBlogCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_180557_add_love_reactant_id_to_blog_comments_table.php',
         'AddLoveReactantIdToBlogPostsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_14_180945_add_love_reactant_id_to_blog_posts_table.php',
         'AddLoveReactantIdToCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2020_04_26_203420_add_love_reactant_id_to_comments_table.php',

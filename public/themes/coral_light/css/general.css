@@ -202,7 +202,25 @@ Form
     width: 100%;
     height: auto;
 }
-
+.form .vs-input, .form .mx-input {
+    background-color: transparent !important;
+    border: 1px solid #e5e5e5 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 5px;
+    height: 40px;
+    box-shadow: none !important;
+}
+.form .mx-datepicker {
+    width: 100% !important;
+}
+.form .vs-input:focus, .form .vs-input:active, .form .mx-input:active {
+    border: 1px solid #1E87F0 !important;
+}
+.form .vs-input__icon {
+    background-color: transparent !important;
+}
 /**
  end
  */

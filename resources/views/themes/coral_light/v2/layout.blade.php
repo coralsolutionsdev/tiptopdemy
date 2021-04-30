@@ -96,5 +96,9 @@
 </div>
 @include('partial.frontend._loading')
 <script src="{{asset('js/app.js?v=202104221330')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    $(".birthday").flatpickr();
+</script>
 </body>
 </html>

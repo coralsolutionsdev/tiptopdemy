@@ -258,7 +258,7 @@ export default {
         this.levels = data.levels;
         this.inputArray.level_id = data.level_id;
         this.inputArray.token = data._token;
-        this.recaptchaSiteKey = data.recaptcha_site_key;
+        // this.recaptchaSiteKey = data.recaptcha_site_key;
         this.updateSubdirectories(this.inputArray.directorate_id);
       });
 
@@ -280,7 +280,7 @@ export default {
     refreshReCaptchaToken(){
       var vue = this;
       grecaptcha.ready(function() {
-        grecaptcha.execute(this.recaptchaSiteKey, {action: 'submit'}).then(token => {
+        grecaptcha.execute(vue.recaptchaSiteKey, {action: 'submit'}).then(token => {
           // Add your logic to submit to your backend server here.
           if (vue.inputArray.recaptcha != token){
             vue.inputArray.recaptcha = token;

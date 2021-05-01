@@ -145,7 +145,7 @@ export default {
     refreshReCaptchaToken(){
       var vue = this;
       grecaptcha.ready(function() {
-        grecaptcha.execute(this.recaptchaSiteKey, {action: 'submit'}).then(token => {
+        grecaptcha.execute(vue.recaptchaSiteKey, {action: 'submit'}).then(token => {
           // Add your logic to submit to your backend server here.
           if (vue.recaptcha != token){
             vue.recaptcha = token;

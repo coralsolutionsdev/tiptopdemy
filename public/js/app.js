@@ -31093,7 +31093,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       grecaptcha.ready(function () {
         var _this2 = this;
 
-        grecaptcha.execute(this.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
+        grecaptcha.execute(vue.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
           // Add your logic to submit to your backend server here.
           if (vue.recaptcha != token) {
             vue.recaptcha = token;
@@ -31401,7 +31401,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.levels = data.levels;
         _this.inputArray.level_id = data.level_id;
         _this.inputArray.token = data._token;
-        _this.recaptchaSiteKey = data.recaptcha_site_key;
+        // this.recaptchaSiteKey = data.recaptcha_site_key;
         _this.updateSubdirectories(_this.inputArray.directorate_id);
       });
     },
@@ -31426,7 +31426,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       grecaptcha.ready(function () {
         var _this3 = this;
 
-        grecaptcha.execute(this.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
+        grecaptcha.execute(vue.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
           // Add your logic to submit to your backend server here.
           if (vue.inputArray.recaptcha != token) {
             vue.inputArray.recaptcha = token;

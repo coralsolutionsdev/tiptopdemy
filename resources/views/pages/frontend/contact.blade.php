@@ -2,7 +2,6 @@
 @section('title', 'Contact')
 @section('head')
 <!-- IMPORTANT!!! remember CSRF token -->
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://www.google.com/recaptcha/api.js?render={{getReCaptchaSiteKey()}}"></script>
 

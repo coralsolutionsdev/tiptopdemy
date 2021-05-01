@@ -2,9 +2,8 @@
 @section('title', 'register')
 @section('head')
     <!-- IMPORTANT!!! remember CSRF token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://www.google.com/recaptcha/api.js?render={{getReCaptchaSiteKey()}}"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{getReCaptchaSiteKey()}}?v=202105012100"></script>
 
 @endsection
 @section('content')

@@ -43,6 +43,8 @@ export default {
       postingMode: false,
       postingMessage: '',
       recaptcha: '',
+      recaptchaSiteKey : '6LeQDcIaAAAAAFLK1sXS-x6mdmeLgIl1Ba8CDR39', // tiptop key
+      // recaptchaSiteKey : '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', // dev key
       items:[
         {
           label: 'الأسم',
@@ -143,7 +145,7 @@ export default {
     refreshReCaptchaToken(){
       var vue = this;
       grecaptcha.ready(function() {
-        grecaptcha.execute('6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', {action: 'submit'}).then(token => {
+        grecaptcha.execute(this.recaptchaSiteKey, {action: 'submit'}).then(token => {
           // Add your logic to submit to your backend server here.
           if (vue.recaptcha != token){
             vue.recaptcha = token;

@@ -192,7 +192,6 @@
                 <div class="uk-margin-small pb-0 item-config" style="display: none">
                     <ul class="uk-subnav uk-subnav-pill" uk-switcher>
                         <li><a href="#">{{__('main.General settings')}}</a></li>
-                        <li><a href="#">{{__('main.Properties')}}</a></li>
                         <li><a href="#">{{__('main.Display settings')}}</a></li>
                     </ul>
                     <ul class="uk-switcher">
@@ -319,8 +318,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="uk-placeholder item-config-section">
                             <label class="uk-form-label h-header" for="">Answering settings</label>
                             <div class="uk-grid-small" uk-grid>
                                 <div class="uk-width-5-5@s uk-flex uk-flex-middle">

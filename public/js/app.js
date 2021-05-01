@@ -31333,7 +31333,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       fieldOptions: [],
       levels: [],
       errors: [],
-      recaptchaSiteKey: null,
+      recaptchaSiteKey: '6LeQDcIaAAAAAFLK1sXS-x6mdmeLgIl1Ba8CDR39', // tiptop key
+      // recaptchaSiteKey : '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', // dev key
       inputArray: {
         first_name: '',
         middle_name: '',

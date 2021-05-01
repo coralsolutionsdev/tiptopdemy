@@ -39,9 +39,13 @@ class HomeController extends Controller
 
     public function suspended(){
         $modelName = 'Profile';
+        $user = Auth::user();
         $page_title = __('main.Home page');
         $breadcrumb =  Breadcrumbs::render('profile');
-        $status = Auth::user()->status;
+        if (!$user){
+            return redirect()->route('main');
+        }
+        $status = $user->status;
         if($status == User::STATUS_PENDING || $status == User::STATUS_DISABLED){
             return view('profile.verification', compact('status', 'modelName', 'page_title', 'breadcrumb'));
         }

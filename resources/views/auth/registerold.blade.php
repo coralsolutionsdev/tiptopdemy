@@ -3,32 +3,7 @@
 @section('head')
     <!-- IMPORTANT!!! remember CSRF token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script type="text/javascript">
-        function callbackThen(response){
-            // read HTTP status
-            // console.log(response.status);
-
-            // read Promise object
-            response.json().then(function(data){
-                // console.log(data);
-            });
-        }
-        function callbackCatch(error){
-            console.error('Error:', error)
-        }
-        function myCustomValidation(token) {
-            $('.recaptcha-validation-required').attr('disabled', false)
-            $("[name='g-recaptcha-response']").val(token);
-        }
-    </script>
-
-    {!! htmlScriptTagJsApi([
-           'action' => 'homepage',
-           'callback_then' => 'callbackThen',
-           'callback_catch' => 'callbackCatch',
-           'custom_validation' => 'myCustomValidation'
-       ]) !!}
-
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG"></script>
 @endsection
 @section('content')
     <section>
@@ -228,7 +203,7 @@
                             @endif
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
-                                    <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required" disabled>{{__('Register')}}</button>
+                                    <button class="uk-button uk-button-primary uk-width-1-1" disabled>{{__('Register')}}</button>
                                 </div>
                             </div>
                         </form>

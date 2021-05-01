@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Institution\Directorate;
 use App\Institution\InstitutionScope;
 use App\Institution\InstitutionScopeField;
+use App\Jobs\SendFormMail;
 use App\Jobs\SendValidationMail;
 use App\Layout;
+use App\Mail\SendMail;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use DB;
 use App\BlogPost;
@@ -32,7 +35,6 @@ class PagesController extends Controller
         $site = Site::all()->last();
         if($site->active == 0)
         {
-            //return redirect()->route('offline');
             return view('offline',compact('contacts'));
             
         }   
@@ -144,6 +146,44 @@ class PagesController extends Controller
             'recaptcha_site_key' => getReCaptchaSiteKey(),
         ];
         return \response($data, 200);
+    }
+
+    public function contact(){
+        return view('pages.frontend.contact');
+    }
+
+    public function sendFormEmail(Request $request){
+        $data = $request->only(['items', 'recaptcha']);
+        // recaptcha validation
+        $captcha = $data['recaptcha'];
+        $client = new Client([
+            'base_uri' => 'https://google.com/recaptcha/api/',
+            'timeout' => 5.0
+        ]);
+        $response = $client->request('POST', 'siteverify', [
+            'query' => [
+                'secret' => config('baseapp.google_recaptcha_secret'),
+                'response' => $captcha]
+        ]);
+        $response = json_decode($response->getBody()->getContents(), true);
+        if (!$response['success']){
+            return response('unable to validate reCaptcha, please try again.', 422);
+        }
+        $data['sender_name'] = null;
+        $data['sender_email'] = null;
+        if ($data['items']){
+            foreach ($data['items'] as $item){
+                if ($item['senderEmail'] == true && is_null($data['sender_email'])){
+                    $data['sender_email'] = $item['value'];
+                }
+                if ($item['senderTitle'] == true && is_null($data['sender_name'])){
+                    $data['sender_name'] = $item['value'];
+                }
+            }
+        }
+        $data['receiver_email'] = 'info@tiptopdemy.com';
+        $email = SendFormMail::dispatch($data);
+        return response('Ok', 200);
     }
    
 }

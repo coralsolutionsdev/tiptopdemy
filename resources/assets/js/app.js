@@ -46,6 +46,7 @@ Vue.component('product-items', require('./components/frontend/products/items.vue
 Vue.component('form-show', require('./components/frontend/forms/Show.vue'));
 Vue.component('smart-form-create', require('./components/admin/form/smart_form/Create.vue'));
 Vue.component('register-form', require('./components/system/forms/RegisterForm.vue'));
+Vue.component('form-builder', require('./components/system/forms/FormBuilder.vue'));
 
 // If you want to use it in your vue components
 Vue.use(AtComponents)

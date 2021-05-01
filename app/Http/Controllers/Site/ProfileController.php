@@ -234,6 +234,9 @@ class ProfileController extends Controller
     }
 
 
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function reSendActivationEmail(Request $request)
     {
         $request->validate([

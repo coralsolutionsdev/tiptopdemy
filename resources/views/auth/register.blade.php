@@ -3,7 +3,7 @@
 @section('head')
     <!-- IMPORTANT!!! remember CSRF token -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://www.google.com/recaptcha/api.js?render={{getReCaptchaSiteKey()}}?v=202105012100"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{getReCaptchaSiteKey()}}"></script>
 
 @endsection
 @section('content')

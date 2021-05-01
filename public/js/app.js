@@ -30993,6 +30993,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       postingMode: false,
       postingMessage: '',
       recaptcha: '',
+      recaptchaSiteKey: '6LeQDcIaAAAAAFLK1sXS-x6mdmeLgIl1Ba8CDR39', // tiptop key
+      // recaptchaSiteKey : '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', // dev key
       items: [{
         label: 'الأسم',
         type: 'text',
@@ -31091,7 +31093,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       grecaptcha.ready(function () {
         var _this2 = this;
 
-        grecaptcha.execute('6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', { action: 'submit' }).then(function (token) {
+        grecaptcha.execute(this.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
           // Add your logic to submit to your backend server here.
           if (vue.recaptcha != token) {
             vue.recaptcha = token;
@@ -31423,7 +31425,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       grecaptcha.ready(function () {
         var _this3 = this;
 
-        grecaptcha.execute('6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', { action: 'submit' }).then(function (token) {
+        grecaptcha.execute(this.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
           // Add your logic to submit to your backend server here.
           if (vue.inputArray.recaptcha != token) {
             vue.inputArray.recaptcha = token;

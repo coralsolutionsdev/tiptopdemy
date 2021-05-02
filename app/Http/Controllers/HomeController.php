@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendValidationMail;
+use App\Mail\ValidationMail;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -34,6 +36,18 @@ class HomeController extends Controller
     }
 
     public function template(){
+        $user = Auth::user();
+        $email = $user->email;
+        $validationCode =  !empty($email) ? generateValidationCode($email) : null;
+        $data['receiver_name'] = $user->first_name;
+        $data['receiver_email'] = $email;
+        $data['validation_code'] = $validationCode;
+        try {
+            Mail::to($data['receiver_email'])->send(new ValidationMail($data));
+        } catch (\Exception $e) {
+            dd($e);
+        }
+        dd('done');
         return view('template');
     }
 

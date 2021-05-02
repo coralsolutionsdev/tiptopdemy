@@ -14,7 +14,7 @@
 {{--    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">--}}
     <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     <!--site Css-->
-    <link rel="stylesheet" href="{{asset('themes/'.getFrontendThemeName().'/css/general.css?v=202105012231')}}">
+    <link rel="stylesheet" href="{{asset('themes/'.getFrontendThemeName().'/css/general.css?v=202105012232')}}">
 
     <!-- THEME CSS -->
     <style>
@@ -45,7 +45,7 @@
     <!-- scripts -->
     <script src="{{asset('libraries/uikit/js/uikit.min.js')}}"></script>
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
-    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202105012231')}}"></script>
+    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202105012232')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('head')
 </head>
@@ -95,7 +95,7 @@
      page_id="103810867929225">
 </div>
 @include('partial.frontend._loading')
-<script src="{{asset('js/app.js?v=202105012231')}}"></script>
+<script src="{{asset('js/app.js?v=202105012232')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     $(".birthday").flatpickr();

@@ -11,20 +11,20 @@
         <div class="uk-grid-small uk-child-width-1-2@m" uk-grid>
         <div class="uk-width-1-4@m uk-width-1-2">
           <label class="uk-form-label" v-html="$t('main.First name')">First name</label>
-          <input class="uk-input" name="first_name" type="text" required :class="{'uk-form-danger': errors.first_name }" v-model="inputArray.first_name">
+          <input class="uk-input" max="20" name="first_name" type="text" required :class="{'uk-form-danger': errors.first_name }" v-model="inputArray.first_name">
           <span class="uk-text-danger uk-text-meta" v-if="errors.first_name" v-html="errors.first_name[0]"></span>
         </div>
         <div class="uk-width-1-4@m uk-width-1-2">
           <label class="uk-form-label" v-html="$t('main.Father_name')"></label>
-          <input class="uk-input" name="middle_name" type="text" required v-model="inputArray.middle_name">
+          <input class="uk-input" max="20" name="middle_name" type="text" required v-model="inputArray.middle_name">
         </div>
         <div class="uk-width-1-4@m uk-width-1-2">
           <label class="uk-form-label" v-html="$t('main.Grandpa_name')"></label>
-          <input class="uk-input" name="last_name" type="text" required v-model="inputArray.last_name">
+          <input class="uk-input" max="20" name="last_name" type="text" required v-model="inputArray.last_name">
         </div>
         <div class="uk-width-1-4@m uk-width-1-2">
           <label class="uk-form-label"v-html="$t('main.Surname')"></label>
-          <input class="uk-input" name="surname" type="text" required :class="{'uk-form-danger': errors.surname }" v-model="inputArray.surname">
+          <input class="uk-input" max="20" name="surname" type="text" required :class="{'uk-form-danger': errors.surname }" v-model="inputArray.surname">
           <span class="uk-text-danger uk-text-meta" v-if="errors.surname" v-html="errors.surname[0]"></span>
         </div>
         <div class="uk-width-1-1">

@@ -587,6 +587,9 @@
         'Drag and drop message' => 'قم بسحب وإفلات الملف لتحميل! أو انقر لإختيار ملف من جهاز الكمبيوتر الخاص بك',
         'you are allowed to upload message' => '.يسمح لك بتحميل 10 ملفات فقط في آن واحد',
 
+        // tiptop
+        'at Tiptopdemy platform' => 'في منصة Tiptopdemy'
+
 
 
     ];

@@ -559,7 +559,8 @@
         'There is no media items available yet' => 'There is no media items available yet',
         'Drag and drop message' => 'Drag and drop to upload content! Or click to select a file from your computer',
         'you are allowed to upload message' => 'you are allowed to upload only 10 files per time',
-
+        // tiptop
+        'at Tiptopdemy platform' => 'at Tiptopdemy platform'
 
 
     ];

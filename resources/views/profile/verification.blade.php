@@ -41,7 +41,7 @@
                     @if($status == \App\User::STATUS_PENDING)
                         <img src="{{asset_image('/assets/reading_01.png')}}" width="200">
                         <h3 class="uk-card-title uk-text-primary uk-text-normal">{{__('main.One more step to activate your account')}}</h3>
-                        <p>{{__('main.Dear', ['name' => Auth::user()->first_name])}}, {{__('main.Thank you to join us')}}</p>
+                        <p>{{__('main.welcome')}} <b>{{Auth::user()->username}}</b> - {{Auth::user()->name}}  {{__('main.at Tiptopdemy platform')}}.</p>
                         <p>{{__('main.To complete your registration please verify your account')}}<br>
                             {{__('main.An email has been sent to your email')}} "<strong class="color-primary">{{Auth::user()->email}}</strong>" {{__('main.with the activation instruction')}}.
                         </p>

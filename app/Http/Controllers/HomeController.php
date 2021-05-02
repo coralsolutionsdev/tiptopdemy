@@ -37,7 +37,7 @@ class HomeController extends Controller
     }
 
     public function template(){
-        return view('template');
+        return redirect()->route('main');
     }
 
     public function suspended(){

@@ -34,6 +34,7 @@ class SendValidationMail implements ShouldQueue
         $receiverData = $this->data;
         try {
             Mail::to($receiverData['receiver_email'])->send(new ValidationMail($receiverData));
+            Log::info('Activation email sent');
         } catch (\Exception $e) {
             Log::error($e->getMessage() . ' ' . $e->getTraceAsString());
         }

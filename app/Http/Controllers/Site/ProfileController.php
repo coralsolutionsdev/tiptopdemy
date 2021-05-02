@@ -19,6 +19,7 @@ use App\GalleryImage;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -260,6 +261,7 @@ class ProfileController extends Controller
             $data['receiver_email'] = $email;
             $data['validation_code'] = $validationCode;
             SendValidationMail::dispatch($data);
+            Log::info('Activation email dispatched');
             session()->flash('success', __('You will receive your activation mail soon, please check your email.'));
             return redirect()->back();
         }else{

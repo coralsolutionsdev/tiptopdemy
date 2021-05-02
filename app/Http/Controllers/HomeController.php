@@ -43,11 +43,12 @@ class HomeController extends Controller
         $data['receiver_name'] = $user->first_name;
         $data['receiver_email'] = $email;
         $data['validation_code'] = $validationCode;
-        try {
-            Mail::to($data['receiver_email'])->send(new ValidationMail($data));
-        } catch (\Exception $e) {
-            Log::error($e->getMessage() . ' ' . $e->getTraceAsString());
-        }
+//        try {
+//            Mail::to($data['receiver_email'])->send(new ValidationMail($data));
+//        } catch (\Exception $e) {
+//            Log::error($e->getMessage() . ' ' . $e->getTraceAsString());
+//        }
+        SendValidationMail::dispatch($data);
         dd('done');
         return view('template');
     }

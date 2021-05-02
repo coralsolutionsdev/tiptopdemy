@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendValidationMail implements ShouldQueue
@@ -34,7 +35,7 @@ class SendValidationMail implements ShouldQueue
         try {
             Mail::to($receiverData['receiver_email'])->send(new ValidationMail($receiverData));
         } catch (\Exception $e) {
-            // TODO: log error
+            Log::error($e->getMessage() . ' ' . $e->getTraceAsString());
         }
     }
 

@@ -36,19 +36,7 @@ class HomeController extends Controller
     }
 
     public function template(){
-        $user = Auth::user();
-        $email = $user->email;
-        $validationCode =  !empty($email) ? generateValidationCode($email) : null;
-        $data['receiver_name'] = $user->first_name;
-        $data['receiver_email'] = $email;
-        $data['validation_code'] = $validationCode;
-        try {
-            Mail::to($data['receiver_email'])->send(new ValidationMail($data));
-        } catch (\Exception $e) {
-            dd($e);
-        }
-        dd('done');
-        return view('template');
+        return redirect()->route('main');
     }
 
     public function suspended(){

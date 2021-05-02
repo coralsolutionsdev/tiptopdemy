@@ -249,7 +249,6 @@ class ProfileController extends Controller
         $response = recaptchaValidate($captcha);
         if (!$response['success']){
             session()->flash('warring', __('captcha is not correct.'));
-
             return redirect()->back();
         }
         $user = Auth::user();
@@ -261,7 +260,6 @@ class ProfileController extends Controller
             $data['receiver_email'] = $email;
             $data['validation_code'] = $validationCode;
             SendValidationMail::dispatch($data);
-            Log::info('Activation email dispatched');
             session()->flash('success', __('You will receive your activation mail soon, please check your email.'));
             return redirect()->back();
         }else{

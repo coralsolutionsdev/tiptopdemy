@@ -76,14 +76,14 @@
                               <input type="hidden" name="items_id[]" :value="question.id">
                               <span class="question-title" v-html="question.title"></span>
                               <span v-if="question.type == 1">
-                            <input class="input-classic" :name="'item_answer['+question.id+']'"  type="text" :placeholder="$t('main.Your answer')">
-                          </span>
+                                <input class="input-classic" :name="'item_answer['+question.id+']'"  type="text" :placeholder="$t('main.Your answer')" autocomplete="off">
+                              </span>
                               <span v-else-if="question.type == 2">
-                            <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent"></textarea>
-                          </span>
+                                <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent" autocomplete="off"></textarea>
+                              </span>
                               <span v-else-if="question.type == 3">
-                                <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-radio" type="radio" :name="'item_answer['+question.id+']'" :value="option.title"> {{option.title}}</label>
-                          </span>
+                                    <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-radio" type="radio" :name="'item_answer['+question.id+']'" :value="option.title"> {{option.title}}</label>
+                              </span>
                               <span v-else-if="question.type == 4">
 <!--                            <vs-checkbox v-for="option in question.options" :name="'item_answer['+question.id+'][]'" :value="option.title"> {{option.title}} </vs-checkbox>-->
                                 <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-checkbox" :name="'item_answer['+question.id+'][]'" :value="option.title" type="checkbox"> {{option.title}}</label>

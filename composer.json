@@ -35,8 +35,7 @@
         "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-tags": "2.7.2",
         "vinkla/hashids": "7.0.*",
-        "webpatser/laravel-countries": "1.5.*",
-        "ext-http": "*"
+        "webpatser/laravel-countries": "1.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

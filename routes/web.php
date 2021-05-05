@@ -234,7 +234,7 @@ Route::group(['middleware'=>'lang'], function(){
                 Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
 //                    Route::post('/post/comment/store', 'CommentController@store');
                 });
-            }   
+            }
             /* Comment */
             Route::group(['namespace' => 'Comment'], function (){
                 Route::resource('/comment','CommentController');

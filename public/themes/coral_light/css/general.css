@@ -186,6 +186,8 @@ Form
 .disable-number-row input[type=number] {
     -moz-appearance: textfield !important;
 }
+textarea { resize: vertical; }
+
 /*images*/
 .thumbnail {
     position: relative;

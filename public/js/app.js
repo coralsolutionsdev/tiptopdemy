@@ -31708,14 +31708,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FormBuilder",
+  props: ['recaptchaSiteKey'],
   data: function data() {
     return {
       lang: 'en',
       postingMode: false,
       postingMessage: '',
       recaptcha: '',
-      recaptchaSiteKey: '6LeQDcIaAAAAAFLK1sXS-x6mdmeLgIl1Ba8CDR39', // tiptop key
-      // recaptchaSiteKey : '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', // dev key
       items: [{
         label: 'الأسم',
         type: 'text',
@@ -32041,6 +32040,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "RegisterForm",
   components: { DatePicker: __WEBPACK_IMPORTED_MODULE_0_vue2_datepicker__["a" /* default */] },
+  props: ['recaptchaSiteKey'],
   data: function data() {
     return {
       value: '',
@@ -32054,8 +32054,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       fieldOptions: [],
       levels: [],
       errors: [],
-      recaptchaSiteKey: '6LeQDcIaAAAAAFLK1sXS-x6mdmeLgIl1Ba8CDR39', // tiptop key
-      // recaptchaSiteKey : '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', // dev key
       inputArray: {
         first_name: '',
         middle_name: '',

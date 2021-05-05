@@ -14,7 +14,9 @@
                 <div class="uk-card uk-card-default uk-card-body uk-width-1-1">
                     <div class="uk-grid" uk-grid>
                         <div class="uk-width-1-2@m uk-width-1-1">
-                            <form-builder></form-builder>
+                            <form-builder
+                                recaptcha-site-key="{{getReCaptchaSiteKey()}}">
+                            </form-builder>
                         </div>
                         <div class="uk-width-1-2@m uk-width-1-1">
                             <h3>{{__('main._contact_info')}}</h3>

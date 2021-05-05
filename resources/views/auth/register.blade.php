@@ -11,7 +11,8 @@
         <div class="pt-25">
             <div class="uk-container">
                 <div class="uk-flex uk-flex-center uk-padding-small" uk-grid>
-                    <register-form>
+                    <register-form
+                        recaptcha-site-key="{{getReCaptchaSiteKey()}}">
                     </register-form>
                 </div>
             </div>

@@ -37,14 +37,15 @@
 <script>
 export default {
   name: "FormBuilder",
+  props: [
+    'recaptchaSiteKey'
+  ],
   data(){
     return{
       lang:'en',
       postingMode: false,
       postingMessage: '',
       recaptcha: '',
-      recaptchaSiteKey : '6LeQDcIaAAAAAFLK1sXS-x6mdmeLgIl1Ba8CDR39', // tiptop key
-      // recaptchaSiteKey : '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOG', // dev key
       items:[
         {
           label: 'الأسم',

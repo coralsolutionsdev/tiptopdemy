@@ -42,33 +42,36 @@
                         <div class="notification-dropdown" uk-dropdown="pos: bottom-justify; mode: click" style="width: 500px !important;">
                             <div>
                                 <div class="" style="padding: 10px 15px 0px 15px">
-                                    <h4 class="text-highlighted uk-text-bold">Notifications</h4>
+                                    <h4 class="text-highlighted uk-text-bold">{{__('main.Notifications')}}</h4>
                                 </div>
                                 <div class="notifications">
                                     <ul class="uk-list uk-margin-remove">
-                                        @foreach($notifications as $notification)
-                                        <li class="uk-margin-remove">
-                                            <div class="notification-item read">
-                                                <a href="">
-                                                    <div class="uk-grid-small" uk-grid>
-                                                        <div class="uk-width-auto">
-                                                            <img class="uk-border-circle" src="{{$notification->data['notifier_image']}}" width="60" height="60" alt="Border circle">
+                                        @if(false)
+                                            @foreach($notifications as $notification)
+                                            <li class="uk-margin-remove">
+                                                <div class="notification-item read">
+                                                    <a href="">
+                                                        <div class="uk-grid-small" uk-grid>
+                                                            <div class="uk-width-auto">
+                                                                <img class="uk-border-circle" src="{{$notification->data['notifier_image']}}" width="60" height="60" alt="Border circle">
+                                                            </div>
+                                                            <div class="uk-width-expand">
+                                                                <b>{{$notification->data['notifier_name']}}</b> <span>{{$notification->data['message']}}</span>
+                                                                <br>
+                                                                <span class="uk-text-muted" style="font-size: 10px">{{$notification->created_at->diffForHumans()}}</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="uk-width-expand">
-                                                            <b>{{$notification->data['notifier_name']}}</b> <span>{{$notification->data['message']}}</span>
-                                                            <br>
-                                                            <span class="uk-text-muted" style="font-size: 10px">{{$notification->created_at->diffForHumans()}}</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        @endforeach
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                        @endif
+                                        <li class="uk-text-center">{{__('main.No notifications yet')}}</li>
                                     </ul>
                                 </div>
 
                                 <div class="uk-padding-small uk-text-center">
-                                    <a href="">See more</a>
+                                    <a href="">{{__('main.View more')}}</a>
                                 </div>
 
                             </div>

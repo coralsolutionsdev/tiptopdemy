@@ -69,12 +69,13 @@ class CommentController extends Controller
             $commentableModel = $model::find($comment['commentable_id']); //  get model eloquent
             if ($commentableModel){
                 if ($comment['commentable_type'] == 'App\BlogPost'){ // PostComment notification
+                    // TODO: complete notifications
                     $notifiableUser = $commentableModel->user;
-                    if ($notifiableUser){
-                        $notifiableUser->notify(new PostComment($user, $commentableModel));
-//                        event(new MyEvent('hello world'));
-                        event(new SendNotificationEvent('Comment added'));
-                    }
+//                    if ($notifiableUser){
+//                        $notifiableUser->notify(new PostComment($user, $commentableModel));
+//                         event(new MyEvent('hello world'));
+//                        event(new SendNotificationEvent('Comment added'));
+//                    }
                 }
             }
         }

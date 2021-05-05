@@ -531,7 +531,9 @@
         'Drag and drop message' => 'Drag and drop to upload content! Or click to select a file from your computer',
         'you are allowed to upload message' => 'you are allowed to upload only 10 files per time',
 
-
+        // notifications
+        'Notifications' => 'Notifications',
+        'No notifications yet' => 'No notifications yet',
 
     ];
 ?>

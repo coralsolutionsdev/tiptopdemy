@@ -92,3 +92,14 @@
     color: var(--text-primary) !important;
 }
 
+.notification-dropdown.uk-dropdown{
+    width: 300px !important;
+    padding: 0px !important;
+}
+.notification-dropdown .notification-item {
+    padding: 5px 15px;
+}
+.notification-dropdown .read, .notification-item:hover{
+    background-color: #F9F8FD;
+}
+

@@ -27,6 +27,7 @@
         "laravelcollective/html": "^6.0",
         "monolog/monolog": "^1.24",
         "pion/laravel-chunk-upload": "^1.4",
+        "pusher/pusher-php-server": "^4.0",
         "rajurayhan/larastreamer": "^1.0",
         "rap2hpoutre/laravel-log-viewer": "1.4.*",
         "santigarcor/laratrust": "5.*.*",

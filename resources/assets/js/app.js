@@ -16,7 +16,9 @@ import AtComponents from 'at-ui'
 // import 'at-ui-style'    // Import CSS
 import Vuesax from 'vuesax'
 // import 'vuesax/dist/vuesax.css' //Vuesax styles
-
+import VueSocialSharing from 'vue-social-sharing'
+// social share
+Vue.use(VueSocialSharing);
 
 Vue.use(VueInternationalization);
 
@@ -47,6 +49,10 @@ Vue.component('form-show', require('./components/frontend/forms/Show.vue'));
 Vue.component('smart-form-create', require('./components/admin/form/smart_form/Create.vue'));
 Vue.component('register-form', require('./components/system/forms/RegisterForm.vue'));
 Vue.component('form-builder', require('./components/system/forms/FormBuilder.vue'));
+Vue.component('notifications', require('./components/system/notifications.vue'));
+Vue.component('notifications-menu', require('./components/system/NotificationsMenu.vue'));
+Vue.component('comments', require('./components/frontend/comments/Comments.vue'));
+Vue.component('post-show', require('./components/frontend/blog/Show.vue'));
 
 // If you want to use it in your vue components
 Vue.use(AtComponents)

@@ -96,6 +96,7 @@ class ModelLexer implements Lexer
         'primary' => 'primary',
         'foreign' => 'foreign',
         'ondelete' => 'onDelete',
+        'onupdate' => 'onUpdate',
         'comment' => 'comment',
     ];
 
@@ -184,10 +185,14 @@ class ModelLexer implements Lexer
             $model->addColumn($column);
 
             $foreign = collect($column->modifiers())->filter(function ($modifier) {
-                return (is_array($modifier) && key($modifier) === 'foreign') || $modifier === 'foreign';
+                return collect($modifier)->containsStrict('foreign') || collect($modifier)->has('foreign');
             })->flatten()->first();
 
-            if ($column->name() !== 'id' && (in_array($column->dataType(), ['id', 'uuid']) || $foreign)) {
+            if (
+                ($column->name() !== 'id' && $column->dataType() === 'id')
+                || ($column->dataType() === 'uuid' && Str::endsWith($column->name(), '_id'))
+                || $foreign
+            ) {
                 $reference = $column->name();
 
                 if ($foreign && $foreign !== 'foreign') {
@@ -241,10 +246,10 @@ class ModelLexer implements Lexer
 
             if (isset(self::$modifiers[strtolower($value)])) {
                 $modifierAttributes = $parts[1] ?? null;
-                if ($modifierAttributes === null) {
+                if (is_null($modifierAttributes)) {
                     $modifiers[] = self::$modifiers[strtolower($value)];
                 } else {
-                    $modifiers[] = [self::$modifiers[strtolower($value)] => $modifierAttributes];
+                    $modifiers[] = [self::$modifiers[strtolower($value)] => preg_replace('~^[\'"]?(.*?)[\'"]?$~', '$1', $modifierAttributes)];
                 }
             }
         }

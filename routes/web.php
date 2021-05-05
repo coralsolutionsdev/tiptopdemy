@@ -232,15 +232,16 @@ Route::group(['middleware'=>'lang'], function(){
 //                    Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
                 Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
 //                    Route::post('/post/comment/store', 'CommentController@store');
+                });
+            }
+            /* Comment */
+            Route::group(['namespace' => 'Comment'], function (){
+                Route::resource('/comment','CommentController');
+                Route::get('/comments/get/items', 'CommentController@getItems');
+                Route::post('/comment/{comment}/ajax/delete','CommentController@ajaxDestroy');
+                Route::post('/comment/{comment}/ajax/update','CommentController@ajaxUpdate');
+                Route::post('/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact');
             });
-        }
-        /* Comment */
-        Route::group(['namespace' => 'Comment'], function (){
-            Route::resource('/comment','CommentController');
-            Route::post('/comment/{comment}/ajax/delete','CommentController@ajaxDestroy');
-            Route::post('/comment/{comment}/ajax/update','CommentController@ajaxUpdate');
-            Route::post('/comment/{comment}/react/{type}/toggle', 'CommentController@updateReact');
-        });
 
         /* Gallery */
         Route::get('/gallery/album/{slug}','Gallery\AlbumController@show')->name('gallery.album.show');
@@ -297,11 +298,15 @@ Route::group(['middleware'=>'lang'], function(){
 
         /*pages*/
         Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
+            Route::get('/notifications','HomeController@notifications')->name('get.notifications');
 
-        /*System*/
-        Route::resource('/system/todo','System\TodoItemController');
+            /*pages - Should be last route always*/
+            Route::get('/{slug}','Site\PageController@getPage')->name('get.page');
 
+
+        });
     });
-});
-/* End of User Routes */
+    /* End of User Routes */
+
+
 });

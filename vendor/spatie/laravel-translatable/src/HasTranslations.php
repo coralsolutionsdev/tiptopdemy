@@ -9,6 +9,13 @@ use Spatie\Translatable\Exceptions\AttributeIsNotTranslatable;
 
 trait HasTranslations
 {
+    protected $translationLocale = null;
+
+    public static function usingLocale(string $locale): self
+    {
+        return (new self())->setLocale($locale);
+    }
+
     public function getAttributeValue($key)
     {
         if (! $this->isTranslatableAttribute($key)) {
@@ -157,6 +164,17 @@ trait HasTranslations
         return isset($this->getTranslations($key)[$locale]);
     }
 
+    public function replaceTranslations(string $key, array $translations): self
+    {
+        foreach ($this->getTranslatedLocales($key) as $locale) {
+            $this->forgetTranslation($key, $locale);
+        }
+
+        $this->setTranslations($key, $translations);
+
+        return $this;
+    }
+
     protected function guardAgainstNonTranslatableAttribute(string $key)
     {
         if (! $this->isTranslatableAttribute($key)) {
@@ -185,9 +203,16 @@ trait HasTranslations
         return $locale;
     }
 
-    protected function getLocale(): string
+    public function setLocale(string $locale): self
     {
-        return config('app.locale');
+        $this->translationLocale = $locale;
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->translationLocale ?: config('app.locale');
     }
 
     public function getTranslatableAttributes(): array

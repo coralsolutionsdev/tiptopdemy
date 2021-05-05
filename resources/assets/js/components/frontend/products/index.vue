@@ -193,7 +193,6 @@ name: "index",
     },
     updateLoadingMode(status){
       this.minLoadingMode = status;
-
     }
   },
 }

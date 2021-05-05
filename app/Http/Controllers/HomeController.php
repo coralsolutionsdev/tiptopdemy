@@ -77,5 +77,10 @@ class HomeController extends Controller
 
     }
 
+    public function notifications(){
+        $page_title = 'Notifications';
+        return view('system.notifications.index', compact('page_title'));
+    }
+
     
 }

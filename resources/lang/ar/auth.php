@@ -16,10 +16,11 @@ return [
     'failed' => 'البريد الالكتروني او كلمة المرور هذه لا تتطابق مع سجلاتنا, يرجى التأكد ومعاودة المحاولة.',
     'Password' => 'كلمة المرور',
     'Confirm Password' => 'تأكيد كلمة المرور',
-    'Forgot Password?' => 'هل نسيت كلمة المرور؟',
+    'Forgot Password' => 'نسيت كلمة المرور',
     'Reset Password' => 'إعادة تعيين كلمة المرور',
     'E-Mail Address' => 'عنوان البريد الإلكتروني',
     'Send Password Reset Link' => 'إرسال رابط إعادة تعيين كلمة السر',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'Login' => 'تسجيل الدخول',
 
 ];

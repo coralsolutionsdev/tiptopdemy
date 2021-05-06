@@ -28,8 +28,7 @@
         @else
             {!! Form::open(['url' => $storeRoute,'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
-
-            @include('manage.partials._page-header')
+        @include('manage.partials._page-header-v2')
         <div class="form-panel row">
             <div class=" col-lg-12">
                 <div class="card border-light">

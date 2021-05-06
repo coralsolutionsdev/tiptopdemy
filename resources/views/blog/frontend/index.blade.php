@@ -39,7 +39,7 @@
 																@endforeach
 															</li>
 														@endif
-														<li><span class="{{$post->getReactionCount('like') > 0 ? 'uk-text-danger fas' : 'far' }} fa-heart reaction-icon"></span>  <span class="reaction-count">{{$post->getReactionCount('like')}}</span></li>
+														<li><span class="{{$post->getReactionCount('like') > 0 ? 'uk-text-danger far' : 'far' }} fa-heart reaction-icon"></span>  <span class="reaction-count">{{$post->getReactionCount('like')}}</span></li>
 													</ul>
 													<p>
 														{!! readMore($post->content) !!}

@@ -25,6 +25,10 @@
                       <span class="post-reaction-count" v-html="post.likes"></span>
                     </a>
                   </li>
+                  <li v-else class="uk-text-danger">
+                    <span class="post-reaction-icon" :class="post.is_liked ? 'fas fa-heart' : 'far fa-heart'"></span>
+                    <span class="post-reaction-count" v-html="post.likes"></span>
+                  </li>
                 </ul>
               </div>
             </div>

@@ -370,6 +370,8 @@
         'Congratulations!' => 'Congratulations!',
         'You completed the quiz' => 'You\'ve passed the lesson\'s memorize test, you can continue viewing the lesson content',
         'Quiz me' => 'Quiz me',
+        'Memory Test' => 'Memory Test',
+        'Add Memory Test' => 'Add Memory Test',
 
         /*Cart*/
         'Cart' => 'Cart',

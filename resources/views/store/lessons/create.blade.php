@@ -18,7 +18,7 @@
         @else
             {!! Form::open(['url' => route('store.lessons.store', $product->slug),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
-        @include('manage.partials._page-header')
+        @include('manage.partials._page-header-v2')
         <div class="form-panel row">
             <div class="col-lg-12">
                 <div class="card border-light">
@@ -323,14 +323,14 @@
             <div id="memorize" class="col-lg-12">
                 <div class="card border-light">
                     <div class="card-body">
-                        <p>{{__('Memorizes')}}</p>
+                        <p>{{__('main.Memory Test')}}</p>
                         <hr>
                         <div class="row">
                             <div class="col-lg-12 text-right" style="padding: 10px">
                             @if(!empty($lesson))
                                 <!-- Button trigger modal -->
                                 <a href="{{route('store.memorize.create', $lesson->slug)}}" class="uk-button uk-button-default">
-                                    <span uk-icon="plus-circle"></span> {{__('main.Add Quiz')}}
+                                    <span uk-icon="plus-circle"></span> {{__('main.Add Memory Test')}}
                                 </a>
                             </div>
                             @endif

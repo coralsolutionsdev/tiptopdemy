@@ -128,6 +128,13 @@ h1, h2, h3, h4, h5{
 .breadcrumb-title li a{
     text-decoration: none;
 }
+.uk-breadcrumb>:nth-child(n+2):not(.uk-first-column)::before {
+    content: "/";
+    display: inline-block;
+    margin: 0 10px;
+    font-size: .875rem;
+    color: #999;
+}
 .bg-primary{
     background-color: var(--theme-primary-color) !important;
 }

@@ -73,14 +73,12 @@ class LessonController extends Controller
     public function create(Product $product)
     {
         $page_title =  trans('main.Store Lessons') . ' - ' .__('main.Create');
-        $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                __('main.Create') => ''
-            ];
+        $breadcrumb =  Breadcrumbs::render('admin.store.lesson.create', $product);
+        $modelName = $this->modelName;
         $groups = $product->groups->pluck('title', 'id')->toArray();
         $tags = Tag::getWithType('lesson')->pluck('name', 'name');
         $selectedTags =array();
-        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups','tags', 'selectedTags'));
+        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups','tags', 'selectedTags', 'modelName'));
 
     }
 
@@ -148,10 +146,9 @@ class LessonController extends Controller
     public function edit(Product $product, Lesson $lesson)
     {
         $page_title =  trans('main.Store Lessons') . ' - ' .__('main.Create');
-        $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                __('main.Create') => ''
-            ];
+        $currentGroup = $lesson->groups()->first();
+        $breadcrumb =  Breadcrumbs::render('admin.store.lesson.edit', $product, $currentGroup, $lesson);
+        $modelName = $this->modelName;
         $groups = $product->groups->pluck('title', 'id')->toArray();
         $selectedGroups = $lesson->groups->pluck('id')->toArray();
 //        $tags = Tag::getWithType('lesson')->pluck('name', 'name');
@@ -162,7 +159,7 @@ class LessonController extends Controller
         $mediaItems = $lesson->getMedia('youtube_video');
         $attachments = $lesson->attachments()->get();
 
-        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags', 'categories', 'attachments'));
+        return view('store.lessons.create', compact('page_title','breadcrumb', 'product', 'groups', 'selectedGroups', 'lesson', 'selectedTags', 'categories', 'attachments', 'modelName'));
 
     }
 

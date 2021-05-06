@@ -6,7 +6,7 @@
 @section('content')
     <section>
         {{--Page header--}}
-        @include('manage.partials._page-header')
+        @include('manage.partials._page-header-v2')
 
         {{--List of items--}}
         <div>

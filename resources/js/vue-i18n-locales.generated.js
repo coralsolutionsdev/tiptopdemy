@@ -79,11 +79,12 @@ export default {
             "failed": "البريد الالكتروني او كلمة المرور هذه لا تتطابق مع سجلاتنا, يرجى التأكد ومعاودة المحاولة.",
             "Password": "كلمة المرور",
             "Confirm Password": "تأكيد كلمة المرور",
-            "Forgot Password?": "هل نسيت كلمة المرور؟",
+            "Forgot Password": "نسيت كلمة المرور",
             "Reset Password": "إعادة تعيين كلمة المرور",
             "E-Mail Address": "عنوان البريد الإلكتروني",
             "Send Password Reset Link": "إرسال رابط إعادة تعيين كلمة السر",
-            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds.",
+            "Login": "تسجيل الدخول"
         },
         "main": {
             "welcome": "مرحبا",
@@ -433,6 +434,8 @@ export default {
             "Congratulations!": "تهانينا!",
             "You completed the quiz": "لقد اجتزت اختبار حفظ الدرس ، يمكنك الاستمرار في مشاهدة محتوى الدرس",
             "Quiz me": "إختبرني",
+            "Memory Test": "إختبار الذاكرة",
+            "Add Memory Test": "أضف إختبار الذاكرة",
             "Cart": "سلة المشتريات",
             "Cart items": "عناصر سلة المشتريات",
             "Cart summary": "ملخص سلة المشتريات",
@@ -599,7 +602,10 @@ export default {
             "Insert": "إدراج",
             "There is no media items available yet": "لا توجد عناصر ميديا متوفرة حاليا",
             "Drag and drop message": "قم بسحب وإفلات الملف لتحميل! أو انقر لإختيار ملف من جهاز الكمبيوتر الخاص بك",
-            "you are allowed to upload message": ".يسمح لك بتحميل 10 ملفات فقط في آن واحد"
+            "you are allowed to upload message": ".يسمح لك بتحميل 10 ملفات فقط في آن واحد",
+            "Notifications": "الإشعارات",
+            "No notifications yet": "لا يوجد إشعارات",
+            "at Tiptopdemy platform": "في منصة Tiptopdemy"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -735,10 +741,11 @@ export default {
             "Password": "Password",
             "Confirm Password": "Confirm Password",
             "Reset Password": "Reset Password",
-            "Forgot Password?": "Forgot Password?",
+            "Forgot Password": "Forgot Password",
             "E-Mail Address": "E-Mail Address",
             "Send Password Reset Link": "Send Password Reset Link",
-            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds.",
+            "Login": "Login"
         },
         "main": {
             "welcome": "Welcome",
@@ -1076,6 +1083,8 @@ export default {
             "Congratulations!": "Congratulations!",
             "You completed the quiz": "You've passed the lesson's memorize test, you can continue viewing the lesson content",
             "Quiz me": "Quiz me",
+            "Memory Test": "Memory Test",
+            "Add Memory Test": "Add Memory Test",
             "Cart": "Cart",
             "Card items": "Card items",
             "Cart summary": "Cart summary",
@@ -1244,7 +1253,10 @@ export default {
             "Insert": "Insert",
             "There is no media items available yet": "There is no media items available yet",
             "Drag and drop message": "Drag and drop to upload content! Or click to select a file from your computer",
-            "you are allowed to upload message": "you are allowed to upload only 10 files per time"
+            "you are allowed to upload message": "you are allowed to upload only 10 files per time",
+            "Notifications": "Notifications",
+            "No notifications yet": "No notifications yet",
+            "at Tiptopdemy platform": "at Tiptopdemy platform"
         },
         "pagination": {
             "previous": "&laquo; Previous",

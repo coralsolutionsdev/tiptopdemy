@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Http\Controllers\Controller;
 use App\Modules\Group\Group;
 use App\Product;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,10 +15,12 @@ class GroupController extends Controller
 {
     protected $breadcrumb;
     protected $page_title;
+    protected $modelName;
 
     public function __construct()
     {
         $this->page_title = 'Store Units';
+        $this->modelName = 'Store';
         $this->breadcrumb = [
             'Store' => '',
             'Product' => '',
@@ -43,11 +46,9 @@ class GroupController extends Controller
     public function create(Product $product)
     {
         $page_title =  __('main.Units') . ' - ' .__('main.Create');
-        $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                'Create' => ''
-            ];
-        return view('store.groups.create', compact('page_title', 'breadcrumb', 'product'));
+        $modelName = $this->modelName;
+        $breadcrumb =  Breadcrumbs::render('admin.store.groups.create', $product);
+        return view('store.groups.create', compact('page_title', 'breadcrumb', 'product', 'modelName'));
 
     }
 
@@ -87,11 +88,9 @@ class GroupController extends Controller
     public function edit(Product $product, Group $group)
     {
         $page_title =  __('main.Units') . ' - ' .__('main.Edit');
-        $breadcrumb =  $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-                'Edit' => ''
-            ];
-        return view('store.groups.create', compact('page_title', 'breadcrumb', 'product', 'group'));
+        $modelName = $this->modelName;
+        $breadcrumb =  Breadcrumbs::render('admin.store.groups.edit', $product, $group);
+        return view('store.groups.create', compact('page_title', 'breadcrumb', 'product', 'group', 'modelName'));
 
     }
 

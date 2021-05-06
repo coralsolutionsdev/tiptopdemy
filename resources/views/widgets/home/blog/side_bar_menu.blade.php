@@ -13,27 +13,6 @@
         <button class="uk-button uk-button-primary uk-width-1-1">{{__('main.search')}}</button>
     </form>
 </div>
-@if(!empty($posts))
-{{-- LAtest posts --}}
-<div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
-    <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main._latest_posts')}}</h5>
-    <div class="uk-margin-small">
-        @foreach($posts as $post)
-            <a style="padding: 0px; margin: 0px" href="{{route('blog.posts.show',$post->slug)}}">
-            <div class="uk-child-width-1-2@s uk-margin" uk-grid>
-                <div class="uk-card-media-right uk-cover-container">
-                    <img src="{{$post->getMainImage()}}">
-                </div>
-                <div style="padding: 0px 6px">
-                    {{$post->title}}
-                    <p style="padding: 0px; margin: 0px" class="uk-text-muted"> {{$post->created_at->diffForHumans()}}</p>
-                </div>
-            </div>
-            </a>
-        @endforeach
-    </div>
-</div>
-@endif
 {{-- Categories --}}
 <div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
     <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main._categories')}}</h5>
@@ -45,6 +24,27 @@
         </ul>
     </div>
 </div>
+
+@if(!empty($posts))
+    <div class="uk-margin-small" style="padding: 20px; border-bottom: 1px solid #e5e5e5">
+        <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main._latest_posts')}}</h5>
+        <div class="uk-margin-small">
+            @foreach($posts as $post)
+                <a style="padding: 0px; margin: 0px" href="{{route('blog.posts.show',$post->slug)}}">
+                    <div class="uk-margin uk-grid-collapse" uk-grid>
+                        <div class="uk-width-1-3@m uk-width-1-1 uk-card-media-right uk-cover-container">
+                            <img src="{{$post->getMainImage()}}" style="width: 100%">
+                        </div>
+                        <div class="uk-width-2-3@m uk-width-1-1" style="padding: 0px 10px">
+                            {{$post->title}}
+                            <p style="padding: 0px; margin: 0px" class="uk-text-muted"> {{$post->created_at->diffForHumans()}}</p>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+    </div>
+@endif
 {{-- Tags --}}
 <div class="uk-margin-small" style="padding: 20px">
     <h5 class="text-highlighted" style="padding: 0px; font-weight: 700">{{__('main._tags')}}</h5>

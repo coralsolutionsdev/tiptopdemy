@@ -37,7 +37,7 @@
         @else
             {!! Form::open(['url' => route('store.products.store'),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
         @endif
-        @include('manage.partials._page-header')
+        @include('manage.partials._page-header-v2')
         <div class="form-panel row">
             <div class="col-lg-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -385,11 +385,18 @@
                                                                     @forelse($group->getLessons as $itemId => $item)
                                                                         <tr>
                                                                             <td class="uk-table-shrink align-middle"><span>{{sprintf('%02d', $itemId+1)}}</span></td>
-                                                                            <td class="uk-table-expand align-middle">{{$item->title}}</td>
-                                                                            <td class="uk-width-small align-middle">{{$item->getType()}}</td>
+                                                                            <td class="uk-table-expand align-middle">
+                                                                                {{$item->title}}
+                                                                                <br> <span class="text-muted">{{$item->getType()}}</span>
+                                                                            </td>
                                                                             <td class="uk-width-small">
                                                                                 <div class="action_btn text-right" style="width: 400px">
                                                                                     <ul>
+                                                                                        <li>
+                                                                                            <a href="{{route('store.memorize.create', $item->slug)}}" class="btn btn-light">
+                                                                                                {{__('main.Add Memory Test')}}
+                                                                                            </a>
+                                                                                        </li>
                                                                                         <li>
                                                                                             <a href="{{route('store.get.form.templates', $item->slug)}}" class="btn btn-light">
                                                                                                {{__('main.Add Quiz')}}

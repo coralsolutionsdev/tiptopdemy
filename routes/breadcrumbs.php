@@ -7,6 +7,7 @@
  * Front end
  */
 
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 // Home
 Breadcrumbs::for('home', function ($trail) {
     $trail->push(__('main._home'), route('main'));
@@ -92,4 +93,67 @@ Breadcrumbs::for('blog.post.show', function ($trail, $post) {
 Breadcrumbs::for('blog.category', function ($trail, $category) {
     $trail->parent('blog');
     $trail->push($category->name, route('blog.category.show', $category->slug));
+});
+
+
+/***************
+ * Admin panel
+ ***************/
+//  Store
+Breadcrumbs::for('admin.store', function ($trail) {
+    $trail->push(__('main.Products'), route('store.products.index'));
+});
+//  Store > create
+Breadcrumbs::for('admin.store.create', function ($trail) {
+    $trail->parent('admin.store');
+    $trail->push(__('main.Create'), route('store.products.create'));
+});
+//  Store > product name > edit
+Breadcrumbs::for('admin.store.edit', function ($trail, $product) {
+    $trail->parent('admin.store');
+    $trail->push($product->name, route('store.products.edit', $product->slug));
+    $trail->push(__('main.Edit'));
+});
+//  Store > product name > Group > new
+Breadcrumbs::for('admin.store.groups.create', function ($trail, $product) {
+    $trail->parent('admin.store');
+    $trail->push($product->name, route('store.products.edit', $product->slug));
+    $trail->push(__('main.Units'), route('store.groups.create', $product->slug));
+    $trail->push(__('main.Create'));
+});
+//  Store > product name > Group > edit
+Breadcrumbs::for('admin.store.groups.edit', function ($trail, $product, $group) {
+    $trail->parent('admin.store');
+    $trail->push($product->name, route('store.products.edit', $product->slug).'#lessons');
+    $trail->push($group->title, route('store.groups.edit', [$product->slug, $group->slug]));
+    $trail->push(__('main.Edit'));
+});
+//  Store > product name > Lesson > new
+Breadcrumbs::for('admin.store.lesson.create', function ($trail, $product) {
+    $trail->parent('admin.store');
+    $trail->push($product->name, route('store.products.edit', $product->slug));
+    $trail->push(__('main.Lessons'), route('store.lessons.create', $product->slug));
+    $trail->push(__('main.Create'));
+});
+//  Store > product name > Lesson > edit
+Breadcrumbs::for('admin.store.lesson.edit', function ($trail, $product, $currentGroup, $lesson) {
+    $trail->parent('admin.store');
+    $trail->push($product->name, route('store.products.edit', $product->slug).'#lessons');
+    $trail->push($currentGroup->title, route('store.groups.edit', [$product->slug, $currentGroup->slug]));
+    $trail->push($lesson->title, route('store.lessons.edit', [$product->slug, $lesson->slug]));
+    $trail->push(__('main.Edit'));
+});
+//  Forms > Memorize > create
+Breadcrumbs::for('admin.store.memorize.create', function ($trail, $product, $lesson) {
+    $trail->parent('admin.store');
+    $trail->push($lesson->title, route('store.lessons.edit', [$product->slug, $lesson->slug]));
+    $trail->push(__('main.Memory Test'));
+    $trail->push(__('main.Create'));
+});
+//  Forms > Memorize > edit
+Breadcrumbs::for('admin.store.memorize.edit', function ($trail, $product, $lesson, $form) {
+    $trail->parent('admin.store');
+    $trail->push($lesson->title, route('store.lessons.edit', [$product->slug, $lesson->slug]));
+    $trail->push($form->title, route('store.memorize.edit', [$lesson->slug, $form->hash_id]));
+    $trail->push(__('main.Edit'));
 });

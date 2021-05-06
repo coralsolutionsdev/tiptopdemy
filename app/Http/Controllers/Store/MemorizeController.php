@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Http\Controllers\Controller;
 use App\Modules\Course\Lesson;
 use App\Modules\Form\Form;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -16,11 +17,14 @@ class MemorizeController extends Controller
 {
     protected $breadcrumb;
     protected $page_title;
+    protected $modelName;
 
     public function __construct()
     {
         $this->middleware('auth', ['except' => ['show']]);
         $this->page_title = 'Memorize';
+        $this->modelName = 'Store';
+
         $this->breadcrumb = [
             'Memorize' => '',
         ];
@@ -44,11 +48,13 @@ class MemorizeController extends Controller
     public function create(Lesson $lesson)
     {
         $page_title =  'Memorise - Create';
-        $breadcrumb =  $this->breadcrumb;
+        $modelName = $this->modelName;
+        $product = $lesson->product;
+        $breadcrumb =  Breadcrumbs::render('admin.store.memorize.create', $product, $lesson);
         $tags = Tag::getWithType('memorize')->pluck('name', 'name');
         $selectedTags = array();
         $storeRoute = route('store.memorize.store', $lesson->slug);
-        return view('forms.memorize.create', compact('page_title', 'breadcrumb', 'tags', 'selectedTags', 'lesson', 'storeRoute'));
+        return view('forms.memorize.create', compact('page_title', 'breadcrumb', 'tags', 'selectedTags', 'lesson', 'storeRoute', 'modelName'));
 
     }
 
@@ -90,11 +96,13 @@ class MemorizeController extends Controller
     {
         $form = Form::where('hash_id', $formHashId)->first();
         $page_title =  'Memorise - edit';
-        $breadcrumb =  $this->breadcrumb;
+        $modelName = $this->modelName;
+        $product = $lesson->product;
+        $breadcrumb =  Breadcrumbs::render('admin.store.memorize.edit', $product, $lesson, $form);
         $tags = Tag::getWithType('memorize')->pluck('name', 'name');
         $selectedTags = $form->getTags();
         $storeRoute = route('store.memorize.update', [$lesson->slug, $form->hash_id]);
-        return view('forms.memorize.create', compact('page_title', 'breadcrumb', 'tags', 'selectedTags', 'lesson', 'storeRoute', 'form'));
+        return view('forms.memorize.create', compact('page_title', 'breadcrumb', 'tags', 'selectedTags', 'lesson', 'storeRoute', 'form', 'modelName'));
 
     }
 

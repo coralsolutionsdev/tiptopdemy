@@ -52,9 +52,10 @@ class ProductController extends Controller
     public function index()
     {
         $page_title = __('main.Products');
-        $breadcrumb = $this->breadcrumb;
+        $breadcrumb =  Breadcrumbs::render('admin.store');
+        $modelName = $this->modelName;
         $products = Product::latest()->paginate(15);
-        return view('store.products.index', compact('page_title', 'breadcrumb', 'products'));
+        return view('store.products.index', compact('page_title', 'breadcrumb', 'products', 'modelName'));
     }
 
     /**
@@ -65,10 +66,8 @@ class ProductController extends Controller
     public function create()
     {
         $page_title =  trans('main.Products') . ' - ' .__('main.Create');
-        $breadcrumb = $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-            __('main.create') => ''
-        ];
+        $breadcrumb =  Breadcrumbs::render('admin.store.create');
+        $modelName = $this->modelName;
         $types = ProductType::pluck('name', 'id')->toArray();
         $visibility = Product::STATUS_ARRAY;
 //        $categories = Category::getRootProductCategories()->pluck('name', 'id');
@@ -79,8 +78,7 @@ class ProductController extends Controller
         $colorPatterns = ColorPattern::where('status', 1)->get();
         $mediaType = Media::TYPE_PRODUCT_IMAGE;
         $modelItem = new Product();
-//        $categories = ['0' => 'No parent'] + Category::getRootProductCategories()->pluck('name', 'id')->toArray();
-        return view('store.products.create', compact('page_title', 'breadcrumb', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns', 'mediaType', 'modelItem'));
+        return view('store.products.create', compact('page_title', 'breadcrumb', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns', 'mediaType', 'modelItem', 'modelName'));
     }
 
     /**
@@ -108,10 +106,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $page_title =  trans('main.Products') . ' - ' .__('main.Edit');
-        $breadcrumb = $this->breadcrumb;
-        $breadcrumb = $breadcrumb + [
-            __('main.Edit') => ''
-        ];
+        $breadcrumb =  Breadcrumbs::render('admin.store.edit', $product);
+        $modelName = $this->modelName;
         $types = ProductType::pluck('name', 'id')->toArray();
         $visibility = Product::STATUS_ARRAY;
         $tree_categories = Category::where('type', Category::TYPE_PRODUCT)->where('parent_id', 0)->get();
@@ -122,7 +118,7 @@ class ProductController extends Controller
         $colorPatterns = ColorPattern::where('status', 1)->get();
         $mediaType = Media::TYPE_PRODUCT_IMAGE;
         $modelItem = $product;
-        return view('store.products.create', compact('page_title', 'breadcrumb', 'product', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns', 'mediaType', 'modelItem'));
+        return view('store.products.create', compact('page_title', 'breadcrumb', 'product', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns', 'mediaType', 'modelItem', 'modelName'));
     }
 
     /**

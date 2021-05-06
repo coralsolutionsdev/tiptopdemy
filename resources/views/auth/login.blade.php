@@ -38,11 +38,11 @@
                     <div class="uk-card uk-card-default uk-card-body uk-width-1-4@m uk-padding">
                         <div class="uk-grid-divider uk-child-width-expand@s" uk-grid>
                             <div>
-                                <div class="uk-text-center">
+                                <div class="uk-text-center uk-margin-small">
                                     @if(!empty(getSite()->logo))
                                         <img src="{{asset_image(getSite()->logo)}}" style="height: 60px" alt="">
                                     @endif
-                                    <p class="uk-text-capitalize" style="font-size: 24px">{{__('sign in')}}</p>
+{{--                                    <p class="uk-text-capitalize" style="font-size: 24px">{{__('auth.Login')}}</p>--}}
                                 </div>
 
                                 <form class="uk-form-stacked" role="form" method="POST" action="{{ route('login.custom') }}">
@@ -51,23 +51,23 @@
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: user"></span>
-                                            <input class="uk-input {{count($errors) ? 'uk-form-danger' : ''}}" id="form-stacked-text" name="email" type="text" placeholder="Email">
+                                            <input class="uk-input {{count($errors) ? 'uk-form-danger' : ''}}" id="form-stacked-text" name="email" type="text" placeholder="{{__('main.Email')}}">
                                         </div>
                                     </div>
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                            <input class="uk-input {{count($errors) ? 'uk-form-danger' : ''}}" id="form-stacked-text" type="password" name="password" placeholder="Password">
+                                            <input class="uk-input {{count($errors) ? 'uk-form-danger' : ''}}" id="form-stacked-text" type="password" name="password" placeholder="{{__('main.Password')}}">
                                         </div>
                                     </div>
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
-                                            <a href="{{ url('/password/reset') }}" class="font-family-Roboto" style="font-size: 14px;">{{trans('auth.Forgot Password?')}}</a>
+                                            <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required">{{__('auth.Login')}}</button>
                                         </div>
                                     </div>
                                     <div class="uk-margin">
                                         <div class="uk-inline uk-width-1-1">
-                                            <button class="uk-button uk-button-primary uk-width-1-1 recaptcha-validation-required">{{__('log in')}}</button>
+                                            <a href="{{ url('/password/reset') }}" class="font-family-Roboto" style="font-size: 14px;">{{trans('auth.Forgot Password')}} 🤔</a>
                                         </div>
                                     </div>
                                 </form>

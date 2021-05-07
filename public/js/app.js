@@ -30444,7 +30444,6 @@ var messages = {
         _this.lessonGroupId = _this.item.lesson_group_id;
         _this.lessonId = _this.item.lesson_id;
         _this.product = _this.item.product;
-        console.log(_this.forms);
       });
     },
     updateViewContentStatus: function updateViewContentStatus(status) {

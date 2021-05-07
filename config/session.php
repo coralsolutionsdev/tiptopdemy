@@ -123,7 +123,7 @@ return [
     */
 
 //    'cookie' => 'laravel_session',
-    'cookie' => 'baseapp_session',
+    'cookie' => 'base_app_session',
 
     /*
     |--------------------------------------------------------------------------

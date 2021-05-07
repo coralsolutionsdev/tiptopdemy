@@ -506,4 +506,20 @@ class FormController extends Controller
         ];
         return response($array, 200);
     }
+
+    /**
+     * Update form status only
+     * @param Request $request
+     * @param Form $form
+     * @return Application|ResponseFactory|Response
+     */
+    public function updateStatus(Request $request, Form $form){
+        $input = $request->only(['status']);
+        if (!$form && isset($input['status'])){
+            return response('error', 500);
+        }
+        $form->status = $input['status'];
+        $form->save();
+        return response($form->id, 200);
+    }
 }

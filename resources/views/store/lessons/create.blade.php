@@ -1,7 +1,6 @@
 @extends('themes.'.getAdminThemeName().'.layout')
 @section('title', $page_title)
 @section('page-header-button')
-
     <button class="btn btn-primary btn-lg w-75"><span>{{!empty($lesson)? __('main.Save changes') : __('main.submit')}}</span></button>
 @endsection
 @section('head')
@@ -338,12 +337,12 @@
                     </div>
                     @if(!empty($lesson))
                         <div class="uk-padding-small">
-                            <table class="table table-striped">
+                            <table class="table table-striped uk-table-middle">
                                 <thead>
                                 <tr>
                                     <th scope="col">{{__('main.Quiz name')}}</th>
                                     <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
-                                    <th scope="col" class="uk-text-center">{{__('main.Status')}}</th>
+                                    <th scope="col" class="uk-text-center" width="120">{{__('main.Status')}}</th>
                                     <th scope="col" width="150">{{__('main.Actions')}}</th>
                                 </tr>
                                 </thead>
@@ -353,7 +352,14 @@
                                         <tr>
                                             <td>{{$form->title}}</td>
                                             <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                            <td class="uk-text-center">{!! getStatusIcon($form->status) !!}</td>
+                                            <td class="uk-text-center">
+                                                <div class="status-update-container">
+                                                    <div class="uk-text-center uk-text-primary update-spinner" style="position: absolute; display: none">
+                                                        <span uk-spinner="ratio: 0.5"></span>
+                                                    </div>
+                                                    <input type="checkbox" name="status" class="toogle-switch" data-value="{{$form->hash_id}}" onchange="updateMemorizeStatus(this)" value="1" {{empty($form) || !empty($form->status) ? 'checked' : null}}>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <div class="action_btn">
                                                     <ul>
@@ -471,6 +477,27 @@
     @include('store.lessons._scripts')
     @if(!empty($lesson))
     <script>
+        /**
+         * update form status
+         * @param param
+         */
+        function updateMemorizeStatus(param) {
+            var item = $(param);
+            var container = item.closest('.status-update-container');
+            container.find('.update-spinner').show();
+            var status = 0;
+            if (item.is(':checked')){
+                status = 1;
+            }
+            var data = {
+                status:status,
+            }
+            $.post('/manage/store/lesson/form/'+item.attr('data-value')+'/update/status', data)
+                .done(function (response) {
+                    container.find('.update-spinner').fadeOut();
+                });
+        }
+
         function copyLink(event) {
             var text = $(event).attr('date-link');
             var $temp = $("<input>");

@@ -135,6 +135,7 @@ Route::group(['middleware'=>'lang'], function(){
         Route::get('/lesson/memorize/get/items/','MemorizeController@getItems')->name('memorize.get.items');
 
 
+
         Route::get('/lesson/{lesson}/form/templates','FormController@templateIndex')->name('get.form.templates');
         Route::post('media/attach','LessonController@attachMedia')->name('media.attach');
         Route::post('lesson/{lesson}/add/resources/item','LessonController@addResourcesItem')->name('add.resources.item');
@@ -148,6 +149,7 @@ Route::group(['middleware'=>'lang'], function(){
         Route::get('/lesson/{lesson}/form/smart/get/info','FormController@smartGetInfo')->name('form.smart.get.info');
         Route::post('/lesson/{lesson}/form/smart/get/items','FormController@smartGetItems')->name('form.smart.get.items');
         Route::post('/lesson/{lesson}/form/smart/store','FormController@smartStore')->name('form.smart.store');
+        Route::post('/lesson/form/{form}/update/status','FormController@updateStatus')->name('form.update.status');
 
 
     });

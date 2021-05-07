@@ -350,7 +350,7 @@ class LessonController extends Controller
         $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
         $description = !empty($lesson->description) ? $lesson->description : '';
         $resources = !empty($lesson->resources) ? $lesson->resources : array();
-        $forms = $lesson->getAvailableForms(Form::STATUS_PUBLISHED);
+        $forms = $lesson->getFormsWithType(Form::TYPE_FORM, Form::STATUS_PUBLISHED);
         $formsArray = [];
         if (!empty($forms)){
             foreach ($forms as $form){

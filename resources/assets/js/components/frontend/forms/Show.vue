@@ -68,7 +68,7 @@
                         <!-- section questions -->
                         <div class="uk-grid-collapse" uk-grid>
                           <!--questions-->
-                          <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave, 'margin-bottom':form.display_type == 1  }">
+                          <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave, 'margin-bottom':form.display_type == 1 }">
                             <div :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
                               <div :id="'question-'+question.id" class="uk-grid-collapse question-row" uk-grid>
                                 <div class="uk-width-auto@m">
@@ -84,11 +84,14 @@
                                     <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent" autocomplete="off"></textarea>
                                   </span>
                                   <span v-else-if="question.type == 3">
-                                        <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-radio" type="radio" :name="'item_answer['+question.id+']'" :value="option.title"> {{option.title}}</label>
+                                        <label v-for="option in question.options" style="margin: 0 2px">
+                                        <br v-if="question.properties && question.properties.display && parseInt(question.properties.display) === 1">
+                                        <input class="uk-radio" type="radio" :name="'item_answer['+question.id+']'" :value="option.title"> {{option.title}}</label>
                                   </span>
                                   <span v-else-if="question.type == 4">
-    <!--                            <vs-checkbox v-for="option in question.options" :name="'item_answer['+question.id+'][]'" :value="option.title"> {{option.title}} </vs-checkbox>-->
-                                        <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-checkbox" :name="'item_answer['+question.id+'][]'" :value="option.title" type="checkbox"> {{option.title}}</label>
+                                        <label v-for="option in question.options" style="margin: 0 2px">
+                                        <br v-if="question.properties && question.properties.display && parseInt(question.properties.display) === 1">
+                                        <input class="uk-checkbox" :name="'item_answer['+question.id+'][]'" :value="option.title" type="checkbox"> {{option.title}}</label>
                                   </span>
                                   <span v-else-if="question.type == 5">
                                     <select class="uk-select uk-form-small uk-form-width-small" :name="'item_answer['+question.id+']'" style="padding:0 20px">
@@ -173,12 +176,18 @@
                         <div v-if="responseArray.passing_score_status == 1">
                           <span uk-icon="icon: check; ratio: 2" style="color: #32d296 ; background-color: #edfbf6; border-radius: 50%; padding: 8px"></span>
                           <h4 class="uk-text-success uk-margin-remove" v-html="$t('main.Passed successfully')"></h4>
-                          <p class="uk-margin-small" v-html="$t('main.Congratulations! you have passed')"></p>
+                          <p class="uk-margin-small">
+                            <span v-if="form.properties.feedback_correct && form.properties.feedback_correct.length > 0" v-html="form.properties.feedback_correct"></span>
+                            <span v-else v-html="$t('main.Congratulations! you have passed')"></span>
+                          </p>
                         </div>
                         <div v-else>
                           <span uk-icon="icon: warning; ratio: 2.4" style="color: #f0506e ; background-color: #fef4f6; border-radius: 50%; padding: 5px"></span>
                           <h4 class="uk-text-danger uk-margin-remove" v-html="$t('main.Failed')"></h4>
-                          <p class="uk-margin-small" v-html="$t('main.Hard luck! unfortunately')"> </p>
+                          <p class="uk-margin-small">
+                            <span v-if="form.properties.feedback_incorrect && form.properties.feedback_incorrect.length > 0" v-html="form.properties.feedback_incorrect"></span>
+                            <span v-else v-html="$t('main.Hard luck! unfortunately')"></span>
+                          </p>
                         </div>
                       </div>
                       <div v-else-if="responseArray.status == 2">
@@ -606,5 +615,8 @@ name: "Show",
 }
 .margin-bottom{
   margin-bottom: 10px;
+}
+.hidden-div{
+  display: none;
 }
 </style>

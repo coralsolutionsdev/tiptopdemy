@@ -132,7 +132,7 @@
                                 Correct
                             </div>
                             <div class="uk-width-4-5@s">
-                                <input class="uk-input uk-form-small" type="text" name="feedback_correct" value="{{!empty($formProperties)? $formProperties['feedback_correct'] : 'Put your correct message'}}">
+                                <input class="uk-input uk-form-small" type="text" name="feedback_correct"  value="{{!empty($formProperties)? $formProperties['feedback_correct'] : ''}}">
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
@@ -140,7 +140,7 @@
                                 Incorrect
                             </div>
                             <div class="uk-width-4-5@s">
-                                <input class="uk-input uk-form-small" type="text" name="feedback_incorrect" value="{{!empty($formProperties)? $formProperties['feedback_incorrect'] : 'Put your incorrect message'}}">
+                                <input class="uk-input uk-form-small" type="text" name="feedback_incorrect" placeholder="Put your incorrect message" value="{{!empty($formProperties)? $formProperties['feedback_incorrect'] : ''}}">
                             </div>
                         </div>
                         <div class="uk-grid-small" uk-grid>
@@ -148,7 +148,7 @@
                                 Try again
                             </div>
                             <div class="uk-width-4-5@s">
-                                <input class="uk-input uk-form-small" type="text" name="feedback_retry" value="{{!empty($formProperties)? $formProperties['feedback_retry'] : 'Put your try again message'}}">
+                                <input class="uk-input uk-form-small" type="text" name="feedback_retry" placeholder="Put your try again message" value="{{!empty($formProperties)? $formProperties['feedback_retry'] : 'Put your try again message'}}">
                             </div>
                         </div>
                     </div>

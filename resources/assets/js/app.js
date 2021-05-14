@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -9,23 +8,25 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import Vue from 'vue';
-import VueInternationalization from 'vue-i18n';
-import Locale from '../../js/vue-i18n-locales.generated';
+
 // ui frameworks
 import AtComponents from 'at-ui'
+Vue.use(AtComponents)
 // import 'at-ui-style'    // Import CSS
+
 import Vuesax from 'vuesax'
+Vue.use(Vuesax)
 // import 'vuesax/dist/vuesax.css' //Vuesax styles
-import VueSocialSharing from 'vue-social-sharing'
+
 // social share
+import VueSocialSharing from 'vue-social-sharing'
 Vue.use(VueSocialSharing);
 
-Vue.use(VueInternationalization);
-
 // const lang = document.documentElement.lang.substr(0, 2);
+import Locale from '../../js/vue-i18n-locales.generated';
+import VueInternationalization from 'vue-i18n';
+Vue.use(VueInternationalization);
 const lang = document.documentElement.lang.substr(0, 2);
-// or however you determine your current app locale
-
 const i18n = new VueInternationalization({
     locale: lang,
     messages: Locale
@@ -55,10 +56,6 @@ Vue.component('comments', require('./components/frontend/comments/Comments.vue')
 Vue.component('post-show', require('./components/frontend/blog/Show.vue'));
 
 // If you want to use it in your vue components
-Vue.use(AtComponents)
-Vue.use(Vuesax)
-
-
 
 const app = new Vue({
     el: '#vue-app',

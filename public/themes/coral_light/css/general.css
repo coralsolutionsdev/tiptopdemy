@@ -1,10 +1,10 @@
 /*@import url("fonts.css");*/
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400&display=swap');
-@import "navbar.css?v=202105070200";
-@import "store.css?v=202105070200";
-@import "../models/form.css?v=202105070200";
-@import "at.css?v=202105070200";
-@import "vuesax.css?v=202105070200";
+@import "navbar.css?v=202105141500";
+@import "store.css?v=202105141500";
+@import "../models/form.css?v=202105141500";
+@import "at.css?v=202105141500";
+@import "vuesax.css?v=202105141500";
 html, body{
     padding: 0px;
     margin: 0px;

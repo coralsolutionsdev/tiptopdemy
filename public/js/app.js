@@ -13344,15 +13344,14 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_vue_i18n_locales_generated__ = __webpack_require__(65);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_at_ui__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_at_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_at_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuesax__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuesax___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vuesax__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_social_sharing__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_social_sharing___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_vue_social_sharing__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_at_ui__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_at_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_at_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuesax__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuesax___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vuesax__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_social_sharing__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_social_sharing___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_social_sharing__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__js_vue_i18n_locales_generated__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_i18n__ = __webpack_require__(100);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -13364,25 +13363,27 @@ __webpack_require__(64);
 window.Vue = __webpack_require__(4);
 
 
-
 // ui frameworks
 
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_at_ui___default.a);
 // import 'at-ui-style'    // Import CSS
 
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vuesax___default.a);
 // import 'vuesax/dist/vuesax.css' //Vuesax styles
 
 // social share
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_5_vue_social_sharing___default.a);
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_i18n__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_social_sharing___default.a);
 
 // const lang = document.documentElement.lang.substr(0, 2);
-var lang = document.documentElement.lang.substr(0, 2);
-// or however you determine your current app locale
 
-var i18n = new __WEBPACK_IMPORTED_MODULE_1_vue_i18n__["a" /* default */]({
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_5_vue_i18n__["a" /* default */]);
+var lang = document.documentElement.lang.substr(0, 2);
+var i18n = new __WEBPACK_IMPORTED_MODULE_5_vue_i18n__["a" /* default */]({
   locale: lang,
-  messages: __WEBPACK_IMPORTED_MODULE_2__js_vue_i18n_locales_generated__["a" /* default */]
+  messages: __WEBPACK_IMPORTED_MODULE_4__js_vue_i18n_locales_generated__["a" /* default */]
 });
 
 /**
@@ -13409,8 +13410,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('comments', __webpack_requ
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('post-show', __webpack_require__(105));
 
 // If you want to use it in your vue components
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_at_ui___default.a);
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vuesax___default.a);
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
   el: '#vue-app',

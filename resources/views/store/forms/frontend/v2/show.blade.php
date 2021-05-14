@@ -59,13 +59,6 @@
                                     </div>
                                 </a>
                             </div>
-                            {{--                        <div class="nav-col" style="width: 5%" uk-tooltip="Next">--}}
-                            {{--                            <a class="nav-link" href="{{$nextLessonLink}}">--}}
-                            {{--                                <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; height: 100% color: {{$product->getMainColorPattern()}}" onclick="$('#next-form').submit()">--}}
-                            {{--                                    <span uk-icon="icon: chevron-{{getFloatKey('start')}}"></span>--}}
-                            {{--                                </div>--}}
-                            {{--                            </a>--}}
-                            {{--                        </div>--}}
                         </div>
 
                     </div>
@@ -73,7 +66,7 @@
 
                 <div>
                     <input type="hidden" name="lesson_id" value="{{$lesson->id}}">
-                    <form-show slug="{{$form->hash_id}}" back-url="{{$backUrl}}"></form-show>
+                    <form-show slug="{{$form->hash_id}}" back-url="{{$backUrl}}" next-url="{{$nextLessonLink}}"></form-show>
                 </div>
 
             </div>

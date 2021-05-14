@@ -477,6 +477,8 @@
         '_form_section' => 'Group',
         'Generate' => 'Generate',
         'Re try' => 'Re try',
+        'Back to lesson' => 'Back to lesson',
+        'Next lesson' => 'Next lesson',
 
         //orders
         'orders' => 'Orders',

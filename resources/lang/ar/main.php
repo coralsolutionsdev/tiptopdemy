@@ -497,6 +497,8 @@
         '_form_section' => 'قسم',
         'Generate' => 'Generate',
         'Re try' => 'أعد المحاولة',
+        'Back to lesson' => 'العودة للدرس',
+        'Next lesson' => 'الدرس التالي',
 
 
         //orders

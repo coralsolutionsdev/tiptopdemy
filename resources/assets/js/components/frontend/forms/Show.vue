@@ -162,9 +162,7 @@
           <div v-else>
             <div class="uk-margin" style="overflow: hidden">
               <div class="uk-card uk-card-default uk-text-center" >
-
-                <div class="uk-child-width-1-2@s uk-flex uk-flex-middle uk-flex-center" uk-grid>
-                  <div class="uk-padding">
+                  <div style="padding-top: 20px">
                     <div v-if="evaluationStatus == 0">
                       <div>
                         <span uk-spinner="ratio: 1.5" style="color: #1e87f0 ; background-color: #edf6ff; border-radius: 50%; padding: 6px"></span>
@@ -205,16 +203,24 @@
                           <p v-html="responseArray.score"></p>
                         </div>
                       </div>
-                      <div>
-                        <a v-if="responseArray.status != 2" class="uk-button uk-button-primary uk-width-auto" :href="responseArray.link+'/?back='+backUrl" v-html="$t('main.View results')"></a>
-                        <a class="uk-button uk-button-secondary uk-width-auto" @click="refreshForm()" v-html="$t('main.Re try')"></a>
-                        <a class="uk-button uk-button-default uk-width-auto" :href="backUrl" v-html="$t('main.Back')"></a>
-                      </div>
+                    </div>
+                  </div>
+                <!--actions-->
+                <div class="uk-padding-small">
+                  <div class="uk-grid-small uk-text-center" uk-grid>
+                    <div class="uk-width-auto@m uk-width-1-1">
+                      <a class="uk-button uk-button-default" :href="nextUrl" v-html="$t('main.Next lesson')" :class="{'disabled-div':!backUrl}"></a>
+                    </div>
+                    <div class="uk-width-expand@m uk-width-1-1">
+                      <a v-if="responseArray.status != 2" class="uk-button uk-button-primary" :href="responseArray.link+'/?back='+backUrl" v-html="$t('main.View results')"></a>
+                      <a class="uk-button uk-button-secondary" @click="refreshForm()" v-html="$t('main.Re try')"></a>
+                    </div>
+                    <div class="uk-width-auto@m uk-width-1-1">
+                      <a class="uk-button uk-button-default" :href="backUrl" v-html="$t('main.Back to lesson')"></a>
                     </div>
 
                   </div>
                 </div>
-
                 <progress style="height: 5px; border-radius: 0px" id="js-progressbar" class="uk-progress" :value="evaluationPercentage" max="100"></progress>
               </div>
             </div>
@@ -287,6 +293,7 @@ name: "Show",
   props: [
     'slug',
     'backUrl',
+    'nextUrl',
   ],
 
   data(){

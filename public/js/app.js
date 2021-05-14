@@ -29492,13 +29492,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown___default.a.name, __WEBPACK_IMPORTED_MODULE_1__chenfengyuan_vue_countdown___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Show",
-  props: ['slug', 'backUrl'],
+  props: ['slug', 'backUrl', 'nextUrl'],
 
   data: function data() {
     return {
@@ -32949,6 +32955,8 @@ if (token) {
             "_form_section": "قسم",
             "Generate": "Generate",
             "Re try": "أعد المحاولة",
+            "Back to lesson": "العودة للدرس",
+            "Next lesson": "الدرس التالي",
             "orders": "طلبات",
             "Place Order": "تأكيد الشراء",
             "purchase complete": "لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: {number}.",
@@ -33601,6 +33609,8 @@ if (token) {
             "_form_section": "Group",
             "Generate": "Generate",
             "Re try": "Re try",
+            "Back to lesson": "Back to lesson",
+            "Next lesson": "Next lesson",
             "orders": "Orders",
             "Place Order": "Place Order",
             "purchase complete": "Your purchase has been completed successfully, your order number is: {number}.",
@@ -36475,7 +36485,7 @@ exports.push([module.i, "\n.uk-form-label[data-v-6cf1a23e]{\r\n  position: absol
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\n.margin-bottom[data-v-8d244afa]{\r\n  margin-bottom: 10px;\n}\n.hidden-div[data-v-8d244afa]{\r\n  display: none;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\n.margin-bottom[data-v-8d244afa]{\r\n  margin-bottom: 10px;\n}\n.hidden-div[data-v-8d244afa]{\r\n  display: none;\n}\r\n", ""]);
 
 /***/ }),
 /* 83 */
@@ -72798,12 +72808,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "uk-card uk-card-default uk-text-center"
   }, [_c('div', {
-    staticClass: "uk-child-width-1-2@s uk-flex uk-flex-middle uk-flex-center",
-    attrs: {
-      "uk-grid": ""
+    staticStyle: {
+      "padding-top": "20px"
     }
-  }, [_c('div', {
-    staticClass: "uk-padding"
   }, [(_vm.evaluationStatus == 0) ? _c('div', [_vm._m(1), _vm._v(" "), _c('h4', {
     staticClass: "uk-text-primary uk-margin-remove",
     domProps: {
@@ -72901,8 +72908,30 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "innerHTML": _vm._s(_vm.responseArray.score)
     }
-  })])]), _vm._v(" "), _c('div', [(_vm.responseArray.status != 2) ? _c('a', {
-    staticClass: "uk-button uk-button-primary uk-width-auto",
+  })])])]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "uk-padding-small"
+  }, [_c('div', {
+    staticClass: "uk-grid-small uk-text-center",
+    attrs: {
+      "uk-grid": ""
+    }
+  }, [_c('div', {
+    staticClass: "uk-width-auto@m uk-width-1-1"
+  }, [_c('a', {
+    staticClass: "uk-button uk-button-default",
+    class: {
+      'disabled-div': !_vm.backUrl
+    },
+    attrs: {
+      "href": _vm.nextUrl
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Next lesson'))
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-expand@m uk-width-1-1"
+  }, [(_vm.responseArray.status != 2) ? _c('a', {
+    staticClass: "uk-button uk-button-primary",
     attrs: {
       "href": _vm.responseArray.link + '/?back=' + _vm.backUrl
     },
@@ -72910,7 +72939,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.$t('main.View results'))
     }
   }) : _vm._e(), _vm._v(" "), _c('a', {
-    staticClass: "uk-button uk-button-secondary uk-width-auto",
+    staticClass: "uk-button uk-button-secondary",
     domProps: {
       "innerHTML": _vm._s(_vm.$t('main.Re try'))
     },
@@ -72919,15 +72948,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return _vm.refreshForm()
       }
     }
-  }), _vm._v(" "), _c('a', {
-    staticClass: "uk-button uk-button-default uk-width-auto",
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "uk-width-auto@m uk-width-1-1"
+  }, [_c('a', {
+    staticClass: "uk-button uk-button-default",
     attrs: {
       "href": _vm.backUrl
     },
     domProps: {
-      "innerHTML": _vm._s(_vm.$t('main.Back'))
+      "innerHTML": _vm._s(_vm.$t('main.Back to lesson'))
     }
-  })])]) : _vm._e()])]), _vm._v(" "), _c('progress', {
+  })])])]), _vm._v(" "), _c('progress', {
     staticClass: "uk-progress",
     staticStyle: {
       "height": "5px",

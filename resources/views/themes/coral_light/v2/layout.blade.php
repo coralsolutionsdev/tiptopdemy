@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('libraries/uikit/css/uikit.min.css')}}"/>
     <!--site Css-->
-    <link rel="stylesheet" href="{{asset('themes/'.getFrontendThemeName().'/css/general.css?v=2021051411800')}}">
+    <link rel="stylesheet" href="{{asset('themes/'.getFrontendThemeName().'/css/general.css?v=2021051411900')}}">
 
     <!-- THEME CSS -->
     <style>
@@ -44,7 +44,7 @@
     <!-- scripts -->
     <script src="{{asset('libraries/uikit/js/uikit.min.js')}}"></script>
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
-    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=2021051411800')}}"></script>
+    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=2021051411900')}}"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- recaptcha -->
@@ -127,7 +127,7 @@
 
 </script>
 @include('partial.frontend._loading')
-<script src="{{asset('js/app.js?v=2021051411800')}}"></script>
+<script src="{{asset('js/app.js?v=2021051411900')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     $(".birthday").flatpickr();

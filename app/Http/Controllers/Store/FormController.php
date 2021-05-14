@@ -94,13 +94,12 @@ class FormController extends Controller
             if ($lessonItem->id == $lesson->id){
                 $preItem = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
                 $nextItem = !empty($group->getLessons[$itemKey+1]) ? $group->getLessons[$itemKey+1] : null;
-
             }
         }
-        if (!empty($preItem)){
+        if (!empty($preItem) && $preItem->hasCompletedAndPassedForms()){
             $prevLessonLink = route('store.lesson.show', [$product->slug, $preItem->slug]);
         }
-        if (!empty($nextItem)){
+        if (!empty($nextItem) && $lesson->hasCompletedAndPassedForms()){
             $nextLessonLink = route('store.lesson.show', [$product->slug, $nextItem->slug]);
         }
         $displayType = !is_null($form->properties['display_type']) ? $form->properties['display_type'] : 1;

@@ -21,14 +21,15 @@ body{
     color: var(--theme-primary-font-color);
 
 }
-.hidden-div{
-    display: none;
-}
+
 *+address, *+dl, *+fieldset, *+figure, *+ol, *+p, *+pre, *+ul {
     margin-top: 0px;
 }
 .uk-text-meta{
     font-size: 12px;
+}
+.opacity-half{
+    opacity: 0.5 !important;
 }
 /**
 uk card
@@ -494,7 +495,10 @@ Lessons
 .nav-col:hover{
     cursor: pointer;
 }
-
+.disabled-group-link{
+    background-color: var(--theme-secondary-bg-color);
+    opacity: 0.5;
+}
 /*
 banners
  */

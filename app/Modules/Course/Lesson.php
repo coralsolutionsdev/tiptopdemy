@@ -3,6 +3,7 @@
 namespace App\Modules\Course;
 
 use App\Modules\Form\Form;
+use App\Modules\Form\FormResponse;
 use App\Modules\Group\Group;
 use App\Modules\Media\Media;
 use App\Modules\modelTrail;
@@ -227,6 +228,47 @@ class Lesson extends Model implements ReactableContract, HasMedia
         }else{
             return $this->forms ;
         }
+    }
+
+    /**
+     * check if user has completed the lessons form with successful score.
+     * @return bool
+     */
+    public function hasCompletedAndPassedForms(): bool
+    {
+        $accessible = true;
+        $user = getAuthUser();
+        $lessonForms = $this->getFormsWithType(Form::TYPE_FORM, Form::STATUS_PUBLISHED);
+        if (!empty($lessonForms) && $lessonForms->count() > 0){
+            // check if passed with all forms
+            foreach ($lessonForms as $form){
+                $response = $form->getLastResponse();
+                if (
+                    !empty($response)
+                    && !empty($response['score_info'])
+                    && !empty($response['score_info']['passing_score_status'])
+                ){
+                    if ($response['score_info']['passing_score_status'] != FormResponse::PASSING_STATUS_PASSED){
+                        if (!empty($user)){
+                            if ($user->id != $this->creator->id){
+                                $accessible = false;
+                            }
+                        } else {
+                            $accessible = false;
+                        }
+                    }
+                } else {
+                    if (!empty($user)){
+                        if ($user->id != $this->creator->id){
+                            $accessible = false;
+                        }
+                    } else {
+                        $accessible = false;
+                    }
+                }
+            }
+        }
+        return $accessible;
     }
     /*
      |--------------------------------------------------------------------------

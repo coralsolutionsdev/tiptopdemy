@@ -496,8 +496,7 @@
         'Click to attach your files' => 'أضغط لارفاق الملفات المراد رفعها',
         '_form_section' => 'قسم',
         'Generate' => 'Generate',
-
-
+        'Re try' => 'أعد المحاولة',
 
 
         //orders

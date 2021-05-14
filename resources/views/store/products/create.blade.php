@@ -389,6 +389,9 @@
                                                                                 {{$item->title}}
                                                                                 <br> <span class="text-muted">{{$item->getType()}}</span>
                                                                             </td>
+                                                                            <td class="align-middle">
+                                                                                {{__('main.Quizzes')}} ({{$item->getFormsWithType(\App\Modules\Form\Form::TYPE_FORM)->count()}})
+                                                                            </td>
                                                                             <td class="uk-width-small">
                                                                                 <div class="action_btn text-right" style="width: 400px">
                                                                                     <ul>

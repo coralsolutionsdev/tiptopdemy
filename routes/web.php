@@ -275,6 +275,7 @@ Route::group(['middleware'=>'lang'], function(){
             Route::get('/products/items' , 'ProductController@GetItems'); // change to index
             Route::get('/sidebar/info' , 'ProductController@getSidebarInfo'); // change to index
             Route::get('/product/lesson/{lesson}/items','LessonController@getItems');
+            Route::get('/product/lesson/{lesson}/groups/items','LessonController@getGroupsItems');
 
 
         });

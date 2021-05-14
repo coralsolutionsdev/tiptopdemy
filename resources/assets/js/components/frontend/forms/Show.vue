@@ -32,115 +32,127 @@
             </div>
             <!--Form info-->
             <div class="uk-grid-small uk-child-width-1-1" uk-grid>
-              <!--            v-if="currentGroupKey == groupKey"-->
               <div :id="'group-'+group.id" v-for="(group, groupKey) in groups" :class="{'hidden-div': currentGroupKey != groupKey}">
-                <div>
-                  <!--section info-->
-                  <div class="uk-grid-collapse uk-text-center" uk-grid  style="padding: 0 10px">
-                    <div v-if="group.title" class="uk-width-auto@m">
-                      <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 20px">
-                        <p class="uk-h5" v-html="group.title"></p>
-                      </div>
-                    </div>
-                  </div>
-                  <!---->
-                  <div :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 0 }">
-                    <!--section info-->
-                    <div class="uk-grid-collapse" uk-grid :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
-                      <div class="uk-width-expand@m" v-html="group.description">
-                      </div>
-                      <div class="uk-width-auto@m uk-text-success">
-                        <span v-html="group.score"></span> Marks
-                      </div>
-                    </div>
-                    <!---->
-                    <div :class="form.display_type == 0 ? 'uk-grid-collapse' : 'uk-grid-small'" uk-grid>
-                      <div class="blanks-row uk-margin-small" v-if="group.draggable_blanks.length > 0">
-                        <!--draggable blanks-->
-                        <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in group.draggable_blanks"
-                             v-html="draggableBlank.value"
-                             v-if="!isDropped(group, draggableBlank.value)"
-                             draggable @dragstart='startDrag(draggableBlank.question_id, draggableBlank.value, draggableBlankKey)'
-                             @click="insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)"
-                        >
-                        </div>
-                      </div>
-                      <!--questions-->
-                      <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave }" style="padding: 4px">
-                        <div :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
-                          <div :id="'question-'+question.id" class="uk-grid-collapse question-row" uk-grid>
-                            <div class="uk-width-auto@m">
-                              <span v-html="key"></span>:
-                            </div>
-                            <div class="uk-width-expand@m question" style="padding: 0 5px">
-                              <input type="hidden" name="items_id[]" :value="question.id">
-                              <span class="question-title" v-html="question.title"></span>
-                              <span v-if="question.type == 1">
-                                <input class="input-classic" :name="'item_answer['+question.id+']'"  type="text" :placeholder="$t('main.Your answer')" autocomplete="off">
-                              </span>
-                              <span v-else-if="question.type == 2">
-                                <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent" autocomplete="off"></textarea>
-                              </span>
-                              <span v-else-if="question.type == 3">
-                                    <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-radio" type="radio" :name="'item_answer['+question.id+']'" :value="option.title"> {{option.title}}</label>
-                              </span>
-                              <span v-else-if="question.type == 4">
-<!--                            <vs-checkbox v-for="option in question.options" :name="'item_answer['+question.id+'][]'" :value="option.title"> {{option.title}} </vs-checkbox>-->
-                                <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-checkbox" :name="'item_answer['+question.id+'][]'" :value="option.title" type="checkbox"> {{option.title}}</label>
-                          </span>
-                              <span v-else-if="question.type == 5">
-                            <select class="uk-select uk-form-small uk-form-width-small" :name="'item_answer['+question.id+']'" style="padding:0 20px">
-                                <option value="" v-html="$t('main.choose answer')"></option>
-                                <option v-for="option in question.options" :value="option.title" v-html="option.title"></option>
-                            </select>
-                          </span>
-                              <div v-else-if="question.type == 6" v-html="question.blank_paragraph">
-                              </div>
-                              <div v-else-if="question.type == 7">
-                                <div class="drop-zone"
-                                     @drop.prevent="onDrop(group, question)"
-                                     @dragover.prevent>
-                                  <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
-                                </div>
-                              </div>
-                              <div v-else-if="question.type == 8">
-                                <!--draggable blanks-->
-                                <div style="display: inline-block" class="drop-zone"
-                                     @drop.prevent="onDrop(group, question)"
-                                     @dragover.prevent>
-                                  <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
-                                </div>
-                                <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in question.blanks"
-                                     v-html="draggableBlank"
-                                     v-if="!isQuestionDropped(group, question, draggableBlank)"
-                                     draggable @dragstart='startDrag(question.id, draggableBlank, draggableBlankKey)'
-                                     @click="insertInNextBlank(group, question.id, draggableBlank, false)"
-                                >
-                                </div>
-                              </div>
-                            </div>
-                            <div class="uk-width-auto@m uk-text-lighter">
-                              <span v-html="question.score"></span> Marks
-                              <label><input :uk-tooltip="$t('main.Pass')" class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded leave-question" type="checkbox" :name="'item_leave['+question.id+']'" :value="question.id" @click="question.auto_leave = !question.auto_leave" :checked="question.auto_leave"></label>
-                              <label><input :uk-tooltip="$t('main.Review')" class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded review-question" name="review" type="checkbox" @click="question.review = !question.review"></label>
-                            </div>
+
+                <div class="uk-grid-collapse uk-child-width-1-1" uk-grid>
+                  <div>
+                    <div>
+                      <!-- section info -->
+                      <div class="uk-grid-collapse uk-text-center" uk-grid>
+                        <div v-if="group.title" class="uk-width-auto@m">
+                          <div class="uk-tile uk-tile-secondary uk-box-shadow-small" style="border-radius: 10px 10px 0 0; padding: 5px 20px; margin: 0 10px">
+                            <p class="uk-h5" v-html="group.title"></p>
                           </div>
                         </div>
                       </div>
+                      <!-- section -->
+                      <div :class="{'uk-card uk-card-default uk-padding-small margin-bottom':form.display_type == 0 }">
+                        <!-- section desc -->
+                        <div class="uk-grid-collapse margin-bottom" uk-grid :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
+                          <div class="uk-width-expand@m" v-html="group.description">
+                          </div>
+                          <div class="uk-width-auto@m uk-text-success">
+                            <span v-html="group.score"></span> Marks
+                          </div>
+                          <div class="uk-width-1-1 blanks-row uk-margin-small" v-if="group.draggable_blanks.length > 0">
+                              <!--draggable blanks-->
+                              <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in group.draggable_blanks"
+                                   v-html="draggableBlank.value"
+                                   v-if="!isDropped(group, draggableBlank.value)"
+                                   draggable @dragstart='startDrag(draggableBlank.question_id, draggableBlank.value, draggableBlankKey)'
+                                   @click="insertInNextBlank(group, draggableBlank.question_id, draggableBlank.value)"
+                              >
+                              </div>
+                            </div>
+                        </div>
+                        <!-- section questions -->
+                        <div class="uk-grid-collapse" uk-grid>
+                          <!--questions-->
+                          <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave, 'margin-bottom':form.display_type == 1  }">
+                            <div :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
+                              <div :id="'question-'+question.id" class="uk-grid-collapse question-row" uk-grid>
+                                <div class="uk-width-auto@m">
+                                  <span v-html="key"></span>:
+                                </div>
+                                <div class="uk-width-expand@m question" style="padding: 0 5px">
+                                  <input type="hidden" name="items_id[]" :value="question.id">
+                                  <span class="question-title" v-html="question.title"></span>
+                                  <span v-if="question.type == 1">
+                                    <input class="input-classic" :name="'item_answer['+question.id+']'"  type="text" :placeholder="$t('main.Your answer')" autocomplete="off">
+                                  </span>
+                                  <span v-else-if="question.type == 2">
+                                    <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent" autocomplete="off"></textarea>
+                                  </span>
+                                  <span v-else-if="question.type == 3">
+                                        <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-radio" type="radio" :name="'item_answer['+question.id+']'" :value="option.title"> {{option.title}}</label>
+                                  </span>
+                                  <span v-else-if="question.type == 4">
+    <!--                            <vs-checkbox v-for="option in question.options" :name="'item_answer['+question.id+'][]'" :value="option.title"> {{option.title}} </vs-checkbox>-->
+                                        <label v-for="option in question.options" style="margin: 0 2px"><input class="uk-checkbox" :name="'item_answer['+question.id+'][]'" :value="option.title" type="checkbox"> {{option.title}}</label>
+                                  </span>
+                                  <span v-else-if="question.type == 5">
+                                    <select class="uk-select uk-form-small uk-form-width-small" :name="'item_answer['+question.id+']'" style="padding:0 20px">
+                                        <option value="" v-html="$t('main.choose answer')"></option>
+                                        <option v-for="option in question.options" :value="option.title" v-html="option.title"></option>
+                                    </select>
+                                  </span>
+                                  <div v-else-if="question.type == 6" v-html="question.blank_paragraph">
+                                  </div>
+                                  <div v-else-if="question.type == 7">
+                                    <div class="drop-zone"
+                                         @drop.prevent="onDrop(group, question)"
+                                         @dragover.prevent>
+                                      <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
+                                    </div>
+                                  </div>
+                                  <div v-else-if="question.type == 8">
+                                    <!--draggable blanks-->
+                                    <div style="display: inline-block" class="drop-zone"
+                                         @drop.prevent="onDrop(group, question)"
+                                         @dragover.prevent>
+                                      <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
+                                    </div>
+                                    <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in question.blanks"
+                                         v-html="draggableBlank"
+                                         v-if="!isQuestionDropped(group, question, draggableBlank)"
+                                         draggable @dragstart='startDrag(question.id, draggableBlank, draggableBlankKey)'
+                                         @click="insertInNextBlank(group, question.id, draggableBlank, false)"
+                                    >
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="uk-width-auto@m uk-text-lighter">
+                                  <span v-html="question.score"></span> Marks
+                                  <label><input :uk-tooltip="$t('main.Pass')" class="uk-checkbox uk-checkbox-danger uk-checkbox-rounded leave-question" type="checkbox" :name="'item_leave['+question.id+']'" :value="question.id" @click="question.auto_leave = !question.auto_leave" :checked="question.auto_leave"></label>
+                                  <label><input :uk-tooltip="$t('main.Review')" class="uk-checkbox uk-checkbox-warning uk-checkbox-rounded review-question" name="review" type="checkbox" @click="question.review = !question.review"></label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
                     </div>
                   </div>
-                  <!--actions-->
-                  <div class="uk-grid-collapse uk-margin-small" uk-grid>
-                    <div class="uk-width-auto">
-                      <span v-if="groupKey > 0" class="uk-button uk-button-secondary section-navigation prev-section" @click="prevGroup()" data-value="0" v-html="$t('main.Previous')"></span>
-                    </div>
-                    <div class="uk-width-expand"></div>
-                    <div class="uk-width-auto">
-                      <span v-if="groupKey != groupsCount" class="uk-button uk-button-secondary section-navigation next-section" @click="nextGroup()" data-value="1" v-html="$t('main.Next')"></span>
-                      <span v-else class="uk-button uk-button-primary section-navigation" data-value="3" v-html="form.properties.submission_title" @click="submit()"></span>
+                  <div>
+                    <!-- section actions -->
+                    <div>
+                      <div class="uk-grid-collapse" uk-grid>
+                        <div class="uk-width-auto">
+                          <span v-if="groupKey > 0" class="uk-button uk-button-secondary section-navigation prev-section" @click="prevGroup()" data-value="0" v-html="$t('main.Previous')"></span>
+                        </div>
+                        <div class="uk-width-expand"></div>
+                        <div class="uk-width-auto">
+                          <span v-if="groupKey != groupsCount" class="uk-button uk-button-secondary section-navigation next-section" @click="nextGroup()" data-value="1" v-html="$t('main.Next')"></span>
+                          <span v-else class="uk-button uk-button-primary section-navigation" data-value="3" v-html="form.properties.submission_title" @click="submit()"></span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -185,8 +197,9 @@
                         </div>
                       </div>
                       <div>
-                        <a v-if="responseArray.status != 2" class="uk-button uk-button-primary uk-width-1-3" :href="responseArray.link+'/?back='+backUrl" v-html="$t('main.View results')"></a>
-                        <a class="uk-button uk-button-default uk-width-1-3" :href="backUrl" v-html="$t('main.Back')"></a>
+                        <a v-if="responseArray.status != 2" class="uk-button uk-button-primary uk-width-auto" :href="responseArray.link+'/?back='+backUrl" v-html="$t('main.View results')"></a>
+                        <a class="uk-button uk-button-secondary uk-width-auto" @click="refreshForm()" v-html="$t('main.Re try')"></a>
+                        <a class="uk-button uk-button-default uk-width-auto" :href="backUrl" v-html="$t('main.Back')"></a>
                       </div>
                     </div>
 
@@ -551,6 +564,9 @@ name: "Show",
       // console.log(data.totalMilliseconds);
 
     },
+    refreshForm(){
+      location.reload();
+    },
   },
 }
 </script>
@@ -587,5 +603,8 @@ name: "Show",
 }
 .dropped-blank{
   opacity: 0.5;
+}
+.margin-bottom{
+  margin-bottom: 10px;
 }
 </style>

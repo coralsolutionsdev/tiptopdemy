@@ -476,6 +476,7 @@
         'Display type' => 'Display type',
         '_form_section' => 'Group',
         'Generate' => 'Generate',
+        'Re try' => 'Re try',
 
         //orders
         'orders' => 'Orders',

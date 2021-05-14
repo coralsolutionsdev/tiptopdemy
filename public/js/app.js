@@ -29471,6 +29471,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -29758,6 +29771,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
       // console.log(data.totalMinutes);
       // console.log(data.totalSeconds);
       // console.log(data.totalMilliseconds);
+    },
+    refreshForm: function refreshForm() {
+      location.reload();
     }
   }
 });
@@ -30363,7 +30379,9 @@ var messages = {
       already_in_cart: 'Am error accrued!',
       product_already_in_cart: 'This product was already added to your shopping cart',
       please_purchase: 'Please purchase the product first',
-      please_purchase_message: 'To view this lesson you need to purchase the product first.'
+      please_purchase_message: 'To view this lesson you need to purchase the product first.',
+      complete_forms: 'Please complete the previous quizzes',
+      complete_forms_message: 'To view this lesson you need to complete the previous quizzes first first.'
     }
   },
   ar: {
@@ -30373,7 +30391,9 @@ var messages = {
       already_in_cart: 'لقد تم اضافة المنتج سابقاً',
       product_already_in_cart: 'هذا المنتج قد تمت اضافته مسبقاً لسلة التسوق الخاصة بك.',
       please_purchase: 'يرجى شراء الدورة',
-      please_purchase_message: 'لعرض هذا الدرس يجب عليك شراء الدورة أولا.'
+      please_purchase_message: 'لعرض هذا الدرس يجب عليك شراء الدورة أولا.',
+      complete_forms: 'يرجى أكمال الأختبارات السابقة',
+      complete_forms_message: 'لعرض هذا الدرس يرجى اكمال إختبارات الدرس السابق أولاً. '
     }
   }
 };
@@ -30423,6 +30443,7 @@ var messages = {
 
     this.lang = document.documentElement.lang.substr(0, 2);
     this.fetchItem();
+    this.fetchGroupsItems();
   },
 
   methods: {
@@ -30440,17 +30461,30 @@ var messages = {
         _this.resources = _this.item.resources;
         _this.forms = _this.item.forms;
         _this.attachments = _this.item.attachments;
-        _this.groups = _this.item.groups;
-        _this.lessonGroupId = _this.item.lesson_group_id;
+        // this.groups = this.item.groups;
+        // this.lessonGroupId = this.item.lesson_group_id;
         _this.lessonId = _this.item.lesson_id;
         _this.product = _this.item.product;
+      });
+    },
+    fetchGroupsItems: function fetchGroupsItems() {
+      var _this2 = this;
+
+      axios.get('/store/product/lesson/' + this.lessonSlug + '/groups/items', {
+        params: {
+          // id: 12345
+        }
+      }).then(function (res) {
+        _this2.item = res.data;
+        _this2.groups = _this2.item.groups;
+        _this2.lessonGroupId = _this2.item.lesson_group_id;
       });
     },
     updateViewContentStatus: function updateViewContentStatus(status) {
       this.viewContentStatus = status;
     },
     addToCart: function addToCart(product) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.inAddingProductId == null && product.in_cart == false) {
         this.inAddingProductId = product.id;
@@ -30464,18 +30498,18 @@ var messages = {
         };
         axios.post('/cart/add', data).then(function (res) {
           product.in_cart = true;
-          _this2.$Notify({
-            title: messages[_this2.lang].message.added_successfully,
-            message: messages[_this2.lang].message.the_product_added,
+          _this3.$Notify({
+            title: messages[_this3.lang].message.added_successfully,
+            message: messages[_this3.lang].message.the_product_added,
             type: 'success',
             duration: 4000
           });
-          _this2.inAddingProductId = null;
+          _this3.inAddingProductId = null;
           $('.navbar-cart-count').html(res.data.item_count);
         }).catch(function (error) {
           console.log(error);
-          _this2.hideLoading();
-          _this2.$Notify({
+          _this3.hideLoading();
+          _this3.$Notify({
             title: 'Oops! something going wrong',
             message: 'Please contact us for more information',
             type: 'error',
@@ -30498,6 +30532,18 @@ var messages = {
         type: 'warning',
         duration: 5000
       });
+    },
+    openLesson: function openLesson(lesson) {
+      if (lesson.accessible) {
+        window.location.replace(lesson.link);
+      } else {
+        this.$Notify({
+          title: messages[this.lang].message.complete_forms,
+          message: messages[this.lang].message.complete_forms_message,
+          type: 'warning',
+          duration: 5000
+        });
+      }
     }
   },
   components: {
@@ -32894,6 +32940,7 @@ if (token) {
             "Click to attach your files": "أضغط لارفاق الملفات المراد رفعها",
             "_form_section": "قسم",
             "Generate": "Generate",
+            "Re try": "أعد المحاولة",
             "orders": "طلبات",
             "Place Order": "تأكيد الشراء",
             "purchase complete": "لقد تمت عملية الشراء بنجاح,  رقم الطلب الخص بك هو: {number}.",
@@ -33545,6 +33592,7 @@ if (token) {
             "Display type": "Display type",
             "_form_section": "Group",
             "Generate": "Generate",
+            "Re try": "Re try",
             "orders": "Orders",
             "Place Order": "Place Order",
             "purchase complete": "Your purchase has been completed successfully, your order number is: {number}.",
@@ -36419,7 +36467,7 @@ exports.push([module.i, "\n.uk-form-label[data-v-6cf1a23e]{\r\n  position: absol
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*:root {*/\r\n/*  --vs-radius: 10px !important;*/\r\n/*}*/\n.disabled[data-v-8d244afa]{\r\n  pointer-events: none;\n}\n.blanks-row[data-v-8d244afa]{\r\n  padding: 10px 0;\r\n  display: inline-block;\r\n  min-width: 150px;\r\n  min-height: 25px;\n}\n.blank-word[data-v-8d244afa]{\r\n  margin: 0 2px;\r\n  padding: 5px 15px;\r\n  display: inline-block;\r\n  background-color: var(--text-primary);\r\n  border-radius: 5px;\r\n  color: white;\n}\n.blank-word[data-v-8d244afa]:hover{\r\n  cursor: pointer;\n}\n.drag-el[data-v-8d244afa] {\r\n  background-color: #fff;\r\n  margin-bottom: 10px;\r\n  padding: 5px;\n}\n.dropped-blank[data-v-8d244afa]{\r\n  opacity: 0.5;\n}\n.margin-bottom[data-v-8d244afa]{\r\n  margin-bottom: 10px;\n}\r\n", ""]);
 
 /***/ }),
 /* 83 */
@@ -37037,14 +37085,15 @@ function parse(str, format) {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.20';
+  var VERSION = '4.17.21';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
 
   /** Error message constants. */
   var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.',
-      FUNC_ERROR_TEXT = 'Expected a function';
+      FUNC_ERROR_TEXT = 'Expected a function',
+      INVALID_TEMPL_VAR_ERROR_TEXT = 'Invalid `variable` option passed into `_.template`';
 
   /** Used to stand-in for `undefined` hash values. */
   var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -37177,10 +37226,11 @@ function parse(str, format) {
   var reRegExpChar = /[\\^$.*+?()[\]{}|]/g,
       reHasRegExpChar = RegExp(reRegExpChar.source);
 
-  /** Used to match leading and trailing whitespace. */
-  var reTrim = /^\s+|\s+$/g,
-      reTrimStart = /^\s+/,
-      reTrimEnd = /\s+$/;
+  /** Used to match leading whitespace. */
+  var reTrimStart = /^\s+/;
+
+  /** Used to match a single whitespace character. */
+  var reWhitespace = /\s/;
 
   /** Used to match wrap detail comments. */
   var reWrapComment = /\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/,
@@ -37189,6 +37239,18 @@ function parse(str, format) {
 
   /** Used to match words composed of alphanumeric characters. */
   var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
+
+  /**
+   * Used to validate the `validate` option in `_.template` variable.
+   *
+   * Forbids characters which could potentially change the meaning of the function argument definition:
+   * - "()," (modification of function parameters)
+   * - "=" (default value)
+   * - "[]{}" (destructuring of function parameters)
+   * - "/" (beginning of a comment)
+   * - whitespace
+   */
+  var reForbiddenIdentifierChars = /[()=,{}\[\]\/\s]/;
 
   /** Used to match backslashes in property paths. */
   var reEscapeChar = /\\(\\)?/g;
@@ -38019,6 +38081,19 @@ function parse(str, format) {
   }
 
   /**
+   * The base implementation of `_.trim`.
+   *
+   * @private
+   * @param {string} string The string to trim.
+   * @returns {string} Returns the trimmed string.
+   */
+  function baseTrim(string) {
+    return string
+      ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+      : string;
+  }
+
+  /**
    * The base implementation of `_.unary` without support for storing metadata.
    *
    * @private
@@ -38349,6 +38424,21 @@ function parse(str, format) {
     return hasUnicode(string)
       ? unicodeToArray(string)
       : asciiToArray(string);
+  }
+
+  /**
+   * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+   * character of `string`.
+   *
+   * @private
+   * @param {string} string The string to inspect.
+   * @returns {number} Returns the index of the last non-whitespace character.
+   */
+  function trimmedEndIndex(string) {
+    var index = string.length;
+
+    while (index-- && reWhitespace.test(string.charAt(index))) {}
+    return index;
   }
 
   /**
@@ -49519,7 +49609,7 @@ function parse(str, format) {
       if (typeof value != 'string') {
         return value === 0 ? value : +value;
       }
-      value = value.replace(reTrim, '');
+      value = baseTrim(value);
       var isBinary = reIsBinary.test(value);
       return (isBinary || reIsOctal.test(value))
         ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
@@ -51891,6 +51981,12 @@ function parse(str, format) {
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
       }
+      // Throw an error if a forbidden character was found in `variable`, to prevent
+      // potential command injection attacks.
+      else if (reForbiddenIdentifierChars.test(variable)) {
+        throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
+      }
+
       // Cleanup code by stripping empty strings.
       source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source)
         .replace(reEmptyStringMiddle, '$1')
@@ -52004,7 +52100,7 @@ function parse(str, format) {
     function trim(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrim, '');
+        return baseTrim(string);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -52039,7 +52135,7 @@ function parse(str, format) {
     function trimEnd(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrimEnd, '');
+        return string.slice(0, trimmedEndIndex(string) + 1);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -70118,11 +70214,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "uk-accordion-content"
     }, _vm._l((group.items), function(lesson, lessonKey) {
       return (lesson.link) ? _c('a', {
-        attrs: {
-          "href": lesson.link
+        on: {
+          "click": function($event) {
+            return _vm.openLesson(lesson)
+          }
         }
       }, [_c('div', {
-        staticClass: "uk-secondary-bg-hover"
+        staticClass: "uk-secondary-bg-hover",
+        class: {
+          'disabled-group-link': !lesson.accessible
+        }
       }, [_c('div', {
         staticStyle: {
           "padding": "5px"
@@ -72355,11 +72456,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "id": 'group-' + group.id
       }
-    }, [_c('div', [_c('div', {
+    }, [_c('div', {
+      staticClass: "uk-grid-collapse uk-child-width-1-1",
+      attrs: {
+        "uk-grid": ""
+      }
+    }, [_c('div', [_c('div', [_c('div', {
       staticClass: "uk-grid-collapse uk-text-center",
-      staticStyle: {
-        "padding": "0 10px"
-      },
       attrs: {
         "uk-grid": ""
       }
@@ -72369,7 +72472,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "uk-tile uk-tile-secondary uk-box-shadow-small",
       staticStyle: {
         "border-radius": "10px 10px 0 0",
-        "padding": "5px 20px"
+        "padding": "5px 20px",
+        "margin": "0 10px"
       }
     }, [_c('p', {
       staticClass: "uk-h5",
@@ -72378,10 +72482,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })])]) : _vm._e()]), _vm._v(" "), _c('div', {
       class: {
-        'uk-card uk-card-default uk-padding-small': _vm.form.display_type == 0
+        'uk-card uk-card-default uk-padding-small margin-bottom': _vm.form.display_type == 0
       }
     }, [_c('div', {
-      staticClass: "uk-grid-collapse",
+      staticClass: "uk-grid-collapse margin-bottom",
       class: {
         'uk-card uk-card-default uk-padding-small': _vm.form.display_type == 1
       },
@@ -72399,13 +72503,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       domProps: {
         "innerHTML": _vm._s(group.score)
       }
-    }), _vm._v(" Marks\n                      ")])]), _vm._v(" "), _c('div', {
-      class: _vm.form.display_type == 0 ? 'uk-grid-collapse' : 'uk-grid-small',
-      attrs: {
-        "uk-grid": ""
-      }
-    }, [(group.draggable_blanks.length > 0) ? _c('div', {
-      staticClass: "blanks-row uk-margin-small"
+    }), _vm._v(" Marks\n                        ")]), _vm._v(" "), (group.draggable_blanks.length > 0) ? _c('div', {
+      staticClass: "uk-width-1-1 blanks-row uk-margin-small"
     }, _vm._l((group.draggable_blanks), function(draggableBlank, draggableBlankKey) {
       return (!_vm.isDropped(group, draggableBlank.value)) ? _c('div', {
         staticClass: "blank-word uk-box-shadow-hover-medium",
@@ -72424,14 +72523,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         }
       }) : _vm._e()
-    }), 0) : _vm._e(), _vm._v(" "), _vm._l((group.items), function(question, key) {
+    }), 0) : _vm._e()]), _vm._v(" "), _c('div', {
+      staticClass: "uk-grid-collapse",
+      attrs: {
+        "uk-grid": ""
+      }
+    }, _vm._l((group.items), function(question, key) {
       return (question.type != 0) ? _c('div', {
         staticClass: "uk-width-1-1@m uk-width-1-1@s",
         class: {
-          'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave
-        },
-        staticStyle: {
-          "padding": "4px"
+          'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave, 'margin-bottom': _vm.form.display_type == 1
         }
       }, [_c('div', {
         class: {
@@ -72449,7 +72550,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         domProps: {
           "innerHTML": _vm._s(key)
         }
-      }), _vm._v(":\n                            ")]), _vm._v(" "), _c('div', {
+      }), _vm._v(":\n                              ")]), _vm._v(" "), _c('div', {
         staticClass: "uk-width-expand@m question",
         staticStyle: {
           "padding": "0 5px"
@@ -72601,7 +72702,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         domProps: {
           "innerHTML": _vm._s(question.score)
         }
-      }), _vm._v(" Marks\n                              "), _c('label', [_c('input', {
+      }), _vm._v(" Marks\n                                "), _c('label', [_c('input', {
         staticClass: "uk-checkbox uk-checkbox-danger uk-checkbox-rounded leave-question",
         attrs: {
           "uk-tooltip": _vm.$t('main.Pass'),
@@ -72630,8 +72731,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         }
       })])])])])]) : _vm._e()
-    })], 2)]), _vm._v(" "), _c('div', {
-      staticClass: "uk-grid-collapse uk-margin-small",
+    }), 0)])])]), _vm._v(" "), _c('div', [_c('div', [_c('div', {
+      staticClass: "uk-grid-collapse",
       attrs: {
         "uk-grid": ""
       }
@@ -72680,7 +72781,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           return _vm.submit()
         }
       }
-    })])])])])
+    })])])])])])])
   }), 0)]) : _c('div', [_c('div', {
     staticClass: "uk-margin",
     staticStyle: {
@@ -72783,7 +72884,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.responseArray.score)
     }
   })])]), _vm._v(" "), _c('div', [(_vm.responseArray.status != 2) ? _c('a', {
-    staticClass: "uk-button uk-button-primary uk-width-1-3",
+    staticClass: "uk-button uk-button-primary uk-width-auto",
     attrs: {
       "href": _vm.responseArray.link + '/?back=' + _vm.backUrl
     },
@@ -72791,7 +72892,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "innerHTML": _vm._s(_vm.$t('main.View results'))
     }
   }) : _vm._e(), _vm._v(" "), _c('a', {
-    staticClass: "uk-button uk-button-default uk-width-1-3",
+    staticClass: "uk-button uk-button-secondary uk-width-auto",
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Re try'))
+    },
+    on: {
+      "click": function($event) {
+        return _vm.refreshForm()
+      }
+    }
+  }), _vm._v(" "), _c('a', {
+    staticClass: "uk-button uk-button-default uk-width-auto",
     attrs: {
       "href": _vm.backUrl
     },
@@ -72925,11 +73036,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "con-content"
   }, [_c('p', {
     staticClass: "not-margin"
-  }, [_c('b', [_vm._v("Dear student")]), _c('br'), _vm._v("\n          You have "), _c('b', {
+  }, [_c('b', [_vm._v("Dear student")]), _c('br'), _vm._v("\n        You have "), _c('b', {
     domProps: {
       "innerHTML": _vm._s(_vm.leaveCount)
     }
-  }), _vm._v(" Questions to review before submitting your answers, do you want to continue?\n        ")])])])], 1)
+  }), _vm._v(" Questions to review before submitting your answers, do you want to continue?\n      ")])])])], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "uk-margin-small"

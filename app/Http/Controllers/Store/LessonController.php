@@ -121,13 +121,12 @@ class LessonController extends Controller
             if ($lessonItem->id == $lesson->id){
                 $preItem = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
                 $nextItem = !empty($group->getLessons[$itemKey+1]) ? $group->getLessons[$itemKey+1] : null;
-
             }
         }
-        if (!empty($preItem)){
+        if (!empty($preItem) && $preItem->hasCompletedAndPassedForms()){
             $prevLessonLink = route('store.lesson.show', [$product->slug, $preItem->slug]);
         }
-        if (!empty($nextItem)){
+        if (!empty($nextItem) && $lesson->hasCompletedAndPassedForms()){
             $nextLessonLink = route('store.lesson.show', [$product->slug, $nextItem->slug]);
         }
         $attachments = $lesson->attachments()->get();
@@ -344,6 +343,11 @@ class LessonController extends Controller
         return response($key, 200);
     }
 
+    /**
+     * get lesson data
+     * @param Lesson $lesson
+     * @return Application|ResponseFactory|Response
+     */
     public function getItems(Lesson $lesson)
     {
         $product = $lesson->product;
@@ -387,38 +391,6 @@ class LessonController extends Controller
             ];
         }
 
-        // groups
-        $groups = $product->groups;
-        $groupsArray = [];
-        foreach ($groups as $key => $group){
-            $groupNumber = $key + 1;
-            // lessons
-            $groupLessonsArray = [];
-            foreach ($group->getLessons as $itemKey => $lessonItem){
-                $lessonNumber = $itemKey + 1;
-                $link = null;
-                if ($groupNumber == 1){
-                    $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);
-                }else{
-                    if ($product->hasPurchased()){
-                        $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);
-                    }
-                }
-                $groupLessonsArray[$lessonNumber] = [
-                    'id' => $lessonItem->id,
-                    'title' => $lessonItem->title,
-                    'link' => $link,
-                ];
-            }
-
-            $groupsArray[$groupNumber] = [
-                'id' => $group->id,
-                'title' => $group->title,
-                'items' => $groupLessonsArray,
-            ];
-        }
-        $lessonGroupId = $lesson->groups() && $lesson->groups()->first() ? $lesson->groups()->first()->id : null;
-
         $productArray = [
             'id' => $product->id,
             'name' => $product->name,
@@ -436,6 +408,60 @@ class LessonController extends Controller
             'resources' => $resources,
             'forms' => $formsArray,
             'attachments' => $attachmentsArray,
+        ], 200);
+    }
+
+    /**
+     * Get lessons groups data
+     * @param Lesson $lesson
+     * @return Application|ResponseFactory|Response
+     */
+    public function getGroupsItems(Lesson $lesson)
+    {
+        $product = $lesson->product;
+        // groups
+        $groups = $product->groups;
+        $groupsArray = [];
+        foreach ($groups as $key => $group){
+            $groupNumber = $key + 1;
+            // lessons
+            $groupLessonsArray = [];
+            foreach ($group->getLessons as $itemKey => $lessonItem){
+                $lessonNumber = $itemKey + 1;
+                $link = $prevLesson = $prevLessonForms =null;
+                if ($groupNumber == 1){
+                    $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);
+                }else{
+                    if ($product->hasPurchased()){
+                        $link = route('store.lesson.show', [$product->slug, $lessonItem->slug]);
+                    }
+                }
+                // check if prev has forms
+                $accessible = true;
+                if ($lessonItem->id != $lesson->id){
+                    $prevLesson = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
+                    if (!empty($prevLesson)){
+                        $accessible = $prevLesson->hasCompletedAndPassedForms();
+                    }
+                }
+
+                $groupLessonsArray[$lessonNumber] = [
+                    'id' => $lessonItem->id,
+                    'title' => $lessonItem->title,
+                    'link' => $link,
+                    'accessible' => $accessible,
+                ];
+            }
+
+            $groupsArray[$groupNumber] = [
+                'id' => $group->id,
+                'title' => $group->title,
+                'items' => $groupLessonsArray,
+            ];
+        }
+        $lessonGroupId = $lesson->groups() && $lesson->groups()->first() ? $lesson->groups()->first()->id : null;
+
+        return response([
             'groups' => $groupsArray,
             'lesson_group_id' => $lessonGroupId
         ], 200);

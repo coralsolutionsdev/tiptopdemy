@@ -39,9 +39,9 @@
               <li v-for="(group, key) in groups" :class=" { 'uk-open':lessonGroupId == group.id}" style="margin:0px 0px 10px 0px">
                 <a class="uk-accordion-title text-highlighted uk-secondary-bg" style="padding: 10px 20px" href="#">{{key < 10 ? '0'+key: key}} | {{group.title}}</a>
                 <div class="uk-accordion-content">
-                  <a v-if="lesson.link" v-for="(lesson, lessonKey) in group.items" :href="lesson.link">
-                    <div class="uk-secondary-bg-hover">
-                      <div style="padding: 5px">
+                  <a v-if="lesson.link" v-for="(lesson, lessonKey) in group.items" @click="openLesson(lesson)">
+                    <div class="uk-secondary-bg-hover" :class="{'disabled-group-link': !lesson.accessible}">
+                      <div class="" style="padding: 5px">
                         <div class="uk-grid-small" uk-grid>
                           <div  class="uk-width-auto@s uk-text-center uk-flex uk-flex-middle">
                             <span v-if="lesson.id == lessonId" class="uk-icon-box uk-text-primary" style="height: 40px; width:40px;" uk-icon="icon: play-circle"></span>
@@ -192,6 +192,8 @@ const messages = {
       product_already_in_cart: 'This product was already added to your shopping cart',
       please_purchase: 'Please purchase the product first',
       please_purchase_message: 'To view this lesson you need to purchase the product first.',
+      complete_forms: 'Please complete the previous quizzes',
+      complete_forms_message: 'To view this lesson you need to complete the previous quizzes first first.',
     }
   },
   ar: {
@@ -202,6 +204,8 @@ const messages = {
       product_already_in_cart: 'هذا المنتج قد تمت اضافته مسبقاً لسلة التسوق الخاصة بك.',
       please_purchase: 'يرجى شراء الدورة',
       please_purchase_message: 'لعرض هذا الدرس يجب عليك شراء الدورة أولا.',
+      complete_forms: 'يرجى أكمال الأختبارات السابقة',
+      complete_forms_message: 'لعرض هذا الدرس يرجى اكمال إختبارات الدرس السابق أولاً. ',
     }
   }
 }
@@ -252,6 +256,7 @@ name: "Show",
 
     this.lang = document.documentElement.lang.substr(0, 2);
     this.fetchItem();
+    this.fetchGroupsItems();
   },
   methods:{
     fetchItem(){
@@ -266,11 +271,22 @@ name: "Show",
         this.resources = this.item.resources;
         this.forms = this.item.forms;
         this.attachments = this.item.attachments;
-        this.groups = this.item.groups;
-        this.lessonGroupId = this.item.lesson_group_id;
+        // this.groups = this.item.groups;
+        // this.lessonGroupId = this.item.lesson_group_id;
         this.lessonId = this.item.lesson_id;
         this.product = this.item.product;
 
+      });
+    },
+    fetchGroupsItems(){
+      axios.get('/store/product/lesson/'+this.lessonSlug+'/groups/items', {
+        params: {
+          // id: 12345
+        }
+      }).then(res => {
+        this.item = res.data;
+        this.groups = this.item.groups;
+        this.lessonGroupId = this.item.lesson_group_id;
       });
     },
     updateViewContentStatus(status){
@@ -328,6 +344,19 @@ name: "Show",
         duration: 5000
       });
     },
+    openLesson(lesson){
+      if(lesson.accessible){
+        window.location.replace(lesson.link);
+      } else {
+        this.$Notify({
+          title: messages[this.lang].message.complete_forms,
+          message: messages[this.lang].message.complete_forms_message,
+          type: 'warning',
+          duration: 5000
+        });
+      }
+
+    },
   },
   components: {
     memorize
@@ -370,6 +399,7 @@ name: "Show",
   .please-purchase:hover{
     cursor: pointer !important;
   }
+
 }
 
 </style>

@@ -205,6 +205,9 @@
                       </div>
                     </div>
                   </div>
+                <!--Rate-->
+                <h5 class="uk-margin-remove"  v-html="$t('main.Lesson rate')"></h5>
+                <rate :length="5" :value="0" @after-rate="onAfterRate"/>
                 <!--actions-->
                 <div class="uk-padding-small">
                   <div class="uk-grid-small uk-text-center" uk-grid>
@@ -226,8 +229,6 @@
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
     <!--CountDown-->
@@ -287,15 +288,18 @@
 <script>
 import Vue from 'vue';
 import VueCountdown from '@chenfengyuan/vue-countdown';
+import rate from 'vue-rate'
+import 'vue-rate/dist/vue-rate.css'
+Vue.use(rate)
 Vue.component(VueCountdown.name, VueCountdown);
 export default {
 name: "Show",
   props: [
     'slug',
+    'lessonSlug',
     'backUrl',
     'nextUrl',
   ],
-
   data(){
     return {
       form:null,
@@ -583,6 +587,22 @@ name: "Show",
     refreshForm(){
       location.reload();
     },
+    onAfterRate(rate) {
+      axios.post('/store/lesson/'+this.lessonSlug+'/react/rate/toggle', {
+        rate:rate
+      })
+          .then(res => {
+          })
+          .catch(error => {
+            console.log(error);
+            this.$Notify({
+              title: 'Oops! something going wrong',
+              message: 'Please contact us for more information',
+              type: 'error',
+              duration: 4000
+            });
+          });
+    },
   },
 }
 </script>
@@ -625,5 +645,8 @@ name: "Show",
 }
 .hidden-div{
   display: none;
+}
+.Rate__star.filled, .Rate__star.hover {
+  color: red !important;
 }
 </style>

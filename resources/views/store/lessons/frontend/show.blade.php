@@ -36,6 +36,13 @@
                                             <h4 class="uk-margin-remove uk-text-bold">{{$product->name}}</h4>
                                             <h5 class="uk-margin-remove uk-text-bold uk-light">{{$lesson->title}}</h5>
                                             <p class="uk-margin-small"><span><img class="uk-border-circle" src="{{$product->user->getProfilePicURL()}}" style="width: 20px; height: 20px; object-fit: cover"></span> <span>{{__('main.By')}}: </span> <span> {{$product->user->name}}</span></p>
+                                            <p>
+                                                {{__('main.Lesson rate')}}:
+                                                @for($i=0; $i < 5; $i++)
+                                                    <i class="{{$i < $rateData['rate_average'] ? 'fas' : 'far'}} fa-star"></i>
+                                                @endfor
+                                                <span>({{$rateData['rate_count']}})</span>
+                                            </p>
                                             <div class="product-tags">
                                                 @foreach($product->tagsWithType('product') as $tag)
                                                     <a class="uk-button uk-button-default" href="#">{{$tag->name}}</a>
@@ -62,13 +69,6 @@
                                 </div>
                             </a>
                         </div>
-{{--                        <div class="nav-col" style="width: 5%" uk-tooltip="Next">--}}
-{{--                            <a class="nav-link" href="{{$nextLessonLink}}">--}}
-{{--                                <div class="uk-card uk-card-body bg-white uk-padding-small uk-flex uk-flex-middle uk-flex-center uk-box-shadow-hover-small" style="border: 0.5px solid {{$product->getMainColorPattern()}}; height: 100% color: {{$product->getMainColorPattern()}}" onclick="$('#next-form').submit()">--}}
-{{--                                    <span uk-icon="icon: chevron-{{getFloatKey('start')}}"></span>--}}
-{{--                                </div>--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
                     </div>
 
                 </div>

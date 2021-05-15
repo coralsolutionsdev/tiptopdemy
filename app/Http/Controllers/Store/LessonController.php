@@ -11,6 +11,7 @@ use App\Modules\Form\FormResponse;
 use App\Modules\Media\Media;
 use App\Product;
 use App\Services\MediaManagerService;
+use App\Services\ReactionManagerService;
 use Carbon\Carbon;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Exception;
@@ -131,7 +132,16 @@ class LessonController extends Controller
         }
         $attachments = $lesson->attachments()->get();
         $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
-        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLessonLink', 'nextLessonLink', 'attachments', 'content'));
+        // rate data
+        $ratesCount = $lesson->getReactionCount('rate') ?? 0;
+        $ratesTotalWeight = $lesson->getReactionTotalWeight('rate') ?? 0;
+        $rateAverage = $ratesCount > 0 && $ratesTotalWeight > 0 ? $ratesTotalWeight / $ratesCount : 0;
+        $rateData = [
+            'rate_count' => $ratesCount,
+            'rate_total_weight' => $ratesTotalWeight,
+            'rate_average' => intval($rateAverage),
+        ];
+        return view('store.lessons.frontend.show', compact('modelName','product','page_title','breadcrumb', 'lesson', 'prevLessonLink', 'nextLessonLink', 'attachments', 'content', 'rateData'));
 
     }
 
@@ -465,6 +475,18 @@ class LessonController extends Controller
             'groups' => $groupsArray,
             'lesson_group_id' => $lessonGroupId
         ], 200);
+    }
+
+    /**
+     * toggle reaction
+     * @param Request $request
+     * @param Lesson $lesson
+     * @return Application|ResponseFactory|Response
+     */
+    public function updateReact(Request $request, Lesson $lesson){
+        $input = $request->only(['rate']);
+        $reaction = ReactionManagerService::react($lesson, 'rate', $input['rate']);
+        return response($reaction, 200);
     }
 
 }

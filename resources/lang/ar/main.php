@@ -423,6 +423,8 @@
         'There is no available lessons in this unit' => 'لا يوجد دروس متوفرة في هذه الوحدة',
         'Add Media Item' => 'أضف عنصر ميديا',
         'Media items' => 'عناصر الميديا',
+        'Lesson rate' => 'تقييم الدرس',
+
 
         // Media
         'Uploading' => 'جارِ الرفع ...',

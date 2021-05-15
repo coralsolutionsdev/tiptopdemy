@@ -404,6 +404,7 @@
         'Products browser' => 'Products browser',
         'Store\'s products' => 'Store\'s products',
         'Price range' => 'Price range',
+        'Lesson rate' => 'Lesson rate',
 
 
     // Media

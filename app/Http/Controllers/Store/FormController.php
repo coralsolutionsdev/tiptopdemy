@@ -106,7 +106,16 @@ class FormController extends Controller
         $hasTimeLimit = !empty($form->properties['has_time_limit']) ? $form->properties['has_time_limit'] : 0;
         $timeLimit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
         $backUrl = route('store.lesson.show', [$product->slug, $lesson->slug]);
-        return view('store.forms.frontend.v2.show', compact('modelName', 'product','page_title','breadcrumb', 'lesson', 'prevLessonLink', 'nextLessonLink', 'form', 'displayType', 'hasTimeLimit', 'timeLimit', 'backUrl'));
+        // rate data
+        $ratesCount = $lesson->getReactionCount('rate') ?? 0;
+        $ratesTotalWeight = $lesson->getReactionTotalWeight('rate') ?? 0;
+        $rateAverage = $ratesCount > 0 && $ratesTotalWeight > 0 ? $ratesTotalWeight / $ratesCount : 0;
+        $rateData = [
+            'rate_count' => $ratesCount,
+            'rate_total_weight' => $ratesTotalWeight,
+            'rate_average' => intval($rateAverage),
+        ];
+        return view('store.forms.frontend.v2.show', compact('modelName', 'product','page_title','breadcrumb', 'lesson', 'prevLessonLink', 'nextLessonLink', 'form', 'displayType', 'hasTimeLimit', 'timeLimit', 'backUrl', 'rateData'));
 
     }
 

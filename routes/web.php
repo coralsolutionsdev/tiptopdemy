@@ -228,13 +228,10 @@ Route::group(['middleware'=>'lang'], function(){
             Route::group(['prefix' => 'blog','namespace' => 'Blog', 'as' => 'blog.'], function () {
                 Route::get('/' , 'PostController@GetIndex')->name('posts.main');
                 Route::resource('/category','CategoryController', ['only' => ['show']]);
-//                    Route::get('/category/{slug}','Blog\CategoryController@show')->name('category.show');
                 Route::resource('/posts','PostController', ['only' => ['show']]);
                 Route::get('/post/{post}/get/post', 'PostController@getPost');
                 Route::get('/post/{post}/get/comments', 'PostController@getComments');
-//                    Route::post('/post/comment/{comment}/delete', 'CommentController@deleteComments');
                 Route::post('/post/{post}/react/{type}/toggle', 'PostController@updateReact');
-//                    Route::post('/post/comment/store', 'CommentController@store');
                 });
             }
             /* Comment */
@@ -276,6 +273,7 @@ Route::group(['middleware'=>'lang'], function(){
             Route::get('/sidebar/info' , 'ProductController@getSidebarInfo'); // change to index
             Route::get('/product/lesson/{lesson}/items','LessonController@getItems');
             Route::get('/product/lesson/{lesson}/groups/items','LessonController@getGroupsItems');
+            Route::post('/lesson/{lesson}/react/{type}/toggle', 'LessonController@updateReact');
 
 
         });

@@ -163,7 +163,6 @@ trait Reactable
                 $user->registerAsLoveReacter();
             }
             $reacterFacade = $user->viaLoveReacter();
-
             $isReacted = $reacterFacade->hasReactedTo($this);
             return $isReacted;
         }
@@ -261,8 +260,24 @@ trait Reactable
         $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
         if (!empty($reactionCounter) && !empty($reactionCounter->count)){
             return $reactionCounter->count;
-
         }
         return 0;
+    }
+    public function getReactionTotalWeight($type =  null)
+    {
+        if ($this->isNotRegisteredAsLoveReactant()){
+            $this->registerAsLoveReactant();
+        }
+        // get reaction type
+        if (is_null($type)){
+            $type = 'like';
+        }
+        $reactionType = ReactionType::fromName($type);
+        $typeName = $reactionType->getName(); // 'Like'
+        $reactantFacade = $this->viaLoveReactant();
+        $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
+        $totalWeight = $reactionCounter->getWeight();
+
+        return $totalWeight;
     }
 }

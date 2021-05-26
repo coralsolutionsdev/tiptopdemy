@@ -12994,188 +12994,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
     data: function data() {
         return {
             lang: 'en',
-            recaptchaSiteKey: '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOGe',
-            AdminSidebarNavigatorGroups: [{
-                title: this.$t('admin.Main Menu'),
-                menus: [{
-                    label: this.$t('admin.Dashboard'),
-                    type: 0,
-                    link: '',
-                    icon: 'icon icon-home'
-                }, {
-                    label: this.$t('admin.Users'),
-                    type: 0,
-                    link: '',
-                    icon: 'icon icon-users'
-                }, {
-                    label: this.$t('admin.Pages'),
-                    type: 0,
-                    link: '',
-                    icon: 'icon icon-file'
-                }, {
-                    label: this.$t('admin.Menus'),
-                    type: 0,
-                    link: '',
-                    icon: 'icon icon-menu'
-                }]
-            }, {
-                title: this.$t('admin.Institutions'),
-                menus: [{
-                    label: 'Institutions',
-                    type: 1,
-                    link: '',
-                    icon: 'icon icon-briefcase',
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Institution Scopes',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Directorates',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }]
-            }, {
-                title: 'Modules',
-                menus: [{
-                    label: 'Quizzes',
-                    type: 1,
-                    link: '',
-                    icon: 'icon icon-edit',
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Templates',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Templates Categories',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }, {
-                    label: 'Store',
-                    type: 1,
-                    link: '',
-                    icon: 'icon icon-shopping-cart',
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Products',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Categories',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Product Types',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Attribute sets',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Tags',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }, {
-                    label: 'Blog',
-                    type: 1,
-                    link: '',
-                    icon: 'icon icon-book',
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Institution Scopes',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Directorates',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }, {
-                    label: 'Banners',
-                    type: 0,
-                    link: '',
-                    icon: 'icon icon-maximize',
-                    status: false,
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Institution Scopes',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Directorates',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }, {
-                    label: 'File Manager',
-                    type: 0,
-                    link: '',
-                    icon: 'icon icon-folder',
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Institution Scopes',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Directorates',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }]
-            }, {
-                title: 'System',
-                menus: [{
-                    label: 'Settings',
-                    type: 1,
-                    link: '',
-                    icon: 'icon icon-settings',
-                    subGroups: [{
-                        title: '',
-                        menus: [{
-                            label: 'Layouts',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Roles',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Languages',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Countries',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Error log',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }, {
-                            label: 'Setting',
-                            link: '',
-                            icon: 'icon icon-home'
-                        }]
-                    }]
-                }]
-            }]
+            recaptchaSiteKey: '6LfQPBYaAAAAABksKwr8bePl5S4Jxq_P4tqLwOOGe'
         };
     },
     created: function created() {
@@ -13574,10 +13393,6 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_5_vue_i18n__["a" /* default */]({
  */
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('example', __webpack_require__(107));
-// admin components
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navigator', __webpack_require__(119));
-
-// frontend components
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('lesson-show', __webpack_require__(116));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-create', __webpack_require__(109));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('memorize-index', __webpack_require__(110));
@@ -13586,7 +13401,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('to-do', __webpack_require
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('product-index', __webpack_require__(117));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('product-items', __webpack_require__(23));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('form-show', __webpack_require__(114));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('form-create', __webpack_require__(108));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('smart-form-create', __webpack_require__(111));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('register-form', __webpack_require__(123));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('form-builder', __webpack_require__(122));
@@ -28034,21 +27848,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 47 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "create"
-});
-
-/***/ }),
+/* 47 */,
 /* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -31803,69 +31603,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
 });
 
 /***/ }),
-/* 60 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_helpers__ = __webpack_require__(18);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Navigator",
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_helpers__["a" /* default */]],
-
-  data: function data() {
-    return {
-      theme: 'light',
-      mode: 'vertical',
-      groups: []
-    };
-  },
-  created: function created() {
-    this.groups = this.AdminSidebarNavigatorGroups;
-  },
-
-  methods: {
-    changeTheme: function changeTheme() {
-      if (this.theme === 'light') {
-        this.theme = 'dark';
-      } else {
-        this.theme = 'light';
-      }
-    }
-  }
-});
-
-/***/ }),
+/* 60 */,
 /* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -36687,20 +36425,8 @@ exports = module.exports = __webpack_require__(0)();
 exports.push([module.i, "\n.memorize-item[data-v-1d3946d6]{\r\n  padding: 5px 20px;\r\n  border: 1px solid var(--text-primary);\r\n  color: var(--text-primary);\r\n  border-radius: 5px;\r\n  margin: 0 2px;\n}\n.uk-modal-dialog[data-v-1d3946d6]{\r\n  border-radius: 10px;\r\n  overflow: hidden;\n}\naudio[data-v-1d3946d6], audio[data-v-1d3946d6]:focus, audio[data-v-1d3946d6]:active{\r\n  outline: none;\r\n  box-shadow: none;\r\n  border: none;\r\n  width: 100% !important;\r\n  height: 30px !important;\n}\n.answer-letter[data-v-1d3946d6]{\r\n  background-color: var(--text-primary);\r\n  display: block;\r\n  width: 40px;\r\n  height: 40px;\r\n  vertical-align: middle;\r\n  border-radius: 50%;\r\n  font-size: 22px;\n}\n.answer[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-input[data-v-1d3946d6]{\r\n  position: absolute;\r\n  opacity: 0;\n}\n.answer-item[data-v-1d3946d6]{\r\n  background-color: #F4F5F7;\r\n  border: 1px solid #F4F5F7;\r\n  border-radius: 10px;\r\n  font-size: 16px\n}\n.answer-item[data-v-1d3946d6]:hover{\r\n  cursor: pointer;\n}\n.answer-item.answered.correct[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #32d296;\r\n  color: #32d296;\n}\n.answer-item.answered.incorrect[data-v-1d3946d6]{\r\n  background-color: #FFFFFF;\r\n  border: 1px solid #f0506e;\r\n  color: #f0506e;\n}\n.answer-item.type-30[data-v-1d3946d6]{\r\n  background-color: #F9F9FB;\r\n  padding: 10px;\n}\n.status-icon[data-v-1d3946d6]{\r\n  display: none;\r\n  position: absolute;\r\n  right: -15px;\r\n  top: -15px;\n}\n.answer-item.answered .status-icon[data-v-1d3946d6]{\r\n  display: -ms-flexbox;\r\n  display: flex;\n}\n.correct-answer-icon[data-v-1d3946d6]{\r\n  color: #32d296;\r\n  background-color: #DEF7EC;\n}\n.incorrect-answer-icon[data-v-1d3946d6]{\r\n  color: #f0506e;\r\n  background-color: #ffe8e8;\n}\n.disabled[data-v-1d3946d6]{\r\n  pointer-events: none;\r\n  cursor: not-allowed !important;\n}\r\n", ""]);
 
 /***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
+/* 72 */,
+/* 73 */,
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -67777,44 +67503,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(149)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(47),
-  /* template */
-  __webpack_require__(127),
-  /* scopeId */
-  "data-v-1fdf2110",
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\admin\\form\\create.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] create.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1fdf2110", Component.options)
-  } else {
-    hotAPI.reload("data-v-1fdf2110", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
+/* 108 */,
 /* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -68191,44 +67880,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(150)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(60),
-  /* template */
-  __webpack_require__(128),
-  /* scopeId */
-  "data-v-2f6d333e",
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\wamp64\\www\\base_app\\resources\\assets\\js\\components\\system\\Navigator.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Navigator.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2f6d333e", Component.options)
-  } else {
-    hotAPI.reload("data-v-2f6d333e", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
+/* 119 */,
 /* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -69037,89 +68689,8 @@ if (false) {
 }
 
 /***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('h1', [_vm._v("Hello form")])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-1fdf2110", module.exports)
-  }
-}
-
-/***/ }),
-/* 128 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
-    staticClass: "row"
-  }), _vm._v(" "), _c('at-menu', {
-    attrs: {
-      "theme": _vm.theme,
-      "active-name": "0-0",
-      "inline-collapsed": ""
-    }
-  }, _vm._l((_vm.groups), function(group, groupKey) {
-    return _c('div', [_c('span', {
-      staticClass: "at-menu__item-group-label",
-      domProps: {
-        "innerHTML": _vm._s(group.title)
-      }
-    }), _vm._v(" "), _vm._l((group.menus), function(menu, menuKey) {
-      return _c('div', [(parseInt(menu.type) === 0) ? _c('at-menu-item', {
-        attrs: {
-          "name": groupKey + '-' + menuKey
-        }
-      }, [_c('i', {
-        class: menu.icon
-      }), _c('span', {
-        domProps: {
-          "innerHTML": _vm._s(menu.label)
-        }
-      })]) : (parseInt(menu.type) === 1) ? _c('at-submenu', [_c('template', {
-        slot: "title"
-      }, [_c('i', {
-        class: menu.icon
-      }), _c('span', {
-        domProps: {
-          "innerHTML": _vm._s(menu.label)
-        }
-      })]), _vm._v(" "), _vm._l((menu.subGroups), function(menuSubGroup) {
-        return (menu.subGroups.length > 0) ? _c('div', {
-          staticStyle: {
-            "margin-top": "-8px"
-          }
-        }, [_c('at-menu-item-group', _vm._l((menuSubGroup.menus), function(menuSubGroupMenu, menuSubGroupMenuKey) {
-          return _c('div', [_c('at-menu-item', {
-            attrs: {
-              "name": "1-2"
-            }
-          }, [_c('i', {
-            staticClass: "icon icon-chevron-right"
-          }), _c('span', {
-            domProps: {
-              "innerHTML": _vm._s(menuSubGroupMenu.label)
-            }
-          })])], 1)
-        }), 0)], 1) : _vm._e()
-      })], 2) : _vm._e()], 1)
-    })], 2)
-  }), 0)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2f6d333e", module.exports)
-  }
-}
-
-/***/ }),
+/* 127 */,
+/* 128 */,
 /* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -74787,58 +74358,8 @@ if(false) {
 }
 
 /***/ }),
-/* 149 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(72);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("68bb9560", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1fdf2110\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./create.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1fdf2110\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./create.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 150 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(73);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("126083b1", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-2f6d333e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Navigator.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-2f6d333e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Navigator.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
+/* 149 */,
+/* 150 */,
 /* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 

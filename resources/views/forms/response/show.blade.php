@@ -14,28 +14,42 @@
                 <div>
                     <div class="uk-card uk-card-default uk-card-body uk-padding-small uk-box-shadow-small">
                         <div class="uk-grid-small" uk-grid>
-                            <div class="uk-width-expand">
-                                <h3 class="text-highlighted">{{$response->title}}</h3>
-                                <p>{!! $response->description !!}</p>
-                                <a href="" id="backURl" class="uk-button uk-button-default">{{__('main.Back')}}</a>
-                            </div>
-                            <div class="uk-width-1-5 uk-text-center">
+                            <div class="uk-width-1-6@m uk-width-1-1 uk-flex uk-flex-middle uk-flex-center">
                                 <div>
-                                    @if($response->score_info['passing_score_type'] == 1)
-                                    <h2 class="text-highlighted">{{$response->score_info['score_percentage']}} / 100 %</h2>
-                                    @else
-                                    <h2 class="text-highlighted">{{$response->score_info['achieved_score']}} / {{$response->score_info['total_score']}}</h2>
+                                    @if($response->score_info['passing_score_status'] != 1 && !empty($response->getFormUrl()))
+                                        <a href="{{$response->getFormUrl()}}" class="uk-button uk-button-secondary uk-margin-small uk-width-1-1">{{__('main.Re try')}}</a>
                                     @endif
+                                    <a href="" id="backURl" class="uk-button uk-button-default uk-width-1-1">{{__('main.Back to lesson')}}</a>
                                 </div>
-                                    @if($response->score_info['passing_score_status'] == 1)
-                                        <div class="uk-alert-success uk-margin-small" uk-alert>
-                                            {{__('main.Passed successfully')}}
+                            </div>
+                            <div class="uk-width-expand@m uk-width-1-1">
+                                <div class="uk-grid-collapse uk-child-width-1-1 uk-text-center" uk-grid>
+                                    <div>
+                                        <h3 class="text-highlighted">{{$response->title}}</h3>
+                                        <p>{!! $response->description !!}</p>
+                                    </div>
+                                    <div class="uk-flex uk-flex-center">
+                                        <div class="uk-width-1-3@m">
+                                            @if($response->score_info['passing_score_status'] == 1)
+                                                <div class="uk-alert-success uk-margin-small" uk-alert>
+                                                    {{__('main.Passed successfully')}}
+                                                </div>
+                                            @else
+                                                <div class="uk-alert-danger uk-margin-small" uk-alert>
+                                                    {{__('main.Failed')}}
+                                                </div>
+                                            @endif
                                         </div>
-                                    @else
-                                        <div class="uk-alert-danger uk-margin-small" uk-alert>
-                                            {{__('main.Failed')}}
-                                        </div>
-                                    @endif
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="uk-width-1-5@m uk-width-1-1 uk-flex uk-flex-middle uk-flex-center">
+                                @if($response->score_info['passing_score_type'] == 1)
+                                <h2 class="{{$response->score_info['passing_score_status'] == 1 ? 'uk-text-success' : 'uk-text-danger'}}">{{$response->score_info['score_percentage']}} / 100 %</h2>
+                                @else
+                                <h2 class="{{$response->score_info['passing_score_status'] == 1 ? 'uk-text-success' : 'uk-text-danger'}}">{{$response->score_info['achieved_score']}} / {{$response->score_info['total_score']}}</h2>
+                                @endif
                             </div>
                         </div>
                     </div>

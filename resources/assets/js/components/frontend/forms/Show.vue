@@ -14,6 +14,7 @@
             <br>
             <div>
               <button class="uk-button uk-button-primary start-quiz" @click="startExam()">{{$t('main.Yes, Start the quiz')}}</button>
+              <a class="uk-button uk-button-default" :href="backUrl" v-html="$t('main.Back to lesson')"></a>
             </div>
           </div>
         </div>
@@ -71,7 +72,7 @@
                           <div v-for="(question, key) in group.items" v-if="question.type != 0" class="uk-width-1-1@m uk-width-1-1@s" :class="{ 'uk-background-warning-light': question.review, 'uk-background-danger-light': question.auto_leave, 'margin-bottom':form.display_type == 1 }">
                             <div :class="{'uk-card uk-card-default uk-padding-small':form.display_type == 1 }">
                               <div :id="'question-'+question.id" class="uk-grid-collapse question-row" uk-grid>
-                                <div class="uk-width-auto@m">
+                                <div class="uk-width-auto@m uk-flex uk-flex-middle">
                                   <span v-html="key"></span>:
                                 </div>
                                 <div class="uk-width-expand@m question" style="padding: 0 5px">
@@ -105,7 +106,7 @@
                                     <div class="drop-zone"
                                          @drop.prevent="onDrop(group, question)"
                                          @dragover.prevent>
-                                      <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
+                                      <div class="drop-zone-content uk-flex uk-flex-middle" v-html="question.blank_paragraph"></div>
                                     </div>
                                   </div>
                                   <div v-else-if="question.type == 8">
@@ -113,7 +114,7 @@
                                     <div style="display: inline-block" class="drop-zone"
                                          @drop.prevent="onDrop(group, question)"
                                          @dragover.prevent>
-                                      <div class="drop-zone-content" v-html="question.blank_paragraph"></div>
+                                      <div class="drop-zone-content uk-flex uk-flex-middle" v-html="question.blank_paragraph"></div>
                                     </div>
                                     <div class="blank-word uk-box-shadow-hover-medium" v-for="(draggableBlank, draggableBlankKey) in question.blanks"
                                          v-html="draggableBlank"
@@ -211,17 +212,16 @@
                 <!--actions-->
                 <div class="uk-padding-small">
                   <div class="uk-grid-small uk-text-center" uk-grid>
-                    <div class="uk-width-auto@m uk-width-1-1">
-                      <a class="uk-button uk-button-default" :href="nextUrl" v-html="$t('main.Next lesson')" :class="{'disabled-div':!backUrl}"></a>
+                    <div class="uk-width-1-5@m uk-width-1-1">
+                      <a v-if="this.nextUrl && this.nextUrl != null" class="uk-button uk-button-default" :href="nextUrl" v-html="$t('main.Next lesson')" :class="{'disabled-div':!backUrl}"></a>
                     </div>
                     <div class="uk-width-expand@m uk-width-1-1">
                       <a v-if="responseArray.status != 2" class="uk-button uk-button-primary" :href="responseArray.link+'/?back='+backUrl" v-html="$t('main.View results')"></a>
                       <a class="uk-button uk-button-secondary" @click="refreshForm()" v-html="$t('main.Re try')"></a>
                     </div>
-                    <div class="uk-width-auto@m uk-width-1-1">
+                    <div class="uk-width-1-5@m uk-width-1-1">
                       <a class="uk-button uk-button-default" :href="backUrl" v-html="$t('main.Back to lesson')"></a>
                     </div>
-
                   </div>
                 </div>
                 <progress style="height: 5px; border-radius: 0px" id="js-progressbar" class="uk-progress" :value="evaluationPercentage" max="100"></progress>
@@ -298,10 +298,10 @@ name: "Show",
     'slug',
     'lessonSlug',
     'backUrl',
-    'nextUrl',
   ],
   data(){
     return {
+      nextUrl:null,
       form:null,
       loadingMode:true,
       groups:null,
@@ -402,9 +402,9 @@ name: "Show",
       axios.post('/form/'+this.slug+'/send/response', data, config)
           .then(res => {
               this.responseArray = res.data;
+              this.nextUrl = this.responseArray.nextUrl;
               this.evaluationStatus = 1;
-            // this.updateProgressPercentage(100);
-
+              console.log(this.nextUrl);
           })
           .catch(error => {
 
@@ -621,7 +621,7 @@ name: "Show",
   min-height: 25px;
 }
 .blank-word{
-  margin: 0 2px;
+  margin: 2px;
   padding: 5px 15px;
   display: inline-block;
   background-color: var(--text-primary);

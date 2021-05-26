@@ -519,7 +519,7 @@ Form
     display: inline-block;
     border: 1px solid #CCCCCC;
     border-radius: 5px;
-    margin-top: -5px;
+    margin-top: 5px;
     margin-left: 2px;
     margin-right: 2px;
     outline: none;

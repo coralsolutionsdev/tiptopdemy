@@ -246,8 +246,6 @@ class ResponseController extends Controller
     public function ajaxStore(Request $request, Form $form){
         $input = $request->only(['answers']);
         $response = $form->createResponse($input['answers']);
-
-        $response->score_info['passing_score_status'];
         $passingScoreType = $response->score_info['passing_score_type'];
         if ($passingScoreType == 1){
             $score = $response->score_info['score_percentage'].' / 100 %';
@@ -255,12 +253,17 @@ class ResponseController extends Controller
             $score = $response->score_info['achieved_score'].' / '.$response->score_info['total_score'];
 
         }
+        // TODO: this is for tiptop use only:
+        // get next lesson
+        $lesson = $form->getLesson();
+        $nextLessonUrl = $form->status = Form::STATUS_PUBLISHED ? $lesson->getNavigationLessonUrl() : null;
         $responseArray = [
             'status' => $response->status,
             'passing_score_status' => $response->score_info['passing_score_status'],
             'passing_type' => $passingScoreType,
             'score' => $score,
             'link' => route('form.response.show',  $form->getLastResponse()->hash_id),
+            'nextUrl' => $nextLessonUrl,
         ];
         return response($responseArray, 200);
     }

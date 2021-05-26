@@ -29,7 +29,7 @@
                             @else
                                 @php $key++ @endphp
                                 <div class="uk-grid-collapse question-row" uk-grid>
-                                    <div class="uk-width-auto@m">
+                                    <div class="uk-width-auto@m uk-flex uk-flex-middle">
                                         {{$key}}:
                                     </div>
                                     @if(!empty($item['description']))

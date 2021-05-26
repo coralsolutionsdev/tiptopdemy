@@ -73,7 +73,7 @@
 
                 <div>
                     <input type="hidden" name="lesson_id" value="{{$lesson->id}}">
-                    <form-show slug="{{$form->hash_id}}" lesson-slug="{{$lesson->slug}}" back-url="{{$backUrl}}" next-url="{{$nextLessonLink}}"></form-show>
+                    <form-show slug="{{$form->hash_id}}" lesson-slug="{{$lesson->slug}}" back-url="{{$backUrl}}"></form-show>
                 </div>
 
             </div>

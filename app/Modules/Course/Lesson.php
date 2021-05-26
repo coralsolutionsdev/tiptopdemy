@@ -270,6 +270,58 @@ class Lesson extends Model implements ReactableContract, HasMedia
         }
         return $accessible;
     }
+
+    /**
+     * return lesson first group
+     * @return mixed
+     */
+    public function getGroup(){
+        return $this->groups->first();
+    }
+
+    /**
+     * return next and prev lessons
+     * @param string $type
+     * @return mixed|null
+     */
+    public function getNavigationLesson(string $type = 'next'){
+        $group = $this->getGroup();
+        $item = null;
+        if ($group){
+            foreach ($group->getLessons as $itemKey => $lessonItem){
+                if ($lessonItem->id == $this->id){
+                    $preItem = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
+                    $nextItem = !empty($group->getLessons[$itemKey+1]) ? $group->getLessons[$itemKey+1] : null;
+                }
+            }
+            if ($type == 'next'){
+                $item = $preItem;
+            } else {
+                $item = $nextItem;
+
+            }
+        }
+        return $item;
+    }
+
+    /**
+     * @param string $type
+     * @return string|null
+     */
+    public function getNavigationLessonUrl(string $type = 'next'): ?string
+    {
+        $product = $this->product;
+        $url = null;
+        if ($type == 'next'){
+            $item = $this->getNavigationLesson('next');
+        } else {
+            $item = $this->getNavigationLesson('prev');
+        }
+        if (!empty($product) && !empty($item) && $item->hasCompletedAndPassedForms()){
+            $url = route('store.lesson.show', [$product->slug, $item->slug]);
+        }
+        return $url;
+    }
     /*
      |--------------------------------------------------------------------------
      | Relationship Methods

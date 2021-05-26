@@ -86,15 +86,33 @@ class FormResponse extends Model
         return self::STATUS_ARRAY[$this->status];
     }
 
+    /**
+     * return response form url
+     * @return string|null
+     */
+    public function getFormUrl(): ?string
+    {
+        $form =  $this->form;
+        $url = null;
+        if (!empty($form)){
+            $lesson = $form->getLesson();
+            if (!empty($lesson)){
+                $url = route('store.form.show',[$lesson->slug, $form->hash_id]);
+            }
+        }
+        return $url;
+    }
+
     /*
-     *
+     |--------------------------------------------------------------------------
+     | Relationship Methods
+     |--------------------------------------------------------------------------
      */
 
     public function form()
     {
         return $this->belongsTo(Form::class);
-    }
-
+    }   
     public function ancestor()
     {
         return $this->belongsTo(Form::class);

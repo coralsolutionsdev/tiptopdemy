@@ -289,16 +289,16 @@ class Lesson extends Model implements ReactableContract, HasMedia
         $item = null;
         if ($group){
             foreach ($group->getLessons as $itemKey => $lessonItem){
+
                 if ($lessonItem->id == $this->id){
                     $preItem = !empty($group->getLessons[$itemKey-1]) ? $group->getLessons[$itemKey-1] : null;
                     $nextItem = !empty($group->getLessons[$itemKey+1]) ? $group->getLessons[$itemKey+1] : null;
                 }
             }
             if ($type == 'next'){
-                $item = $preItem;
-            } else {
                 $item = $nextItem;
-
+            } else {
+                $item = $preItem;
             }
         }
         return $item;
@@ -317,7 +317,7 @@ class Lesson extends Model implements ReactableContract, HasMedia
         } else {
             $item = $this->getNavigationLesson('prev');
         }
-        if (!empty($product) && !empty($item) && $item->hasCompletedAndPassedForms()){
+        if (!empty($product) && !empty($item)){
             $url = route('store.lesson.show', [$product->slug, $item->slug]);
         }
         return $url;

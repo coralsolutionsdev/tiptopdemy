@@ -251,12 +251,10 @@ class ResponseController extends Controller
             $score = $response->score_info['score_percentage'].' / 100 %';
         }else{
             $score = $response->score_info['achieved_score'].' / '.$response->score_info['total_score'];
-
         }
-        // TODO: this is for tiptop use only:
-        // get next lesson
+        // TODO: this is for tiptop use only; get next lesson
         $lesson = $form->getLesson();
-        $nextLessonUrl = $form->status = Form::STATUS_PUBLISHED ? $lesson->getNavigationLessonUrl() : null;
+        $nextLessonUrl = $form->status == Form::STATUS_PUBLISHED && $lesson->hasCompletedAndPassedForms() ? $lesson->getNavigationLessonUrl() : null;
         $responseArray = [
             'status' => $response->status,
             'passing_score_status' => $response->score_info['passing_score_status'],

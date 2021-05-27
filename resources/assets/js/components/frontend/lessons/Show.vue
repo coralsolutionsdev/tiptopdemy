@@ -120,8 +120,8 @@
                       <th class="uk-text-center uk-width-2-5" v-html="$t('main.Quiz name')"></th>
                       <th class="uk-text-center" v-html="$t('main.Items num')"></th>
                       <th class="uk-text-center" v-html="$t('main.Quiz period')"></th>
-                      <th class="uk-text-center" v-html="$t('main.Availability')"></th>
-                      <th class="uk-text-center" v-html="$t('main.Results')" v-if="viewContentStatus"></th>
+                      <th class="uk-text-center" v-html="$t('main.Results')" ></th>
+                      <th class="uk-text-center" v-html="$t('main.Form link')" v-if="viewContentStatus"></th>
                     </tr>
                     </thead>
                     <tbody>

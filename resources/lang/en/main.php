@@ -480,6 +480,7 @@
         'Re try' => 'Re try',
         'Back to lesson' => 'Back to lesson',
         'Next lesson' => 'Next lesson',
+        'Form link' => 'Form link',
 
         //orders
         'orders' => 'Orders',

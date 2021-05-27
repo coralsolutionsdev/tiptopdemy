@@ -501,6 +501,8 @@
         'Re try' => 'أعد المحاولة',
         'Back to lesson' => 'العودة للدرس',
         'Next lesson' => 'الدرس التالي',
+        'Form link' => 'رابط الإمتحان',
+
 
 
         //orders

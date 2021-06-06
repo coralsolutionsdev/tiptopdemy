@@ -31191,6 +31191,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // .....
 var token = document.head.querySelector('meta[name="csrf-token"]').content;
@@ -31206,7 +31226,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
         thumbnailWidth: 200,
         addRemoveLinks: true,
         // Setup chunking
-        acceptedFiles: "image/*,video/*,audio/*",
+        acceptedFiles: "image/*, video/*, audio/*, application/pdf, .rar, .zip, .docx, .doc, .pptx, .ppt, .xlsx, .xls",
         maxFiles: 10,
         timeout: 3600000,
         autoProcessQueue: true,
@@ -31369,6 +31389,7 @@ var token = document.head.querySelector('meta[name="csrf-token"]').content;
       this.activeFileId = file.id;
       this.activeItemType = this.activeItemTypeFile;
       this.selectedItemType = this.activeItemTypeFile;
+      console.log('prev', this.previewFile);
     },
     openFolderPreview: function openFolderPreview(folder) {
       // this.previewMode = true;
@@ -36520,7 +36541,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
-exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -9px;\n  top: -9px;\n  background-color: #32d296 !important;\n  color: white;\n  z-index: 999;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n.no-media-icon[data-v-acd81a90]{\n  opacity: 0.3;\n  filter: grayscale(90%);\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n\n", ""]);
+exports.push([module.i, "\naudio[data-v-acd81a90], audio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  outline: none;\n  box-shadow: none;\n  border: none;\n  width: 100% !important;\n}\naudio[data-v-acd81a90]:focus, audio[data-v-acd81a90]:active{\n  /*filter: drop-shadow(1px 5px 5px #F2F4F8);*/\n}\n.img-preview[data-v-acd81a90]{\n  max-height:150px;\n  object-fit:cover;\n}\n.navbar-list li[data-v-acd81a90]{\n  display: inline-block;\n}\n.file-manager-content[data-v-acd81a90]{\n  min-height: 80vh;\n}\n.folder-count[data-v-acd81a90]{\n  font-size: 12px;\n}\n.files-count[data-v-acd81a90]{\n  position: absolute;\n  margin-left: 70px;\n  top: 70px;\n  background-color: #32d296 !important;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.selected-file-badge[data-v-acd81a90]{\n  position: absolute;\n  right: -9px;\n  top: -9px;\n  background-color: #32d296 !important;\n  color: white;\n  z-index: 999;\n  /*filter: drop-shadow(1px 1px 2px #969696);*/\n}\n.onMove[data-v-acd81a90]{\n  opacity: 0.5;\n}\n.bounce[data-v-acd81a90] {\n  animation: bounce 1s infinite;\n}\n.no-media-icon[data-v-acd81a90]{\n  opacity: 0.3;\n  filter: grayscale(90%);\n}\n@keyframes bounce {\n0%,\n  25%,\n  50%,\n  75%,\n  100% {\n    transform: translateY(0);\n}\n40% {\n    transform: translateY(-10px);\n}\n60% {\n    transform: translateY(-6px);\n}\n}\n/*dropzone*/\n.dropzone-custom-content[data-v-acd81a90] {\n  text-align: center;\n  font-family: 'Cairo', 'Rubik', sans-serif !important;\n}\n.vue-dropzone[data-v-acd81a90] {\n  text-align: center;\n  border: 1px dotted #e5e5e5;\n  color: #666666;\n}\n.vue-dropzone[data-v-acd81a90]:hover {\n background-color: #F9F9FB;\n}\n.disableSelection[data-v-acd81a90]{\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  outline: 0;\n}\n\n", ""]);
 
 /***/ }),
 /* 84 */
@@ -73256,7 +73277,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, _vm._l((_vm.allFolders), function(folder) {
     return _c('li', {
       staticClass: "nav-item"
-    }, [(folder.sub_groups_count == 0) ? _c('a', [_c('span', [_c('span', {
+    }, [(folder.sub_groups_count == 0) ? _c('a', {
+      on: {
+        "click": function($event) {
+          return _vm.openFolder(folder)
+        }
+      }
+    }, [_c('span', [_c('span', {
       attrs: {
         "uk-icon": "folder"
       }
@@ -73384,7 +73411,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "uk-spinner": "ratio: 0.5"
     }
   }), _vm._v(" " + _vm._s(_vm.$t('main.Loading')))]) : _vm._e()]), _vm._v(" "), _c('div', {
-    staticClass: "uk-width-auto"
+    staticClass: "uk-width-auto disableSelection"
   }, [_c('ul', {
     staticClass: "uk-list navbar-list"
   }, [_c('li', [_c('span', {
@@ -73682,8 +73709,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "uk-grid": ""
     }
-  }, [(_vm.previewFile.custom_properties.file_type == 'image') ? _c('div', {
+  }, [(_vm.previewFile.custom_properties.file_type === 'image') ? _c('div', {
     staticClass: "uk-text-center"
+  }, [_c('div', {
+    attrs: {
+      "uk-lightbox": ""
+    }
+  }, [_c('a', {
+    attrs: {
+      "href": _vm.previewFile.url
+    }
   }, [_c('img', {
     staticStyle: {
       "border-radius": "10px",
@@ -73695,7 +73730,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "alt": "",
       "uk-img": ""
     }
-  })]) : (_vm.previewFile.custom_properties.file_type == 'video') ? _c('div', [_c('video', {
+  })])])]) : (_vm.previewFile.custom_properties.file_type == 'video') ? _c('div', [_c('video', {
     attrs: {
       "src": _vm.previewFile.url,
       "playsinline": "",
@@ -73703,7 +73738,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "disablepictureinpicture": "",
       "controlsList": "nodownload"
     }
-  })]) : (_vm.previewFile.custom_properties.file_type == 'audio') ? _c('div', [_c('audio', {
+  })]) : (_vm.previewFile.custom_properties.file_type === 'audio') ? _c('div', [_c('audio', {
     attrs: {
       "src": _vm.previewFile.url,
       "controls": "",
@@ -73713,7 +73748,48 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "audio/mpeg"
     }
-  })])]) : _vm._e(), _vm._v(" "), _c('div', [_c('p', {
+  })])]) : (_vm.previewFile.custom_properties.file_type === 'application') ? _c('div', [(_vm.previewFile.custom_properties.extension === 'pdf') ? _c('div', [_c('embed', {
+    attrs: {
+      "src": _vm.previewFile.url
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small uk-text-center"
+  }, [_c('a', {
+    staticClass: "uk-button uk-button-default",
+    attrs: {
+      "target": "_blank",
+      "href": _vm.previewFile.url
+    },
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.view'))
+    }
+  })])]) : _c('div', {
+    staticClass: "uk-padding-small uk-text-center"
+  }, [_c('img', {
+    staticClass: "uk-margin",
+    attrs: {
+      "data-src": '/storage/assets/file_icons/' + _vm.previewFile.custom_properties.extension + '.png',
+      "alt": "",
+      "width": "75",
+      "uk-img": ""
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "uk-margin-small uk-text-center"
+  }, [_c('a', {
+    staticClass: "uk-button uk-button-default",
+    attrs: {
+      "target": "_blank",
+      "href": _vm.previewFile.url
+    }
+  }, [_c('span', {
+    attrs: {
+      "uk-icon": "icon: download"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.$t('main.Download'))
+    }
+  })])])])]) : _vm._e(), _vm._v(" "), _c('div', [_c('p', {
     staticClass: "uk-text-primary uk-margin-remove"
   }, [_vm._v(_vm._s(_vm.$t('main.File name')))]), _vm._v(" "), _c('input', {
     directives: [{

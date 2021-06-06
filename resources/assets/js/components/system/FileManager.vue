@@ -16,7 +16,7 @@
                 <p class="uk-text-primary">{{ $t('main.Folders') }}</p>
                 <ul class="uk-list">
                   <li class="nav-item" v-for="folder in allFolders">
-                    <a v-if="folder.sub_groups_count == 0"> <span><span uk-icon="folder"></span> <span v-html="folder.title"></span></span></a>
+                    <a v-if="folder.sub_groups_count == 0" @click="openFolder(folder)"> <span><span uk-icon="folder"></span> <span v-html="folder.title"></span></span></a>
                     <ul v-else uk-accordion>
                       <li class="">
                         <a class="uk-accordion-title" href="#"><span uk-icon="folder"></span> <span v-html="folder.title"></span></a>
@@ -41,7 +41,7 @@
                       <input type="hidden" class="selected-file-url" v-model="previewFile.url" v-if="insertmode && previewFile">
                       <span @click="goPrev()" class="hover-primary" uk-icon="icon: chevron-left" v-bind:uk-tooltip="$t('main.Back')"></span> <span v-html="groupName"></span> <span v-if="loadingMode" class="uk-text-primary"><span style="margin: 0 5px" uk-spinner="ratio: 0.5"></span> {{$t('main.Loading')}}</span>
                     </div>
-                    <div class="uk-width-auto">
+                    <div class="uk-width-auto disableSelection">
                       <ul class="uk-list navbar-list">
                         <li><span @click="uploadMode = !uploadMode" :class="{'uk-text-primary':uploadMode}" class="navbar-item hover-primary" uk-icon="icon: cloud-upload" v-bind:uk-tooltip="$t('main.File upload')"></span></li>
                         <li><span @click="createFolder()" class="navbar-item hover-primary" uk-icon="icon: folder" v-bind:uk-tooltip="$t('main.New folder')"></span></li>
@@ -128,16 +128,36 @@
                   <!--file preview-->
                   <div v-if="previewMode" class="uk-width-1-3" style="background-color: #F9F9FB; padding: 10px;min-height: 72vh; display: block">
                     <div v-if="previewFile != null" class="uk-grid-small uk-child-width-1-1@s" uk-grid>
-                      <div class="uk-text-center" v-if="previewFile.custom_properties.file_type == 'image'">
-                        <img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; max-height: 300px; object-fit:cover">
+                      <div class="uk-text-center" v-if="previewFile.custom_properties.file_type === 'image'">
+                        <div uk-lightbox>
+                          <a :href="previewFile.url"><img :data-src="previewFile.url" alt="" uk-img style="border-radius: 10px; max-height: 300px; object-fit:cover"></a>
+                        </div>
                       </div>
                       <div v-else-if="previewFile.custom_properties.file_type == 'video'">
                         <video :src="previewFile.url" playsinline controls disablepictureinpicture controlsList="nodownload"></video>
                       </div>
-                      <div v-else-if="previewFile.custom_properties.file_type == 'audio'">
+                      <div v-else-if="previewFile.custom_properties.file_type === 'audio'">
                         <audio :src="previewFile.url" controls controlsList="nodownload">
                           <source type="audio/mpeg">
                         </audio>
+                      </div>
+                      <div v-else-if="previewFile.custom_properties.file_type === 'application'">
+                        <div v-if="previewFile.custom_properties.extension === 'pdf'">
+                          <embed :src="previewFile.url" />
+                          <div class="uk-margin-small uk-text-center">
+                            <a class="uk-button uk-button-default" target="_blank" :href="previewFile.url" v-html="$t('main.view')">
+                            </a>
+                          </div>
+                        </div>
+                        <div v-else class="uk-padding-small uk-text-center">
+                          <img class="uk-margin" :data-src="'/storage/assets/file_icons/'+previewFile.custom_properties.extension+'.png'" alt="" width="75" uk-img>
+                          <div class="uk-margin-small uk-text-center">
+                            <a class="uk-button uk-button-default" target="_blank" :href="previewFile.url" >
+                              <span uk-icon="icon: download"></span>
+                              <span v-html="$t('main.Download')"></span>
+                            </a>
+                          </div>
+                        </div>
                       </div>
                       <div>
                         <p class="uk-text-primary uk-margin-remove">{{ $t('main.File name') }}</p>
@@ -215,7 +235,7 @@ name: "FileManager",
         thumbnailWidth: 200,
         addRemoveLinks: true,
         // Setup chunking
-        acceptedFiles: "image/*,video/*,audio/*",
+        acceptedFiles: "image/*, video/*, audio/*, application/pdf, .rar, .zip, .docx, .doc, .pptx, .ppt, .xlsx, .xls",
         maxFiles: 10,
         timeout: 3600000,
         autoProcessQueue: true,
@@ -314,7 +334,7 @@ name: "FileManager",
       .then(res => {
         // console.log(res.data);
         this.files = res.data;
-        console.log( this.files)
+        console.log(this.files)
         this.hideLoading();
       })
       .catch(error => {
@@ -375,6 +395,8 @@ name: "FileManager",
       this.activeFileId = file.id;
       this.activeItemType = this.activeItemTypeFile;
       this.selectedItemType = this.activeItemTypeFile;
+      console.log('prev',this.previewFile);
+
     },
     openFolderPreview(folder){
       // this.previewMode = true;
@@ -682,6 +704,15 @@ name: "FileManager",
   }
   .vue-dropzone:hover {
    background-color: #F9F9FB;
+  }
+  .disableSelection{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: 0;
   }
 
 </style>

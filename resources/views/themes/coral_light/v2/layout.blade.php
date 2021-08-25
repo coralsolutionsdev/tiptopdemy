@@ -18,6 +18,7 @@
     <!-- THEME CSS -->
     <style>
         :root{
+
             --theme-secondary-bg-color: #F3F5F9;
             --theme-primary-color: {{getFrontEndColor()}};
             --theme-primary-font-color: #949494;

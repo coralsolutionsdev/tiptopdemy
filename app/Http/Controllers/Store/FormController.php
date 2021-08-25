@@ -133,7 +133,7 @@ class FormController extends Controller
         $categories = Category::where('type', Category::TYPE_FORM_TEMPLATE)->where('parent_id', 0)->get();
         $formProperties = $form->properties;
         $tags = Tag::getWithType('form_taxonomy')->pluck('name', 'name');
-        return view('store.forms.create', compact('page_title', 'product', 'lesson', 'form', 'categories', 'formProperties', 'tags'));
+        return view('store.forms.create ', compact('page_title', 'product', 'lesson', 'form', 'categories', 'formProperties', 'tags'));
     }
 
     /**

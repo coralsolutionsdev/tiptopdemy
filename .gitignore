@@ -19,4 +19,5 @@ npm-debug.log
 draft.yaml
 .env
 .blueprint
+/vendor
 

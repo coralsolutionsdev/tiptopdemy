@@ -8,7 +8,7 @@ use App\Modules\Course\Lesson;
 use App\Modules\Form\Form;
 use App\Modules\Form\FormItem;
 use App\Modules\Form\FormResponse;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Product;
 use App\Services\MediaManagerService;
 use App\Services\ReactionManagerService;
@@ -232,11 +232,11 @@ class LessonController extends Controller
     public function addResourcesItem(Request $request, Lesson $lesson){
         $input = $request->only(['name', 'path', 'mime_type', 'file_type', 'media_type', 'extension', 'duration']);
         $message = $mediaId = $mediaUrl = $mediaType = $mediaName = null;
-        $status = Media::UPLOAD_TYPE_REFUSED;
+        $status = MediaFile::UPLOAD_TYPE_REFUSED;
         $mediaType = isset($input['media_type']) ? $input['media_type'] : null;
 
         if (!empty($mediaType)){
-            if ($mediaType == Media::TYPE_VIDEO){
+            if ($mediaType == MediaFile::TYPE_VIDEO){
                 // save media from file url
                 // check if file is already exist
                 if (!empty($lesson) && file_exists(storage_path("app/public/".$input['path'].$input['name']))){
@@ -253,22 +253,22 @@ class LessonController extends Controller
 
                     if (!empty($media)){
                         $mediaId = $media->id;
-                        $status = Media::UPLOAD_TYPE_COMPLETED;
-                        $message = 'Media has attached successfully';
+                        $status = MediaFile::UPLOAD_TYPE_COMPLETED;
+                        $message = 'MediaFile has attached successfully';
                         $mediaUrl = $media->getFullUrl();
                         $mediaName = $media->name;
                     }
                     // remove file from storage
                     Storage::deleteDirectory($input['path']);
                 }
-            } elseif (in_array($mediaType, [Media::TYPE_YOUTUBE, Media::TYPE_HTML_PAGE])){
+            } elseif (in_array($mediaType, [MediaFile::TYPE_YOUTUBE, MediaFile::TYPE_HTML_PAGE])){
                 $embedUrl = $input['path'];
-                if ($mediaType == Media::TYPE_YOUTUBE){
+                if ($mediaType == MediaFile::TYPE_YOUTUBE){
                     $embedUrl = str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $input['path']);
                 }
                 $mediaId = generateRandomString(6);
-                $status = Media::UPLOAD_TYPE_COMPLETED;
-                $message = 'Media has attached successfully';
+                $status = MediaFile::UPLOAD_TYPE_COMPLETED;
+                $message = 'MediaFile has attached successfully';
                 $mediaUrl = $embedUrl;
                 $mediaName = $input['name'];
             }

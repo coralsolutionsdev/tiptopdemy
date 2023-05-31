@@ -7,76 +7,96 @@
 
 This package offers taggable behaviour for your models. After the package is installed the only thing you have to do is add the `HasTags` trait to an Eloquent model to make it taggable. 
 
-But we didn't stop with the regular tagging capabilities you find in every package. Laravel Tags comes with batteries included. Out of the box it has support for [translating tags](https://docs.spatie.be/laravel-tags/v2/advanced-usage/adding-translations), [multiple tag types](https://docs.spatie.be/laravel-tags/v2/advanced-usage/using-types) and [sorting capabilities](https://docs.spatie.be/laravel-tags/v2/advanced-usage/sorting-tags).
+But we didn't stop with the regular tagging capabilities you find in every package. Laravel Tags comes with batteries included. Out of the box it has support for [translating tags](https://docs.spatie.be/laravel-tags/v4/advanced-usage/adding-translations), [multiple tag types](https://docs.spatie.be/laravel-tags/v4/advanced-usage/using-types) and [sorting capabilities](https://docs.spatie.be/laravel-tags/v4/advanced-usage/sorting-tags).
 
-You'll find the documentation on https://docs.spatie.be/laravel-tags/v2/introduction/.
+You'll find the documentation on https://spatie.be/docs/laravel-tags.
 
 Here are some code examples:
 
 ```php
-//create a model with some tags, don't forget to put "tags" on $fillable array on referred model
+// apply HasTags trait to a model
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Tags\HasTags;
+
+class NewsItem extends Model
+{
+    use HasTags;
+    
+    // ...
+}
+```
+
+```php
+
+// create a model with some tags
 $newsItem = NewsItem::create([
    'name' => 'The Article Title',
    'tags' => ['first tag', 'second tag'], //tags will be created if they don't exist
 ]);
 
-//attaching tags
+// attaching tags
 $newsItem->attachTag('third tag');
 $newsItem->attachTag('third tag','some_type');
 $newsItem->attachTags(['fourth tag', 'fifth tag']);
 $newsItem->attachTags(['fourth_tag','fifth_tag'],'some_type');
 
-//detaching tags
+// detaching tags
 $newsItem->detachTags('third tag');
 $newsItem->detachTags('third tag','some_type');
 $newsItem->detachTags(['fourth tag', 'fifth tag']);
 $newsItem->detachTags(['fourth tag', 'fifth tag'],'some_type');
 
-//syncing tags
+// get all tags of a model
+$newsItem->tags;
+
+// syncing tags
 $newsItem->syncTags(['first tag', 'second tag']); // all other tags on this model will be detached
 
-//syncing tags with a type
+// syncing tags with a type
 $newsItem->syncTagsWithType(['category 1', 'category 2'], 'categories'); 
 $newsItem->syncTagsWithType(['topic 1', 'topic 2'], 'topics'); 
 
-//retrieving tags with a type
+// retrieving tags with a type
 $newsItem->tagsWithType('categories'); 
 $newsItem->tagsWithType('topics'); 
 
-//retrieving models that have any of the given tags
+// retrieving models that have any of the given tags
 NewsItem::withAnyTags(['first tag', 'second tag'])->get();
 
-//retrieve models that have all of the given tags
+// retrieve models that have all of the given tags
 NewsItem::withAllTags(['first tag', 'second tag'])->get();
 
-//translating a tag
+// retrieve models that don't have any of the given tags
+NewsItem::withoutTags(['first tag', 'second tag'])->get();
+
+// translating a tag
 $tag = Tag::findOrCreate('my tag');
 $tag->setTranslation('name', 'fr', 'mon tag');
 $tag->setTranslation('name', 'nl', 'mijn tag');
 $tag->save();
 
-//getting translations
+// getting translations
 $tag->translate('name'); //returns my name
 $tag->translate('name', 'fr'); //returns mon tag (optional locale param)
 
-//convenient translations through taggable models
+// convenient translations through taggable models
 $newsItem->tagsTranslated();// returns tags with slug_translated and name_translated properties
 $newsItem->tagsTranslated('fr');// returns tags with slug_translated and name_translated properties set for specified locale
 
-//using tag types
+// using tag types
 $tag = Tag::findOrCreate('tag 1', 'my type');
 
-//tags have slugs
+// tags have slugs
 $tag = Tag::findOrCreate('yet another tag');
 $tag->slug; //returns "yet-another-tag"
 
-//tags are sortable
+// tags are sortable
 $tag = Tag::findOrCreate('my tag');
 $tag->order_column; //returns 1
 $tag2 = Tag::findOrCreate('another tag');
 $tag2->order_column; //returns 2
 
-//manipulating the order of tags
+// manipulating the order of tags
 $tag->swapOrder($anotherTag);
 ```
 
@@ -84,9 +104,7 @@ Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview 
 
 ## Support us
 
-Learn how to create a package like this one, by watching our premium video course:
-
-[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-tags.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-tags)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -94,7 +112,7 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Requirements
 
-This package requires Laravel 5.8 or higher, PHP 7.2 or higher and a database that supports `json` fields and MySQL compatible functions.
+This package requires Laravel 8 or higher, PHP 8 or higher, and a database that supports `json` fields and MySQL compatible functions.
 
 ## Installation
 
@@ -108,7 +126,7 @@ The package will automatically register itself.
 
 You can publish the migration with:
 ```bash
-php artisan vendor:publish --provider="Spatie\Tags\TagsServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Spatie\Tags\TagsServiceProvider" --tag="tags-migrations"
 ```
 
 After the migration has been published you can create the `tags` and `taggables` tables by running the migrations:
@@ -119,7 +137,7 @@ php artisan migrate
 
 You can optionally publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Spatie\Tags\TagsServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Spatie\Tags\TagsServiceProvider" --tag="tags-config"
 ```
 
 This is the contents of the published config file:
@@ -136,15 +154,15 @@ return [
 ```
 
 ## Documentation
-You'll find the documentation on [https://docs.spatie.be/laravel-tags/v2](https://docs.spatie.be/laravel-tags/v2).
+You'll find the documentation on [https://docs.spatie.be/laravel-tags/v4](https://spatie.be/docs/laravel-tags).
 
 Find yourself stuck using the package? Found a bug? Do you have general questions or suggestions for improving the `laravel-tags` package? Feel free to [create an issue on GitHub](https://github.com/spatie/laravel-tags/issues), we'll try to address it as soon as possible.
 
-If you've found a bug regarding security please mail [freek@spatie.be](mailto:freek@spatie.be) instead of using the issue tracker.
+If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
 ## Testing
 
-1. Copy `.env.example` to `.env` and fill in your database credentials.
+1. Copy `phpunit.xml.dist` to `phpunit.xml` and fill in your database credentials.
 2. Run `composer test`.
 
 ### Changelog
@@ -153,11 +171,11 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
 ## Postcardware
 

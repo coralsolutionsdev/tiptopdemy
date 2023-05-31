@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use Faker\Generator as Faker;
 
-$factory->define(Media::class, function (Faker $faker) {
+$factory->define(MediaFile::class, function (Faker $faker) {
     return [
         'title' => $faker->sentence(4),
         'type' => $faker->randomNumber(),

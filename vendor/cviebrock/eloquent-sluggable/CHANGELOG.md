@@ -1,8 +1,69 @@
 # Change Log
 
-## 6.0.4 - 08-Dec-2020
+## 8.0.8 - 11-Jun-2021
 
-- PHP 8.0 support (#536, thanks @fulopattila122)
+- fix event tests and `registerModelEvent()` hook (#556, #561, thanks @standaniels)
+
+
+## 8.0.7 - 19-May-2021
+
+- fix issue with `SluggableObserver::SAVED` not always saving 
+  the model (#558, #560, thanks @llewellyn-kevin)
+
+
+## 8.0.5 - 28-Feb-2021
+
+- started unique suffixes with "-2" instead of "-1" (#549, thanks @Tamim26061)
+  - this can be adjusted via the `firstUniqueSuffix` config setting
+
+ 
+## 8.0.4 - 20-Jan-2021
+
+- bug fix for #543#issuecomment-763391948 (thanks @dluague)
+
+
+## 8.0.3 - 19-Jan-2021
+
+- add ability to slug models on Eloquent's `saved` event, rather than
+  `saving`
+  - this adds a few more SQL queries per save, but allows for the use of
+    the primary key field in the `source` configuration (see #539 and #448)
+  - default configuration remains the same, but might change in a future release
+- added base `customizeSlugEngine` and `scopeWithUniqueSlugConstraints` methods
+  to the trait, to enforce type hinting and return values
+  - NOTE: if you were using these methods in your models, you may need to ensure
+    the method signatures match now
+  - see #544 for more information, including what to do if you had custom
+    methods in another trait
+- add `slugEngineOptions` configuration option (see #454, thanks @Adioz01)
+- move automated testing from travis-ci to Github actions (#534, thanks @cbl)
+- clean up some third-party tools and badges
+- clean up docblocks, return hints, and PHPUnit method calls
+
+
+## 8.0.2 - 29-Nov-2020
+
+- support PHP 8.0 (#533, thanks @cbl)
+
+
+## 8.0.1 - 28-Sep-2020
+
+- fix when manually setting a slug to a "falsy" value (#527, thanks @huiyang)
+
+
+## 8.0.0 - 10-Sep-2020
+
+- Laravel 8 support
+
+
+## 7.0.1 - 06-Apr-2020
+
+- fix to help support translatable slugs (using either spatie or Astrotomic package) (#506, thanks @GeoSot) 
+
+
+## 7.0.0 - 04-Mar-2020
+
+- Laravel 7.0 support
 
 
 ## 6.0.3 - 09-Feb-2020

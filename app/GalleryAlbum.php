@@ -53,7 +53,7 @@ class GalleryAlbum extends Model
         }
         return $count;
     }
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [

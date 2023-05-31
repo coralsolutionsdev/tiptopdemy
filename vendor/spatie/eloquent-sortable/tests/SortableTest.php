@@ -157,7 +157,7 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
     {
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = [];
         };
 
@@ -167,13 +167,13 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_respect_the_sort_when_creating_setting()
     {
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = ['sort_when_creating' => true];
         };
 
         $this->assertTrue($model->shouldSortWhenCreating());
 
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = ['sort_when_creating' => false];
         };
         $this->assertFalse($model->shouldSortWhenCreating());
@@ -324,5 +324,51 @@ class SortableTest extends TestCase
                 $this->assertEquals($order, $newModels[$key]);
             }
         }
+    }
+
+    /** @test */
+    public function it_can_use_config_properties()
+    {
+        config([
+        'eloquent-sortable.order_column_name' => 'order_column',
+        'eloquent-sortable.sort_when_creating' => true,
+      ]);
+
+        $model = new class () extends Dummy {
+            public $sortable = [];
+        };
+
+        $this->assertEquals(config('eloquent-sortable.order_column_name'), $model->determineOrderColumnName());
+        $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
+    }
+
+    /** @test */
+    public function it_can_override_config_properties()
+    {
+        $model = new class () extends Dummy {
+            public $sortable = [
+            'order_column_name' => 'my_custom_order_column',
+            'sort_when_creating' => false,
+          ];
+        };
+
+        $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
+        $this->assertFalse($model->shouldSortWhenCreating());
+    }
+
+    /** @test */
+    public function it_can_tell_if_element_is_first_in_order()
+    {
+        $model = (new Dummy())->buildSortQuery()->get();
+        $this->assertTrue($model[0]->isFirstInOrder());
+        $this->assertFalse($model[1]->isFirstInOrder());
+    }
+
+    /** @test */
+    public function it_can_tell_if_element_is_last_in_order()
+    {
+        $model = (new Dummy())->buildSortQuery()->get();
+        $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
+        $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
     }
 }

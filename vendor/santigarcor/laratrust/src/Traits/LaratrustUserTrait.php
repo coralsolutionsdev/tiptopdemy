@@ -2,13 +2,6 @@
 
 namespace Laratrust\Traits;
 
-/**
- * This file is part of Laratrust,
- * a role & permission management solution for Laravel.
- *
- * @license MIT
- * @package Laratrust
- */
 use Laratrust\Helper;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -67,7 +60,7 @@ trait LaratrustUserTrait
             Config::get('laratrust.foreign_keys.role')
         );
 
-        if (Config::get('laratrust.use_teams')) {
+        if (Config::get('laratrust.teams.enabled')) {
             $roles->withPivot(Config::get('laratrust.foreign_keys.team'));
         }
 
@@ -81,19 +74,65 @@ trait LaratrustUserTrait
      */
     public function rolesTeams()
     {
-        if (!Config::get('laratrust.use_teams')) {
+        if (!Config::get('laratrust.teams.enabled')) {
             return null;
         }
 
         return $this->morphToMany(
-                Config::get('laratrust.models.team'),
-                'user',
-                Config::get('laratrust.tables.role_user'),
-                Config::get('laratrust.foreign_keys.user'),
-                Config::get('laratrust.foreign_keys.team')
-            )
+            Config::get('laratrust.models.team'),
+            'user',
+            Config::get('laratrust.tables.role_user'),
+            Config::get('laratrust.foreign_keys.user'),
+            Config::get('laratrust.foreign_keys.team')
+        )
             ->withPivot(Config::get('laratrust.foreign_keys.role'));
     }
+
+    /**
+     * Many-to-Many relations with Team associated through the permissions user is given.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function permissionsTeams()
+    {
+        if (!Config::get('laratrust.teams.enabled')) {
+            return null;
+        }
+
+        return $this->morphToMany(
+            Config::get('laratrust.models.team'),
+            'user',
+            Config::get('laratrust.tables.permission_user'),
+            Config::get('laratrust.foreign_keys.user'),
+            Config::get('laratrust.foreign_keys.team')
+        )
+            ->withPivot(Config::get('laratrust.foreign_keys.permission'));
+    }
+
+
+    /**
+     * Get a collection of all user teams
+     *
+     * @param  array|null  $columns
+     * @return \Illuminate\Support\Collection
+     */
+    public function allTeams($columns = null)
+    {
+        $columns = is_array($columns) ? $columns : ['*'];
+        if ($columns) {
+            $columns[] = 'id';
+            $columns = array_unique($columns);
+        }
+
+        if (!Config::get('laratrust.teams.enabled')) {
+            return collect([]);
+        }
+        $permissionTeams = $this->permissionsTeams()->get($columns);
+        $roleTeams = $this->rolesTeams()->get($columns);
+
+        return $roleTeams->merge($permissionTeams)->unique('id');
+    }
+
 
     /**
      * Many-to-Many relations with Permission.
@@ -110,7 +149,7 @@ trait LaratrustUserTrait
             Config::get('laratrust.foreign_keys.permission')
         );
 
-        if (Config::get('laratrust.use_teams')) {
+        if (Config::get('laratrust.teams.enabled')) {
             $permissions->withPivot(Config::get('laratrust.foreign_keys.team'));
         }
 
@@ -201,19 +240,6 @@ trait LaratrustUserTrait
     /**
      * Check if user has a permission by its name.
      *
-     * @param  string|array  $permission Permission string or array of permissions.
-     * @param  string|bool  $team      Team name or requiredAll roles.
-     * @param  bool  $requireAll All permissions in the array are required.
-     * @return bool
-     */
-    public function can($permission, $team = null, $requireAll = false)
-    {
-        return $this->hasPermission($permission, $team, $requireAll);
-    }
-
-    /**
-     * Check if user has a permission by its name.
-     *
      * @param  string|array  $permission  Permission string or array of permissions.
      * @param  string|bool  $team  Team name or requiredAll roles.
      * @param  bool  $requireAll  All permissions in the array are required.
@@ -262,7 +288,7 @@ trait LaratrustUserTrait
         $objectType = Str::singular($relationship);
         $object = Helper::getIdFor($object, $objectType);
 
-        if (Config::get('laratrust.use_teams')) {
+        if (Config::get('laratrust.teams.enabled')) {
             $team = Helper::getIdFor($team, 'team');
 
             if (
@@ -304,11 +330,11 @@ trait LaratrustUserTrait
         $objectType = Str::singular($relationship);
         $relationshipQuery = $this->$relationship();
 
-        if (Config::get('laratrust.use_teams')) {
+        if (Config::get('laratrust.teams.enabled')) {
             $relationshipQuery->wherePivot(
-                    Helper::teamForeignKey(),
-                    Helper::getIdFor($team, 'team')
-                );
+                Helper::teamForeignKey(),
+                Helper::getIdFor($team, 'team')
+            );
         }
 
         $object = Helper::getIdFor($object, $objectType);
@@ -337,7 +363,7 @@ trait LaratrustUserTrait
 
         $objectType = Str::singular($relationship);
         $mappedObjects = [];
-        $useTeams = Config::get('laratrust.use_teams');
+        $useTeams = Config::get('laratrust.teams.enabled');
         $team = $useTeams ? Helper::getIdFor($team, 'team') : null;
 
         foreach ($objects as $object) {
@@ -578,7 +604,7 @@ trait LaratrustUserTrait
      * @param  array  $options
      * @return boolean
      */
-    public function canAndOwns($permission, $thing, $options = [])
+    public function isAbleToAndOwns($permission, $thing, $options = [])
     {
         $options = Helper::checkOrSet('requireAll', $options, [false, true]);
         $options = Helper::checkOrSet('foreignKeyName', $options, [null]);
@@ -590,18 +616,39 @@ trait LaratrustUserTrait
 
     /**
      * Return all the user permissions.
+     * if $team param is false it ignores teams
      *
+     * @param  null|array  $columns
+     * @param  null|false $team
      * @return \Illuminate\Support\Collection|static
      */
-    public function allPermissions()
+    public function allPermissions($columns = null, $team = false)
     {
-        $roles = $this->roles()->with('permissions')->get();
+        $columns = is_array($columns) ? $columns : null;
+        if ($columns) {
+            $columns[] = 'id';
+            $columns = array_unique($columns);
+        }
+        $withColumns = $columns ? ":" . implode(',', $columns) : '';
 
-        $roles = $roles->flatMap(function ($role) {
+        $roles = $this->roles()
+            ->when(config('laratrust.teams.enabled') && $team !== false, function ($query) use ($team) {
+                return $query->whereHas('permissions', function ($permissionQuery) use ($team) {
+                    $permissionQuery->where(config('laratrust.foreign_keys.team'), Helper::getIdFor($team, 'team'));
+                });
+            })
+            ->with("permissions{$withColumns}")->get();
+
+        $rolesPermissions = $roles->flatMap(function ($role) {
             return $role->permissions;
         });
 
-        return $this->permissions()->get()->merge($roles)->unique('name');
+        $directPermissions = $this->permissions()
+            ->when(config('laratrust.teams.enabled') && $team !== false, function ($query) use ($team) {
+                $query->where(config('laratrust.foreign_keys.team'), Helper::getIdFor($team, 'team'));
+            });
+
+        return $directPermissions->get($columns ?? ['*'])->merge($rolesPermissions)->unique('id');
     }
 
     /**
@@ -616,15 +663,15 @@ trait LaratrustUserTrait
 
     /**
      * Handles the call to the magic methods with can,
-     * like $user->canEditSomething().
+     * like $user->isAbleToEditSomething().
      * @param  string  $method
      * @param  array  $parameters
      * @return boolean
      */
-    private function handleMagicCan($method, $parameters)
+    private function handleMagicIsAbleTo($method, $parameters)
     {
-        $case = str_replace('_case', '', Config::get('laratrust.magic_can_method_case'));
-        $method = preg_replace('/^can/', '', $method);
+        $case = str_replace('_case', '', Config::get('laratrust.magic_is_able_to_method_case'));
+        $method = preg_replace('/^isAbleTo/', '', $method);
 
         if ($case == 'kebab') {
             $permission = Str::snake($method, '-');
@@ -644,10 +691,10 @@ trait LaratrustUserTrait
      */
     public function __call($method, $parameters)
     {
-        if (!preg_match('/^can[A-Z].*/', $method)) {
+        if (!preg_match('/^isAbleTo[A-Z].*/', $method)) {
             return parent::__call($method, $parameters);
         }
 
-        return $this->handleMagicCan($method, $parameters);
+        return $this->handleMagicIsAbleTo($method, $parameters);
     }
 }

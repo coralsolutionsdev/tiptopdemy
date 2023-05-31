@@ -2,29 +2,43 @@
 
 namespace Spatie\Tags;
 
+use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 
 trait HasTags
 {
-    protected $queuedTags = [];
+    protected array $queuedTags = [];
 
     public static function getTagClassName(): string
     {
-        return Tag::class;
+        return config('tags.tag_model', Tag::class);
+    }
+
+    public function getTaggableMorphName(): string
+    {
+        return config('tags.taggable.morph_name', 'taggable');
+    }
+
+    public function getTaggableTableName(): string
+    {
+        return config('tags.taggable.table_name', 'taggables');
     }
 
     public static function bootHasTags()
     {
         static::created(function (Model $taggableModel) {
-            if (count($taggableModel->queuedTags) > 0) {
-                $taggableModel->attachTags($taggableModel->queuedTags);
-
-                $taggableModel->queuedTags = [];
+            if (count($taggableModel->queuedTags) === 0) {
+                return;
             }
+
+            $taggableModel->attachTags($taggableModel->queuedTags);
+
+            $taggableModel->queuedTags = [];
         });
 
         static::deleted(function (Model $deletedModel) {
@@ -37,29 +51,23 @@ trait HasTags
     public function tags(): MorphToMany
     {
         return $this
-            ->morphToMany(self::getTagClassName(), 'taggable')
+            ->morphToMany(self::getTagClassName(), $this->getTaggableMorphName())
             ->ordered();
     }
 
-    /**
-     * @param string $locale
-     */
-    public function tagsTranslated($locale = null): MorphToMany
+    public function tagsTranslated(string | null $locale = null): MorphToMany
     {
-        $locale = ! is_null($locale) ? $locale : app()->getLocale();
+        $locale = ! is_null($locale) ? $locale : self::getTagClassName()::getLocale();
 
         return $this
-            ->morphToMany(self::getTagClassName(), 'taggable')
+            ->morphToMany(self::getTagClassName(), $this->getTaggableMorphName())
             ->select('*')
             ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.\"{$locale}\"')) as name_translated")
             ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(slug, '$.\"{$locale}\"')) as slug_translated")
             ->ordered();
     }
 
-    /**
-     * @param string|array|\ArrayAccess|\Spatie\Tags\Tag $tags
-     */
-    public function setTagsAttribute($tags)
+    public function setTagsAttribute(string | array | ArrayAccess | Tag $tags)
     {
         if (! $this->exists) {
             $this->queuedTags = $tags;
@@ -70,51 +78,63 @@ trait HasTags
         $this->syncTags($tags);
     }
 
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array|\ArrayAccess|\Spatie\Tags\Tag $tags
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeWithAllTags(Builder $query, $tags, string $type = null): Builder
-    {
+    public function scopeWithAllTags(
+        Builder $query,
+        string | array | ArrayAccess | Tag $tags,
+        string $type = null,
+    ): Builder {
         $tags = static::convertToTags($tags, $type);
 
         collect($tags)->each(function ($tag) use ($query) {
             $query->whereHas('tags', function (Builder $query) use ($tag) {
-                $query->where('tags.id', $tag ? $tag->id : 0);
+                $query->where('tags.id', $tag->id ?? 0);
             });
         });
 
         return $query;
     }
 
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array|\ArrayAccess|\Spatie\Tags\Tag $tags
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeWithAnyTags(Builder $query, $tags, string $type = null): Builder
-    {
+    public function scopeWithAnyTags(
+        Builder $query,
+        string | array | ArrayAccess | Tag $tags,
+        string $type = null,
+    ): Builder {
         $tags = static::convertToTags($tags, $type);
 
-        return $query->whereHas('tags', function (Builder $query) use ($tags) {
-            $tagIds = collect($tags)->pluck('id');
+        return $query
+            ->whereHas('tags', function (Builder $query) use ($tags) {
+                $tagIds = collect($tags)->pluck('id');
 
-            $query->whereIn('tags.id', $tagIds);
-        });
+                $query->whereIn('tags.id', $tagIds);
+            });
+    }
+
+    public function scopeWithoutTags(
+        Builder $query,
+        string | array | ArrayAccess | Tag $tags,
+        string $type = null
+    ): Builder {
+        $tags = static::convertToTags($tags, $type);
+
+        return $query
+            ->whereDoesntHave('tags', function (Builder $query) use ($tags) {
+                $tagIds = collect($tags)->pluck('id');
+
+                $query->whereIn('tags.id', $tagIds);
+            });
     }
 
     public function scopeWithAllTagsOfAnyType(Builder $query, $tags): Builder
     {
         $tags = static::convertToTagsOfAnyType($tags);
 
-        collect($tags)->each(function ($tag) use ($query) {
-            $query->whereHas('tags', function (Builder $query) use ($tag) {
-                $query->where('tags.id', $tag ? $tag->id : 0);
+        collect($tags)
+            ->each(function ($tag) use ($query) {
+                $query->whereHas(
+                    'tags',
+                    fn (Builder $query) => $query->where('tags.id', $tag ? $tag->id : 0)
+                );
             });
-        });
 
         return $query;
     }
@@ -123,26 +143,20 @@ trait HasTags
     {
         $tags = static::convertToTagsOfAnyType($tags);
 
-        return $query->whereHas('tags', function (Builder $query) use ($tags) {
-            $tagIds = collect($tags)->pluck('id');
+        $tagIds = collect($tags)->pluck('id');
 
-            $query->whereIn('tags.id', $tagIds);
-        });
+        return $query->whereHas(
+            'tags',
+            fn (Builder $query) => $query->whereIn('tags.id', $tagIds)
+        );
     }
 
     public function tagsWithType(string $type = null): Collection
     {
-        return $this->tags->filter(function (Tag $tag) use ($type) {
-            return $tag->type === $type;
-        });
+        return $this->tags->filter(fn (Tag $tag) => $tag->type === $type);
     }
 
-    /**
-     * @param array|\ArrayAccess|\Spatie\Tags\Tag $tags
-     * @param string|null $type
-     * @return $this
-     */
-    public function attachTags($tags, string $type = null)
+    public function attachTags(array | ArrayAccess | Tag $tags, string $type = null): static
     {
         $className = static::getTagClassName();
 
@@ -153,54 +167,33 @@ trait HasTags
         return $this;
     }
 
-    /**
-     * @param string|\Spatie\Tags\Tag $tag
-     *
-     * @param string|null $type
-     * @return $this
-     */
-    public function attachTag($tag, string $type = null)
+    public function attachTag(string | Tag $tag, string | null $type = null)
     {
         return $this->attachTags([$tag], $type);
     }
 
-    /**
-     * @param array|\ArrayAccess $tags
-     *
-     * @param string|null $type
-     * @return $this
-     */
-    public function detachTags($tags, string $type = null)
+    public function detachTags(array | ArrayAccess $tags, string | null $type = null): static
     {
         $tags = static::convertToTags($tags, $type);
 
         collect($tags)
             ->filter()
-            ->each(function (Tag $tag) {
-                $this->tags()->detach($tag);
-            });
+            ->each(fn (Tag $tag) => $this->tags()->detach($tag));
 
         return $this;
     }
 
-    /**
-     * @param string|\Spatie\Tags\Tag $tag
-     *
-     * @param string|null $type
-     * @return $this
-     */
-    public function detachTag($tag, string $type = null)
+    public function detachTag(string | Tag $tag, string | null $type = null): static
     {
         return $this->detachTags([$tag], $type);
     }
 
-    /**
-     * @param array|\ArrayAccess $tags
-     *
-     * @return $this
-     */
-    public function syncTags($tags)
+    public function syncTags(string | array | ArrayAccess $tags): static
     {
+        if (is_string($tags)) {
+            $tags = Arr::wrap($tags);
+        }
+
         $className = static::getTagClassName();
 
         $tags = collect($className::findOrCreate($tags));
@@ -210,13 +203,7 @@ trait HasTags
         return $this;
     }
 
-    /**
-     * @param array|\ArrayAccess $tags
-     * @param string|null $type
-     *
-     * @return $this
-     */
-    public function syncTagsWithType($tags, string $type = null)
+    public function syncTagsWithType(array | ArrayAccess $tags, string | null $type = null): static
     {
         $className = static::getTagClassName();
 
@@ -229,6 +216,10 @@ trait HasTags
 
     protected static function convertToTags($values, $type = null, $locale = null)
     {
+        if ($values instanceof Tag) {
+            $values = [$values];
+        }
+
         return collect($values)->map(function ($value) use ($type, $locale) {
             if ($value instanceof Tag) {
                 if (isset($type) && $value->type != $type) {
@@ -254,35 +245,28 @@ trait HasTags
             $className = static::getTagClassName();
 
             return $className::findFromStringOfAnyType($value, $locale);
-        });
+        })->flatten();
     }
 
-    /**
-     * Use in place of eloquent's sync() method so that the tag type may be optionally specified.
-     *
-     * @param $ids
-     * @param string|null $type
-     * @param bool $detaching
-     */
-    protected function syncTagIds($ids, string $type = null, $detaching = true)
+    protected function syncTagIds($ids, string | null $type = null, $detaching = true): void
     {
         $isUpdated = false;
 
         // Get a list of tag_ids for all current tags
         $current = $this->tags()
             ->newPivotStatement()
-            ->where('taggable_id', $this->getKey())
-            ->where('taggable_type', $this->getMorphClass())
+            ->where($this->getTaggableMorphName() . '_id', $this->getKey())
+            ->where($this->getTaggableMorphName() . '_type', $this->getMorphClass())
             ->when($type !== null, function ($query) use ($type) {
                 $tagModel = $this->tags()->getRelated();
 
                 return $query->join(
                     $tagModel->getTable(),
-                    'taggables.tag_id',
+                    $this->getTaggableTableName() . '.tag_id',
                     '=',
-                    $tagModel->getTable().'.'.$tagModel->getKeyName()
+                    $tagModel->getTable() . '.' . $tagModel->getKeyName()
                 )
-                    ->where('tags.type', $type);
+                    ->where($tagModel->getTable() . '.type', $type);
             })
             ->pluck('tag_id')
             ->all();

@@ -16,20 +16,19 @@ use Laratrust\Traits\LaratrustUserTrait;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Spatie\Image\Exceptions\InvalidManipulation;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Vinkla\Hashids\Facades\Hashids;
 use Webpatser\Countries\Countries;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class User extends Authenticatable implements ReacterableContract, HasMedia
+class User extends Authenticatable implements ReacterableContract
 {
     use Notifiable;
     use LaratrustUserTrait;
     use Reacterable;
     use HasAttachment;
     use Commenter;
-    use HasMediaTrait;
+    use InteractsWithMedia;
     use HasGroup;
     use modelTrail;
     use Notifiable;

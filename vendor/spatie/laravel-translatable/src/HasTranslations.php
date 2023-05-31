@@ -2,21 +2,20 @@
 
 namespace Spatie\Translatable;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Spatie\Translatable\Events\TranslationHasBeenSet;
 use Spatie\Translatable\Exceptions\AttributeIsNotTranslatable;
 
 trait HasTranslations
 {
-    protected $translationLocale = null;
+    protected string | null $translationLocale = null;
 
     public static function usingLocale(string $locale): self
     {
         return (new self())->setLocale($locale);
     }
 
-    public function getAttributeValue($key)
+    public function getAttributeValue($key): mixed
     {
         if (! $this->isTranslatableAttribute($key)) {
             return parent::getAttributeValue($key);
@@ -41,12 +40,12 @@ trait HasTranslations
         return $this->setTranslation($key, $this->getLocale(), $value);
     }
 
-    public function translate(string $key, string $locale = '', bool $useFallbackLocale = true): string
+    public function translate(string $key, string $locale = '', bool $useFallbackLocale = true): mixed
     {
         return $this->getTranslation($key, $locale, $useFallbackLocale);
     }
 
-    public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true)
+    public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true): mixed
     {
         $locale = $this->normalizeLocale($key, $locale, $useFallbackLocale);
 
@@ -61,28 +60,30 @@ trait HasTranslations
         return $translation;
     }
 
-    public function getTranslationWithFallback(string $key, string $locale): string
+    public function getTranslationWithFallback(string $key, string $locale): mixed
     {
         return $this->getTranslation($key, $locale, true);
     }
 
-    public function getTranslationWithoutFallback(string $key, string $locale)
+    public function getTranslationWithoutFallback(string $key, string $locale): mixed
     {
         return $this->getTranslation($key, $locale, false);
     }
 
-    public function getTranslations(string $key = null): array
+    public function getTranslations(string $key = null, array $allowedLocales = null): array
     {
         if ($key !== null) {
             $this->guardAgainstNonTranslatableAttribute($key);
 
-            return array_filter(json_decode($this->getAttributes()[$key] ?? '' ?: '{}', true) ?: [], function ($value) {
-                return $value !== null && $value !== '';
-            });
+            return array_filter(
+                json_decode($this->getAttributes()[$key] ?? '' ?: '{}', true) ?: [],
+                fn ($value, $locale) => $this->filterTranslations($value, $locale, $allowedLocales),
+                ARRAY_FILTER_USE_BOTH
+            );
         }
 
-        return array_reduce($this->getTranslatableAttributes(), function ($result, $item) {
-            $result[$item] = $this->getTranslations($item);
+        return array_reduce($this->getTranslatableAttributes(), function ($result, $item) use ($allowedLocales) {
+            $result[$item] = $this->getTranslations($item, $allowedLocales);
 
             return $result;
         });
@@ -175,7 +176,7 @@ trait HasTranslations
         return $this;
     }
 
-    protected function guardAgainstNonTranslatableAttribute(string $key)
+    protected function guardAgainstNonTranslatableAttribute(string $key): void
     {
         if (! $this->isTranslatableAttribute($key)) {
             throw AttributeIsNotTranslatable::make($key, $this);
@@ -184,7 +185,9 @@ trait HasTranslations
 
     protected function normalizeLocale(string $key, string $locale, bool $useFallbackLocale): string
     {
-        if (in_array($locale, $this->getTranslatedLocales($key))) {
+        $translatedLocales = $this->getTranslatedLocales($key);
+
+        if (in_array($locale, $translatedLocales)) {
             return $locale;
         }
 
@@ -192,15 +195,37 @@ trait HasTranslations
             return $locale;
         }
 
-        if (! is_null($fallbackLocale = config('translatable.fallback_locale'))) {
+        $fallbackLocale = config('translatable.fallback_locale') ?? config('app.fallback_locale');
+        if (! is_null($fallbackLocale) && in_array($fallbackLocale, $translatedLocales)) {
             return $fallbackLocale;
         }
 
-        if (! is_null($fallbackLocale = config('app.fallback_locale'))) {
-            return $fallbackLocale;
+        if (! empty($translatedLocales) && config('translatable.fallback_any')) {
+            return $translatedLocales[0];
         }
 
         return $locale;
+    }
+
+    protected function filterTranslations(mixed $value = null, string $locale = null, array $allowedLocales = null): bool
+    {
+        if ($value === null) {
+            return false;
+        }
+
+        if ($value === '') {
+            return false;
+        }
+
+        if ($allowedLocales === null) {
+            return true;
+        }
+
+        if (! in_array($locale, $allowedLocales)) {
+            return false;
+        }
+
+        return true;
     }
 
     public function setLocale(string $locale): self

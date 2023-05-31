@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Media;
 
 use App\Modules\Course\Lesson;
 use App\Modules\Group\Group;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Http\Controllers\Controller;
 use App\Services\FileAssetManagerService;
 use App\Services\MediaManagerService;
@@ -37,7 +37,7 @@ class MediaController extends Controller
         $breadcrumb =  [];
         $user = getAuthUser();
 //        $mediaItems = $user->getMedia('file_manager')->sortDesc('created_at');
-//        $mediaItems = \Spatie\MediaLibrary\Models\Media::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get()->sortByDesc('created_at');
+//        $mediaItems = \Spatie\MediaLibrary\Models\MediaFile::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get()->sortByDesc('created_at');
 //        dd($mediaItems);
         return view('system.file-manager.index', compact('page_title','breadcrumb'));
     }
@@ -103,7 +103,7 @@ class MediaController extends Controller
         $mediaName = null;
         $mediaType = null;
         $mediaFileName = null;
-        $status = Media::UPLOAD_TYPE_IN_PROCESS; // 0 pending, 1 success,  2 not allowed
+        $status = MediaFile::UPLOAD_TYPE_IN_PROCESS; // 0 pending, 1 success,  2 not allowed
         $mediaType = $input['type'];
         $file = $request->file;;
         $mediaName = isset($input['media_name']) && !empty($input['media_name']) ? $input['media_name'] : null;
@@ -115,55 +115,55 @@ class MediaController extends Controller
         if (empty($itemId) && empty($model)){
             // error
             $message = 'Undefiled model';
-            $status = Media::UPLOAD_TYPE_REFUSED;
+            $status = MediaFile::UPLOAD_TYPE_REFUSED;
         }
         $lesson = $model::find($itemId);
 
         if (empty($lesson)){
             $message = 'Undefiled model item';
-            $status = Media::UPLOAD_TYPE_REFUSED;
+            $status = MediaFile::UPLOAD_TYPE_REFUSED;
         }
         if (empty($mediaType)){
             $message = 'Undefiled media type';
-            $status = Media::UPLOAD_TYPE_REFUSED;
+            $status = MediaFile::UPLOAD_TYPE_REFUSED;
         }
-        if ($mediaType == Media::TYPE_VIDEO){
+        if ($mediaType == MediaFile::TYPE_VIDEO){
             if (!empty($file)){
                 // check if its allowed to upload the file
                 $fileExtension = $file->getClientOriginalExtension();
-                if (!Media::isExtensionAllowed($fileExtension)){
-                    $message = 'Media file is not supported';
-                    $status = Media::UPLOAD_TYPE_REFUSED;
+                if (!MediaFile::isExtensionAllowed($fileExtension)){
+                    $message = 'MediaFile file is not supported';
+                    $status = MediaFile::UPLOAD_TYPE_REFUSED;
 
                 }
                 $mediaFile = $file;
             }else{
                 $message = 'Undefiled media file';
-                $status = Media::UPLOAD_TYPE_REFUSED;
+                $status = MediaFile::UPLOAD_TYPE_REFUSED;
             }
-        } elseif ($mediaType == Media::TYPE_YOUTUBE){
+        } elseif ($mediaType == MediaFile::TYPE_YOUTUBE){
             if (empty($youtubeUrl)){
                 $message = 'Undefiled youtube url';
-                $status = Media::UPLOAD_TYPE_REFUSED;
+                $status = MediaFile::UPLOAD_TYPE_REFUSED;
             }
 
             // $mediaFile = $youtubeUrl;
             $mediaFile = str_replace(['https://www.youtube.com/watch?v=','https://youtu.be/'], 'https://www.youtube.com/embed/', $youtubeUrl);
-        } elseif ($mediaType == Media::TYPE_HTML_PAGE){
+        } elseif ($mediaType == MediaFile::TYPE_HTML_PAGE){
             if (empty($htmlUrl)){
                 $message = 'Undefiled HTML url';
-                $status = Media::UPLOAD_TYPE_REFUSED;
+                $status = MediaFile::UPLOAD_TYPE_REFUSED;
             }
             $mediaFile = $htmlUrl;
         }
 
         // if allowed to upload
-        if ($status == Media::UPLOAD_TYPE_IN_PROCESS){
-            if ($mediaType == Media::TYPE_VIDEO){
+        if ($status == MediaFile::UPLOAD_TYPE_IN_PROCESS){
+            if ($mediaType == MediaFile::TYPE_VIDEO){
                 $media =  MediaManagerService::store($lesson, $mediaType, $mediaFile, $mediaName);
                 if (!empty($media)){
-                    $status = Media::UPLOAD_TYPE_COMPLETED;
-                    $message = 'Media has attached successfully';
+                    $status = MediaFile::UPLOAD_TYPE_COMPLETED;
+                    $message = 'MediaFile has attached successfully';
                     $mediaId = $media->id;
                     $mediaUrl = $media->getFullUrl();
                     $mediaName = $media->name;
@@ -171,7 +171,7 @@ class MediaController extends Controller
             } else {
                 $mediaId = generateRandomString(4);;
                 $mediaUrl = $mediaFile;
-                $message = 'Media has attached successfully';
+                $message = 'MediaFile has attached successfully';
 
             }
             // add media to lesson resources
@@ -201,10 +201,10 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Modules\Media\Media  $media
+     * @param  \App\Modules\Media\MediaFile  $media
      * @return \Illuminate\Http\Response
      */
-    public function show(Media $media)
+    public function show(MediaFile $media)
     {
         //
     }
@@ -212,10 +212,10 @@ class MediaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Modules\Media\Media  $media
+     * @param  \App\Modules\Media\MediaFile  $media
      * @return \Illuminate\Http\Response
      */
-    public function edit(Media $media)
+    public function edit(MediaFile $media)
     {
         //
     }
@@ -224,10 +224,10 @@ class MediaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Modules\Media\Media  $media
+     * @param  \App\Modules\Media\MediaFile  $media
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Media $media)
+    public function update(Request $request, MediaFile $media)
     {
         //
     }
@@ -235,10 +235,10 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Modules\Media\Media  $media
+     * @param  \App\Modules\Media\MediaFile  $media
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Media $media)
+    public function destroy(MediaFile $media)
     {
         //
     }
@@ -289,7 +289,7 @@ class MediaController extends Controller
         }
         return response()->json($items);
     }
-    public function ajaxDestroy(Media $media)
+    public function ajaxDestroy(MediaFile $media)
     {
         // TODO: check if use can remove this media item
         $user = getAuthUser();

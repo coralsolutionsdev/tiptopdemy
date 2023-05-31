@@ -3,6 +3,7 @@
 use Cviebrock\EloquentSluggable\Tests\Listeners\AbortSlugging;
 use Cviebrock\EloquentSluggable\Tests\Listeners\DoNotAbortSlugging;
 use Cviebrock\EloquentSluggable\Tests\Models\Post;
+use Illuminate\Support\Facades\Event;
 
 /**
  * Class EventTests
@@ -14,31 +15,30 @@ class EventTests extends TestCase
 
     /**
      * Test that the "slugging" event is fired.
-     *
-     * @todo Figure out how to accurately test Eloquent model events
      */
-    public function testEventsAreFired()
+    public function testEventsAreFired(): void
     {
-        $this->markTestIncomplete('Event tests are not yet reliable.');
+        Event::fake([
+            'eloquent.slugging: ' . Post::class,
+            'eloquent.slugged: ' . Post::class,
+        ]);
 
         Post::create([
             'title' => 'My Test Post'
         ]);
 
-        $this->expectsEvents([
-            'eloquent.slugging: ' . Post::class,
-            'eloquent.slugged: ' . Post::class,
-        ]);
+        Event::assertDispatched('eloquent.slugging: ' . Post::class);
+        Event::assertDispatched('eloquent.slugged: ' . Post::class);
     }
 
     /**
      * Test that the "slugging" event can be cancelled.
-     *
-     * @todo Figure out how to accurately test Eloquent model events
      */
-    public function testDoNotCancelSluggingEventWhenItReturnsAnythingOtherThanFalse()
+    public function testDoNotCancelSluggingEventWhenItReturnsAnythingOtherThanFalse(): void
     {
-        $this->markTestIncomplete('Event tests are not yet reliable.');
+        Event::fake([
+            'eloquent.slugged: ' . Post::class,
+        ]);
 
         $this->app['events']->listen('eloquent.slugging: ' . Post::class, DoNotAbortSlugging::class);
 
@@ -46,20 +46,15 @@ class EventTests extends TestCase
             'title' => 'My Test Post'
         ]);
 
-        $this->expectsEvents([
-            'eloquent.slugging: ' . Post::class,
-        ]);
-
-        $this->doesntExpectEvents([
-            'eloquent.slugged: ' . Post::class,
-        ]);
-
-        $this->assertEquals('my-test-post', $post->slug);
+        self::assertEquals('my-test-post', $post->slug);
+        Event::assertDispatched('eloquent.slugged: ' . Post::class);
     }
 
-    public function testCancelSluggingEvent()
+    public function testCancelSluggingEvent(): void
     {
-        $this->markTestIncomplete('Event tests are not yet reliable.');
+        Event::fake([
+            'eloquent.slugged: ' . Post::class,
+        ]);
 
         $this->app['events']->listen('eloquent.slugging: ' . Post::class, AbortSlugging::class);
 
@@ -67,31 +62,7 @@ class EventTests extends TestCase
             'title' => 'My Test Post'
         ]);
 
-        $this->expectsEvents([
-            'eloquent.slugging: ' . Post::class,
-        ]);
-
-        $this->doesntExpectEvents([
-            'eloquent.slugged: ' . Post::class,
-        ]);
-
-        $this->assertEquals(null, $post->slug);
-    }
-
-    /**
-     * Test that the "slugged" event is fired.
-     *
-     * @todo Figure out how to accurately test Eloquent model events
-     */
-    public function testSluggedEvent()
-    {
-        $this->markTestIncomplete('Event tests are not yet reliable.');
-
-        $post = Post::create([
-            'title' => 'My Test Post'
-        ]);
-
-        $this->assertEquals('my-test-post', $post->slug);
-        $this->assertEquals('I have been slugged!', $post->subtitle);
+        self::assertEquals(null, $post->slug);
+        Event::assertNotDispatched('eloquent.slugged: ' . Post::class);
     }
 }

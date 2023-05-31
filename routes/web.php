@@ -56,7 +56,7 @@ Route::group(['middleware'=>'lang'], function(){
     Route::get('/','Admin\AdminController@GetDashboard')->name('admin.dashboard');
     Route::resource('/users','Site\UserController');
     Route::get('/user/password/{id}/update','Site\UserController@PassEdit')->name('password.edit');
-    Route::put('/user/password/{id}','Site\UserController@PassUpdate')->name('password.update');
+//    Route::put('/user/password/{id}','Site\UserController@PassUpdate')->name('password.update');
     Route::get('/user/role/{id}/update','Site\UserController@RoleEdit')->name('role.edit');
     Route::put('/user/role/{id}','Site\UserController@RoleUpdate')->name('role.update');
     Route::resource('/setting','Admin\SettingController', ['only' => ['index' , 'update']]);
@@ -204,14 +204,14 @@ Route::group(['middleware'=>'lang'], function(){
 //                Route::get('cache/flush',['as' => 'cache.flush', 'uses' =>  'ServerController@flushCache']);
     });
     /*
-     * Media
+     * MediaFile
      */
-    Route::post('/media/attach','Media\MediaController@ajaxStore')->name('ajax.media.attach');
+    Route::post('/media/attach','MediaFile\MediaController@ajaxStore')->name('ajax.media.attach');
 
-    Route::group(['prefix' => 'media', 'namespace' => 'Media', 'as' => 'media.'], function (){
+    Route::group(['prefix' => 'media', 'namespace' => 'MediaFile', 'as' => 'media.'], function (){
         Route::resource('/','MediaController');
         Route::get('/get/library/items','MediaController@getMediaLibrary')->name('get.library.items');
-        Route::get('/get/items','MediaController@getItems')->name('get.library.items');
+//        Route::get('/get/items','MediaController@getItems')->name('get.library.items');
         Route::post('/ajax/move/item','MediaController@ajaxMove')->name('ajax.move');
         Route::post('/ajax/delete/{media}','MediaController@ajaxDestroy')->name('ajax.destroy');
         Route::post('/ajax/image/upload','MediaController@editorImageUpload')->name('image.upload');
@@ -249,7 +249,7 @@ Route::group(['middleware'=>'lang'], function(){
 
         /* Profile */
         Route::resource('/profile', 'Site\ProfileController', ['only' => ['index' , 'update' ,'edit']])->middleware('active.account');
-        Route::put('/profile/update', 'Site\ProfileController@update')->name('profile.update')->middleware('active.account');
+//        Route::put('/profile/update', 'Site\ProfileController@update')->name('profile.update')->middleware('active.account');
         Route::get('/profile/courses', 'Site\ProfileController@coursesIndex')->name('profile.courses.index');
         Route::get('/profile/orders', 'Site\ProfileController@ordersIndex')->name('profile.orders.index');
         Route::get('/profile/observers', 'Site\ProfileController@observersIndex')->name('profile.observers.index');

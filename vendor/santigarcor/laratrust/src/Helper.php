@@ -10,23 +10,31 @@ use Illuminate\Database\Eloquent\Relations\MorphPivot;
 class Helper
 {
     /**
-     * Gets the it from an array, object or integer.
+     * Gets the id from an array, object or integer.
      *
      * @param  mixed  $object
      * @param  string  $type
      * @return int
      */
-    public static function getIdFor($object, $type)
+    public static function getIdFor($object, string $type)
     {
         if (is_null($object)) {
             return null;
-        } elseif (is_object($object)) {
+        }
+
+        if (is_object($object)) {
             return $object->getKey();
-        } elseif (is_array($object)) {
+        }
+
+        if (is_array($object)) {
             return $object['id'];
-        } elseif (is_numeric($object)) {
+        }
+
+        if (is_numeric($object)) {
             return $object;
-        } elseif (is_string($object)) {
+        }
+
+        if (is_string($object)) {
             return call_user_func_array([
                 Config::get("laratrust.models.{$type}"), 'where'
             ], ['name', $object])->firstOrFail()->getKey();
@@ -66,7 +74,7 @@ class Helper
      */
     public static function fetchTeam($team = null)
     {
-        if (is_null($team) || !Config::get('laratrust.use_teams')) {
+        if (is_null($team) || !Config::get('laratrust.teams.enabled')) {
             return null;
         }
 
@@ -112,8 +120,8 @@ class Helper
     public static function isInSameTeam($rolePermission, $team)
     {
         if (
-            !Config::get('laratrust.use_teams')
-            || (!Config::get('laratrust.teams_strict_check') && is_null($team))
+            !Config::get('laratrust.teams.enabled')
+            || (!Config::get('laratrust.teams.strict_check') && is_null($team))
         ) {
             return true;
         }
@@ -199,5 +207,53 @@ class Helper
         }
 
         return [$wildcard, $noWildcard];
+    }
+
+    /**
+     * Check if a role is editable in the admin panel.
+     *
+     * @param string|\Laratrust\Models\LaratrustRole $role
+     * @return bool
+     */
+    public static function roleIsEditable($role)
+    {
+        $roleName = is_string($role) ? $role : $role->name;
+
+        return ! in_array(
+            $roleName,
+            Config::get('laratrust.panel.roles_restrictions.not_editable') ?? []
+        );
+    }
+
+    /**
+     * Check if a role is deletable in the admin panel.
+     *
+     * @param string|\Laratrust\Models\LaratrustRole $role
+     * @return bool
+     */
+    public static function roleIsDeletable($role)
+    {
+        $roleName = is_string($role) ? $role : $role->name;
+
+        return ! in_array(
+            $roleName,
+            Config::get('laratrust.panel.roles_restrictions.not_deletable') ?? []
+        );
+    }
+
+    /**
+     * Check if a role is removable in the admin panel.
+     *
+     * @param string|\Laratrust\Models\LaratrustRole $role
+     * @return bool
+     */
+    public static function roleIsRemovable($role)
+    {
+        $roleName = is_string($role) ? $role : $role->name;
+
+        return ! in_array(
+            $roleName,
+            Config::get('laratrust.panel.roles_restrictions.not_removable') ?? []
+        );
     }
 }

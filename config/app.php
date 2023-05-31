@@ -183,7 +183,7 @@ return [
          * Third party package
          */
         Intervention\Image\ImageServiceProvider::class,
-        AlbertCht\InvisibleReCaptcha\InvisibleReCaptchaServiceProvider::class,
+//        AlbertCht\InvisibleReCaptcha\InvisibleReCaptchaServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Arrilot\Widgets\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
@@ -198,7 +198,7 @@ return [
         DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider::class,
         Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
-        MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
+//        MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
         Shivella\Bitly\BitlyServiceProvider::class,
 
     ],

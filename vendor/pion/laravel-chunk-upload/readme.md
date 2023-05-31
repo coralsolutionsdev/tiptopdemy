@@ -1,14 +1,14 @@
 # Laravel Chunk Upload
 
 [![Total Downloads](https://poser.pugx.org/pion/laravel-chunk-upload/downloads?format=flat)](https://packagist.org/packages/pion/laravel-chunk-upload)
-[![Build Status](https://travis-ci.org/pionl/laravel-chunk-upload.svg?branch=master)](https://travis-ci.org/pionl/laravel-chunk-upload)
+[![Build Status](https://github.com/pionl/laravel-chunk-upload/workflows/build/badge.svg)](https://github.com/pionl/laravel-chunk-upload/actions)
 [![Latest Stable Version](https://poser.pugx.org/pion/laravel-chunk-upload/v/stable?format=flat)](https://packagist.org/packages/pion/laravel-chunk-upload)
 [![Latest Unstable Version](https://poser.pugx.org/pion/laravel-chunk-upload/v/unstable?format=flat)](https://packagist.org/packages/pion/laravel-chunk-upload)
 [![License](https://poser.pugx.org/pion/laravel-chunk-upload/license)](https://packagist.org/packages/pion/laravel-chunk-upload)
 
 ## Introduction
 
-> Supports Laravel from 5.2 to 7 (covered by integration tests on all versions).
+> Supports Laravel from 5.2 to 9 (covered by integration tests for 7/8/9 versions).
 
 Easy to use service/library for chunked upload with supporting multiple JS libraries on top of Laravel's file upload with low memory footprint in mind. 
 
@@ -43,7 +43,7 @@ Setup consists of 3 steps:
 | Library | Wiki | single & chunk upload | simultaneous uploads | In [example project](https://github.com/pionl/laravel-chunk-upload-example) | Author |
 |---- |----|----|----| ---- | ---- |
 | [resumable.js](https://github.com/23/resumable.js) | [Wiki](https://github.com/pionl/laravel-chunk-upload/wiki/resumable-js) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | [@pionl](https://github.com/pionl) |
-| [DropZone](https://gitlab.com/meno/dropzone/) | [Wiki](https://github.com/pionl/laravel-chunk-upload/wiki/dropzone) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | [@pionl](https://github.com/pionl) |
+| [DropZone](https://github.com/dropzone/dropzone) | [Wiki](https://github.com/pionl/laravel-chunk-upload/wiki/dropzone) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | [@pionl](https://github.com/pionl) |
 | [jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload) | [Wiki](https://github.com/pionl/laravel-chunk-upload/wiki/jquery-file-upload)  | :heavy_check_mark: | :heavy_multiplication_x: | :heavy_check_mark: | [@pionl](https://github.com/pionl) |
 | [Plupload](https://github.com/moxiecode/plupload) | [Wiki](https://github.com/pionl/laravel-chunk-upload/wiki/plupload) | :heavy_check_mark: | :heavy_multiplication_x: | :heavy_multiplication_x: | [@pionl](https://github.com/pionl) |
 | [simple uploader](https://github.com/simple-uploader) | :heavy_multiplication_x: | :heavy_check_mark: | :heavy_multiplication_x: | :heavy_multiplication_x: | [@dyktek](https://github.com/dyktek) |
@@ -67,15 +67,15 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contri
 
 ## Compatibility
 
-* 7.* (last tested on v7.16.1)
-* 6.* (last tested on v6.18.20)
-* 5.8.* (last tested on v5.8.38)
-* 5.7.* (last tested on v5.7.29)
-* 5.6.* (last tested on v5.6.40)
-* 5.5.* (last tested on v5.5.49)
-* 5.4.* (last tested on v5.4.36)
-* 5.3.* (last tested on v5.3.31)
-* 5.2.* (last tested on v5.2.45)
+> Laravel 5/6 should be still supported but we are not testing them via automation sccripts
+
+| Version | PHP           |
+|---------|---------------| 
+| 10.*    | 8.1, 8.2      |
+| 9.*     | 8.0, 8.1      |
+| 8.*     | 7.4, 8.0, 8.1 |
+| 7.*     | 7.4           |
+
 
 
 ## Copyright and License

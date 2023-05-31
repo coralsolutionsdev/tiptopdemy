@@ -2,8 +2,8 @@
 
 namespace Laratrust\Checkers\User;
 
-use Illuminate\Support\Str;
 use Laratrust\Helper;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -19,11 +19,11 @@ class LaratrustUserDefaultChecker extends LaratrustUserChecker
     {
         $roles = collect($this->userCachedRoles());
 
-        if (config('laratrust.use_teams') === false) {
+        if (config('laratrust.teams.enabled') === false) {
             return $roles->pluck('name')->toArray();
         }
 
-        if ($team === null && config('laratrust.teams_strict_check') === false) {
+        if ($team === null && config('laratrust.teams.strict_check') === false) {
             return $roles->pluck('name')->toArray();
         }
 
@@ -192,10 +192,6 @@ class LaratrustUserDefaultChecker extends LaratrustUserChecker
      */
     public function userModelCacheKey()
     {
-        if (!Config::get('laratrust.use_morph_map')) {
-            return 'user';
-        }
-
         foreach (Config::get('laratrust.user_models') as $key => $model) {
             if ($this->user instanceof $model) {
                 return $key;

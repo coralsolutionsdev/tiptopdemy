@@ -7,7 +7,7 @@ use App\Modules\ColorPattern\ColorPattern;
 use App\Modules\ColorPattern\HasColorPattern;
 use App\Modules\Course\Lesson;
 use App\Modules\Group\HasGroup;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Modules\modelTrail;
 use App\Modules\Store\Invoice;
 use App\Modules\Store\Order;
@@ -24,14 +24,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\File;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Product extends Model implements ReactableContract, HasMedia
+
+
+class Product extends Model implements HasMedia
 {
     use Sluggable;
     use HasTags;
@@ -39,8 +41,8 @@ class Product extends Model implements ReactableContract, HasMedia
     use HasGroup;
     use HasColorPattern;
     use Reactable;
-    use HasMediaTrait;
     use modelTrail;
+    use InteractsWithMedia;
 
 
 
@@ -86,7 +88,7 @@ class Product extends Model implements ReactableContract, HasMedia
         return 'slug';
     }
 
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -210,7 +212,7 @@ class Product extends Model implements ReactableContract, HasMedia
      */
     public function getImages()
     {
-        return $this->getMedia(Media::getGroup(Media::TYPE_PRODUCT_IMAGE));
+        return $this->getMedia(MediaFile::getGroup(MediaFile::TYPE_PRODUCT_IMAGE));
 
     }
 
@@ -221,11 +223,11 @@ class Product extends Model implements ReactableContract, HasMedia
     public function getProductPrimaryImage()
     {
         $path =  asset_image('assets/no-image.png');
-        $images = $this->getMedia(Media::getGroup(Media::TYPE_PRODUCT_IMAGE));
+        $images = $this->getMedia(MediaFile::getGroup(MediaFile::TYPE_PRODUCT_IMAGE));
         if (!empty($images)){
             $image = $images->first();
             if (!empty($image)){
-                $path = $image->getFullUrl('card');
+                $path = $image->getFullUrl();
             }
         }
         return $path;
@@ -236,7 +238,7 @@ class Product extends Model implements ReactableContract, HasMedia
     public function getProductAlternativeImage()
     {
         $path =  null;
-        $images = $this->getMedia(Media::getGroup(Media::TYPE_PRODUCT_IMAGE));
+        $images = $this->getMedia(MediaFile::getGroup(MediaFile::TYPE_PRODUCT_IMAGE));
         if (!empty($images)){
             $image = $images->get(1);
             if (!empty($image)){
@@ -307,28 +309,25 @@ class Product extends Model implements ReactableContract, HasMedia
        return $user->products->where('id', $this->id)->first();
     }
 
-    /**
-     * Register media library conversation types
-     * @param \Spatie\MediaLibrary\Models\Media|null $media
-     * @throws InvalidManipulation
-     */
-    public function registerMediaConversions(\Spatie\MediaLibrary\Models\Media $media = null): void
+
+    public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->width(100)
+            ->width(368)
+            ->height(232)
             ->sharpen(10);
         $this->addMediaConversion('card')
-            ->width(500)
+            ->width(368)
+            ->height(232)
             ->sharpen(10);
     }
-
     /**
      * register media allowed extensions
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this
-            ->addMediaCollection(Media::getGroup(Media::TYPE_PRODUCT_IMAGE))
+            ->addMediaCollection(MediaFile::getGroup(MediaFile::TYPE_PRODUCT_IMAGE))
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/gif']);
 
     }
@@ -384,8 +383,8 @@ class Product extends Model implements ReactableContract, HasMedia
         $product->categories()->sync($categories);
 
         // media update //
-        $mediaType = Media::TYPE_PRODUCT_IMAGE;
-        $productMedia = $product->getMedia(Media::getGroup($mediaType));
+        $mediaType = MediaFile::TYPE_PRODUCT_IMAGE;
+        $productMedia = $product->getMedia(MediaFile::getGroup($mediaType));
         // removed media items
         $mediaRemovedItems = isset($input['media_removed_ids']) && !empty($input['media_removed_ids']) ? $input['media_removed_ids'] :  array();
         if (!empty($mediaRemovedItems)){
@@ -420,7 +419,7 @@ class Product extends Model implements ReactableContract, HasMedia
                 }
             }
         }else{ // no product images
-            $product->clearMediaCollection(Media::getGroup($mediaType));
+            $product->clearMediaCollection(MediaFile::getGroup($mediaType));
         }
 
         // update tags

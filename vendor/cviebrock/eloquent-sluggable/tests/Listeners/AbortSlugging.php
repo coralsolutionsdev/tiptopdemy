@@ -1,5 +1,7 @@
 <?php namespace Cviebrock\EloquentSluggable\Tests\Listeners;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class AbortSlugging
  *
@@ -13,10 +15,8 @@ class AbortSlugging
      * @param string $event
      * @return bool
      */
-    public function handle($model, $event)
+    public function handle(Model $model, string $event): bool
     {
-        echo "SLUGGING ABORTED!\n";
-
         return false;
     }
 }

@@ -27,12 +27,12 @@
   "require": {
     "php": ">=7.1",
     "ext-json": "*",
-    "illuminate/support": "^5.8 || ^6.0 || ^7.0 || ^8.0",
-    "guzzlehttp/guzzle": "~6.0 || ^7.0.1 || ^7.1 || ^7.2 || ^7.3"
+    "illuminate/support": "^5.8 || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0",
+    "guzzlehttp/guzzle": "~6.0 || ^7.0.1 || ^7.1 || ^7.2 || ^7.3 || ^7.4 || ^7.5"
   },
   "require-dev": {
     "symfony/http-foundation": "^5.0",
-    "phpunit/phpunit": "^8.1"
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {
@@ -43,5 +43,10 @@
     "psr-4": {
       "Shivella\\Bitly\\Test\\": "Tests"
     }
+  },
+  "scripts": {
+      "tests": [
+          "phpunit tests"
+      ]
   }
 }

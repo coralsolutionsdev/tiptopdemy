@@ -2,14 +2,10 @@
 
 namespace Laratrust;
 
-/**
- * This file is part of Laratrust,
- * a role & permission management solution for Laravel.
- *
- * @license MIT
- * @package Laratrust
- */
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class LaratrustServiceProvider extends ServiceProvider
@@ -22,54 +18,19 @@ class LaratrustServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
-     * The commands to be registered.
-     *
-     * @var array
-     */
-    protected $commands = [
-        'Migration' => 'command.laratrust.migration',
-        'MakeRole' => 'command.laratrust.role',
-        'MakePermission' => 'command.laratrust.permission',
-        'MakeTeam' => 'command.laratrust.team',
-        'AddLaratrustUserTraitUse' => 'command.laratrust.add-trait',
-        'Setup' => 'command.laratrust.setup',
-        'SetupTeams' => 'command.laratrust.setup-teams',
-        'MakeSeeder' => 'command.laratrust.seeder',
-        'Upgrade' => 'command.laratrust.upgrade'
-    ];
-
-    /**
-     * The middlewares to be registered.
-     *
-     * @var array
-     */
-    protected $middlewares = [
-        'role' => \Laratrust\Middleware\LaratrustRole::class,
-        'permission' => \Laratrust\Middleware\LaratrustPermission::class,
-        'ability' => \Laratrust\Middleware\LaratrustAbility::class,
-    ];
-
-    /**
-     * Bootstrap the application events.
+     * Bootstrap any application services.
      *
      * @return void
      */
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/laratrust.php', 'laratrust');
-
-        $this->publishes([
-            __DIR__.'/../config/laratrust.php' => config_path('laratrust.php'),
-            __DIR__. '/../config/laratrust_seeder.php' => config_path('laratrust_seeder.php'),
-        ], 'laratrust');
-
         $this->useMorphMapForRelationships();
-
         $this->registerMiddlewares();
-
-        if (class_exists('\Blade')) {
-            $this->registerBladeDirectives();
-        }
+        $this->registerBladeDirectives();
+        $this->registerRoutes();
+        $this->registerResources();
+        $this->registerPermissionsToGate();
+        $this->defineAssetPublishing();
     }
 
     /**
@@ -105,21 +66,15 @@ class LaratrustServiceProvider extends ServiceProvider
             return;
         }
 
-        foreach ($this->middlewares as $key => $class) {
+        $middlewares = [
+            'role' => \Laratrust\Middleware\LaratrustRole::class,
+            'permission' => \Laratrust\Middleware\LaratrustPermission::class,
+            'ability' => \Laratrust\Middleware\LaratrustAbility::class,
+        ];
+
+        foreach ($middlewares as $key => $class) {
             $router->$registerMethod($key, $class);
         }
-    }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->registerLaratrust();
-
-        $this->registerCommands();
     }
 
     /**
@@ -129,7 +84,121 @@ class LaratrustServiceProvider extends ServiceProvider
      */
     private function registerBladeDirectives()
     {
+        if (!class_exists('\Blade')) {
+            return;
+        }
+
         (new LaratrustRegistersBladeDirectives)->handle($this->app->version());
+    }
+
+    /**
+     * Register the routes used by the Laratrust admin panel.
+     *
+     * @return void
+     */
+    protected function registerRoutes()
+    {
+        if (!$this->app['config']->get('laratrust.panel.register')) {
+            return;
+        }
+
+        Route::group([
+            'prefix' => config('laratrust.panel.path'),
+            'namespace' => 'Laratrust\Http\Controllers',
+            'middleware' => config('laratrust.panel.middleware', 'web'),
+        ], function () {
+            Route::redirect('/', '/'. config('laratrust.panel.path'). '/roles-assignment');
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        });
+    }
+
+    /**
+     * Register all the possible views used by Laratrust.
+     *
+     * @return void
+     */
+    protected function registerResources()
+    {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laratrust');
+    }
+
+    /**
+     * Register permissions to Laravel Gate
+     *
+     * @return void
+     */
+    protected function registerPermissionsToGate()
+    {
+        if (!$this->app['config']->get('laratrust.permissions_as_gates')) {
+            return;
+        }
+
+        app(Gate::class)->before(function (Authorizable $user, string $ability) {
+            if (method_exists($user, 'hasPermission')) {
+                return $user->hasPermission($ability) ?: null;
+            }
+        });
+    }
+
+    /**
+     * Register the assets that are publishable for the admin panel to work.
+     *
+     * @return void
+     */
+    protected function defineAssetPublishing()
+    {
+        if (!$this->app['config']->get('laratrust.panel.register')) {
+            return;
+        }
+
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/laratrust'),
+        ], 'laratrust-assets');
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->configure();
+        $this->offerPublishing();
+        $this->registerLaratrust();
+        $this->registerCommands();
+    }
+
+    /**
+     * Setup the configuration for Laratrust.
+     *
+     * @return void
+     */
+    protected function configure()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/laratrust.php', 'laratrust');
+    }
+
+    /**
+     * Setup the resource publishing group for Laratrust.
+     *
+     * @return void
+     */
+    protected function offerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/laratrust.php' => config_path('laratrust.php'),
+            ], 'laratrust');
+
+            $this->publishes([
+                __DIR__. '/../config/laratrust_seeder.php' => config_path('laratrust_seeder.php'),
+            ], 'laratrust-seeder');
+            
+            $this->publishes([
+                __DIR__. '/../resources/views/panel' => resource_path('views/vendor/laratrust/panel'),
+            ], 'laratrust-views');
+        }
     }
 
     /**
@@ -137,7 +206,7 @@ class LaratrustServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerLaratrust()
+    protected function registerLaratrust()
     {
         $this->app->bind('laratrust', function ($app) {
             return new Laratrust($app);
@@ -147,91 +216,24 @@ class LaratrustServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the given commands.
+     * Register the Laratrusts commands.
      *
      * @return void
      */
     protected function registerCommands()
     {
-        foreach (array_keys($this->commands) as $command) {
-            $method = "register{$command}Command";
-
-            call_user_func_array([$this, $method], []);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\AddLaratrustUserTraitUseCommand::class,
+                Console\MakePermissionCommand::class,
+                Console\MakeRoleCommand::class,
+                Console\MakeSeederCommand::class,
+                Console\MakeTeamCommand::class,
+                Console\MigrationCommand::class,
+                Console\SetupCommand::class,
+                Console\SetupTeamsCommand::class,
+                Console\UpgradeCommand::class,
+            ]);
         }
-
-        $this->commands(array_values($this->commands));
-    }
-
-    protected function registerMigrationCommand()
-    {
-        $this->app->singleton('command.laratrust.migration', function () {
-            return new \Laratrust\Commands\MigrationCommand();
-        });
-    }
-
-    protected function registerMakeRoleCommand()
-    {
-        $this->app->singleton('command.laratrust.role', function ($app) {
-            return new \Laratrust\Commands\MakeRoleCommand($app['files']);
-        });
-    }
-
-    protected function registerMakePermissionCommand()
-    {
-        $this->app->singleton('command.laratrust.permission', function ($app) {
-            return new \Laratrust\Commands\MakePermissionCommand($app['files']);
-        });
-    }
-
-    protected function registerMakeTeamCommand()
-    {
-        $this->app->singleton('command.laratrust.team', function ($app) {
-            return new \Laratrust\Commands\MakeTeamCommand($app['files']);
-        });
-    }
-
-    protected function registerAddLaratrustUserTraitUseCommand()
-    {
-        $this->app->singleton('command.laratrust.add-trait', function () {
-            return new \Laratrust\Commands\AddLaratrustUserTraitUseCommand();
-        });
-    }
-
-    protected function registerSetupCommand()
-    {
-        $this->app->singleton('command.laratrust.setup', function () {
-            return new \Laratrust\Commands\SetupCommand();
-        });
-    }
-
-    protected function registerSetupTeamsCommand()
-    {
-        $this->app->singleton('command.laratrust.setup-teams', function () {
-            return new \Laratrust\Commands\SetupTeamsCommand();
-        });
-    }
-
-    protected function registerMakeSeederCommand()
-    {
-        $this->app->singleton('command.laratrust.seeder', function () {
-            return new \Laratrust\Commands\MakeSeederCommand();
-        });
-    }
-
-    protected function registerUpgradeCommand()
-    {
-        $this->app->singleton('command.laratrust.upgrade', function () {
-            return new \Laratrust\Commands\UpgradeCommand();
-        });
-    }
-
-    /**
-     * Get the services provided.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array_values($this->commands);
     }
 }

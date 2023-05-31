@@ -3,6 +3,9 @@
 if (class_exists('ParagonIE_Sodium_Core32_Ed25519', false)) {
     return;
 }
+if (!class_exists('ParagonIE_Sodium_Core32_Curve25519')) {
+    require_once dirname(__FILE__) . '/Curve25519.php';
+}
 
 /**
  * Class ParagonIE_Sodium_Core32_Ed25519
@@ -478,21 +481,5 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
             }
         }
         return false;
-    }
-
-    /**
-     * Catch self::hash_update() failures and throw instead of silently proceding
-     *
-     * @param HashContext|resource &$hs
-     * @param string $data
-     * @return void
-     * @throws SodiumException
-     * @psalm-suppress PossiblyInvalidArgument
-     */
-    private static function hash_update(&$hs, $data)
-    {
-        if (!hash_update($hs, $data)) {
-            throw new SodiumException('self::hash_update() failed');
-        }
     }
 }

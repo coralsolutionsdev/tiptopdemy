@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Cog\Laravel\Love\Console\Commands;
 
-use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableInterface;
 use Cog\Laravel\Love\Reacter\Models\Reacter;
 use Cog\Laravel\Love\Support\Database\AddForeignColumnStub;
 use Cog\Laravel\Love\Support\Database\MigrationCreator;
@@ -33,7 +33,7 @@ final class SetupReacterable extends Command
      *
      * @var string
      */
-    protected $name = 'love:setup-reacterable';
+    protected static $defaultName = 'love:setup-reacterable';
 
     /**
      * The console command description.
@@ -42,10 +42,19 @@ final class SetupReacterable extends Command
      */
     protected $description = 'Set up reacterable model';
 
+    /**
+     * @var Filesystem
+     */
     private $files;
 
+    /**
+     * @var MigrationCreator
+     */
     private $creator;
 
+    /**
+     * @var Composer
+     */
     private $composer;
 
     public function __construct(Filesystem $files, MigrationCreator $creator, Composer $composer)
@@ -133,6 +142,9 @@ final class SetupReacterable extends Command
         return 0;
     }
 
+    /**
+     * @return array[]
+     */
     protected function getOptions(): array
     {
         return [
@@ -158,7 +170,7 @@ final class SetupReacterable extends Command
 
     private function isModelInvalid(Model $model): bool
     {
-        return !$model instanceof ReacterableContract;
+        return !$model instanceof ReacterableInterface;
     }
 
     private function getMigrationsPath(): string

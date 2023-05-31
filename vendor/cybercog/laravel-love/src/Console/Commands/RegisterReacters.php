@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Cog\Laravel\Love\Console\Commands;
 
 use Cog\Contracts\Love\Reacterable\Exceptions\ReacterableInvalid;
-use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableInterface;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -26,7 +27,7 @@ final class RegisterReacters extends Command
      *
      * @var string
      */
-    protected $name = 'love:register-reacters';
+    protected static $defaultName = 'love:register-reacters';
 
     /**
      * The console command description.
@@ -35,6 +36,9 @@ final class RegisterReacters extends Command
      */
     protected $description = 'Register Reacterable models as Reacters';
 
+    /**
+     * @return array[]
+     */
     protected function getOptions(): array
     {
         return [
@@ -90,14 +94,14 @@ final class RegisterReacters extends Command
      */
     private function reacterableModelFromType(
         string $modelType
-    ): ReacterableContract {
+    ): ReacterableInterface {
         if (!class_exists($modelType)) {
             $modelType = $this->findModelTypeInMorphMap($modelType);
         }
 
         $model = new $modelType();
 
-        if (!$model instanceof ReacterableContract) {
+        if (!$model instanceof ReacterableInterface) {
             throw ReacterableInvalid::notImplementInterface($modelType);
         }
 
@@ -142,12 +146,12 @@ final class RegisterReacters extends Command
     /**
      * @param \Cog\Contracts\Love\Reacterable\Models\Reacterable|\Illuminate\Database\Eloquent\Model $reacterableModel
      * @param array $modelIds
-     * @return iterable
+     * @return Collection
      */
     private function collectModels(
-        ReacterableContract $reacterableModel,
+        ReacterableInterface $reacterableModel,
         array $modelIds
-    ): iterable {
+    ): Collection {
         $query = $reacterableModel
             ->query()
             ->whereNull('love_reacter_id');
@@ -159,7 +163,7 @@ final class RegisterReacters extends Command
         return $query->get();
     }
 
-    private function registerModelsAsReacters(iterable $models): void
+    private function registerModelsAsReacters(Collection $models): void
     {
         $collectedCount = $models->count();
         $progressBar = $this->output->createProgressBar($collectedCount);

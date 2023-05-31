@@ -421,12 +421,12 @@
         'video link' => 'رابط الفيديو',
         'Lesson description' => 'وصف الدرس',
         'There is no available lessons in this unit' => 'لا يوجد دروس متوفرة في هذه الوحدة',
-        'Add Media Item' => 'أضف عنصر ميديا',
-        'Media items' => 'عناصر الميديا',
+        'Add MediaFile Item' => 'أضف عنصر ميديا',
+        'MediaFile items' => 'عناصر الميديا',
         'Lesson rate' => 'تقييم الدرس',
 
 
-        // Media
+        // MediaFile
         'Uploading' => 'جارِ الرفع ...',
 
         // Form
@@ -489,7 +489,7 @@
         'Upload a new video' => 'إرفع فيديو جديد',
         'HTML page' => 'HTML صفحة',
         'Embed' => 'تضمين',
-        'Media name' => 'إسم ملف الميديا',
+        'MediaFile name' => 'إسم ملف الميديا',
         'Video upload' => 'رفع ملف فيدو',
         'Drag and drop your video file to upload, or' => 'قم بسحب الفيديو وإفلاتها للتحميل ، أو',
         'Drag and drop your files to upload, or' => 'قم بسحب ملفاتك وإفلاتها للتحميل ، أو',

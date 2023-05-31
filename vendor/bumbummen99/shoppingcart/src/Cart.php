@@ -904,20 +904,4 @@ class Cart
     {
         return $this->updatedAt;
     }
-    /*
-     |--------------------------------------------------------------------------
-     | Custom Methods
-     |--------------------------------------------------------------------------
-     */
-    /**
-     * @return Collection
-     */
-    public function getProductsIds()
-    {
-        $productIds = array();
-        foreach (self::content() as $rowId => $item){
-            $productIds[$rowId] = $item->id;
-        }
-        return $productIds;
-    }
 }

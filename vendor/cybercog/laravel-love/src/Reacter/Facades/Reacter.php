@@ -13,28 +13,34 @@ declare(strict_types=1);
 
 namespace Cog\Laravel\Love\Reacter\Facades;
 
-use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
-use Cog\Contracts\Love\Reacter\Facades\Reacter as ReacterFacadeContract;
-use Cog\Contracts\Love\Reacter\Models\Reacter as ReacterContract;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableInterface;
+use Cog\Contracts\Love\Reacter\Facades\Reacter as ReacterFacadeInterface;
+use Cog\Contracts\Love\Reacter\Models\Reacter as ReacterInterface;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 
 final class Reacter implements
-    ReacterFacadeContract
+    ReacterFacadeInterface
 {
+    /**
+     * @var ReacterInterface
+     */
     private $reacter;
 
-    public function __construct(ReacterContract $reacter)
+    public function __construct(ReacterInterface $reacter)
     {
         $this->reacter = $reacter;
     }
 
+    /**
+     * @return iterable|\Cog\Contracts\Love\Reaction\Models\Reaction[]
+     */
     public function getReactions(): iterable
     {
         return $this->reacter->getReactions();
     }
 
     public function reactTo(
-        ReactableContract $reactable,
+        ReactableInterface $reactable,
         string $reactionTypeName,
         ?float $rate = null
     ): void {
@@ -46,7 +52,7 @@ final class Reacter implements
     }
 
     public function unreactTo(
-        ReactableContract $reactable,
+        ReactableInterface $reactable,
         string $reactionTypeName
     ): void {
         $this->reacter->unreactTo(
@@ -56,7 +62,7 @@ final class Reacter implements
     }
 
     public function hasReactedTo(
-        ReactableContract $reactable,
+        ReactableInterface $reactable,
         ?string $reactionTypeName = null,
         ?float $rate = null
     ): bool {
@@ -70,7 +76,7 @@ final class Reacter implements
     }
 
     public function hasNotReactedTo(
-        ReactableContract $reactable,
+        ReactableInterface $reactable,
         ?string $reactionTypeName = null,
         ?float $rate = null
     ): bool {

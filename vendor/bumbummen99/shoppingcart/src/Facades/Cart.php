@@ -15,5 +15,4 @@ class Cart extends Facade
     {
         return 'cart';
     }
-    
 }

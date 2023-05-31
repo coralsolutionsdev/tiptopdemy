@@ -54,7 +54,7 @@ class BlogPost extends Model implements ReactableContract
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [

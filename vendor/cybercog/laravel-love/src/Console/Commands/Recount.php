@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Cog\Laravel\Love\Console\Commands;
 
 use Cog\Contracts\Love\Reactable\Exceptions\ReactableInvalid;
-use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableInterface;
 use Cog\Laravel\Love\Reactant\Jobs\RebuildReactionAggregatesJob;
 use Cog\Laravel\Love\Reactant\Models\Reactant;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Bus\Dispatcher as DispatcherContract;
+use Illuminate\Contracts\Bus\Dispatcher as DispatcherInterface;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -30,7 +30,7 @@ final class Recount extends Command
      *
      * @var string
      */
-    protected $name = 'love:recount';
+    protected static $defaultName = 'love:recount';
 
     /**
      * The console command description.
@@ -47,7 +47,7 @@ final class Recount extends Command
     /**
      * Get the console command options.
      *
-     * @return array
+     * @return array[]
      */
     protected function getOptions(
     ): array {
@@ -59,7 +59,7 @@ final class Recount extends Command
     }
 
     public function __construct(
-        DispatcherContract $dispatcher
+        DispatcherInterface $dispatcher
     ) {
         parent::__construct();
         $this->dispatcher = $dispatcher;
@@ -130,14 +130,14 @@ final class Recount extends Command
      */
     private function reactableModelFromType(
         string $modelType
-    ): ReactableContract {
+    ): ReactableInterface {
         if (!class_exists($modelType)) {
             $modelType = $this->findModelTypeInMorphMap($modelType);
         }
 
         $model = new $modelType();
 
-        if (!$model instanceof ReactableContract) {
+        if (!$model instanceof ReactableInterface) {
             throw ReactableInvalid::notImplementInterface($modelType);
         }
 

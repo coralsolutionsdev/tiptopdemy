@@ -15,7 +15,7 @@ $newsItem
    ->setTranslation('name', 'en', 'Name in English')
    ->setTranslation('name', 'nl', 'Naam in het Nederlands')
    ->save();
-   
+
 $newsItem->name; // Returns 'Name in English' given that the current app locale is 'en'
 $newsItem->getTranslation('name', 'nl'); // returns 'Naam in het Nederlands'
 
@@ -36,21 +36,24 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 You can install the package via composer:
 
-``` bash
+```bash
 composer require spatie/laravel-translatable
 ```
 
 If you want to have another fallback_locale than the app fallback locale (see `config/app.php`), you could publish the config file:
-```
+```bash
 php artisan vendor:publish --provider="Spatie\Translatable\TranslatableServiceProvider"
 ```
 
 This is the contents of the published file:
 ```php
 return [
-  'fallback_locale' => 'en',
+  'fallback_locale' => null,
+  'fallback_any' => false,
 ];
 ```
+
+Sometimes it is favored to return any translation if neigher the translation for the prefered locale nor the fallback locale are set. To do so, set fallback_any in the config to true.
 
 ## Making a model translatable
 
@@ -62,14 +65,14 @@ The required steps to make a model translatable are:
 
 Here's an example of a prepared model:
 
-``` php
+```php
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class NewsItem extends Model
 {
     use HasTranslations;
-    
+
     public $translatable = ['name'];
 }
 ```
@@ -157,6 +160,27 @@ public function forgetAllTranslations(string $locale)
 public function getTranslations(string $attributeName): array
 ```
 
+#### Getting the specified translations in one go
+
+You can filter the translations by passing an array of locales:
+``` php
+public function getTranslations(string $attributeName, array $allowedLocales): array
+```
+
+Here's an example:
+
+```php
+$translations = [
+    'en' => 'Hello',
+    'fr' => 'Bonjour',
+    'de' => 'Hallo',
+];
+
+$newsItem->setTranslations('hello', $translations);
+$newsItem->getTranslations('hello', ['en', 'fr']); // returns ['en' => 'Hello', 'fr' => 'Bonjour']
+```
+
+
 #### Setting translations in one go
 
 ``` php
@@ -198,7 +222,7 @@ $newsItem->getTranslations(); // ['en' => 'hello']
 
 #### Setting the model locale
 The default locale used to translate models is the application locale,
-however it can sometimes be handy to use a custom locale.  
+however it can sometimes be handy to use a custom locale.
 
 To do so, you can use `setLocale` on a model instance.
 ``` php
@@ -296,7 +320,7 @@ trait HasTranslations
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-## Upgrading 
+## Upgrading
 
 ### From v2 to v3
 

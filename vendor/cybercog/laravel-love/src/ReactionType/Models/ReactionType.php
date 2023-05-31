@@ -14,43 +14,55 @@ declare(strict_types=1);
 namespace Cog\Laravel\Love\ReactionType\Models;
 
 use Cog\Contracts\Love\ReactionType\Exceptions\ReactionTypeInvalid;
-use Cog\Contracts\Love\ReactionType\Models\ReactionType as ReactionTypeContract;
+use Cog\Contracts\Love\ReactionType\Models\ReactionType as ReactionTypeInterface;
 use Cog\Laravel\Love\Reaction\Models\Reaction;
 use Cog\Laravel\Love\Support\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class ReactionType extends Model implements
-    ReactionTypeContract
+    ReactionTypeInterface
 {
     public const MASS_DEFAULT = 0;
 
     protected $table = 'love_reaction_types';
 
+    /**
+     * @var int[]
+     */
     protected $attributes = [
         'mass' => self::MASS_DEFAULT,
     ];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'name',
         'mass',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'id' => 'string',
         'mass' => 'integer',
     ];
 
+    /**
+     * @var array<self>
+     */
     private static $nameCache = [];
 
     protected static function boot(): void
     {
         parent::boot();
 
-        self::saved(function (ReactionTypeContract $reactionType) {
+        self::saved(function (self $reactionType) {
             self::$nameCache[$reactionType->getName()] = $reactionType;
         });
 
-        self::deleted(function (ReactionTypeContract $reactionType) {
+        self::deleted(function (self $reactionType) {
             unset(self::$nameCache[$reactionType->getName()]);
         });
     }
@@ -62,12 +74,12 @@ final class ReactionType extends Model implements
 
     public static function fromName(
         string $name
-    ): ReactionTypeContract {
+    ): ReactionTypeInterface {
         if (isset(self::$nameCache[$name])) {
             return self::$nameCache[$name];
         }
 
-        /** @var \Cog\Laravel\Love\ReactionType\Models\ReactionType $type */
+        /** @var \Cog\Laravel\Love\ReactionType\Models\ReactionType|null $type */
         $type = self::query()->where('name', $name)->first();
 
         if ($type === null) {
@@ -95,13 +107,13 @@ final class ReactionType extends Model implements
     }
 
     public function isEqualTo(
-        ReactionTypeContract $that
+        ReactionTypeInterface $that
     ): bool {
         return $this->getId() === $that->getId();
     }
 
     public function isNotEqualTo(
-        ReactionTypeContract $that
+        ReactionTypeInterface $that
     ): bool {
         return !$this->isEqualTo($that);
     }

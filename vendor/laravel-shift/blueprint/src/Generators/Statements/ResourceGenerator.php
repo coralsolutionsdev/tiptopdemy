@@ -8,22 +8,27 @@ use Blueprint\Models\Controller;
 use Blueprint\Models\Model;
 use Blueprint\Models\Statements\ResourceStatement;
 use Blueprint\Tree;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ResourceGenerator implements Generator
 {
     const INDENT = '            ';
-    /**
-     * @var \Illuminate\Contracts\Filesystem\Filesystem
-     */
-    private $files;
 
-    /** @var Tree */
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var Tree
+     */
     private $tree;
 
-    public function __construct($files)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->files = $files;
+        $this->filesystem = $filesystem;
     }
 
     public function output(Tree $tree): array
@@ -32,27 +37,29 @@ class ResourceGenerator implements Generator
 
         $output = [];
 
-        $stub = $this->files->stub('resource.stub');
+        $stub = $this->filesystem->stub('resource.stub');
 
-        /** @var \Blueprint\Models\Controller $controller */
+        /**
+         * @var \Blueprint\Models\Controller $controller
+         */
         foreach ($tree->controllers() as $controller) {
             foreach ($controller->methods() as $method => $statements) {
                 foreach ($statements as $statement) {
-                    if (! $statement instanceof ResourceStatement) {
+                    if (!$statement instanceof ResourceStatement) {
                         continue;
                     }
 
                     $path = $this->getPath(($controller->namespace() ? $controller->namespace() . '/' : '') . $statement->name());
 
-                    if ($this->files->exists($path)) {
+                    if ($this->filesystem->exists($path)) {
                         continue;
                     }
 
-                    if (! $this->files->exists(dirname($path))) {
-                        $this->files->makeDirectory(dirname($path), 0755, true);
+                    if (!$this->filesystem->exists(dirname($path))) {
+                        $this->filesystem->makeDirectory(dirname($path), 0755, true);
                     }
 
-                    $this->files->put($path, $this->populateStub($stub, $controller, $statement));
+                    $this->filesystem->put($path, $this->populateStub($stub, $controller, $statement));
 
                     $output['created'][] = $path;
                 }
@@ -96,7 +103,9 @@ class ResourceGenerator implements Generator
     {
         $context = Str::singular($resource->reference());
 
-        /** @var \Blueprint\Models\Model $model */
+        /**
+         * @var \Blueprint\Models\Model $model
+         */
         $model = $this->tree->modelForContext($context);
 
         $data = [];
@@ -112,6 +121,26 @@ class ResourceGenerator implements Generator
         foreach ($this->visibleColumns($model) as $column) {
             $data[] = self::INDENT . '\'' . $column . '\' => $this->' . $column . ',';
         }
+
+        foreach ($model->relationships() as $type => $relationship) {
+            $method_name = lcfirst(Str::afterLast(Arr::last($relationship), '\\'));
+
+            $relation_model = $this->tree->modelForContext($method_name);
+
+            if ($relation_model === null) {
+                continue;
+            }
+
+            if (in_array($type, ['hasMany', 'belongsToMany', 'morphMany'])) {
+                $relation_resource_name = $relation_model->name() . 'Collection';
+                $method_name = Str::plural($method_name);
+            } else {
+                $relation_resource_name = $relation_model->name() . 'Resource';
+            }
+
+            $data[] = self::INDENT . '\'' . $method_name . '\' => ' . $relation_resource_name . '::make($this->whenLoaded(\'' . $method_name . '\')),';
+        }
+
         $data[] = '        ];';
 
         return implode(PHP_EOL, $data);
@@ -119,9 +148,12 @@ class ResourceGenerator implements Generator
 
     private function visibleColumns(Model $model)
     {
-        return array_diff(array_keys($model->columns()), [
-            'password',
-            'remember_token',
-        ]);
+        return array_diff(
+            array_keys($model->columns()),
+            [
+                'password',
+                'remember_token',
+            ]
+        );
     }
 }

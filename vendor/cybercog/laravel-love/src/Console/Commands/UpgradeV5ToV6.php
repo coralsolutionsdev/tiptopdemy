@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Cog\Laravel\Love\Console\Commands;
 
-use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
-use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableInterface;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableInterface;
 use Cog\Laravel\Love\Reaction\Models\Reaction;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -30,7 +33,7 @@ final class UpgradeV5ToV6 extends Command
      *
      * @var string
      */
-    protected $name = 'love:upgrade-v5-to-v6';
+    protected static $defaultName = 'love:upgrade-v5-to-v6';
 
     /**
      * The console command description.
@@ -40,11 +43,23 @@ final class UpgradeV5ToV6 extends Command
     protected $description = 'Upgrade Love package from v5 to v6';
 
     /**
+     * @var Builder
+     */
+    private $queryBuilder;
+
+    public function __construct(Builder $queryBuilder)
+    {
+        parent::__construct();
+
+        $this->queryBuilder = $queryBuilder;
+    }
+
+    /**
      * Execute the console command.
      *
-     * @return void
+     * @return int
      */
-    public function handle(): void
+    public function handle(): int
     {
         $this->dbMigrate();
         $this->populateReactionTypes();
@@ -53,6 +68,8 @@ final class UpgradeV5ToV6 extends Command
         $this->populateReactions();
         $this->dbCleanup();
         $this->filesystemCleanup();
+
+        return 0;
     }
 
     private function dbMigrate(): void
@@ -130,7 +147,7 @@ final class UpgradeV5ToV6 extends Command
                 continue;
             }
 
-            if (!in_array(ReacterableContract::class, class_implements($class))) {
+            if (!in_array(ReacterableInterface::class, class_implements($class))) {
                 $this->warn("Class `{$class}` need to implement Reacterable contract.");
                 continue;
             }
@@ -139,7 +156,7 @@ final class UpgradeV5ToV6 extends Command
         }
 
         foreach ($reacterableClasses as $class) {
-            /** @var \Illuminate\Database\Eloquent\Model[] $reacterables */
+            /** @var Collection<Model> $reacterables */
             $reacterables = $class::query()->get();
             $progress = $this->output->createProgressBar($reacterables->count());
             foreach ($reacterables as $reacterable) {
@@ -177,7 +194,7 @@ final class UpgradeV5ToV6 extends Command
                 continue;
             }
 
-            if (!in_array(ReactableContract::class, class_implements($class))) {
+            if (!in_array(ReactableInterface::class, class_implements($class))) {
                 $this->warn("Class `{$class}` need to implement Reactable contract.");
                 continue;
             }
@@ -186,7 +203,7 @@ final class UpgradeV5ToV6 extends Command
         }
 
         foreach ($reactableClasses as $class) {
-            /** @var \Illuminate\Database\Eloquent\Model[] $reactables */
+            /** @var Collection<Model> $reactables */
             $reactables = $class::query()->get();
             $progress = $this->output->createProgressBar($reactables->count());
             foreach ($reactables as $reactable) {
@@ -210,9 +227,8 @@ final class UpgradeV5ToV6 extends Command
     private function populateReactions(): void
     {
         $this->info('Converting Likes & Dislikes to Reactions');
-        /** @var \Illuminate\Database\Query\Builder $query */
-        $query = DB::query();
-        $likes = $query
+        $likes = $this->queryBuilder
+            ->newQuery()
             ->select('*')
             ->from('love_likes')
             ->orderBy('created_at', 'asc')
@@ -232,7 +248,7 @@ final class UpgradeV5ToV6 extends Command
                 continue;
             }
 
-            /** @var \Cog\Contracts\Love\Reactable\Models\Reactable $reactable */
+            /** @var ReactableInterface $reactable */
             $reactable = $class::whereKey($like->likeable_id)->firstOrFail();
 
             $userClass = $this->getUserClass();
@@ -243,7 +259,7 @@ final class UpgradeV5ToV6 extends Command
                 continue;
             }
 
-            /** @var \Cog\Contracts\Love\Reacterable\Models\Reacterable $reacterable */
+            /** @var ReacterableInterface $reacterable */
             $reacterable = $userClass::whereKey($like->user_id)->firstOrFail();
             $reactionTypeName = $this->reactionTypeNameFromLikeTypeName($like->type_id);
 
@@ -279,19 +295,16 @@ final class UpgradeV5ToV6 extends Command
 
     private function collectLikeableTypes(): iterable
     {
-        /** @var \Illuminate\Database\Query\Builder $query */
-        $query = DB::query();
-        $types = $query
+        return $this->queryBuilder
+            ->newQuery()
             ->select('likeable_type')
             ->from('love_likes')
             ->groupBy('likeable_type')
             ->get()
             ->pluck('likeable_type');
-
-        return $types;
     }
 
-    private function collectLikerTypes(): iterable
+    private function collectLikerTypes(): array
     {
         return [
             $this->getUserClass(),
@@ -300,16 +313,13 @@ final class UpgradeV5ToV6 extends Command
 
     private function collectLikeTypes(): iterable
     {
-        /** @var \Illuminate\Database\Query\Builder $query */
-        $query = DB::query();
-        $types = $query
+        return $this->queryBuilder
+            ->newQuery()
             ->select('type_id')
             ->from('love_likes')
             ->groupBy('type_id')
             ->get()
             ->pluck('type_id');
-
-        return $types;
     }
 
     private function getUserClass(): string

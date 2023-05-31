@@ -5,7 +5,7 @@ namespace App\Modules\Course;
 use App\Modules\Form\Form;
 use App\Modules\Form\FormResponse;
 use App\Modules\Group\Group;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Modules\modelTrail;
 use App\Product;
 use App\User;
@@ -13,14 +13,14 @@ use Bnb\Laravel\Attachments\HasAttachment;
 use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Vinkla\Hashids\Facades\Hashids;
+use Spatie\MediaLibrary\HasMedia;
 
 class Lesson extends Model implements ReactableContract, HasMedia
 {
     use Reactable;
-    use HasMediaTrait;
+    use InteractsWithMedia;
     use HasAttachment;
     use modelTrail;
 
@@ -94,8 +94,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
      */
     public function deleteWithDependencies()
     {
-        $mediaType = Media::TYPE_VIDEO;
-        $this->clearMediaCollection(Media::getGroup($mediaType));
+        $mediaType = MediaFile::TYPE_VIDEO;
+        $this->clearMediaCollection(MediaFile::getGroup($mediaType));
         $this->delete();
     }
 
@@ -176,8 +176,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
             foreach ($removedResources as $key => $removedId){
                 foreach ($lesson->resources as $lessonResource){
                     if ($lessonResource['id'] == $removedId){
-                        if ($lessonResource['type'] == Media::TYPE_VIDEO){
-                            $media = $lesson->getMedia(Media::getGroup($lessonResource['type']))->where('id', $removedId)->first();
+                        if ($lessonResource['type'] == MediaFile::TYPE_VIDEO){
+                            $media = $lesson->getMedia(MediaFile::getGroup($lessonResource['type']))->where('id', $removedId)->first();
                             if ($media){
                                 $media->delete();
                             }
@@ -203,8 +203,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
                 }
             }
         }else{
-            $mediaType = Media::TYPE_VIDEO;
-            $lesson->clearMediaCollection(Media::getGroup($mediaType));
+            $mediaType = MediaFile::TYPE_VIDEO;
+            $lesson->clearMediaCollection(MediaFile::getGroup($mediaType));
         }
 
         $lesson->resources = $resources;

@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 class SluggableObserver
 {
 
+    /** @var string */
+    public const SAVING = 'saving';
+
+    /** @var string */
+    public const SAVED = 'saved';
+
     /**
      * @var \Cviebrock\EloquentSluggable\Services\SlugService
      */
@@ -36,27 +42,47 @@ class SluggableObserver
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
-     * @return boolean|null
+     * @return bool|void
      */
     public function saving(Model $model)
     {
-        return $this->generateSlug($model, 'saving');
+        if ($model->sluggableEvent() !== self::SAVING) {
+            return;
+        }
+
+        $this->generateSlug($model, 'saving');
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return bool|void
+     */
+    public function saved(Model $model)
+    {
+        if ($model->sluggableEvent() !== self::SAVED) {
+            return;
+        }
+        if ($this->generateSlug($model, 'saved')) {
+            return $model->saveQuietly();
+        }
     }
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param string $event
-     * @return boolean|void
+     * @return bool
      */
-    protected function generateSlug(Model $model, string $event)
+    protected function generateSlug(Model $model, string $event): bool
     {
         // If the "slugging" event returns false, abort
         if ($this->fireSluggingEvent($model, $event) === false) {
-            return;
+            return false;
         }
         $wasSlugged = $this->slugService->slug($model);
 
         $this->fireSluggedEvent($model, $wasSlugged);
+
+        return $wasSlugged;
     }
 
     /**
@@ -64,9 +90,9 @@ class SluggableObserver
      *
      * @param  \Illuminate\Database\Eloquent\Model $model
      * @param  string $event
-     * @return mixed
+     * @return bool|null
      */
-    protected function fireSluggingEvent(Model $model, string $event)
+    protected function fireSluggingEvent(Model $model, string $event): ?bool
     {
         return $this->events->until('eloquent.slugging: ' . get_class($model), [$model, $event]);
     }
@@ -76,8 +102,9 @@ class SluggableObserver
      *
      * @param  \Illuminate\Database\Eloquent\Model $model
      * @param  string $status
+     * @return void
      */
-    protected function fireSluggedEvent(Model $model, string $status)
+    protected function fireSluggedEvent(Model $model, string $status): void
     {
         $this->events->dispatch('eloquent.slugged: ' . get_class($model), [$model, $status]);
     }

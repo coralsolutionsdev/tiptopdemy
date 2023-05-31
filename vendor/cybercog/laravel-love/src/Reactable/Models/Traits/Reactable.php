@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Cog\Laravel\Love\Reactable\Models\Traits;
 
 use Cog\Contracts\Love\Reactable\Exceptions\AlreadyRegisteredAsLoveReactant;
-use Cog\Contracts\Love\Reactant\Facades\Reactant as ReactantFacadeContract;
-use Cog\Contracts\Love\Reactant\Models\Reactant as ReactantContract;
-use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Contracts\Love\Reactant\Facades\Reactant as ReactantFacadeInterface;
+use Cog\Contracts\Love\Reactant\Models\Reactant as ReactantInterface;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableInterface;
 use Cog\Laravel\Love\Reactable\Observers\ReactableObserver;
 use Cog\Laravel\Love\Reactant\Facades\Reactant as ReactantFacade;
 use Cog\Laravel\Love\Reactant\Models\NullReactant;
@@ -45,12 +45,12 @@ trait Reactable
         return $this->belongsTo(Reactant::class, 'love_reactant_id');
     }
 
-    public function getLoveReactant(): ReactantContract
+    public function getLoveReactant(): ReactantInterface
     {
         return $this->getAttribute('loveReactant') ?? new NullReactant($this);
     }
 
-    public function viaLoveReactant(): ReactantFacadeContract
+    public function viaLoveReactant(): ReactantFacadeInterface
     {
         return new ReactantFacade($this->getLoveReactant());
     }
@@ -82,7 +82,7 @@ trait Reactable
 
     public function scopeWhereReactedBy(
         Builder $query,
-        ReacterableContract $reacterable,
+        ReacterableInterface $reacterable,
         ?string $reactionTypeName = null
     ): Builder {
         return $query->whereHas('loveReactant.reactions', function (Builder $reactionsQuery) use ($reacterable, $reactionTypeName) {
@@ -95,7 +95,7 @@ trait Reactable
 
     public function scopeWhereNotReactedBy(
         Builder $query,
-        ReacterableContract $reacterable,
+        ReacterableInterface $reacterable,
         ?string $reactionTypeName = null
     ): Builder {
         return $query->whereDoesntHave('loveReactant.reactions', function (Builder $reactionsQuery) use ($reacterable, $reactionTypeName) {
@@ -138,146 +138,5 @@ trait Reactable
         return $query
             ->leftJoin((new ReactionTotal())->getTable() . ' as ' . $alias, "{$alias}.reactant_id", '=', "{$this->getTable()}.love_reactant_id")
             ->select($select);
-    }
-    /*
-     |--------------------------------------------------------------------------
-     | App eaction Methods
-     |--------------------------------------------------------------------------
-     */
-    /**
-     * check if user has reacted to item
-     * @param $type
-     * @return bool
-     */
-    function hasReaction($type)
-    {
-        $user = getAuthUser();
-        if ($user){
-            // get reaction type
-            if (is_null($type)){
-                $type = 'like';
-            }
-            $reactionType = ReactionType::fromName($type);
-            $typeName = $reactionType->getName(); // 'Like'
-            if ($user->isNotRegisteredAsLoveReacter()){ // false
-                $user->registerAsLoveReacter();
-            }
-            $reacterFacade = $user->viaLoveReacter();
-            $isReacted = $reacterFacade->hasReactedTo($this);
-            return $isReacted;
-        }
-        return false;
-    }
-
-    /**
-     * assign reaction to item
-     * @param $type
-     * @param int $weight
-     * @return bool
-     */
-    function addReaction($type,  $weight = 1)
-    {
-        $user = getAuthUser();
-        if ($user){
-            // get reaction type
-            if (is_null($type)){
-                $type = 'like';
-            }
-            $reactionType = ReactionType::fromName($type);
-            $typeName = $reactionType->getName(); // 'Like'
-
-            //model should ne registered ad love reactant
-            if ($this->isNotRegisteredAsLoveReactant()){
-                $this->registerAsLoveReactant();
-            }
-
-            if ($user->isNotRegisteredAsLoveReacter()){ // false
-                $user->registerAsLoveReacter();
-            }
-            try {
-                $user->viaLoveReacter()->reactTo($this, $typeName, $weight);
-            } catch (\Cog\Contracts\Love\Reaction\Exceptions\ReactionAlreadyExists $exception) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * remove reaction from item
-     * @param $type
-     * @param int $weight
-     * @return bool
-     */
-    function removeReaction($type,  $weight = 1)
-    {
-        $user = getAuthUser();
-        if ($user){
-            if ($user){
-                // get reaction type
-                if (is_null($type)){
-                    $type = 'like';
-                }
-                $reactionType = ReactionType::fromName($type);
-                $typeName = $reactionType->getName(); // 'Like'
-
-                //model should ne registered ad love reactant
-                if ($this->isNotRegisteredAsLoveReactant()){
-                    $this->registerAsLoveReactant();
-                }
-
-                if ($user->isNotRegisteredAsLoveReacter()){ // false
-                    $user->registerAsLoveReacter();
-                }
-                try {
-                    $user->viaLoveReacter()->unreactTo($this, $typeName, $weight);
-                } catch (\Cog\Contracts\Love\Reaction\Exceptions\ReactionAlreadyExists $exception) {
-                    return false;
-                }
-
-            }
-        }
-        return false;
-    }
-
-    /**
-     * return reaction count
-     * @param null $type
-     * @return int
-     */
-    public function getReactionCount($type =  null)
-    {
-        if ($this->isNotRegisteredAsLoveReactant()){
-            $this->registerAsLoveReactant();
-        }
-        // get reaction type
-        if (is_null($type)){
-            $type = 'like';
-        }
-        $reactionType = ReactionType::fromName($type);
-        $typeName = $reactionType->getName(); // 'Like'
-        $reactantFacade = $this->viaLoveReactant();
-        $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
-        if (!empty($reactionCounter) && !empty($reactionCounter->count)){
-            return $reactionCounter->count;
-        }
-        return 0;
-    }
-    public function getReactionTotalWeight($type =  null)
-    {
-        if ($this->isNotRegisteredAsLoveReactant()){
-            $this->registerAsLoveReactant();
-        }
-        // get reaction type
-        if (is_null($type)){
-            $type = 'like';
-        }
-        $reactionType = ReactionType::fromName($type);
-        $typeName = $reactionType->getName(); // 'Like'
-        $reactantFacade = $this->viaLoveReactant();
-        $reactionCounter = $reactantFacade->getReactionCounterOfType($typeName);
-        $totalWeight = $reactionCounter->getWeight();
-
-        return $totalWeight;
     }
 }

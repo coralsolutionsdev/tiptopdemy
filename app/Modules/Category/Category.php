@@ -68,7 +68,7 @@ class Category extends Model
     const STATUS_DISABLED = 0;
     const STATUS_ENABLED = 1;
 
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [

@@ -354,7 +354,7 @@
         'Youtube' => 'Youtube',
         'HTML page' => 'HTML page',
         'Embed' => 'Embed',
-        'Media name' => 'Media name',
+        'MediaFile name' => 'MediaFile name',
         'Video upload' => 'Video upload',
         'Drag and drop your files to upload, or' => 'Drag and drop your files to upload, or',
         'Drag and drop your video file to upload, or' => 'Drag and drop your video file to upload, or',
@@ -399,15 +399,15 @@
         'Quizzes' => 'Quizzes',
         'quizzes' => 'Quizzes',
         'There is no available lessons in this unit' => 'There is no available lessons in this unit',
-        'Add Media Item' => 'Add Media Item',
-        'Media items' => 'Media items',
+        'Add MediaFile Item' => 'Add MediaFile Item',
+        'MediaFile items' => 'MediaFile items',
         'Products browser' => 'Products browser',
         'Store\'s products' => 'Store\'s products',
         'Price range' => 'Price range',
         'Lesson rate' => 'Lesson rate',
 
 
-    // Media
+    // MediaFile
         'Uploading' => 'Uploading ...',
 
     // Form

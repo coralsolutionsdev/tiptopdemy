@@ -3,20 +3,28 @@
 namespace Blueprint;
 
 use Doctrine\DBAL\Types\Type;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Database\Eloquent\Model;
 
 class Tracer
 {
     /** @var Filesystem */
-    private $files;
+    private $filesystem;
 
-    public function execute(Blueprint $blueprint, Filesystem $files): array
+    public function execute(Blueprint $blueprint, Filesystem $filesystem, array $paths = null): array
     {
-        $this->files = $files;
+        $this->filesystem = $filesystem;
+
+        if (empty($paths)) {
+            $paths = [Blueprint::appPath()];
+
+            if (config('blueprint.models_namespace')) {
+                $paths[0] .= '/'.str_replace('\\', '/', config('blueprint.models_namespace'));
+            }
+        }
 
         $definitions = [];
-        foreach ($this->appClasses() as $class) {
+        foreach ($this->appClasses($paths) as $class) {
             $model = $this->loadModel($class);
             if (is_null($model)) {
                 continue;
@@ -30,36 +38,35 @@ class Tracer
         }
 
         $cache = [];
-        if ($files->exists('.blueprint')) {
-            $cache = $blueprint->parse($files->get('.blueprint'));
+        if ($filesystem->exists('.blueprint')) {
+            $cache = $blueprint->parse($filesystem->get('.blueprint'));
         }
 
         $cache['models'] = $definitions;
 
-        $files->put('.blueprint', $blueprint->dump($cache));
+        $filesystem->put('.blueprint', $blueprint->dump($cache));
 
         return $definitions;
     }
 
-    private function appClasses()
+    private function appClasses($paths)
     {
-        $dir = Blueprint::appPath();
+        $classes = [];
+        foreach ($paths as $path) {
+            if (!$this->filesystem->exists($path)) {
+                continue;
+            }
 
-        if (config('blueprint.models_namespace')) {
-            $dir .= '/' . str_replace('\\', '/', config('blueprint.models_namespace'));
-        }
-
-        if (!$this->files->exists($dir)) {
-            return [];
+            $classes = array_merge($classes, $this->filesystem->allFiles($path));
         }
 
         return array_map(function (\SplFIleInfo $file) {
-            return str_replace(
-                [Blueprint::appPath() . '/', '/'],
-                [config('blueprint.namespace') . '\\', '\\'],
-                $file->getPath() . '/' . $file->getBasename('.php')
-            );
-        }, $this->files->allFiles($dir));
+            $content = $this->filesystem->get($file->getPathName());
+            preg_match("/namespace ([\w\\\\]+)/", $content, $namespace);
+            preg_match("/class (\w+)/", $content, $class);
+
+            return ($namespace[1] ?? '').'\\'.($class[1] ?? '');
+        }, $classes);
     }
 
     private function loadModel(string $class)
@@ -237,9 +244,6 @@ class Tracer
     private function relativeClassName($model)
     {
         $name = Blueprint::relativeNamespace(get_class($model));
-        if (config('blueprint.models_namespace')) {
-            return $name;
-        }
 
         return ltrim(str_replace(config('blueprint.models_namespace'), '', $name), '\\');
     }

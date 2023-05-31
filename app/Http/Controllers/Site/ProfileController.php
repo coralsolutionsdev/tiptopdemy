@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Jobs\SendValidationMail;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Product;
 use App\Services\FileAssetManagerService;
 use App\Services\MediaManagerService;
@@ -106,7 +106,7 @@ class ProfileController extends Controller
         $countries = getCountries()->pluck('name', 'id')->toArray();
         $directorates = getCountryDirectorates(368)->pluck('title', 'id')->toArray();
         $scopes = getInstitutionScopes(368)->pluck('title', 'id')->toArray(); // iraq
-        $mediaType = Media::TYPE_PRODUCT_IMAGE;
+        $mediaType = MediaFile::TYPE_PRODUCT_IMAGE;
         return view('profile.edit', compact('modelName','page_title', 'breadcrumb', 'user', 'posts_count', 'pictures_count', 'countries', 'directorates', 'scopes', 'mediaType'));
     }
 
@@ -140,8 +140,8 @@ class ProfileController extends Controller
         // media upload
         if (isset($updatedTab) && $updatedTab == 2){
             $mediaInput = $request->only(['media_removed_ids', 'media_position', 'media_id', 'media_files', 'media_new_file_order']);
-            $mediaType = Media::TYPE_PROFILE_IMAGE;
-            $productMedia = $user->getMedia(Media::getGroup($mediaType));
+            $mediaType = MediaFile::TYPE_PROFILE_IMAGE;
+            $productMedia = $user->getMedia(MediaFile::getGroup($mediaType));
             // removed media items
             $mediaRemovedItems = isset($mediaInput['media_removed_ids']) && !empty($mediaInput['media_removed_ids']) ? $mediaInput['media_removed_ids'] :  array();
             if (!empty($mediaRemovedItems)){
@@ -182,7 +182,7 @@ class ProfileController extends Controller
 
                 }
             }else{ // no product images
-                $user->clearMediaCollection(Media::getGroup($mediaType));
+                $user->clearMediaCollection(MediaFile::getGroup($mediaType));
             }
         }
         session()->flash('success', trans('main._update_msg'));

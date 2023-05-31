@@ -21,10 +21,16 @@ abstract class Model extends IlluminateModel
     /**
      * Get the current connection name for the model.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getConnectionName(): ?string
     {
         return Config::get('love.storage.database.connection');
+    }
+
+    public function getTable(): string
+    {
+        return Config::get("love.storage.database.tables.{$this->table}")
+            ?? $this->table;
     }
 }

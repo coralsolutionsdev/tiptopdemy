@@ -4,7 +4,7 @@ namespace App\Modules\Group;
 
 use App\Modules\ColorPattern\ColorPattern;
 use App\Modules\Course\Lesson;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Modules\modelTrail;
 use App\Product;
 use App\User;
@@ -93,7 +93,7 @@ class Group extends Model
     }
     public function mediaItems()
     {
-        return $this->belongsToMany(Media::class,'group_item','group_id', 'model_id')->withPivot('model_id','model_type');
+        return $this->belongsToMany(MediaFile::class,'group_item','group_id', 'model_id')->withPivot('model_id','model_type');
     }
     public function getLessons()
     {

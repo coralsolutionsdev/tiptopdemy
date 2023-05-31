@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Cog\Laravel\Love\Console\Commands;
 
 use Cog\Contracts\Love\Reactable\Exceptions\ReactableInvalid;
-use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableInterface;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -26,7 +27,7 @@ final class RegisterReactants extends Command
      *
      * @var string
      */
-    protected $name = 'love:register-reactants';
+    protected static $defaultName = 'love:register-reactants';
 
     /**
      * The console command description.
@@ -35,6 +36,9 @@ final class RegisterReactants extends Command
      */
     protected $description = 'Register Reactable models as Reactants';
 
+    /**
+     * @return array[]
+     */
     protected function getOptions(): array
     {
         return [
@@ -90,14 +94,14 @@ final class RegisterReactants extends Command
      */
     private function reactableModelFromType(
         string $modelType
-    ): ReactableContract {
+    ): ReactableInterface {
         if (!class_exists($modelType)) {
             $modelType = $this->findModelTypeInMorphMap($modelType);
         }
 
         $model = new $modelType();
 
-        if (!$model instanceof ReactableContract) {
+        if (!$model instanceof ReactableInterface) {
             throw ReactableInvalid::notImplementInterface($modelType);
         }
 
@@ -142,12 +146,12 @@ final class RegisterReactants extends Command
     /**
      * @param \Cog\Contracts\Love\Reactable\Models\Reactable|\Illuminate\Database\Eloquent\Model $reactableModel
      * @param array $modelIds
-     * @return iterable
+     * @return Collection
      */
     private function collectModels(
-        ReactableContract $reactableModel,
+        ReactableInterface $reactableModel,
         array $modelIds
-    ): iterable {
+    ): Collection {
         $query = $reactableModel
             ->query()
             ->whereNull('love_reactant_id');
@@ -159,7 +163,7 @@ final class RegisterReactants extends Command
         return $query->get();
     }
 
-    private function registerModelsAsReactants(iterable $models): void
+    private function registerModelsAsReactants(Collection $models): void
     {
         $collectedCount = $models->count();
         $progressBar = $this->output->createProgressBar($collectedCount);

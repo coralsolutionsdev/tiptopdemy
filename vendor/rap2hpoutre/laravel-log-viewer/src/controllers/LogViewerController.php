@@ -4,10 +4,10 @@ namespace Rap2hpoutre\LaravelLogViewer;
 
 use Illuminate\Support\Facades\Crypt;
 
-if (class_exists("\\Illuminate\\Routing\\Controller")) {
-    class BaseController extends \Illuminate\Routing\Controller {}
-} elseif (class_exists("Laravel\\Lumen\\Routing\\Controller")) {
-    class BaseController extends \Laravel\Lumen\Routing\Controller {}
+if (class_exists("\\Illuminate\\Routing\\Controller")) {	
+    class BaseController extends \Illuminate\Routing\Controller {}	
+} elseif (class_exists("Laravel\\Lumen\\Routing\\Controller")) {	
+    class BaseController extends \Laravel\Lumen\Routing\Controller {}	
 }
 
 /**
@@ -17,9 +17,10 @@ if (class_exists("\\Illuminate\\Routing\\Controller")) {
 class LogViewerController extends BaseController
 {
     /**
-     * @var
+     * @var \Illuminate\Http\Request
      */
     protected $request;
+
     /**
      * @var LaravelLogViewer
      */
@@ -29,7 +30,7 @@ class LogViewerController extends BaseController
      * @var string
      */
     protected $view_log = 'laravel-log-viewer::log';
-	
+
     /**
      * LogViewerController constructor.
      */
@@ -66,6 +67,9 @@ class LogViewerController extends BaseController
             'files' => $this->log_viewer->getFiles(true),
             'current_file' => $this->log_viewer->getFileName(),
             'standardFormat' => true,
+            'structure' => $this->log_viewer->foldersAndFiles(),
+            'storage_path' => $this->log_viewer->getStoragePath(),
+
         ];
 
         if ($this->request->wantsJson()) {
@@ -74,8 +78,10 @@ class LogViewerController extends BaseController
 
         if (is_array($data['logs']) && count($data['logs']) > 0) {
             $firstLog = reset($data['logs']);
-            if (!$firstLog['context'] && !$firstLog['level']) {
-                $data['standardFormat'] = false;
+            if ($firstLog) {
+                if (!$firstLog['context'] && !$firstLog['level']) {
+                    $data['standardFormat'] = false;
+                }
             }
         }
 
@@ -96,7 +102,7 @@ class LogViewerController extends BaseController
             return $this->download($this->pathFromInput('dl'));
         } elseif ($this->request->has('clean')) {
             app('files')->put($this->pathFromInput('clean'), '');
-            return $this->redirect($this->request->url());
+            return $this->redirect(url()->previous());
         } elseif ($this->request->has('del')) {
             app('files')->delete($this->pathFromInput('del'));
             return $this->redirect($this->request->url());

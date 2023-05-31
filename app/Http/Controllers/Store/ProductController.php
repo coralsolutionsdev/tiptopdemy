@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Category;
 use App\GalleryImage;
 use App\Modules\ColorPattern\ColorPattern;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use App\Product;
 use App\ProductImage;
 use App\ProductType;
@@ -76,7 +76,7 @@ class ProductController extends Controller
         $tags = Tag::getWithType('product')->pluck('name', 'name');
         $selectedTags = array();
         $colorPatterns = ColorPattern::where('status', 1)->get();
-        $mediaType = Media::TYPE_PRODUCT_IMAGE;
+        $mediaType = MediaFile::TYPE_PRODUCT_IMAGE;
         $modelItem = new Product();
         return view('store.products.create', compact('page_title', 'breadcrumb', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns', 'mediaType', 'modelItem', 'modelName'));
     }
@@ -116,7 +116,7 @@ class ProductController extends Controller
         $tags = Tag::getWithType('product')->pluck('name', 'name');
         $selectedTags = $product->getTags();
         $colorPatterns = ColorPattern::where('status', 1)->get();
-        $mediaType = Media::TYPE_PRODUCT_IMAGE;
+        $mediaType = MediaFile::TYPE_PRODUCT_IMAGE;
         $modelItem = $product;
         return view('store.products.create', compact('page_title', 'breadcrumb', 'product', 'categories', 'types', 'visibility', 'tree_categories', 'selectedCategories', 'tags', 'selectedTags', 'colorPatterns', 'mediaType', 'modelItem', 'modelName'));
     }
@@ -147,8 +147,8 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if (!empty($product)){
-            $mediaType = Media::TYPE_PRODUCT_IMAGE;
-            $product->clearMediaCollection(Media::getGroup($mediaType));
+            $mediaType = MediaFile::TYPE_PRODUCT_IMAGE;
+            $product->clearMediaCollection(MediaFile::getGroup($mediaType));
         }
         $product->delete();
         session()->flash('success',__('Deleted Successfully'));

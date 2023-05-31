@@ -5,7 +5,7 @@ namespace App\Services;
 
 
 use App\Modules\Group\Group;
-use App\Modules\Media\Media;
+use App\Modules\Media\MediaFile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -27,19 +27,19 @@ class MediaManagerService
     {
         $media = null;
         if (!empty($modelItem) && !empty($mediaType) && !empty($mediaFile)){
-            if (in_array($mediaType, [Media::TYPE_VIDEO, Media::TYPE_IMAGE, Media::TYPE_PRODUCT_IMAGE, Media::TYPE_PROFILE_IMAGE])){
+            if (in_array($mediaType, [MediaFile::TYPE_VIDEO, MediaFile::TYPE_IMAGE, MediaFile::TYPE_PRODUCT_IMAGE, MediaFile::TYPE_PROFILE_IMAGE])){
                 try {
                     $media = $modelItem
                         ->addMedia($mediaFile)
-                        ->toMediaCollection(Media::getGroup($mediaType));
+                        ->toMediaCollection(MediaFile::getGroup($mediaType));
                 } catch (FileException $e){
                     Log::error($e);
                 }
-            } elseif (in_array($mediaType, [Media::TYPE_YOUTUBE, Media::TYPE_HTML_PAGE])){
+            } elseif (in_array($mediaType, [MediaFile::TYPE_YOUTUBE, MediaFile::TYPE_HTML_PAGE])){
                 try {
                     $media = $modelItem
                         ->addMediaFromUrl($mediaFile)
-                        ->toMediaCollection(Media::getGroup($mediaType));
+                        ->toMediaCollection(MediaFile::getGroup($mediaType));
                 } catch (FileException $e){
                     Log::error($e);
                 }
@@ -147,7 +147,7 @@ class MediaManagerService
         $mime = str_replace('/', '-', $file->getMimeType());
         $fileExtension = $file->getClientOriginalExtension();
         $type = strstr($file->getMimeType(), '/', true);
-        $mediaType = Media::TYPE_VIDEO;
+        $mediaType = MediaFile::TYPE_VIDEO;
 
         // Group files by the date (week
         $userPath = md5($user->getTenancyId()).'/'.md5($user->id);
@@ -161,7 +161,7 @@ class MediaManagerService
         // move the file name
         $file->move($finalPath, $fileName);
         $fullPath = $finalPath.$fileName;
-        if ($type == Media::TYPE_VIDEO){
+        if ($type == MediaFile::TYPE_VIDEO){
             $duration =  self::getDuration($fullPath);
         }
         return response()->json([
@@ -193,7 +193,7 @@ class MediaManagerService
         $mime = str_replace('/', '-', $file->getMimeType());
         $fileExtension = $file->getClientOriginalExtension();
         $type = strstr($file->getMimeType(), '/', true);
-        $mediaType = Media::TYPE_VIDEO;
+        $mediaType = MediaFile::TYPE_VIDEO;
 
         // Group files by the date (week
         $userPath = md5($user->getTenancyId()).'/'.md5($user->id);
@@ -207,7 +207,7 @@ class MediaManagerService
         // move the file name
         $file->move($finalPath, $fileName);
         $fullPath = $finalPath.$fileName;
-        if ($type == Media::TYPE_VIDEO){
+        if ($type == MediaFile::TYPE_VIDEO){
             $duration =  self::getDuration($fullPath);
         }
         return [

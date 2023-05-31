@@ -47,7 +47,7 @@
             var item = $('#mediaItem-'+btnId);
             var url = item.attr('url-value');
             copyToClipboard(url);
-            UIkit.notification("<span uk-icon='icon: check'></span> Media url copied to clipboard.", {pos: 'top-center', status:'success'})
+            UIkit.notification("<span uk-icon='icon: check'></span> MediaFile url copied to clipboard.", {pos: 'top-center', status:'success'})
 
         });
     }

@@ -4,6 +4,71 @@ All notable changes to `laravel-love` will be documented in this file.
 
 ## [Unreleased]
 
+## [8.9.0] - 2022-02-23
+
+### Added
+
+- ([#206]) Added Laravel 9 support
+
+## [8.8.1] - 2021-04-03
+
+### Removed
+
+- ([#197]) Dropped PHP 7.1 support
+
+## [8.8.0] - 2021-04-03
+
+### Removed
+
+- ([#196]) Dropped Laravel 5.7 support
+- ([#196]) Dropped Laravel 5.8 support
+
+### Fixed
+
+- ([#196]) Fixed CVE-2021-21263 vulnerability
+- ([#196]) Fixed GHSA-x7p5-p2c9-phvg vulnerability
+
+## [8.7.1] - 2020-12-06
+
+### Fixed
+
+- ([#186]) Improve CLI application performance by replacing `$name` with `$defaultName` static property in commands
+- ([#187]) Fixed inconsistency in method parameter names
+
+## [8.7.0] - 2020-12-06
+
+### Added
+
+- ([#185]) Added PHP 8.x support
+
+## [8.6.1] - 2020-10-04
+
+### Changed
+
+- ([#178]) Rename imported interfaces aliases
+
+## [8.6.0] - 2020-10-02
+
+### Added
+
+- ([#177]) Added accessor methods to aggregates jobs
+
+## [8.5.0] - 2020-09-09
+
+### Added
+
+- ([#176]) Added Laravel 8 support
+
+## [8.4.0] - 2020-05-22
+
+### Added
+
+- ([#165]) Added table names configuration
+
+### Fixed
+
+- ([#161]) Removed redundant queues from Reactant listeners
+
 ## [8.3.1] - 2020-03-06
 
 ### Added
@@ -428,7 +493,16 @@ Follow [upgrade instructions](UPGRADING.md#from-v5-to-v6) to migrate database to
 
 - Initial release
 
-[Unreleased]: https://github.com/cybercog/laravel-love/compare/8.3.1...master
+[Unreleased]: https://github.com/cybercog/laravel-love/compare/8.9.0...master
+[8.9.0]: https://github.com/cybercog/laravel-love/compare/8.8.1...8.9.0
+[8.8.1]: https://github.com/cybercog/laravel-love/compare/8.8.0...8.8.1
+[8.8.0]: https://github.com/cybercog/laravel-love/compare/8.7.1...8.8.0
+[8.7.1]: https://github.com/cybercog/laravel-love/compare/8.7.0...8.7.1
+[8.7.0]: https://github.com/cybercog/laravel-love/compare/8.6.1...8.7.0
+[8.6.1]: https://github.com/cybercog/laravel-love/compare/8.6.0...8.6.1
+[8.6.0]: https://github.com/cybercog/laravel-love/compare/8.5.0...8.6.0
+[8.5.0]: https://github.com/cybercog/laravel-love/compare/8.4.0...8.5.0
+[8.4.0]: https://github.com/cybercog/laravel-love/compare/8.3.1...8.4.0
 [8.3.1]: https://github.com/cybercog/laravel-love/compare/8.3.0...8.3.1
 [8.3.0]: https://github.com/cybercog/laravel-love/compare/8.2.0...8.3.0
 [8.2.0]: https://github.com/cybercog/laravel-love/compare/8.1.2...8.2.0
@@ -468,6 +542,17 @@ Follow [upgrade instructions](UPGRADING.md#from-v5-to-v6) to migrate database to
 [1.1.1]: https://github.com/cybercog/laravel-love/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/cybercog/laravel-love/compare/1.0.0...1.1.0
 
+[#206]: https://github.com/cybercog/laravel-love/pull/206
+[#197]: https://github.com/cybercog/laravel-love/pull/197
+[#196]: https://github.com/cybercog/laravel-love/pull/196
+[#187]: https://github.com/cybercog/laravel-love/pull/187
+[#186]: https://github.com/cybercog/laravel-love/pull/186
+[#185]: https://github.com/cybercog/laravel-love/pull/185
+[#178]: https://github.com/cybercog/laravel-love/pull/178
+[#177]: https://github.com/cybercog/laravel-love/pull/177
+[#176]: https://github.com/cybercog/laravel-love/pull/176
+[#165]: https://github.com/cybercog/laravel-love/pull/165
+[#161]: https://github.com/cybercog/laravel-love/pull/161
 [#158]: https://github.com/cybercog/laravel-love/pull/158
 [#151]: https://github.com/cybercog/laravel-love/pull/151
 [#148]: https://github.com/cybercog/laravel-love/pull/148

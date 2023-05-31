@@ -2,6 +2,29 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.0.0 - 2021-03-21
+
+- require PHP 8+
+- drop support for all PHP 7.x versions
+- use PHP 8 syntax
+
+## 3.11.0 - 2021-01-18
+
+- add methods to determine whether element is the last or first in order (#102)
+
+## 3.10.0 - 2020-11-25
+
+- add support for PHP 8.0
+- drop support for Laravel 5.8
+
+## 3.9.0 - 2020-09-16
+
+- add config file
+
+## 3.8.3 - 2020-09-08
+
+- add support for Laravel 8
+
 ## 3.8.2 - 2020-07-08
 
 - reduce dependency tree (#89)

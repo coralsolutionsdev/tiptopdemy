@@ -7,12 +7,15 @@ use Cviebrock\EloquentSluggable\Tests\Models\PostShortConfig;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomCallableMethod;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomEngine;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomEngine2;
+use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomEngineOptions;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomMethod;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomSeparator;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomSource;
+use Cviebrock\EloquentSluggable\Tests\Models\PostWithIdSource;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithCustomSuffix;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithEmptySeparator;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithForeignRuleset;
+use Cviebrock\EloquentSluggable\Tests\Models\PostWithIdSourceOnSaved;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithMaxLength;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithMaxLengthSplitWords;
 use Cviebrock\EloquentSluggable\Tests\Models\PostWithMultipleSlugs;
@@ -32,95 +35,95 @@ class BaseTests extends TestCase
     /**
      * Test basic slugging functionality.
      */
-    public function testSimpleSlug()
+    public function testSimpleSlug(): void
     {
         $post = Post::create([
             'title' => 'My First Post'
         ]);
-        $this->assertEquals('my-first-post', $post->slug);
+        self::assertEquals('my-first-post', $post->slug);
     }
 
     /**
      * Test basic slugging functionality using short configuration syntax.
      */
-    public function testShortConfig()
+    public function testShortConfig(): void
     {
         $post = PostShortConfig::create([
             'title' => 'My First Post'
         ]);
-        $this->assertEquals('my-first-post', $post->slug);
+        self::assertEquals('my-first-post', $post->slug);
     }
 
     /**
      * Test that accented characters and other stuff is "fixed".
      */
-    public function testAccentedCharacters()
+    public function testAccentedCharacters(): void
     {
         $post = Post::create([
             'title' => 'My Dinner With André & François'
         ]);
-        $this->assertEquals('my-dinner-with-andre-francois', $post->slug);
+        self::assertEquals('my-dinner-with-andre-francois', $post->slug);
     }
 
     /**
      * Test building a slug from multiple attributes.
      */
-    public function testMultipleSource()
+    public function testMultipleSource(): void
     {
         $post = PostWithMultipleSources::create([
             'title' => 'A Post Title',
             'subtitle' => 'A Subtitle'
         ]);
-        $this->assertEquals('a-post-title-a-subtitle', $post->slug);
+        self::assertEquals('a-post-title-a-subtitle', $post->slug);
     }
 
-    public function testLeadingTrailingSpaces()
+    public function testLeadingTrailingSpaces(): void
     {
         $post = Post::create([
             'title' => "\tMy First Post \r\n"
         ]);
-        $this->assertEquals('my-first-post', $post->slug);
+        self::assertEquals('my-first-post', $post->slug);
     }
 
     /**
      * Test building a slug using a custom method.
      */
-    public function testCustomMethod()
+    public function testCustomMethod(): void
     {
         $post = PostWithCustomMethod::create([
             'title' => 'A Post Title',
             'subtitle' => 'A Subtitle'
         ]);
-        $this->assertEquals('eltit-tsop-a', $post->slug);
+        self::assertEquals('eltit-tsop-a', $post->slug);
     }
 
     /**
      * Test building a slug using a custom method.
      */
-    public function testCustomCallableMethod()
+    public function testCustomCallableMethod(): void
     {
         $post = PostWithCustomCallableMethod::create([
             'title' => 'A Post Title',
             'subtitle' => 'A Subtitle'
         ]);
-        $this->assertEquals('eltit-tsop-a', $post->slug);
+        self::assertEquals('eltit-tsop-a', $post->slug);
     }
 
     /**
      * Test building a slug using a custom suffix.
      */
-    public function testCustomSuffix()
+    public function testCustomSuffix(): void
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $post = PostWithCustomSuffix::create([
                 'title' => 'A Post Title',
                 'subtitle' => 'A Subtitle',
             ]);
 
-            if ($i === 0) {
-                $this->assertEquals('a-post-title', $post->slug);
+            if ($i === 1) {
+                self::assertEquals('a-post-title', $post->slug);
             } else {
-                $this->assertEquals('a-post-title-' . chr($i + 96), $post->slug);
+                self::assertEquals('a-post-title-' . chr($i + 95), $post->slug);
             }
         }
     }
@@ -128,34 +131,34 @@ class BaseTests extends TestCase
     /**
      * Test building a slug using the __toString method.
      */
-    public function testToStringMethod()
+    public function testToStringMethod(): void
     {
         $post = PostWithNoSource::create([
             'title' => 'A Post Title'
         ]);
-        $this->assertEquals('a-post-title', $post->slug);
+        self::assertEquals('a-post-title', $post->slug);
     }
 
     /**
      * Test using a custom separator.
      */
-    public function testCustomSeparator()
+    public function testCustomSeparator(): void
     {
         $post = PostWithCustomSeparator::create([
             'title' => 'A post title'
         ]);
-        $this->assertEquals('a.post.title', $post->slug);
+        self::assertEquals('a.post.title', $post->slug);
     }
 
     /**
      * Test using reserved word blocking.
      */
-    public function testReservedWord()
+    public function testReservedWord(): void
     {
         $post = PostWithReservedSlug::create([
             'title' => 'Add'
         ]);
-        $this->assertEquals('add-2', $post->slug);
+        self::assertEquals('add-2', $post->slug);
     }
 
     /**
@@ -163,22 +166,22 @@ class BaseTests extends TestCase
      *
      * @see https://github.com/cviebrock/eloquent-sluggable/issues/5
      */
-    public function testIssue5()
+    public function testIssue5(): void
     {
         $post = Post::create([
             'title' => 'My first post'
         ]);
-        $this->assertEquals('my-first-post', $post->slug);
+        self::assertEquals('my-first-post', $post->slug);
 
         $post->title = 'My first post rocks';
         $post->slug = null;
         $post->save();
-        $this->assertEquals('my-first-post-rocks', $post->slug);
+        self::assertEquals('my-first-post-rocks', $post->slug);
 
         $post->title = 'My first post';
         $post->slug = null;
         $post->save();
-        $this->assertEquals('my-first-post', $post->slug);
+        self::assertEquals('my-first-post', $post->slug);
     }
 
     /**
@@ -186,64 +189,63 @@ class BaseTests extends TestCase
      *
      * @see https://github.com/cviebrock/eloquent-sluggable/issues/20
      */
-    public function testIssue20()
+    public function testIssue20(): void
     {
         $post1 = Post::create([
             'title' => 'My first post'
         ]);
-        $this->assertEquals('my-first-post', $post1->slug);
+        self::assertEquals('my-first-post', $post1->slug);
 
         $post2 = $post1->replicate();
-        $this->assertEquals('my-first-post-1', $post2->slug);
+        self::assertEquals('my-first-post-2', $post2->slug);
     }
 
     /**
      * Test that we don't try and slug models that don't implement Sluggable.
      */
-    public function testNonSluggableModels()
+    public function testNonSluggableModels(): void
     {
-        $post = new PostNotSluggable([
+        $post = PostNotSluggable::create([
             'title' => 'My First Post'
         ]);
-        $post->save();
-        $this->assertEquals(null, $post->slug);
+        self::assertEquals(null, $post->slug);
     }
 
     /**
      * Test for max_length option.
      */
-    public function testMaxLength()
+    public function testMaxLength(): void
     {
         $post = PostWithMaxLength::create([
             'title' => 'A post with a really long title'
         ]);
-        $this->assertEquals('a-post', $post->slug);
+        self::assertEquals('a-post', $post->slug);
     }
 
     /**
      * Test for max_length option with word splitting.
      */
-    public function testMaxLengthSplitWords()
+    public function testMaxLengthSplitWords(): void
     {
         $post = PostWithMaxLengthSplitWords::create([
             'title' => 'A post with a really long title'
         ]);
-        $this->assertEquals('a-post-wit', $post->slug);
+        self::assertEquals('a-post-wit', $post->slug);
     }
 
     /**
      * Test for max_length option with increments.
      */
-    public function testMaxLengthWithIncrements()
+    public function testMaxLengthWithIncrements(): void
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $post = PostWithMaxLength::create([
                 'title' => 'A post with a really long title'
             ]);
-            if ($i == 0) {
-                $this->assertEquals('a-post', $post->slug);
-            } elseif ($i < 10) {
-                $this->assertEquals('a-post-' . $i, $post->slug);
+            if ($i === 1) {
+                self::assertEquals('a-post', $post->slug);
+            } else {
+                self::assertEquals('a-post-' . $i, $post->slug);
             }
         }
     }
@@ -251,16 +253,16 @@ class BaseTests extends TestCase
     /**
      * Test for max_length option with increments and word splitting.
      */
-    public function testMaxLengthSplitWordsWithIncrements()
+    public function testMaxLengthSplitWordsWithIncrements(): void
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $post = PostWithMaxLengthSplitWords::create([
                 'title' => 'A post with a really long title'
             ]);
-            if ($i == 0) {
-                $this->assertEquals('a-post-wit', $post->slug);
-            } elseif ($i < 10) {
-                $this->assertEquals('a-post-wit-' . $i, $post->slug);
+            if ($i === 1) {
+                self::assertEquals('a-post-wit', $post->slug);
+            } else {
+                self::assertEquals('a-post-wit-' . $i, $post->slug);
             }
         }
     }
@@ -268,12 +270,12 @@ class BaseTests extends TestCase
     /**
      * Test for max_length option with a slug that might end in separator.
      */
-    public function testMaxLengthDoesNotEndInSeparator()
+    public function testMaxLengthDoesNotEndInSeparator(): void
     {
         $post = PostWithMaxLengthSplitWords::create([
             'title' => 'It should work'
         ]);
-        $this->assertEquals('it-should', $post->slug);
+        self::assertEquals('it-should', $post->slug);
     }
 
     /**
@@ -281,13 +283,13 @@ class BaseTests extends TestCase
      *
      * @see https://github.com/cviebrock/eloquent-sluggable/issues/32
      */
-    public function testDoesNotNeedSluggingWhenSlugIsSet()
+    public function testDoesNotNeedSluggingWhenSlugIsSet(): void
     {
         $post = Post::create([
             'title' => 'My first post',
             'slug' => 'custom-slug'
         ]);
-        $this->assertEquals('custom-slug', $post->slug);
+        self::assertEquals('custom-slug', $post->slug);
     }
 
     /**
@@ -295,28 +297,50 @@ class BaseTests extends TestCase
      *
      * @see https://github.com/cviebrock/eloquent-sluggable/issues/32
      */
-    public function testDoesNotNeedSluggingWithUpdateWhenSlugIsSet()
+    public function testDoesNotNeedSluggingWithUpdateWhenSlugIsSet(): void
     {
         $post = Post::create([
             'title' => 'My first post',
             'slug' => 'custom-slug'
         ]);
-        $this->assertEquals('custom-slug', $post->slug);
+        self::assertEquals('custom-slug', $post->slug);
 
         $post->title = 'A New Title';
         $post->save();
-        $this->assertEquals('custom-slug', $post->slug);
+        self::assertEquals('custom-slug', $post->slug);
 
         $post->title = 'A Another New Title';
         $post->slug = 'new-custom-slug';
         $post->save();
-        $this->assertEquals('new-custom-slug', $post->slug);
+        self::assertEquals('new-custom-slug', $post->slug);
+    }
+
+    /**
+     * Test that models are still updated even if slug is not updated.
+     *
+     * @see https://github.com/cviebrock/eloquent-sluggable/issues/559
+     */
+    public function testModelStillSavesWhenSlugIsNotUpdated()
+    {
+        $post = Post::create([
+            'title' => 'My Post',
+            'subtitle' => 'My First Subtitle',
+        ]);
+
+        self::assertEquals('my-post', $post->slug);
+
+        $post->subtitle = 'My Second Subtitle';
+        $post->save();
+        $post->refresh();
+
+        self::assertEquals('my-post', $post->slug);
+        self::assertEquals('My Second Subtitle', $post->subtitle);
     }
 
     /**
      * Test generating slug from related model field.
      */
-    public function testSlugFromRelatedModel()
+    public function testSlugFromRelatedModel(): void
     {
         $author = Author::create([
             'name' => 'Arthur Conan Doyle'
@@ -326,75 +350,81 @@ class BaseTests extends TestCase
         ]);
         $post->author()->associate($author);
         $post->save();
-        $this->assertEquals('arthur-conan-doyle-first', $post->slug);
+        self::assertEquals('arthur-conan-doyle-first', $post->slug);
     }
 
     /**
      * Test generating slug when related model doesn't exists.
      */
-    public function testSlugFromRelatedModelNotExists()
+    public function testSlugFromRelatedModelNotExists(): void
     {
         $post = PostWithRelation::create([
             'title' => 'First'
         ]);
-        $this->assertEquals('first', $post->slug);
+        self::assertEquals('first', $post->slug);
     }
 
     /**
      * Test that a null slug source creates a null slug.
      */
-    public function testNullSourceGeneratesEmptySlug()
+    public function testNullSourceGeneratesEmptySlug(): void
     {
         $post = PostWithCustomSource::create([
             'title' => 'My Test Post'
         ]);
-        $this->assertEquals(null, $post->slug);
+        self::assertEquals(null, $post->slug);
     }
 
     /**
      * Test that a zero length slug source creates a null slug.
      */
-    public function testZeroLengthSourceGeneratesEmptySlug()
+    public function testZeroLengthSourceGeneratesEmptySlug(): void
     {
         $post = Post::create([
             'title' => ''
         ]);
-        $this->assertNull($post->slug);
+        self::assertNull($post->slug);
     }
 
     /**
      * Test using custom Slugify rules.
      */
-    public function testCustomEngineRules()
+    public function testCustomEngineRules(): void
     {
-        $post = new PostWithCustomEngine([
+        $post = PostWithCustomEngine::create([
             'title' => 'The quick brown fox jumps over the lazy dog'
         ]);
-        $post->save();
-        $this->assertEquals('tha-qaack-brawn-fax-jamps-avar-tha-lazy-dag', $post->slug);
+        self::assertEquals('tha-qaack-brawn-fax-jamps-avar-tha-lazy-dag', $post->slug);
     }
 
     /**
      * Test using additional custom Slugify rules.
      */
-    public function testCustomEngineRules2()
+    public function testCustomEngineRules2(): void
     {
-        $post = new PostWithCustomEngine2([
+        $post = PostWithCustomEngine2::create([
             'title' => 'The quick brown fox/jumps over/the lazy dog'
         ]);
-        $post->save();
-        $this->assertEquals('the-quick-brown-fox/jumps-over/the-lazy-dog', $post->slug);
+        self::assertEquals('the-quick-brown-fox/jumps-over/the-lazy-dog', $post->slug);
+    }
+
+    public function testCustomEngineOptions(): void
+    {
+        $post = PostWithCustomEngineOptions::create([
+            'title' => 'My First Post'
+        ]);
+        self::assertEquals('My-First-Post', $post->slug);
     }
 
     /**
      * Test using a custom Slugify ruleset.
      */
-    public function testForeignRuleset()
+    public function testForeignRuleset(): void
     {
         $post = PostWithForeignRuleset::create([
             'title' => 'Mia unua poŝto'
         ]);
-        $this->assertEquals('mia-unua-posxto', $post->slug);
+        self::assertEquals('mia-unua-posxto', $post->slug);
     }
 
     /**
@@ -402,84 +432,155 @@ class BaseTests extends TestCase
      *
      * @see https://github.com/cviebrock/eloquent-sluggable/issues/256
      */
-    public function testEmptySeparator()
+    public function testEmptySeparator(): void
     {
-        $post = new PostWithEmptySeparator([
+        $post = PostWithEmptySeparator::create([
             'title' => 'My Test Post'
         ]);
-        $post->save();
-        $this->assertEquals('mytestpost', $post->slug);
+        self::assertEquals('mytestpost', $post->slug);
     }
 
     /**
      * Test models with multiple slug fields.
      */
-    public function testMultipleSlugs()
+    public function testMultipleSlugs(): void
     {
-        $post = new PostWithMultipleSlugs([
+        $post = PostWithMultipleSlugs::create([
             'title' => 'My Test Post',
             'subtitle' => 'My Subtitle',
         ]);
-        $post->save();
 
-        $this->assertEquals('my-test-post', $post->slug);
-        $this->assertEquals('my.subtitle', $post->dummy);
+        self::assertEquals('my-test-post', $post->slug);
+        self::assertEquals('my.subtitle', $post->dummy);
     }
 
     /**
      * Test subscript characters in slug field
      */
-    public function testSubscriptCharacters()
+    public function testSubscriptCharacters(): void
     {
-        $post = new Post([
+        $post = Post::create([
             'title' => 'RDA-125-15/30/45m³/h CAV'
         ]);
-        $post->save();
 
-        $this->assertEquals('rda-125-15-30-45m3-h-cav', $post->slug);
+        self::assertEquals('rda-125-15-30-45m3-h-cav', $post->slug);
     }
 
     /**
      * Test that a false-y string slug source creates a slug.
      */
-    public function testFalsyString()
+    public function testFalsyString(): void
     {
         $post = Post::create([
             'title' => '0'
         ]);
-        $this->assertEquals('0', $post->slug);
+        self::assertEquals('0', $post->slug);
     }
 
     /**
      * Test that a false-y int slug source creates a slug.
      */
-    public function testFalsyInt()
+    public function testFalsyInt(): void
     {
         $post = Post::create([
             'title' => 0
         ]);
-        $this->assertEquals('0', $post->slug);
+        self::assertEquals('0', $post->slug);
     }
 
     /**
      * Test that a boolean true source creates a slug.
      */
-    public function testTrueSource()
+    public function testTrueSource(): void
     {
         $post = Post::create([
             'title' => true
         ]);
-        $this->assertEquals('1', $post->slug);
+        self::assertEquals('1', $post->slug);
     }
 
     /**
      * Test that a boolean false slug source creates a slug.
      */
-    public function testFalseSource()
+    public function testFalseSource(): void
     {
         $post = Post::create([
             'title' => false
         ]);
-        $this->assertEquals('0', $post->slug);
+        self::assertEquals('0', $post->slug);
+    }
+
+    /**
+     * Test that manually setting the slug to "0" doesn't
+     * force a re-slugging.
+     */
+    public function testIssue527(): void
+    {
+        $post = Post::create([
+            'title' => 'example title'
+        ]);
+        self::assertEquals('example-title', $post->slug);
+
+        $post->slug = '0';
+        $post->save();
+        self::assertEquals('0', $post->slug);
+
+        $post->slug = '';
+        $post->save();
+        self::assertEquals('example-title', $post->slug);
+    }
+
+    /**
+     * Test that you can use the model's primary key
+     * as part of the source field when the sluggableEvent
+     * is using the SAVED observer.
+     */
+    public function testPrimaryKeyInSource(): void
+    {
+        $post = PostWithIdSourceOnSaved::create([
+            'title' => 'My First Post'
+        ]);
+        self::assertEquals('my-first-post-1', $post->slug);
+
+        $post2 = PostWithIdSourceOnSaved::create([
+            'title' => 'My Second Post'
+        ]);
+        self::assertEquals('my-second-post-2', $post2->slug);
+
+        $post->title = 'Still My First Post';
+        $post->save();
+        self::assertEquals('still-my-first-post-1', $post->slug);
+    }
+
+    /**
+     * Test that when using the SAVED observer the slug is
+     * actually persisted in storage.
+     */
+    public function testOnSavedPersistsSlug()
+    {
+        $post = PostWithIdSourceOnSaved::create([
+            'title' => 'My Test Post',
+        ]);
+        $post->refresh();
+
+        self::assertEquals('my-test-post-1', $post->slug);
+    }
+
+    /**
+     * Test that you can't use the model's primary key
+     * as part of the source field if the sluggableEvent
+     * is the default SAVING.
+     */
+    public function testPrimaryKeyInSourceOnSaving(): void
+    {
+        $post = PostWithIdSource::create([
+            'title' => 'My First Post'
+        ]);
+        self::assertEquals('my-first-post', $post->slug);
+
+        $post->title = 'Still My First Post';
+        $post->save();
+
+        self::assertEquals('still-my-first-post-1', $post->slug);
     }
 }

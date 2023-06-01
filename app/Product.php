@@ -224,10 +224,11 @@ class Product extends Model implements HasMedia
     {
         $path =  asset_image('assets/no-image.png');
         $images = $this->getMedia(MediaFile::getGroup(MediaFile::TYPE_PRODUCT_IMAGE));
+
         if (!empty($images)){
             $image = $images->first();
             if (!empty($image)){
-                $path = $image->getFullUrl();
+                $path = $image->getUrl();
             }
         }
         return $path;

@@ -133,8 +133,10 @@ class LessonController extends Controller
         $attachments = $lesson->attachments()->get();
         $content = !empty($lesson->content) && !empty($lesson->content['html']) ? $lesson->content['html'] : '';
         // rate data
-        $ratesCount = $lesson->getReactionCount('rate') ?? 0;
-        $ratesTotalWeight = $lesson->getReactionTotalWeight('rate') ?? 0;
+//        $ratesCount = $lesson->getReactionCount('rate') ?? 0;
+//        $ratesTotalWeight = $lesson->getReactionTotalWeight('rate') ?? 0;
+        $ratesCount = 0;
+        $ratesTotalWeight =  0;
         $rateAverage = $ratesCount > 0 && $ratesTotalWeight > 0 ? $ratesTotalWeight / $ratesCount : 0;
         $rateData = [
             'rate_count' => $ratesCount,

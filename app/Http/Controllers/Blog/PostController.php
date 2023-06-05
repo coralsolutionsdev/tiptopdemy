@@ -77,7 +77,7 @@ class PostController extends Controller
         }else{
             $posts = BlogPost::latest()->where('status','1')->paginate(10);
         }
-        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','count','categories','search_key', 'modelName'));
+        return view('blog.frontend.index', compact('page_title', 'breadcrumb','posts','search_key', 'modelName'));
     }
 
     /**

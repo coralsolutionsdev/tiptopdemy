@@ -36,7 +36,8 @@
 								<p>{{substr(strip_tags($post->content),0,50)}} {{strlen($post->content) > 50 ? "...": "" }}</p>
 							</td>
 {{--							<td class="text-center align-middle">{{ucfirst($post->category->title)}}</td>--}}
-							<td class="text-center align-middle">{{$post->getReactionCount('like')}}</td>
+{{--							<td class="text-center align-middle">{{$post->getReactionCount('like')}}</td>--}}
+							<td class="text-center align-middle">0</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->status) !!}</td>
 							<td class="text-center align-middle">{!! getStatusIcon($post->allow_comments_status) !!}</td>
 							<td class="text-center align-middle"><a href="{{route('blog.post.comments.show', $post->slug)}}" class="btn btn-light">{{__('main.View')}} ({{$post->comments->count()}})</a></td>

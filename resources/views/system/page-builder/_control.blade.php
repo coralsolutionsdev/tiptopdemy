@@ -245,10 +245,15 @@
                         </div>
                         <div class="uk-margin-small">
                             <label class="uk-form-label" for="form-stacked-text">Hotspot color</label>
-                            <div class="uk-form-controls">
+                            {{-- <div class="uk-form-controls">
                                 <label><input class="uk-radio hotspot-color hotspot-color-dark" type="radio" name="hotspot-color" value="uk-dark"> Dark</label>
                                 <label><input class="uk-radio hotspot-color hotspot-color-light" type="radio" name="hotspot-color" value="uk-light"> light</label>
+                            </div> --}}
+
+                            <div class="col-lg-9" style="padding: 10px 0 10px 10px; margin: 0px">
+                                <input type="text" id="wheel-color_picker" name="hotspot-color" class="form-control color_picker hotspot-color" data-control="wheel" value="#000">
                             </div>
+                           
                         </div>
                         <div class="uk-margin-small uk-text-right">
 {{--                            <span class="uk-button uk-button-primary save-changes-hotspot-marker uk-button-small" style="padding: 5px 15px">Save changes</span>--}}

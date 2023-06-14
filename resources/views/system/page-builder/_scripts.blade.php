@@ -684,21 +684,13 @@
             });
             $(document).off('change');
             $(document).on('change', '.hotspot-color', function() {
+                var pin = $('.pb-marker-pin-'+id);
                 inputLeftValue = $(this).val();
                 editableMarker.attr('color-class-value', )
-                if (inputLeftValue == 'uk-dark'){
-                    editableMarker.removeClass('uk-light');
-                    editableMarker.addClass('uk-dark');
-                    marker.removeClass('uk-light');
-                    marker.addClass('uk-dark');
-                    marker.attr('color-class-value','uk-dark')
-                }else{
-                    editableMarker.removeClass('uk-dark');
-                    editableMarker.addClass('uk-light');
-                    marker.removeClass('uk-dark');
-                    marker.addClass('uk-light');
-                    marker.attr('color-class-value','uk-light')
-                }
+                pin.css('backgroundColor', inputLeftValue);
+                marker.find('.pb-marker-pin').css("backgroundColor", inputLeftValue);
+
+                
                 // marker.find('.pb-marker-pin').css("left", inputLeftValue+"%");
                 // marker.find('.pb-marker-pin').attr("left-value", inputLeftValue);
             });
@@ -738,6 +730,7 @@
             activeMarkerId = itemId;
             tinymce.remove('.pb-marker-description-content-editor');
             var widgetItem = $('#pbMarker-'+itemId);
+            var widgetItemPinColor = widgetItem.find('.pb-marker-pin').css("backgroundColor");
             var markerEditor = $('.marker-editor');
             markerEditor.show();
             var widgetItemTitle = '';
@@ -746,12 +739,9 @@
             var widgetItemLeft = widgetItem.find('.pb-marker-pin').attr('left-value');
             var widgetItemColor = widgetItem.attr('color-class-value');
             // temp
-            if (widgetItemColor == 'uk-dark'){
-                $('.hotspot-color-dark').prop('checked', true)
-            }else{
-                $('.hotspot-color-light').prop('checked', true)
-            }
-
+            
+            $('.hotspot-color').val(widgetItemPinColor)
+    
             // update marker editor
             $('.pb-marker-description-content-editor').val(widgetItemDescription);
             $('.hidden-textarea-input').val(widgetItemDescription);

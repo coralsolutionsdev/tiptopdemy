@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Media;
+namespace App\Http\Controllers\MediaFile;
 
 use App\Modules\Course\Lesson;
 use App\Modules\Group\Group;
@@ -33,7 +33,6 @@ class MediaController extends Controller
      */
     public function index()
     {
-        dd('here');
         $page_title =  'File Manager';
         $breadcrumb =  [];
         $user = getAuthUser();

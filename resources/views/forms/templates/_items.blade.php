@@ -377,6 +377,14 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="uk-margin uk-grid-small" uk-grid>
+                                <div class="uk-width-auto@m uk-flex uk-flex-middle">
+                                    <label>Similarity Code:</label>
+                                </div>
+                                <div class="uk-width-expand@m ">
+                                    <input type="text" class="uk-input uk-form-small input-similarity-code">
+                                </div>
+                            </div>
                         </li>
                         <li class="uk-placeholder item-config-section">
                             <label class="uk-form-label h-header" for="">Display type</label>

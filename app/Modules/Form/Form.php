@@ -173,6 +173,7 @@ class Form extends Model
             'feedback_incorrect' => isset($input['feedback_incorrect']) ?  $input['feedback_incorrect'] : null,
             'feedback_retry' => isset($input['feedback_retry']) ?  $input['feedback_retry'] : null,
             'submission_title' => isset($input['submission_title']) ?  $input['submission_title'] : null,
+            'submission_title' => isset($input['submission_title']) ?  $input['submission_title'] : null,
         ];
         $input['properties'] = $properties;
 
@@ -250,6 +251,7 @@ class Form extends Model
                 'evaluation' => isset($input['item_evaluation'][$id]) ? $input['item_evaluation'][$id] : 1,
                 'taxonomies_a' => isset($input['item_taxonomy'][$id]) ? $input['item_taxonomy'][$id] : array(),
                 'extra_blanks' => isset($input['item_extra_blanks'][$id]) ? $input['item_extra_blanks'][$id] : array(),
+                'similarity_code' => isset($input['item_similarity_code'][$id]) ? $input['item_similarity_code'][$id] : null,
             ];
             $newItem['score'] = isset($input['item_score'][$id]) ? $input['item_score'][$id] : 0;
             $newItem['properties'] = $properties;

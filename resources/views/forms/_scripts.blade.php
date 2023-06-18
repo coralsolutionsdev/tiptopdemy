@@ -756,6 +756,8 @@
 
         item.find('.input-evaluation-auto').attr('name', 'item_evaluation['+itemId+']');
         item.find('.input-evaluation-manual').attr('name', 'item_evaluation['+itemId+']');
+       
+        item.find('.input-similarity-code').attr('name', 'item_similarity_code['+itemId+']');
 
         // input-taxonomy
         var taxonomies = item.find('.input-taxonomy');
@@ -897,6 +899,10 @@
                     }
                 }
 
+                if(properties.similarity_code != null){
+                    item.find('.input-similarity-code').val(properties.similarity_code);
+                }
+
             }
             // update tag_taxonomies
             var tagTaxonomies = formItem.tag_taxonomies;
@@ -1030,6 +1036,7 @@
                 properties.display = 1;
             }
             properties.width = item.find('.input-width').val();
+            properties.similarity_code = item.find('.input-similarity-code').val();
 
             // update options
             if(itemType == typeFillTheBlank || itemType == typeFillTheBlankDragAndDrop || itemType == typeFillTheBlankReArrange){

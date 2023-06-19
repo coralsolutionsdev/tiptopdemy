@@ -251,7 +251,7 @@
                             </div> --}}
 
                             <div class="col-lg-9" style="padding: 10px 0 10px 10px; margin: 0px">
-                                <input type="text" id="wheel-color_picker" name="hotspot-color" class="form-control color_picker hotspot-color" data-control="wheel" value="#000">
+                                <input type="text" id="wheel-color_picker" name="hotspot-color" class="form-control color_picker hotspot-color" data-control="wheel" value="#7dffb5">
                             </div>
                            
                         </div>

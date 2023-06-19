@@ -178,6 +178,7 @@
                     <span style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
                     <span style="margin: 0 10px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
                     <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
+                    <br><br><input type="text" class="uk-input uk-form-small input-similarity-code" placeholder="Similarity Code:">
                 </span>
             </div>
             <div class="uk-margin-remove">
@@ -377,14 +378,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="uk-margin uk-grid-small" uk-grid>
+                            {{-- <div class="uk-margin uk-grid-small" uk-grid>
                                 <div class="uk-width-auto@m uk-flex uk-flex-middle">
                                     <label>Similarity Code:</label>
                                 </div>
                                 <div class="uk-width-expand@m ">
                                     <input type="text" class="uk-input uk-form-small input-similarity-code">
                                 </div>
-                            </div>
+                            </div> --}}
                         </li>
                         <li class="uk-placeholder item-config-section">
                             <label class="uk-form-label h-header" for="">Display type</label>

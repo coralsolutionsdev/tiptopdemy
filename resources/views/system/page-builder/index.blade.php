@@ -41,6 +41,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{asset('plugins/dropzone/dropzone.css')}}">
   <script src="{{asset('/plugins/dropzone/dropzone.js')}}"></script>
+  <!-- MiniColors -->
+  <link rel="stylesheet" href="{{asset('plugins/color_picker/jquery.minicolors.css')}}">
   <style>
     :root{
       --theme-secondary-bg-color: #F3F5F9;
@@ -207,7 +209,18 @@
   </li>
 @endif
 <script src="{{asset('js/app.js?v=202101201920')}}"></script>
-
+<script src="{{asset('plugins/color_picker/jquery.minicolors.js')}}"></script>
+<script>
+    $('.color_picker').minicolors({
+        control: 'wheel',
+        theme: 'bootstrap'
+    });
+    $('.color_picker').change(function () {
+        var input =  $(this);
+        var new_color = input.val();
+        input.val(new_color);
+    });
+</script>
 @include('partial.scripts._tinyemc')
 @include('system.page-builder._scripts')
 {{--@include('system.file-manager._scripts')--}}

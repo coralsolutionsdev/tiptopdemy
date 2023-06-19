@@ -215,6 +215,7 @@ class FormController extends Controller
         $page_title =  'Smart form';
         $product = $lesson->product;
         $productGroups = $product->groups;
+        $breadcrumb = $this->breadcrumb;
         $lessonUnit = $lesson->groups->first();
         $unitNumber = getCollectionIndexOfId($productGroups, $lessonUnit)+1;
         $lessonNumber = getCollectionIndexOfId($lessonUnit->getLessons, $lesson)+1;
@@ -223,6 +224,8 @@ class FormController extends Controller
 
     function smartGetItems(Request $request, Lesson $lesson){
         $input = $request->all();
+        $similarity_exceptions = request('similarity_exceptions',[]);
+        $exceptions = request('exceptions',[]);
         $message = 'no message';
         $product = $lesson->product;
         $productGroups = $product->groups;
@@ -327,18 +330,25 @@ class FormController extends Controller
                                             // Uniform filter end
 
                                             if ($sourceFilterStatus && $taxAFilterStatus && $uniformFilterStatus && $taxBFilterStatus){
+                                                
+                                                $similarityCode = $formItem->properties['similarity_code'] ?? null;
+                                                
+                                                if (!in_array($similarityCode,$similarity_exceptions) && !in_array($formItem->id,$exceptions)) { 
 
-                                                $title = $formItem->title;
-                                                if ($formItem->type == FormItem::TYPE_FILL_THE_BLANK || $formItem->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
-                                                    $title = subContent($formItem->getFillableBlank($formItem->id, false), 75);
+                                                    $title = $formItem->title;
+                                                    if ($formItem->type == FormItem::TYPE_FILL_THE_BLANK || $formItem->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                                                        $title = subContent($formItem->getFillableBlank($formItem->id, false), 75);
+                                                    }
+    
+    
+                                                    $questionsArray[] = [
+                                                        'id' => $formItem->id,
+                                                        'title' => $title,
+                                                        'type' => $formItem->type,
+                                                        'similarity_code' => $formItem->properties['similarity_code'] ?? null,
+                                                    ] ;
                                                 }
 
-
-                                                $questionsArray[] = [
-                                                    'id' => $formItem->id,
-                                                    'title' => $title,
-                                                    'type' => $formItem->type,
-                                                ] ;
                                             }
 
                                         }
@@ -353,6 +363,9 @@ class FormController extends Controller
             }
 
         }
+
+        // dd($questionsArray);
+
         return response($questionsArray, 200);
     }
 

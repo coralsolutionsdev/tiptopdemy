@@ -471,8 +471,9 @@ export default {
       showForms:false,
       defaultQuestion:null,
       tags:[],
-      myOptions: [] // or [{id: key, text: value}, {id: key, text: value}]
-
+      myOptions: [], // or [{id: key, text: value}, {id: key, text: value}]
+      exceptions:[], // items that already added 
+      similarity_exceptions:[], /// items that have similar (similarity_code) with the added items
     }
   },
   created() {
@@ -555,6 +556,8 @@ export default {
         taxonomies_b:question.taxonomies_b,
         uniform:question.uniform,
         type:question.type,
+        similarity_exceptions:this.similarity_exceptions,
+        exceptions:this.exceptions,
       };
       axios.post('/manage/store/lesson/'+this.lessonSlug+'/form/smart/get/items', data)
           .then(res => {
@@ -564,6 +567,10 @@ export default {
             var randomQuestion =  question.questionItems[Math.floor(Math.random()*question.questionItems.length)]
             if (question.questionItems.length > 0){
               question.selectedQuestionItemId = randomQuestion.id;
+              this.exceptions.push(randomQuestion.id);
+              if (randomQuestion.similarity_code) {
+                this.similarity_exceptions.push(randomQuestion.similarity_code);
+              }
             } else {
               this.$Notify({
                 title: 'No questions',

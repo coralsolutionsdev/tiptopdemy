@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Form;
 
-use App\Http\Controllers\Controller;
-use App\Modules\Course\Lesson;
+use Hashids\Hashids;
 use App\Modules\Form\Form;
+use Illuminate\Http\Request;
+use App\Modules\Course\Lesson;
 use App\Modules\Form\FormItem;
 use App\Modules\Form\FormResponse;
-use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
+use App\Http\Controllers\Controller;
 
 class ResponseController extends Controller
 {
@@ -232,7 +232,8 @@ class ResponseController extends Controller
         $newItemInput['score_info'] = $scoreInfo;
         $newItemInput['creator_id'] = getAuthUser() ? getAuthUser()->id : null;
         $response = FormResponse::create($newItemInput);
-        $response->hash_id = Hashids::encode(1,$lesson->id,$response->id);
+        $hashids = new Hashids();
+        $response->hash_id = $hashids->encode(1,$lesson->id,$response->id);
         $response->save();
         session()->flash('success', trans('main.Quiz has been submitted successfully'));
         return redirect()->route('store.lesson.show',[$lesson->product->slug, $lesson->slug]);

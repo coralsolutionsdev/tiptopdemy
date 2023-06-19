@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Store;
 
 use App\Category;
-use App\Http\Controllers\Controller;
-use App\Modules\Course\Lesson;
+use Hashids\Hashids;
+use Spatie\Tags\Tag;
 use App\Modules\Form\Form;
-use App\Modules\Form\FormItem;
 use App\Modules\Group\Group;
-use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Spatie\Tags\Tag;
-use Vinkla\Hashids\Facades\Hashids;
+use App\Modules\Course\Lesson;
+use App\Modules\Form\FormItem;
+use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 
 class FormController extends Controller
 {
@@ -107,8 +107,11 @@ class FormController extends Controller
         $timeLimit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
         $backUrl = route('store.lesson.show', [$product->slug, $lesson->slug]);
         // rate data
-        $ratesCount = $lesson->getReactionCount('rate') ?? 0;
-        $ratesTotalWeight = $lesson->getReactionTotalWeight('rate') ?? 0;
+        //// ask mr.mehmet about it later /// why theses funcs r not defined
+        // $ratesCount = $lesson->getReactionCount('rate') ?? 0; 
+        $ratesCount = (method_exists($lesson, 'getReactionCount') ? $lesson->getReactionCount('rate') : 0);
+        // $ratesTotalWeight = $lesson->getReactionTotalWeight('rate') ?? 0;
+        $ratesTotalWeight = (method_exists($lesson, 'getReactionTotalWeight') ? $lesson->getReactionTotalWeight('rate') : 0);
         $rateAverage = $ratesCount > 0 && $ratesTotalWeight > 0 ? $ratesTotalWeight / $ratesCount : 0;
         $rateData = [
             'rate_count' => $ratesCount,
@@ -375,6 +378,7 @@ class FormController extends Controller
      * @return Application|ResponseFactory|Response
      */
     function smartStore(Request $request, Lesson $lesson){
+        $hashids = new Hashids();
         $requestInput = $request->only(['settings', 'groups']);
         $settings = $requestInput['settings'];
         $groups = $requestInput['groups'];
@@ -413,8 +417,8 @@ class FormController extends Controller
         $input['properties'] = $properties;
         // create new form
         $form =  Form::create($input);
-        $form->slug = Hashids::encode($user->getTenancyId(),$ownerId,$form->id); // change this
-        $form->hash_id = Hashids::encode($user->getTenancyId(),$ownerId,$form->id);
+        $form->slug = $hashids->encode($user->getTenancyId(),$ownerId,$form->id); // change this
+        $form->hash_id = $hashids->encode($user->getTenancyId(),$ownerId,$form->id);
         $form->save();
         // attach created form to the owner (Lesson)
         if(!empty($owner)){
@@ -457,7 +461,7 @@ class FormController extends Controller
             ];
             $newSection['properties'] = $properties;
             $newFormSection =  FormItem::create($newSection);
-            $newFormSection->hash_id = Hashids::encode($user->getTenancyId(),$form->id,$newFormSection->id);
+            $newFormSection->hash_id = $hashids->encode($user->getTenancyId(),$form->id,$newFormSection->id);
             $newFormSection->save();
 
             // create section's formItems

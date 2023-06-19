@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\Media;
 
-use App\Modules\Course\Lesson;
+use Hashids\Hashids;
 use App\Modules\Group\Group;
-use App\Modules\Media\MediaFile;
-use App\Http\Controllers\Controller;
-use App\Services\FileAssetManagerService;
-use App\Services\MediaManagerService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Illuminate\Support\Facades\Storage;
-use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
-use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
-use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
-use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
-use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
-use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
-use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
+use App\Modules\Course\Lesson;
+use App\Modules\Media\MediaFile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Services\MediaManagerService;
+use Illuminate\Support\Facades\Storage;
+use App\Services\FileAssetManagerService;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Vinkla\Hashids\Facades\Hashids;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
+
 
 class MediaController extends Controller
 {
@@ -359,7 +360,8 @@ class MediaController extends Controller
             $user = getAuthUser();
             $mediaInfo = $path = $url = null;
             $file = $request->file;
-            $companyHashId = Hashids::encode(1);
+            $hashids = new Hashids();
+            $companyHashId = $hashids->encode(1);
             $fileName = $file->getClientOriginalName();
 
             if (isset($_SERVER['HTTP_ORIGIN'])) {

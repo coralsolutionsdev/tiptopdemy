@@ -3,10 +3,10 @@
 namespace App\Modules\Form;
 
 use App\User;
-use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Type;
+use Hashids\Hashids;
 use Spatie\Tags\HasTags;
-use Vinkla\Hashids\Facades\Hashids;
+use phpDocumentor\Reflection\Type;
+use Illuminate\Database\Eloquent\Model;
 
 class FormItem extends Model
 {
@@ -233,7 +233,8 @@ class FormItem extends Model
             $input['type'] = FormItem::TYPE_MEMORIZE;
             $input['creator_id'] = $owner->id;
             $item = FormItem::create($input);
-            $item->hash_id = Hashids::encode(1,$owner->id,$item->id);
+            $hashids = new Hashids();
+            $item->hash_id = $hashids->encode(1,$owner->id,$item->id);
             $item->save();
         }else{
             $item->update($input);

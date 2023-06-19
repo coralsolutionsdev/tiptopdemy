@@ -2,13 +2,13 @@
 
 namespace App\Modules\Store;
 
-use App\UniqueId;
 use App\User;
+use App\UniqueId;
+use Carbon\Carbon;
+use Hashids\Hashids;
+use League\Flysystem\Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
-use League\Flysystem\Exception;
-use Vinkla\Hashids\Facades\Hashids;
 
 
 class Invoice extends Model
@@ -131,7 +131,8 @@ class Invoice extends Model
      */
     public function encodeHashedId()
     {
-        return  Hashids::encode($this->creator_id,$this->order_id,$this->id);
+        $hashids = new Hashids();
+        return  $hashids->encode($this->creator_id,$this->order_id,$this->id);
     }
 
     /**
@@ -145,7 +146,7 @@ class Invoice extends Model
         if (is_null($hashedId) || empty($hashedId)){
             throw new Exception('invalid hashed ID ');
         }
-        $numbers = Hashids::decode($hashedId);
+        $numbers = $hashids->decode($hashedId);
         return [
             'user_id' => $numbers[0],
             'order_id' => $numbers[1],

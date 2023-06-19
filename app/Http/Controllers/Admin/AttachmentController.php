@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Hashids\Hashids;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\FileAssetManagerService;
-use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
+
 
 class AttachmentController extends Controller
 {
@@ -14,7 +15,8 @@ class AttachmentController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file;
-            $companyHashId = Hashids::encode(1);
+            $hashids = new Hashids();
+            $companyHashId = $hashids->encode(1);
             $fileName = $file->getClientOriginalName();
 
             if (isset($_SERVER['HTTP_ORIGIN'])) {

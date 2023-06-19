@@ -4,8 +4,8 @@
 namespace App\Modules\Group;
 
 
+use Hashids\Hashids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Vinkla\Hashids\Facades\Hashids;
 
 trait HasGroup
 {
@@ -22,7 +22,8 @@ trait HasGroup
         $input['owner_type'] = $this->getClassName();
         $input['owner_id'] = $this->id;
         $group =  Group::create($input);
-        $group->slug = Hashids::encode($user->getTenancyId(),$this->id,$group->id);
+        $hashids = new Hashids();
+        $group->slug = $hashids->encode($user->getTenancyId(),$this->id,$group->id);
         $group->save();
         return $group;
     }

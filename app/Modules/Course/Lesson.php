@@ -2,20 +2,20 @@
 
 namespace App\Modules\Course;
 
+use App\User;
+use App\Product;
+use Hashids\Hashids;
 use App\Modules\Form\Form;
-use App\Modules\Form\FormResponse;
+use App\Modules\modelTrail;
 use App\Modules\Group\Group;
 use App\Modules\Media\MediaFile;
-use App\Modules\modelTrail;
-use App\Product;
-use App\User;
-use Bnb\Laravel\Attachments\HasAttachment;
-use Illuminate\Database\Eloquent\Model;
-use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
-use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Vinkla\Hashids\Facades\Hashids;
 use Spatie\MediaLibrary\HasMedia;
+use App\Modules\Form\FormResponse;
+use Illuminate\Database\Eloquent\Model;
+use Bnb\Laravel\Attachments\HasAttachment;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 
 class Lesson extends Model implements ReactableContract, HasMedia
 {
@@ -150,7 +150,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
             $lesson->update($input);
         }else{
             $lesson = self::create($input);
-            $lesson->slug = Hashids::encode($user->getTenancyId(),$input['product_id'],$lesson->id);
+            $hashids = new Hashids();
+            $lesson->slug = $hashids->encode($user->getTenancyId(),$input['product_id'],$lesson->id);
             $lesson->save();
         }
 

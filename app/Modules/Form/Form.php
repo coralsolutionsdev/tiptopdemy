@@ -2,12 +2,12 @@
 
 namespace App\Modules\Form;
 
-use App\Modules\Course\Lesson;
 use App\User;
+use Hashids\Hashids;
+use Spatie\Tags\HasTags;
+use App\Modules\Course\Lesson;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Tags\HasTags;
-use Vinkla\Hashids\Facades\Hashids;
 
 class Form extends Model
 {
@@ -144,6 +144,7 @@ class Form extends Model
     public static function createOrUpdate($input,$owner = null, $form = null)
     {
         // TODO: update the method to create form without owner
+        $hashids = new Hashids();
         $iDs = isset($input['item_id'])? $input['item_id'] : array();
         $typeArray = isset($input['item_type']) ? $input['item_type'] : array();
         $existingForm = !empty($form) ? $form : null;
@@ -190,8 +191,8 @@ class Form extends Model
 
         if ($createNew == true || empty($form) || is_null($form)){
             $form =  self::create($input);
-            $form->slug = Hashids::encode(1,$ownerId,$form->id); // change this
-            $form->hash_id = Hashids::encode(1,$ownerId,$form->id);
+            $form->slug = $hashids->encode(1,$ownerId,$form->id); // change this
+            $form->hash_id = $hashids->encode(1,$ownerId,$form->id);
             $form->save();
             if(!empty($owner)){
                 $owner->forms()->attach($form->id);
@@ -264,12 +265,12 @@ class Form extends Model
                     $newFormItem->update($newItem);
                 }else{
                     $newFormItem =  FormItem::create($newItem);
-                    $newFormItem->hash_id = Hashids::encode(1,$form->id,$newFormItem->id);
+                    $newFormItem->hash_id = $hashids->encode(1,$form->id,$newFormItem->id);
                     $newFormItem->save();
                 }
             }else{
                 $newFormItem =  FormItem::create($newItem);
-                $newFormItem->hash_id = Hashids::encode(1,$form->id,$newFormItem->id);
+                $newFormItem->hash_id = $hashids->encode(1,$form->id,$newFormItem->id);
                 $newFormItem->save();
             }
             // update section score
@@ -367,8 +368,8 @@ class Form extends Model
         $ownerId = !empty($owner)? $owner->id : 0;
         $newForm = $this->replicate();
         $newForm->push();
-        $newForm->slug = Hashids::encode(1,$ownerId,$newForm->id); // change this
-        $newForm->hash_id = Hashids::encode(1,$ownerId,$newForm->id);
+        $newForm->slug = $hashids->encode(1,$ownerId,$newForm->id); // change this
+        $newForm->hash_id = $hashids->encode(1,$ownerId,$newForm->id);
         $newForm->type = $input['type'];
         $newForm->title = isset($input['title']) ? $input['title'] : $newForm->title;
         $newForm->save();
@@ -419,6 +420,7 @@ class Form extends Model
         if (!$user){
             abort(500);
         }
+        $hashids = new Hashids();
         $existingForm = !empty($form) ? $form : null;
         $input['version'] = !empty($existingForm) ? $existingForm->version : 0;
         $input['master_id'] = null;
@@ -439,8 +441,8 @@ class Form extends Model
         if (empty($form)){
             $input['creator_id'] = $user->id;
             $form = Form::create($input);
-            $form->slug = Hashids::encode($user->getTenancyId(),$ownerId,$form->id); // change this
-            $form->hash_id = Hashids::encode($user->getTenancyId(),$ownerId,$form->id);
+            $form->slug = $hashids->encode($user->getTenancyId(),$ownerId,$form->id); // change this
+            $form->hash_id = $hashids->encode($user->getTenancyId(),$ownerId,$form->id);
             $form->save();
             if(!empty($owner)){
                 $owner->forms()->attach($form->id);
@@ -480,7 +482,7 @@ class Form extends Model
                 $formItem = FormItem::find($id);
                 if (empty($formItem)){
                     $newFormItem = FormItem::create($formItemInput);
-                    $newFormItem->hash_id = Hashids::encode($user->getTenancyId(),$form->id,$newFormItem->id);
+                    $newFormItem->hash_id = $hashids->encode($user->getTenancyId(),$form->id,$newFormItem->id);
                     $newFormItem->save();
                 }else{
                     $formItem->update($formItemInput);
@@ -495,6 +497,7 @@ class Form extends Model
 
     public function createResponse($answers)
     {
+        $hashids = new Hashids();
         $items = $this->items;
         $inputLeaveQuestions = array();
         // default values
@@ -676,7 +679,7 @@ class Form extends Model
         $newItemInput['score_info'] = $scoreInfo;
         $newItemInput['creator_id'] = getAuthUser() ? getAuthUser()->id : null;
         $response = FormResponse::create($newItemInput);
-        $response->hash_id = Hashids::encode(1,$user->id,$response->id);
+        $response->hash_id = $hashids->encode(1,$user->id,$response->id);
         $response->save();
         return $response;
     }

@@ -473,8 +473,7 @@ export default {
       tags:[],
       myOptions: [], // or [{id: key, text: value}, {id: key, text: value}]
       exceptions:[], // items that already added 
-      similarity_exceptions:[], /// items that have similar (similarity_code) with the added items
-      //
+      similarity_exceptions:[], /// items that have similar (similarity_code) with the added items rff
     }
   },
   created() {
@@ -517,7 +516,7 @@ export default {
             taxonomies_b: this.defaultQuestion ? this.defaultQuestion.taxonomies_b : [],
             uniform: this.defaultQuestion ? this.defaultQuestion.uniform : false,
             loadingMode:false,
-            questionItems:[],
+            questionItems:[], 
             selectedQuestionItemId:null,
             type: this.defaultQuestion ? this.defaultQuestion.type : 6,
           }

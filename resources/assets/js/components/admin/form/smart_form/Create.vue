@@ -473,7 +473,7 @@ export default {
       tags:[],
       myOptions: [], // or [{id: key, text: value}, {id: key, text: value}]
       exceptions:[], // items that already added 
-      similarity_exceptions:[], /// items that have similar (similarity_code) with the added items rff
+      similarity_exceptions:[], /// items that have similar (similarity_code) with the added items
     }
   },
   created() {

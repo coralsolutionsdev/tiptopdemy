@@ -28455,7 +28455,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       tags: [],
       myOptions: [], // or [{id: key, text: value}, {id: key, text: value}]
       exceptions: [], // items that already added 
-      similarity_exceptions: [] /// items that have similar (similarity_code) with the added items rff
+      similarity_exceptions: [] /// items that have similar (similarity_code) with the added items
     };
   },
   created: function created() {

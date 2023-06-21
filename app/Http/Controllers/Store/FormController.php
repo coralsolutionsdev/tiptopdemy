@@ -269,8 +269,8 @@ class FormController extends Controller
 //                            ];
                             $lessonForms = $groupLesson->getAvailableForms();
                             foreach ($lessonForms as $lessonForm){
-
-                                if ($lessonForm){
+                                
+                                if ($lessonForm && $lessonForm->status == Form::STATUS_PUBLISHED){
                                     foreach ($lessonForm->items as $formItem){
                                         if ($formItem->type == $input['type']){
                                             $sourceFilterStatus = false;

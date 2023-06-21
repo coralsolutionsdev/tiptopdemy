@@ -571,6 +571,7 @@ export default {
               if (randomQuestion.similarity_code) {
                 this.similarity_exceptions.push(randomQuestion.similarity_code);
               }
+              console.log(randomQuestion.id);
             } else {
               this.$Notify({
                 title: 'No questions',

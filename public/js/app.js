@@ -28553,6 +28553,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (randomQuestion.similarity_code) {
             _this2.similarity_exceptions.push(randomQuestion.similarity_code);
           }
+          console.log(randomQuestion.id);
         } else {
           _this2.$Notify({
             title: 'No questions',

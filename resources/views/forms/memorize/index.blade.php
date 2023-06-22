@@ -24,7 +24,7 @@
 {{--		{{$templates->links()}}--}}
 	</div>
 </section>
-<script src="{{asset('/js/app.js?v=202101041200')}}"></script>
+<script src="{{asset('/js/app.js?v=202306220410')}}"></script>
 
 @endsection
 @section('script')

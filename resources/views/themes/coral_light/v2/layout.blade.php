@@ -45,7 +45,7 @@
     <!-- scripts -->
     <script src="{{asset('libraries/uikit/js/uikit.min.js')}}"></script>
     <script src="{{asset('libraries/uikit/js/uikit-icons.min.js')}}"></script>
-    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202306220410')}}"></script>
+    <script src="{{asset('themes/'.getFrontendThemeName().'/js/app.js?v=202306220510')}}"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- recaptcha -->
@@ -128,7 +128,7 @@
 
 </script>
 @include('partial.frontend._loading')
-<script src="{{asset('js/app.js?v=202306220410')}}"></script>
+<script src="{{asset('js/app.js?v=202306220510')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     $(".birthday").flatpickr();

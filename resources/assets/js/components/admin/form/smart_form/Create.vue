@@ -628,7 +628,7 @@ export default {
     scrollToEndOfPage(){
       $('body, html').animate({
         scrollTop: $('.add-group-wrapper').offset().top
-      }, 300);
+      }, 300);  
     },
     onlyNumber ($event) {
       //console.log($event.keyCode); //keyCodes value

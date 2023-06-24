@@ -28554,6 +28554,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.exceptions[key] = randomQuestion.id;
           if (randomQuestion.similarity_code) {
             _this2.similarity_exceptions[key] = randomQuestion.similarity_code;
+          } else {
+            _this2.similarity_exceptions.splice(key, 1);
           }
           console.log(randomQuestion.id);
         } else {

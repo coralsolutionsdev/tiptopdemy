@@ -570,6 +570,8 @@ export default {
               this.exceptions[key] = randomQuestion.id;
               if (randomQuestion.similarity_code) {
                 this.similarity_exceptions[key] = randomQuestion.similarity_code;
+              }else{
+                this.similarity_exceptions.splice(key, 1)
               }
               console.log(randomQuestion.id);
             } else {

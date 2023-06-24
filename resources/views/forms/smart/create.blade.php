@@ -18,6 +18,6 @@
         <smart-form-create current-unit-num="{{$unitNumber}}" current-lesson-num="{{$lessonNumber}}" lesson-slug="{{$lesson->slug}}"></smart-form-create>
     </div>
     @include('partial.scripts._tinyemc')
-    <script src="{{asset('js/app.js?v=202306220510')}}"></script>
+    <script src="{{asset('js/app.js?v=202306240510')}}"></script>
 
 @endsection

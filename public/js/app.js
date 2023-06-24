@@ -28524,7 +28524,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.addNewGroupQuestion(newGroupItem);
       return newGroupItem;
     },
-    runQuestionFilters: function runQuestionFilters(question) {
+    runQuestionFilters: function runQuestionFilters(question, key) {
       var _this2 = this;
 
       question.loadingMode = true;
@@ -28549,7 +28549,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var randomQuestion = question.questionItems[Math.floor(Math.random() * question.questionItems.length)];
         if (question.questionItems.length > 0) {
           question.selectedQuestionItemId = randomQuestion.id;
-          _this2.exceptions.push(randomQuestion.id);
+          _this2.exceptions[key] = randomQuestion.id;
           if (randomQuestion.similarity_code) {
             _this2.similarity_exceptions.push(randomQuestion.similarity_code);
           }
@@ -28639,6 +28639,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var id = _ref.id,
           text = _ref.text;
+    },
+    addToExceptions: function addToExceptions(val, key) {
+      this.exceptions[key] = val;
     }
   }
 });
@@ -73407,7 +73410,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }],
         staticClass: "uk-select uk-form-small",
         on: {
-          "change": function($event) {
+          "change": [function($event) {
             var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
               return o.selected
             }).map(function(o) {
@@ -73415,7 +73418,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               return val
             });
             _vm.$set(question, "selectedQuestionItemId", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
-          }
+          }, function($event) {
+            return _vm.addToExceptions(question.selectedQuestionItemId, questionKey)
+          }]
         }
       }, [_c('option', {
         staticClass: "uk-text-muted",
@@ -73725,7 +73730,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         },
         on: {
           "click": function($event) {
-            return _vm.runQuestionFilters(question)
+            return _vm.runQuestionFilters(question, questionKey)
           }
         }
       }, [(question.loadingMode) ? _c('span', {

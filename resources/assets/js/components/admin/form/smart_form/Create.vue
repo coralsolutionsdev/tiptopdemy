@@ -318,7 +318,7 @@
                     </div>
                   </div>
                   <div class="uk-width-expand">
-                    <select class="uk-select uk-form-small" v-model="question.selectedQuestionItemId">
+                    <select class="uk-select uk-form-small" v-model="question.selectedQuestionItemId" @change="addToExceptions(question.selectedQuestionItemId,questionKey)">
                       <option class="uk-text-muted" :value="null">Available questions</option>
                       <option v-for="questionItem in question.questionItems" :value="questionItem.id" v-html="questionItem.title"></option>
                     </select>
@@ -400,7 +400,7 @@
                         <label><input class="uk-radio" type="radio" name="setAsDefault" @change="setQuestionAsDefault(question)"></label>
                       </div>
                       <div class="uk-width-auto">
-                        <button class="uk-button uk-button-primary uk-button-small" style="min-width: 75px" @click="runQuestionFilters(question)" :disabled="question.loadingMode">
+                        <button class="uk-button uk-button-primary uk-button-small" style="min-width: 75px" @click="runQuestionFilters(question,questionKey)" :disabled="question.loadingMode">
                           <span v-if="question.loadingMode" uk-spinner="ratio: 0.5"></span>
                           <span v-else>Run</span>
                         </button>
@@ -543,7 +543,7 @@ export default {
       this.addNewGroupQuestion(newGroupItem);
       return newGroupItem;
     },
-    runQuestionFilters(question){
+    runQuestionFilters(question,key){
       question.loadingMode = true;
       const data = {
         id:question.id,
@@ -567,7 +567,7 @@ export default {
             var randomQuestion =  question.questionItems[Math.floor(Math.random()*question.questionItems.length)]
             if (question.questionItems.length > 0){
               question.selectedQuestionItemId = randomQuestion.id;
-              this.exceptions.push(randomQuestion.id);
+              this.exceptions[key] = randomQuestion.id;
               if (randomQuestion.similarity_code) {
                 this.similarity_exceptions.push(randomQuestion.similarity_code);
               }
@@ -656,6 +656,9 @@ export default {
     },
     mySelectEvent({id, text}){
       // console.log({id, text})
+    },
+    addToExceptions(val,key){
+      this.exceptions[key] = val;
     },
   }
 }

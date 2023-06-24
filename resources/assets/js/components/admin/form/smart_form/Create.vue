@@ -671,6 +671,8 @@ export default {
 
       if (similarityCode) {
           this.similarity_exceptions[key] = similarityCode;
+      }else{
+        this.similarity_exceptions.splice(key, 1)
       }
 
     },

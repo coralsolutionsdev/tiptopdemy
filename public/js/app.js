@@ -28656,6 +28656,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       if (similarityCode) {
         this.similarity_exceptions[key] = similarityCode;
+      } else {
+        this.similarity_exceptions.splice(key, 1);
       }
     }
   }

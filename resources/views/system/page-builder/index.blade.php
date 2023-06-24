@@ -208,7 +208,7 @@
     </div>
   </li>
 @endif
-<script src="{{asset('js/app.js?v=202306240610')}}"></script>
+<script src="{{asset('js/app.js?v=202306240710')}}"></script>
 <script src="{{asset('plugins/color_picker/jquery.minicolors.js')}}"></script>
 <script>
     $('.color_picker').minicolors({

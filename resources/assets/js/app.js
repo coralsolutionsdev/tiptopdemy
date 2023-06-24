@@ -57,6 +57,8 @@ Vue.component('post-show', require('./components/frontend/blog/Show.vue'));
 
 // If you want to use it in your vue components
 
+Vue.config.devtools = true;
+
 const app = new Vue({
     el: '#vue-app',
     i18n,

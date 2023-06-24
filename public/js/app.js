@@ -13304,6 +13304,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('post-show', __webpack_req
 
 // If you want to use it in your vue components
 
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
+
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
   el: '#vue-app',
   i18n: i18n

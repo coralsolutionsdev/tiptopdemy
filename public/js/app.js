@@ -28551,7 +28551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           question.selectedQuestionItemId = randomQuestion.id;
           _this2.exceptions[key] = randomQuestion.id;
           if (randomQuestion.similarity_code) {
-            _this2.similarity_exceptions.push(randomQuestion.similarity_code);
+            _this2.similarity_exceptions[key] = randomQuestion.similarity_code;
           }
           console.log(randomQuestion.id);
         } else {
@@ -28640,8 +28640,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var id = _ref.id,
           text = _ref.text;
     },
-    addToExceptions: function addToExceptions(val, key) {
-      this.exceptions[key] = val;
+    addToExceptions: function addToExceptions(question, key) {
+
+      this.exceptions[key] = question.selectedQuestionItemId;
+
+      var similarityCode = null;
+      console.log(question);
+      question.questionItems.forEach(function (item) {
+        if (item.id === question.selectedQuestionItemId) {
+          similarityCode = item.similarity_code;
+        }
+      });
+
+      if (similarityCode) {
+        this.similarity_exceptions[key] = similarityCode;
+      }
     }
   }
 });
@@ -73419,7 +73432,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             });
             _vm.$set(question, "selectedQuestionItemId", $event.target.multiple ? $$selectedVal : $$selectedVal[0])
           }, function($event) {
-            return _vm.addToExceptions(question.selectedQuestionItemId, questionKey)
+            return _vm.addToExceptions(question, questionKey)
           }]
         }
       }, [_c('option', {

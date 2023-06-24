@@ -318,7 +318,7 @@
                     </div>
                   </div>
                   <div class="uk-width-expand">
-                    <select class="uk-select uk-form-small" v-model="question.selectedQuestionItemId" @change="addToExceptions(question.selectedQuestionItemId,questionKey)">
+                    <select class="uk-select uk-form-small" v-model="question.selectedQuestionItemId" @change="addToExceptions(question,questionKey)">
                       <option class="uk-text-muted" :value="null">Available questions</option>
                       <option v-for="questionItem in question.questionItems" :value="questionItem.id" v-html="questionItem.title"></option>
                     </select>
@@ -569,7 +569,7 @@ export default {
               question.selectedQuestionItemId = randomQuestion.id;
               this.exceptions[key] = randomQuestion.id;
               if (randomQuestion.similarity_code) {
-                this.similarity_exceptions.push(randomQuestion.similarity_code);
+                this.similarity_exceptions[key] = randomQuestion.similarity_code;
               }
               console.log(randomQuestion.id);
             } else {
@@ -657,8 +657,22 @@ export default {
     mySelectEvent({id, text}){
       // console.log({id, text})
     },
-    addToExceptions(val,key){
-      this.exceptions[key] = val;
+    addToExceptions(question,key){
+
+      this.exceptions[key] = question.selectedQuestionItemId;
+
+      let similarityCode = null;
+        console.log(question);
+        question.questionItems.forEach(item => {
+        if (item.id === question.selectedQuestionItemId) {
+          similarityCode = item.similarity_code;
+        }
+      });
+
+      if (similarityCode) {
+          this.similarity_exceptions[key] = similarityCode;
+      }
+
     },
   }
 }

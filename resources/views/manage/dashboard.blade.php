@@ -61,5 +61,5 @@
 			</div>
 		</div>
 </section>
-<script src="{{asset('js/app.js?v=202306240510')}}"></script>
+<script src="{{asset('js/app.js?v=202306240610')}}"></script>
 @endsection

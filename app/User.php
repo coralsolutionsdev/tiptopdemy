@@ -2,26 +2,27 @@
 
 namespace App;
 
-use App\Modules\Comment\Commenter;
-use App\Modules\Group\HasGroup;
 use App\Modules\modelTrail;
 use App\Modules\Store\Order;
 use App\Modules\System\ToDo;
-use Bnb\Laravel\Attachments\HasAttachment;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
-use Laratrust\Traits\LaratrustUserTrait;
-use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
-use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
-use Spatie\Image\Exceptions\InvalidManipulation;
+use App\Modules\Group\HasGroup;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Vinkla\Hashids\Facades\Hashids;
+use App\Modules\Comment\Commenter;
 use Webpatser\Countries\Countries;
+use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
+use Laratrust\Traits\LaratrustUserTrait;
+use Bnb\Laravel\Attachments\HasAttachment;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Collection;
+use Spatie\Image\Exceptions\InvalidManipulation;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 
-class User extends Authenticatable implements ReacterableContract
+class User extends Authenticatable implements ReacterableContract,HasMedia
 {
     use Notifiable;
     use LaratrustUserTrait;

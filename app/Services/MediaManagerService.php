@@ -246,6 +246,7 @@ class MediaManagerService
             $filePlaytimeString = MediaManagerService::getProperties($file, 'playtime_string');
             $filePlaytimeSeconds = MediaManagerService::getProperties($file, 'playtime_seconds');
         }
+        
         $fileSize = MediaManagerService::getProperties($file, 'filesize');
         $group = Group::where('slug', $groupSlug)->first();
         // attach media file name

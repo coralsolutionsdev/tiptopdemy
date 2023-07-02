@@ -17,6 +17,7 @@ use App\Services\FileAssetManagerService;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -270,7 +271,7 @@ class MediaController extends Controller
         $user = getAuthUser();
         $items = array();
 //        $mediaItems = $user->getMedia('file_manager')->sortBy('name');
-        $mediaItems = \Spatie\MediaLibrary\Models\Media::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get();
+        $mediaItems = Media::where('model_type', 'App\User')->where('model_id', $user->id)->where('collection_name', 'file_manager')->get();
         $group = isset($input['group']) ? $input['group'] : null;
         $mediaItems = $mediaItems->sortBy('name')->filter(function ($mediaItem) use($group){
             if ($mediaItem->getCustomProperty('group') == $group){

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MediaFile extends Model
 {
+    protected $table = 'media';
     const TYPE_IMAGE = 1;
     const TYPE_PRODUCT_IMAGE = 2;
     const TYPE_PROFILE_IMAGE = 3;

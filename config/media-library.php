@@ -12,7 +12,7 @@ return [
      * The maximum file size of an item in bytes.
      * Adding a larger file will result in an exception.
      */
-    'max_file_size' => 1024 * 1024 * 10, // 10MB
+    'max_file_size' => 1024 * 1024 * 1024 * 10,
 
     /*
      * This queue connection will be used to generate derived and responsive images.
@@ -63,8 +63,9 @@ return [
     /*
      * The class that contains the strategy for determining a media file's path.
      */
-    'path_generator' => Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator::class,
+    // 'path_generator' => Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator::class,
     // 'path_generator' => App\Services\MediaLibrary\CustomPathGenerator::class,
+    'path_generator' => \App\Generators\TenancyPathGenerator::class,
 
     /*
      * Here you can specify which path generator should be used for the given class.

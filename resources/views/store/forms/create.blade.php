@@ -62,7 +62,7 @@
         </div>
     </div>
     {!! Form::close() !!}
-    @include('forms.templates._items')
+    @include('forms.templates._items2')
     @include('forms.templates._save_template')
 @endsection
 @section('script')

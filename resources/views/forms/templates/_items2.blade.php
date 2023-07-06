@@ -198,8 +198,8 @@
                     <ul class="uk-switcher">
                         <li class="uk-placeholder item-config-section">
 
-                        <div class="row d-flex justify-conent-between">
-                            <div class="col-9">
+                        <div class="">
+                            <div class="float-md-left">
                                     <div>
                                         {{--hidden data--}}
                                         <input type="hidden" name="" class="input-id">
@@ -347,7 +347,7 @@
                                 
                                 <br>
                             </div>
-                            <div class="col-3">
+                            <div class="float-md-right">
 
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                                     <label><input class="uk-checkbox input-uniform" type="checkbox" name=""> <span style="margin: 0 0.5em"> ME</span></label>
@@ -375,7 +375,7 @@
                                     <input class="uk-input uk-form-small uk-form-width-small input-answer-time-within" type="number" placeholder="Time in seconds" step="1" style="margin: 0 0.5em">
                                     <label><input class="uk-radio input-source-internal" type="radio" name="radio1" value="0"> Quoted </label>
                                     <label><input class="uk-radio input-source-internal-modified" type="radio" name="radio1" value="1"> Modified</label>
-                                    <label><input class="uk-radio input-source-external" type="radio" name="radio1" value="2"> Out the box </label>
+                                    <label><input class="uk-radio input-source-external" type="radio" name="radio1" value="2"> Out box </label>
                                 </div>
 
                             </div>

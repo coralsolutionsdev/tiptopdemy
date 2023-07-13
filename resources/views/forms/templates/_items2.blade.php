@@ -173,33 +173,39 @@
         <div class="uk-card uk-card-default uk-card-body uk-padding-small">
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
+                
+                    <span class="btn btn-default insert-blank hidden"><span class="" uk-icon="icon: plus-circle"></span></span>
+                    <span class="btn btn-default insert-drag-and-drop-blank hidden"><span class="" uk-icon="icon: plus-circle"></span></span>
+             
+
                 <span class="uk-align-right">
-                    <span style="margin: 0 10px" class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
-                    <span style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span>
+                    {{-- <span style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span> --}}
+                    <label><input class="uk-checkbox input-uniform" type="checkbox" name=""> <span style="margin: 0 0.5em"> ME</span></label>
                     <span style="margin: 0 10px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
+                    <span style="margin: 0 10px" class="uk-text-primary pr-1"><span class="item-score-widget">0</span> {{trans_choice('main.Marks', 0)}}</span>
+                    <input type="text" class="uk-input uk-form-small input-similarity-code" placeholder="Similarity Code:" style="width:120px">
                     <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
-                    <br><br><input type="text" class="uk-input uk-form-small input-similarity-code" placeholder="Similarity Code:">
                 </span>
             </div>
             <div class="uk-margin-remove">
 
                 <div class="uk-margin-small item-review">
-                    <div class="uk-margin-small item-pre-review" style="padding: 10px 0">
+                    {{-- <div class="uk-margin-small item-pre-review" style="padding: 10px 0">
                     </div>
                     <div class="item-review-content">
 
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="uk-margin-small pb-0 item-config" style="display: none">
-                    <ul class="uk-subnav uk-subnav-pill" uk-switcher>
+                <div class="uk-margin-small pb-0 item-config" >
+                    <ul class="uk-subnav uk-subnav-pill" uk-switcher style="position: absolute;left:24%;top:0%">
                         <li><a href="#">{{__('main.General settings')}}</a></li>
                         <li><a href="#">{{__('main.Display settings')}}</a></li>
                     </ul>
                     <ul class="uk-switcher">
-                        <li class="uk-placeholder item-config-section">
+                        <li class="uk-placeholder item-config-section my-0 ">
 
-                        <div class="">
-                            <div class="float-md-left">
+                        <div class="row">
+                            <div class="col-8 pr-0">
                                     <div>
                                         {{--hidden data--}}
                                         <input type="hidden" name="" class="input-id">
@@ -208,13 +214,7 @@
                                         <input type="hidden" name="" class="input-score" value="0">
                                     </div>
                                     <div class="fill-the-blank-section hidden-div">
-                                        <div class="cu-editor uk-grid-collapse" uk-grid>
 
-                                            <div class="uk-width-auto@m">
-                                                <span class="btn btn-default insert-blank hidden"><span class="" uk-icon="icon: plus-circle">
-                                                <span class="btn btn-default insert-drag-and-drop-blank hidden"><span class="" uk-icon="icon: plus-circle">
-                                            </div>
-                                        </div>
                                         <!-- User interaction is required by the browser -->
                                         <div class="editable-div fill-the-blank-div cu-border-light p-2 mt-1" contenteditable="true" >
                                             {{__('main._fill blank default paragraph')}}
@@ -284,13 +284,13 @@
 
                                         <div class="uk-margin uk-grid-small" uk-grid>
                                             <div class="uk-width-auto@m uk-flex uk-flex-middle">
-                                                <label>Taxonomy 1</label>
+                                                <label class="pr-2">Taxonomy 1</label>
                                             </div>
                                             <div class="uk-width-expand@m">
             
                                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                                                     @foreach(\App\Modules\Form\Form::TAXONOMY_TYPES_ARRAY as $key => $taxonomy)
-                                                    <label><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
+                                                    <label class="m-0 p-0"><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
                                                     @endforeach
                                                 </div>
         
@@ -347,20 +347,14 @@
                                 
                                 <br>
                             </div>
-                            <div class="float-md-right">
+                            <div class="col-4">
 
-                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                    <label><input class="uk-checkbox input-uniform" type="checkbox" name=""> <span style="margin: 0 0.5em"> ME</span></label>
+                                <div class="uk-margin-small">
+                                    <input type="text" class="uk-form-small input-extra-blanks d-inline" placeholder="Extra Word">
                                 </div>
 
                                 <div class="uk-margin-small">
-                                    <label class="uk-form-label h-header d-inline p-0 mr-2" for="">Extra word</label>
-                                    <input type="text" class="uk-form-small input-extra-blanks d-inline" placeholder="Ex: welcome">
-                                </div>
-
-                                <div class="uk-margin-small">
-                                    <label class="uk-form-label h-header d-inline p-0 mr-2" for="">Description</label>
-                                    <input type="text" class="input-description d-inline uk-textarea w-auto"  placeholder="type your question here">
+                                    <input type="text" class="input-description d-inline uk-textarea  w-auto"  placeholder="Description">
                                 </div>
 
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
@@ -372,7 +366,7 @@
 
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                                     <label><input class="uk-checkbox input-answer-time" name="" type="checkbox"></label>
-                                    <input class="uk-input uk-form-small uk-form-width-small input-answer-time-within" type="number" placeholder="Time in seconds" step="1" style="margin: 0 0.5em">
+                                    <input class="uk-input uk-form-small uk-form-width-small input-answer-time-within my-2" type="number" placeholder="Time in seconds" step="1" style="margin: 0 0.5em">
                                     <label><input class="uk-radio input-source-internal" type="radio" name="radio1" value="0"> Quoted </label>
                                     <label><input class="uk-radio input-source-internal-modified" type="radio" name="radio1" value="1"> Modified</label>
                                     <label><input class="uk-radio input-source-external" type="radio" name="radio1" value="2"> Out box </label>

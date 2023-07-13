@@ -170,7 +170,7 @@
 </li>
 <li class="form-item uk-width-1-1 uk-margin-remove pr-1 pl-1 pb-2 item-template" style="display: none">
     <div>
-        <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+        <div class="uk-card uk-card-default uk-card-body uk-padding-small py-0 px-1">
             <div class="item-header">
                 <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> <span class="form-item-title"></span>
                 
@@ -178,7 +178,7 @@
                     <span class="btn btn-default insert-drag-and-drop-blank hidden"><span class="" uk-icon="icon: plus-circle"></span></span>
              
 
-                <span class="uk-align-right">
+                <span class="uk-align-right m-0 py-1">
                     {{-- <span style="margin: 0 10px" class="open-config hover-primary" uk-icon="icon: cog" href="" uk-tooltip="Settings"></span> --}}
                     <label><input class="uk-checkbox input-uniform" type="checkbox" name=""> <span style="margin: 0 0.5em"> ME</span></label>
                     <span style="margin: 0 10px" class="hover-primary replicate-form-item" uk-icon="icon: copy" uk-tooltip="Duplicate"></span>
@@ -187,25 +187,17 @@
                     <span style="margin: 0 10px" class="hover-danger remove-form-item" uk-icon="icon: trash" uk-tooltip="Delete"></span>
                 </span>
             </div>
-            <div class="uk-margin-remove">
 
-                <div class="uk-margin-small item-review">
-                    {{-- <div class="uk-margin-small item-pre-review" style="padding: 10px 0">
-                    </div>
-                    <div class="item-review-content">
-
-                    </div> --}}
-                </div>
-                <div class="uk-margin-small pb-0 item-config" >
-                    <ul class="uk-subnav uk-subnav-pill" uk-switcher style="position: absolute;left:24%;top:0%">
-                        <li><a href="#">{{__('main.General settings')}}</a></li>
-                        <li><a href="#">{{__('main.Display settings')}}</a></li>
+                <div class="pb-0 item-config py-0" >
+                    <ul class="uk-subnav uk-subnav-pill py-0" uk-switcher style="position: absolute;left:24%;top:0%">
+                        <li><a class="py-0" href="#">{{__('main.General settings')}}</a></li>
+                        <li><a class="py-0" href="#">{{__('main.Display settings')}}</a></li>
                     </ul>
                     <ul class="uk-switcher">
-                        <li class="uk-placeholder item-config-section my-0 ">
+                        <li class="uk-placeholder item-config-section my-0 py-0" style="border: none">
 
-                        <div class="row">
-                            <div class="col-8 pr-0">
+                        <div class="row w-100">
+                            <div class="col-8 p-0">
                                     <div>
                                         {{--hidden data--}}
                                         <input type="hidden" name="" class="input-id">
@@ -229,7 +221,7 @@
                                             <span class="btn btn-default editor-item editor-action editor-format" data-value="underline"><i class="fas fa-underline"></i></span>
                                             <span class="btn btn-default editor-item editor-action editor-format" data-value="Bold"><i class="fas fa-bold"></i></span>
                                             <div class="uk-inline">
-                                                <span class="btn btn-default editor-item editor-font-color" style="padding:6px 10px"><i style="border-bottom: 2px solid #000000; padding: 1px 3px" class="fas fa-font"></i></span>
+                                                <span class="btn btn-default editor-item editor-font-color" style="padding:6px 10px"><i style="border-bottom: 1px solid #000000; padding: 1px 3px" class="fas fa-font"></i></span>
                                                 <div uk-dropdown="mode: hover" class="uk-padding-remove font-color-pallet">
                                                     <div class="uk-grid-collapse uk-child-width-1-5 uk-text-center" uk-grid>
                                                         <span class="btn btn-default editor-action color-item" style="background-color: #BFEDD2" data-value="#BFEDD2"></span>
@@ -290,7 +282,7 @@
             
                                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                                                     @foreach(\App\Modules\Form\Form::TAXONOMY_TYPES_ARRAY as $key => $taxonomy)
-                                                    <label class="m-0 p-0"><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
+                                                    <label class="m-0" style="padding-left:2px " ><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
                                                     @endforeach
                                                 </div>
         
@@ -335,14 +327,14 @@
                                     </div>
 
                                
-                                <div class="uk-margin uk-grid-small score-section disabled-div" uk-grid>
+                                {{-- <div class="uk-margin uk-grid-small score-section disabled-div" uk-grid>
                                     <div class="uk-width-auto@m uk-flex uk-flex-middle">
                                         <label>Question mark:</label>
                                     </div>
                                     <div class="uk-width-expand@m ">
                                         <input type="number" class="uk-input uk-form-small input-score">
                                     </div>
-                                </div>
+                                </div> --}}
                                 <br>
                                 
                                 <br>
@@ -409,7 +401,7 @@
                     </ul>
 
                 </div>
-            </div>
+        
         </div>
     </div>
 </li>

@@ -484,7 +484,7 @@ button
    outline: none;
 }
 .editable-div{
-    min-height: 80px;
+    min-height: 55px;
 }
 .editable-div:focus{
     outline: -webkit-focus-ring-color auto 0px ;

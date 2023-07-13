@@ -274,33 +274,6 @@
 
                                         </div>
 
-                                        <div class="uk-margin uk-grid-small" uk-grid>
-                                            <div class="uk-width-auto@m uk-flex uk-flex-middle">
-                                                <label class="pr-2">Taxonomy 1</label>
-                                            </div>
-                                            <div class="uk-width-expand@m">
-            
-                                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                                    @foreach(\App\Modules\Form\Form::TAXONOMY_TYPES_ARRAY as $key => $taxonomy)
-                                                    <label class="m-0" style="padding-left:2px " ><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
-                                                    @endforeach
-                                                </div>
-        
-                                            </div>
-                                        </div>
-                                        <div class="uk-margin uk-grid-small" uk-grid>
-                                            <div class="uk-width-auto@m uk-flex uk-flex-middle">
-                                                <label>Taxonomy 2</label>
-                                            </div>
-                                            <div class="uk-width-expand@m">
-                                                <select class="input-tags uk-select select2 input-taxonomy-b" name="" multiple="multiple" style="width: 100%">
-                                                    @foreach($tags as $tag)
-                                                    <option value="{{$tag}}">{{$tag}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
 
                                         <input type="hidden" name="" class="input-blanks" value="">
                                         <input type="hidden" name="" class="input-blanks-alignment" value="auto">
@@ -326,18 +299,34 @@
                                         </div>
                                     </div>
 
-                               
-                                {{-- <div class="uk-margin uk-grid-small score-section disabled-div" uk-grid>
+                            
+                                <div class="uk-margin uk-grid-small" uk-grid>
                                     <div class="uk-width-auto@m uk-flex uk-flex-middle">
-                                        <label>Question mark:</label>
+                                        <label class="pr-2">Taxonomy 1</label>
                                     </div>
-                                    <div class="uk-width-expand@m ">
-                                        <input type="number" class="uk-input uk-form-small input-score">
+                                    <div class="uk-width-expand@m">
+    
+                                        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                            @foreach(\App\Modules\Form\Form::TAXONOMY_TYPES_ARRAY as $key => $taxonomy)
+                                            <label class="m-0" style="padding-left:2px " ><input class="uk-checkbox input-taxonomy" name="" type="checkbox" value="{{$key}}"> {{$taxonomy}}</label>
+                                            @endforeach
+                                        </div>
+
                                     </div>
-                                </div> --}}
-                                <br>
-                                
-                                <br>
+                                </div>
+                                <div class="uk-margin uk-grid-small" uk-grid>
+                                    <div class="uk-width-auto@m uk-flex uk-flex-middle">
+                                        <label>Taxonomy 2</label>
+                                    </div>
+                                    <div class="uk-width-expand@m">
+                                        <select class="input-tags uk-select select2 input-taxonomy-b" name="" multiple="multiple" style="width: 100%">
+                                            @foreach($tags as $tag)
+                                            <option value="{{$tag}}">{{$tag}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="col-4">
 

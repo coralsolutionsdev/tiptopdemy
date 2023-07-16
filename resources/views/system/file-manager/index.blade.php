@@ -14,5 +14,5 @@
     <div id="vue-app">
         <file-manager v-bind:insertmode="false"></file-manager>
     </div>
-    <script src="{{asset('js/app.js?v=202306240724')}}"></script>
+    <script src="{{asset('js/app.js?v=202307170724')}}"></script>
 @endsection

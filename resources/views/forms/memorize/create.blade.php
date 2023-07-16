@@ -307,7 +307,7 @@
             </div>
 
 
-    <script src="{{asset('js/app.js?v=202306240724')}}"></script>
+    <script src="{{asset('js/app.js?v=202307170724')}}"></script>
 
     </section>
 

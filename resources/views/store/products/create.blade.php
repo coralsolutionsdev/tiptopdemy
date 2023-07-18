@@ -404,7 +404,7 @@
                                         <ul uk-accordion>
 
                                             @foreach($product->groups as $id => $group)
-                                                <li class="unit {{$id == 0 ? 'uk-open' : ''}}">
+                                                <li class="unit">
                                                     <a class="uk-accordion-title" href="#">
                                                         <span class="text-primary">{{sprintf('%02d', $id+1)}} <span
                                                                     style="margin: 0 2px">|</span></span> <span
@@ -461,7 +461,7 @@
                                                                                 <div class="action_btn text-right"
                                                                                      style="width: 400px">
                                                                                     <ul>
-                                                                                        <li>
+                                                                                        {{-- <li>
                                                                                             <a href="{{route('store.memorize.create', $item->slug)}}"
                                                                                                class="btn btn-light">
                                                                                                 {{__('main.Add Memory Test')}}
@@ -472,7 +472,7 @@
                                                                                                class="btn btn-light">
                                                                                                 {{__('main.Add Quiz')}}
                                                                                             </a>
-                                                                                        </li>
+                                                                                        </li> --}}
                                                                                         <li class="">
                                                                                             <a target="_blank"
                                                                                                href="{{route('store.lesson.show', [$product->slug, $item->slug])}}"

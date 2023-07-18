@@ -20,6 +20,165 @@
         @endif
         @include('manage.partials._page-header-v2')
         <div class="form-panel row">
+
+            <div id="quizzes" class="col-lg-12">
+                <div class="card border-light">
+                    <div class="card-body" style="background-color: #e0ffe9">
+                        <p>{{__('main.Quizzes')}}</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-12 text-right" style="padding: 10px;">
+                                @if(!empty($lesson))
+                                    <!-- Button trigger modal -->
+                                    <a href="{{route('store.get.form.templates', $lesson->slug)}}"
+                                       class="uk-button uk-button-default">
+                                        <span uk-icon="plus-circle"></span> {{__('main.Add Quiz')}}
+                                    </a>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Add new Quiz</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="uk-flex uk-flex-center actions-section">
+                                                        <div class="uk-grid-small uk-child-width-expand@s uk-text-center"
+                                                             uk-grid style="padding:10px 20px; width: 60%">
+                                                            <div>
+                                                                <a href="{{route('store.form.create', $lesson->slug)}}">
+                                                                    <div class="uk-card uk-card-default uk-card-body uk-text-primary border-primary uk-box-shadow-hover-large">
+                                                                        <div class="uk-padding-small"><span
+                                                                                    uk-icon="icon: plus-circle; ratio: 3"></span>
+                                                                        </div>
+                                                                        <label>Create new</label>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div>
+                                                                <div class="uk-card uk-card-default uk-card-body uk-text-primary border-primary uk-box-shadow-hover-large show-template-section">
+                                                                    <div class="uk-padding-small"><span
+                                                                                uk-icon="icon: copy; ratio: 3"></span>
+                                                                    </div>
+                                                                    <label>Clone Template</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="templates-section hidden-div">
+                                                        <div class="uk-grid-small uk-child-width-expand@s uk-text-left"
+                                                             uk-grid style="padding:0px 20px;">
+                                                            <div class="uk-width-1-3">
+                                                                {{drawInputTreeListItems($categories, 'categories[]',!empty($selectedCategories) ? $selectedCategories : array(), 'checktree')}}
+                                                            </div>
+                                                            <div class="uk-width-2-3">
+                                                                <div class="uk-text-center">{{__('main.There is no form items yet.')}}</div>
+                                                                <div class="uk-grid-collapse" uk-grid>
+                                                                    <div>
+                                                                        text
+                                                                    </div>
+                                                                    <div>
+                                                                        <a class="uk-button uk-button-default" href="">Apply</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('.show-template-section').click(function () {
+                                                        $('.actions-section').slideUp(function () {
+                                                            $('.templates-section').fadeIn();
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+
+
+                            @endif
+                        </div>
+                    </div>
+                    @if(!empty($lesson))
+                        <div class="uk-padding-small" style="background-color: #e0ffe9">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">{{__('main.Quiz name')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Display type')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.version')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
+                                    <th scope="col" class="uk-text-center">{{__('main.Status')}}</th>
+                                    <th scope="col" width="200">{{__('main.Actions')}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if(!empty($lesson))
+                                    @forelse($lesson->getFormsWithType(\App\Modules\Form\Form::TYPE_FORM) as $form)
+                                        <tr>
+                                            <td>{{$form->title}}</td>
+                                            <td class="uk-text-center">{{!empty($form->properties) && $form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
+                                            <td class="uk-text-success uk-text-center">{{$form->version}}.0</td>
+                                            <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
+                                            <td class="uk-text-center">{{\App\Modules\Form\Form::STATUS_ARRAY[$form->status]}}</td>
+                                            <td>
+                                                <div class="action_btn">
+                                                    <ul>
+                                                        <li class="">
+                                                            <span onclick="copyLink(this)"
+                                                                  date-link="{{route('store.form.show', [$lesson->slug, $form->hash_id])}}"
+                                                                  class="btn btn-light hover-primary"
+                                                                  uk-tooltip="Copy link"><i
+                                                                        class="fas fa-link"></i></span>
+                                                        </li>
+                                                        <li class="">
+                                                            <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}"
+                                                               class="btn btn-light"><i class="far fa-edit"></i></a>
+                                                        </li>
+                                                        <li class="">
+                                                            <span id="{{$form->id}}" class="btn btn-light btn-delete"><i
+                                                                        class="far fa-trash-alt"></i></span>
+                                                            <form id="delete-form" method="post"
+                                                                  action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
+                                                                {{csrf_field()}}
+                                                                {{method_field('DELETE')}}
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="uk-text-center">
+                                                {{__('main.There is no form items yet.')}}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="uk-placeholder uk-text-center">
+                            <div class="uk-alert-warning" uk-alert>
+                                <p>
+                                    {{__('main.Please create a lesson first.')}}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+
             <div class="col-lg-12">
                 <div class="card border-light">
                     <div class="card-body">
@@ -201,163 +360,6 @@
             </div>
             {!! Form::close() !!}
 
-            <div id="quizzes" class="col-lg-12">
-                <div class="card border-light">
-                    <div class="card-body" style="background-color: #e0ffe9">
-                        <p>{{__('main.Quizzes')}}</p>
-                        <hr>
-                        <div class="row">
-                            <div class="col-lg-12 text-right" style="padding: 10px;">
-                                @if(!empty($lesson))
-                                    <!-- Button trigger modal -->
-                                    <a href="{{route('store.get.form.templates', $lesson->slug)}}"
-                                       class="uk-button uk-button-default">
-                                        <span uk-icon="plus-circle"></span> {{__('main.Add Quiz')}}
-                                    </a>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Add new Quiz</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="uk-flex uk-flex-center actions-section">
-                                                        <div class="uk-grid-small uk-child-width-expand@s uk-text-center"
-                                                             uk-grid style="padding:10px 20px; width: 60%">
-                                                            <div>
-                                                                <a href="{{route('store.form.create', $lesson->slug)}}">
-                                                                    <div class="uk-card uk-card-default uk-card-body uk-text-primary border-primary uk-box-shadow-hover-large">
-                                                                        <div class="uk-padding-small"><span
-                                                                                    uk-icon="icon: plus-circle; ratio: 3"></span>
-                                                                        </div>
-                                                                        <label>Create new</label>
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                            <div>
-                                                                <div class="uk-card uk-card-default uk-card-body uk-text-primary border-primary uk-box-shadow-hover-large show-template-section">
-                                                                    <div class="uk-padding-small"><span
-                                                                                uk-icon="icon: copy; ratio: 3"></span>
-                                                                    </div>
-                                                                    <label>Clone Template</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="templates-section hidden-div">
-                                                        <div class="uk-grid-small uk-child-width-expand@s uk-text-left"
-                                                             uk-grid style="padding:0px 20px;">
-                                                            <div class="uk-width-1-3">
-                                                                {{drawInputTreeListItems($categories, 'categories[]',!empty($selectedCategories) ? $selectedCategories : array(), 'checktree')}}
-                                                            </div>
-                                                            <div class="uk-width-2-3">
-                                                                <div class="uk-text-center">{{__('main.There is no form items yet.')}}</div>
-                                                                <div class="uk-grid-collapse" uk-grid>
-                                                                    <div>
-                                                                        text
-                                                                    </div>
-                                                                    <div>
-                                                                        <a class="uk-button uk-button-default" href="">Apply</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('.show-template-section').click(function () {
-                                                        $('.actions-section').slideUp(function () {
-                                                            $('.templates-section').fadeIn();
-                                                        });
-                                                    });
-                                                </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-
-
-                            @endif
-                        </div>
-                    </div>
-                    @if(!empty($lesson))
-                        <div class="uk-padding-small" style="background-color: #e0ffe9">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">{{__('main.Quiz name')}}</th>
-                                    <th scope="col" class="uk-text-center">{{__('main.Display type')}}</th>
-                                    <th scope="col" class="uk-text-center">{{__('main.version')}}</th>
-                                    <th scope="col" class="uk-text-center">{{__('main.Items num.')}}</th>
-                                    <th scope="col" class="uk-text-center">{{__('main.Status')}}</th>
-                                    <th scope="col" width="200">{{__('main.Actions')}}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @if(!empty($lesson))
-                                    @forelse($lesson->getFormsWithType(\App\Modules\Form\Form::TYPE_FORM) as $form)
-                                        <tr>
-                                            <td>{{$form->title}}</td>
-                                            <td class="uk-text-center">{{!empty($form->properties) && $form->properties['display_type'] == 1 ? 'Modern' : 'Classic'}}</td>
-                                            <td class="uk-text-success uk-text-center">{{$form->version}}.0</td>
-                                            <td class="uk-text-center">{{$form->items->where('type', '!=', \App\Modules\Form\FormItem::TYPE_SECTION)->count()}}</td>
-                                            <td class="uk-text-center">{{\App\Modules\Form\Form::STATUS_ARRAY[$form->status]}}</td>
-                                            <td>
-                                                <div class="action_btn">
-                                                    <ul>
-                                                        <li class="">
-                                                            <span onclick="copyLink(this)"
-                                                                  date-link="{{route('store.form.show', [$lesson->slug, $form->hash_id])}}"
-                                                                  class="btn btn-light hover-primary"
-                                                                  uk-tooltip="Copy link"><i
-                                                                        class="fas fa-link"></i></span>
-                                                        </li>
-                                                        <li class="">
-                                                            <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id])}}"
-                                                               class="btn btn-light"><i class="far fa-edit"></i></a>
-                                                        </li>
-                                                        <li class="">
-                                                            <span id="{{$form->id}}" class="btn btn-light btn-delete"><i
-                                                                        class="far fa-trash-alt"></i></span>
-                                                            <form id="delete-form" method="post"
-                                                                  action="{{route('store.form.destroy', [$lesson->slug, $form->hash_id])}}">
-                                                                {{csrf_field()}}
-                                                                {{method_field('DELETE')}}
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="uk-text-center">
-                                                {{__('main.There is no form items yet.')}}
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <div class="uk-placeholder uk-text-center">
-                            <div class="uk-alert-warning" uk-alert>
-                                <p>
-                                    {{__('main.Please create a lesson first.')}}
-                                </p>
-                            </div>
-                        </div>
-                    @endif
-
-                </div>
-            </div>
 
             <div id="memorize" class="col-lg-12">
                 <div class="card border-light">

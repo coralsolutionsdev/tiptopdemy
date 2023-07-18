@@ -17,7 +17,7 @@
         </div>
     </div>
     {{--question item--}}
-    <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_SHORT_ANSWER}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
+    {{-- <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_SHORT_ANSWER}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
         <div class=" uk-grid-medium" uk-grid>
             <div class="uk-width-auto@m uk-text-center uk-flex uk-flex-middle">
                 <i class="fas fa-grip-lines"></i>
@@ -32,7 +32,7 @@
                 <span class="count">0</span>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{--question item--}}
     <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_PARAGRAPH}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
         <div class=" uk-grid-medium" uk-grid>
@@ -51,7 +51,7 @@
         </div>
     </div>
     {{--question item--}}
-    <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_SINGLE_CHOICE}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
+    {{-- <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_SINGLE_CHOICE}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
         <div class=" uk-grid-medium" uk-grid>
             <div class="uk-width-auto@m uk-text-center uk-flex uk-flex-middle">
                 <i class="fas fa-grip-lines"></i>
@@ -66,9 +66,9 @@
                 <span class="count">0</span>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{--question item--}}
-    <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_MULTI_CHOICE}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
+    {{-- <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_MULTI_CHOICE}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
         <div class=" uk-grid-medium" uk-grid>
             <div class="uk-width-auto@m uk-text-center uk-flex uk-flex-middle">
                 <i class="fas fa-grip-lines"></i>
@@ -83,7 +83,7 @@
                 <span class="count">0</span>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{--question item--}}
     <div id="questionType-{{\App\Modules\Form\FormItem::TYPE_DROP_DOWN}}" class="question-type card card-body border-hover-primary pt-2 pb-2 m-2">
         <div class=" uk-grid-medium" uk-grid>

@@ -800,11 +800,11 @@
 
         if(formItem != null) {
             // update values
-            item.find('.input-title').val(formItem.title);
-            if(type == typeSection){
-                item.find('.hidden-input-title').val(formItem.description);
-            }else{
-                item.find('.hidden-input-title').val(formItem.title);
+            item.find('.input-title').val(sanitizeHTML(formItem.title));
+            if (type === typeSection) {
+                item.find('.hidden-input-title').val(sanitizeHTML(formItem.description));
+            }else {
+                item.find('.hidden-input-title').val(sanitizeHTML(formItem.title));
             }
             item.find('.input-description').val(formItem.description);
             item.find('.item-score-widget').html(formItem.score);
@@ -1156,6 +1156,11 @@
 
 
 
+    function sanitizeHTML(input) {
+        const container = document.createElement('div');
+        container.innerHTML = input;
+        return container.textContent || container.innerText || '';
+    }
 
 
 </script>

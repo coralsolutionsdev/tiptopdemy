@@ -40,7 +40,7 @@ class Product extends Model implements HasMedia
     use HasAttachment;
     use HasGroup;
     use HasColorPattern;
-    use Reactable;
+    // use Reactable;
     use modelTrail;
     use InteractsWithMedia;
 

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Site;
 
 use App\Role;
-use App\Services\FileAssetManagerService;
+use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Services\FileAssetManagerService;
 
 
 class UserController extends Controller
@@ -85,7 +86,7 @@ class UserController extends Controller
             'lang' => 'ar',
             'avatar' => $avatar,
             'password' => bcrypt($data['password']),
-            'verify_token' => str_random(60),
+            'verify_token' => Str::random(60),
         ]);
 
         //role assign

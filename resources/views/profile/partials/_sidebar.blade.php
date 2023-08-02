@@ -70,7 +70,7 @@
         <div class="uk-modal-dialog uk-modal-body">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <h3 class="text-highlighted">{{__('main.Avatar groups')}}</h3>
-            {!! Form::open(['url' => route('profile.update'),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
+            {!! Form::open(['url' => route('profile.update', ['profile' => $user->id]),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
             <div>
                 @foreach($user->getAvatarGroups() as $groupName => $groupAvatars)
                     <h5 class="text-highlighted">{{__($groupName)}}</h5>

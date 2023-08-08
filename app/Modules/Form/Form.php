@@ -304,6 +304,9 @@ class Form extends Model
 
                     }
                 }
+                if(isset($newFormItem->properties['shuffle_options']) && $newFormItem->properties['shuffle_options'] == 1){
+                    shuffle($newItemOptions);
+                }
                 $newFormItem->options = $newItemOptions;
                 $newFormItem->save();
             }elseif ($itemType == FormItem::TYPE_FILL_THE_BLANK || $itemType == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $itemType == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){

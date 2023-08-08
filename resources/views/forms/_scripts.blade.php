@@ -319,7 +319,8 @@
         }
         var optionID = generateRandomString(6);
 
-        var optionTitle = '{{__('main.Option title')}}';
+        // var optionTitle = '{{__('main.Option title')}}';
+        var optionTitle = '';
         if(defaultTitle != null){
             optionTitle = defaultTitle;
         }
@@ -1162,5 +1163,29 @@
         return container.textContent || container.innerText || '';
     }
 
+        // Function to extract URL parameters
+        function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    // Function to be executed if the route has param newver=1
+    function executeFunctionIfNewVersion() {
+        var newVersionParam = getParameterByName('newver');
+        
+            if (newVersionParam === '1') {
+
+                $('.update-type').val(1) // CREATE_NEW_VERSION
+                $('.form').submit();
+            }
+    }
+
+    // Call the function when the page loads
+    window.addEventListener('load', executeFunctionIfNewVersion);
 
 </script>

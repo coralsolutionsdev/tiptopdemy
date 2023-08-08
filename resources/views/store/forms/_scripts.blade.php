@@ -79,7 +79,8 @@
             item = $('#form_item-'+itemId);
         }
         var optionID = generateRandomString(6);
-        var optionTitle = '{{__('main.Option title')}}';
+        // var optionTitle = '{{__('main.Option title')}}';
+        var optionTitle = '';
         var optionSelected = '';
         if(option != null){
             optionID = option.id;
@@ -486,4 +487,5 @@
             });
         });
     @endif
+
 </script>

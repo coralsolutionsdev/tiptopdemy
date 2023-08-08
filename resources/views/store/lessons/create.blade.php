@@ -126,6 +126,11 @@
                                         <td>
                                             <div class="action_btn">
                                                 <ul>
+                                                    {{-- new vers button --}}
+                                                    <li class="">
+                                                        <a href="{{route('store.form.edit', [$lesson->slug, $form->hash_id,'newver'=>1])}}"
+                                                           class="btn btn-light"><i class="far fa-save"></i></a>
+                                                    </li>
                                                     <li class="">
                                                         <span onclick="copyLink(this)"
                                                               date-link="{{route('store.form.show', [$lesson->slug, $form->hash_id])}}"

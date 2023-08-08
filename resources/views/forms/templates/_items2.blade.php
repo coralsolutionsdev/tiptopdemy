@@ -339,7 +339,7 @@
                                 </div>
 
                                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                    <label><input class="uk-checkbox input-shuffle-options" type="checkbox"> <span style="margin: 0 0.5em">Shuffle</span></label>
+                                    <label><input class="uk-checkbox input-shuffle-options" type="checkbox" checked> <span style="margin: 0 0.5em">Shuffle</span></label>
                                     <label><input class="uk-radio input-display-block" type="radio" name="radio2" value="1" checked> Block</label>
                                     <label><input class="uk-radio input-display-inline" type="radio" name="radio2" value="0"> in line</label>
                                 </div>

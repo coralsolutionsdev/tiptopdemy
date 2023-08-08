@@ -50,7 +50,7 @@
                             {{__('main.Category')}}:
                         </div>
                         <div class="col-3">
-                            {{ Form::select('status', \App\Modules\Form\Form::STATUS_ARRAY, !empty($form) ? $form->status : 1, [ 'class' => 'form-control']) }}
+                            {{ Form::select('status', \App\Modules\Form\Form::STATUS_ARRAY, !empty($form) ? $form->status : 2, [ 'class' => 'form-control']) }}
                         </div>
                     </div>
                     <div class="row uk-margin-small" uk-grid>
@@ -116,7 +116,7 @@
                         <label class="uk-form-label h-header" for="">Display type</label>
                         <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                             <label><input class="uk-radio" type="radio" name="display_type" value="1" {{empty($form) || ($form['properties']['display_type']) == 1 ? 'checked' : ''}}> Modern</label>
-                            <label><input class="uk-radio" type="radio" name="display_type" value="0" {{!empty($form) && $form['properties']['display_type'] == 0 ? 'checked' : ''}}> Classic</label>
+                            <label><input class="uk-radio" type="radio" name="display_type" value="0" {{!empty($form) && $form['properties']['display_type'] == 0 ? 'checked' : 'checked'}}> Classic</label>
                         </div>
                         <br>
                         <label class="uk-form-label h-header" for="">Quiz text direction</label>

@@ -61,6 +61,58 @@
                             <input class="uk-input uk-form-small" name="position" type="number" value="{{!empty($form) ? $form->position : 0}}">
                         </div>
                     </div>
+                    {{-- exporting settings  --}}
+                    <div class="h-header mt-5">Export Settings</div>
+                    <input type="hidden" name="form_id" value="{{$form->id}}">
+                    {{-- <input type="hidden" name="exported_form" value="{{json_encode($form)}}"> --}}
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.school')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_school_name" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.date')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_date" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.branch')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_branch" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.trail')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_trail" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.time')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_time" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            Export:
+                        </div>
+                        <div class="col-11">
+                            <span class="btn btn-primary" id="form-export">Export Form</span>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <div>

@@ -547,4 +547,21 @@ class FormController extends Controller
         $form->save();
         return response($form->id, 200);
     }
+
+
+    public function exportForm(){
+
+        $input = request()->all();
+        $form_id = $input['form_id'] ?? null;
+        $items = FormItem::where('form_id', $form_id)->get();
+
+        $data = [
+            'items' => $items,
+            'settings' => $input,
+        ];
+
+        return view('testpdf',compact('data'));
+
+    }
+
 }

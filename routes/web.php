@@ -1,5 +1,8 @@
 <?php
 
+use App\Modules\Form\FormItem;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +13,51 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('test',function(){
+
+    // $data = ['a'=>"geeeeeeeeeeeee"];
+    // $pdf = Pdf::loadView('testpdf', $data);
+    // return $pdf->download('invoice.pdf');
+
+    // return view('testpdf');
+
+    $input = request()->all();
+
+    $input = [
+
+        "export_school_name" => 'Alexa School',
+        "export_date" => '2022-4-4',
+        "export_branch" => 'erbil',
+        "export_trail" => 'first trail',
+        "export_time" => '2 hours',
+
+    ];
+
+    $form_id = $input['form_id'] ?? null;
+    $items = FormItem::where('form_id', 107)->orderBy('position','ASC')->get();
+
+    $itemsArray = array();
+    $count = 0;
+
+    foreach ($items as $key => $item){
+        $blanksArray = array();
+        if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
+            $item->blank_paragraph = $item->getFillableBlank($item->id);
+        }
+    }
+
+    // dd($itemsArray);
+
+    $data = [
+        // 'items' => $itemsArray,
+        'items' => $items,
+        'settings' => $input,
+    ];
+
+    return view('testpdf',compact('data'));
+
+});
 
 
 /* Inastallation */
@@ -150,6 +198,7 @@ Route::group(['middleware'=>'lang'], function(){
         Route::post('/lesson/{lesson}/form/smart/get/items','FormController@smartGetItems')->name('form.smart.get.items');
         Route::post('/lesson/{lesson}/form/smart/store','FormController@smartStore')->name('form.smart.store');
         Route::post('/lesson/form/{form}/update/status','FormController@updateStatus')->name('form.update.status');
+        Route::post('/form/{form}/export','FormController@exportForm')->name('form.export');
 
 
     });

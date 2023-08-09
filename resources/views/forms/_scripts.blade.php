@@ -1188,4 +1188,37 @@
     // Call the function when the page loads
     window.addEventListener('load', executeFunctionIfNewVersion);
 
+
+    $('#form-export').on('click', function() {
+    var csrfToken = "{{csrf_token()}}"
+    var data = {
+      export_school_name: $('input[name=export_school_name]').val(),
+      export__date: $('input[name=export_date]').val(),
+      export_branch: $('input[name=export_branch]').val(),
+      export_trail: $('input[name=export_trail]').val(),
+      export_time: $('input[name=export_time]').val(),
+      form_id: $('input[name=form_id]').val(),
+    //   exported_form: $('input[name=exported_form]').val()
+    };
+
+    var form_id = $('input[name=form_id]').val()
+
+    $.ajax({
+      type: 'POST', // Or 'GET' depending on your use case
+      url: `/manage/store/form/${form_id}/export`, // Replace with your server endpoint
+      data: data,
+      headers: {
+        'X-CSRF-TOKEN': csrfToken
+      },
+      success: function(response) {
+        // Handle success response here
+        console.log('Form submitted successfully');
+      },
+      error: function(error) {
+        // Handle error response here
+        console.error('Form submission error', error);
+      }
+    });
+  });
+
 </script>

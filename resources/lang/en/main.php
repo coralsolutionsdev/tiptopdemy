@@ -571,8 +571,13 @@
         'Notifications' => 'Notifications',
         'No notifications yet' => 'No notifications yet',
         // tiptop
-        'at Tiptopdemy platform' => 'at Tiptopdemy platform'
-
+        'at Tiptopdemy platform' => 'at Tiptopdemy platform',
+        // export 
+        'date'=>'date',
+        'time'=>'time',
+        'trail'=>'trail',
+        'branch'=>'branch',
+        'school'=>'school name',
 
     ];
 ?>

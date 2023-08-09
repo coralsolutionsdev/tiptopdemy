@@ -8,6 +8,7 @@
         "php": ">=8.2.3",
         "ext-json": "*",
         "arrilot/laravel-widgets": "^3.12",
+        "barryvdh/laravel-dompdf": "*",
         "biscolab/laravel-recaptcha": "*",
         "bnbwebexpertise/laravel-attachments": "1.0.*",
         "bumbummen99/shoppingcart": "^2.10",

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Modules\Course\Lesson;
 use App\Modules\Form\FormItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -552,15 +553,96 @@ class FormController extends Controller
     public function exportForm(){
 
         $input = request()->all();
-        $form_id = $input['form_id'] ?? null;
-        $items = FormItem::where('form_id', $form_id)->get();
 
+        $input = [
+    
+            "export_school_name" => 'Alexa School',
+            "export_date" => '2022-4-4',
+            "export_branch" => 'erbil',
+            "export_trail" => 'first trail',
+            "export_time" => '2 hours',
+    
+        ];
+    
+        $form_id = $input['form_id'] ?? null;
+        $items = FormItem::where('form_id', 107)
+        // ->where('type',7)
+        ->orderBy('position','ASC')->get();
+    
+        $itemsArray = array();
+        $count = 0;
+    
+        foreach ($items as $key => $item){
+            $blanksArray = array();
+            if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
+                $item->blank_paragraph = $item->getFillableBlank($item->id);
+            }
+    
+            if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
+                $blanks = !empty($item->options) && !empty($item->options['paragraph_blanks']) ? $item->options['paragraph_blanks'] : array();
+                foreach ($blanks as $blank){
+                    $isInArray = false;
+                    foreach ($blank['items'] as $blankItem){
+                        foreach ($blanksArray as $blanksArrayItem){
+                            if ($blanksArrayItem == $blankItem['value']){
+                                $isInArray = true;
+                            }
+                        }
+                        if (!$isInArray){
+                            array_push($blanksArray, $blankItem['value']);
+                        }
+                    }
+                }
+                // add extra word to blanks array
+                $extraBlanks = isset($item->properties['extra_blanks']) ?  $item->properties['extra_blanks'] : null;
+                if ($extraBlanks){
+                    foreach ($extraBlanks as $extraBlank){
+                        if ($extraBlank && $extraBlank != null && strlen($extraBlank) > 0){
+                            array_push($blanksArray, $extraBlank);
+                        }
+                    }
+                }
+                $array2 = $blanksArray;
+                shuffle($array2);
+                $blanksArray = $array2;
+    
+                // group draggable blanks
+                if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+                    foreach ($blanksArray as $draggableBlankItem) {
+                        $groupDraggableBlanks[] = [
+                            'id' => rand(0,999),
+                            'value' => $draggableBlankItem,
+                            'question_id' => $item->id,
+                        ];
+                    }
+                }
+    
+            }
+    
+            $item->blanks = $blanksArray;
+            $item->dropped_blanks = array();
+            $item->auto_leave = !empty($questionsToAnswer) && $questionsToAnswer < $key;
+            $item->review = false;
+    
+        }
+    
+        $array3 = $groupDraggableBlanks;
+        shuffle($array3);
+        $groupDraggableBlanks = $array3;
+    
+        // dd($items);
+    
+        // dd($itemsArray);
+    
         $data = [
+            // 'items' => $itemsArray,
             'items' => $items,
+            'draggable_blanks' => $groupDraggableBlanks,
             'settings' => $input,
         ];
 
-        return view('testpdf',compact('data'));
+        $pdf = Pdf::loadView('testpdf', $data);
+        return $pdf->download('invoice.pdf');
 
     }
 

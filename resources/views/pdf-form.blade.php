@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> --}}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Document</title>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <style>
         /* Custom CSS to center the container */
         body, html {
@@ -23,6 +27,7 @@
             font-weight: bold;
             padding: 2px;
             text-transform: capitalize;
+            margin:10px 0
             
         }
 
@@ -52,7 +57,7 @@
         }
 
         li strong{
-            color: #6e6969
+            color: #1b1b1b
         }
 
         .question p{
@@ -70,7 +75,7 @@
         }
 
         .first-blanks-section{
-            margin: 20px 
+            margin: 5px 20px 
         }
         .first-blanks{
           margin: 10px 0;
@@ -78,6 +83,21 @@
           display: inline;
           padding: 2px
         }
+
+        div[data-section-index="6"] {
+            position: relative;
+        }
+        div[data-index="6"] .droppable-blank {
+            border: none;
+        }
+        .first-blanks:has(.list-blanks){
+          background: transparent;
+          position: absolute;
+          top: -10px;
+          left: 160px;
+
+        }
+
         .first-blank-item{
             padding: 5px;
             /* background: #b4b3b3; */
@@ -102,13 +122,26 @@
             gap: 0px; 
         }
 
+        p{
+            margin: 0;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .question-7:last-of-type {
+            color: red
+        }
+
+
       </style>
 </head>
 <body>
 
 
 
-<div class="container  header">
+<div class="container-fluid  header">
     <div class="grid-container ">
         <div class="grid-item">
             <span class="font-weight-bold"><strong>Republic Of Iraq Ministry of Education</strong></span>
@@ -116,7 +149,7 @@
             <br><span><strong>School name:</strong> {{$data['settings']['export_school_name'] ?? ''}}</span>
         </div>
         <div class="grid-item ">
-            <img src="https://jor.rdd.edu.iq/img/logo.png" width="100px" height="100px" alt="">
+            <img src="{{$data['settings']['export_logo'] ?? ''}}" width="100px" height="100px" alt="">
         </div>
         <div class="grid-item">
             <ul>
@@ -127,7 +160,7 @@
             </ul>
         </div>
     </div>
-    <p><strong>Note:</strong></p>
+    <p><strong>Note: </strong>{{$data['settings']['export_note'] ?? ''}}</p>
 </div>
 
 <div class="container-fluid">
@@ -147,6 +180,10 @@
                 // $firstBlanks[$sectionIndex] = [];
             @endphp
 
+            @if ($sectionIndex == 5)
+            <div class="page-break"></div>
+            @endif
+
             @if ($item->title != '')
                 <div class="qs-type d-flex justify-content-between mt-2">
                     @php
@@ -157,31 +194,22 @@
                 </div>
             @endif
 
-            <div>
-                <p class="px-5">
+            <div class="mb-2">
+                
                     {!! $item->description !!}
-                </p>
+                
             </div>
 
-            {{-- @if ($sectionIndex == 5 || $sectionIndex == 6)
-                <!-- Display firstBlanks after processing all items in a section -->
-                @foreach ($firstBlanks as $sectionFirstBlanks)
-                    @if (count($sectionFirstBlanks) > 0)
-                        <div class="first-blanks">
-                            @php
-                                $dd = implode(', ', $sectionFirstBlanks);
-                            @endphp
-                            {{$dd}}
-                        </div>
-                    @endif
-                @endforeach
-            @endif --}}
+            @if ($sectionIndex == 5 || $sectionIndex == 6)
+                <div class="first-blanks-section" data-section-index="{{$sectionIndex}}">
+                    <!-- This will be replaced with first blanks using JavaScript -->
+                </div>
+            @endif
 
-        <!-- Add a marker for displaying first blanks -->
-        <div class="first-blanks-section" data-section-index="{{$sectionIndex}}">
-            <!-- This will be replaced with first blanks using JavaScript -->
-        </div>
-
+            @if ($sectionIndex == 6)
+            <h6>List A:</h6>
+            @endif
+            
         @endif
 
         @if ($item->type == 7)
@@ -194,7 +222,7 @@
             @php
                 $itemIndex++;
             @endphp
-            <div class="question mb-2 px-3">
+            <div class="question mb-2">
                  {!! $item->title ?? '' !!}
             </div>     
         @endif
@@ -203,7 +231,7 @@
             @php
                 $itemIndex++;
             @endphp
-            <div class="question px-3">
+            <div class="question">
                  {{$itemIndex}}. {!! $item->title ?? '' !!} 
                 @if (isset($item->options))
                     @foreach ($item->options as $opt)
@@ -221,7 +249,7 @@
             @php
                 $itemIndex++;
             @endphp
-            <div class="question px-3">
+            <div class="question">
                  {{$itemIndex}}. {!! $item->blank_paragraph ?? '' !!}
             </div>     
         @endif
@@ -229,18 +257,13 @@
         @if ($item->type == 7)
             @php
                 $itemIndex++;
-                // $firstBlanks[$sectionIndex][] = $item->blanks[0];
             @endphp
             
-            <div class="question-7 px-3">
+            <div class="question-7" data-index="{{$sectionIndex}}">
                  {{$itemIndex}}. {!! $item->blank_paragraph ?? '' !!}
             </div>  
         @endif
 
-
-        {{-- @if ($loop->last)
-            @dd($firstBlanks)
-        @endif --}}
 
 
     @endforeach
@@ -251,44 +274,59 @@
             shuffle($array);
         }
 
-        unset($array); 
+        unset($array);
+
     @endphp
     
-    {{-- @dd($firstBlanks) --}}
+    {{-- @dd($firstBlanks,$newArray) --}}
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
 <script>
-    $(document).ready(function() {
-        // Loop through each section's marker
-        $('.first-blanks-section').each(function() {
-            var sectionIndex = $(this).data('section-index');
-            var firstBlanksContainer = $(this);
+$(document).ready(function() {
+ 
+    // Function to get alphabetic index (A, B, C, ...)
+    function getAlphabeticIndex(index) {
+        return String.fromCharCode(97 + index);
+    }
 
-            // Fetch the accumulated first blanks for the matching section
-            var sectionFirstBlanks = <?= json_encode($firstBlanks) ?>;
-            var sectionBlanks = sectionFirstBlanks[sectionIndex];
+    // Loop through each section's marker
+    $('.first-blanks-section').each(function() {
+        var sectionIndex = $(this).data('section-index');
+        var firstBlanksContainer = $(this);
 
-            console.log(sectionFirstBlanks);
+        // Fetch the accumulated first blanks for the matching section
+        var sectionFirstBlanks = <?= json_encode($firstBlanks) ?>;
+        var sectionBlanks = sectionFirstBlanks[sectionIndex];
 
-            // Generate HTML for first blanks
-            var firstBlanksHtml = '';
-            if (sectionBlanks && sectionBlanks.length > 0) {
-                firstBlanksHtml += '<div class="first-blanks">';
-                sectionBlanks.forEach(function(firstBlank) {
+        // Generate HTML for first blanks
+        var firstBlanksHtml = '';
+        if (sectionBlanks && sectionBlanks.length > 0) {
+            firstBlanksHtml += '<div class="first-blanks">';
+                if (sectionIndex === 6) {
+                    firstBlanksHtml  += '<h6 class="">List B:</h6>';
+                }
+            sectionBlanks.forEach(function(firstBlank, index) {
+                if (sectionIndex === 6) {
+                    var alphabeticIndex = getAlphabeticIndex(index);
+                    firstBlanksHtml += '<div class="list-blanks">' + alphabeticIndex + '. ' + firstBlank + '</div>';
+                } else {
                     firstBlanksHtml += '<span class="first-blank-item">' + firstBlank + '</span>';
-                });
-                firstBlanksHtml += '</div>';
-            }
+                }
+            });
+            firstBlanksHtml += '</div>';
+        }
 
-            // Inject HTML into the firstBlanksContainer
-            firstBlanksContainer.html(firstBlanksHtml);
-        });
+        // Inject HTML into the firstBlanksContainer
+        firstBlanksContainer.html(firstBlanksHtml);
     });
+});
+
+window.onload = function() {
+    window.print();
+};
+
 </script>
 
 

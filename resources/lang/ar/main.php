@@ -598,8 +598,16 @@
         'Notifications' => 'الإشعارات',
         'No notifications yet' => 'لا يوجد إشعارات',
         // tiptop
-        'at Tiptopdemy platform' => 'في منصة Tiptopdemy'
+        'at Tiptopdemy platform' => 'في منصة Tiptopdemy',
 
+        // export 
+        'date'=>'التاريخ',
+        'time'=>'الوقت',
+        'trail'=>'الدور',
+        'branch'=>'branch',
+        'school'=>'اسم المدرسة',
+        'logo'=>'الشعار',
+        'note'=>'ملاحظات',
 
 
     ];

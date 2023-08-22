@@ -107,6 +107,22 @@
                     </div>
                     <div class="row uk-margin-small">
                         <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.logo')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_logo" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
+                            {{__('main.note')}}:
+                        </div>
+                        <div class="col-11">
+                            <input class="uk-input uk-form-small" name="export_note" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="row uk-margin-small">
+                        <div class="col-1 uk-flex uk-flex-middle">
                             Export:
                         </div>
                         <div class="col-11">

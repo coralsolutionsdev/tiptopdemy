@@ -1189,36 +1189,48 @@
     window.addEventListener('load', executeFunctionIfNewVersion);
 
 
-    $('#form-export').on('click', function() {
-    var csrfToken = "{{csrf_token()}}"
-    var data = {
-      export_school_name: $('input[name=export_school_name]').val(),
-      export__date: $('input[name=export_date]').val(),
-      export_branch: $('input[name=export_branch]').val(),
-      export_trail: $('input[name=export_trail]').val(),
-      export_time: $('input[name=export_time]').val(),
-      form_id: $('input[name=form_id]').val(),
-    //   exported_form: $('input[name=exported_form]').val()
-    };
 
-    var form_id = $('input[name=form_id]').val()
+$('#form-export').on('click', function() {
+  var csrfToken = "{{csrf_token()}}";
+  var form_id = $('input[name=form_id]').val()
+  // Create a new form element
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = `/manage/store/form/${form_id}/export`; // Replace with your server endpoint
 
-    $.ajax({
-      type: 'POST', // Or 'GET' depending on your use case
-      url: `/manage/store/form/${form_id}/export`, // Replace with your server endpoint
-      data: data,
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      },
-      success: function(response) {
-        // Handle success response here
-        console.log('Form submitted successfully');
-      },
-      error: function(error) {
-        // Handle error response here
-        console.error('Form submission error', error);
-      }
-    });
-  });
+  // Create input fields and append them to the form
+  var fields = {
+    export_school_name: $('input[name=export_school_name]').val(),
+    export_date: $('input[name=export_date]').val(),
+    export_branch: $('input[name=export_branch]').val(),
+    export_trail: $('input[name=export_trail]').val(),
+    export_time: $('input[name=export_time]').val(),
+    export_logo: $('input[name=export_logo]').val(),
+    export_note: $('input[name=export_note]').val(),
+    form_id: $('input[name=form_id]').val(),
+  };
+
+  for (var fieldName in fields) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = fieldName;
+    input.value = fields[fieldName];
+    form.appendChild(input);
+  }
+
+  // Add CSRF token header to the form
+  var csrfInput = document.createElement('input');
+  csrfInput.type = 'hidden';
+  csrfInput.name = '_token';
+  csrfInput.value = csrfToken;
+  form.appendChild(csrfInput);
+
+  // Append the form to the document and submit it
+  document.body.appendChild(form);
+  form.submit();
+
+  console.log('Form submitted');
+});
+
 
 </script>

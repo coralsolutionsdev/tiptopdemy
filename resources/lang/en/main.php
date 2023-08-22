@@ -578,6 +578,8 @@
         'trail'=>'trail',
         'branch'=>'branch',
         'school'=>'school name',
+        'logo'=>'logo',
+        'note'=>'note',
 
     ];
 ?>

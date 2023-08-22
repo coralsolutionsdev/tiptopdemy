@@ -14,110 +14,110 @@ use Barryvdh\DomPDF\Facade\Pdf;
 |
 */
 
-Route::get('test',function(){
+// Route::get('test',function(){
 
-    // $data = ['a'=>"geeeeeeeeeeeee"];
-    // $pdf = Pdf::loadView('testpdf', $data);
-    // return $pdf->download('invoice.pdf');
+//     // $data = ['a'=>"geeeeeeeeeeeee"];
+//     // $pdf = Pdf::loadView('testpdf', $data);
+//     // return $pdf->download('invoice.pdf');
 
-    // return view('testpdf');
+//     // return view('testpdf');
 
-    $input = request()->all();
+//     $input = request()->all();
 
-    $input = [
+//     $input = [
 
-        "export_school_name" => 'Alexa School',
-        "export_date" => '2022-4-4',
-        "export_branch" => 'erbil',
-        "export_trail" => 'first trail',
-        "export_time" => '2 hours',
+//         "export_school_name" => 'Alexa School',
+//         "export_date" => '2022-4-4',
+//         "export_branch" => 'erbil',
+//         "export_trail" => 'first trail',
+//         "export_time" => '2 hours',
 
-    ];
+//     ];
 
-    $form_id = $input['form_id'] ?? null;
-    $items = FormItem::where('form_id', 107)
-    // ->where('type',7)
-    ->orderBy('position','ASC')->get();
+//     $form_id = $input['form_id'] ?? null;
+//     $items = FormItem::where('form_id', 107)
+//     // ->where('type',7)
+//     ->orderBy('position','ASC')->get();
 
-    $itemsArray = array();
-    $count = 0;
+//     $itemsArray = array();
+//     $count = 0;
 
-    foreach ($items as $key => $item){
-        $blanksArray = array();
-        if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
-            $item->blank_paragraph = $item->getFillableBlank($item->id);
-        }
+//     foreach ($items as $key => $item){
+//         $blanksArray = array();
+//         if ($item->type == FormItem::TYPE_FILL_THE_BLANK || $item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
+//             $item->blank_paragraph = $item->getFillableBlank($item->id);
+//         }
 
-        if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
-            $blanks = !empty($item->options) && !empty($item->options['paragraph_blanks']) ? $item->options['paragraph_blanks'] : array();
-            foreach ($blanks as $blank){
-                $isInArray = false;
-                foreach ($blank['items'] as $blankItem){
-                    foreach ($blanksArray as $blanksArrayItem){
-                        if ($blanksArrayItem == $blankItem['value']){
-                            $isInArray = true;
-                        }
-                    }
-                    if (!$isInArray){
-                        array_push($blanksArray, $blankItem['value']);
-                    }
-                }
-            }
-            // add extra word to blanks array
-            $extraBlanks = isset($item->properties['extra_blanks']) ?  $item->properties['extra_blanks'] : null;
-            if ($extraBlanks){
-                foreach ($extraBlanks as $extraBlank){
-                    if ($extraBlank && $extraBlank != null && strlen($extraBlank) > 0){
-                        array_push($blanksArray, $extraBlank);
-                    }
-                }
-            }
-            $array2 = $blanksArray;
-            shuffle($array2);
-            $blanksArray = $array2;
+//         if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP || $item->type == FormItem::TYPE_FILL_THE_BLANK_RE_ARRANGE){
+//             $blanks = !empty($item->options) && !empty($item->options['paragraph_blanks']) ? $item->options['paragraph_blanks'] : array();
+//             foreach ($blanks as $blank){
+//                 $isInArray = false;
+//                 foreach ($blank['items'] as $blankItem){
+//                     foreach ($blanksArray as $blanksArrayItem){
+//                         if ($blanksArrayItem == $blankItem['value']){
+//                             $isInArray = true;
+//                         }
+//                     }
+//                     if (!$isInArray){
+//                         array_push($blanksArray, $blankItem['value']);
+//                     }
+//                 }
+//             }
+//             // add extra word to blanks array
+//             $extraBlanks = isset($item->properties['extra_blanks']) ?  $item->properties['extra_blanks'] : null;
+//             if ($extraBlanks){
+//                 foreach ($extraBlanks as $extraBlank){
+//                     if ($extraBlank && $extraBlank != null && strlen($extraBlank) > 0){
+//                         array_push($blanksArray, $extraBlank);
+//                     }
+//                 }
+//             }
+//             $array2 = $blanksArray;
+//             shuffle($array2);
+//             $blanksArray = $array2;
 
-            // group draggable blanks
-            if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
-                foreach ($blanksArray as $draggableBlankItem) {
-                    $groupDraggableBlanks[] = [
-                        'id' => rand(0,999),
-                        'value' => $draggableBlankItem,
-                        'question_id' => $item->id,
-                    ];
-                }
-            }
+//             // group draggable blanks
+//             if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
+//                 foreach ($blanksArray as $draggableBlankItem) {
+//                     $groupDraggableBlanks[] = [
+//                         'id' => rand(0,999),
+//                         'value' => $draggableBlankItem,
+//                         'question_id' => $item->id,
+//                     ];
+//                 }
+//             }
 
-        }
+//         }
 
-        $item->blanks = $blanksArray;
-        $item->dropped_blanks = array();
-        $item->auto_leave = !empty($questionsToAnswer) && $questionsToAnswer < $key;
-        $item->review = false;
+//         $item->blanks = $blanksArray;
+//         $item->dropped_blanks = array();
+//         $item->auto_leave = !empty($questionsToAnswer) && $questionsToAnswer < $key;
+//         $item->review = false;
 
-    }
+//     }
 
-    $array3 = $groupDraggableBlanks;
-    shuffle($array3);
-    $groupDraggableBlanks = $array3;
+//     $array3 = $groupDraggableBlanks;
+//     shuffle($array3);
+//     $groupDraggableBlanks = $array3;
 
-    // dd($items);
+//     // dd($items);
 
-    // dd($itemsArray);
+//     // dd($itemsArray);
 
-    $data = [
-        // 'items' => $itemsArray,
-        'items' => $items,
-        'draggable_blanks' => $groupDraggableBlanks,
-        'settings' => $input,
-    ];
+//     $data = [
+//         // 'items' => $itemsArray,
+//         'items' => $items,
+//         'draggable_blanks' => $groupDraggableBlanks,
+//         'settings' => $input,
+//     ];
 
-    // dd($data);
+//     // dd($data);
 
-    return view('testpdf',compact('data'));
-    // $pdf = Pdf::loadView('testpdf', $data);
-    // return $pdf->download('invoice.pdf');
+//     return view('pdf-form',compact('data'));
+//     // $pdf = Pdf::loadView('testpdf', $data);
+//     // return $pdf->download('invoice.pdf');
 
-});
+// });
 
 
 /* Inastallation */

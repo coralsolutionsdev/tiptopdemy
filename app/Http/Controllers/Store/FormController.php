@@ -554,18 +554,10 @@ class FormController extends Controller
 
         $input = request()->all();
 
-        $input = [
-    
-            "export_school_name" => 'Alexa School',
-            "export_date" => '2022-4-4',
-            "export_branch" => 'erbil',
-            "export_trail" => 'first trail',
-            "export_time" => '2 hours',
-    
-        ];
-    
+        // dd($input);
+        
         $form_id = $input['form_id'] ?? null;
-        $items = FormItem::where('form_id', 107)
+        $items = FormItem::where('form_id', $form_id)
         // ->where('type',7)
         ->orderBy('position','ASC')->get();
     
@@ -605,17 +597,7 @@ class FormController extends Controller
                 $array2 = $blanksArray;
                 shuffle($array2);
                 $blanksArray = $array2;
-    
-                // group draggable blanks
-                if ($item->type == FormItem::TYPE_FILL_THE_BLANK_DRAG_AND_DROP){
-                    foreach ($blanksArray as $draggableBlankItem) {
-                        $groupDraggableBlanks[] = [
-                            'id' => rand(0,999),
-                            'value' => $draggableBlankItem,
-                            'question_id' => $item->id,
-                        ];
-                    }
-                }
+
     
             }
     
@@ -626,23 +608,19 @@ class FormController extends Controller
     
         }
     
-        $array3 = $groupDraggableBlanks;
-        shuffle($array3);
-        $groupDraggableBlanks = $array3;
-    
-        // dd($items);
-    
-        // dd($itemsArray);
     
         $data = [
             // 'items' => $itemsArray,
             'items' => $items,
-            'draggable_blanks' => $groupDraggableBlanks,
             'settings' => $input,
         ];
 
-        $pdf = Pdf::loadView('testpdf', $data);
-        return $pdf->download('invoice.pdf');
+        // $data = ['data' => $data];
+
+        return view('pdf-form',compact('data'));
+
+        // $pdf = Pdf::loadView('pdf-form', $data)->setPaper('a4', 'portrait')->setWarnings(false);
+        // return $pdf->download('file.pdf');
 
     }
 

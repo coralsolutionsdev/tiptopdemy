@@ -370,6 +370,13 @@ class FormController extends Controller
 
         // dd($questionsArray);
 
+        usort($questionsArray, function($a, $b) {
+            return strcmp($a['title'], $b['title']);
+        });
+        
+        // dd($questionsArray);
+
+
         return response($questionsArray, 200);
     }
 

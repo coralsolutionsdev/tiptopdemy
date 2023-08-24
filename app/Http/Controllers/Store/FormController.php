@@ -410,7 +410,7 @@ class FormController extends Controller
         $properties = [
             'score_type' => isset($settings['score_type']) ?  $settings['score_type'] : null,
             'passing_score' => isset($settings['passing_score']) ?  $settings['passing_score'] : null,
-            'has_time_limit' => isset($settings['has_time_limit']) ?  1 : 0,
+            'has_time_limit' => isset($settings['has_time_limit']) ?  ($settings['has_time_limit'] !=false ? 1 : 0) : 0,
             'time_limit' => isset($settings['time_limit']) ?  $settings['time_limit'] : '',
             'attempts_number' => isset($settings['attempts_number']) ?  $settings['attempts_number'] : null,
             'shuffle_questions' => isset($settings['shuffle_questions']) ?  1 : 0,

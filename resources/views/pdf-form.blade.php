@@ -357,7 +357,7 @@ $(document).ready(function() {
 });
 
 window.onload = function() {
-    // window.print();
+    window.print();
 };
 
 </script>

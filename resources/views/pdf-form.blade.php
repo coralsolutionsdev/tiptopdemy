@@ -74,31 +74,31 @@
             display: inline-block;
         }
 
-        .first-blanks-section{
+        .blanks-section{
             margin: 5px 20px 
         }
-        .first-blanks{
+        .blanks{
           margin: 10px 0;
           background: #b4b3b3;
           display: inline;
           padding: 2px
         }
 
-        div[data-section-index="6"] {
+        .lists-section {
             position: relative;
         }
-        div[data-index="6"] .droppable-blank {
+        .matching .droppable-blank {
             border: none;
         }
-        .first-blanks:has(.list-blanks){
+        .list-items{
           background: transparent;
           position: absolute;
-          top: -10px;
-          left: 160px;
+          top: 0px;
+          left: 25%;
 
         }
 
-        .first-blank-item{
+        .blank-item{
             padding: 5px;
             /* background: #b4b3b3; */
             display: inline;
@@ -129,11 +129,6 @@
         .page-break {
             page-break-before: always;
         }
-
-        .question-7:last-of-type {
-            color: red
-        }
-
 
       </style>
 </head>
@@ -166,7 +161,8 @@
 <div class="container-fluid">
     @php
         $sectionIndex = 0;
-        $firstBlanks = [];
+        $blanks = [];
+        $lists = [];
     @endphp
 
 
@@ -177,7 +173,7 @@
             @php
                 $sectionIndex++;
                 $itemIndex = 0;
-                // $firstBlanks[$sectionIndex] = [];
+                // $blanks[$sectionIndex] = [];
             @endphp
 
             @if ($sectionIndex == 5)
@@ -200,21 +196,28 @@
                 
             </div>
 
-            @if ($sectionIndex == 5 || $sectionIndex == 6)
-                <div class="first-blanks-section" data-section-index="{{$sectionIndex}}">
-                    <!-- This will be replaced with first blanks using JavaScript -->
-                </div>
-            @endif
+      
+            <div class="blanks-section" data-section-index="{{$sectionIndex}}">
+                <!-- This will be replaced with  blanks using JavaScript -->
+            </div>
 
-            @if ($sectionIndex == 6)
+            <div class="lists-section" data-section-index="{{$sectionIndex}}">
+                <!-- This will be replaced with  lists using JavaScript -->
+            </div>
+
+            {{-- @if ($sectionIndex == 6)
             <h6>List A:</h6>
-            @endif
+            @endif --}}
             
         @endif
 
         @if ($item->type == 7)
             @php
-                $firstBlanks[$sectionIndex][] = $item->blanks[0];
+                if (isset($item->properties['display']) && $item->properties['display'] == 1) {
+                    $blanks[$sectionIndex][] = $item->blanks[0];
+                }elseif(isset($item->properties['display']) && $item->properties['display'] == 0){
+                    $lists[$sectionIndex][] = $item->blanks[0];
+                }
             @endphp
         @endif
 
@@ -259,7 +262,8 @@
                 $itemIndex++;
             @endphp
             
-            <div class="question-7" data-index="{{$sectionIndex}}">
+            <div class="question-7 {{(isset($item->properties['display']) && $item->properties['display'] == 0) ? 'matching' : ''}}" 
+                data-index="{{$sectionIndex}}">
                  {{$itemIndex}}. {!! $item->blank_paragraph ?? '' !!}
             </div>  
         @endif
@@ -270,7 +274,13 @@
 
     @php
         /// shuffling array items
-        foreach ($firstBlanks as &$array) {
+        foreach ($blanks as &$array) {
+            shuffle($array);
+        }
+
+        unset($array);
+
+        foreach ($lists as &$array) {
             shuffle($array);
         }
 
@@ -278,7 +288,7 @@
 
     @endphp
     
-    {{-- @dd($firstBlanks,$newArray) --}}
+    {{-- @dd($blanks) --}}
 
 </div>
 
@@ -292,39 +302,62 @@ $(document).ready(function() {
     }
 
     // Loop through each section's marker
-    $('.first-blanks-section').each(function() {
+    $('.blanks-section').each(function() {
         var sectionIndex = $(this).data('section-index');
-        var firstBlanksContainer = $(this);
+        var blanksContainer = $(this);
 
-        // Fetch the accumulated first blanks for the matching section
-        var sectionFirstBlanks = <?= json_encode($firstBlanks) ?>;
-        var sectionBlanks = sectionFirstBlanks[sectionIndex];
+        // Fetch the accumulated  blanks for the matching section
+        var sectionblanks = <?= json_encode($blanks) ?>;
+        var sectionBlanks = sectionblanks[sectionIndex];
 
-        // Generate HTML for first blanks
-        var firstBlanksHtml = '';
+        // Generate HTML for blanks
+        var blanksHtml = '';
         if (sectionBlanks && sectionBlanks.length > 0) {
-            firstBlanksHtml += '<div class="first-blanks">';
-                if (sectionIndex === 6) {
-                    firstBlanksHtml  += '<h6 class="">List B:</h6>';
-                }
-            sectionBlanks.forEach(function(firstBlank, index) {
-                if (sectionIndex === 6) {
-                    var alphabeticIndex = getAlphabeticIndex(index);
-                    firstBlanksHtml += '<div class="list-blanks">' + alphabeticIndex + '. ' + firstBlank + '</div>';
-                } else {
-                    firstBlanksHtml += '<span class="first-blank-item">' + firstBlank + '</span>';
-                }
+            blanksHtml += '<div class="blanks">';
+            sectionBlanks.forEach(function(blank, index) {
+                blanksHtml += '<span class="blank-item">' + blank + '</span>';
             });
-            firstBlanksHtml += '</div>';
+            blanksHtml += '</div>';
         }
 
-        // Inject HTML into the firstBlanksContainer
-        firstBlanksContainer.html(firstBlanksHtml);
+        // Inject HTML into the blanksContainer
+        blanksContainer.html(blanksHtml);
+    });
+
+    // Loop through each section's marker
+    $('.lists-section').each(function() {
+        var sectionIndex = $(this).data('section-index');
+        var blanksContainer = $(this);
+
+        // Fetch the accumulated first blanks for the matching section
+        var sectionlists = <?= json_encode($lists) ?>;
+        var sectionlists = sectionlists[sectionIndex];
+
+        // Generate HTML for first blanks
+        var listsHtml = '';
+        if (sectionlists && sectionlists.length > 0) {
+            
+            var matchingElement = $(`.matching[data-index="${sectionIndex}"]`).first();
+            var newChildElement = $('<h5>List A:</h5>');
+            matchingElement.before(newChildElement);
+
+            listsHtml += '<div class="list-items">';
+            listsHtml += '<h5>List B:</h5>'
+            sectionlists.forEach(function(item, index) {
+                // listsHtml += '<span class="blank-item">' + blank + '</span>';
+                var alphabeticIndex = getAlphabeticIndex(index);
+                listsHtml += '<div class="list-blanks">' + alphabeticIndex + '. ' + item + '</div>';
+            });
+            listsHtml += '</div>';
+        }
+
+        // Inject HTML into the lists Container
+        blanksContainer.html(listsHtml);
     });
 });
 
 window.onload = function() {
-    window.print();
+    // window.print();
 };
 
 </script>

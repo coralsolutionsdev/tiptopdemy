@@ -63,7 +63,7 @@
                     </div>
                     {{-- exporting settings  --}}
                     <div class="h-header mt-5">Export Settings</div>
-                    <input type="hidden" name="form_id" value="{{$form->id}}">
+                    <input type="hidden" name="form_id" value="{{$form->id ?? ''}}">
                     {{-- <input type="hidden" name="exported_form" value="{{json_encode($form)}}"> --}}
                     <div class="row uk-margin-small">
                         <div class="col-1 uk-flex uk-flex-middle">

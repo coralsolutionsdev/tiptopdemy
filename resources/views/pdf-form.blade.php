@@ -94,7 +94,7 @@
           background: transparent;
           position: absolute;
           top: 0px;
-          left: 25%;
+          right: 10%;
 
         }
 
@@ -293,7 +293,7 @@
 </div>
 
 
-<script>
+<script defer>
 $(document).ready(function() {
  
     // Function to get alphabetic index (A, B, C, ...)

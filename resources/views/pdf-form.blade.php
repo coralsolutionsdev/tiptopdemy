@@ -130,11 +130,6 @@
             page-break-before: always;
         }
 
-        .bold{
-            font-weight: bold;
-
-        }
-
       </style>
 </head>
 <body>
@@ -297,102 +292,6 @@
 
 </div>
 
-{{-- Answers --}}
-<div>
-
-    <div class="page-break"></div>
-
-    <h1 class="text-center alert alert-primary my-4">------------------------------- Answers -------------------------------</h1>
-
-    @php
-        $sectionIndex = 0;
-    @endphp
-
-    @if ($sectionIndex == 5)
-    <div class="page-break"></div>
-    @endif
-
-    @foreach ($data['items'] as $item)
-    
-    @if ($item->type == 0 )
-        @php
-            $sectionIndex++;
-            $itemIndex = 0;
-            // $blanks[$sectionIndex] = [];
-        @endphp
-
-
-        @if ($item->title != '')
-            <div class="qs-type d-flex justify-content-between mt-2">
-                @php
-                    $arr = explode(':', $item->title);
-                @endphp
-                <span class="text-start">{{$arr[0]?? ''}}</span>
-                <span class="text-end">{{$arr[1] ?? ''}}</span>
-            </div>
-        @endif
-
-        <div class="mb-2">
-            
-                {!! $item->description !!}
-            
-        </div>
-
-
-        
-    @endif
-
-
-    @if ($item->type == 2)
-        @php
-            $itemIndex++;
-        @endphp
-        <div class="question mb-2">
-             {!! $item->title ?? '' !!}
-        </div>     
-    @endif
-
-    @if ($item->type == 5)
-        @php
-            $itemIndex++;
-        @endphp
-        <div class="question">
-             {{$itemIndex}}. 
-            @if (isset($item->options))
-                @foreach ($item->options as $opt)
-                    @if ((isset($opt['title']) && $opt['title'] != 'Option title' && $opt['mark'] > 0))
-                           <strong> {{$opt['title'] ?? '' }}</strong>
-                    @endif
-                @endforeach
-            @endif
-        </div> 
-    @endif
-
-    @if ($item->type == 6 )
-        @php
-            $itemIndex++;
-        @endphp
-        <div class="question">
-             {{$itemIndex}}. <strong>{{$item->options['paragraph_blanks'][0]['items'][0]['value'] ?? ''}} </strong>
-        </div>     
-    @endif
-
-    @if ($item->type == 7)
-        @php
-            $itemIndex++;
-        @endphp
-        
-        <div class="question-7">
-            {{$itemIndex}}. <strong>{{$item->blanks[0]}}</strong>
-        </div>
-    @endif
-
-
-
-@endforeach
-
-</div>
-
 
 <script>
 $(document).ready(function() {
@@ -458,7 +357,7 @@ $(document).ready(function() {
 });
 
 window.onload = function() {
-    // window.print();
+    window.print();
 };
 
 </script>

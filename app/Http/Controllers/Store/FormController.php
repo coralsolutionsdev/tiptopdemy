@@ -11,14 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Modules\Course\Lesson;
 use App\Modules\Form\FormItem;
-use PhpOffice\PhpWord\PhpWord;
 use Barryvdh\DomPDF\Facade\Pdf;
-use PhpOffice\PhpWord\IOFactory;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
-use Illuminate\Support\Facades\Response as FacadeResponse;
 
 class FormController extends Controller
 {
@@ -627,34 +624,7 @@ class FormController extends Controller
 
         // $data = ['data' => $data];
 
-        // Generate the HTML content using Laravel Blade
-        $htmlContent = view('pdf-form')->with('data',$data)->render();
-
-        $file_name = strtotime(date('Y-m-d H:i:s')) . '_advertisement_template.doc';
-        $headers = array(
-            "Content-type"=>"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "Content-Disposition"=>"attachment;Filename=$file_name"
-        );
-        return FacadeResponse::make($htmlContent,200, $headers);
-
-        // Create a new PhpWord instance
-        $phpWord = new PhpWord();
-
-        // Add a section to the document
-        $section = $phpWord->addSection();
-
-        // Add the HTML content to the section
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $htmlContent, false, false);
-
-        // Save the document as a Word file
-        $filename = 'exported_document.docx';
-        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save($filename);
-
-        return response()->download($filename)->deleteFileAfterSend(true);
-
-
-        // return view('pdf-form',compact('data'));
+        return view('pdf-form',compact('data'));
 
         // $pdf = Pdf::loadView('pdf-form', $data)->setPaper('a4', 'portrait')->setWarnings(false);
         // return $pdf->download('file.pdf');

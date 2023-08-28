@@ -30,6 +30,7 @@
         "laravelcollective/html": "^6.0",
         "monolog/monolog": "^2.04",
         "nunomaduro/collision": "^5.0",
+        "phpoffice/phpword": "*",
         "pion/laravel-chunk-upload": "^1.4",
         "pusher/pusher-php-server": "^4.0",
         "rajurayhan/larastreamer": "^1.0",

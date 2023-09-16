@@ -105,6 +105,7 @@ class GroupController extends Controller
     public function update(Request $request, Product $product, Group $group)
     {
         $input = $request->all();
+        $input['status'] = $request->status ?? 0;
         $input['editor_id'] = getAuthUser()->id;
         $group->update($input);
         $selectedTab = 'lessons';

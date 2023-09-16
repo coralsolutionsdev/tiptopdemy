@@ -97,7 +97,7 @@ class Group extends Model
     }
     public function getLessons()
     {
-        return $this->belongsToMany(Lesson::class)->orderBy('position');
+        return $this->belongsToMany(Lesson::class)->orderBy('position')->where('status',1);
     }
     public function products()
     {

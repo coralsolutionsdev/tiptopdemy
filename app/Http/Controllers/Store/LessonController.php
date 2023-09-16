@@ -432,7 +432,7 @@ class LessonController extends Controller
     {
         $product = $lesson->product;
         // groups
-        $groups = $product->groups;
+        $groups = $product->groups->where('status', 1);
         $groupsArray = [];
         foreach ($groups as $key => $group){
             $groupNumber = $key + 1;

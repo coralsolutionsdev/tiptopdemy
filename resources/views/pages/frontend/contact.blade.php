@@ -21,7 +21,7 @@
                         <div class="uk-width-1-2@m uk-width-1-1">
                             <h3>{{__('main._contact_info')}}</h3>
                             <div class="uk-margin-small">
-                                <span uk-icon="icon: phone"></span> <span class="uk-margin-small-left uk-margin-small-right">+9647732534388</span>
+                                <span uk-icon="icon: phone"></span> <span class="uk-margin-small-left uk-margin-small-right">+9647744411551</span>
                             </div>
                             <div class="uk-margin-small">
                                 <span uk-icon="icon: location"></span> <span class="uk-margin-small-left uk-margin-small-right">Iraq - Baghdad</span>
@@ -31,7 +31,7 @@
                                 <a target="_blank" href="https://www.facebook.com/Tiptop-demy-%D8%AA%D8%A8%D8%AA%D9%88%D8%A8-103810867929225" class="uk-icon-button" uk-icon="facebook" style="color: #0470E5"></a>
                                 <a target="_blank" href="https://www.youtube.com/channel/UC-jD-kqLu-L_S6TzWAqF0fg/featured" class="uk-icon-button uk-text-danger" uk-icon="youtube"></a>
 {{--                                <a target="_blank" href="https://api.whatsapp.com/send?phone=009647732534388;text=Hi%20,%20I%20need%20some%20help." class="uk-icon-button uk-text-success" uk-icon="whatsapp"></a>--}}
-                                <a target="_blank" href="https://wa.me/+9647732534388?text=Hi%20,%20I%20need%20some%20help." class="uk-icon-button uk-text-success" uk-icon="whatsapp"></a>
+                                <a target="_blank" href="https://wa.me/+9647744411551?text=Hi%20,%20I%20need%20some%20help." class="uk-icon-button uk-text-success" uk-icon="whatsapp"></a>
                                 <a target="_blank" href="mailto:info@tiptopdemy.com?subject=An inquiry about Tiptopdemy services" class="uk-icon-button uk-text-danger" uk-icon="mail"></a>
                             </div>
 

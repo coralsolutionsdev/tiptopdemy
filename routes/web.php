@@ -236,7 +236,7 @@ Route::group(['middleware'=>'lang'], function(){
         Route::get('tags', 'ProductController@indexTags')->name('tags.index');
         Route::delete('tags/{tag}', 'ProductController@destroyTag')->name('tags.destroy');
         Route::resource('/product/{product}/groups','GroupController');
-        Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']])->middleware('auth');
+        Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
         Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
 
         Route::resource('/lesson/{lesson}/memorize','MemorizeController', ['except' => ['show']]);
@@ -375,7 +375,7 @@ Route::group(['middleware'=>'lang'], function(){
             Route::get('/' , 'ProductController@GetIndex')->name('products.main'); // change to index
             Route::resource('/category','CategoryController',  ['only' => ['show']]);
             Route::resource('/product','ProductController',  ['only' => ['show']]);
-            Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']]);
+            Route::resource('/product/{product}/lesson','LessonController', ['only' => ['show']])->middleware('auth');
             Route::get('/lesson/{lesson}/form/{form}/get/items/','FormController@getItems')->name('form.get.items');
             Route::resource('/lesson/{lesson}/form','FormController', ['only' => ['show']]);
             Route::get('/products/items' , 'ProductController@GetItems'); // change to index

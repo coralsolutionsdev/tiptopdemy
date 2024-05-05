@@ -236,7 +236,7 @@ Route::group(['middleware'=>'lang'], function(){
         Route::get('tags', 'ProductController@indexTags')->name('tags.index');
         Route::delete('tags/{tag}', 'ProductController@destroyTag')->name('tags.destroy');
         Route::resource('/product/{product}/groups','GroupController');
-        Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']]);
+        Route::resource('/product/{product}/lessons','LessonController', ['except' => ['show']])->middleware('auth');
         Route::resource('/lesson/{lesson}/form','FormController', ['except' => ['show']]);
 
         Route::resource('/lesson/{lesson}/memorize','MemorizeController', ['except' => ['show']]);

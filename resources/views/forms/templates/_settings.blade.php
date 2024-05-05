@@ -225,7 +225,7 @@
                     <div class="h-header">Quiz submission</div>
                     <div class="uk-grid-small" uk-grid>
                         <div class="uk-width-1-5@s uk-flex uk-flex-middle">
-                            <label><input class="uk-checkbox" type="checkbox"> <span style="margin: 0 0.5em">Send quiz results to</span></label>
+                            <label><input class="uk-checkbox" value="1" type="checkbox" name="send_results_status" {{!empty($formProperties) && !empty($formProperties['send_results_status']) && $formProperties['send_results_status'] == 1? 'checked' : 'false'}}> <span style="margin: 0 0.5em">Send quiz results to</span></label>
                         </div>
                         <div class="uk-width-2-5@s">
                             <input class="uk-input uk-form-small" name="send_results_to" type="text" value="{{!empty($formProperties) && !empty($formProperties['send_results_to'])? $formProperties['send_results_to'] : ''}}" placeholder="email@example.com">

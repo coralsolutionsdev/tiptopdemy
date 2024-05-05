@@ -175,7 +175,9 @@ class Form extends Model
             'feedback_retry' => isset($input['feedback_retry']) ?  $input['feedback_retry'] : null,
             'submission_title' => isset($input['submission_title']) ?  $input['submission_title'] : null,
             'send_results_to' => isset($input['send_results_to']) ?  $input['send_results_to'] : null,
+            'send_results_status' => !empty($input['send_results_status']) && isset($input['send_results_status']) && $input['send_results_status'] == 1 ?  1 : 0,
         ];
+
         $input['properties'] = $properties;
 
         $createNew = true;

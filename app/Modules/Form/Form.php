@@ -174,7 +174,7 @@ class Form extends Model
             'feedback_incorrect' => isset($input['feedback_incorrect']) ?  $input['feedback_incorrect'] : null,
             'feedback_retry' => isset($input['feedback_retry']) ?  $input['feedback_retry'] : null,
             'submission_title' => isset($input['submission_title']) ?  $input['submission_title'] : null,
-            'submission_title' => isset($input['submission_title']) ?  $input['submission_title'] : null,
+            'send_results_to' => isset($input['send_results_to']) ?  $input['send_results_to'] : null,
         ];
         $input['properties'] = $properties;
 

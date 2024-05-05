@@ -228,7 +228,7 @@
                             <label><input class="uk-checkbox" type="checkbox"> <span style="margin: 0 0.5em">Send quiz results to</span></label>
                         </div>
                         <div class="uk-width-2-5@s">
-                            <input class="uk-input uk-form-small" type="text" placeholder="email@example.com">
+                            <input class="uk-input uk-form-small" name="send_results_to" type="text" value="{{!empty($formProperties)? $formProperties['send_results_to'] : ''}}" placeholder="email@example.com">
                         </div>
                     </div>
                     <div class="uk-grid-small" uk-grid>

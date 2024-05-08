@@ -122,7 +122,11 @@ class Form extends Model
      * @return mixed
      */
     public function getGroupedItems(){
-        return $this->items->groupBy('section');
+        $shuffle = false;
+        if (!empty($this->properties && !empty($this->properties['shuffle_groups']) && $this->properties['shuffle_groups'] == 1)){
+            $shuffle = true;
+        }
+        return $this->items->shuffle(false)->groupBy('section');
     }
 
     public static function getOwner($ownerID = null, $ownerType = null)
@@ -653,8 +657,8 @@ class Form extends Model
 
         // response score info
         $scorePercentage = ($responseAchievedTotalScore/$responseTotalScore) * 100;
-        $scoringType = !empty($form->properties['score_type']) ? $form->properties['score_type'] : 1;
-        $passingScore = !empty($form->properties['passing_score']) ? $form->properties['passing_score'] : 50;
+        $scoringType = !empty($this->properties['score_type']) ? $this->properties['score_type'] : 1;
+        $passingScore = !empty($this->properties['passing_score']) ? $this->properties['passing_score'] : 50;
         $scoreStatus = FormResponse::PASSING_STATUS_FAILED; // failed
         if ($scoringType == 1){ //percentage
             if ($scorePercentage >= $passingScore){

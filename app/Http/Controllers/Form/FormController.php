@@ -178,13 +178,42 @@ class FormController extends Controller
                     'draggable_blanks' => $groupDraggableBlanks,
                 ];
             }
-            $form->grouped_questions = $groups;
+            $shuffleArray = [];
+            if (!empty($form->properties && !empty($form->properties['shuffle_groups']) && $form->properties['shuffle_groups'] == 1)){
+                $groupsArray = $this->shuffle_assoc($groups);
+                foreach ($groupsArray as $arr){
+                    $shuffleArray[] = $arr;
+                }
+            }
+            $form->grouped_questions = $shuffleArray;
             $form->display_type = $displayType;
             $form->direction = $form->getDirection();
             $form->has_time_limit = !empty($form->properties['has_time_limit']);
             $form->time_limit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
             return response($form, 200);
         }
+
+    }
+
+    function shuffle_assoc($list) {
+
+        if (!is_array($list)) return $list;
+
+
+
+        $keys = array_keys($list);
+
+        shuffle($keys);
+
+        $random = array();
+
+        foreach ($keys as $key)
+
+            $random[$key] = $list[$key];
+
+
+
+        return $random;
 
     }
     /**

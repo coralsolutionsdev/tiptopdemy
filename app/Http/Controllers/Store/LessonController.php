@@ -383,7 +383,7 @@ class LessonController extends Controller
                     'description' => $form->description,
                     'items_count' => $form->items->where('type', '!=', FormItem::TYPE_SECTION)->count(),
                     'has_time_limit' => !empty($form->properties['has_time_limit']) && $form->properties['has_time_limit'] == 1 ? 1 : 0,
-                    'time_limit' => $form->properties['time_limit'].' '.trans_choice('main.Minutes', $form->properties['time_limit']),
+                    'time_limit' => $form->properties['time_limit'].' '.trans_choice('main.Minutes', !empty($form->properties['time_limit']) ? $form->properties['time_limit'] : 0),
                     'evaluation_status' => $evaluationStatus,
                     'evaluation_mark' => $evaluationMark,
                     'response_link' => $responseLink,

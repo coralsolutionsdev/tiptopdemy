@@ -180,16 +180,17 @@ class FormController extends Controller
             }
             $shuffleArray = [];
             if (!empty($form->properties && !empty($form->properties['shuffle_groups']) && $form->properties['shuffle_groups'] == 1)){
-                $groupsArray = $this->shuffle_assoc($groups);
-                foreach ($groupsArray as $arr){
-                    $shuffleArray[] = $arr;
-                }
+                $groups = $this->shuffle_assoc($groups);
+            }
+            foreach ($groups as $arr){
+                $shuffleArray[] = $arr;
             }
             $form->grouped_questions = $shuffleArray;
             $form->display_type = $displayType;
             $form->direction = $form->getDirection();
             $form->has_time_limit = !empty($form->properties['has_time_limit']);
             $form->time_limit = !empty($form->properties['time_limit'])? $form->properties['time_limit'] : null;
+
             return response($form, 200);
         }
 

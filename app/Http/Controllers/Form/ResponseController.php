@@ -247,7 +247,6 @@ class ResponseController extends Controller
     public function ajaxStore(Request $request, Form $form){
         $input = $request->only(['answers']);
         $response = $form->createResponse($input['answers']);
-        dd($response);
         $passingScoreType = $response->score_info['passing_score_type'];
         if ($passingScoreType == 1){
             $score = $response->score_info['score_percentage'].' / 100 %';

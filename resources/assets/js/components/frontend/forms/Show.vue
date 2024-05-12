@@ -79,10 +79,10 @@
                                   <input type="hidden" name="items_id[]" :value="question.id">
                                   <span class="question-title" v-html="question.title"></span>
                                   <span v-if="question.type == 1">
-                                    <input class="input-classic" :name="'item_answer['+question.id+']'"  type="text" :placeholder="$t('main.Your answer')" autocomplete="off">
+                                    <input class="input-classic" :name="'item_answer['+question.id+']'"  type="text" :placeholder="$t('main.Your answer')" autocomplete="nope">
                                   </span>
                                   <span v-else-if="question.type == 2">
-                                    <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent" autocomplete="off"></textarea>
+                                    <textarea class="uk-textarea" :name="'item_answer['+question.id+']'" rows="5" placeholder="..." style="background-color: transparent" autocomplete="nope"></textarea>
                                   </span>
                                   <span v-else-if="question.type == 3">
                                         <label v-for="option in question.options" style="margin: 0 2px">

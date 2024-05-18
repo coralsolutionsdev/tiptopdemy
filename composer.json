@@ -20,6 +20,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "haruncpi/laravel-id-generator": "^1.0",
         "intervention/image": "^2.5",
+        "irazasyed/telegram-bot-sdk": "^3.9",
         "james-heinrich/getid3": "^1.9",
         "laravel/framework": "^8.0",
         "laravel/nexmo-notification-channel": "^2.0",

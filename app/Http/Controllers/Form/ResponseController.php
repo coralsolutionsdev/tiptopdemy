@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Form;
 
+use App\Services\TelegramServiceManager;
 use Hashids\Hashids;
 use App\Modules\Form\Form;
 use Illuminate\Http\Request;
@@ -52,7 +53,6 @@ class ResponseController extends Controller
     public function store(Request $request, Form $form)
     {
         $input = $request->only(['item_id', 'item_answer', 'item_leave', 'lesson_id']);
-        dd($input);
         $lesson = Lesson::find($input['lesson_id']);
         if (empty($lesson)){
             // message
@@ -261,9 +261,18 @@ class ResponseController extends Controller
             'passing_score_status' => $response->score_info['passing_score_status'],
             'passing_type' => $passingScoreType,
             'score' => $score,
-            'link' => route('form.response.show',  $form->getLastResponse()->hash_id),
+            'link' => route('form.response.show',  $response->hash_id),
             'nextUrl' => $nextLessonUrl,
         ];
+$message =  "
+Student: ".auth()->user()->email." 
+Exam:
+Score: ".$score." 
+Link: ".$responseArray['link']." ";
+
+        $res = TelegramServiceManager::getInstance()
+            ->setMessage($message)
+            ->send();
         return response($responseArray, 200);
     }
 

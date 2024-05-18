@@ -99,6 +99,10 @@ class Group extends Model
     {
         return $this->belongsToMany(Lesson::class)->orderBy('position')->where('status',1);
     }
+    public function getAllLessons()
+    {
+        return $this->belongsToMany(Lesson::class)->orderBy('position');
+    }
     public function products()
     {
         return $this->belongsToMany(Product::class);

@@ -15,8 +15,11 @@
     <section>
 
         @include('manage.partials._page-header-v2')
+        <button class="btn btn-primary btn-lg my-4">
+            <span>{{!empty($lesson)? __('main.Save changes') : __('main.submit')}}</span>
+        </button>
 
-        <div id="quizzes" class="col-lg-12">
+        <div id="quizzes">
             <div class="card border-light">
                 <div class="card-body" style="background-color: #e0ffe9">
                     <p>{{__('main.Quizzes')}}</p>
@@ -178,20 +181,13 @@
 
             </div>
         </div>
+        <hr>
 
 
-        @if(!empty($lesson))
-            {!! Form::open(['url' => route('store.lessons.update', [$product->slug, $lesson->slug]),'method' => 'PUT','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
-        @else
-            {!! Form::open(['url' => route('store.lessons.store', $product->slug),'method' => 'POST','enctype' => 'multipart/form-data','data-parsley-validate' => true]) !!}
-        @endif
-        
         <div class="form-panel row">
 
             <div class="col-lg-12">
-                <button class="btn btn-primary btn-lg my-4">
-                    <span>{{!empty($lesson)? __('main.Save changes') : __('main.submit')}}</span>
-                </button>
+
                 <div class="card border-light">
                     <div class="card-body">
                         <p>{{__('main.Basic input')}}</p>

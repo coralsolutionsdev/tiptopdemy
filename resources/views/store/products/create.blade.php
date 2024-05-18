@@ -442,7 +442,7 @@
                                                             <div>
                                                                 <table class="uk-table uk-table-justify uk-table-divider">
                                                                     <tbody>
-                                                                    @forelse($group->getLessons as $itemId => $item)
+                                                                    @forelse($group->getAllLessons as $itemId => $item)
                                                                         <tr>
                                                                             <td class="uk-table-shrink align-middle">
                                                                                 <span>{{sprintf('%02d', $itemId+1)}}</span>
@@ -454,8 +454,7 @@
                                                                             </td>
                                                                             <td class="align-middle">
                                                                                 {{__('main.Quizzes')}}
-                                                                                ({{$item->getFormsWithType(\App\Modules\Form\Form::TYPE_FORM)->count()}}
-                                                                                )
+                                                                                ({{$item->getFormsWithType(\App\Modules\Form\Form::TYPE_FORM)->count()}})
                                                                             </td>
                                                                             <td class="uk-width-small">
                                                                                 <div class="action_btn text-right"

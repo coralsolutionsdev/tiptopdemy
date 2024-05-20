@@ -266,7 +266,7 @@ class ResponseController extends Controller
         ];
 $message =  "
 Student: ".auth()->user()->email." 
-Exam:
+Exam: ".$form->title."
 Score: ".$score." 
 Link: ".$responseArray['link']." ";
 

@@ -289,6 +289,8 @@ class Lesson extends Model implements ReactableContract, HasMedia
         $group = $this->getGroup();
         $item = null;
         if ($group){
+            $nextItem = null;
+            $preItem = null;
             foreach ($group->getLessons as $itemKey => $lessonItem){
 
                 if ($lessonItem->id == $this->id){
